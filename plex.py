@@ -143,8 +143,6 @@ def main():
     for r in user_ratings:
         ratings[r['movie']['ids']['slug']] = r['rating']
     #watched_shows = trakt_user.watched_shows
-    # desktoptoken = "AhhL5xUiC9YuCiYpjoue"
-    token = 'bsBi7Y4qUPEszLsRQdye'
     plex = plexapi.server.PlexServer(token=getenv('PLEX_TOKEN'))
     sections = plex.library.sections()
     for section in sections:
