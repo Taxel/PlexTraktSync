@@ -7,6 +7,7 @@ import trakt.users
 from plexapi.myplex import MyPlexAccount
 from dotenv import load_dotenv
 from os import getenv
+import logging
 
 
 def clean_collections_in_section(s):
