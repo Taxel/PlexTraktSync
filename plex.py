@@ -51,15 +51,16 @@ def process_movie_section(s, watched_set, ratings_dict):
                     break
             m.add_to_library()
             if m.slug in ratings_dict:
-                trakt_rating = ratings_dict[m.slug]
+                trakt_rating = int(ratings_dict[m.slug])
             else:
                 trakt_rating = None
-            plex_rating = movie.userRating
+            plex_rating = int(movie.userRating) if movie.userRating is not None else None
+            identical = plex_rating is trakt_rating
             # plex rating takes precedence over trakt rating
-            if plex_rating is not None:
+            if plex_rating is not None and not identical:
                 m.rate(plex_rating)
                 print("\tRating with {} on trakt".format(plex_rating))
-            elif trakt_rating is not None:
+            elif trakt_rating is not None and not identical:
                 movie.rate(trakt_rating)
                 print("\tRating with {} on plex".format(trakt_rating))
             watchedOnPlex = movie.isWatched
