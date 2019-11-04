@@ -1,1 +1,4 @@
 .env
+.vscode/
+trakt_cache.sqlite
+last_update.log
