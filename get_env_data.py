@@ -20,4 +20,4 @@ trakt.core.AUTH_METHOD=trakt.core.OAUTH_AUTH
 trakt_user = input("Please input your Trakt username: ")
 trakt.init(trakt_user, store=True)
 print("You are now logged into Trakt. Add your username in .env: TRAKT_USER=" + trakt_user)
-print("Once the PLEX_TOKEN and TRAKT_USER are in your .env file, you can run 'python3 plex.py' and enjoy!")
+print("Once the PLEX_TOKEN and TRAKT_USER are in your .env file, you can run 'python3 main.py' and enjoy!")

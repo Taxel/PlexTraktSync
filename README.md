@@ -22,7 +22,7 @@ To setup this on your own machine, first clone or download this repo.
 
 After that, rename the `.env_example` file to `.env`. The data you have to put into this file will be printed out by `python3 get_env_data.py`, so execute this script and follow the instructions.
 
-After that you're done. run `python3 plex.py`. You can take a look at the progress in the `last_update.log` file which will be created. 
+After that you're done. run `python3 main.py`. You can take a look at the progress in the `last_update.log` file which will be created. 
 
 Personally, I run this script in a cronjob every two hours. On Mac this worked by adding the line
 
