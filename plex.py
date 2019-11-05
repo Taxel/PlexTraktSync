@@ -5,12 +5,14 @@ import trakt.tv
 import trakt.sync
 import trakt.users
 import trakt.core
-import trakt_show_progress
 from dotenv import load_dotenv
 from os import getenv
 import logging
 from time import time
-from plexapi.exceptions import BadRequest, NotFound
+
+
+import trakt_show_progress
+from trakt_list_util import TraktListUtil
 
 import requests
 import requests_cache
@@ -85,12 +87,10 @@ def process_single_movie(plex_movie, trakt_watched, trakt_ratings, trakt_collect
 
 
 
-def process_movie_section(s, watched_set, ratings_dict, watchlist, collection):
+def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
     # args: a section of plex movies, a set comprised of the slugs of all watched movies and a dict with key=slug and value=rating (1-10)
 
-    # plex movies to be added to the watchlist
-    # will be returned
-    plex_watchlist = []
+
     ###############
     # Sync movies with trakt
     ###############
@@ -159,15 +159,13 @@ def process_movie_section(s, watched_set, ratings_dict, watchlist, collection):
                     logging.info("Movie [{} ({})]: marking as watched in Plex...".format(movie.title, movie.year))
                     with requests_cache.disabled():
                         movie.markWatched()
-            # add to plex watchlist
-            if m.slug in watchlist:
-                plex_watchlist.append(movie)
-                logging.info('Movie [{} ({})]: added to watchlist'.format(movie.title, movie.year))
+            # add to plex lists
+            listutil.addPlexMovieToLists(m.slug, movie)
 
             logging.info("Movie [{} ({})]: sync complete".format(movie.title, movie.year))
         except trakt.errors.NotFoundException:
             logging.error("Movie [{} ({})]: NOT FOUND on trakt - GUID: {}".format(movie.title, movie.year, guid))
-    return plex_watchlist
+
 
 def process_single_show(show):
     guid = show.guid
@@ -305,16 +303,20 @@ def main():
     start_time = time()
     load_dotenv()
     logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', filename='last_update.log', filemode='w', level=logging.INFO)
+    listutil = TraktListUtil()
     # do not use the cache for account specific stuff as this is subject to change
     with requests_cache.disabled():
+        liked_lists = trakt_show_progress.get_liked_lists()
         trakt_user = trakt.users.User(getenv('TRAKT_USERNAME'))
         trakt_watched_movies = set(map(lambda m: m.slug, trakt_user.watched_movies))
         logging.debug("Watched movies from trakt: {}".format(trakt_watched_movies))
         trakt_movie_collection = set(map(lambda m: m.slug, trakt_user.movie_collection))
         #logging.debug("Movie collection from trakt:", trakt_movie_collection)
-        trakt_movie_watchlist = set(map(lambda m: m.slug, trakt_user.watchlist_movies))
+        listutil.addList(None, "Trakt Watchlist", list_set=set(map(lambda m: m.slug, trakt_user.watchlist_movies)))
         #logging.debug("Movie watchlist from trakt:", trakt_movie_watchlist)
         user_ratings = trakt_user.get_ratings(media_type='movies')
+    for lst in liked_lists:
+        listutil.addList(lst['username'], lst['listname'])
     ratings = {}
     for r in user_ratings:
         ratings[r['movie']['ids']['slug']] = r['rating']
@@ -328,8 +330,7 @@ def main():
         logging.info("Server version {} updated at: {}".format(plex.version, plex.updatedAt))
         logging.info("Recently added: {}".format(plex.library.recentlyAdded()[:5]))
     
-    # collect the watchlist items in loop, then recreate it afterwards
-    plex_watchlist = []
+
     with requests_cache.disabled():
         sections = plex.library.sections()
     for section in sections:
@@ -338,7 +339,7 @@ def main():
         if type(section) is plexapi.library.MovieSection:
             #clean_collections_in_section(section)
             print("Processing section", section.title)
-            plex_watchlist += process_movie_section(section, trakt_watched_movies, ratings, trakt_movie_watchlist, trakt_movie_collection)
+            process_movie_section(section, trakt_watched_movies, ratings, listutil, trakt_movie_collection)
         # process show sections
         elif type(section) is plexapi.library.ShowSection:
             print("Processing section", section.title)
@@ -349,15 +350,7 @@ def main():
         timedelta = time() - section_start_time
         logging.warning("Completed section sync in {} s".format(timedelta))
 
-    try:
-        with requests_cache.disabled():
-            plex.playlist('trakt_watchlist').delete()
-    except (NotFound, BadRequest):
-        with requests_cache.disabled():
-            logging.error("Playlist 'trakt_watchlist' not found, so it could not be deleted. Actual playlists: %s" % plex.playlists())
-        pass
-    with requests_cache.disabled():
-        plex.createPlaylist('trakt_watchlist', items=plex_watchlist)
+    listutil.updatePlexLists(plex)
     logging.info("Updated plex watchlist")
     timedelta = time() - start_time
     logging.info("Completed full sync in {} seconds".format(timedelta))

@@ -2,6 +2,18 @@ from trakt.core import get
 from trakt.tv import TVEpisode
 
 @get
+def get_liked_lists():
+    data = yield 'users/likes/lists'
+    retVal = []
+    for lst in data:
+        thisList = {}
+        thisList['listname'] = lst['list']['name']
+        thisList['username'] = lst['list']['user']['ids']['slug']
+        retVal.append(thisList)
+    yield retVal
+
+
+@get
 def lookup_table(show):
     # returns all seasons and episodes with one single call
     data = yield 'shows/{}/seasons?extended=episodes'.format(show.slug)
@@ -102,5 +114,4 @@ class ShowProgress():
     
 
 if __name__ == "__main__":
-    watched_got = all_episodes('game-of-thrones')
-    print(watched_got.get_completed(8, 6))
+    print(get_liked_lists())
