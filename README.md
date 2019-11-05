@@ -30,6 +30,14 @@ Personally, I run this script in a cronjob every two hours. On Mac this worked b
 
 to the cronjobs after typing `crontab -e` in the terminal.
 
+## Sync settings
+To disable parts of the functionality of this software, look no further than `config.json`. Here, in the sync section, you can disable the following things by setting them from `true` to `false` in a text editor:
+
+ - Downloading liked lists from Trakt and adding them to Plex
+ - Downloading your watchlist from Trakt and adding it to Plex
+ - Syncing the watched status between Plex and Trakt
+ - Syncing the collected status between Plex and Trakt
+
 ## Notes
 
  - The first execution of the script will (depending on your PMS library size) take a long time. After that, movie details and Trakt lists are cached, so it should run a lot quicker the second time. This does mean, however, that Trakt lists are not updated dynamically (which is fine for lists like "2018 Academy Award Nominees" but might not be ideal for lists that are updated often). Here are the execution times on my Plex server: First run - 1228 seconds, second run - 111 seconds
