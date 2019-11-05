@@ -11,7 +11,7 @@ import logging
 from time import time
 
 
-import trakt_show_progress
+import pytrakt_extensions
 from trakt_list_util import TraktListUtil
 
 import requests
@@ -131,12 +131,12 @@ def process_show_section(s):
                     trakt_show = result
                     break
             with requests_cache.disabled():
-                trakt_watched = trakt_show_progress.watched(trakt_show.slug)
-                trakt_collected = trakt_show_progress.collected(trakt_show.slug)
+                trakt_watched = pytrakt_extensions.watched(trakt_show.slug)
+                trakt_collected = pytrakt_extensions.collected(trakt_show.slug)
             start_time = time()
             # this lookup-table is accessible via lookup[season][episode]
             with requests_cache.disabled():
-                lookup = trakt_show_progress.lookup_table(trakt_show)
+                lookup = pytrakt_extensions.lookup_table(trakt_show)
 
             logging.debug("Show [{} ({})]: Generated LUT in {} seconds".format(show.title, show.year, (time() - start_time)))
 
@@ -176,7 +176,7 @@ def main():
     listutil = TraktListUtil()
     # do not use the cache for account specific stuff as this is subject to change
     with requests_cache.disabled():
-        liked_lists = trakt_show_progress.get_liked_lists()
+        liked_lists = pytrakt_extensions.get_liked_lists()
         trakt_user = trakt.users.User(getenv('TRAKT_USERNAME'))
         trakt_watched_movies = set(map(lambda m: m.slug, trakt_user.watched_movies))
         logging.debug("Watched movies from trakt: {}".format(trakt_watched_movies))
