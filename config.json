@@ -1,0 +1,9 @@
+{
+    "sync": {
+        "liked_lists": true,
+        "watchlist": true,
+        "watched_status": true,
+        "collection": true,
+        "ratings": true
+    }
+}

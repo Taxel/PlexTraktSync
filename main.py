@@ -1,3 +1,4 @@
+
 import plexapi.server
 import trakt
 import trakt.movies
@@ -13,6 +14,7 @@ from time import time
 
 import pytrakt_extensions
 from trakt_list_util import TraktListUtil
+from config import CONFIG
 
 import requests
 import requests_cache
@@ -56,41 +58,47 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                 if type(result) is trakt.movies.Movie:
                     m = result
                     break
-            # add to collection if necessary
-            if m.slug not in collection:
-                logging.info('Movie [{} ({})]: Added to trakt collection'.format(movie.title, movie.year))
-                m.add_to_library()
+
+            if CONFIG['sync']['collection']:            
+                # add to collection if necessary
+                if m.slug not in collection:
+                    logging.info('Movie [{} ({})]: Added to trakt collection'.format(movie.title, movie.year))
+                    m.add_to_library()
+
             # compare ratings
-            if m.slug in ratings_dict:
-                trakt_rating = int(ratings_dict[m.slug])
-            else:
-                trakt_rating = None
-            plex_rating = int(movie.userRating) if movie.userRating is not None else None
-            identical = plex_rating is trakt_rating
-            # plex rating takes precedence over trakt rating
-            if plex_rating is not None and not identical:
-                with requests_cache.disabled():
-                    m.rate(plex_rating)
-                logging.info("Movie [{} ({})]: Rating with {} on trakt".format(movie.title, movie.year, plex_rating))
-            elif trakt_rating is not None and not identical:
-                with requests_cache.disabled():
-                    movie.rate(trakt_rating)
-                logging.info("Movie [{} ({})]: Rating with {} on plex".format(movie.title, movie.year, trakt_rating))
+            if CONFIG['sync']['ratings']:
+                if m.slug in ratings_dict:
+                    trakt_rating = int(ratings_dict[m.slug])
+                else:
+                    trakt_rating = None
+                plex_rating = int(movie.userRating) if movie.userRating is not None else None
+                identical = plex_rating is trakt_rating
+                # plex rating takes precedence over trakt rating
+                if plex_rating is not None and not identical:
+                    with requests_cache.disabled():
+                        m.rate(plex_rating)
+                    logging.info("Movie [{} ({})]: Rating with {} on trakt".format(movie.title, movie.year, plex_rating))
+                elif trakt_rating is not None and not identical:
+                    with requests_cache.disabled():
+                        movie.rate(trakt_rating)
+                    logging.info("Movie [{} ({})]: Rating with {} on plex".format(movie.title, movie.year, trakt_rating))
+
             # sync watch status
-            watchedOnPlex = movie.isWatched
-            watchedOnTrakt = m.slug in watched_set
-            if watchedOnPlex is not watchedOnTrakt:
-                # if watch status is not synced
-                # send watched status from plex to trakt
-                if watchedOnPlex:
-                    logging.info("Movie [{} ({})]: marking as watched on Trakt...".format(movie.title, movie.year))
-                    with requests_cache.disabled():
-                        m.mark_as_seen()
-                # set watched status if movie is watched on trakt
-                elif watchedOnTrakt:
-                    logging.info("Movie [{} ({})]: marking as watched in Plex...".format(movie.title, movie.year))
-                    with requests_cache.disabled():
-                        movie.markWatched()
+            if CONFIG['sync']['watched_status']:
+                watchedOnPlex = movie.isWatched
+                watchedOnTrakt = m.slug in watched_set
+                if watchedOnPlex is not watchedOnTrakt:
+                    # if watch status is not synced
+                    # send watched status from plex to trakt
+                    if watchedOnPlex:
+                        logging.info("Movie [{} ({})]: marking as watched on Trakt...".format(movie.title, movie.year))
+                        with requests_cache.disabled():
+                            m.mark_as_seen()
+                    # set watched status if movie is watched on trakt
+                    elif watchedOnTrakt:
+                        logging.info("Movie [{} ({})]: marking as watched in Plex...".format(movie.title, movie.year))
+                        with requests_cache.disabled():
+                            movie.markWatched()
             # add to plex lists
             listutil.addPlexMovieToLists(m.slug, movie)
 
@@ -146,21 +154,25 @@ def process_show_section(s):
                     eps = lookup[episode.seasonNumber][episode.index]
                     watched = trakt_watched.get_completed(episode.seasonNumber, episode.index)
                     collected = trakt_collected.get_completed(episode.seasonNumber, episode.index)
-                    if not collected:
-                        with requests_cache.disabled():
-                            eps.instance.add_to_library()
-                        logging.info("Show [{} ({})]: Collected episode S{:02}E{:02}".format(show.title, show.year, episode.seasonNumber, episode.index))
-                    if episode.isWatched != watched:
-                        if episode.isWatched:
+                    # sync collected
+                    if CONFIG['sync']['collection']:
+                        if not collected:
                             with requests_cache.disabled():
-                                eps.instance.mark_as_seen()
-                            logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(show.title, show.year, episode.seasonNumber, episode.index))
-                        elif watched:
-                            with requests_cache.disabled():
-                                episode.markWatched()
-                            logging.info("Show [{} ({})]: Marked as watched on plex: episode S{:02}E{:02}".format(show.title, show.year, episode.seasonNumber, episode.index))
-                        else:
-                            logging.warning("Episode.isWatched: {}, watched: {} isWatched != watched: {}".format(episode.isWatched, watched, episode.isWatched != watched))
+                                eps.instance.add_to_library()
+                            logging.info("Show [{} ({})]: Collected episode S{:02}E{:02}".format(show.title, show.year, episode.seasonNumber, episode.index))
+                    # sync watched status
+                    if CONFIG['sync']['watched_status']:
+                        if episode.isWatched != watched:
+                            if episode.isWatched:
+                                with requests_cache.disabled():
+                                    eps.instance.mark_as_seen()
+                                logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(show.title, show.year, episode.seasonNumber, episode.index))
+                            elif watched:
+                                with requests_cache.disabled():
+                                    episode.markWatched()
+                                logging.info("Show [{} ({})]: Marked as watched on plex: episode S{:02}E{:02}".format(show.title, show.year, episode.seasonNumber, episode.index))
+                            else:
+                                logging.warning("Episode.isWatched: {}, watched: {} isWatched != watched: {}".format(episode.isWatched, watched, episode.isWatched != watched))
                     logging.debug("Show [{} ({})]: Synced episode S{:02}E{:02}".format(show.title, show.year, episode.seasonNumber, episode.index))
                 except KeyError:
                     logging.warning("Show [{} ({})]: Key not found, did not record episode S{:02}E{:02}".format(show.title, show.year, episode.seasonNumber, episode.index))
@@ -170,23 +182,28 @@ def process_show_section(s):
 
 
 def main():
+
     start_time = time()
     load_dotenv()
     logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', filename='last_update.log', filemode='w', level=logging.INFO)
     listutil = TraktListUtil()
     # do not use the cache for account specific stuff as this is subject to change
     with requests_cache.disabled():
-        liked_lists = pytrakt_extensions.get_liked_lists()
+        if CONFIG['sync']['liked_lists']:
+            liked_lists = pytrakt_extensions.get_liked_lists()
         trakt_user = trakt.users.User(getenv('TRAKT_USERNAME'))
         trakt_watched_movies = set(map(lambda m: m.slug, trakt_user.watched_movies))
         logging.debug("Watched movies from trakt: {}".format(trakt_watched_movies))
         trakt_movie_collection = set(map(lambda m: m.slug, trakt_user.movie_collection))
         #logging.debug("Movie collection from trakt:", trakt_movie_collection)
-        listutil.addList(None, "Trakt Watchlist", list_set=set(map(lambda m: m.slug, trakt_user.watchlist_movies)))
+        if CONFIG['sync']['watchlist']:
+            listutil.addList(None, "Trakt Watchlist", list_set=set(map(lambda m: m.slug, trakt_user.watchlist_movies)))
         #logging.debug("Movie watchlist from trakt:", trakt_movie_watchlist)
         user_ratings = trakt_user.get_ratings(media_type='movies')
-    for lst in liked_lists:
-        listutil.addList(lst['username'], lst['listname'])
+
+    if CONFIG['sync']['liked_lists']:
+        for lst in liked_lists:
+            listutil.addList(lst['username'], lst['listname'])
     ratings = {}
     for r in user_ratings:
         ratings[r['movie']['ids']['slug']] = r['rating']
