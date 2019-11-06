@@ -13,7 +13,7 @@ This is currently under construction, so use at own risk, there may be bugs and 
 
  - Liked lists in Trakt are downloaded and all movies in PMS belonging to that list are added
 
- - None of the above requires a Plex Pass or Trakt VIP membership, downside: Needs to be executed manually or via cronjob, can not use live data via webhooks.
+ - None of the above requires a Plex Pass or Trakt VIP membership. Downside: Needs to be executed manually or via cronjob, can not use live data via webhooks.
 
 ## Setup
 To setup this on your own machine, first clone or download this repo.

@@ -113,7 +113,7 @@ def process_show_section(s):
         allShows = s.all()
     for show in allShows:
         guid = show.guid
-        if guid.startswith('local'):
+        if guid.startswith('local') or 'agents.none' in guid:
             # ignore this guid, it's not matched
             logging.warning("Show [{} ({})]: GUID is local, ignoring".format(show.title, show.year))
             continue
