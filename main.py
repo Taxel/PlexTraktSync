@@ -213,7 +213,7 @@ def main():
     if plex_token == '-':
         plex_token = ""
     with requests_cache.disabled():
-        plex = plexapi.server.PlexServer(token=plex_token)
+        plex = plexapi.server.PlexServer(token=plex_token, baseurl=CONFIG['base_url'])
         logging.info("Server version {} updated at: {}".format(plex.version, plex.updatedAt))
         logging.info("Recently added: {}".format(plex.library.recentlyAdded()[:5]))
     
