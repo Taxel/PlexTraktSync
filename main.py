@@ -60,7 +60,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                     m = result
                     break
             if m is None:
-                logging.error'Movie [{} ({})]: Not found. Aborting'.format(movie.title, movie.year))
+                logging.error('Movie [{} ({})]: Not found. Aborting'.format(movie.title, movie.year))
                 continue
 
             if CONFIG['sync']['collection']:            
