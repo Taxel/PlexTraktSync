@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from os import getenv
 import logging
 from time import time
+from json.decoder import JSONDecodeError
 
 
 import pytrakt_extensions
@@ -166,16 +167,23 @@ def process_show_section(s):
                     # sync collected
                     if CONFIG['sync']['collection']:
                         if not collected:
-                            with requests_cache.disabled():
-                                eps.instance.add_to_library()
-                            logging.info("Show [{} ({})]: Collected episode S{:02}E{:02}".format(show.title, show.year, episode.seasonNumber, episode.index))
+                            try:
+                                with requests_cache.disabled():
+                                    eps.instance.add_to_library()
+                                logging.info("Show [{} ({})]: Collected episode S{:02}E{:02}".format(show.title, show.year, episode.seasonNumber, episode.index))
+                            except JSONDecodeError as e:
+                                logging.error("JSON decode error: {}".format(str(e)))
+
                     # sync watched status
                     if CONFIG['sync']['watched_status']:
                         if episode.isWatched != watched:
                             if episode.isWatched:
-                                with requests_cache.disabled():
-                                    eps.instance.mark_as_seen()
-                                logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(show.title, show.year, episode.seasonNumber, episode.index))
+                                try:
+                                    with requests_cache.disabled():
+                                        eps.instance.mark_as_seen()
+                                    logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(show.title, show.year, episode.seasonNumber, episode.index))
+                                except JSONDecodeError as e:
+                                    logging.error("JSON decode error: {}".format(str(e)))
                             elif watched:
                                 with requests_cache.disabled():
                                     episode.markWatched()
