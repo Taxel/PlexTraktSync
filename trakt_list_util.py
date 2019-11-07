@@ -30,7 +30,8 @@ class TraktList():
             except (NotFound, BadRequest):
                 logging.error("Playlist %s not found, so it could not be deleted. Actual playlists: %s" % (self.name, plex.playlists()))
                 pass
-            plex.createPlaylist(self.name, items=self.plex_movies)
+            if len(self.plex_movies) > 0:
+                plex.createPlaylist(self.name, items=self.plex_movies)
 
 
 class TraktListUtil():
