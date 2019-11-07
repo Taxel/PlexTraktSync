@@ -1,5 +1,5 @@
 {
-    "base_url": "localhost:32400",
+    "base_url": "http://localhost:32400",
     "sync": {
         "liked_lists": true,
         "watchlist": true,
