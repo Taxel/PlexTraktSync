@@ -53,11 +53,15 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
         # search and sync movie
         try:
             search = trakt.sync.search_by_id(x, id_type=provider)
+            m = None
             # look for the first movie in the results
             for result in search:
                 if type(result) is trakt.movies.Movie:
                     m = result
                     break
+            if m is None:
+                logging.error'Movie [{} ({})]: Not found. Aborting'.format(movie.title, movie.year))
+                continue
 
             if CONFIG['sync']['collection']:            
                 # add to collection if necessary
@@ -134,11 +138,15 @@ def process_show_section(s):
             # find show
             logging.debug("Show [{} ({})]: Started sync".format(show.title, show.year))
             search = trakt.sync.search_by_id(x, id_type=provider)
+            trakt_show = None
             # look for the first tv show in the results
             for result in search:
                 if type(result) is trakt.tv.TVShow:
                     trakt_show = result
                     break
+            if trakt_show is None:
+                logging.error("Show [{} ({})]: Did not find on Trakt. Aborting".format(show.title, show.year))
+                break
             with requests_cache.disabled():
                 trakt_watched = pytrakt_extensions.watched(trakt_show.slug)
                 trakt_collected = pytrakt_extensions.collected(trakt_show.slug)
