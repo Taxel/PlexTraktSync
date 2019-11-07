@@ -121,13 +121,14 @@ def process_show_section(s):
             x = guid.split('//')[1]
             x = x.split('?')[0]
             provider = 'tvdb'
+        elif 'themoviedb' in guid:
+            x = guid.split('//')[1]
+            x = x.split('?')[0]
+            provider = 'tmdb'
         else:
-            logging.error("Show [{} ({})]: Unrecognized GUID {}".format(show.title, show.year))
+            logging.error("Show [{} ({})]: Unrecognized GUID {}".format(show.title, show.year, guid))
+            continue
             raise NotImplementedError()
-        # elif 'themoviedb' in guid:
-        #     x = guid.split('//')[1]
-        #     x = x.split('?')[0]
-        #     provider = 'tmdb'
 
         try:
             # find show
