@@ -48,6 +48,10 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
             x = guid.split('//')[1]
             x = x.split('?')[0]
             provider = 'tmdb'
+        elif 'xbmcnfo' in guid:
+            x = guid.split('//')[1]
+            x = x.split('?')[0]
+            provider = CONFIG['xbmc-providers']['movies']
         else:
             logging.error('Movie [{} ({})]: Unrecognized GUID {}'.format(
                 movie.title, movie.year, movie.guid))
@@ -141,6 +145,10 @@ def process_show_section(s):
             x = guid.split('//')[1]
             x = x.split('?')[0]
             provider = 'tmdb'
+        elif 'xbmcnfotv' in guid:
+            x = guid.split('//')[1]
+            x = x.split('?')[0]
+            provider = CONFIG['xbmc-providers']['shows']
         else:
             logging.error("Show [{} ({})]: Unrecognized GUID {}".format(
                 show.title, show.year, guid))

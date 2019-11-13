@@ -7,5 +7,9 @@
         "watched_status": true,
         "collection": true,
         "ratings": true
+    },
+    "xbmc-providers": {
+        "movies": "imdb",
+        "shows": "tvdb"
     }
 }
