@@ -230,7 +230,8 @@ def main():
     load_dotenv()
     logLevel = logging.DEBUG if CONFIG['log_debug_messages'] else logging.INFO
     logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s',
-                        filename='last_update.log', filemode='w', level=logLevel)
+                        handlers=[logging.FileHandler('last_update.log', 'w', 'utf-8')],
+                        level=logLevel)
     listutil = TraktListUtil()
     # do not use the cache for account specific stuff as this is subject to change
     with requests_cache.disabled():
