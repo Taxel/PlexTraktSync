@@ -102,7 +102,7 @@ class ShowProgress():
             self.seasons[prog.number] = prog
             allCompleted = allCompleted and prog.completed
 
-        self.completed = allCompleted
+        self.completed = allCompleted if len(seasons) > 0 else False
         #print("Series completed: {}".format(self.completed))
 
     def get_completed(self, season, episode):
