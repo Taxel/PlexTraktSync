@@ -146,7 +146,7 @@ def process_show_section(s):
                     trakt_show = result
                     break
             if trakt_show is None:
-                logging.error("Show [{} ({})]: Did not find on Trakt. Aborting".format(show.title, show.year))
+                logging.error("Show [{} ({})]: Did not find on Trakt. Aborting. GUID: {}".format(show.title, show.year, guid))
                 break
             with requests_cache.disabled():
                 trakt_watched = pytrakt_extensions.watched(trakt_show.slug)
