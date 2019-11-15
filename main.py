@@ -31,6 +31,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
     ###############
     with requests_cache.disabled():
         allMovies = s.all()
+    logging.info("Now working on movie section {} containing {} elements".format(s.title, len(allMovies)))
     for movie in allMovies:
         # find id to search movie
         guid = movie.guid
@@ -130,6 +131,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
 def process_show_section(s):
     with requests_cache.disabled():
         allShows = s.all()
+    logging.info("Now working on show section {} containing {} elements".format(s.title, len(allShows)))
     for show in allShows:
         guid = show.guid
         if guid.startswith('local') or 'agents.none' in guid:
@@ -168,7 +170,7 @@ def process_show_section(s):
                     break
             if trakt_show is None:
                 logging.error("Show [{} ({})]: Did not find on Trakt. Aborting. GUID: {}".format(show.title, show.year, guid))
-                break
+                continue
             with requests_cache.disabled():
                 trakt_watched = pytrakt_extensions.watched(trakt_show.slug)
                 trakt_collected = pytrakt_extensions.collected(trakt_show.slug)
