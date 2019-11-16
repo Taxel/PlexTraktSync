@@ -186,46 +186,50 @@ def process_show_section(s):
             for episode in show.episodes():
                 try:
                     eps = lookup[episode.seasonNumber][episode.index]
-                    watched = trakt_watched.get_completed(
-                        episode.seasonNumber, episode.index)
-                    collected = trakt_collected.get_completed(
-                        episode.seasonNumber, episode.index)
-                    # sync collected
-                    if CONFIG['sync']['collection']:
-                        if not collected:
+                except KeyError:
+                    try:
+                        logging.warning("Show [{} ({})]: Key not found, did not record episode S{:02}E{:02}".format(
+                            show.title, show.year, episode.seasonNumber, episode.index))
+                    except TypeError:
+                        logging.error("Show [{} ({})]: Invalid episode {}".format(show.title, show.year, episode))
+                    continue
+                watched = trakt_watched.get_completed(
+                    episode.seasonNumber, episode.index)
+                collected = trakt_collected.get_completed(
+                    episode.seasonNumber, episode.index)
+                # sync collected
+                if CONFIG['sync']['collection']:
+                    if not collected:
+                        try:
+                            with requests_cache.disabled():
+                                eps.instance.add_to_library()
+                            logging.info("Show [{} ({})]: Collected episode S{:02}E{:02}".format(
+                                show.title, show.year, episode.seasonNumber, episode.index))
+                        except JSONDecodeError as e:
+                            logging.error(
+                                "JSON decode error: {}".format(str(e)))
+
+                # sync watched status
+                if CONFIG['sync']['watched_status']:
+                    if episode.isWatched != watched:
+                        if episode.isWatched:
                             try:
                                 with requests_cache.disabled():
-                                    eps.instance.add_to_library()
-                                logging.info("Show [{} ({})]: Collected episode S{:02}E{:02}".format(
+                                    eps.instance.mark_as_seen()
+                                logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(
                                     show.title, show.year, episode.seasonNumber, episode.index))
                             except JSONDecodeError as e:
                                 logging.error(
                                     "JSON decode error: {}".format(str(e)))
-
-                    # sync watched status
-                    if CONFIG['sync']['watched_status']:
-                        if episode.isWatched != watched:
-                            if episode.isWatched:
-                                try:
-                                    with requests_cache.disabled():
-                                        eps.instance.mark_as_seen()
-                                    logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(
-                                        show.title, show.year, episode.seasonNumber, episode.index))
-                                except JSONDecodeError as e:
-                                    logging.error(
-                                        "JSON decode error: {}".format(str(e)))
-                            elif watched:
-                                with requests_cache.disabled():
-                                    episode.markWatched()
-                                logging.info("Show [{} ({})]: Marked as watched on plex: episode S{:02}E{:02}".format(
-                                    show.title, show.year, episode.seasonNumber, episode.index))
-                            else:
-                                logging.warning("Episode.isWatched: {}, watched: {} isWatched != watched: {}".format(
-                                    episode.isWatched, watched, episode.isWatched != watched))
+                        elif watched:
+                            with requests_cache.disabled():
+                                episode.markWatched()
+                            logging.info("Show [{} ({})]: Marked as watched on plex: episode S{:02}E{:02}".format(
+                                show.title, show.year, episode.seasonNumber, episode.index))
+                        else:
+                            logging.warning("Episode.isWatched: {}, watched: {} isWatched != watched: {}".format(
+                                episode.isWatched, watched, episode.isWatched != watched))
                     logging.debug("Show [{} ({})]: Synced episode S{:02}E{:02}".format(
-                        show.title, show.year, episode.seasonNumber, episode.index))
-                except KeyError:
-                    logging.warning("Show [{} ({})]: Key not found, did not record episode S{:02}E{:02}".format(
                         show.title, show.year, episode.seasonNumber, episode.index))
             logging.info("Show [{} ({})]: Finished sync".format(
                 show.title, show.year))
