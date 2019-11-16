@@ -2,11 +2,17 @@
     "base_url": "http://localhost:32400",
     "log_debug_messages": false,
     "sync": {
-        "liked_lists": true,
-        "watchlist": true,
-        "watched_status": true,
-        "collection": true,
-        "ratings": true
+        "trakt_to_plex": {
+            "liked_lists": true,
+            "watchlist": true,
+            "watched_status": true,
+            "ratings": true
+        },
+        "plex_to_trakt": {
+            "watched_status": true,
+            "collection": true,
+            "ratings": true
+        }        
     },
     "xbmc-providers": {
         "movies": "imdb",
