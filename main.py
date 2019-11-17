@@ -172,8 +172,12 @@ def process_show_section(s):
                 logging.error("Show [{} ({})]: Did not find on Trakt. Aborting. GUID: {}".format(show.title, show.year, guid))
                 continue
             with requests_cache.disabled():
-                trakt_watched = pytrakt_extensions.watched(trakt_show.slug)
-                trakt_collected = pytrakt_extensions.collected(trakt_show.slug)
+                try:
+                    trakt_watched = pytrakt_extensions.watched(trakt_show.slug)
+                    trakt_collected = pytrakt_extensions.collected(trakt_show.slug)
+                except JSONDecodeError:
+                    logging.error("Show [{} ({})]: JSONDecodeError. Aborting".format(show.title, show.year))
+                    continue
             start_time = time()
             # this lookup-table is accessible via lookup[season][episode]
             with requests_cache.disabled():
