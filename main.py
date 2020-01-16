@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from os import getenv
 import logging
 from time import time
+import datetime
 from json.decoder import JSONDecodeError
 
 
@@ -111,7 +112,8 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                         logging.info("Movie [{} ({})]: marking as watched on Trakt...".format(
                             movie.title, movie.year))
                         with requests_cache.disabled():
-                            m.mark_as_seen()
+                            seen_date = (movie.lastViewedAt if movie.lastViewedAt else datetime.now())
+                            m.mark_as_seen(seen_date)
                     # set watched status if movie is watched on trakt
                     elif watchedOnTrakt:
                         logging.info("Movie [{} ({})]: marking as watched in Plex...".format(
