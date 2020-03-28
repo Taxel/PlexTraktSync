@@ -218,7 +218,8 @@ def process_show_section(s):
                         if episode.isWatched:
                             try:
                                 with requests_cache.disabled():
-                                    eps.instance.mark_as_seen()
+                                    seen_date = (episode.lastViewedAt if episode.lastViewedAt else datetime.now())
+                                    eps.instance.mark_as_seen(seen_date)
                                 logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(
                                     show.title, show.year, episode.seasonNumber, episode.index))
                             except JSONDecodeError as e:
