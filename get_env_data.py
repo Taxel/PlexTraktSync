@@ -21,10 +21,9 @@ else:
     with open(env_file, "w") as txt:
         txt.write("PLEX_TOKEN=-\n")
 
-trakt.APPLICATION_ID = '65370'
-trakt.core.AUTH_METHOD=trakt.core.OAUTH_AUTH
+trakt.core.AUTH_METHOD=trakt.core.DEVICE_AUTH
 trakt_user = input("Please input your Trakt username: ")
-trakt.init(trakt_user, store=True)
+trakt.init(store=True)
 with open(env_file, "a") as txt:
     txt.write("TRAKT_USERNAME=" + trakt_user + "\n")
 print("You are now logged into Trakt. Your Trakt credentials have been added in .env and .pytrakt.json files.")
