@@ -29,4 +29,4 @@ PlexAPI = "==3.2.0"
 websocket_client = "==0.56.0"
 
 [requires]
-python_version = "3.7"
+python_version = "3"
