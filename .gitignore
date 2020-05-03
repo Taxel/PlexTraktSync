@@ -1,5 +1,13 @@
+#Environment files
 .env
-.vscode/
+venv
 __pycache__/
+
+#IDE Configurations
+.vscode/
+.idea/
+
+#Project files
+.pytrakt.json
 trakt_cache.sqlite
 last_update.log

@@ -1,5 +1,15 @@
 from trakt.core import get
 from trakt.tv import TVEpisode
+import datetime
+
+@get
+def get_history(username, media_type, item_id, start_at: datetime = None, end_at: datetime = None, limit=50000):
+    url = 'users/{username}/history/{type}/{item_id}?limit={limit}'.format(username=username, type=media_type, item_id=item_id, limit=limit)
+    if start_at is not None and end_at is not None:
+        url = url + '&start_at={start_at}Z&end_at={end_at}Z'.format(start_at=start_at.isoformat(), end_at=end_at.isoformat())
+
+    data = yield url
+    yield data
 
 @get
 def get_liked_lists():
@@ -85,7 +95,7 @@ class SeasonProgress():
             return False
         return self.episodes[episode].get_completed()
 
-    
+
 class ShowProgress():
     def __init__(self, aired=0, completed=False, last_watched_at=None, reset_at=None, seasons=None, hidden_seasons=None, next_episode=0, last_episode=0, last_collected_at=None):
         self.aired = aired
@@ -111,7 +121,7 @@ class ShowProgress():
         elif season not in self.seasons.keys():
             return False
         return self.seasons[season].get_completed(episode)
-    
+
 
 if __name__ == "__main__":
     print(get_liked_lists())
