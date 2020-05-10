@@ -54,7 +54,7 @@ class LazyEpisode():
 @get
 def watched(show_slug):
     # returns a ShowProgress object containing the watched states of the passed show
-    data = yield 'shows/{}/progress/watched'.format(show_slug)
+    data = yield 'shows/{}/progress/watched?specials=true&count_specials=true'.format(show_slug)
     yield ShowProgress(**data)
 
 @get

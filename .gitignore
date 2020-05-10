@@ -11,3 +11,4 @@ __pycache__/
 .pytrakt.json
 trakt_cache.sqlite
 last_update.log
+duplicate_cleaner.log

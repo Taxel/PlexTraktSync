@@ -1,7 +1,7 @@
-
 import plexapi.server
 from os import getenv, path
 import trakt
+
 trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
 import trakt.movies
 import trakt.tv
@@ -13,7 +13,6 @@ import logging
 from time import time
 import datetime
 from json.decoder import JSONDecodeError
-
 
 import pytrakt_extensions
 from trakt_list_util import TraktListUtil
@@ -172,7 +171,8 @@ def process_show_section(s):
                     trakt_show = result
                     break
             if trakt_show is None:
-                logging.error("Show [{} ({})]: Did not find on Trakt. Aborting. GUID: {}".format(show.title, show.year, guid))
+                logging.error(
+                    "Show [{} ({})]: Did not find on Trakt. Aborting. GUID: {}".format(show.title, show.year, guid))
                 continue
             with requests_cache.disabled():
                 trakt_watched = pytrakt_extensions.watched(trakt_show.slug)
@@ -218,7 +218,8 @@ def process_show_section(s):
                         if episode.isWatched:
                             try:
                                 with requests_cache.disabled():
-                                    eps.instance.mark_as_seen()
+                                    seen_date = (episode.lastViewedAt if episode.lastViewedAt else datetime.now())
+                                    eps.instance.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
                                 logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(
                                     show.title, show.year, episode.seasonNumber, episode.index))
                             except JSONDecodeError as e:
@@ -242,7 +243,6 @@ def process_show_section(s):
 
 
 def main():
-
     start_time = time()
     load_dotenv()
     if not getenv("PLEX_TOKEN") or not getenv("TRAKT_USERNAME"):
@@ -265,11 +265,11 @@ def main():
             trakt_watched_movies))
         trakt_movie_collection = set(
             map(lambda m: m.slug, trakt_user.movie_collection))
-        #logging.debug("Movie collection from trakt:", trakt_movie_collection)
+        # logging.debug("Movie collection from trakt:", trakt_movie_collection)
         if CONFIG['sync']['watchlist']:
             listutil.addList(None, "Trakt Watchlist", list_set=set(
                 map(lambda m: m.slug, trakt_user.watchlist_movies)))
-        #logging.debug("Movie watchlist from trakt:", trakt_movie_watchlist)
+        # logging.debug("Movie watchlist from trakt:", trakt_movie_watchlist)
         user_ratings = trakt_user.get_ratings(media_type='movies')
 
     if CONFIG['sync']['liked_lists']:
