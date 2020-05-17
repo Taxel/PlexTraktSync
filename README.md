@@ -35,17 +35,21 @@ pipenv run python main.py
 
 [pipenv]: https://pipenv.pypa.io/
 
-After that, rename the `.env_example` file to `.env`.
 
-The data you have to put into this file will be printed out by `python3
-get_env_data.py`, so execute this script and follow the instructions.
 To connect to Trakt you need to create a new API app: Visit
 `https://trakt.tv/oauth/applications/new`, give it a meaningful name and enter
 `urn:ietf:wg:oauth:2.0:oob`as the redirect url. You can leave Javascript
 origins and the checkboxes blank.
 
-After that you're done. run `python3 main.py`. You can take a look at the
-progress in the `last_update.log` file which will be created. 
+If your Plex server is not on localhost, edit base_url in `config.json` file.
+
+Then, run `python3 main.py`.
+
+At first run, you will be asked to setup Trakt and Plex access.
+Follow the instructions, your credentials and API keys will be stored in
+`.env` and `.pytrakt.json` files.
+You can take a look at the progress in the `last_update.log` file which will
+be created. 
 
 Personally, I run this script in a cronjob every two hours. On Mac this worked
 by adding the line:
