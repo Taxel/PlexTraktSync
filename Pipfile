@@ -1,0 +1,32 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+astroid = "==2.3.2"
+certifi = "==2019.9.11"
+chardet = "==3.0.4"
+idna = "==2.8"
+isort = "==4.3.21"
+lazy-object-proxy = "==1.4.2"
+mccabe = "==0.6.1"
+oauthlib = "==3.1.0"
+pylint = "==2.4.3"
+python-dotenv = "==0.10.3"
+requests = "==2.22.0"
+requests-cache = "==0.5.2"
+requests-oauthlib = "==1.2.0"
+six = "==1.12.0"
+tqdm = "==4.36.1"
+trakt = "==2.11.0"
+typed-ast = "==1.4.0"
+urllib3 = "==1.25.6"
+wrapt = "==1.11.2"
+PlexAPI = "==3.2.0"
+websocket_client = "==0.56.0"
+
+[requires]
+python_version = "3"

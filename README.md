@@ -27,6 +27,14 @@ This should install the required Python packages:
 pip3 install -r requirements.txt
 ```
 
+Alternatively you can use [pipenv]:
+```
+pip install pipenv
+pipenv run python main.py
+```
+
+[pipenv]: https://pipenv.pypa.io/
+
 After that, rename the `.env_example` file to `.env`.
 
 The data you have to put into this file will be printed out by `python3
