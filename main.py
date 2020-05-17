@@ -114,7 +114,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                             movie.title, movie.year))
                         with requests_cache.disabled():
                             seen_date = (movie.lastViewedAt if movie.lastViewedAt else datetime.now())
-                            m.mark_as_seen(seen_date)
+                            m.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
                     # set watched status if movie is watched on trakt
                     elif watchedOnTrakt:
                         logging.info("Movie [{} ({})]: marking as watched in Plex...".format(
@@ -218,7 +218,8 @@ def process_show_section(s):
                         if episode.isWatched:
                             try:
                                 with requests_cache.disabled():
-                                    eps.instance.mark_as_seen()
+                                    seen_date = (episode.lastViewedAt if episode.lastViewedAt else datetime.now())
+                                    eps.instance.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
                                 logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(
                                     show.title, show.year, episode.seasonNumber, episode.index))
                             except JSONDecodeError as e:
