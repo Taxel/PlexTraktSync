@@ -23,7 +23,8 @@ else:
 
 trakt.core.AUTH_METHOD=trakt.core.DEVICE_AUTH
 trakt_user = input("Please input your Trakt username: ")
-trakt.init(store=True)
+client_id, client_secret = trakt.core._get_client_info()
+trakt.init(client_id=client_id, client_secret=client_secret, store=True)
 with open(env_file, "a") as txt:
     txt.write("TRAKT_USERNAME=" + trakt_user + "\n")
 print("You are now logged into Trakt. Your Trakt credentials have been added in .env and .pytrakt.json files.")
