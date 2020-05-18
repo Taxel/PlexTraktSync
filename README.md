@@ -29,7 +29,9 @@ pip3 install -r requirements.txt
 
 Alternatively you can use [pipenv]:
 ```
-pip install pipenv
+pip3 install pipenv
+sudo apk add python3-dev alpine-sdk # on Alpine Linux
+pipenv
 pipenv run python main.py
 ```
 
