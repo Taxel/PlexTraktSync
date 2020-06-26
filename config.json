@@ -12,8 +12,8 @@
         "movies": "imdb",
         "shows": "tvdb"
     },
-    "excluded-libraries": {
+    "excluded-libraries": [
         "Private",
         "Family Holidays"
-    }
+    ]
 }
