@@ -302,6 +302,8 @@ def main():
     with requests_cache.disabled():
         sections = plex.library.sections()
     for section in sections:
+        if section.title in CONFIG['excluded-libraries']:
+            continue
         # process movie sections
         section_start_time = time()
         if type(section) is plexapi.library.MovieSection:

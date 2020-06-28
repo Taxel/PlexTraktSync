@@ -11,5 +11,9 @@
     "xbmc-providers": {
         "movies": "imdb",
         "shows": "tvdb"
-    }
+    },
+    "excluded-libraries": [
+        "Private",
+        "Family Holidays"
+    ]
 }
