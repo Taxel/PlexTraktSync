@@ -14,9 +14,34 @@ if plex_needed:
     servername = input("Now enter the server name: ")
     account = MyPlexAccount(username, password)
     plex = account.resource(servername).connect()  # returns a PlexServer instance
+    token = plex._token
+    users = account.users()
+    if users:
+        print("Managed user(s) found:")
+        for user in users:
+            if user.friend == True:
+                print(user.title)
+        name = input("If you want to sync a managed user, enter its username (if not just press enter): ")
+        while name:
+            try:
+                useraccount = account.user(name)
+            except:
+                if name != "_wrong":
+                    print("Unknown username!")
+                name = input("Please enter a managed username (or just press enter to use your main account): ")
+                if not name:
+                    print("Ok, continuing with your account " + username)
+                    break
+                continue
+            try:
+                token = account.user(name).get_token(plex.machineIdentifier)
+                break
+            except:
+                print("Impossible to find this managed user on this server!")
+                name = "_wrong"
     with open(env_file, 'w') as txt:
-        txt.write("PLEX_TOKEN=" + plex._token + "\n")
-    print("Your Plex token has been added in .env file: PLEX_TOKEN=" + plex._token)
+        txt.write("PLEX_TOKEN=" + token + "\n")
+    print("Plex token has been added in .env file: PLEX_TOKEN=" + token)
 else:
     with open(env_file, "w") as txt:
         txt.write("PLEX_TOKEN=-\n")
