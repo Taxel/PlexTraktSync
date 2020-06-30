@@ -24,14 +24,14 @@ To setup this on your own machine, first clone or download this repo.
 
 This should install the required Python packages:
 ```
-sudo apk add python3-dev alpine-sdk # on Alpine Linux
+sudo apk add py3-pip python3-dev alpine-sdk # on Alpine Linux
 pip3 install -r requirements.txt
 ```
 
 Alternatively you can use [pipenv]:
 ```
+sudo apk add py3-pip python3-dev alpine-sdk # on Alpine Linux
 pip3 install pipenv
-sudo apk add python3-dev alpine-sdk # on Alpine Linux
 pipenv
 pipenv run python main.py
 ```
