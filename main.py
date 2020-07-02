@@ -262,6 +262,9 @@ def main():
                         level=logLevel)
     listutil = TraktListUtil()
     # do not use the cache for account specific stuff as this is subject to change
+    start_msg = "Starting sync Plex user {} and Trakt user {}.".format(getenv('PLEX_USERNAME'), getenv('TRAKT_USERNAME'))
+    print(start_msg)
+    logging.info(start_msg)
     with requests_cache.disabled():
         if CONFIG['sync']['liked_lists']:
             liked_lists = pytrakt_extensions.get_liked_lists()
@@ -319,7 +322,7 @@ def main():
             continue
 
         timedelta = time() - section_start_time
-        logging.warning("Completed section sync in {} s".format(timedelta))
+        logging.warning("Completed section sync in {:.1f} s".format(timedelta))
 
     listutil.updatePlexLists(plex)
     logging.info("Updated plex watchlist")
