@@ -264,7 +264,11 @@ def main():
     # do not use the cache for account specific stuff as this is subject to change
     with requests_cache.disabled():
         if CONFIG['sync']['liked_lists']:
-            liked_lists = pytrakt_extensions.get_liked_lists()
+            try:
+                liked_lists = pytrakt_extensions.get_liked_lists()
+            except trakt.errors.OAuthException as e:
+                logging.info("Trakt authentication error: {}".format(str(e)))
+                exit(1)
         trakt_user = trakt.users.User(getenv('TRAKT_USERNAME'))
         trakt_watched_movies = set(
             map(lambda m: m.trakt, trakt_user.watched_movies))
