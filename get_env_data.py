@@ -21,7 +21,8 @@ if plex_needed:
         for user in users:
             if user.friend == True:
                 print(user.title)
-        name = input("If you want to use a managed user enter its username'\Iif you want to use your main account just press enter : ")
+        print("If you want to use a managed user enter its username,")
+        name = input("if you want to use your main account just press enter: ")
         while name:
             try:
                 useraccount = account.user(name)
