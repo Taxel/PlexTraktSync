@@ -21,7 +21,7 @@ if plex_needed:
         for user in users:
             if user.friend == True:
                 print(user.title)
-        name = input("If you want to sync a managed user, enter its username (if not just press enter): ")
+        name = input("If you want to use a managed user enter its username'\Iif you want to use your main account just press enter : ")
         while name:
             try:
                 useraccount = account.user(name)
@@ -37,7 +37,7 @@ if plex_needed:
                 token = account.user(name).get_token(plex.machineIdentifier)
                 break
             except:
-                print("Impossible to find this managed user on this server!")
+                print("Impossible to find the managed user \'"+name+"\' on this server!")
                 name = "_wrong"
     with open(env_file, 'w') as txt:
         txt.write("PLEX_TOKEN=" + token + "\n")
