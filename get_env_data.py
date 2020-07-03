@@ -44,7 +44,7 @@ if plex_needed:
     with open(env_file, 'w') as txt:
         txt.write("PLEX_USERNAME=" + username + "\n")
         txt.write("PLEX_TOKEN=" + token + "\n")
-    print("Plex token has been added in .env file: PLEX_TOKEN=" + token)
+    print("Plex token for {} has been added in .env file: PLEX_TOKEN={}".format(username, token))
 else:
     with open(env_file, "w") as txt:
         txt.write("PLEX_USERNAME=-\n")

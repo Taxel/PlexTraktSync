@@ -262,7 +262,7 @@ def main():
                         level=logLevel)
     listutil = TraktListUtil()
     # do not use the cache for account specific stuff as this is subject to change
-    start_msg = "Starting sync Plex user {} and Trakt user {}.".format(getenv('PLEX_USERNAME'), getenv('TRAKT_USERNAME'))
+    start_msg = "Starting sync Plex {} and Trakt {}".format(getenv('PLEX_USERNAME'), getenv('TRAKT_USERNAME'))
     print(start_msg)
     logging.info(start_msg)
     with requests_cache.disabled():
