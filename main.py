@@ -327,8 +327,8 @@ def main():
     listutil.updatePlexLists(plex)
     logging.info("Updated plex watchlist")
     timedelta = time() - start_time
-    logging.info("Completed full sync in {} seconds".format(timedelta))
-    print("Completed full sync in {} seconds".format(timedelta))
+    logging.info("Completed full sync in {:.1f} seconds".format(timedelta))
+    print("Completed full sync in {:.1f} seconds".format(timedelta))
 
 
 if __name__ == "__main__":
