@@ -262,6 +262,9 @@ def main():
                         level=logLevel)
     listutil = TraktListUtil()
     # do not use the cache for account specific stuff as this is subject to change
+    start_msg = "Starting sync Plex {} and Trakt {}".format(getenv('PLEX_USERNAME'), getenv('TRAKT_USERNAME'))
+    print(start_msg)
+    logging.info(start_msg)
     with requests_cache.disabled():
         try:
             trakt_user = trakt.users.User(getenv('TRAKT_USERNAME'))
@@ -325,13 +328,13 @@ def main():
             continue
 
         timedelta = time() - section_start_time
-        logging.warning("Completed section sync in {} s".format(timedelta))
+        logging.warning("Completed section sync in {:.1f} s".format(timedelta))
 
     listutil.updatePlexLists(plex)
     logging.info("Updated plex watchlist")
     timedelta = time() - start_time
-    logging.info("Completed full sync in {} seconds".format(timedelta))
-    print("Completed full sync in {} seconds".format(timedelta))
+    logging.info("Completed full sync in {:.1f} seconds".format(timedelta))
+    print("Completed full sync in {:.1f} seconds".format(timedelta))
 
 
 if __name__ == "__main__":
