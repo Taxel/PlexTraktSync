@@ -1,5 +1,4 @@
 {
-    "base_url": "http://localhost:32400",
     "log_debug_messages": false,
     "sync": {
         "liked_lists": true,
