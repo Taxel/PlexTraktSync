@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c579cff67c41f32a0294ffdc46cfd5ac13946f9d629bc08bd2e16d2a647efa95"
+            "sha256": "8ebfd1ad0ecb829e0f07f99cacb24fc0d89cd4f05f532cec47aed964d3df386c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -137,8 +137,9 @@
         },
         "requests-oauthlib": {
             "hashes": [
+                "sha256:d3ed0c8f2e3bbc6b344fa63d6f933745ab394469da38db16bdddb461c7e25140",
                 "sha256:bd6533330e8748e94bf0b214775fed487d309b8b8fe823dc45641ebcd9a32f57",
-                "sha256:d3ed0c8f2e3bbc6b344fa63d6f933745ab394469da38db16bdddb461c7e25140"
+                "sha256:dd5a0499abfefd087c6dd96693cbd5bfd28aa009719a7f85ab3fabe3956ef19a"
             ],
             "index": "pypi",
             "version": "==1.2.0"
@@ -161,10 +162,10 @@
         },
         "trakt": {
             "hashes": [
-                "sha256:1bcb422e0aa8d1d414e33ef88b9ca8a505cf02a6b24894f8289e4f1e2dc33881"
+                "sha256:e8b815a47bbb97976d5c7b55ecf835a106b00be385646f52cedd4ef8706db73a"
             ],
             "index": "pypi",
-            "version": "==2.11.0"
+            "version": "==2.14.0"
         },
         "typed-ast": {
             "hashes": [
