@@ -28,6 +28,9 @@ def input_yesno(msg):
         return input_yesno(msg)
 
 def load_json(path):
-    with open(path) as f:
-        data = json.load(f)
+    try:
+        with open(path) as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = {}
     return data
