@@ -1,18 +1,29 @@
 from plexapi.myplex import MyPlexAccount
+from dotenv import load_dotenv
 import utils
-from os import path
+from os import getenv, path
 import trakt
 import trakt.core
 
 trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
 env_file = path.join(path.dirname(path.abspath(__file__)), ".env")
 
+load_dotenv()
+PLEX_BASEURL = getenv("PLEX_BASEURL")
+PLEX_USERNAME = getenv("PLEX_USERNAME")
+PLEX_TOKEN = getenv("PLEX_TOKEN")
+TRAKT_USERNAME = getenv("TRAKT_USERNAME")
+
+CONFIG = utils.load_json(trakt.core.CONFIG_PATH)
+CLIENT_ID = CONFIG.get("CLIENT_ID")
+CLIENT_SECRET = CONFIG.get("CLIENT_SECRET")
+
 plex_needed = utils.input_yesno("Are you logged into this server with a Plex account?")
 if plex_needed:
-    username = input("Please enter your Plex username: ")
-    password = input("Please enter your Plex password: ")
+    PLEX_USERNAME = utils.input_text("Please enter your Plex username", PLEX_USERNAME)
+    password = utils.input_hidden("Please enter your Plex password: ")
     servername = input("Now enter the server name: ")
-    account = MyPlexAccount(username, password)
+    account = MyPlexAccount(PLEX_USERNAME, password)
     plex = account.resource(servername).connect()  # returns a PlexServer instance
     token = plex._token
     users = account.users()
@@ -41,24 +52,23 @@ if plex_needed:
             except:
                 print("Impossible to find the managed user \'"+name+"\' on this server!")
                 name = "_wrong"
-    with open(env_file, 'w') as txt:
-        txt.write("PLEX_USERNAME=" + username + "\n")
-        txt.write("PLEX_TOKEN=" + token + "\n")
-        txt.write("PLEX_BASEURL=" + plex._baseurl + "\n")
-    print("Plex token for {} has been added in .env file:".format(username))
-    print("PLEX_TOKEN={}".format(token))
-    print("PLEX_BASEURL={}".format(plex._baseurl))
-else:
-    with open(env_file, "w") as txt:
-        txt.write("PLEX_USERNAME=-\n")
-        txt.write("PLEX_TOKEN=-\n")
+    PLEX_BASEURL = plex._baseurl
+    PLEX_USERNAME = username
+    PLEX_TOKEN = token
 
 trakt.core.AUTH_METHOD=trakt.core.DEVICE_AUTH
-trakt_user = input("Please input your Trakt username: ")
+TRAKT_USERNAME = utils.input_text("Please input your Trakt username", TRAKT_USERNAME)
 client_id, client_secret = trakt.core._get_client_info()
 trakt.init(client_id=client_id, client_secret=client_secret, store=True)
-with open(env_file, "a") as txt:
-    txt.write("TRAKT_USERNAME=" + trakt_user + "\n")
+
+with open(env_file, "w") as txt:
+    txt.write("TRAKT_USERNAME={0}\n".format(TRAKT_USERNAME))
+    txt.write("PLEX_USERNAME={0}\n".format(PLEX_USERNAME))
+    txt.write("PLEX_TOKEN={0}\n".format(PLEX_TOKEN))
+    txt.write("PLEX_BASEURL={0}\n".format(PLEX_BASEURL))
+
 print("You are now logged into Trakt. Your Trakt credentials have been added in .env and .pytrakt.json files.")
-print("You can enjoy sync! \nCheck config.json to adjust settings.")
+print("You can enjoy sync!")
+print("")
+print("Check config.json to adjust settings.")
 print("If you want to change Plex or Trakt account, just edit or remove .env and .pytrakt.json files.")
