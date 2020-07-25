@@ -1,7 +1,7 @@
 # Plex-Trakt-Sync
 
 This project adds a two-way-sync between trakt.tv and Plex Media Server. It
-requires a trakt.tv account but no Plex premium and Trakt VIP subscriptions,
+requires a trakt.tv account but no Plex premium and no Trakt VIP subscriptions,
 unlike the Plex app provided by Trakt.
 
 I am not actively maintaining this, so use at own risk, there may be bugs and
@@ -41,8 +41,6 @@ To connect to Trakt you need to create a new API app: Visit
 `https://trakt.tv/oauth/applications/new`, give it a meaningful name and enter
 `urn:ietf:wg:oauth:2.0:oob`as the redirect url. You can leave Javascript
 origins and the checkboxes blank.
-
-If your Plex server is not on localhost, edit base_url in `config.json` file.
 
 Then, run `python3 main.py`.
 

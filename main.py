@@ -298,11 +298,12 @@ def main():
     logging.debug("Movie ratings from trakt: {}".format(ratings))
     logging.info('Loaded Trakt lists.')
     plex_token = getenv("PLEX_TOKEN")
+    plex_baseurl = getenv("PLEX_BASEURL")
     if plex_token == '-':
         plex_token = ""
     with requests_cache.disabled():
         plex = plexapi.server.PlexServer(
-            token=plex_token, baseurl=CONFIG['base_url'])
+            token=plex_token, baseurl=plex_baseurl)
         logging.info("Server version {} updated at: {}".format(
             plex.version, plex.updatedAt))
         logging.info("Recently added: {}".format(
