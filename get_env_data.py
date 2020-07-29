@@ -11,7 +11,7 @@ env_file = path.join(path.dirname(path.abspath(__file__)), ".env")
 plex_needed = utils.input_yesno("-- Plex --\nAre you logged into this server with a Plex account?")
 if plex_needed:
     username = input("Please enter your Plex username: ")
-    password = input("Please enter your Plex password: ")
+    password = utils.input_hidden("Please enter your Plex password: ")
     servername = input("Now enter the server name: ")
     account = MyPlexAccount(username, password)
     plex = account.resource(servername).connect()  # returns a PlexServer instance
