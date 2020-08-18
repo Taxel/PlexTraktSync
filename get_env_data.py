@@ -3,6 +3,7 @@ import utils
 from os import path
 import trakt
 import trakt.core
+import trakt.users
 
 trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
 env_file = path.join(path.dirname(path.abspath(__file__)), ".env")
@@ -54,11 +55,12 @@ else:
         txt.write("PLEX_TOKEN=-\n")
 
 trakt.core.AUTH_METHOD=trakt.core.DEVICE_AUTH
-trakt_user = input("Please input your Trakt username: ")
+print("Trakt configuration:")
 client_id, client_secret = trakt.core._get_client_info()
 trakt.init(client_id=client_id, client_secret=client_secret, store=True)
+trakt_user = trakt.users.User('me')
 with open(env_file, "a") as txt:
-    txt.write("TRAKT_USERNAME=" + trakt_user + "\n")
+    txt.write("TRAKT_USERNAME=" + trakt_user.name + "\n")
 print("You are now logged into Trakt. Your Trakt credentials have been added in .env and .pytrakt.json files.")
 print("You can enjoy sync! \nCheck config.json to adjust settings.")
 print("If you want to change Plex or Trakt account, just edit or remove .env and .pytrakt.json files.")
