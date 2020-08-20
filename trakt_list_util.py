@@ -14,9 +14,9 @@ class TraktList():
             self.slugs = list(map(lambda m: m.slug, [elem for elem in UserList._get(listname, username).get_items() if type(elem) == Movie]))
     
     @staticmethod
-    def from_set(listname, list_set):
+    def from_slug_list(listname, slug_list):
         l = TraktList(None, listname)
-        l.slugs = list_set
+        l.slugs = slug_list
         return l
 
     def addPlexMovie(self, slug, plex_movie):
@@ -41,9 +41,9 @@ class TraktListUtil():
     def __init__(self):
         self.lists = []
 
-    def addList(self, username, listname, list_set = None):
-        if list_set is not None:
-            self.lists.append(TraktList.from_set(listname, list_set))
+    def addList(self, username, listname, slug_list = None):
+        if slug_list is not None:
+            self.lists.append(TraktList.from_slug_list(listname, slug_list))
             logging.info("Downloaded List {}".format(listname))
             return
         try:
