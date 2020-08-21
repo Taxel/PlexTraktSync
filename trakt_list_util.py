@@ -11,18 +11,21 @@ class TraktList():
         self.plex_movies = []
         self.list_order = []
         if username != None:
-            self.slugs = list(map(lambda m: m.slug, [elem for elem in UserList._get(listname, username).get_items() if type(elem) == Movie]))
+            slug_dict = dict(enumerate(map(lambda m: m.slug, [elem for elem in UserList._get(listname, username).get_items() if type(elem) == Movie])))
+            self.slugs = dict(zip(slug_dict.values(), slug_dict.keys()))
     
     @staticmethod
     def from_slug_list(listname, slug_list):
         l = TraktList(None, listname)
-        l.slugs = slug_list
+        slug_dict = dict(enumerate(slug_list))
+        l.slugs = dict(zip(slug_dict.values(), slug_dict.keys()))
         return l
 
     def addPlexMovie(self, slug, plex_movie):
-        if slug in self.slugs:
+        rank = self.slugs.get(slug)
+        if rank is not None:
             self.plex_movies.append(plex_movie)
-            self.list_order.append(self.slugs.index(slug))
+            self.list_order.append(rank)
             logging.info('Movie [{} ({})]: added to list {}'.format(plex_movie.title, plex_movie.year, self.name))
 
     def updatePlexList(self, plex):
