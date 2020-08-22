@@ -4,6 +4,7 @@ from trakt.movies import Movie
 import requests_cache
 import logging
 from plexapi.exceptions import BadRequest, NotFound
+from itertools import count
 
 class TraktList():
     def __init__(self, username, listname):
@@ -11,14 +12,12 @@ class TraktList():
         self.plex_movies = []
         self.list_order = []
         if username != None:
-            slug_dict = dict(enumerate(map(lambda m: m.slug, [elem for elem in UserList._get(listname, username).get_items() if type(elem) == Movie])))
-            self.slugs = dict(zip(slug_dict.values(), slug_dict.keys()))
+            self.slugs = dict(zip(map(lambda m: m.slug, [elem for elem in UserList._get(listname, username).get_items() if type(elem) == Movie]),count()))
     
     @staticmethod
     def from_slug_list(listname, slug_list):
         l = TraktList(None, listname)
-        slug_dict = dict(enumerate(slug_list))
-        l.slugs = dict(zip(slug_dict.values(), slug_dict.keys()))
+        l.slugs = dict(zip(slug_list, count()))
         return l
 
     def addPlexMovie(self, slug, plex_movie):
