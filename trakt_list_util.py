@@ -10,7 +10,6 @@ class TraktList():
     def __init__(self, username, listname):
         self.name = listname
         self.plex_movies = []
-        self.list_order = []
         if username != None:
             self.slugs = dict(zip(map(lambda m: m.slug, [elem for elem in UserList._get(listname, username).get_items() if type(elem) == Movie]),count()))
     
@@ -23,8 +22,7 @@ class TraktList():
     def addPlexMovie(self, slug, plex_movie):
         rank = self.slugs.get(slug)
         if rank is not None:
-            self.plex_movies.append(plex_movie)
-            self.list_order.append(rank)
+            self.plex_movies.append((rank, plex_movie))
             logging.info('Movie [{} ({})]: added to list {}'.format(plex_movie.title, plex_movie.year, self.name))
 
     def updatePlexList(self, plex):
@@ -35,7 +33,7 @@ class TraktList():
                 logging.error("Playlist %s not found, so it could not be deleted. Actual playlists: %s" % (self.name, plex.playlists()))
                 pass
             if len(self.plex_movies) > 0:
-                _, plex_movies_sorted = zip(*sorted(zip(self.list_order, self.plex_movies)))
+                _, plex_movies_sorted = zip(*sorted(self.plex_movies))
                 plex.createPlaylist(self.name, items=plex_movies_sorted)
 
 
