@@ -1,13 +1,12 @@
 # deletes everything in trakt's collection
 # dangerous!
-from dotenv import load_dotenv
-from os import getenv
 import trakt.users
 import sys
 
+trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
+
 def main():
-    load_dotenv()
-    trakt_user = trakt.users.User(getenv('TRAKT_USERNAME'))
+    trakt_user = trakt.users.User('me')
     coll = trakt_user.movie_collection
     for movie in coll:
         print("Deleting", movie.title)
