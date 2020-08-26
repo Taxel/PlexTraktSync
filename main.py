@@ -284,7 +284,7 @@ def main():
         #logging.debug("Movie collection from trakt:", trakt_movie_collection)
         trakt_watched_shows = pytrakt_extensions.allwatched()
         if CONFIG['sync']['watchlist']:
-            listutil.addList(None, "Trakt Watchlist", list_set=set(
+            listutil.addList(None, "Trakt Watchlist", slug_list=list(
                 map(lambda m: m.slug, trakt_user.watchlist_movies)))
         #logging.debug("Movie watchlist from trakt:", trakt_movie_watchlist)
         user_ratings = trakt_user.get_ratings(media_type='movies')
