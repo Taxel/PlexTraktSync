@@ -3,11 +3,12 @@ import utils
 from os import path
 import trakt
 import trakt.core
+import trakt.users
 
 trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
 env_file = path.join(path.dirname(path.abspath(__file__)), ".env")
 
-plex_needed = utils.input_yesno("Are you logged into this server with a Plex account?")
+plex_needed = utils.input_yesno("-- Plex --\nAre you logged into this server with a Plex account?")
 if plex_needed:
     username = input("Please enter your Plex username: ")
     password = input("Please enter your Plex password: ")
@@ -45,20 +46,22 @@ if plex_needed:
         txt.write("PLEX_USERNAME=" + username + "\n")
         txt.write("PLEX_TOKEN=" + token + "\n")
         txt.write("PLEX_BASEURL=" + plex._baseurl + "\n")
-    print("Plex token for {} has been added in .env file:".format(username))
+    print("Plex token and baseurl for {} have been added in .env file:".format(username))
     print("PLEX_TOKEN={}".format(token))
     print("PLEX_BASEURL={}".format(plex._baseurl))
 else:
     with open(env_file, "w") as txt:
         txt.write("PLEX_USERNAME=-\n")
         txt.write("PLEX_TOKEN=-\n")
+        txt.write("PLEX_BASEURL=http://localhost:32400\n")
 
 trakt.core.AUTH_METHOD=trakt.core.DEVICE_AUTH
-trakt_user = input("Please input your Trakt username: ")
+print("-- Trakt --")
 client_id, client_secret = trakt.core._get_client_info()
 trakt.init(client_id=client_id, client_secret=client_secret, store=True)
+trakt_user = trakt.users.User('me')
 with open(env_file, "a") as txt:
-    txt.write("TRAKT_USERNAME=" + trakt_user + "\n")
+    txt.write("TRAKT_USERNAME=" + trakt_user.username + "\n")
 print("You are now logged into Trakt. Your Trakt credentials have been added in .env and .pytrakt.json files.")
 print("You can enjoy sync! \nCheck config.json to adjust settings.")
 print("If you want to change Plex or Trakt account, just edit or remove .env and .pytrakt.json files.")

@@ -267,7 +267,7 @@ def main():
     logging.info(start_msg)
     with requests_cache.disabled():
         try:
-            trakt_user = trakt.users.User(getenv('TRAKT_USERNAME'))
+            trakt_user = trakt.users.User('me')
         except trakt.errors.OAuthException as e:
             m = "Trakt authentication error: {}".format(str(e))
             logging.info(m)
