@@ -19,7 +19,6 @@ import pytrakt_extensions
 from trakt_list_util import TraktListUtil
 from config import CONFIG
 
-import requests
 import requests_cache
 
 requests_cache.install_cache('trakt_cache')
@@ -116,8 +115,8 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                             with requests_cache.disabled():
                                 seen_date = (movie.lastViewedAt if movie.lastViewedAt else datetime.now())
                                 m.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
-                        except ValueError: #for py<3.6
-                                m.mark_as_seen(seen_date)
+                        except ValueError:  # for py<3.6
+                            m.mark_as_seen(seen_date)
                     # set watched status if movie is watched on trakt
                     elif watchedOnTrakt:
                         logging.info("Movie [{} ({})]: marking as watched in Plex...".format(
@@ -127,11 +126,14 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
             # add to plex lists
             listutil.addPlexMovieToLists(m.slug, movie)
 
-            logging.info("Movie [{} ({})]: sync complete".format(
+            logging.info("Movie [{} ({})]: Finished sync".format(
                 movie.title, movie.year))
         except trakt.errors.NotFoundException:
             logging.error(
-                "Movie [{} ({})]: NOT FOUND on trakt - GUID: {}".format(movie.title, movie.year, guid))
+                "Movie [{} ({})]: GUID {} not found on trakt".format(movie.title, movie.year, guid))
+        except:
+            logging.error(
+                "Movie [{} ({})]: bad response from trakt (GUID: {})".format(movie.title, movie.year, guid))
 
 
 def process_show_section(s, watched_set):
@@ -178,7 +180,6 @@ def process_show_section(s, watched_set):
                 logging.error("Show [{} ({})]: Did not find on Trakt. Aborting. GUID: {}".format(show.title, show.year, guid))
                 continue
             with requests_cache.disabled():
-                #trakt_watched = pytrakt_extensions.watched(trakt_show.trakt)
                 trakt_collected = pytrakt_extensions.collected(trakt_show.slug)
             start_time = time()
             # this lookup-table is accessible via lookup[season][episode]
@@ -225,7 +226,7 @@ def process_show_section(s, watched_set):
                                     eps.instance.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
                                 logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(
                                     show.title, show.year, episode.seasonNumber, episode.index))
-                            except ValueError: #for py<3.6
+                            except ValueError:  # for py<3.6
                                 eps.instance.mark_as_seen(seen_date)
                             except JSONDecodeError as e:
                                 logging.error(
@@ -244,6 +245,9 @@ def process_show_section(s, watched_set):
                 show.title, show.year))
         except trakt.errors.NotFoundException:
             logging.error("Show [{} ({})]: GUID {} not found on trakt".format(
+                show.title, show.year, guid))
+        except:
+            logging.error("Show [{} ({})]: bad response from trakt (GUID {})".format(
                 show.title, show.year, guid))
 
 
@@ -281,12 +285,12 @@ def main():
             trakt_watched_movies))
         trakt_movie_collection = set(
             map(lambda m: m.slug, trakt_user.movie_collection))
-        #logging.debug("Movie collection from trakt:", trakt_movie_collection)
+        # logging.debug("Movie collection from trakt:", trakt_movie_collection)
         trakt_watched_shows = pytrakt_extensions.allwatched()
         if CONFIG['sync']['watchlist']:
             listutil.addList(None, "Trakt Watchlist", slug_list=list(
                 map(lambda m: m.slug, trakt_user.watchlist_movies)))
-        #logging.debug("Movie watchlist from trakt:", trakt_movie_watchlist)
+        # logging.debug("Movie watchlist from trakt:", trakt_movie_watchlist)
         user_ratings = trakt_user.get_ratings(media_type='movies')
 
     if CONFIG['sync']['liked_lists']:
