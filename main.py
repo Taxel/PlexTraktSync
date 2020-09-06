@@ -333,13 +333,15 @@ def main():
             continue
 
         timedelta = time() - section_start_time
-        logging.warning("Completed section sync in {:.1f} s".format(timedelta))
+        m, s = divmod(timedelta, 60)
+        logging.warning("Completed section sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
 
     listutil.updatePlexLists(plex)
     logging.info("Updated plex watchlist")
     timedelta = time() - start_time
-    logging.info("Completed full sync in {:.1f} seconds".format(timedelta))
-    print("Completed full sync in {:.1f} seconds".format(timedelta))
+    m, s = divmod(timedelta, 60)
+    logging.info("Completed full sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
+    print("Completed full sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
 
 
 if __name__ == "__main__":
