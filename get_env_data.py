@@ -20,7 +20,7 @@ if plex_needed:
     if users:
         print("Managed user(s) found:")
         for user in users:
-            if user.friend == True:
+            if user.friend is True:
                 print(user.title)
         print("If you want to use a managed user enter its username,")
         name = input("if you want to use your main account just press enter: ")
