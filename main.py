@@ -306,12 +306,18 @@ def main():
     if plex_token == '-':
         plex_token = ""
     with requests_cache.disabled():
-        plex = plexapi.server.PlexServer(
-            token=plex_token, baseurl=plex_baseurl)
-        logging.info("Server version {} updated at: {}".format(
-            plex.version, plex.updatedAt))
-        logging.info("Recently added: {}".format(
-            plex.library.recentlyAdded()[:5]))
+        try:
+            plex = plexapi.server.PlexServer(
+                token=plex_token, baseurl=plex_baseurl)
+            logging.info("Server version {} updated at: {}".format(
+                plex.version, plex.updatedAt))
+            logging.info("Recently added: {}".format(
+                plex.library.recentlyAdded()[:5]))
+        except Exception as e:
+            m = "Plex connection error: {}".format(str(e))
+            logging.info(m)
+            print(m)
+            exit(1)
 
     with requests_cache.disabled():
         sections = plex.library.sections()
