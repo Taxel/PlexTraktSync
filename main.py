@@ -180,7 +180,7 @@ def process_show_section(s, watched_set):
                 logging.error("Show [{} ({})]: Did not find on Trakt. Aborting. GUID: {}".format(show.title, show.year, guid))
                 continue
             with requests_cache.disabled():
-                trakt_collected = pytrakt_extensions.collected(trakt_show.slug)
+                trakt_collected = pytrakt_extensions.collected(trakt_show.trakt)
             start_time = time()
             # this lookup-table is accessible via lookup[season][episode]
             with requests_cache.disabled():
