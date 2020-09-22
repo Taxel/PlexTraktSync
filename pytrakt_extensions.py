@@ -75,7 +75,7 @@ class EpisodeProgress():
         return self.completed
 
 class SeasonProgress():
-    def __init__(self, number=0, aired=0, completed=False, episodes=None):
+    def __init__(self, number=0, title=None, aired=0, completed=False, episodes=None):
         self.number = number
         self.aired = aired
         self.episodes = {}
