@@ -16,7 +16,7 @@ def get_liked_lists():
 @get
 def lookup_table(show):
     # returns all seasons and episodes with one single call
-    data = yield 'shows/{}/seasons?extended=episodes'.format(show.slug)
+    data = yield 'shows/{}/seasons?extended=episodes'.format(show.trakt)
     retVal = {}
     for season in data:
         eps = {}
@@ -54,9 +54,9 @@ def watched(show_id):
     yield ShowProgress(**data)
 
 @get
-def collected(show_slug):
+def collected(show_id):
     # returns a ShowProgress object containing the watched states of the passed show
-    data = yield 'shows/{}/progress/collection'.format(show_slug)
+    data = yield 'shows/{}/progress/collection?specials=true'.format(show_id)
     #print(data)
     yield ShowProgress(**data)
 
@@ -75,7 +75,7 @@ class EpisodeProgress():
         return self.completed
 
 class SeasonProgress():
-    def __init__(self, number=0, aired=0, completed=False, episodes=None):
+    def __init__(self, number=0, title=None, aired=0, completed=False, episodes=None):
         self.number = number
         self.aired = aired
         self.episodes = {}
