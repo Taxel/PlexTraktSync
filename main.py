@@ -254,7 +254,15 @@ def process_show_section(s, watched_set):
 def main():
 
     start_time = time()
-    load_dotenv()
+    # try to load the custom envfile set in CUSTOM_ENV envoirment variable
+    envFile = getenv('CUSTOM_ENV')
+    if envFile == None:
+        envFile = path.join(path.dirname(path.abspath(__file__)), '.env')
+    else:
+        if not path.isabs(envFile):
+           envFile = path.join(path.dirname(path.abspath(__file__)), envFile) 
+        print("Using custom env file: %s" % envFile)  
+    load_dotenv(dotenv_path=envFile)
     if not getenv("PLEX_TOKEN") or not getenv("TRAKT_USERNAME"):
         print("First run, please follow those configuration instructions.")
         import get_env_data

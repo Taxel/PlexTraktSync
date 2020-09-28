@@ -59,6 +59,12 @@ by adding the line:
 
 to the cronjobs after typing `crontab -e` in the terminal.
 
+You can supply a custom env file by using the CUSTOM_ENV envoirment variable. 
+
+```
+CUSTOM_ENV=.env.my.plex.host ./plex_trakt_sync
+```
+
 ## Sync settings
 
 To disable parts of the functionality of this software, look no further than
