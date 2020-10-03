@@ -39,7 +39,7 @@ class TraktList():
                 logging.error("Playlist %s not found, so it could not be deleted. Actual playlists: %s" % (self.name, plex.playlists()))
                 pass
             if len(self.plex_items) > 0:
-                _, plex_items_sorted = zip(*sorted(self.plex_items))
+                _, plex_items_sorted = zip(*sorted(dict(reversed(self.plex_items)).items()))
                 plex.createPlaylist(self.name, items=plex_items_sorted)
 
 
