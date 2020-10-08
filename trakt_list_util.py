@@ -1,29 +1,35 @@
 from trakt.users import UserList
 from trakt.errors import NotFoundException
 from trakt.movies import Movie
+from trakt.tv import TVEpisode
+from plexapi.video import Episode
 import requests_cache
 import logging
 from plexapi.exceptions import BadRequest, NotFound
 from itertools import count
 
+
 class TraktList():
     def __init__(self, username, listname):
         self.name = listname
-        self.plex_movies = []
-        if username != None:
-            self.slugs = dict(zip(map(lambda m: m.slug, [elem for elem in UserList._get(listname, username).get_items() if type(elem) == Movie]),count()))
-    
+        self.plex_items = []
+        if username is not None:
+            self.traktids = dict(zip(map(lambda e: e.trakt, [elem for elem in UserList._get(listname, username).get_items() if isinstance(elem, (Movie, TVEpisode))]), count(1)))
+
     @staticmethod
-    def from_slug_list(listname, slug_list):
+    def from_traktid_list(listname, traktid_list):
         l = TraktList(None, listname)
-        l.slugs = dict(zip(slug_list, count()))
+        l.traktids = dict(zip(traktid_list, count(1)))
         return l
 
-    def addPlexMovie(self, slug, plex_movie):
-        rank = self.slugs.get(slug)
+    def addPlexItem(self, traktid, plex_item):
+        rank = self.traktids.get(traktid)
         if rank is not None:
-            self.plex_movies.append((rank, plex_movie))
-            logging.info('Movie [{} ({})]: added to list {}'.format(plex_movie.title, plex_movie.year, self.name))
+            self.plex_items.append((rank, plex_item))
+            if isinstance(plex_item, Episode):
+                logging.info('Show [{} ({})]: {} added to list {}'.format(plex_item.show().title, plex_item.show().year, plex_item.seasonEpisode, self.name))
+            else:
+                logging.info('Movie [{} ({})]: added to list {}'.format(plex_item.title, plex_item.year, self.name))
 
     def updatePlexList(self, plex):
         with requests_cache.disabled():
@@ -32,18 +38,18 @@ class TraktList():
             except (NotFound, BadRequest):
                 logging.error("Playlist %s not found, so it could not be deleted. Actual playlists: %s" % (self.name, plex.playlists()))
                 pass
-            if len(self.plex_movies) > 0:
-                _, plex_movies_sorted = zip(*sorted(self.plex_movies))
-                plex.createPlaylist(self.name, items=plex_movies_sorted)
+            if len(self.plex_items) > 0:
+                _, plex_items_sorted = zip(*sorted(dict(reversed(self.plex_items)).items()))
+                plex.createPlaylist(self.name, items=plex_items_sorted)
 
 
 class TraktListUtil():
     def __init__(self):
         self.lists = []
 
-    def addList(self, username, listname, slug_list = None):
-        if slug_list is not None:
-            self.lists.append(TraktList.from_slug_list(listname, slug_list))
+    def addList(self, username, listname, traktid_list=None):
+        if traktid_list is not None:
+            self.lists.append(TraktList.from_traktid_list(listname, traktid_list))
             logging.info("Downloaded List {}".format(listname))
             return
         try:
@@ -52,9 +58,9 @@ class TraktListUtil():
         except NotFoundException:
             logging.warning("Failed to get list {} by user {}".format(listname, username))
 
-    def addPlexMovieToLists(self, slug, plex_movie):
+    def addPlexItemToLists(self, traktid, plex_item):
         for l in self.lists:
-            l.addPlexMovie(slug, plex_movie)
+            l.addPlexItem(traktid, plex_item)
 
     def updatePlexLists(self, plex):
         for l in self.lists:

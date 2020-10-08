@@ -25,7 +25,7 @@ requests_cache.install_cache('trakt_cache')
 
 
 def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
-    # args: a section of plex movies, a set comprised of the slugs of all watched movies and a dict with key=slug and value=rating (1-10)
+    # args: a section of plex movies, a set comprised of the trakt ids of all watched movies and a dict with key=slug and value=rating (1-10)
 
     ###############
     # Sync movies with trakt
@@ -75,7 +75,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
 
             if CONFIG['sync']['collection']:
                 # add to collection if necessary
-                if m.slug not in collection:
+                if m.trakt not in collection:
                     logging.info('Movie [{} ({})]: Added to trakt collection'.format(
                         movie.title, movie.year))
                     m.add_to_library()
@@ -124,7 +124,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                         with requests_cache.disabled():
                             movie.markWatched()
             # add to plex lists
-            listutil.addPlexMovieToLists(m.slug, movie)
+            listutil.addPlexItemToLists(m.trakt, movie)
 
             logging.info("Movie [{} ({})]: Finished sync".format(
                 movie.title, movie.year))
@@ -136,7 +136,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                 "Movie [{} ({})]: bad response from trakt (GUID: {})".format(movie.title, movie.year, guid))
 
 
-def process_show_section(s, watched_set):
+def process_show_section(s, watched_set, listutil):
     with requests_cache.disabled():
         allShows = s.all()
     logging.info("Now working on show section {} containing {} elements".format(s.title, len(allShows)))
@@ -241,6 +241,8 @@ def process_show_section(s, watched_set):
                                 episode.isWatched, watched, episode.isWatched != watched))
                     logging.debug("Show [{} ({})]: Synced episode S{:02}E{:02}".format(
                         show.title, show.year, episode.seasonNumber, episode.index))
+                # add to plex lists
+                listutil.addPlexItemToLists(eps.instance.trakt, episode)
             logging.info("Show [{} ({})]: Finished sync".format(
                 show.title, show.year))
         except trakt.errors.NotFoundException:
@@ -284,15 +286,14 @@ def main():
         logging.debug("Watched movies from trakt: {}".format(
             trakt_watched_movies))
         trakt_movie_collection = set(
-            map(lambda m: m.slug, trakt_user.movie_collection))
+            map(lambda m: m.trakt, trakt_user.movie_collection))
         # logging.debug("Movie collection from trakt:", trakt_movie_collection)
         trakt_watched_shows = pytrakt_extensions.allwatched()
         if CONFIG['sync']['watchlist']:
-            listutil.addList(None, "Trakt Watchlist", slug_list=list(
-                map(lambda m: m.slug, trakt_user.watchlist_movies)))
+            listutil.addList(None, "Trakt Watchlist", traktid_list=list(
+                map(lambda m: m.trakt, trakt_user.watchlist_movies)))
         # logging.debug("Movie watchlist from trakt:", trakt_movie_watchlist)
         user_ratings = trakt_user.get_ratings(media_type='movies')
-
     if CONFIG['sync']['liked_lists']:
         for lst in liked_lists:
             listutil.addList(lst['username'], lst['listname'])
@@ -334,7 +335,7 @@ def main():
         # process show sections
         elif type(section) is plexapi.library.ShowSection:
             print("Processing section", section.title)
-            process_show_section(section, trakt_watched_shows)
+            process_show_section(section, trakt_watched_shows, listutil)
         else:
             continue
 
