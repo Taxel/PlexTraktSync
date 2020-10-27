@@ -28,19 +28,13 @@ This should install the required Python packages:
 pip3 install -r requirements.txt
 ```
 
-Alternatively you can use [pipenv]:
-```
-pip install pipenv
-pipenv run python main.py
-```
-
-[pipenv]: https://pipenv.pypa.io/
-
 
 To connect to Trakt you need to create a new API app: Visit
 `https://trakt.tv/oauth/applications/new`, give it a meaningful name and enter
-`urn:ietf:wg:oauth:2.0:oob`as the redirect url. You can leave Javascript
+`urn:ietf:wg:oauth:2.0:oob` as the redirect url. You can leave Javascript
 origins and the checkboxes blank.
+<img src="https://github.com/VladButacu/PlexTraktSync/docs/trakt_api_creation.png">
+
 
 Then, run `python3 main.py`.
 
