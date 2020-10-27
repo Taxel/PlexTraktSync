@@ -3,9 +3,11 @@
 import trakt.users
 import sys
 
-trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
+from os import path
+
 
 def main():
+    trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
     trakt_user = trakt.users.User('me')
     coll = trakt_user.movie_collection
     for movie in coll:
@@ -19,6 +21,7 @@ def main():
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] != '-confirm':
-        print("This script will delete every movie and show from your trakt collection. If you are sure you want to do that, rerun this script with the argument -confirm")
+        print("This script will delete every movie and show from your trakt collection !!!")
+        print(" If you are sure you want to do that, rerun this script with the argument -confirm")
     else:
         main()

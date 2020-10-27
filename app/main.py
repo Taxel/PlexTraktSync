@@ -1,30 +1,134 @@
+import datetime
+import json
+import logging
+from json.decoder import JSONDecodeError
+from os import path
+from time import time
 
 import plexapi.server
-from os import getenv, path
+import requests_cache
 import trakt
-trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
 import trakt.movies
 import trakt.tv
 import trakt.sync
 import trakt.users
 import trakt.core
-from dotenv import load_dotenv
-import logging
-from time import time
-import datetime
-from json.decoder import JSONDecodeError
-
-
 import pytrakt_extensions
 from trakt_list_util import TraktListUtil
-from config import CONFIG
-
-import requests_cache
-
-requests_cache.install_cache('trakt_cache')
 
 
-def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
+def main():
+    # Generate cache db
+    requests_cache.install_cache('data/trakt_cache')
+    # Load app config
+    APP_CONFIG = load_config('data/app_config.json')
+    # Load plex config
+    PLEX_CONFIG = load_config('data/plex_config.json')
+    # Load trakt config
+    trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), "data/trakt_config.json")
+
+    plex_token = PLEX_CONFIG['PLEX_TOKEN']
+    plex_baseurl = PLEX_CONFIG['BASE_URL']
+    liked_lists = ""
+    listutil = TraktListUtil()
+
+    start_time = time()
+
+    logLevel = logging.DEBUG if APP_CONFIG['log_debug_messages'] else logging.INFO
+    logfile = path.join(path.dirname(path.abspath(__file__)), "data/last_update.log")
+    logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s',
+                        handlers=[logging.FileHandler(logfile, 'w', 'utf-8')],
+                        level=logLevel)
+
+    start_msg = f"Starting sync"
+    print(start_msg)
+    logging.info(start_msg)
+
+    with requests_cache.disabled():
+        try:
+            trakt_user = trakt.users.User('me')
+        except trakt.errors.OAuthException as e:
+            logging.info(e)
+            print(e)
+            exit(1)
+
+        if APP_CONFIG['sync']['liked_lists']:
+            liked_lists = pytrakt_extensions.get_liked_lists()
+
+        trakt_watched_movies = set(map(lambda m: m.trakt, trakt_user.watched_movies))
+        logging.debug(f"Watched movies from trakt: {trakt_watched_movies}")
+
+        trakt_movie_collection = set(map(lambda m: m.trakt, trakt_user.movie_collection))
+        logging.debug(f"Movie collection from trakt: {trakt_movie_collection}")
+
+        trakt_watched_shows = pytrakt_extensions.allwatched()
+        if APP_CONFIG['sync']['watchlist']:
+            listutil.addList(None, "Trakt Watchlist", traktid_list=list(map(lambda m: m.trakt, trakt_user.watchlist_movies)))
+            # logging.debug("Movie watchlist from trakt:", trakt_movie_watchlist)
+
+        user_ratings = trakt_user.get_ratings(media_type='movies')
+
+    if APP_CONFIG['sync']['liked_lists']:
+        for lst in liked_lists:
+            listutil.addList(lst['username'], lst['listname'])
+
+    ratings = {}
+    for r in user_ratings:
+        ratings[r['movie']['ids']['slug']] = r['rating']
+    logging.debug(f"Movie ratings from trakt: {ratings}")
+    logging.info('Loaded Trakt lists.')
+
+    if plex_token == '-':
+        plex_token = ""
+    with requests_cache.disabled():
+        try:
+            plex = plexapi.server.PlexServer(token=plex_token, baseurl=plex_baseurl)
+            logging.info(f"Server version {plex.version} updated at: {plex.updatedAt}")
+            logging.info(f"Recently added: {plex.library.recentlyAdded()[:5]}")
+        except Exception as e:
+            m = f"Plex connection error: {e}"
+            logging.info(m)
+            print(m)
+            exit(1)
+
+    with requests_cache.disabled():
+        sections = plex.library.sections()
+    for section in sections:
+        if section.title in APP_CONFIG['excluded-libraries']:
+            continue
+        # process movie sections
+        section_start_time = time()
+        if type(section) is plexapi.library.MovieSection:
+            # clean_collections_in_section(section)
+            print(f"Processing section {section.title}")
+            process_movie_section(APP_CONFIG, section, trakt_watched_movies, ratings, listutil, trakt_movie_collection)
+        # process show sections
+        elif type(section) is plexapi.library.ShowSection:
+            print(f"Processing section {section.title}")
+            process_show_section(APP_CONFIG, section, trakt_watched_shows, listutil)
+        else:
+            continue
+
+        timedelta = time() - section_start_time
+        m, s = divmod(timedelta, 60)
+        logging.info(f"Completed section sync in {m} min {s} sec")
+
+    listutil.updatePlexLists(plex)
+    logging.info("Updated plex watchlist")
+    timedelta = time() - start_time
+    m, s = divmod(timedelta, 60)
+    logging.info(f"Completed full sync in in {round(m)} min {round(s)} sec")
+    print(f"Completed full sync in in {round(m)} min {round(s)} sec")
+
+
+def load_config(file):
+    config_file = path.join(path.dirname(path.abspath(__file__)), file)
+    with open(config_file, 'r') as fp:
+        config = json.load(fp)
+    return config
+
+
+def process_movie_section(config, s, watched_set, ratings_dict, listutil, collection):
     # args: a section of plex movies, a set comprised of the trakt ids of all watched movies and a dict with key=slug and value=rating (1-10)
 
     ###############
@@ -53,7 +157,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
         elif 'xbmcnfo' in guid:
             x = guid.split('//')[1]
             x = x.split('?')[0]
-            provider = CONFIG['xbmc-providers']['movies']
+            provider = config['xbmc-providers']['movies']
         else:
             logging.error('Movie [{} ({})]: Unrecognized GUID {}'.format(
                 movie.title, movie.year, movie.guid))
@@ -73,7 +177,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                     movie.title, movie.year))
                 continue
 
-            if CONFIG['sync']['collection']:
+            if config['sync']['collection']:
                 # add to collection if necessary
                 if m.trakt not in collection:
                     logging.info('Movie [{} ({})]: Added to trakt collection'.format(
@@ -81,7 +185,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                     m.add_to_library()
 
             # compare ratings
-            if CONFIG['sync']['ratings']:
+            if config['sync']['ratings']:
                 if m.slug in ratings_dict:
                     trakt_rating = int(ratings_dict[m.slug])
                 else:
@@ -102,7 +206,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                         movie.title, movie.year, trakt_rating))
 
             # sync watch status
-            if CONFIG['sync']['watched_status']:
+            if config['sync']['watched_status']:
                 watchedOnPlex = movie.isWatched
                 watchedOnTrakt = m.trakt in watched_set
                 if watchedOnPlex is not watchedOnTrakt:
@@ -136,7 +240,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                 "Movie [{} ({})]: bad response from trakt (GUID: {})".format(movie.title, movie.year, guid))
 
 
-def process_show_section(s, watched_set, listutil):
+def process_show_section(config, s, watched_set, listutil):
     with requests_cache.disabled():
         allShows = s.all()
     logging.info("Now working on show section {} containing {} elements".format(s.title, len(allShows)))
@@ -158,7 +262,7 @@ def process_show_section(s, watched_set, listutil):
         elif 'xbmcnfotv' in guid:
             x = guid.split('//')[1]
             x = x.split('?')[0]
-            provider = CONFIG['xbmc-providers']['shows']
+            provider = config['xbmc-providers']['shows']
         else:
             logging.error("Show [{} ({})]: Unrecognized GUID {}".format(
                 show.title, show.year, guid))
@@ -205,7 +309,7 @@ def process_show_section(s, watched_set, listutil):
                 collected = trakt_collected.get_completed(
                     episode.seasonNumber, episode.index)
                 # sync collected
-                if CONFIG['sync']['collection']:
+                if config['sync']['collection']:
                     if not collected:
                         try:
                             with requests_cache.disabled():
@@ -217,7 +321,7 @@ def process_show_section(s, watched_set, listutil):
                                 "JSON decode error: {}".format(str(e)))
 
                 # sync watched status
-                if CONFIG['sync']['watched_status']:
+                if config['sync']['watched_status']:
                     if episode.isWatched != watched:
                         if episode.isWatched:
                             try:
@@ -251,104 +355,6 @@ def process_show_section(s, watched_set, listutil):
         except:
             logging.error("Show [{} ({})]: bad response from trakt (GUID {})".format(
                 show.title, show.year, guid))
-
-
-def main():
-
-    start_time = time()
-    load_dotenv()
-    if not getenv("PLEX_TOKEN") or not getenv("TRAKT_USERNAME"):
-        print("First run, please follow those configuration instructions.")
-        import get_env_data
-        load_dotenv()
-    logLevel = logging.DEBUG if CONFIG['log_debug_messages'] else logging.INFO
-    logfile = path.join(path.dirname(path.abspath(__file__)), "last_update.log")
-    logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s',
-                        handlers=[logging.FileHandler(logfile, 'w', 'utf-8')],
-                        level=logLevel)
-    listutil = TraktListUtil()
-    # do not use the cache for account specific stuff as this is subject to change
-    start_msg = "Starting sync Plex {} and Trakt {}".format(getenv('PLEX_USERNAME'), getenv('TRAKT_USERNAME'))
-    print(start_msg)
-    logging.info(start_msg)
-    with requests_cache.disabled():
-        try:
-            trakt_user = trakt.users.User('me')
-        except trakt.errors.OAuthException as e:
-            m = "Trakt authentication error: {}".format(str(e))
-            logging.info(m)
-            print(m)
-            exit(1)
-        if CONFIG['sync']['liked_lists']:
-            liked_lists = pytrakt_extensions.get_liked_lists()
-        trakt_watched_movies = set(
-            map(lambda m: m.trakt, trakt_user.watched_movies))
-        logging.debug("Watched movies from trakt: {}".format(
-            trakt_watched_movies))
-        trakt_movie_collection = set(
-            map(lambda m: m.trakt, trakt_user.movie_collection))
-        # logging.debug("Movie collection from trakt:", trakt_movie_collection)
-        trakt_watched_shows = pytrakt_extensions.allwatched()
-        if CONFIG['sync']['watchlist']:
-            listutil.addList(None, "Trakt Watchlist", traktid_list=list(
-                map(lambda m: m.trakt, trakt_user.watchlist_movies)))
-        # logging.debug("Movie watchlist from trakt:", trakt_movie_watchlist)
-        user_ratings = trakt_user.get_ratings(media_type='movies')
-    if CONFIG['sync']['liked_lists']:
-        for lst in liked_lists:
-            listutil.addList(lst['username'], lst['listname'])
-    ratings = {}
-    for r in user_ratings:
-        ratings[r['movie']['ids']['slug']] = r['rating']
-    logging.debug("Movie ratings from trakt: {}".format(ratings))
-    logging.info('Loaded Trakt lists.')
-    plex_token = getenv("PLEX_TOKEN")
-    plex_baseurl = getenv("PLEX_BASEURL")
-    if plex_token == '-':
-        plex_token = ""
-    with requests_cache.disabled():
-        try:
-            plex = plexapi.server.PlexServer(
-                token=plex_token, baseurl=plex_baseurl)
-            logging.info("Server version {} updated at: {}".format(
-                plex.version, plex.updatedAt))
-            logging.info("Recently added: {}".format(
-                plex.library.recentlyAdded()[:5]))
-        except Exception as e:
-            m = "Plex connection error: {}".format(str(e))
-            logging.info(m)
-            print(m)
-            exit(1)
-
-    with requests_cache.disabled():
-        sections = plex.library.sections()
-    for section in sections:
-        if section.title in CONFIG['excluded-libraries']:
-            continue
-        # process movie sections
-        section_start_time = time()
-        if type(section) is plexapi.library.MovieSection:
-            # clean_collections_in_section(section)
-            print("Processing section", section.title)
-            process_movie_section(
-                section, trakt_watched_movies, ratings, listutil, trakt_movie_collection)
-        # process show sections
-        elif type(section) is plexapi.library.ShowSection:
-            print("Processing section", section.title)
-            process_show_section(section, trakt_watched_shows, listutil)
-        else:
-            continue
-
-        timedelta = time() - section_start_time
-        m, s = divmod(timedelta, 60)
-        logging.warning("Completed section sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
-
-    listutil.updatePlexLists(plex)
-    logging.info("Updated plex watchlist")
-    timedelta = time() - start_time
-    m, s = divmod(timedelta, 60)
-    logging.info("Completed full sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
-    print("Completed full sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
 
 
 if __name__ == "__main__":

@@ -14,20 +14,25 @@ class TraktList():
         self.name = listname
         self.plex_items = []
         if username is not None:
-            self.traktids = dict(zip(map(lambda e: e.trakt, [elem for elem in UserList._get(listname, username).get_items() if isinstance(elem, (Movie, TVEpisode))]), count(1)))
+            self.traktids = dict(
+                zip(
+                    map(
+                        lambda e: e.trakt,
+                        [elem for elem in UserList._get(listname, username).get_items() if isinstance(elem, (Movie, TVEpisode))]
+                    ), count(1)))
 
     @staticmethod
     def from_traktid_list(listname, traktid_list):
-        l = TraktList(None, listname)
-        l.traktids = dict(zip(traktid_list, count(1)))
-        return l
+        list = TraktList(None, listname)
+        list.traktids = dict(zip(traktid_list, count(1)))
+        return list
 
     def addPlexItem(self, traktid, plex_item):
         rank = self.traktids.get(traktid)
         if rank is not None:
             self.plex_items.append((rank, plex_item))
             if isinstance(plex_item, Episode):
-                logging.info('Show [{} ({})]: {} added to list {}'.format(plex_item.show().title, plex_item.show().year, plex_item.seasonEpisode, self.name))
+                logging.info(f'Show [{plex_item.show().title} ({plex_item.show().year})]: {plex_item.seasonEpisode} added to list {self.name}')
             else:
                 logging.info('Movie [{} ({})]: added to list {}'.format(plex_item.title, plex_item.year, self.name))
 
@@ -59,9 +64,9 @@ class TraktListUtil():
             logging.warning("Failed to get list {} by user {}".format(listname, username))
 
     def addPlexItemToLists(self, traktid, plex_item):
-        for l in self.lists:
-            l.addPlexItem(traktid, plex_item)
+        for item in self.lists:
+            item.addPlexItem(traktid, plex_item)
 
     def updatePlexLists(self, plex):
-        for l in self.lists:
-            l.updatePlexList(plex)
+        for item in self.lists:
+            item.updatePlexList(plex)
