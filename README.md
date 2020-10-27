@@ -14,7 +14,7 @@ the documentation and comments are lacking at best.
  - Watched status are synced (dates are not reported from Trakt to Plex)
  - Liked lists in Trakt are downloaded and all movies in Plex belonging to that
    list are added
- - You can edit the [config file](https://github.com/Taxel/PlexTraktSync/blob/master/config.json) to choose what to sync
+ - You can edit the [config file](https://github.com/VladButacu/PlexTraktSync/blob/master/app/data/app_config.json.example) to choose what to sync
  - None of the above requires a Plex Pass or Trakt VIP membership.
    Downside: Needs to be executed manually or via cronjob,
    can not use live data via webhooks.
@@ -23,40 +23,57 @@ the documentation and comments are lacking at best.
 
 To setup this on your own machine, first clone or download this repo.
 
-This should install the required Python packages:
+<br/>
+
+### Install required packages
 ```
 pip3 install -r requirements.txt
 ```
+<br/>
 
+### Create app config file
+Rename [app_config.json.example](https://github.com/VladButacu/PlexTraktSync/blob/master/app/data/app_config.json.example) to **app_config.json** in `app/data/` folder
 
+<br/>
+
+### Create Trakt app api
 To connect to Trakt you need to create a new API app: Visit
 `https://trakt.tv/oauth/applications/new`, give it a meaningful name and enter
 `urn:ietf:wg:oauth:2.0:oob` as the redirect url. You can leave Javascript
 origins and the checkboxes blank.
 <img src="https://github.com/VladButacu/PlexTraktSync/blob/master/docs/trakt_api_creation.png">
 
+<br/>
 
-Then, run `python3 main.py`.
+### Generate Plex and Trakt config files
+You can run `python3 get_configs.py` to generate the config files with the required credentials for Plex and Trakt. Follow the prompt guide to do so.
 
-At first run, you will be asked to setup Trakt and Plex access.
-Follow the instructions, your credentials and API keys will be stored in
-`.env` and `.pytrakt.json` files.
-You can take a look at the progress in the `last_update.log` file which will
-be created. 
+If you need to only generate the config for either Plex or Trakt run the script like so:
+- Plex: `python3 get_configs.py plex`
+- Trakt: `python3 get_configs.py trakt`
 
-Personally, I run this script in a cronjob every two hours. On Mac this worked
-by adding the line:
+<br/>
 
-```
-0 */2 * * * cd ~/path/to/this/repo/ && ./plex_trakt_sync.sh
-```
+## Running the script
 
-to the cronjobs after typing `crontab -e` in the terminal.
+### Local
+Make sure you are in the `app/` folder and run it with:
+`python3 main.py`
+
+<br/>
+
+### Docker
+`docker run --rm -v /absolute-path-to-this-repo/app/data/folder:/app/data vbutacu/plex-trakt-sync`
+
+</br>
+
+For both *Local* and *Docker* methods you can take a look at the progress in the `last_update.log` file which will be created in the `app/data` folder
+
+</br>
 
 ## Sync settings
-
 To disable parts of the functionality of this software, look no further than
-`config.json`. Here, in the sync section, you can disable the following things
+`app_config.json`. Here, in the sync section, you can disable the following things
 by setting them from `true` to `false` in a text editor:
 
  - Downloading liked lists from Trakt and adding them to Plex
