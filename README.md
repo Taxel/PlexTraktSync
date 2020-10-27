@@ -63,7 +63,7 @@ Make sure you are in the `app/` folder and run it with:
 <br/>
 
 ### Docker
-`docker run --rm -v /absolute-path-to-this-repo/app/data/folder:/app/data vbutacu/plex-trakt-sync`
+`docker run --rm -v /absolute-path-to-this-repo/app/data:/app/data vbutacu/plex-trakt-sync`
 
 </br>
 
