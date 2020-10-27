@@ -1,6 +1,5 @@
 # Plex-Trakt-Sync
 
-## Status
 [![Docker Pulls](https://img.shields.io/docker/pulls/vbutacu/plex-trakt-sync.svg?maxAge=60&style=flat-square)](https://hub.docker.com/repository/docker/vbutacu/plex-trakt-sync)
 [![Docker image size](https://img.shields.io/docker/image-size/vbutacu/plex-trakt-sync?style=flat-square)](https://hub.docker.com/repository/docker/vbutacu/plex-trakt-sync)
 ![CodeQL](https://img.shields.io/github/workflow/status/VladButacu/PlexTraktSync/CodeQL/master)
