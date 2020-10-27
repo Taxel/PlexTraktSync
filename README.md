@@ -1,5 +1,10 @@
 # Plex-Trakt-Sync
 
+## Status
+[![Docker Pulls](https://img.shields.io/docker/pulls/vbutacu/plex-trakt-sync.svg?maxAge=60&style=flat-square)](https://hub.docker.com/repository/docker/vbutacu/plex-trakt-sync)
+[![Docker image size](https://img.shields.io/docker/image-size/vbutacu/plex-trakt-sync?style=flat-square)](https://hub.docker.com/repository/docker/vbutacu/plex-trakt-sync)
+![CodeQL](https://img.shields.io/github/workflow/status/VladButacu/PlexTraktSync/CodeQL/master)
+
 This project adds a two-way-sync between trakt.tv and Plex Media Server. It
 requires a trakt.tv account but no Plex premium and no Trakt VIP subscriptions,
 unlike the Plex app provided by Trakt.
