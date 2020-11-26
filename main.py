@@ -54,6 +54,13 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
             x = guid.split('//')[1]
             x = x.split('?')[0]
             provider = CONFIG['xbmc-providers']['movies']
+        elif 'plex:' in guid:
+            # We can't use the guid for this as it's not going to match Trakt.
+            x = movie.title
+            provider = 'plex'
+            # We'll do a name based query against Trakt for the Plex Movie Scanner
+            # It's a lot looser, but we'll do our best to match it up.
+            # It's more likely we'd get misses than false positives.
         else:
             logging.error('Movie [{} ({})]: Unrecognized GUID {}'.format(
                 movie.title, movie.year, movie.guid))
@@ -61,7 +68,17 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
             raise NotImplementedError()
         # search and sync movie
         try:
-            search = trakt.sync.search_by_id(x, id_type=provider)
+            search = []
+            if provider == 'plex':
+                find = trakt.sync.get_search_results(x, ['movie'], False)
+                for f in find:
+                    if f.media.title == movie.title and f.media.year == movie.year:
+                        # Title and year match ... pretty highly likely match.
+                        # Possible that the year could have been added to the query, but this
+                        # feels more concrete (in other words, we'd want to check anyhow)
+                        search.append(f.media)
+            else:
+                search = trakt.sync.search_by_id(x, id_type=provider)
             m = None
             # look for the first movie in the results
             for result in search:
