@@ -76,9 +76,18 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
             if CONFIG['sync']['collection']:
                 # add to collection if necessary
                 if m.trakt not in collection:
-                    logging.info('Movie [{} ({})]: Added to trakt collection'.format(
-                        movie.title, movie.year))
-                    m.add_to_library()
+                    retry = True
+                    while retry:
+                        try:
+                            retry = False
+                            m.add_to_library()
+                            logging.info('Movie [{} ({})]: Added to trakt collection'.format(
+                                movie.title, movie.year))
+                        except trakt.errors.RateLimitException:
+                            logging.warning(
+                                "Movie [{} ({})]: Rate Limited on adding to collection. Sleeping 1 sec from trakt (GUID: {})".format(movie.title, movie.year, guid))
+                            sleep(1)
+                            retry = True
 
             # compare ratings
             if CONFIG['sync']['ratings']:
@@ -91,10 +100,20 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                 identical = plex_rating is trakt_rating
                 # plex rating takes precedence over trakt rating
                 if plex_rating is not None and not identical:
-                    with requests_cache.disabled():
-                        m.rate(plex_rating)
-                    logging.info("Movie [{} ({})]: Rating with {} on trakt".format(
-                        movie.title, movie.year, plex_rating))
+                    retry = True
+                    while retry:
+                        retry = False
+                        try:
+                            with requests_cache.disabled():
+                                m.rate(plex_rating)
+                            logging.info("Movie [{} ({})]: Rating with {} on trakt".format(
+                                movie.title, movie.year, plex_rating))
+                        except trakt.errors.RateLimitException:
+                            logging.warning(
+                                     "Movie [{} ({})]: Rate Limited on rating update. Sleeping 1 sec from trakt (GUID: {})".format(movie.title, movie.year, guid))
+                            sleep(1)
+                            retry = True
+
                 elif trakt_rating is not None and not identical:
                     with requests_cache.disabled():
                         movie.rate(trakt_rating)
@@ -109,14 +128,23 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                     # if watch status is not synced
                     # send watched status from plex to trakt
                     if watchedOnPlex:
-                        logging.info("Movie [{} ({})]: marking as watched on Trakt...".format(
-                            movie.title, movie.year))
-                        try:
-                            with requests_cache.disabled():
-                                seen_date = (movie.lastViewedAt if movie.lastViewedAt else datetime.now())
-                                m.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
-                        except ValueError:  # for py<3.6
-                            m.mark_as_seen(seen_date)
+                        retry = True
+                        while retry:
+                            retry = False
+                            try:
+                                with requests_cache.disabled():
+                                    seen_date = (movie.lastViewedAt if movie.lastViewedAt else datetime.now())
+                                    m.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
+                                logging.info("Movie [{} ({})]: marking as watched on Trakt...".format(
+                                    movie.title, movie.year))
+                            except ValueError:  # for py<3.6
+                                m.mark_as_seen(seen_date)
+                            except trakt.errors.RateLimitException:
+                                logging.warning(
+                                    "Movie [{} ({})]: Rate Limited on watched update. Sleeping 1 sec from trakt (GUID: {})".format(movie.title, movie.year, guid))
+                                sleep(1)
+                                retry = True
+
                     # set watched status if movie is watched on trakt
                     elif watchedOnTrakt:
                         logging.info("Movie [{} ({})]: marking as watched in Plex...".format(
