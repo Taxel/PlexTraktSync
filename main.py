@@ -10,7 +10,7 @@ import trakt.users
 import trakt.core
 from dotenv import load_dotenv
 import logging
-from time import time
+from time import time, sleep
 import datetime
 from json.decoder import JSONDecodeError
 
@@ -131,9 +131,13 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
         except trakt.errors.NotFoundException:
             logging.error(
                 "Movie [{} ({})]: GUID {} not found on trakt".format(movie.title, movie.year, guid))
-        except:
+        except trakt.errors.RateLimitException:
+            logging.warning(
+                "Movie [{} ({})]: Rate Limited. Sleeping 1 sec from trakt (GUID: {})".format(movie.title, movie.year, guid))
+            sleep(1)
+        except Exception as e:
             logging.error(
-                "Movie [{} ({})]: bad response from trakt (GUID: {})".format(movie.title, movie.year, guid))
+                "Movie [{} ({})]: Response '{}' from trakt (GUID: {})".format(movie.title, movie.year, e.message, guid))
 
 
 def process_show_section(s, watched_set, listutil):
@@ -207,30 +211,46 @@ def process_show_section(s, watched_set, listutil):
                 # sync collected
                 if CONFIG['sync']['collection']:
                     if not collected:
-                        try:
-                            with requests_cache.disabled():
-                                eps.instance.add_to_library()
-                            logging.info("Show [{} ({})]: Collected episode S{:02}E{:02}".format(
-                                show.title, show.year, episode.seasonNumber, episode.index))
-                        except JSONDecodeError as e:
-                            logging.error(
-                                "JSON decode error: {}".format(str(e)))
+                        retry = True
+                        while retry:
+                            retry = False
+                            try:
+                                with requests_cache.disabled():
+                                    eps.instance.add_to_library()
+                                logging.info("Show [{} ({})]: Collected episode S{:02}E{:02}".format(
+                                    show.title, show.year, episode.seasonNumber, episode.index))
+                            except JSONDecodeError as e:
+                                logging.error(
+                                    "JSON decode error: {}".format(str(e)))
+                            except trakt.errors.RateLimitException:
+                                logging.warning("Show [{} ({})]: Rate limit on Collected episode S{:02}E{:02}".format(
+                                    show.title, show.year, episode.seasonNumber, episode.index))
+                                sleep(1)
+                                retry = True
 
                 # sync watched status
                 if CONFIG['sync']['watched_status']:
                     if episode.isWatched != watched:
                         if episode.isWatched:
-                            try:
-                                with requests_cache.disabled():
-                                    seen_date = (episode.lastViewedAt if episode.lastViewedAt else datetime.now())
-                                    eps.instance.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
-                                logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(
-                                    show.title, show.year, episode.seasonNumber, episode.index))
-                            except ValueError:  # for py<3.6
-                                eps.instance.mark_as_seen(seen_date)
-                            except JSONDecodeError as e:
-                                logging.error(
-                                    "JSON decode error: {}".format(str(e)))
+                            retry = True
+                            while retry:
+                                retry = False
+                                try:
+                                    with requests_cache.disabled():
+                                        seen_date = (episode.lastViewedAt if episode.lastViewedAt else datetime.now())
+                                        eps.instance.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
+                                    logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(
+                                        show.title, show.year, episode.seasonNumber, episode.index))
+                                except ValueError:  # for py<3.6
+                                    eps.instance.mark_as_seen(seen_date)
+                                except JSONDecodeError as e:
+                                    logging.error(
+                                        "JSON decode error: {}".format(str(e)))
+                                except trakt.errors.RateLimitException:
+                                    logging.warning("Show [{} ({})]: Rate limit on Watched episode S{:02}E{:02}".format(
+                                        show.title, show.year, episode.seasonNumber, episode.index))
+                                    retry = True
+                                    sleep(1)
                         elif watched:
                             with requests_cache.disabled():
                                 episode.markWatched()
@@ -248,9 +268,13 @@ def process_show_section(s, watched_set, listutil):
         except trakt.errors.NotFoundException:
             logging.error("Show [{} ({})]: GUID {} not found on trakt".format(
                 show.title, show.year, guid))
-        except:
-            logging.error("Show [{} ({})]: bad response from trakt (GUID {})".format(
-                show.title, show.year, guid))
+        except trakt.errors.RateLimitException:
+            logging.warning(
+                "Show [{} ({})]: Rate Limited. Sleeping 1 sec from trakt (GUID: {})".format(show.title, show.year, guid))
+            sleep(1)
+        except Exception as e:
+            logging.error("Show [{} ({})]: Response {} from trakt (GUID {})".format(
+                show.title, show.year, e.message, guid))
 
 
 def main():
