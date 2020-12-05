@@ -1,9 +1,7 @@
 [[source]]
-name = "pypi"
-url = "https://pypi.org/simple"
+url = "https://pypi.python.org/simple"
 verify_ssl = true
-
-[dev-packages]
+name = "pypi"
 
 [packages]
 astroid = "==2.3.2"
@@ -24,9 +22,13 @@ tqdm = "==4.36.1"
 trakt = "==2.14.1"
 typed-ast = "==1.4.0"
 urllib3 = "==1.25.6"
-wrapt = "==1.11.2"
-PlexAPI = "==3.2.0"
 websocket_client = "==0.56.0"
+wrapt = "==1.11.2"
+
+[dev-packages]
 
 [requires]
-python_version = "3"
+python_version = "3.8"
+
+[packages.d367f6a]
+file = "https://codeload.github.com/andyloree/python-plexapi/legacy.tar.gz/8635727cd6d90099da9fbe9a540ae0c54cac19f7"
