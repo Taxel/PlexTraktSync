@@ -6,7 +6,6 @@ isort==4.3.21
 lazy-object-proxy==1.4.2
 mccabe==0.6.1
 oauthlib==3.1.0
-PlexAPI==3.2.0
 pylint==2.4.3
 python-dotenv==0.10.3
 requests==2.22.0
@@ -19,3 +18,4 @@ typed-ast==1.4.0
 urllib3==1.25.6
 websocket-client==0.56.0
 wrapt==1.11.2
+https://codeload.github.com/andyloree/python-plexapi/legacy.tar.gz/8635727cd6d90099da9fbe9a540ae0c54cac19f7
