@@ -1,0 +1,6 @@
+version: "3.8"
+services:
+    plextraktsync:
+        build: .
+        volumes:
+            - ./src:/var/src
