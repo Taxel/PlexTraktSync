@@ -1,8 +1,9 @@
 
 import plexapi.server
-from os import getenv, path
+from config import CONFIG, CONFIG_DIR, LOG_DIR, CACHE_DIR
+from os import getenv, path, isatty
 import trakt
-trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
+trakt.core.CONFIG_PATH = path.join(CONFIG_DIR, ".pytrakt.json")
 import trakt.movies
 import trakt.tv
 import trakt.sync
@@ -13,15 +14,15 @@ import logging
 from time import time
 import datetime
 from json.decoder import JSONDecodeError
+import sys
 
 
 import pytrakt_extensions
 from trakt_list_util import TraktListUtil
-from config import CONFIG
 
 import requests_cache
 
-requests_cache.install_cache('trakt_cache')
+requests_cache.install_cache(path.join(CACHE_DIR, 'trakt_cache'))
 
 
 def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
@@ -260,16 +261,27 @@ def process_show_section(s, watched_set, listutil):
 def main():
 
     start_time = time()
-    load_dotenv()
+    load_dotenv(dotenv_path=path.join(CONFIG_DIR, ".env"))
     if not getenv("PLEX_TOKEN") or not getenv("TRAKT_USERNAME"):
+        if not isatty(0):
+            print("Error: It looks like you are running this in a non-interactive terminal and have not configured the script yet.")
+            print("If you are running this in Docker, leave this container running and run 'docker exec -it plextraktsync python3 /var/src/main.py' to configure the script.")
+            return
         print("First run, please follow those configuration instructions.")
         import get_env_data
-        load_dotenv()
+        load_dotenv(dotenv_path=path.join(CONFIG_DIR, ".env"))
     logLevel = logging.DEBUG if CONFIG['log_debug_messages'] else logging.INFO
-    logfile = path.join(path.dirname(path.abspath(__file__)), "last_update.log")
-    logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s',
-                        handlers=[logging.FileHandler(logfile, 'w', 'utf-8')],
-                        level=logLevel)
+    logfile = path.join(LOG_DIR, "last_update.log")
+    if isatty(0):
+        # log to file if ran in interactive mode
+        logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s',
+                            handlers=[logging.FileHandler(logfile, 'w', 'utf-8')],
+                            level=logLevel)
+    else:
+        # log to stdout in non-interactive mode
+        logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s',
+                            handlers=[logging.StreamHandler(sys.stdout)],
+                            level=logLevel)
     listutil = TraktListUtil()
     # do not use the cache for account specific stuff as this is subject to change
     start_msg = "Starting sync Plex {} and Trakt {}".format(getenv('PLEX_USERNAME'), getenv('TRAKT_USERNAME'))
@@ -316,8 +328,6 @@ def main():
                 token=plex_token, baseurl=plex_baseurl)
             logging.info("Server version {} updated at: {}".format(
                 plex.version, plex.updatedAt))
-            logging.info("Recently added: {}".format(
-                plex.library.recentlyAdded()[:5]))
         except Exception as e:
             m = "Plex connection error: {}".format(str(e))
             logging.info(m)

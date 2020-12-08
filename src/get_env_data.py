@@ -4,9 +4,10 @@ from os import path
 import trakt
 import trakt.core
 import trakt.users
+from config import CONFIG_DIR
 
-trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
-env_file = path.join(path.dirname(path.abspath(__file__)), ".env")
+trakt.core.CONFIG_PATH = path.join(CONFIG_DIR, ".pytrakt.json")
+env_file = path.join(CONFIG_DIR, ".env")
 
 plex_needed = utils.input_yesno("-- Plex --\nAre you logged into this server with a Plex account?")
 if plex_needed:
