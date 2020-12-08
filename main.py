@@ -36,6 +36,10 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
     for movie in allMovies:
         # find id to search movie
         guid = movie.guid
+        if guid.startswith('plex://movie/'):
+            if len(movie.guids) > 0:
+                logging.debug("trying first alternative guid: " + str(movie.guids[0].id))
+                guid = movie.guids[0].id
         x = provider = None
         if guid.startswith('local') or 'agents.none' in guid:
             # ignore this guid, it's not matched
@@ -46,7 +50,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
             x = guid.split('//')[1]
             x = x.split('?')[0]
             provider = 'imdb'
-        elif 'themoviedb' in guid:
+        elif 'themoviedb' in guid or 'tmdb' in guid:
             x = guid.split('//')[1]
             x = x.split('?')[0]
             provider = 'tmdb'
