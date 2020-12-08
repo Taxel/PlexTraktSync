@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a72c2190a3f2336980afd554841372315b94d79481274b0dd4917a676b6e273b"
+            "sha256": "1456827666fdf3400a2cd8d7e4f282da7b8a6c3b0a4137d6aac32f389854e6b0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -39,6 +39,9 @@
             ],
             "index": "pypi",
             "version": "==3.0.4"
+        },
+        "d367f6a": {
+            "file": "https://codeload.github.com/andyloree/python-plexapi/legacy.tar.gz/8635727cd6d90099da9fbe9a540ae0c54cac19f7"
         },
         "idna": {
             "hashes": [
@@ -95,13 +98,6 @@
             ],
             "index": "pypi",
             "version": "==3.1.0"
-        },
-        "plexapi": {
-            "hashes": [
-                "sha256:d3007194594d4d347d67b4aa9337e211cab9c1f123d889f067a28e7266260be1"
-            ],
-            "index": "pypi",
-            "version": "==3.2.0"
         },
         "pylint": {
             "hashes": [
