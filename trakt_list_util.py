@@ -1,5 +1,5 @@
 from trakt.users import UserList
-from trakt.errors import NotFoundException
+from trakt.errors import NotFoundException, OAuthException
 from trakt.movies import Movie
 from trakt.tv import TVEpisode
 from plexapi.video import Episode
@@ -55,7 +55,7 @@ class TraktListUtil():
         try:
             self.lists.append(TraktList(username, listname))
             logging.info("Downloaded List {}".format(listname))
-        except NotFoundException:
+        except (NotFoundException, OAuthException):
             logging.warning("Failed to get list {} by user {}".format(listname, username))
 
     def addPlexItemToLists(self, traktid, plex_item):
