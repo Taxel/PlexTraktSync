@@ -46,6 +46,7 @@ if plex_needed:
         txt.write("PLEX_USERNAME=" + username + "\n")
         txt.write("PLEX_TOKEN=" + token + "\n")
         txt.write("PLEX_BASEURL=" + plex._baseurl + "\n")
+        txt.write("PLEX_FALLBACKURL=http://localhost:32400\n")
     print("Plex token and baseurl for {} have been added in .env file:".format(username))
     print("PLEX_TOKEN={}".format(token))
     print("PLEX_BASEURL={}".format(plex._baseurl))
