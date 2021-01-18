@@ -2,6 +2,7 @@
 # dangerous!
 import trakt.users
 import sys
+from os import path
 
 trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
 
