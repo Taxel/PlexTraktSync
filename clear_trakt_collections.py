@@ -1,10 +1,11 @@
 # deletes everything in trakt's collection
 # dangerous!
-import trakt.users
+import trakt
 import sys
 from os import path
-
 trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
+import trakt.users
+
 
 def main():
     trakt_user = trakt.users.User('me')
