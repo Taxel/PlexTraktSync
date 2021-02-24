@@ -56,7 +56,7 @@ be created.
 An example cronjob line that would run this script every 12 hours:
 
 ```
-0 */12 * * * cd ~/path/to/this/repo/ && ./plex_trakt_sync.sh
+0 */12 * * * cd ~/path/to/this/repo/ && ./data/plex_trakt_sync.sh
 ```
 
 This can be added to the cronjobs after typing `crontab -e` in the terminal.
