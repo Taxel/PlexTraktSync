@@ -18,12 +18,13 @@ the documentation and comments are lacking at best.
 
 ## Setup
 
-To setup this on your own machine, first clone or download this repo.
-
+To setup this project on your own machine, clone or download this repo, and then:
 
 * Windows - Run setup.bat and follow the prompts.
 
-* Linux / MacOS - Assuming you have Python installed, use the files in the data folder to complete these steps:
+* Linux / MacOS - Use the files in the data folder to complete these steps:
+
+If you don't have it already, install [Python]: http://www.python.com/
 
 This should install the required Python packages:
 ```
