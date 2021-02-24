@@ -20,10 +20,14 @@ the documentation and comments are lacking at best.
 
 To setup this on your own machine, first clone or download this repo.
 
+
 **Windows**
+
 Run setup.bat and follow the prompts.
 
+
 **Linux / MacOS / Other**
+
 Assuming you have Pythin installed, all the files you need are in the data folder:
 
 This should install the required Python packages:
