@@ -1,5 +1,4 @@
 # Hawke.one Plex-Trakt-Sync
-![alt text](https://github.com/sirloinofbeef/PlexTraktSync/blob/master/data/hawke.one.logo.png?raw=true)
 
 This project adds a two-way-sync between trakt.tv and hawke.one. 
 It requires a trakt.tv account, but no Plex premium or Trakt VIP subscriptions.
