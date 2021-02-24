@@ -316,7 +316,7 @@ def main():
     start_time = time()
     load_dotenv()
     if not getenv("PLEX_TOKEN") or not getenv("TRAKT_USERNAME"):
-        print("First run, please follow those configuration instructions.")
+        print("First run, please follow these configuration instructions:")
         import get_env_data
         load_dotenv()
     logLevel = logging.DEBUG if CONFIG['log_debug_messages'] else logging.INFO

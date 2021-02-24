@@ -1,11 +1,11 @@
 {
     "log_debug_messages": false,
     "sync": {
-        "liked_lists": true,
+        "liked_lists": false,
         "watchlist": true,
         "watched_status": true,
         "collection": true,
-        "ratings": true
+        "ratings": false
     },
     "xbmc-providers": {
         "movies": "imdb",
