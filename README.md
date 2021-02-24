@@ -53,14 +53,13 @@ Follow the instructions, your credentials and API keys will be stored in
 You can take a look at the progress in the `last_update.log` file which will
 be created. 
 
-Personally, I run this script in a cronjob every two hours. On Mac this worked
-by adding the line:
+An example cronjob line that would run this script every 12 hours:
 
 ```
-0 */2 * * * cd ~/path/to/this/repo/ && ./plex_trakt_sync.sh
+0 */12 * * * cd ~/path/to/this/repo/ && ./plex_trakt_sync.sh
 ```
 
-to the cronjobs after typing `crontab -e` in the terminal.
+This can be added to the cronjobs after typing `crontab -e` in the terminal.
 
 ## Sync settings
 
