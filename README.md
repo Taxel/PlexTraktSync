@@ -1,8 +1,7 @@
-# Plex-Trakt-Sync
+# Hawke.one Plex-Trakt-Sync
 
-This project adds a two-way-sync between trakt.tv and Plex Media Server. It
-requires a trakt.tv account but no Plex premium and no Trakt VIP subscriptions,
-unlike the Plex app provided by Trakt.
+This project adds a two-way-sync between trakt.tv and hawke.one. 
+It requires a trakt.tv account, but no Plex premium or Trakt VIP subscriptions.
 
 I am not actively maintaining this, so use at own risk, there may be bugs and
 the documentation and comments are lacking at best.
@@ -14,14 +13,21 @@ the documentation and comments are lacking at best.
  - Watched status are synced (dates are not reported from Trakt to Plex)
  - Liked lists in Trakt are downloaded and all movies in Plex belonging to that
    list are added
- - You can edit the [config file](https://github.com/Taxel/PlexTraktSync/blob/master/config.json) to choose what to sync
+ - You can edit the data/config.json file (it's just plain text) to choose what to sync
  - None of the above requires a Plex Pass or Trakt VIP membership.
-   Downside: Needs to be executed manually or via cronjob,
-   can not use live data via webhooks.
 
 ## Setup
 
 To setup this on your own machine, first clone or download this repo.
+
+Windows
+--------------------
+Run setup.bat and follow the prompts.
+
+Linux / MacOS / Other
+--------------------
+
+Assuming you have Pythin installed, all the files you need are in the data folder:
 
 This should install the required Python packages:
 ```
@@ -72,13 +78,9 @@ by setting them from `true` to `false` in a text editor:
 
 ## Notes
 
- - The first execution of the script will (depending on your PMS library size)
-   take a long time. After that, movie details and Trakt lists are cached, so
-   it should run a lot quicker the second time. This does mean, however, that
-   Trakt lists are not updated dynamically (which is fine for lists like "2018
-   Academy Award Nominees" but might not be ideal for lists that are updated
-   often). Here are the execution times on my Plex server: First run - 1228
-   seconds, second run - 111 seconds
+ - The first execution of the script will take a long time. 
+   After that, movie details and Trakt lists are cached, so it should run 
+   quicker. Large sections (such as TV Shows) will still take a significant time.
 
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
