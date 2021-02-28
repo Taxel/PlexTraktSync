@@ -1,6 +1,6 @@
-.env
-.vscode/
+/.env
+/.pytrakt.json
+/.vscode/
+/last_update.log
+/trakt_cache.sqlite
 __pycache__/
-trakt_cache.sqlite
-last_update.log
-.pytrakt.json
