@@ -16,7 +16,7 @@ from json.decoder import JSONDecodeError
 
 
 import pytrakt_extensions
-from trakt_list_util import TraktListUtil
+from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.config import CONFIG
 
 import requests_cache
