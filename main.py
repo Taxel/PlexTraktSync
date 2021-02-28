@@ -14,8 +14,7 @@ from time import time, sleep
 import datetime
 from json.decoder import JSONDecodeError
 
-
-import pytrakt_extensions
+from plex_trakt_sync import pytrakt_extensions
 from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.config import CONFIG
 
