@@ -401,7 +401,8 @@ def main():
     load_dotenv()
     if not getenv("PLEX_TOKEN") or not getenv("TRAKT_USERNAME"):
         print("First run, please follow those configuration instructions.")
-        import get_env_data
+        from plex_trakt_sync.get_env_data import get_env_data
+        get_env_data()
         load_dotenv()
     logLevel = logging.DEBUG if CONFIG['log_debug_messages'] else logging.INFO
     logfile = path.join(path.dirname(path.abspath(__file__)), "last_update.log")
