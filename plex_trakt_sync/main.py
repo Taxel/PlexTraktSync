@@ -401,7 +401,7 @@ def main():
     load_dotenv()
     if not getenv("PLEX_TOKEN") or not getenv("TRAKT_USERNAME"):
         print("First run, please follow those configuration instructions.")
-        from plex_trakt_sync.get_env_data import get_env_data
+        from .get_env_data import get_env_data
         get_env_data()
         load_dotenv()
     logLevel = logging.DEBUG if CONFIG['log_debug_messages'] else logging.INFO
@@ -480,7 +480,3 @@ def main():
     m, s = divmod(timedelta, 60)
     logging.info("Completed full sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
     print("Completed full sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
-
-
-if __name__ == "__main__":
-    main()
