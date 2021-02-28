@@ -1,14 +1,12 @@
 from plexapi.myplex import MyPlexAccount
-import utils
+from plex_trakt_sync import util
 from os import path
-import trakt
-import trakt.core
 import trakt.users
 from plex_trakt_sync.path import pytrakt_file, env_file
 
 trakt.core.CONFIG_PATH = pytrakt_file
 
-plex_needed = utils.input_yesno("-- Plex --\nAre you logged into this server with a Plex account?")
+plex_needed = util.input_yesno("-- Plex --\nAre you logged into this server with a Plex account?")
 if plex_needed:
     username = input("Please enter your Plex username: ")
     password = input("Please enter your Plex password: ")
