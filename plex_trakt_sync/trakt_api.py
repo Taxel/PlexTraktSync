@@ -42,3 +42,11 @@ class TraktApi:
         return set(
             map(lambda m: m.trakt, self.me.watched_movies)
         )
+
+    @property
+    @memoize
+    @nocache
+    def movie_collection(self):
+        return set(
+            map(lambda m: m.trakt, self.me.movie_collection)
+        )
