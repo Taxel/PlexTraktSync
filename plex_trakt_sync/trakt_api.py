@@ -50,3 +50,9 @@ class TraktApi:
         return set(
             map(lambda m: m.trakt, self.me.movie_collection)
         )
+
+    @property
+    @memoize
+    @nocache
+    def watched_shows(self):
+        return pytrakt_extensions.allwatched()
