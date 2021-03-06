@@ -168,7 +168,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
             # add to plex lists
             listutil.addPlexItemToLists(m.trakt, movie)
 
-            logging.info("Movie [{} ({})]: Finished sync".format(
+            logging.debug("Movie [{} ({})]: Finished sync".format(
                 movie.title, movie.year))
         except trakt.errors.NotFoundException:
             logging.error(
@@ -315,7 +315,7 @@ def process_show_section(s, watched_set, listutil):
                         show.title, show.year, episode.seasonNumber, episode.index))
                 # add to plex lists
                 listutil.addPlexItemToLists(eps.instance.trakt, episode)
-            logging.info("Show [{} ({})]: Finished sync".format(
+            logging.debug("Show [{} ({})]: Finished sync".format(
                 show.title, show.year))
         except trakt.errors.NotFoundException:
             logging.error("Show [{} ({})]: GUID {} not found on trakt".format(
