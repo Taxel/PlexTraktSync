@@ -1,4 +1,6 @@
 import trakt
+
+from plex_trakt_sync import pytrakt_extensions
 from plex_trakt_sync.path import pytrakt_file
 
 trakt.core.CONFIG_PATH = pytrakt_file
@@ -7,6 +9,7 @@ from trakt.errors import OAuthException, ForbiddenException
 
 from plex_trakt_sync.logging import logging
 from plex_trakt_sync.decorators import memoize, nocache
+from plex_trakt_sync.config import CONFIG
 
 
 class TraktApi:
@@ -23,3 +26,19 @@ class TraktApi:
         except (OAuthException, ForbiddenException) as e:
             logging.fatal("Trakt authentication error: {}".format(str(e)))
             raise e
+
+    @property
+    @memoize
+    @nocache
+    def liked_lists(self):
+        if not CONFIG['sync']['liked_lists']:
+            return []
+        return pytrakt_extensions.get_liked_lists()
+
+    @property
+    @memoize
+    @nocache
+    def watched_movies(self):
+        return set(
+            map(lambda m: m.trakt, self.me.watched_movies)
+        )
