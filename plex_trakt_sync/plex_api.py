@@ -9,3 +9,7 @@ class PlexApi:
     @property
     def plex_server(self):
         return get_plex_server()
+
+    @property
+    def library_sections(self):
+        return self.plex_server.library.sections()
