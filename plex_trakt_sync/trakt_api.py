@@ -73,3 +73,12 @@ class TraktApi:
     @nocache
     def movie_ratings(self):
         return self.me.get_ratings(media_type='movies')
+
+    @property
+    @memoize
+    def ratings(self):
+        ratings = {}
+        for r in self.movie_ratings:
+            ratings[r['movie']['ids']['slug']] = r['rating']
+
+        return ratings
