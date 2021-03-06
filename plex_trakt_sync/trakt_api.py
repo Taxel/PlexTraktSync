@@ -56,3 +56,14 @@ class TraktApi:
     @nocache
     def watched_shows(self):
         return pytrakt_extensions.allwatched()
+
+    @property
+    @memoize
+    @nocache
+    def watchlist_movies(self):
+        if not CONFIG['sync']['watchlist']:
+            return []
+
+        return list(
+            map(lambda m: m.trakt, self.me.watchlist_movies)
+        )
