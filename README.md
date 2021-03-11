@@ -47,6 +47,9 @@ Then, run `python3 main.py`.
 At first run, you will be asked to setup Trakt and Plex access.
 Follow the instructions, your credentials and API keys will be stored in
 `.env` and `.pytrakt.json` files.
+
+If you have 2 Factor Authentication enabled on Plex, you can append the code to your password.
+
 You can take a look at the progress in the `last_update.log` file which will
 be created. 
 
