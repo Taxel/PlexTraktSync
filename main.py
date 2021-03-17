@@ -1,4 +1,3 @@
-
 import plexapi.server
 from os import getenv, path
 import trakt
@@ -10,7 +9,7 @@ import trakt.users
 import trakt.core
 from dotenv import load_dotenv
 import logging
-from time import time
+from time import time, sleep
 import datetime
 from json.decoder import JSONDecodeError
 
@@ -23,6 +22,8 @@ import requests_cache
 
 requests_cache.install_cache('trakt_cache')
 env_file = path.join(path.dirname(path.abspath(__file__)), ".env")
+trakt_post_wait = 1.2  # delay in sec between trakt post requests to respect rate limit
+
 
 def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
     # args: a section of plex movies, a set comprised of the trakt ids of all watched movies and a dict with key=slug and value=rating (1-10)
@@ -76,14 +77,27 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                 logging.error('Movie [{} ({})]: Not found. Aborting'.format(
                     movie.title, movie.year))
                 continue
-
+            last_time = time()
             if CONFIG['sync']['collection']:
                 # add to collection if necessary
                 if m.trakt not in collection:
-                    logging.info('Movie [{} ({})]: Added to trakt collection'.format(
-                        movie.title, movie.year))
-                    m.add_to_library()
-
+                    retry = 0
+                    while retry < 5:
+                        try:
+                            last_time = respect_trakt_rate(last_time)
+                            m.add_to_library()
+                            logging.info('Movie [{} ({})]: Added to trakt collection'.format(
+                                movie.title, movie.year))
+                            break
+                        except trakt.errors.RateLimitException as e:
+                            delay = int(e.response.headers.get("Retry-After", 1))
+                            logging.warning(
+                                "Movie [{} ({})]: Rate Limited on adding to collection. Sleeping {} sec from trakt (GUID: {})".format(movie.title, movie.year, delay, guid))
+                            sleep(delay)
+                            retry += retry
+                    if retry == 5:
+                        logging.warning(
+                            "Movie [{} ({})]: Rate Limited 5 times on watched update. Abort trakt request.".format(movie.title, movie.year))
             # compare ratings
             if CONFIG['sync']['ratings']:
                 if m.slug in ratings_dict:
@@ -95,10 +109,24 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                 identical = plex_rating is trakt_rating
                 # plex rating takes precedence over trakt rating
                 if plex_rating is not None and not identical:
-                    with requests_cache.disabled():
-                        m.rate(plex_rating)
-                    logging.info("Movie [{} ({})]: Rating with {} on trakt".format(
-                        movie.title, movie.year, plex_rating))
+                    retry = 0
+                    while retry < 5:
+                        try:
+                            last_time = respect_trakt_rate(last_time)
+                            with requests_cache.disabled():
+                                m.rate(plex_rating)
+                            logging.info("Movie [{} ({})]: Rating with {} on trakt".format(
+                                movie.title, movie.year, plex_rating))
+                            break
+                        except trakt.errors.RateLimitException as e:
+                            delay = int(e.response.headers.get("Retry-After", 1))
+                            logging.warning(
+                                "Movie [{} ({})]: Rate Limited on rating update. Sleeping {} sec from trakt (GUID: {})".format(movie.title, movie.year, delay, guid))
+                            sleep(delay)
+                            retry += retry
+                    if retry == 5:
+                        logging.warning(
+                            "Movie [{} ({})]: Rate Limited 5 times on watched update. Abort trakt request.".format(movie.title, movie.year))
                 elif trakt_rating is not None and not identical:
                     with requests_cache.disabled():
                         movie.rate(trakt_rating)
@@ -113,14 +141,27 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                     # if watch status is not synced
                     # send watched status from plex to trakt
                     if watchedOnPlex:
-                        logging.info("Movie [{} ({})]: marking as watched on Trakt...".format(
-                            movie.title, movie.year))
-                        try:
-                            with requests_cache.disabled():
-                                seen_date = (movie.lastViewedAt if movie.lastViewedAt else datetime.now())
-                                m.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
-                        except ValueError:  # for py<3.6
-                            m.mark_as_seen(seen_date)
+                        retry = 0
+                        while retry < 5:
+                            try:
+                                last_time = respect_trakt_rate(last_time)
+                                with requests_cache.disabled():
+                                    seen_date = (movie.lastViewedAt if movie.lastViewedAt else datetime.now())
+                                    m.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
+                                logging.info("Movie [{} ({})]: marking as watched on Trakt...".format(
+                                    movie.title, movie.year))
+                                break
+                            except ValueError:  # for py<3.6
+                                m.mark_as_seen(seen_date)
+                            except trakt.errors.RateLimitException as e:
+                                delay = int(e.response.headers.get("Retry-After", 1))
+                                logging.warning(
+                                    "Movie [{} ({})]: Rate Limited on watched update. Sleeping {} sec from trakt (GUID: {})".format(movie.title, movie.year, delay, guid))
+                                sleep(delay)
+                                retry += retry
+                        if retry == 5:
+                            logging.warning(
+                                "Movie [{} ({})]: Rate Limited 5 times on watched update. Abort trakt request.".format(movie.title, movie.year))
                     # set watched status if movie is watched on trakt
                     elif watchedOnTrakt:
                         logging.info("Movie [{} ({})]: marking as watched in Plex...".format(
@@ -135,9 +176,14 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
         except trakt.errors.NotFoundException:
             logging.error(
                 "Movie [{} ({})]: GUID {} not found on trakt".format(movie.title, movie.year, guid))
-        except:
-            logging.error(
-                "Movie [{} ({})]: bad response from trakt (GUID: {})".format(movie.title, movie.year, guid))
+        except trakt.errors.RateLimitException as e:
+            delay = int(e.response.headers.get("Retry-After", 1))
+            logging.warning(
+                "Movie [{} ({})]: Rate Limited. Sleeping {} sec from trakt (GUID: {})".format(movie.title, movie.year, delay, guid))
+            sleep(delay)
+        except Exception as e:
+            logging.warning(
+                "Movie [{} ({})]: {} (GUID: {})".format(movie.title, movie.year, e, guid))
 
 
 def process_show_section(s, watched_set, listutil):
@@ -185,7 +231,7 @@ def process_show_section(s, watched_set, listutil):
                 continue
             with requests_cache.disabled():
                 trakt_collected = pytrakt_extensions.collected(trakt_show.trakt)
-            start_time = time()
+            start_time = last_time = time()
             # this lookup-table is accessible via lookup[season][episode]
             with requests_cache.disabled():
                 lookup = pytrakt_extensions.lookup_table(trakt_show)
@@ -211,30 +257,55 @@ def process_show_section(s, watched_set, listutil):
                 # sync collected
                 if CONFIG['sync']['collection']:
                     if not collected:
-                        try:
-                            with requests_cache.disabled():
-                                eps.instance.add_to_library()
-                            logging.info("Show [{} ({})]: Collected episode S{:02}E{:02}".format(
-                                show.title, show.year, episode.seasonNumber, episode.index))
-                        except JSONDecodeError as e:
-                            logging.error(
-                                "JSON decode error: {}".format(str(e)))
-
+                        retry = 0
+                        while retry < 5:
+                            try:
+                                last_time = respect_trakt_rate(last_time)
+                                with requests_cache.disabled():
+                                    eps.instance.add_to_library()
+                                logging.info("Show [{} ({})]: Collected episode S{:02}E{:02}".format(
+                                    show.title, show.year, episode.seasonNumber, episode.index))
+                                break
+                            except JSONDecodeError as e:
+                                logging.error(
+                                    "JSON decode error: {}".format(str(e)))
+                            except trakt.errors.RateLimitException as e:
+                                delay = int(e.response.headers.get("Retry-After", 1))
+                                logging.warning("Show [{} ({})]: Rate limit on collected episode S{:02}E{:02}. Sleeping {} sec from trakt".format(
+                                    show.title, show.year, episode.seasonNumber, episode.index, delay))
+                                sleep(delay)
+                                retry += retry
+                        if retry == 5:
+                            logging.warning(
+                                "Show [{} ({})]: Rate Limited 5 times on collected episode S{:02}E{:02}. Abort trakt request.".format(show.title, show.year, episode.seasonNumber, episode.index))
                 # sync watched status
                 if CONFIG['sync']['watched_status']:
                     if episode.isWatched != watched:
                         if episode.isWatched:
-                            try:
-                                with requests_cache.disabled():
-                                    seen_date = (episode.lastViewedAt if episode.lastViewedAt else datetime.now())
-                                    eps.instance.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
-                                logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(
-                                    show.title, show.year, episode.seasonNumber, episode.index))
-                            except ValueError:  # for py<3.6
-                                eps.instance.mark_as_seen(seen_date)
-                            except JSONDecodeError as e:
-                                logging.error(
-                                    "JSON decode error: {}".format(str(e)))
+                            retry = 0
+                            while retry < 5:
+                                try:
+                                    last_time = respect_trakt_rate(last_time)
+                                    with requests_cache.disabled():
+                                        seen_date = (episode.lastViewedAt if episode.lastViewedAt else datetime.now())
+                                        eps.instance.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
+                                    logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(
+                                        show.title, show.year, episode.seasonNumber, episode.index))
+                                    break
+                                except ValueError:  # for py<3.6
+                                    eps.instance.mark_as_seen(seen_date)
+                                except JSONDecodeError as e:
+                                    logging.error(
+                                        "JSON decode error: {}".format(str(e)))
+                                except trakt.errors.RateLimitException as e:
+                                    delay = int(e.response.headers.get("Retry-After", 1))
+                                    logging.warning("Show [{} ({})]: Rate limit on watched episode S{:02}E{:02}. Sleep {} sec from trakt".format(
+                                        show.title, show.year, episode.seasonNumber, episode.index, delay))
+                                    retry += retry
+                                    sleep(delay)
+                            if retry == 5:
+                                logging.warning(
+                                    "Show [{} ({})]: Rate Limited 5 times on collected episode S{:02}E{:02}. Abort trakt request.".format(show.title, show.year, episode.seasonNumber, episode.index))
                         elif watched:
                             with requests_cache.disabled():
                                 episode.markWatched()
@@ -252,9 +323,14 @@ def process_show_section(s, watched_set, listutil):
         except trakt.errors.NotFoundException:
             logging.error("Show [{} ({})]: GUID {} not found on trakt".format(
                 show.title, show.year, guid))
-        except:
-            logging.error("Show [{} ({})]: bad response from trakt (GUID {})".format(
-                show.title, show.year, guid))
+        except trakt.errors.RateLimitException as e:
+            delay = int(e.response.headers.get("Retry-After", 1))
+            logging.debug(
+                "Show [{} ({})]: Rate Limited. Sleeping {} sec from trakt".format(show.title, show.year, delay))
+            sleep(delay)
+        except Exception as e:
+            logging.error("Show [{} ({})]: {} (GUID {})".format(
+                show.title, show.year, e, guid))
 
 
 def get_plex_server():
@@ -314,6 +390,11 @@ def get_plex_server():
             exit(1)
     return server
 
+def respect_trakt_rate(last_time):
+    diff_time = time() - last_time
+    if diff_time < trakt_post_wait:
+        sleep(trakt_post_wait - diff_time)
+    return time()
 
 def main():
 
