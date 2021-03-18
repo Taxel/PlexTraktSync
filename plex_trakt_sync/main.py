@@ -291,11 +291,11 @@ def process_show_section(s, watched_set, listutil):
                                     logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(
                                         show.title, show.year, episode.seasonNumber, episode.index))
                                     break
-                                except ValueError:  # for py<3.6
-                                    eps.instance.mark_as_seen(seen_date)
                                 except JSONDecodeError as e:
                                     logging.error(
                                         "JSON decode error: {}".format(str(e)))
+                                except ValueError:  # for py<3.6
+                                    eps.instance.mark_as_seen(seen_date)
                                 except trakt.errors.RateLimitException as e:
                                     delay = int(e.response.headers.get("Retry-After", 1))
                                     logging.warning("Show [{} ({})]: Rate limit on watched episode S{:02}E{:02}. Sleep {} sec from trakt".format(
