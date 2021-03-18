@@ -1,7 +1,8 @@
 import plexapi.server
 from os import getenv, path
 import trakt
-trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
+from plex_trakt_sync.path import pytrakt_file, env_file
+trakt.core.CONFIG_PATH = pytrakt_file
 import trakt.movies
 import trakt.tv
 import trakt.sync
@@ -21,7 +22,6 @@ from config import CONFIG
 import requests_cache
 
 requests_cache.install_cache('trakt_cache')
-env_file = path.join(path.dirname(path.abspath(__file__)), ".env")
 trakt_post_wait = 1.2  # delay in sec between trakt post requests to respect rate limit
 
 

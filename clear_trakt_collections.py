@@ -2,8 +2,8 @@
 # dangerous!
 import trakt
 import sys
-from os import path
-trakt.core.CONFIG_PATH = path.join(path.dirname(path.abspath(__file__)), ".pytrakt.json")
+from plex_trakt_sync.path import pytrakt_file
+trakt.core.CONFIG_PATH = pytrakt_file
 import trakt.users
 
 
