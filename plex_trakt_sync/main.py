@@ -63,7 +63,6 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
             logging.error('Movie [{} ({})]: Unrecognized GUID {}'.format(
                 movie.title, movie.year, movie.guid))
             continue
-            raise NotImplementedError()
         # search and sync movie
         try:
             search = trakt.sync.search_by_id(x, id_type=provider)
@@ -213,7 +212,6 @@ def process_show_section(s, watched_set, listutil):
             logging.error("Show [{} ({})]: Unrecognized GUID {}".format(
                 show.title, show.year, guid))
             continue
-            raise NotImplementedError()
 
         try:
             # find show
