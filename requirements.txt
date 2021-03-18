@@ -1,4 +1,4 @@
-PlexAPI==4.3.1
-python-dotenv==0.10.3
+plexapi==4.4.1
+python-dotenv==0.15.0
 requests-cache==0.5.2
 trakt==3.0.0
