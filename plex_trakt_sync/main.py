@@ -151,7 +151,8 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                                     movie.title, movie.year))
                                 break
                             except ValueError:  # for py<3.6
-                                m.mark_as_seen(seen_date)
+                                with requests_cache.disabled():
+                                    m.mark_as_seen(seen_date)
                             except trakt.errors.RateLimitException as e:
                                 delay = int(e.response.headers.get("Retry-After", 1))
                                 logging.warning(
