@@ -3,6 +3,7 @@ from os import getenv, path
 import trakt
 from plex_trakt_sync.path import pytrakt_file, env_file
 trakt.core.CONFIG_PATH = pytrakt_file
+import trakt.errors
 import trakt.movies
 import trakt.tv
 import trakt.sync
