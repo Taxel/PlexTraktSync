@@ -1,4 +1,5 @@
 from plexapi.library import MovieSection, ShowSection, LibrarySection
+from plexapi.video import Movie, Show
 from plex_trakt_sync.decorators import memoize, nocache
 from plex_trakt_sync.config import CONFIG
 
@@ -9,9 +10,20 @@ class PlexLibraryItem:
 
     @property
     @memoize
+    def type(self):
+        if type(self.item) is Movie:
+            return "movies"
+        if type(self.item) is Show:
+            return "shows"
+
+    @property
+    @memoize
     def provider(self):
         x = self.item.guid.split("://")[0]
         x = x.replace("com.plexapp.agents.", "")
+        if x == "xbmcnfo":
+            x = CONFIG["xbmc-providers"][self.type]
+
         return x
 
     @property
