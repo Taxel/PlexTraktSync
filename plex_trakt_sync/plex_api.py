@@ -30,8 +30,17 @@ class PlexLibraryItem:
     @property
     @memoize
     def id(self):
-        x = self.item.guid.split("://")[1]
-        x = x.split("?")[0]
+        guid = self.item.guid
+        try:
+            x = guid.split("://")[1]
+            x = x.split("?")[0]
+        except IndexError as e:
+            # old item, like imdb 'tt0112253'
+            if guid[0:2] == "tt" and guid[2:].isnumeric():
+                x = guid
+                p = self.provider
+            else:
+                raise e
         return x
 
     def __repr__(self):
