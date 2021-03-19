@@ -1,5 +1,5 @@
 import plexapi.server
-from os import getenv, path
+from os import path
 import trakt
 from plex_trakt_sync.path import pytrakt_file, env_file
 trakt.core.CONFIG_PATH = pytrakt_file
@@ -8,7 +8,6 @@ import trakt.tv
 import trakt.sync
 import trakt.users
 import trakt.core
-from dotenv import load_dotenv
 import logging
 from time import time, sleep
 import datetime
@@ -333,9 +332,9 @@ def process_show_section(s, watched_set, listutil):
 
 
 def get_plex_server():
-    plex_token = getenv("PLEX_TOKEN")
-    plex_baseurl = getenv("PLEX_BASEURL")
-    plex_fallbackurl = getenv("PLEX_FALLBACKURL")
+    plex_token = CONFIG["PLEX_TOKEN"]
+    plex_baseurl = CONFIG["PLEX_BASEURL"]
+    plex_fallbackurl = CONFIG["PLEX_FALLBACKURL"]
     if plex_token == '-':
         plex_token = ""
     server = None
@@ -359,11 +358,11 @@ def get_plex_server():
                     token=plex_token, baseurl=new_plex_baseurl)
                 # save new url to .env
                 with open(env_file, 'w') as txt:
-                    txt.write("PLEX_USERNAME=" + getenv('PLEX_USERNAME') + "\n")
+                    txt.write("PLEX_USERNAME=" + CONFIG['PLEX_USERNAME'] + "\n")
                     txt.write("PLEX_TOKEN=" + plex_token + "\n")
                     txt.write("PLEX_BASEURL=" + new_plex_baseurl + "\n")
                     txt.write("PLEX_FALLBACKURL=" + plex_fallbackurl + "\n")
-                    txt.write("TRAKT_USERNAME=" + getenv('TRAKT_USERNAME') + "\n")
+                    txt.write("TRAKT_USERNAME=" + CONFIG['TRAKT_USERNAME'] + "\n")
                 logging.info("Plex server url changed to {}".format(new_plex_baseurl))
             except Exception:
                 pass
@@ -398,12 +397,6 @@ def respect_trakt_rate(last_time):
 def main():
 
     start_time = time()
-    load_dotenv()
-    if not getenv("PLEX_TOKEN") or not getenv("TRAKT_USERNAME"):
-        print("First run, please follow those configuration instructions.")
-        from .get_env_data import get_env_data
-        get_env_data()
-        load_dotenv()
     logLevel = logging.DEBUG if CONFIG['log_debug_messages'] else logging.INFO
     logfile = path.join(path.dirname(path.abspath(__file__)), "last_update.log")
     logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s',
@@ -411,7 +404,7 @@ def main():
                         level=logLevel)
     listutil = TraktListUtil()
     # do not use the cache for account specific stuff as this is subject to change
-    start_msg = "Starting sync Plex {} and Trakt {}".format(getenv('PLEX_USERNAME'), getenv('TRAKT_USERNAME'))
+    start_msg = "Starting sync Plex {} and Trakt {}".format(CONFIG['PLEX_USERNAME'], CONFIG['TRAKT_USERNAME'])
     print(start_msg)
     logging.info(start_msg)
     with requests_cache.disabled():
