@@ -32,11 +32,8 @@ class Config(dict):
             get_env_data()
             load_dotenv()
 
-        self["PLEX_BASEURL"] = getenv("PLEX_BASEURL")
-        self["PLEX_FALLBACKURL"] = getenv("PLEX_FALLBACKURL")
-        self["PLEX_TOKEN"] = getenv("PLEX_TOKEN")
-        self["PLEX_USERNAME"] = getenv("PLEX_USERNAME")
-        self["TRAKT_USERNAME"] = getenv("TRAKT_USERNAME")
+        for key in self.env_keys:
+            self[key] = getenv(key)
 
         self.initialized = True
 
