@@ -63,6 +63,16 @@ class PlexLibrarySection:
     def all(self):
         return self.section.all()
 
+    @memoize
+    def items(self):
+        result = []
+        for item in (PlexLibraryItem(x) for x in self.all()):
+            if item.provider in ["local", "none", "agents.none"]:
+                continue
+            result.append(item)
+
+        return result
+
 
 class PlexApi:
     """
