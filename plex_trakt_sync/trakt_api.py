@@ -94,6 +94,12 @@ class TraktApi:
 
         return ratings
 
+    def rating(self, m):
+        if m.slug in self.ratings:
+            return int(self.ratings[m.slug])
+
+        return None
+
     @rate_limit()
     def find_movie(self, movie):
         try:
