@@ -19,6 +19,8 @@ class PlexLibraryItem:
     @property
     @memoize
     def provider(self):
+        if self.guid_is_imdb_legacy:
+            return "imdb"
         x = self.item.guid.split("://")[0]
         x = x.replace("com.plexapp.agents.", "")
         x = x.replace("themoviedb", "tmdb")
@@ -30,18 +32,19 @@ class PlexLibraryItem:
     @property
     @memoize
     def id(self):
-        guid = self.item.guid
-        try:
-            x = guid.split("://")[1]
-            x = x.split("?")[0]
-        except IndexError as e:
-            # old item, like imdb 'tt0112253'
-            if guid[0:2] == "tt" and guid[2:].isnumeric():
-                x = guid
-                p = self.provider
-            else:
-                raise e
+        if self.guid_is_imdb_legacy:
+            return self.item.guid
+        x = self.item.guid.split("://")[1]
+        x = x.split("?")[0]
         return x
+
+    @property
+    @memoize
+    def guid_is_imdb_legacy(self):
+        guid = self.item.guid
+
+        # old item, like imdb 'tt0112253'
+        return guid[0:2] == "tt" and guid[2:].isnumeric()
 
     def __repr__(self):
         return "<%s:%s:%s>" % (self.provider, self.id, self.item)
