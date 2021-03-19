@@ -1,7 +1,9 @@
 from plexapi.myplex import MyPlexAccount
 from plex_trakt_sync import util
 import trakt.users
-from plex_trakt_sync.path import pytrakt_file, env_file
+
+from plex_trakt_sync.config import CONFIG
+from plex_trakt_sync.path import pytrakt_file
 
 
 def get_env_data():
@@ -38,29 +40,30 @@ def get_env_data():
                     username = name
                     break
                 except:
-                    print("Impossible to find the managed user \'"+name+"\' on this server!")
+                    print("Impossible to find the managed user \'" + name + "\' on this server!")
                     name = "_wrong"
-        with open(env_file, 'w') as txt:
-            txt.write("PLEX_USERNAME=" + username + "\n")
-            txt.write("PLEX_TOKEN=" + token + "\n")
-            txt.write("PLEX_BASEURL=" + plex._baseurl + "\n")
-            txt.write("PLEX_FALLBACKURL=http://localhost:32400\n")
+        CONFIG["PLEX_USERNAME"] = username
+        CONFIG["PLEX_TOKEN"] = token
+        CONFIG["PLEX_BASEURL"] = plex._baseurl
+        CONFIG["PLEX_FALLBACKURL"] = "http://localhost:32400"
+
         print("Plex token and baseurl for {} have been added in .env file:".format(username))
         print("PLEX_TOKEN={}".format(token))
         print("PLEX_BASEURL={}".format(plex._baseurl))
     else:
-        with open(env_file, "w") as txt:
-            txt.write("PLEX_USERNAME=-\n")
-            txt.write("PLEX_TOKEN=-\n")
-            txt.write("PLEX_BASEURL=http://localhost:32400\n")
+        CONFIG["PLEX_USERNAME"] = "-"
+        CONFIG["PLEX_TOKEN"] = "-"
+        CONFIG["PLEX_BASEURL"] = "http://localhost:32400"
 
-    trakt.core.AUTH_METHOD=trakt.core.DEVICE_AUTH
+    trakt.core.AUTH_METHOD = trakt.core.DEVICE_AUTH
     print("-- Trakt --")
     client_id, client_secret = trakt.core._get_client_info()
     trakt.init(client_id=client_id, client_secret=client_secret, store=True)
     trakt_user = trakt.users.User('me')
-    with open(env_file, "a") as txt:
-        txt.write("TRAKT_USERNAME=" + trakt_user.username + "\n")
+    CONFIG["TRAKT_USERNAME"] = trakt_user.username
+
     print("You are now logged into Trakt. Your Trakt credentials have been added in .env and .pytrakt.json files.")
     print("You can enjoy sync! \nCheck config.json to adjust settings.")
     print("If you want to change Plex or Trakt account, just edit or remove .env and .pytrakt.json files.")
+
+    CONFIG.save()
