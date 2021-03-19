@@ -1,6 +1,20 @@
-from plexapi.library import MovieSection, ShowSection
+from plexapi.library import MovieSection, ShowSection, LibrarySection
 from plex_trakt_sync.decorators import memoize, nocache
 from plex_trakt_sync.config import CONFIG
+
+
+class PlexLibrarySection:
+    def __init__(self, section: LibrarySection):
+        self.section = section
+
+    @property
+    def title(self):
+        return self.section.title
+
+    @memoize
+    @nocache
+    def all(self):
+        return self.section.all()
 
 
 class PlexApi:
