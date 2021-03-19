@@ -435,10 +435,9 @@ def main():
     logging.debug("Movie ratings from trakt: {}".format(ratings))
     logging.info('Loaded Trakt lists.')
 
-    plex = PlexApi()
-    plex_server = plex.plex_server
-
     with requests_cache.disabled():
+        plex_server = get_plex_server()
+        plex = PlexApi(plex_server)
         logging.info("Server version {} updated at: {}".format(
             plex_server.version, plex_server.updatedAt))
         logging.info("Recently added: {}".format(

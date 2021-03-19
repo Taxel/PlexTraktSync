@@ -1,5 +1,4 @@
 from plex_trakt_sync.decorators import memoize, nocache
-from plex_trakt_sync.main import get_plex_server
 from plex_trakt_sync.config import CONFIG
 
 
@@ -8,11 +7,8 @@ class PlexApi:
     Plex API class abstracting common data access and dealing with requests cache.
     """
 
-    @property
-    @memoize
-    @nocache
-    def plex_server(self):
-        return get_plex_server()
+    def __init__(self, plex_server):
+        self.plex_server = plex_server
 
     @property
     @memoize
