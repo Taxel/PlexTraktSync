@@ -32,7 +32,7 @@ class PlexApi:
         for section in self.library_sections:
             if not type(section) is MovieSection:
                 continue
-            result.append(section)
+            result.append(PlexLibrarySection(section))
 
         return result
 
