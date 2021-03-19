@@ -3,6 +3,28 @@ from plex_trakt_sync.decorators import memoize, nocache
 from plex_trakt_sync.config import CONFIG
 
 
+class PlexLibraryItem:
+    def __init__(self, item):
+        self.item = item
+
+    @property
+    @memoize
+    def provider(self):
+        x = self.item.guid.split("://")[0]
+        x = x.replace("com.plexapp.agents.", "")
+        return x
+
+    @property
+    @memoize
+    def id(self):
+        x = self.item.guid.split("://")[1]
+        x = x.split("?")[0]
+        return x
+
+    def __repr__(self):
+        return "<%s:%s:%s>" % (self.provider, self.id, self.item)
+
+
 class PlexLibrarySection:
     def __init__(self, section: LibrarySection):
         self.section = section
