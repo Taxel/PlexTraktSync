@@ -48,6 +48,11 @@ class PlexLibraryItem:
 
     @property
     @memoize
+    def rating(self):
+        return int(self.item.userRating) if self.item.userRating is not None else None
+
+    @property
+    @memoize
     def guid_is_imdb_legacy(self):
         guid = self.item.guid
 
