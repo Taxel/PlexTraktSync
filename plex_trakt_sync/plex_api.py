@@ -147,3 +147,7 @@ class PlexApi:
     @nocache
     def rate(self, m, rating):
         m.rate(rating)
+
+    @nocache
+    def mark_watched(self, m):
+        m.markWatched()
