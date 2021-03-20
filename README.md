@@ -21,7 +21,7 @@ the documentation and comments are lacking at best.
 
 ## Setup
 
-To setup this on your own machine, first clone or download this repo.
+To set up the script on your own machine, first clone or download this repo.
 
 This should install the required Python packages:
 ```
@@ -36,11 +36,11 @@ pipenv run python main.py
 
 [pipenv]: https://pipenv.pypa.io/
 
-
-To connect to Trakt you need to create a new API app: Visit
-`https://trakt.tv/oauth/applications/new`, give it a meaningful name and enter
-`urn:ietf:wg:oauth:2.0:oob`as the redirect url. You can leave Javascript
-origins and the checkboxes blank.
+To connect to Trakt you need to create a new API app:
+1. Visit https://trakt.tv/oauth/applications/new
+1. give it a meaningful name
+1. enter `urn:ietf:wg:oauth:2.0:oob`as the redirect url.
+1. You can leave Javascript origins and the checkboxes blank.
 
 Then, run `python3 main.py`.
 
@@ -55,14 +55,12 @@ If you have [2 Factor Authentication enabled on Plex][2fa], you can append the c
 You can take a look at the progress in the `last_update.log` file which will
 be created. 
 
-Personally, I run this script in a cronjob every two hours. On Mac this worked
-by adding the line:
+To set up to run this script in a cronjob every two hours,
+type `crontab -e` in the terminal.
 
 ```
-0 */2 * * * cd ~/path/to/this/repo/ && ./plex_trakt_sync.sh
+0 */2 * * * cd ~/path/to/this/repo && ./plex_trakt_sync.sh
 ```
-
-to the cronjobs after typing `crontab -e` in the terminal.
 
 ## Sync settings
 
