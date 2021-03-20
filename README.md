@@ -19,9 +19,6 @@ unlike the Plex app provided by Trakt.
 ## Setup
 
 The script is known to work with Python 3.6-3.9 versions.
-This matches [Python EOL][python-eol] schedule:
-
-[python-eol]: https://endoflife.date/python
 
 To set up the script on your own machine, first clone or download this repo.
 
