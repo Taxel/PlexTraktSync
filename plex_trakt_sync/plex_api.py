@@ -44,11 +44,3 @@ class PlexApi:
             result.append(section)
 
         return result
-
-    @staticmethod
-    def is_movie(section):
-        return type(section) is MovieSection
-
-    @staticmethod
-    def is_show(section):
-        return type(section) is ShowSection
