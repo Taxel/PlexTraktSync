@@ -8,12 +8,7 @@ try:
 except ImportError:
     # For py<3.9
     # https://docs.python.org/3.9/library/functools.html
-    from functools import lru_cache
-
-
-    def memoize(user_function, /):
-        'Simple lightweight unbounded cache.  Sometimes called "memoize".'
-        return lru_cache(maxsize=None)(user_function)
+    from functools import lru_cache as memoize
 
 
 @contextmanager
