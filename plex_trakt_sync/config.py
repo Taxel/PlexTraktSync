@@ -1,7 +1,8 @@
 import json
 from dotenv import load_dotenv
 from os import getenv
-from plex_trakt_sync.path import config_file, env_file
+from plex_trakt_sync.path import config_file, env_file, default_config_file
+from os.path import exists
 
 
 class Config(dict):
@@ -21,6 +22,12 @@ class Config(dict):
         return dict.__getitem__(self, item)
 
     def initialize(self):
+        if not exists(config_file):
+            with open(default_config_file, "r") as fp:
+                defaults = json.load(fp)
+            with open(config_file, "w") as fp:
+                fp.write(json.dumps(defaults, indent=4))
+
         with open(config_file, "r") as fp:
             config = json.load(fp)
             self.update(config)

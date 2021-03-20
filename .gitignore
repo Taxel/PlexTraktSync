@@ -2,6 +2,7 @@
 /.idea/
 /.pytrakt.json
 /.vscode/
+/config.json
 /last_update.log
 /trakt_cache.sqlite
 __pycache__/
