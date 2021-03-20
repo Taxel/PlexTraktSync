@@ -3,6 +3,7 @@ from os import path
 import trakt
 from plex_trakt_sync.path import pytrakt_file, env_file
 trakt.core.CONFIG_PATH = pytrakt_file
+import trakt.errors
 import trakt.movies
 import trakt.tv
 import trakt.sync
@@ -61,7 +62,6 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
             logging.error('Movie [{} ({})]: Unrecognized GUID {}'.format(
                 movie.title, movie.year, movie.guid))
             continue
-            raise NotImplementedError()
         # search and sync movie
         try:
             search = trakt.sync.search_by_id(x, id_type=provider)
@@ -150,7 +150,8 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                                     movie.title, movie.year))
                                 break
                             except ValueError:  # for py<3.6
-                                m.mark_as_seen(seen_date)
+                                with requests_cache.disabled():
+                                    m.mark_as_seen(seen_date)
                             except trakt.errors.RateLimitException as e:
                                 delay = int(e.response.headers.get("Retry-After", 1))
                                 logging.warning(
@@ -211,7 +212,6 @@ def process_show_section(s, watched_set, listutil):
             logging.error("Show [{} ({})]: Unrecognized GUID {}".format(
                 show.title, show.year, guid))
             continue
-            raise NotImplementedError()
 
         try:
             # find show
@@ -290,11 +290,12 @@ def process_show_section(s, watched_set, listutil):
                                     logging.info("Show [{} ({})]: Marked as watched on trakt: episode S{:02}E{:02}".format(
                                         show.title, show.year, episode.seasonNumber, episode.index))
                                     break
-                                except ValueError:  # for py<3.6
-                                    eps.instance.mark_as_seen(seen_date)
                                 except JSONDecodeError as e:
                                     logging.error(
                                         "JSON decode error: {}".format(str(e)))
+                                except ValueError:  # for py<3.6
+                                    with requests_cache.disabled():
+                                        eps.instance.mark_as_seen(seen_date)
                                 except trakt.errors.RateLimitException as e:
                                     delay = int(e.response.headers.get("Retry-After", 1))
                                     logging.warning("Show [{} ({})]: Rate limit on watched episode S{:02}E{:02}. Sleep {} sec from trakt".format(
