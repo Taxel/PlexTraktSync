@@ -67,9 +67,9 @@ To disable parts of the functionality of this software, look no further than
 `config.json`. Here, in the sync section, you can disable the following things
 by setting them from `true` to `false` in a text editor:
 
-If the `config.json` is missing, copy it from `config.default.json`, the script
-will create `config.json` on first run, so this is only needed if you intend to
-customize before first run.
+At first run, the script will create `config.json` based on `config.default.json`.
+If you want to customize settings before first run (ex. you don't want full
+sync) you can copy and edit `config.json` before launching the script.
 
  - Downloading liked lists from Trakt and adding them to Plex
  - Downloading your watchlist from Trakt and adding it to Plex
