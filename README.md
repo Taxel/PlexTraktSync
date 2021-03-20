@@ -36,10 +36,10 @@ pipenv run python main.py
 [pipenv]: https://pipenv.pypa.io/
 
 To connect to Trakt you need to create a new API app:
-1. Visit https://trakt.tv/oauth/applications/new
-1. give it a meaningful name
-1. enter `urn:ietf:wg:oauth:2.0:oob`as the redirect url.
-1. You can leave Javascript origins and the checkboxes blank.
+- Visit https://trakt.tv/oauth/applications/new
+- Give it a meaningful name
+- Enter `urn:ietf:wg:oauth:2.0:oob` as the redirect url
+- You can leave Javascript origins and the Permissions checkboxes blank
 
 Then, run `python3 main.py`.
 
