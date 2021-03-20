@@ -1,6 +1,7 @@
 import plexapi.server
+import requests_cache
 import trakt
-from plex_trakt_sync.path import pytrakt_file, env_file
+from plex_trakt_sync.path import pytrakt_file, env_file, trakt_cache
 trakt.core.CONFIG_PATH = pytrakt_file
 import trakt.errors
 import trakt.movies
@@ -17,9 +18,7 @@ from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.logging import logging
 
-import requests_cache
-
-requests_cache.install_cache('trakt_cache')
+requests_cache.install_cache(trakt_cache)
 trakt_post_wait = 1.2  # delay in sec between trakt post requests to respect rate limit
 
 
