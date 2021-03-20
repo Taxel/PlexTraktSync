@@ -4,9 +4,6 @@ This project adds a two-way-sync between trakt.tv and Plex Media Server. It
 requires a trakt.tv account but no Plex premium and no Trakt VIP subscriptions,
 unlike the Plex app provided by Trakt.
 
-I am not actively maintaining this, so use at own risk, there may be bugs and
-the documentation and comments are lacking at best.
-
 ## Features
 
  - Media in Plex are added to Trakt collection
@@ -21,7 +18,9 @@ the documentation and comments are lacking at best.
 
 ## Setup
 
-To setup this on your own machine, first clone or download this repo.
+The script is known to work with Python 3.6-3.9 versions.
+
+To set up the script on your own machine, first clone or download this repo.
 
 This should install the required Python packages:
 ```
@@ -36,11 +35,11 @@ pipenv run python main.py
 
 [pipenv]: https://pipenv.pypa.io/
 
-
-To connect to Trakt you need to create a new API app: Visit
-`https://trakt.tv/oauth/applications/new`, give it a meaningful name and enter
-`urn:ietf:wg:oauth:2.0:oob`as the redirect url. You can leave Javascript
-origins and the checkboxes blank.
+To connect to Trakt you need to create a new API app:
+- Visit https://trakt.tv/oauth/applications/new
+- Give it a meaningful name
+- Enter `urn:ietf:wg:oauth:2.0:oob` as the redirect url
+- You can leave Javascript origins and the Permissions checkboxes blank
 
 Then, run `python3 main.py`.
 
@@ -55,14 +54,12 @@ If you have [2 Factor Authentication enabled on Plex][2fa], you can append the c
 You can take a look at the progress in the `last_update.log` file which will
 be created. 
 
-Personally, I run this script in a cronjob every two hours. On Mac this worked
-by adding the line:
+To set up to run this script in a cronjob every two hours,
+type `crontab -e` in the terminal.
 
 ```
-0 */2 * * * cd ~/path/to/this/repo/ && ./plex_trakt_sync.sh
+0 */2 * * * cd ~/path/to/this/repo && ./plex_trakt_sync.sh
 ```
-
-to the cronjobs after typing `crontab -e` in the terminal.
 
 ## Sync settings
 
