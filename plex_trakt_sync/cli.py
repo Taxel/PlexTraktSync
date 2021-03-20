@@ -3,12 +3,14 @@ from plex_trakt_sync.main import main
 from plex_trakt_sync.clear_trakt_collections import clear_trakt_collections
 
 
-@click.group()
-def cli():
+@click.group(invoke_without_command=True)
+@click.pass_context
+def cli(ctx):
     """
     Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
     """
-    pass
+    if not ctx.invoked_subcommand:
+        main()
 
 
 @click.command()
