@@ -100,6 +100,11 @@ class TraktApi:
 
         return None
 
+    @nocache
+    @rate_limit(delay=TRAKT_POST_DELAY)
+    def rate(self, m, rating):
+        m.rate(rating)
+
     @rate_limit()
     def find_movie(self, movie):
         try:
