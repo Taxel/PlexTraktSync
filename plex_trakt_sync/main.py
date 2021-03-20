@@ -1,5 +1,4 @@
 import plexapi.server
-from os import path
 import trakt
 from plex_trakt_sync.path import pytrakt_file, env_file
 trakt.core.CONFIG_PATH = pytrakt_file
@@ -9,7 +8,6 @@ import trakt.tv
 import trakt.sync
 import trakt.users
 import trakt.core
-import logging
 from time import time, sleep
 import datetime
 from json.decoder import JSONDecodeError
@@ -17,6 +15,7 @@ from json.decoder import JSONDecodeError
 from plex_trakt_sync import pytrakt_extensions
 from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.config import CONFIG
+from plex_trakt_sync.logging import logging
 
 import requests_cache
 
@@ -398,11 +397,6 @@ def respect_trakt_rate(last_time):
 def main():
 
     start_time = time()
-    logLevel = logging.DEBUG if CONFIG['log_debug_messages'] else logging.INFO
-    logfile = path.join(path.dirname(path.abspath(__file__)), "last_update.log")
-    logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s',
-                        handlers=[logging.FileHandler(logfile, 'w', 'utf-8')],
-                        level=logLevel)
     listutil = TraktListUtil()
     # do not use the cache for account specific stuff as this is subject to change
     start_msg = "Starting sync Plex {} and Trakt {}".format(CONFIG['PLEX_USERNAME'], CONFIG['TRAKT_USERNAME'])
