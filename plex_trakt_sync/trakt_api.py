@@ -94,7 +94,11 @@ class TraktApi:
 
     @memoize
     def find_movie(self, movie):
-        search = trakt.sync.search_by_id(movie.id, id_type=movie.provider)
+        try:
+            search = trakt.sync.search_by_id(movie.id, id_type=movie.provider)
+        except ValueError as e:
+            # ValueError: search_type must be one of ('trakt', 'trakt-movie', 'trakt-show', 'trakt-episode', 'trakt-person', 'imdb', 'tmdb', 'tvdb')
+            raise e
         # look for the first movie in the results
         for m in search:
             if type(m) is trakt.movies.Movie:
