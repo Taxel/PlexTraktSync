@@ -4,9 +4,6 @@ This project adds a two-way-sync between trakt.tv and Plex Media Server. It
 requires a trakt.tv account but no Plex premium and no Trakt VIP subscriptions,
 unlike the Plex app provided by Trakt.
 
-I am not actively maintaining this, so use at own risk, there may be bugs and
-the documentation and comments are lacking at best.
-
 ## Features
 
  - Media in Plex are added to Trakt collection
