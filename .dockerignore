@@ -1,0 +1,7 @@
+# https://docs.docker.com/engine/reference/builder/#dockerignore-file
+/*
+!/*.py
+!/Pipfile
+!/Pipfile.lock
+!/config.default.json
+!/plex_trakt_sync/*.py
