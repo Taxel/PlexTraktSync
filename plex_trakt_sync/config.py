@@ -32,6 +32,8 @@ class Config(dict):
             config = json.load(fp)
             self.update(config)
 
+        self.initialized = True
+
         load_dotenv()
         if not getenv("PLEX_TOKEN") or not getenv("TRAKT_USERNAME"):
             print("First run, please follow those configuration instructions.")
@@ -42,13 +44,14 @@ class Config(dict):
         for key in self.env_keys:
             self[key] = getenv(key)
 
-        self.initialized = True
-
     def save(self):
         with open(env_file, "w") as txt:
             txt.write("# This is .env file for PlexTraktSync\n")
             for key in self.env_keys:
-                txt.write("{}={}\n".format(key, self[key]))
+                if key in self:
+                    txt.write("{}={}\n".format(key, self[key]))
+                else:
+                    txt.write("{}=\n".format(key))
 
 
 CONFIG = Config()
