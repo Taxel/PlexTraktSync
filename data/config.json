@@ -1,0 +1,18 @@
+{
+    "log_debug_messages": false,
+    "sync": {
+        "liked_lists": true,
+        "watchlist": true,
+        "watched_status": true,
+        "collection": true,
+        "ratings": true
+    },
+    "xbmc-providers": {
+        "movies": "imdb",
+        "shows": "tvdb"
+    },
+    "excluded-libraries": [
+        "Private",
+        "Family Holidays"
+    ]
+}

@@ -1,0 +1,85 @@
+2021-03-30 21:01:16,151 INFO:Starting sync Plex sirloinofbeef. and Trakt sirloinofbee
+2021-03-30 21:01:24,314 INFO:Downloaded List Trakt Watchlist
+2021-03-30 21:01:25,354 INFO:Loaded Trakt lists.
+2021-03-30 21:01:26,189 INFO:Server version 1.22.1.4228-724c56e62 updated at: 2021-03-30 19:53:50
+2021-03-30 21:01:27,588 INFO:Recently added: [<Season:163542:Leah-Remini:-Sciento-s0>, <Season:163516:Victoria-s0>, <Season:163418:One-Day-at-Disney-s1>, <Season:163413:Bungo-Stray-Dogs-s0>, <Movie:163370:C.H.U.D.-II:-Bud-the>]
+2021-03-30 21:02:24,364 INFO:Now working on movie section Movies containing 7493 elements
+2021-03-30 21:02:33,795 INFO:Movie [The 'Burbs (1989)]: Added to trakt collection
+2021-03-30 21:02:33,795 INFO:Movie [The 'Burbs (1989)]: Finished sync
+2021-03-30 21:02:37,873 INFO:Movie [+1 (2013)]: Added to trakt collection
+2021-03-30 21:02:37,874 INFO:Movie [+1 (2013)]: Finished sync
+2021-03-30 21:02:41,606 INFO:Movie [1: Nenokkadine (2014)]: Added to trakt collection
+2021-03-30 21:02:41,607 INFO:Movie [1: Nenokkadine (2014)]: Finished sync
+2021-03-30 21:02:45,851 INFO:Movie [1BR (2020)]: Added to trakt collection
+2021-03-30 21:02:45,852 INFO:Movie [1BR (2020)]: Finished sync
+2021-03-30 21:02:47,435 INFO:Movie [2 Fast 2 Furious (2003)]: Finished sync
+2021-03-30 21:02:51,509 INFO:Movie [2 Graves in the Desert (2020)]: Added to trakt collection
+2021-03-30 21:02:51,510 INFO:Movie [2 Graves in the Desert (2020)]: Finished sync
+2021-03-30 21:02:55,116 INFO:Movie [2 Guns (2013)]: Added to trakt collection
+2021-03-30 21:02:55,116 INFO:Movie [2 Guns (2013)]: Finished sync
+2021-03-30 21:02:58,851 INFO:Movie [3 A.M. 3D (2012)]: Added to trakt collection
+2021-03-30 21:02:58,851 INFO:Movie [3 A.M. 3D (2012)]: Finished sync
+2021-03-30 21:03:02,675 INFO:Movie [3 A.M. PART 2 (2014)]: Added to trakt collection
+2021-03-30 21:03:02,675 INFO:Movie [3 A.M. PART 2 (2014)]: Finished sync
+2021-03-30 21:03:06,768 INFO:Movie [3 from Hell (2019)]: Added to trakt collection
+2021-03-30 21:03:06,768 INFO:Movie [3 from Hell (2019)]: Finished sync
+2021-03-30 21:03:10,640 INFO:Movie [3 Idiots (2009)]: Added to trakt collection
+2021-03-30 21:03:10,640 INFO:Movie [3 Idiots (2009)]: Finished sync
+2021-03-30 21:03:14,053 INFO:Movie [3-D Sex and Zen: Extreme Ecstasy (2011)]: Added to trakt collection
+2021-03-30 21:03:14,054 INFO:Movie [3-D Sex and Zen: Extreme Ecstasy (2011)]: Finished sync
+2021-03-30 21:03:17,858 INFO:Movie [3-Iron (2004)]: Added to trakt collection
+2021-03-30 21:03:17,858 INFO:Movie [3-Iron (2004)]: Finished sync
+2021-03-30 21:03:21,913 INFO:Movie [3:10 to Yuma (1957)]: Added to trakt collection
+2021-03-30 21:03:21,913 INFO:Movie [3:10 to Yuma (1957)]: Finished sync
+2021-03-30 21:03:25,093 INFO:Movie [3:10 to Yuma (2007)]: Added to trakt collection
+2021-03-30 21:03:25,093 INFO:Movie [3:10 to Yuma (2007)]: Finished sync
+2021-03-30 21:03:29,170 INFO:Movie [4 Moons (2015)]: Added to trakt collection
+2021-03-30 21:03:29,170 INFO:Movie [4 Moons (2015)]: Finished sync
+2021-03-30 21:03:33,295 INFO:Movie [5 Centimeters per Second (2007)]: Added to trakt collection
+2021-03-30 21:03:33,296 INFO:Movie [5 Centimeters per Second (2007)]: Finished sync
+2021-03-30 21:03:37,496 INFO:Movie [5 to 7 (2015)]: Added to trakt collection
+2021-03-30 21:03:37,496 INFO:Movie [5 to 7 (2015)]: Finished sync
+2021-03-30 21:03:42,031 INFO:Movie [The 5th Wave (2016)]: Added to trakt collection
+2021-03-30 21:03:42,032 INFO:Movie [The 5th Wave (2016)]: Finished sync
+2021-03-30 21:03:45,935 INFO:Movie [6 Underground (2019)]: Added to trakt collection
+2021-03-30 21:03:45,935 INFO:Movie [6 Underground (2019)]: Finished sync
+2021-03-30 21:03:49,736 INFO:Movie [The 6th Day (2000)]: Added to trakt collection
+2021-03-30 21:03:49,736 INFO:Movie [The 6th Day (2000)]: Finished sync
+2021-03-30 21:03:53,736 INFO:Movie [7 Days in Entebbe (2018)]: Added to trakt collection
+2021-03-30 21:03:53,736 INFO:Movie [7 Days in Entebbe (2018)]: Finished sync
+2021-03-30 21:03:57,087 INFO:Movie [7 Plus Seven (1970)]: Added to trakt collection
+2021-03-30 21:03:57,087 INFO:Movie [7 Plus Seven (1970)]: Finished sync
+2021-03-30 21:04:00,959 INFO:Movie [8 Mile (2002)]: Added to trakt collection
+2021-03-30 21:04:00,959 INFO:Movie [8 Mile (2002)]: Finished sync
+2021-03-30 21:04:04,172 INFO:Movie [8½ (1963)]: Added to trakt collection
+2021-03-30 21:04:04,172 INFO:Movie [8½ (1963)]: Finished sync
+2021-03-30 21:04:08,332 INFO:Movie [8MM (1999)]: Added to trakt collection
+2021-03-30 21:04:08,332 INFO:Movie [8MM (1999)]: Finished sync
+2021-03-30 21:04:12,311 INFO:Movie [9 (2009)]: Added to trakt collection
+2021-03-30 21:04:12,311 INFO:Movie [9 (2009)]: Finished sync
+2021-03-30 21:04:15,469 INFO:Movie [9½ Weeks (1986)]: Added to trakt collection
+2021-03-30 21:04:15,469 INFO:Movie [9½ Weeks (1986)]: Finished sync
+2021-03-30 21:04:19,310 INFO:Movie [9th Company (2005)]: Added to trakt collection
+2021-03-30 21:04:19,310 INFO:Movie [9th Company (2005)]: Finished sync
+2021-03-30 21:04:23,242 INFO:Movie [The 9th Life of Louis Drax (2016)]: Added to trakt collection
+2021-03-30 21:04:23,242 INFO:Movie [The 9th Life of Louis Drax (2016)]: Finished sync
+2021-03-30 21:04:27,067 INFO:Movie [10 (1979)]: Added to trakt collection
+2021-03-30 21:04:27,067 INFO:Movie [10 (1979)]: Finished sync
+2021-03-30 21:04:30,353 INFO:Movie [10 Cloverfield Lane (2016)]: Added to trakt collection
+2021-03-30 21:04:30,353 INFO:Movie [10 Cloverfield Lane (2016)]: Finished sync
+2021-03-30 21:04:34,572 INFO:Movie [10 Things I Hate About You (1999)]: Added to trakt collection
+2021-03-30 21:04:34,572 INFO:Movie [10 Things I Hate About You (1999)]: Finished sync
+2021-03-30 21:04:37,967 INFO:Movie [10 to Midnight (1983)]: Added to trakt collection
+2021-03-30 21:04:37,967 INFO:Movie [10 to Midnight (1983)]: Finished sync
+2021-03-30 21:04:42,244 INFO:Movie [10,000 BC (2008)]: Added to trakt collection
+2021-03-30 21:04:42,244 INFO:Movie [10,000 BC (2008)]: Finished sync
+2021-03-30 21:04:46,394 INFO:Movie [10/31 (2017)]: Added to trakt collection
+2021-03-30 21:04:46,395 INFO:Movie [10/31 (2017)]: Finished sync
+2021-03-30 21:04:50,562 INFO:Movie [12 Angry Men (1957)]: Added to trakt collection
+2021-03-30 21:04:50,562 INFO:Movie [12 Angry Men (1957)]: Finished sync
+2021-03-30 21:04:54,690 INFO:Movie [12 Hour Shift (2020)]: Added to trakt collection
+2021-03-30 21:04:54,690 INFO:Movie [12 Hour Shift (2020)]: Finished sync
+2021-03-30 21:04:58,677 INFO:Movie [12 Monkeys (1996)]: Added to trakt collection
+2021-03-30 21:04:58,677 INFO:Movie [12 Monkeys (1996)]: Finished sync
+2021-03-30 21:05:01,954 INFO:Movie [12 Strong (2018)]: Added to trakt collection
+2021-03-30 21:05:01,954 INFO:Movie [12 Strong (2018)]: Finished sync
