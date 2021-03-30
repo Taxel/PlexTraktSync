@@ -8,7 +8,7 @@ title Hawke.one - Trakt Sync - Setup
 cls
 
 echo -----------------------------------------------------------------------------------
-echo  Hawke.one - Trakt Sync - Setup (beta 1.1)
+echo  Hawke.one - Trakt Sync - Setup (beta 2.0)
 echo -----------------------------------------------------------------------------------
 echo This project stores PyTrakt API keys (no passwords) in plain text on your system.
 echo If you do not want to have a file containing these on your system, you can not use this project.
