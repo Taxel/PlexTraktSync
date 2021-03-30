@@ -1,6 +1,0 @@
-.env
-.vscode/
-__pycache__/
-trakt_cache.sqlite
-last_update.log
-.pytrakt.json
