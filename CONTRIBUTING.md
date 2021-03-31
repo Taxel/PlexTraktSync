@@ -12,17 +12,25 @@ We love your input! We want to make contributing to this project as easy and tra
 
 We use GitHub to host code, to track issues and feature requests, as well as accept pull requests.
 
-## We Use [GitHub Flow], So All Code Changes Happen Through Pull Requests
+## Code Changes Happen Through Pull Requests
 
-Pull requests are the best way to propose changes to the codebase (we use [GitHub Flow]). We actively welcome your pull requests:
+Pull requests are the best way to propose changes to the codebase.
 
-1. Fork the repo and create your branch from `master`.
-2. If you've added code that should be tested, add tests.
-3. If you've changed APIs, update the documentation.
-4. Ensure the test suite passes.
-5. Make sure your code lints.
-6. Issue that pull request!
+We use [Git-Flow] to automate our `git` branching workflow.
 
+In short development happens as this:
+1. the new changes end up in `develop` branch via pull requests
+1. when release is prepared, a pull request from `develop` to `master` is created
+1. when that pull request is meged, a release is tagged
+1. after release `master` is merged back to `develop`
+
+For bugfixes the flow is more like [GitHub Flow]:
+1. pull request is made against `master` branch
+1. pull request is merged
+1. release is tagged
+1. after release `master` is merged back to `develop`
+
+[Git-Flow]: https://nvie.com/posts/a-successful-git-branching-model/
 [GitHub Flow]: https://guides.github.com/introduction/flow/index.html
 
 ## Any contributions you make will be under the MIT Software License
