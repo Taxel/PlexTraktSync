@@ -53,15 +53,6 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 
 People *love* thorough bug reports. I'm not even kidding.
 
-## Use a Consistent Coding Style
-
-I'm again borrowing these from [Facebook's Guidelines]
-
-* 2 spaces for indentation rather than tabs
-* You can try running `npm run lint` for style unification
-
-[Facebook's Guidelines]: https://github.com/facebook/draft-js/blob/a9316a723f9e918afde44dea68b5f9f39b7d9b00/CONTRIBUTING.md
-
 ## License
 
 By contributing, you agree that your contributions will be licensed under its MIT License.
