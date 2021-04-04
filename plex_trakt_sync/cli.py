@@ -1,6 +1,6 @@
 import click
-from plex_trakt_sync.main import main
 from plex_trakt_sync.clear_trakt_collections import clear_trakt_collections
+from plex_trakt_sync.commands.sync import sync
 
 
 @click.group(invoke_without_command=True)
@@ -10,16 +10,7 @@ def cli(ctx):
     Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
     """
     if not ctx.invoked_subcommand:
-        main()
-
-
-@click.command()
-def sync():
-    """
-    Perform sync between Plex and Trakt
-    """
-
-    main()
+        sync()
 
 
 @click.command()
