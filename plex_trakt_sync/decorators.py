@@ -1,8 +1,14 @@
 import logging
 from contextlib import contextmanager
-from plex_trakt_sync.memoize import Memoize as memoize
-from plex_trakt_sync.nocache import CacheDisabledDecorator as nocache
 from time import time
+from plex_trakt_sync.nocache import CacheDisabledDecorator as nocache
+
+try:
+    from functools import cache as memoize
+except ImportError:
+    # For py<3.9
+    # https://docs.python.org/3.9/library/functools.html
+    from functools import lru_cache as memoize
 
 
 @contextmanager
