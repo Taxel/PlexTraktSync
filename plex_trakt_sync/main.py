@@ -337,6 +337,10 @@ def get_plex_server():
     if plex_token == '-':
         plex_token = ""
     server = None
+
+    plexapi.X_PLEX_PLATFORM = 'PlexTraktSync'
+    plexapi.BASE_HEADERS['X-Plex-Platform'] = plexapi.X_PLEX_PLATFORM
+
     # if connection fails, it will try :
     # 1. url expected by new ssl certificate
     # 2. url without ssl
