@@ -1,3 +1,4 @@
+click==7.1.2
 plexapi==4.5.0
 python-dotenv==0.15.0
 requests-cache==0.5.2
