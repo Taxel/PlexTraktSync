@@ -2,6 +2,8 @@ import plexapi.server
 import requests_cache
 import trakt
 from plex_trakt_sync.path import pytrakt_file, env_file, trakt_cache
+from plex_trakt_sync.plex_api import PlexApi
+
 trakt.core.CONFIG_PATH = pytrakt_file
 import trakt.errors
 import trakt.movies
@@ -432,17 +434,16 @@ def main():
         ratings[r['movie']['ids']['slug']] = r['rating']
     logging.debug("Movie ratings from trakt: {}".format(ratings))
     logging.info('Loaded Trakt lists.')
+
     with requests_cache.disabled():
-        plex = get_plex_server()
+        plex_server = get_plex_server()
+        plex = PlexApi(plex_server)
         logging.info("Server version {} updated at: {}".format(
-            plex.version, plex.updatedAt))
+            plex_server.version, plex_server.updatedAt))
         logging.info("Recently added: {}".format(
-            plex.library.recentlyAdded()[:5]))
-    with requests_cache.disabled():
-        sections = plex.library.sections()
-    for section in sections:
-        if section.title in CONFIG['excluded-libraries']:
-            continue
+            plex_server.library.recentlyAdded()[:5]))
+
+    for section in plex.library_sections:
         # process movie sections
         section_start_time = time()
         if type(section) is plexapi.library.MovieSection:
@@ -461,7 +462,7 @@ def main():
         m, s = divmod(timedelta, 60)
         logging.warning("Completed section sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
 
-    listutil.updatePlexLists(plex)
+    listutil.updatePlexLists(plex_server)
     logging.info("Updated plex watchlist")
     timedelta = time() - start_time
     m, s = divmod(timedelta, 60)
