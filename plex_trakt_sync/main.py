@@ -346,7 +346,7 @@ def get_plex_server():
         server = plexapi.server.PlexServer(
             token=plex_token, baseurl=plex_baseurl)
     except plexapi.server.requests.exceptions.SSLError as e:
-        m = "Plex connection error: {}, fallback url {} didn't respond either.".format(str(e), plex_fallbackurl)
+        m = "Plex connection error: {}, tried url {}".format(str(e), plex_baseurl)
         excep_msg = str(e.__context__)
         if "doesn't match '*." in excep_msg:
             hash_pos = excep_msg.find("*.") + 2
