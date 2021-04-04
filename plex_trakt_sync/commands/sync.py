@@ -1,5 +1,6 @@
 import click
 
+from plex_trakt_sync.requests_cache import requests_cache
 from plex_trakt_sync.main import get_plex_server
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.decorators import measure_time
@@ -11,7 +12,8 @@ from plex_trakt_sync.logging import logging
 
 
 def sync_all():
-    server = get_plex_server()
+    with requests_cache.disabled():
+        server = get_plex_server()
     listutil = TraktListUtil()
     plex = PlexApi(server)
     trakt = TraktApi()
@@ -30,8 +32,9 @@ def sync_all():
     for lst in trakt_liked_lists:
         listutil.addList(lst['username'], lst['listname'])
 
-    logging.info("Server version {} updated at: {}".format(server.version, server.updatedAt))
-    logging.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
+    with requests_cache.disabled():
+        logging.info("Server version {} updated at: {}".format(server.version, server.updatedAt))
+        logging.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
     for section in plex.library_sections:
         if PlexApi.is_movie(section):
