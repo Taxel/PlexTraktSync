@@ -1,6 +1,6 @@
 import plexapi.server
 import trakt
-from plex_trakt_sync.path import pytrakt_file, env_file, trakt_cache
+from plex_trakt_sync.path import pytrakt_file
 from plex_trakt_sync.plex_api import PlexApi
 
 trakt.core.CONFIG_PATH = pytrakt_file
@@ -357,12 +357,10 @@ def get_plex_server():
                 server = plexapi.server.PlexServer(
                     token=plex_token, baseurl=new_plex_baseurl)
                 # save new url to .env
-                with open(env_file, 'w') as txt:
-                    txt.write("PLEX_USERNAME=" + CONFIG['PLEX_USERNAME'] + "\n")
-                    txt.write("PLEX_TOKEN=" + plex_token + "\n")
-                    txt.write("PLEX_BASEURL=" + new_plex_baseurl + "\n")
-                    txt.write("PLEX_FALLBACKURL=" + plex_fallbackurl + "\n")
-                    txt.write("TRAKT_USERNAME=" + CONFIG['TRAKT_USERNAME'] + "\n")
+                CONFIG["PLEX_TOKEN"] = plex_token
+                CONFIG["PLEX_BASEURL"] = new_plex_baseurl
+                CONFIG["PLEX_FALLBACKURL"] = plex_fallbackurl
+                CONFIG.save()
                 logging.info("Plex server url changed to {}".format(new_plex_baseurl))
             except Exception:
                 pass
