@@ -170,7 +170,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
             # add to plex lists
             listutil.addPlexItemToLists(m.trakt, movie)
 
-            logging.info("Movie [{} ({})]: Finished sync".format(
+            logging.debug("Movie [{} ({})]: Finished sync".format(
                 movie.title, movie.year))
         except trakt.errors.NotFoundException:
             logging.error(
@@ -317,7 +317,7 @@ def process_show_section(s, watched_set, listutil):
                         show.title, show.year, episode.seasonNumber, episode.index))
                 # add to plex lists
                 listutil.addPlexItemToLists(eps.instance.trakt, episode)
-            logging.info("Show [{} ({})]: Finished sync".format(
+            logging.debug("Show [{} ({})]: Finished sync".format(
                 show.title, show.year))
         except trakt.errors.NotFoundException:
             logging.error("Show [{} ({})]: GUID {} not found on trakt".format(
@@ -399,17 +399,14 @@ def main():
 
     start_time = time()
     listutil = TraktListUtil()
+    logging.info("Starting sync Plex {} and Trakt {}".format(CONFIG['PLEX_USERNAME'], CONFIG['TRAKT_USERNAME']))
     # do not use the cache for account specific stuff as this is subject to change
-    start_msg = "Starting sync Plex {} and Trakt {}".format(CONFIG['PLEX_USERNAME'], CONFIG['TRAKT_USERNAME'])
-    print(start_msg)
-    logging.info(start_msg)
     with requests_cache.disabled():
         try:
             trakt_user = trakt.users.User('me')
         except trakt.errors.OAuthException as e:
             m = "Trakt authentication error: {}".format(str(e))
-            logging.info(m)
-            print(m)
+            logging.error(m)
             exit(1)
         if CONFIG['sync']['liked_lists']:
             liked_lists = pytrakt_extensions.get_liked_lists()
@@ -448,12 +445,12 @@ def main():
         section_start_time = time()
         if type(section) is plexapi.library.MovieSection:
             # clean_collections_in_section(section)
-            print("Processing section", section.title)
+            logging.info("Processing section {}".format(section.title))
             process_movie_section(
                 section, trakt_watched_movies, ratings, listutil, trakt_movie_collection)
         # process show sections
         elif type(section) is plexapi.library.ShowSection:
-            print("Processing section", section.title)
+            logging.info("Processing section {}".format(section.title))
             process_show_section(section, trakt_watched_shows, listutil)
         else:
             continue
@@ -467,4 +464,3 @@ def main():
     timedelta = time() - start_time
     m, s = divmod(timedelta, 60)
     logging.info("Completed full sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
-    print("Completed full sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
