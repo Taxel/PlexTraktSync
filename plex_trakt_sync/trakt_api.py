@@ -54,9 +54,14 @@ class TraktApi:
     @memoize
     @nocache
     @rate_limit()
+    def movie_collection(self):
+        return self.me.movie_collection
+
+    @property
+    @memoize
     def movie_collection_set(self):
         return set(
-            map(lambda m: m.trakt, self.me.movie_collection)
+            map(lambda m: m.trakt, self.movie_collection)
         )
 
     @property
