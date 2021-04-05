@@ -92,6 +92,7 @@ class TraktApi:
 
         return ratings
 
+    @rate_limit()
     def find_movie(self, movie):
         try:
             search = trakt.sync.search_by_id(movie.id, id_type=movie.provider)
