@@ -57,6 +57,11 @@ class TraktApi:
     def movie_collection(self):
         return self.me.movie_collection
 
+    @nocache
+    @rate_limit(delay=TRAKT_POST_DELAY)
+    def remove_from_library(self, media):
+        media.remove_from_library()
+
     @property
     @memoize
     def movie_collection_set(self):
