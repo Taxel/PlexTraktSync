@@ -94,6 +94,17 @@ class TraktApi:
 
         return ratings
 
+    def rating(self, m):
+        if m.slug in self.ratings:
+            return int(self.ratings[m.slug])
+
+        return None
+
+    @nocache
+    @rate_limit(delay=TRAKT_POST_DELAY)
+    def rate(self, m, rating):
+        m.rate(rating)
+
     @rate_limit()
     def find_movie(self, movie):
         try:

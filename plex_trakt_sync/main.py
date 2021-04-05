@@ -1,7 +1,7 @@
 import plexapi.server
 import trakt
 from plex_trakt_sync.path import pytrakt_file
-from plex_trakt_sync.plex_api import PlexLibrarySection
+from plex_trakt_sync.plex_api import PlexLibrarySection, PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
 
 trakt.core.CONFIG_PATH = pytrakt_file
@@ -23,7 +23,25 @@ from plex_trakt_sync.requests_cache import requests_cache
 trakt_post_wait = 1.2  # delay in sec between trakt post requests to respect rate limit
 
 
-def process_movie_section(section: PlexLibrarySection, watched_set, ratings_dict, listutil, collection, trakt_api: TraktApi):
+def sync_ratings(pm, tm, plex: PlexApi, trakt: TraktApi):
+    if not CONFIG['sync']['ratings']:
+        return
+
+    trakt_rating = trakt.rating(tm)
+    plex_rating = pm.rating
+    if plex_rating is trakt_rating:
+        return
+
+    # Plex rating takes precedence over Trakt rating
+    if plex_rating is not None:
+        logging.info(f"Rating {pm} with {plex_rating} on Trakt")
+        trakt.rate(tm, plex_rating)
+    elif trakt_rating is not None:
+        logging.info(f"Rating {pm} with {trakt_rating} on Plex")
+        plex.rate(pm.item, trakt_rating)
+
+
+def process_movie_section(section: PlexLibrarySection, watched_set, listutil, collection, trakt_api: TraktApi, plex_api: PlexApi):
     # args: a section of plex movies, a set comprised of the trakt ids of all watched movies and a dict with key=slug and value=rating (1-10)
 
     ###############
@@ -67,38 +85,7 @@ def process_movie_section(section: PlexLibrarySection, watched_set, ratings_dict
                             "Movie [{} ({})]: Rate Limited 5 times on watched update. Abort trakt request.".format(movie.title, movie.year))
             # compare ratings
             if CONFIG['sync']['ratings']:
-                if m.slug in ratings_dict:
-                    trakt_rating = int(ratings_dict[m.slug])
-                else:
-                    trakt_rating = None
-                plex_rating = int(
-                    movie.userRating) if movie.userRating is not None else None
-                identical = plex_rating is trakt_rating
-                # plex rating takes precedence over trakt rating
-                if plex_rating is not None and not identical:
-                    retry = 0
-                    while retry < 5:
-                        try:
-                            last_time = respect_trakt_rate(last_time)
-                            with requests_cache.disabled():
-                                m.rate(plex_rating)
-                            logging.info("Movie [{} ({})]: Rating with {} on trakt".format(
-                                movie.title, movie.year, plex_rating))
-                            break
-                        except trakt.errors.RateLimitException as e:
-                            delay = int(e.response.headers.get("Retry-After", 1))
-                            logging.warning(
-                                "Movie [{} ({})]: Rate Limited on rating update. Sleeping {} sec from trakt (GUID: {})".format(movie.title, movie.year, delay, guid))
-                            sleep(delay)
-                            retry += retry
-                    if retry == 5:
-                        logging.warning(
-                            "Movie [{} ({})]: Rate Limited 5 times on watched update. Abort trakt request.".format(movie.title, movie.year))
-                elif trakt_rating is not None and not identical:
-                    with requests_cache.disabled():
-                        movie.rate(trakt_rating)
-                    logging.info("Movie [{} ({})]: Rating with {} on plex".format(
-                        movie.title, movie.year, trakt_rating))
+                sync_ratings(it, m, plex_api, trakt_api)
 
             # sync watch status
             if CONFIG['sync']['watched_status']:
