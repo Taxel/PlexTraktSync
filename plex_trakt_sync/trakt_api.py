@@ -5,6 +5,8 @@ from plex_trakt_sync.path import pytrakt_file
 
 trakt.core.CONFIG_PATH = pytrakt_file
 import trakt.users
+import trakt.sync
+import trakt.movies
 from trakt.errors import OAuthException, ForbiddenException
 
 from plex_trakt_sync.logging import logging
@@ -89,3 +91,17 @@ class TraktApi:
             ratings[r['movie']['ids']['slug']] = r['rating']
 
         return ratings
+
+    @rate_limit()
+    def find_movie(self, movie):
+        try:
+            search = trakt.sync.search_by_id(movie.id, id_type=movie.provider)
+        except ValueError as e:
+            # ValueError: search_type must be one of ('trakt', 'trakt-movie', 'trakt-show', 'trakt-episode', 'trakt-person', 'imdb', 'tmdb', 'tvdb')
+            raise e
+        # look for the first movie in the results
+        for m in search:
+            if type(m) is trakt.movies.Movie:
+                return m
+
+        return None
