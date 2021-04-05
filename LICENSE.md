@@ -1,6 +1,7 @@
 MIT License
 
 Copyright (c) 2019 Alexander Theimer  
+Copyright (c) 2019-2021 twolaw  
 Copyright (c) 2020-2021 Elan Ruusamäe  
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
