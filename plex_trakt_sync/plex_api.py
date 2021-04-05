@@ -10,6 +10,14 @@ class PlexLibraryItem:
 
     @property
     @memoize
+    def guid(self):
+        if self.item.guid.startswith('plex://movie/'):
+            if len(self.item.guids) > 0:
+                return self.item.guids[0].id
+        return self.item.guid
+
+    @property
+    @memoize
     def type(self):
         if type(self.item) is Movie:
             return "movies"
@@ -21,7 +29,7 @@ class PlexLibraryItem:
     def provider(self):
         if self.guid_is_imdb_legacy:
             return "imdb"
-        x = self.item.guid.split("://")[0]
+        x = self.guid.split("://")[0]
         x = x.replace("com.plexapp.agents.", "")
         x = x.replace("themoviedb", "tmdb")
         if x == "xbmcnfo":
@@ -34,7 +42,7 @@ class PlexLibraryItem:
     def id(self):
         if self.guid_is_imdb_legacy:
             return self.item.guid
-        x = self.item.guid.split("://")[1]
+        x = self.guid.split("://")[1]
         x = x.split("?")[0]
         return x
 
