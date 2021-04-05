@@ -8,7 +8,7 @@ import trakt.users
 from trakt.errors import OAuthException, ForbiddenException
 
 from plex_trakt_sync.logging import logging
-from plex_trakt_sync.decorators import memoize, nocache
+from plex_trakt_sync.decorators import memoize, nocache, rate_limit
 from plex_trakt_sync.config import CONFIG
 
 
@@ -20,6 +20,7 @@ class TraktApi:
     @property
     @memoize
     @nocache
+    @rate_limit()
     def me(self):
         try:
             return trakt.users.User('me')
@@ -30,6 +31,7 @@ class TraktApi:
     @property
     @memoize
     @nocache
+    @rate_limit()
     def liked_lists(self):
         if not CONFIG['sync']['liked_lists']:
             return []
@@ -38,6 +40,7 @@ class TraktApi:
     @property
     @memoize
     @nocache
+    @rate_limit()
     def watched_movies(self):
         return set(
             map(lambda m: m.trakt, self.me.watched_movies)
@@ -46,6 +49,7 @@ class TraktApi:
     @property
     @memoize
     @nocache
+    @rate_limit()
     def movie_collection(self):
         return set(
             map(lambda m: m.trakt, self.me.movie_collection)
@@ -54,12 +58,14 @@ class TraktApi:
     @property
     @memoize
     @nocache
+    @rate_limit()
     def watched_shows(self):
         return pytrakt_extensions.allwatched()
 
     @property
     @memoize
     @nocache
+    @rate_limit()
     def watchlist_movies(self):
         if not CONFIG['sync']['watchlist']:
             return []
@@ -71,6 +77,7 @@ class TraktApi:
     @property
     @memoize
     @nocache
+    @rate_limit()
     def movie_ratings(self):
         return self.me.get_ratings(media_type='movies')
 
