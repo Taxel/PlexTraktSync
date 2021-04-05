@@ -1,6 +1,88 @@
-from plexapi.library import MovieSection, ShowSection
+from plexapi.library import MovieSection, ShowSection, LibrarySection
+from plexapi.video import Movie, Show
 from plex_trakt_sync.decorators import memoize, nocache
 from plex_trakt_sync.config import CONFIG
+
+
+class PlexLibraryItem:
+    def __init__(self, item):
+        self.item = item
+
+    @property
+    @memoize
+    def guid(self):
+        if self.item.guid.startswith('plex://movie/'):
+            if len(self.item.guids) > 0:
+                return self.item.guids[0].id
+        return self.item.guid
+
+    @property
+    @memoize
+    def type(self):
+        if type(self.item) is Movie:
+            return "movies"
+        if type(self.item) is Show:
+            return "shows"
+
+    @property
+    @memoize
+    def provider(self):
+        if self.guid_is_imdb_legacy:
+            return "imdb"
+        x = self.guid.split("://")[0]
+        x = x.replace("com.plexapp.agents.", "")
+        x = x.replace("themoviedb", "tmdb")
+        if x == "xbmcnfo":
+            x = CONFIG["xbmc-providers"][self.type]
+
+        return x
+
+    @property
+    @memoize
+    def id(self):
+        if self.guid_is_imdb_legacy:
+            return self.item.guid
+        x = self.guid.split("://")[1]
+        x = x.split("?")[0]
+        return x
+
+    @property
+    @memoize
+    def guid_is_imdb_legacy(self):
+        guid = self.item.guid
+
+        # old item, like imdb 'tt0112253'
+        return guid[0:2] == "tt" and guid[2:].isnumeric()
+
+    def __repr__(self):
+        return "<%s:%s:%s>" % (self.provider, self.id, self.item)
+
+
+class PlexLibrarySection:
+    def __init__(self, section: LibrarySection):
+        self.section = section
+
+    def __len__(self):
+        return len(self.all())
+
+    @property
+    def title(self):
+        return self.section.title
+
+    @memoize
+    @nocache
+    def all(self):
+        return self.section.all()
+
+    @memoize
+    def items(self):
+        result = []
+        for item in (PlexLibraryItem(x) for x in self.all()):
+            if item.provider in ["local", "none", "agents.none"]:
+                continue
+            result.append(item)
+
+        return result
 
 
 class PlexApi:
@@ -18,7 +100,7 @@ class PlexApi:
         for section in self.library_sections:
             if not type(section) is MovieSection:
                 continue
-            result.append(section)
+            result.append(PlexLibrarySection(section))
 
         return result
 

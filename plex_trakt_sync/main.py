@@ -1,6 +1,7 @@
 import plexapi.server
 import trakt
 from plex_trakt_sync.path import pytrakt_file
+from plex_trakt_sync.plex_api import PlexLibrarySection
 
 trakt.core.CONFIG_PATH = pytrakt_file
 import trakt.errors
@@ -21,47 +22,23 @@ from plex_trakt_sync.requests_cache import requests_cache
 trakt_post_wait = 1.2  # delay in sec between trakt post requests to respect rate limit
 
 
-def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
+def process_movie_section(section: PlexLibrarySection, watched_set, ratings_dict, listutil, collection):
     # args: a section of plex movies, a set comprised of the trakt ids of all watched movies and a dict with key=slug and value=rating (1-10)
 
     ###############
     # Sync movies with trakt
     ###############
-    with requests_cache.disabled():
-        allMovies = s.all()
-    logging.info("Now working on movie section {} containing {} elements".format(s.title, len(allMovies)))
-    for movie in allMovies:
-        # find id to search movie
-        guid = movie.guid
-        if guid.startswith('plex://movie/'):
-            if len(movie.guids) > 0:
-                logging.debug("trying first alternative guid: " + str(movie.guids[0].id))
-                guid = movie.guids[0].id
-        x = provider = None
-        if guid.startswith('local') or 'agents.none' in guid:
-            # ignore this guid, it's not matched
-            logging.warning("Movie [{} ({})]: GUID ({}) is local or none, ignoring".format(
-                movie.title, movie.year, guid))
+
+    logging.info("Now working on movie section {} containing {} elements".format(section.title, len(section)))
+    for it in section.items():
+        movie = it.item
+        if not it.provider:
+            logging.error('Movie [{} ({})]: Unrecognized GUID {}'.format(movie.title, movie.year, movie.guid))
             continue
-        elif 'imdb' in guid:
-            x = guid.split('//')[1]
-            x = x.split('?')[0]
-            provider = 'imdb'
-        elif 'themoviedb' in guid or 'tmdb' in guid:
-            x = guid.split('//')[1]
-            x = x.split('?')[0]
-            provider = 'tmdb'
-        elif 'xbmcnfo' in guid:
-            x = guid.split('//')[1]
-            x = x.split('?')[0]
-            provider = CONFIG['xbmc-providers']['movies']
-        else:
-            logging.error('Movie [{} ({})]: Unrecognized GUID {}'.format(
-                movie.title, movie.year, movie.guid))
-            continue
+
         # search and sync movie
         try:
-            search = trakt.sync.search_by_id(x, id_type=provider)
+            search = trakt.sync.search_by_id(it.id, id_type=it.provider)
             m = None
             # look for the first movie in the results
             for result in search:
@@ -178,8 +155,8 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                 "Movie [{} ({})]: Rate Limited. Sleeping {} sec from trakt (GUID: {})".format(movie.title, movie.year, delay, guid))
             sleep(delay)
         except Exception as e:
-            logging.warning(
-                "Movie [{} ({})]: {} (GUID: {})".format(movie.title, movie.year, e, guid))
+            logging.error(
+                "Movie [{} ({})]: {} (GUID: {})".format(movie.title, movie.year, e, it.guid))
 
 
 def process_show_section(s, watched_set, listutil):
