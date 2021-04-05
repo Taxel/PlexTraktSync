@@ -131,3 +131,7 @@ class PlexApi:
             result.append(section)
 
         return result
+
+    @nocache
+    def rate(self, m, rating):
+        m.rate(rating)
