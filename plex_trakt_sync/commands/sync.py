@@ -1,7 +1,7 @@
 import click
 
 from plex_trakt_sync.requests_cache import requests_cache
-from plex_trakt_sync.main import get_plex_server
+from plex_trakt_sync.plex_server import get_plex_server
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.decorators import measure_time
 from plex_trakt_sync.main import process_movie_section, process_show_section
