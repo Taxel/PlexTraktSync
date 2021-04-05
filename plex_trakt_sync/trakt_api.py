@@ -92,7 +92,6 @@ class TraktApi:
 
         return ratings
 
-    @memoize
     def find_movie(self, movie):
         try:
             search = trakt.sync.search_by_id(movie.id, id_type=movie.provider)
