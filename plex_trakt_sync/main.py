@@ -148,7 +148,7 @@ def process_movie_section(section: PlexLibrarySection, watched_set, ratings_dict
                 movie.title, movie.year))
         except trakt.errors.NotFoundException:
             logging.error(
-                "Movie [{} ({})]: GUID {} not found on trakt".format(movie.title, movie.year, guid))
+                "Movie [{} ({})]: GUID {} not found on trakt".format(movie.title, movie.year, it.guid))
         except trakt.errors.RateLimitException as e:
             delay = int(e.response.headers.get("Retry-After", 1))
             logging.warning(
