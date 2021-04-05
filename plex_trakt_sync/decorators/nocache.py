@@ -1,10 +1,12 @@
+from functools import wraps
+
 import requests_cache
 
 
-class CacheDisabledDecorator:
-    def __init__(self, fn):
-        self.fn = fn
-
-    def __call__(self, *args):
+def nocache(method):
+    @wraps(method)
+    def inner(self, *args, **kwargs):
         with requests_cache.disabled():
-            return self.fn(*args)
+            return method(self, *args, **kwargs)
+
+    return inner
