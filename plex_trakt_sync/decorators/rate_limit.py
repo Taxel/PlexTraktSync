@@ -3,7 +3,7 @@ from time import sleep, time
 from trakt.errors import RateLimitException
 from plex_trakt_sync.logging import logging
 
-last_time = time()
+last_time = None
 
 
 # https://trakt.docs.apiary.io/#introduction/rate-limiting
@@ -18,6 +18,12 @@ def rate_limit(retries=5, delay=None):
     def respect_trakt_rate():
         if delay is None:
             return
+
+        global last_time
+        if last_time is None:
+            last_time = time()
+            return
+
         diff_time = time() - last_time
         if diff_time < delay:
             wait = delay - diff_time
