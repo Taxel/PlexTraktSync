@@ -13,6 +13,8 @@ from plex_trakt_sync.logging import logging
 from plex_trakt_sync.decorators import memoize, nocache, rate_limit
 from plex_trakt_sync.config import CONFIG
 
+TRAKT_POST_DELAY = 1.1
+
 
 class TraktApi:
     """
@@ -22,7 +24,7 @@ class TraktApi:
     @property
     @memoize
     @nocache
-    @rate_limit(delay=1.2)
+    @rate_limit(delay=TRAKT_POST_DELAY)
     def me(self):
         try:
             return trakt.users.User('me')
