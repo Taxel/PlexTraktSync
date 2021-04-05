@@ -38,7 +38,7 @@ def sync_all():
 
     for section in plex.movie_sections:
         with measure_time("Processing section %s" % section.title):
-            process_movie_section(section, trakt_watched_movies, trakt_ratings, listutil, trakt_movie_collection, trakt)
+            process_movie_section(section, trakt_watched_movies, listutil, trakt_movie_collection, trakt, plex)
 
     for section in plex.show_sections:
         with measure_time("Processing section %s" % section.title):
