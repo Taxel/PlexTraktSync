@@ -1,5 +1,6 @@
 import click
-from plex_trakt_sync.clear_trakt_collections import clear_trakt_collections
+from plex_trakt_sync.logging import logging
+from plex_trakt_sync.trakt_api import TraktApi
 
 
 @click.command()
@@ -12,4 +13,13 @@ def clear_collections(confirm):
     if not confirm:
         click.echo('You need to pass --confirm option to proceed')
         return
-    clear_trakt_collections()
+
+    trakt = TraktApi()
+
+    for movie in trakt.movie_collection:
+        logging.info(f"Deleting: {movie}")
+        trakt.remove_from_library(movie)
+
+    for show in trakt.show_collection:
+        logging.info(f"Deleting: {show}")
+        trakt.remove_from_library(show)
