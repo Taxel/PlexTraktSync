@@ -62,6 +62,9 @@ class PlexLibrarySection:
     def __init__(self, section: LibrarySection):
         self.section = section
 
+    def __len__(self):
+        return len(self.all())
+
     @property
     def title(self):
         return self.section.title
