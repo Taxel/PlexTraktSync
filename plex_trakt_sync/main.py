@@ -1,7 +1,6 @@
 import plexapi.server
 import trakt
 from plex_trakt_sync.path import pytrakt_file
-from plex_trakt_sync.plex_api import PlexApi
 
 trakt.core.CONFIG_PATH = pytrakt_file
 import trakt.errors
@@ -15,7 +14,6 @@ import datetime
 from json.decoder import JSONDecodeError
 
 from plex_trakt_sync import pytrakt_extensions
-from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.logging import logging
 from plex_trakt_sync.requests_cache import requests_cache
@@ -386,78 +384,9 @@ def get_plex_server():
             exit(1)
     return server
 
+
 def respect_trakt_rate(last_time):
     diff_time = time() - last_time
     if diff_time < trakt_post_wait:
         sleep(trakt_post_wait - diff_time)
     return time()
-
-def main():
-
-    start_time = time()
-    listutil = TraktListUtil()
-    logging.info("Starting sync Plex {} and Trakt {}".format(CONFIG['PLEX_USERNAME'], CONFIG['TRAKT_USERNAME']))
-    # do not use the cache for account specific stuff as this is subject to change
-    with requests_cache.disabled():
-        try:
-            trakt_user = trakt.users.User('me')
-        except trakt.errors.OAuthException as e:
-            m = "Trakt authentication error: {}".format(str(e))
-            logging.error(m)
-            exit(1)
-        if CONFIG['sync']['liked_lists']:
-            liked_lists = pytrakt_extensions.get_liked_lists()
-        trakt_watched_movies = set(
-            map(lambda m: m.trakt, trakt_user.watched_movies))
-        logging.debug("Watched movies from trakt: {}".format(
-            trakt_watched_movies))
-        trakt_movie_collection = set(
-            map(lambda m: m.trakt, trakt_user.movie_collection))
-        # logging.debug("Movie collection from trakt:", trakt_movie_collection)
-        trakt_watched_shows = pytrakt_extensions.allwatched()
-        if CONFIG['sync']['watchlist']:
-            listutil.addList(None, "Trakt Watchlist", traktid_list=list(
-                map(lambda m: m.trakt, trakt_user.watchlist_movies)))
-        # logging.debug("Movie watchlist from trakt:", trakt_movie_watchlist)
-        user_ratings = trakt_user.get_ratings(media_type='movies')
-    if CONFIG['sync']['liked_lists']:
-        for lst in liked_lists:
-            listutil.addList(lst['username'], lst['listname'])
-    ratings = {}
-    for r in user_ratings:
-        ratings[r['movie']['ids']['slug']] = r['rating']
-    logging.debug("Movie ratings from trakt: {}".format(ratings))
-    logging.info('Loaded Trakt lists.')
-
-    with requests_cache.disabled():
-        plex_server = get_plex_server()
-        plex = PlexApi(plex_server)
-        logging.info("Server version {} updated at: {}".format(
-            plex_server.version, plex_server.updatedAt))
-        logging.info("Recently added: {}".format(
-            plex_server.library.recentlyAdded()[:5]))
-
-    for section in plex.library_sections:
-        # process movie sections
-        section_start_time = time()
-        if type(section) is plexapi.library.MovieSection:
-            # clean_collections_in_section(section)
-            logging.info("Processing section {}".format(section.title))
-            process_movie_section(
-                section, trakt_watched_movies, ratings, listutil, trakt_movie_collection)
-        # process show sections
-        elif type(section) is plexapi.library.ShowSection:
-            logging.info("Processing section {}".format(section.title))
-            process_show_section(section, trakt_watched_shows, listutil)
-        else:
-            continue
-
-        timedelta = time() - section_start_time
-        m, s = divmod(timedelta, 60)
-        logging.warning("Completed section sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
-
-    listutil.updatePlexLists(plex_server)
-    logging.info("Updated plex watchlist")
-    timedelta = time() - start_time
-    m, s = divmod(timedelta, 60)
-    logging.info("Completed full sync in " + (m>0) * "{:.0f} min ".format(m) + (s>0) * "{:.1f} seconds".format(s))
