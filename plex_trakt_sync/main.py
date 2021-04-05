@@ -2,6 +2,7 @@ import plexapi.server
 import trakt
 from plex_trakt_sync.path import pytrakt_file
 from plex_trakt_sync.plex_api import PlexLibrarySection
+from plex_trakt_sync.trakt_api import TraktApi
 
 trakt.core.CONFIG_PATH = pytrakt_file
 import trakt.errors
@@ -22,7 +23,7 @@ from plex_trakt_sync.requests_cache import requests_cache
 trakt_post_wait = 1.2  # delay in sec between trakt post requests to respect rate limit
 
 
-def process_movie_section(section: PlexLibrarySection, watched_set, ratings_dict, listutil, collection):
+def process_movie_section(section: PlexLibrarySection, watched_set, ratings_dict, listutil, collection, trakt_api: TraktApi):
     # args: a section of plex movies, a set comprised of the trakt ids of all watched movies and a dict with key=slug and value=rating (1-10)
 
     ###############
@@ -37,18 +38,12 @@ def process_movie_section(section: PlexLibrarySection, watched_set, ratings_dict
             continue
 
         # search and sync movie
+        m = trakt_api.find_movie(it)
+        if m is None:
+            logging.warning(f"Movie [{movie.title} ({movie.year})]: Not found. Skipping")
+            continue
+
         try:
-            search = trakt.sync.search_by_id(it.id, id_type=it.provider)
-            m = None
-            # look for the first movie in the results
-            for result in search:
-                if type(result) is trakt.movies.Movie:
-                    m = result
-                    break
-            if m is None:
-                logging.error('Movie [{} ({})]: Not found. Aborting'.format(
-                    movie.title, movie.year))
-                continue
             last_time = time()
             if CONFIG['sync']['collection']:
                 # add to collection if necessary
