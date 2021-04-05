@@ -22,7 +22,7 @@ class TraktApi:
     @property
     @memoize
     @nocache
-    @rate_limit()
+    @rate_limit(delay=1.2)
     def me(self):
         try:
             return trakt.users.User('me')
