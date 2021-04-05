@@ -5,6 +5,8 @@ from plex_trakt_sync.path import pytrakt_file
 
 trakt.core.CONFIG_PATH = pytrakt_file
 import trakt.users
+import trakt.sync
+import trakt.movies
 from trakt.errors import OAuthException, ForbiddenException
 
 from plex_trakt_sync.logging import logging
@@ -89,3 +91,13 @@ class TraktApi:
             ratings[r['movie']['ids']['slug']] = r['rating']
 
         return ratings
+
+    @memoize
+    def find_movie(self, movie):
+        search = trakt.sync.search_by_id(movie.id, id_type=movie.provider)
+        # look for the first movie in the results
+        for m in search:
+            if type(m) is trakt.movies.Movie:
+                return m
+
+        return None
