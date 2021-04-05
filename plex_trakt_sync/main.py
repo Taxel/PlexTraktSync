@@ -189,16 +189,21 @@ def process_show_section(s, watched_set, listutil):
     logging.info("Now working on show section {} containing {} elements".format(s.title, len(allShows)))
     for show in allShows:
         guid = show.guid
+        if guid.startswith('plex://show/'):
+            if len(show.guids) > 0:
+                logging.debug("trying first alternative guid: " + str(show.guids[0].id))
+                guid = show.guids[0].id
+        x = provider = None
         if guid.startswith('local') or 'agents.none' in guid:
             # ignore this guid, it's not matched
             logging.warning("Show [{} ({})]: GUID is local, ignoring".format(
                 show.title, show.year))
             continue
-        elif 'thetvdb' in guid:
+        elif 'imdb' in guid:
             x = guid.split('//')[1]
             x = x.split('?')[0]
-            provider = 'tvdb'
-        elif 'themoviedb' in guid:
+            provider = 'imdb'
+        elif 'themoviedb' in guid or 'tmdb' in guid:
             x = guid.split('//')[1]
             x = x.split('?')[0]
             provider = 'tmdb'
