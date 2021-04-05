@@ -13,6 +13,28 @@ class PlexApi:
 
     @property
     @memoize
+    def movie_sections(self):
+        result = []
+        for section in self.library_sections:
+            if not type(section) is MovieSection:
+                continue
+            result.append(section)
+
+        return result
+
+    @property
+    @memoize
+    def show_sections(self):
+        result = []
+        for section in self.library_sections:
+            if not type(section) is ShowSection:
+                continue
+            result.append(section)
+
+        return result
+
+    @property
+    @memoize
     @nocache
     def library_sections(self):
         result = []
@@ -22,11 +44,3 @@ class PlexApi:
             result.append(section)
 
         return result
-
-    @staticmethod
-    def is_movie(section):
-        return type(section) is MovieSection
-
-    @staticmethod
-    def is_show(section):
-        return type(section) is ShowSection

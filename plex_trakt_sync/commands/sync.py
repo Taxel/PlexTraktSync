@@ -36,15 +36,13 @@ def sync_all():
         logging.info("Server version {} updated at: {}".format(server.version, server.updatedAt))
         logging.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
-    for section in plex.library_sections:
-        if PlexApi.is_movie(section):
-            with measure_time("Processing section %s" % section.title):
-                process_movie_section(section, trakt_watched_movies, trakt_ratings, listutil, trakt_movie_collection)
-        elif PlexApi.is_show(section):
-            with measure_time("Processing section %s" % section.title):
-                process_show_section(section, trakt_watched_shows, listutil)
-        else:
-            continue
+    for section in plex.movie_sections:
+        with measure_time("Processing section %s" % section.title):
+            process_movie_section(section, trakt_watched_movies, trakt_ratings, listutil, trakt_movie_collection)
+
+    for section in plex.show_sections:
+        with measure_time("Processing section %s" % section.title):
+            process_show_section(section, trakt_watched_shows, listutil)
 
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(server)
