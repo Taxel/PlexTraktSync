@@ -25,10 +25,14 @@ class WatchStateUpdater:
             self.scrobble(tm, percent, item["state"])
 
     def scrobble(self, tm, percent, state):
-        if state == "stopped" and tm in self.play_state:
-            scrobbler = self.play_state[tm]
-            self.trakt.scrobbler_stop(scrobbler, percent)
-            del self.play_state[tm]
+        if state == "stopped":
+            if tm not in self.play_state:
+                scrobbler = self.trakt.scrobble(tm, 0)
+                self.trakt.scrobbler_stop(scrobbler)
+            else:
+                scrobbler = self.play_state[tm]
+                self.trakt.scrobbler_stop(scrobbler)
+                del self.play_state[tm]
 
         if state == "playing":
             if tm not in self.play_state:
@@ -37,6 +41,15 @@ class WatchStateUpdater:
             else:
                 scrobbler = self.play_state[tm]
                 self.trakt.scrobbler_update(scrobbler, percent)
+
+        if state == "paused":
+            if tm not in self.play_state:
+                scrobbler = self.trakt.scrobble(tm, 0)
+                self.play_state[tm] = scrobbler
+                self.trakt.scrobbler_pause(scrobbler)
+            else:
+                scrobbler = self.play_state[tm]
+                self.trakt.scrobbler_pause(scrobbler)
 
     def filter_media(self, message):
         for item in self.filter_playing(message):
@@ -67,8 +80,7 @@ class WatchStateUpdater:
         for item in message["PlaySessionStateNotification"]:
             state = item["state"]
             print(f"State: {state}")
-            # "playing", 'buffering', 'stopped'
-            if state not in ["playing", "stopped"]:
+            if state not in ["playing", "stopped", "paused"]:
                 continue
 
             yield item
