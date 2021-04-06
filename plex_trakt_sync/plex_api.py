@@ -66,6 +66,10 @@ class PlexLibraryItem:
         except ValueError:  # for py<3.6
             return date
 
+    def watch_progress(self, view_offset):
+        percent = view_offset / self.item.duration * 100
+        return percent
+
     @property
     @memoize
     def guid_is_imdb_legacy(self):
