@@ -1,12 +1,17 @@
 import click
 from plexapi.server import PlexServer
+
+from plex_trakt_sync.decorators import memoize
 from plex_trakt_sync.listener import WebSocketListener, PLAYING
 from plex_trakt_sync.config import CONFIG
+from plex_trakt_sync.plex_api import PlexApi, PlexLibraryItem
+from plex_trakt_sync.trakt_api import TraktApi
 
 
 class WatchStateUpdater:
-    def __init__(self, plex):
+    def __init__(self, plex: PlexApi, trakt: TraktApi):
         self.plex = plex
+        self.trakt = trakt
 
     def __call__(self, message):
         """
@@ -27,16 +32,23 @@ class WatchStateUpdater:
             if state == 'buffering':
                 continue
 
-            viewOffset = item["viewOffset"]
-            ratingKey = item["ratingKey"]
-            print("Find movie for %s @ %s" % (ratingKey, viewOffset))
-            movie = self.plex.library.fetchItem("/library/metadata/%s" % ratingKey)
-            print("Found movie: %r" % movie)
-            percent = viewOffset/movie.duration * 100
+            pm = self.plex.fetch_item(item["ratingKey"])
+            print(f"Found {pm} for {item['ratingKey']}")
+            if not pm:
+                continue
+
+            movie = pm.item
+            percent = pm.watch_progress(item["viewOffset"])
 
             print("%r: %.6F%% Duration: %s, Watched: %s, LastViewed: %s" % (
                 movie, percent, movie.duration, movie.isWatched, movie.lastViewedAt
             ))
+
+            tm = self.trakt.find_movie(pm)
+            if not tm:
+                continue
+
+            self.trakt.scrobble(tm, percent)
 
 
 @click.command()
@@ -48,8 +60,10 @@ def watch():
     url = CONFIG["PLEX_BASEURL"]
     token = CONFIG["PLEX_TOKEN"]
     server = PlexServer(url, token)
+    trakt = TraktApi()
+    plex = PlexApi(server)
 
     ws = WebSocketListener(server)
-    ws.on(PLAYING, WatchStateUpdater(server))
+    ws.on(PLAYING, WatchStateUpdater(plex, trakt))
     print("Listening for events!")
     ws.listen()
