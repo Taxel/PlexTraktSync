@@ -27,3 +27,5 @@ def initialize():
 
 
 initialize()
+
+logger = logging.getLogger('PlexTraktSync')
