@@ -33,6 +33,7 @@ class PlexLibraryItem:
         x = self.guid.split("://")[0]
         x = x.replace("com.plexapp.agents.", "")
         x = x.replace("themoviedb", "tmdb")
+        x = x.replace("thetvdb", "tvdb")
         if x == "xbmcnfo":
             x = CONFIG["xbmc-providers"][self.type]
 
