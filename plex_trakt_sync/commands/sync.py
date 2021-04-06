@@ -11,7 +11,7 @@ from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.logging import logging
 
 
-def sync_all():
+def sync_all(movies=True, tv=True):
     with requests_cache.disabled():
         server = get_plex_server()
     listutil = TraktListUtil()
@@ -36,25 +36,40 @@ def sync_all():
         logging.info("Server version {} updated at: {}".format(server.version, server.updatedAt))
         logging.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
-    for section in plex.movie_sections:
-        with measure_time("Processing section %s" % section.title):
-            process_movie_section(section, trakt_watched_movies, listutil, trakt_movie_collection, trakt, plex)
+    if movies:
+        for section in plex.movie_sections:
+            with measure_time("Processing section %s" % section.title):
+                process_movie_section(section, trakt_watched_movies, listutil, trakt_movie_collection, trakt, plex)
 
-    for section in plex.show_sections:
-        with measure_time("Processing section %s" % section.title):
-            process_show_section(section, trakt_watched_shows, listutil)
+    if tv:
+        for section in plex.show_sections:
+            with measure_time("Processing section %s" % section.title):
+                process_show_section(section, trakt_watched_shows, listutil)
 
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(server)
 
 
 @click.command()
-def sync():
+@click.option(
+    "--sync", "sync_option",
+    type=click.Choice(["all", "movies", "tv"], case_sensitive=False),
+    default="all",
+    show_default=True, help="Specify what to sync"
+)
+def sync(sync_option: str):
     """
     Perform sync between Plex and Trakt
     """
 
-    logging.info("Starting sync Plex {} and Trakt {}".format(CONFIG['PLEX_USERNAME'], CONFIG['TRAKT_USERNAME']))
+    movies = sync_option in ["all", "movies"]
+    tv = sync_option in ["all", "tv"]
+    if not movies and not tv:
+        click.echo("Nothing to sync!")
+        return
+
+    logging.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['PLEX_USERNAME']}")
+    logging.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
-        sync_all()
+        sync_all(movies=movies, tv=tv)
