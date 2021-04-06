@@ -146,6 +146,10 @@ class PlexApi:
         media = self.plex.library.fetchItem(key)
         return PlexLibraryItem(media)
 
+    def reload_item(self, pm):
+        self.fetch_item.cache_clear()
+        return self.fetch_item(pm.item.ratingKey)
+
     @property
     @memoize
     @nocache
