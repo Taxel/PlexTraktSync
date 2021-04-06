@@ -135,6 +135,10 @@ class PlexApi:
 
         return result
 
+    @memoize
+    def fetch_item(self, key: str):
+        return self.plex.library.fetchItem(f"/library/metadata/{key}")
+
     @property
     @memoize
     @nocache
