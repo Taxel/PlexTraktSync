@@ -10,6 +10,7 @@ from plexapi.library import LibrarySection, MovieSection, ShowSection
 from plexapi.server import PlexServer, SystemDevice
 from trakt.utils import timestamp
 
+from plex_trakt_sync.config import PLEX_PLATFORM
 from plex_trakt_sync.decorators.deprecated import deprecated
 from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.decorators.nocache import nocache
@@ -495,6 +496,14 @@ class PlexApi:
             self.plex.playlist(name).delete()
         except (NotFound, BadRequest):
             logger.debug(f"Playlist '{name}' not found, so it could not be deleted")
+
+    def history(self, m):
+        for h in m.history():
+            # Ignore history entries created by us
+            device = self.system_device(h.deviceID)
+            if device.platform == PLEX_PLATFORM:
+                continue
+            yield h
 
     @nocache
     def mark_watched(self, m):
