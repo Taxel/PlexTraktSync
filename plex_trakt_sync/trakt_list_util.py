@@ -3,7 +3,7 @@ from trakt.errors import NotFoundException, OAuthException
 from trakt.movies import Movie
 from trakt.tv import TVEpisode
 from plexapi.video import Episode
-import requests_cache
+from plex_trakt_sync.requests_cache import requests_cache
 from plex_trakt_sync.logging import logger
 from plexapi.exceptions import BadRequest, NotFound
 from itertools import count
