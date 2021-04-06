@@ -54,6 +54,14 @@ def sync_watched(pm, tm, plex: PlexApi, trakt: TraktApi, trakt_watched_movies):
         plex.mark_watched(pm.item)
 
 
+def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
+    if tm.trakt in trakt_movie_collection:
+        return
+
+    logging.info(f"Add to Trakt Collection: {pm}")
+    trakt.add_to_collection(tm)
+
+
 def process_movie_section(section: PlexLibrarySection, watched_set, listutil, collection, trakt_api: TraktApi, plex_api: PlexApi):
     # args: a section of plex movies, a set comprised of the trakt ids of all watched movies and a dict with key=slug and value=rating (1-10)
 
@@ -76,27 +84,10 @@ def process_movie_section(section: PlexLibrarySection, watched_set, listutil, co
 
         guid = it.guid
         try:
-            last_time = time()
+            # add to collection if necessary
             if CONFIG['sync']['collection']:
-                # add to collection if necessary
-                if m.trakt not in collection:
-                    retry = 0
-                    while retry < 5:
-                        try:
-                            last_time = respect_trakt_rate(last_time)
-                            m.add_to_library()
-                            logging.info('Movie [{} ({})]: Added to trakt collection'.format(
-                                movie.title, movie.year))
-                            break
-                        except trakt.errors.RateLimitException as e:
-                            delay = int(e.response.headers.get("Retry-After", 1))
-                            logging.warning(
-                                "Movie [{} ({})]: Rate Limited on adding to collection. Sleeping {} sec from trakt (GUID: {})".format(movie.title, movie.year, delay, guid))
-                            sleep(delay)
-                            retry += retry
-                    if retry == 5:
-                        logging.warning(
-                            "Movie [{} ({})]: Rate Limited 5 times on watched update. Abort trakt request.".format(movie.title, movie.year))
+                sync_collection(it, m, trakt_api, collection)
+
             # compare ratings
             if CONFIG['sync']['ratings']:
                 sync_ratings(it, m, plex_api, trakt_api)
