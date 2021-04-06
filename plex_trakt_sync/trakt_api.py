@@ -128,6 +128,13 @@ class TraktApi:
         m.rate(rating)
 
     @nocache
+    @rate_limit()
+    def scrobble(self, media: Union[Movie, TVEpisode], percent: float):
+        progress = int(percent)
+        scrobbler = media.scrobble(progress, None, None)
+        return scrobbler
+
+    @nocache
     @rate_limit(delay=TRAKT_POST_DELAY)
     def mark_watched(self, m, time):
         m.mark_as_seen(time)
