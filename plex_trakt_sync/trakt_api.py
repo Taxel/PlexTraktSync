@@ -132,6 +132,11 @@ class TraktApi:
     def mark_watched(self, m, time):
         m.mark_as_seen(time)
 
+    @nocache
+    @rate_limit(delay=TRAKT_POST_DELAY)
+    def add_to_collection(self, m):
+        m.add_to_library()
+
     @rate_limit()
     def find_movie(self, movie):
         try:
