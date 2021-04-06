@@ -1,5 +1,5 @@
 import plexapi.server
-from plex_trakt_sync.config import CONFIG
+from plex_trakt_sync.config import CONFIG, PLEX_PLATFORM
 from plex_trakt_sync.logging import logger
 
 
@@ -11,7 +11,7 @@ def get_plex_server():
         plex_token = ""
     server = None
 
-    plexapi.X_PLEX_PLATFORM = 'PlexTraktSync'
+    plexapi.X_PLEX_PLATFORM = PLEX_PLATFORM
     plexapi.BASE_HEADERS['X-Plex-Platform'] = plexapi.X_PLEX_PLATFORM
 
     # if connection fails, it will try :
