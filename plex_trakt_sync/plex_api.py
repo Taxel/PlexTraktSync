@@ -1,4 +1,6 @@
 import datetime
+from typing import Union
+
 from plexapi.library import MovieSection, ShowSection, LibrarySection
 from plexapi.video import Movie, Show
 from plex_trakt_sync.decorators import memoize, nocache
@@ -140,8 +142,8 @@ class PlexApi:
         return result
 
     @memoize
-    def fetch_item(self, key: str):
-        media = self.plex.library.fetchItem(f"/library/metadata/{key}")
+    def fetch_item(self, key: Union[int, str]):
+        media = self.plex.library.fetchItem(key)
         return PlexLibraryItem(media)
 
     @property
