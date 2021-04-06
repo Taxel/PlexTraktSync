@@ -11,6 +11,7 @@ class WatchStateUpdater:
     def __init__(self, plex: PlexApi, trakt: TraktApi):
         self.plex = plex
         self.trakt = trakt
+        self.play_state = dict()
 
     def __call__(self, message):
         for pm, tm, item in self.filter_media(message):
@@ -21,7 +22,21 @@ class WatchStateUpdater:
                 movie, percent, movie.isWatched, movie.lastViewedAt
             ))
 
-            self.trakt.scrobble(tm, percent)
+            self.scrobble(tm, percent, item["state"])
+
+    def scrobble(self, tm, percent, state):
+        if state == "stopped" and tm in self.play_state:
+            scrobbler = self.play_state[tm]
+            self.trakt.scrobbler_stop(scrobbler, percent)
+            del self.play_state[tm]
+
+        if state == "playing":
+            if tm not in self.play_state:
+                scrobbler = self.trakt.scrobble(tm, percent)
+                self.play_state[tm] = scrobbler
+            else:
+                scrobbler = self.play_state[tm]
+                self.trakt.scrobbler_update(scrobbler, percent)
 
     def filter_media(self, message):
         for item in self.filter_playing(message):
