@@ -137,9 +137,19 @@ class TraktApi:
 
     @nocache
     @rate_limit()
+    def scrobbler_pause(self, scrobbler: Scrobbler):
+        scrobbler.pause()
+
+    @nocache
+    @rate_limit()
     def scrobbler_update(self, scrobbler: Scrobbler, percent: float):
         progress = int(percent)
         scrobbler.update(progress)
+
+    @nocache
+    @rate_limit()
+    def scrobbler_stop(self, scrobbler: Scrobbler):
+        scrobbler.stop()
 
     @nocache
     @rate_limit(delay=TRAKT_POST_DELAY)
