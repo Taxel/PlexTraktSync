@@ -137,7 +137,8 @@ class PlexApi:
 
     @memoize
     def fetch_item(self, key: str):
-        return self.plex.library.fetchItem(f"/library/metadata/{key}")
+        media = self.plex.library.fetchItem(f"/library/metadata/{key}")
+        return PlexLibraryItem(media)
 
     @property
     @memoize
