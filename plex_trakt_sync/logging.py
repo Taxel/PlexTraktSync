@@ -16,6 +16,7 @@ def initialize():
 
     # file handler can log down to debug messages
     file_handler = logging.FileHandler(log_file, 'w', 'utf-8')
+    file_handler.setFormatter(logging.Formatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s"))
     file_handler.setLevel(logging.DEBUG)
 
     handlers = [
