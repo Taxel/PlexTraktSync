@@ -53,7 +53,7 @@ class WatchStateUpdater:
             state = item["state"]
             print(f"State: {state}")
             # "playing", 'buffering', 'stopped'
-            if state == 'buffering':
+            if state not in ["playing", "stopped"]:
                 continue
 
             yield item
