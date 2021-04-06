@@ -57,6 +57,7 @@ def process_movie_section(section: PlexLibrarySection, watched_set, listutil, co
             logging.warning(f"Movie [{movie.title} ({movie.year})]: Not found. Skipping")
             continue
 
+        guid = it.guid
         try:
             last_time = time()
             if CONFIG['sync']['collection']:
