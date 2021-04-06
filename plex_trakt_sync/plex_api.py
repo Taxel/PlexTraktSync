@@ -110,8 +110,8 @@ class PlexApi:
     Plex API class abstracting common data access and dealing with requests cache.
     """
 
-    def __init__(self, plex_server):
-        self.plex_server = plex_server
+    def __init__(self, plex):
+        self.plex = plex
 
     @property
     @memoize
@@ -140,7 +140,7 @@ class PlexApi:
     @nocache
     def library_sections(self):
         result = []
-        for section in self.plex_server.library.sections():
+        for section in self.plex.library.sections():
             if section.title in CONFIG["excluded-libraries"]:
                 continue
             result.append(section)
