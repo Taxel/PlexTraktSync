@@ -161,6 +161,7 @@ class TraktApi:
     def add_to_collection(self, m):
         m.add_to_library()
 
+    @memoize
     @rate_limit()
     def find_movie(self, movie):
         try:
