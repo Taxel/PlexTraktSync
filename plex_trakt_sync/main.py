@@ -16,7 +16,7 @@ from json.decoder import JSONDecodeError
 
 from plex_trakt_sync import pytrakt_extensions
 from plex_trakt_sync.config import CONFIG
-from plex_trakt_sync.logging import logging
+from plex_trakt_sync.logging import logger as logging
 from plex_trakt_sync.requests_cache import requests_cache
 
 trakt_post_wait = 1.2  # delay in sec between trakt post requests to respect rate limit

@@ -13,7 +13,7 @@ from trakt.tv import TVShow, TVSeason, TVEpisode
 from trakt.errors import OAuthException, ForbiddenException
 from trakt.sync import Scrobbler
 
-from plex_trakt_sync.logging import logging
+from plex_trakt_sync.logging import logger
 from plex_trakt_sync.decorators import memoize, nocache, rate_limit
 from plex_trakt_sync.config import CONFIG
 
@@ -33,7 +33,7 @@ class TraktApi:
         try:
             return trakt.users.User('me')
         except (OAuthException, ForbiddenException) as e:
-            logging.fatal("Trakt authentication error: {}".format(str(e)))
+            logger.fatal("Trakt authentication error: {}".format(str(e)))
             raise e
 
     @property

@@ -3,8 +3,8 @@ from trakt.errors import NotFoundException, OAuthException
 from trakt.movies import Movie
 from trakt.tv import TVEpisode
 from plexapi.video import Episode
-import requests_cache
-import logging
+from plex_trakt_sync.requests_cache import requests_cache
+from plex_trakt_sync.logging import logger
 from plexapi.exceptions import BadRequest, NotFound
 from itertools import count
 
@@ -27,16 +27,16 @@ class TraktList():
         if rank is not None:
             self.plex_items.append((rank, plex_item))
             if isinstance(plex_item, Episode):
-                logging.info('Show [{} ({})]: {} added to list {}'.format(plex_item.show().title, plex_item.show().year, plex_item.seasonEpisode, self.name))
+                logger.info('Show [{} ({})]: {} added to list {}'.format(plex_item.show().title, plex_item.show().year, plex_item.seasonEpisode, self.name))
             else:
-                logging.info('Movie [{} ({})]: added to list {}'.format(plex_item.title, plex_item.year, self.name))
+                logger.info('Movie [{} ({})]: added to list {}'.format(plex_item.title, plex_item.year, self.name))
 
     def updatePlexList(self, plex):
         with requests_cache.disabled():
             try:
                 plex.playlist(self.name).delete()
             except (NotFound, BadRequest):
-                logging.error("Playlist %s not found, so it could not be deleted. Actual playlists: %s" % (self.name, plex.playlists()))
+                logger.error("Playlist %s not found, so it could not be deleted. Actual playlists: %s" % (self.name, plex.playlists()))
                 pass
             if len(self.plex_items) > 0:
                 _, plex_items_sorted = zip(*sorted(dict(reversed(self.plex_items)).items()))
@@ -50,13 +50,13 @@ class TraktListUtil():
     def addList(self, username, listname, traktid_list=None):
         if traktid_list is not None:
             self.lists.append(TraktList.from_traktid_list(listname, traktid_list))
-            logging.info("Downloaded List {}".format(listname))
+            logger.info("Downloaded List {}".format(listname))
             return
         try:
             self.lists.append(TraktList(username, listname))
-            logging.info("Downloaded List {}".format(listname))
+            logger.info("Downloaded List {}".format(listname))
         except (NotFoundException, OAuthException):
-            logging.warning("Failed to get list {} by user {}".format(listname, username))
+            logger.warning("Failed to get list {} by user {}".format(listname, username))
 
     def addPlexItemToLists(self, traktid, plex_item):
         for l in self.lists:

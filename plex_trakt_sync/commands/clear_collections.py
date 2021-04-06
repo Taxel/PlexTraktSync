@@ -1,5 +1,5 @@
 import click
-from plex_trakt_sync.logging import logging
+from plex_trakt_sync.logging import logger
 from plex_trakt_sync.trakt_api import TraktApi
 
 
@@ -18,11 +18,11 @@ def clear_collections(confirm, dry_run):
     trakt = TraktApi()
 
     for movie in trakt.movie_collection:
-        logging.info(f"Deleting: {movie}")
+        logger.info(f"Deleting: {movie}")
         if not dry_run:
             trakt.remove_from_library(movie)
 
     for show in trakt.show_collection:
-        logging.info(f"Deleting: {show}")
+        logger.info(f"Deleting: {show}")
         if not dry_run:
             trakt.remove_from_library(show)
