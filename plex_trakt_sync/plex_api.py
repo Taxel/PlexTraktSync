@@ -7,7 +7,7 @@ from typing import Union
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound
 from plexapi.library import LibrarySection, MovieSection, ShowSection
-from plexapi.server import PlexServer
+from plexapi.server import PlexServer, SystemDevice
 from trakt.utils import timestamp
 
 from plex_trakt_sync.decorators.deprecated import deprecated
@@ -474,6 +474,11 @@ class PlexApi:
     @property
     def library_section_names(self):
         return [s.title for s in self.library_sections]
+
+    @memoize
+    @nocache
+    def system_device(self, device_id: int) -> SystemDevice:
+        return self.plex.systemDevice(device_id)
 
     @nocache
     def rate(self, m, rating):
