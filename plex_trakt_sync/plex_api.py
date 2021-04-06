@@ -55,8 +55,11 @@ class PlexLibraryItem:
     @property
     @memoize
     def seen_date(self):
-        movie = self.item
-        date = (movie.lastViewedAt if movie.lastViewedAt else datetime.now())
+        media = self.item
+        if not media.lastViewedAt:
+            raise ValueError('lastViewedAt is not set')
+
+        date = media.lastViewedAt
 
         try:
             return date.astimezone(datetime.timezone.utc)
