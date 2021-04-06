@@ -1,3 +1,4 @@
+import datetime
 from plexapi.library import MovieSection, ShowSection, LibrarySection
 from plexapi.video import Movie, Show
 from plex_trakt_sync.decorators import memoize, nocache
@@ -50,6 +51,20 @@ class PlexLibraryItem:
     @memoize
     def rating(self):
         return int(self.item.userRating) if self.item.userRating is not None else None
+
+    @property
+    @memoize
+    def seen_date(self):
+        media = self.item
+        if not media.lastViewedAt:
+            raise ValueError('lastViewedAt is not set')
+
+        date = media.lastViewedAt
+
+        try:
+            return date.astimezone(datetime.timezone.utc)
+        except ValueError:  # for py<3.6
+            return date
 
     @property
     @memoize
@@ -135,3 +150,7 @@ class PlexApi:
     @nocache
     def rate(self, m, rating):
         m.rate(rating)
+
+    @nocache
+    def mark_watched(self, m):
+        m.markWatched()

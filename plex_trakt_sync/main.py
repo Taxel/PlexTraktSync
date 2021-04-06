@@ -23,9 +23,6 @@ trakt_post_wait = 1.2  # delay in sec between trakt post requests to respect rat
 
 
 def sync_ratings(pm, tm, plex: PlexApi, trakt: TraktApi):
-    if not CONFIG['sync']['ratings']:
-        return
-
     trakt_rating = trakt.rating(tm)
     plex_rating = pm.rating
     if plex_rating is trakt_rating:
@@ -38,6 +35,23 @@ def sync_ratings(pm, tm, plex: PlexApi, trakt: TraktApi):
     elif trakt_rating is not None:
         logging.info(f"Rating {pm} with {trakt_rating} on Plex")
         plex.rate(pm.item, trakt_rating)
+
+
+def sync_watched(pm, tm, plex: PlexApi, trakt: TraktApi, trakt_watched_movies):
+    watched_on_plex = pm.item.isWatched
+    watched_on_trakt = tm.trakt in trakt_watched_movies
+    if watched_on_plex is watched_on_trakt:
+        return
+
+    # if watch status is not synced
+    # send watched status from plex to trakt
+    if watched_on_plex:
+        logging.info(f"Marking as watched on Trakt: {pm}")
+        trakt.mark_watched(tm, pm.seen_date)
+    # set watched status if movie is watched on Trakt
+    elif watched_on_trakt:
+        logging.info(f"Marking as watched in Plex: {pm}")
+        plex.mark_watched(pm.item)
 
 
 def process_movie_section(section: PlexLibrarySection, watched_set, listutil, collection, trakt_api: TraktApi, plex_api: PlexApi):
@@ -60,6 +74,7 @@ def process_movie_section(section: PlexLibrarySection, watched_set, listutil, co
             logging.warning(f"Movie [{movie.title} ({movie.year})]: Not found. Skipping")
             continue
 
+        guid = it.guid
         try:
             last_time = time()
             if CONFIG['sync']['collection']:
@@ -88,40 +103,8 @@ def process_movie_section(section: PlexLibrarySection, watched_set, listutil, co
 
             # sync watch status
             if CONFIG['sync']['watched_status']:
-                watchedOnPlex = movie.isWatched
-                watchedOnTrakt = m.trakt in watched_set
-                if watchedOnPlex is not watchedOnTrakt:
-                    # if watch status is not synced
-                    # send watched status from plex to trakt
-                    if watchedOnPlex:
-                        retry = 0
-                        while retry < 5:
-                            try:
-                                last_time = respect_trakt_rate(last_time)
-                                with requests_cache.disabled():
-                                    seen_date = (movie.lastViewedAt if movie.lastViewedAt else datetime.now())
-                                    m.mark_as_seen(seen_date.astimezone(datetime.timezone.utc))
-                                logging.info("Movie [{} ({})]: marking as watched on Trakt...".format(
-                                    movie.title, movie.year))
-                                break
-                            except ValueError:  # for py<3.6
-                                with requests_cache.disabled():
-                                    m.mark_as_seen(seen_date)
-                            except trakt.errors.RateLimitException as e:
-                                delay = int(e.response.headers.get("Retry-After", 1))
-                                logging.warning(
-                                    "Movie [{} ({})]: Rate Limited on watched update. Sleeping {} sec from trakt (GUID: {})".format(movie.title, movie.year, delay, guid))
-                                sleep(delay)
-                                retry += retry
-                        if retry == 5:
-                            logging.warning(
-                                "Movie [{} ({})]: Rate Limited 5 times on watched update. Abort trakt request.".format(movie.title, movie.year))
-                    # set watched status if movie is watched on trakt
-                    elif watchedOnTrakt:
-                        logging.info("Movie [{} ({})]: marking as watched in Plex...".format(
-                            movie.title, movie.year))
-                        with requests_cache.disabled():
-                            movie.markWatched()
+                sync_watched(it, m, plex_api, trakt_api, watched_set)
+
             # add to plex lists
             listutil.addPlexItemToLists(m.trakt, movie)
 
@@ -285,8 +268,6 @@ def process_show_section(s, watched_set, listutil):
         except Exception as e:
             logging.error("Show [{} ({})]: {} (GUID {})".format(
                 show.title, show.year, e, guid))
-
-
 
 
 def respect_trakt_rate(last_time):

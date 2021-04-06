@@ -44,12 +44,12 @@ def rate_limit(retries=5, delay=None):
                     if retry == retries:
                         raise e
 
-                    delay = int(e.response.headers.get("Retry-After", 1))
+                    seconds = int(e.response.headers.get("Retry-After", 1))
                     retry += 1
                     logging.warning(
-                        f'RateLimitException for {fn}, retrying after {delay} seconds (try: {retry}/{retries})'
+                        f'RateLimitException for {fn}, retrying after {seconds} seconds (try: {retry}/{retries})'
                     )
-                    sleep(delay)
+                    sleep(seconds)
 
         return wrapper
 

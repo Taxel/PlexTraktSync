@@ -127,6 +127,11 @@ class TraktApi:
     def rate(self, m, rating):
         m.rate(rating)
 
+    @nocache
+    @rate_limit(delay=TRAKT_POST_DELAY)
+    def mark_watched(self, m, time):
+        m.mark_as_seen(time)
+
     @rate_limit()
     def find_movie(self, movie):
         try:
