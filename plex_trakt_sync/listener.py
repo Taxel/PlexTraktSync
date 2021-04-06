@@ -1,6 +1,8 @@
 from time import sleep
 from plexapi.server import PlexServer
 
+from plex_trakt_sync.logging import logging
+
 PLAYING = "playing"
 
 
@@ -9,6 +11,7 @@ class WebSocketListener:
         self.plex = plex
         self.interval = interval
         self.event_handlers = {}
+        self.logger = logging.getLogger("PlexTraktSync.WebSocketListener")
 
     def on(self, event_name, handler):
         if event_name not in self.event_handlers:
@@ -18,6 +21,7 @@ class WebSocketListener:
 
     def listen(self):
         def handler(data):
+            self.logger.debug(data)
             event_type = data['type']
             if event_type not in self.event_handlers:
                 return
