@@ -21,7 +21,7 @@ def sync_all():
     with measure_time("Loaded Trakt lists"):
         trakt_watched_movies = trakt.watched_movies
         trakt_watched_shows = trakt.watched_shows
-        trakt_movie_collection = trakt.movie_collection
+        trakt_movie_collection = trakt.movie_collection_set
         trakt_ratings = trakt.ratings
         trakt_watchlist_movies = trakt.watchlist_movies
         trakt_liked_lists = trakt.liked_lists

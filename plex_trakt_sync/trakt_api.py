@@ -1,3 +1,4 @@
+from typing import Union
 import trakt
 
 from plex_trakt_sync import pytrakt_extensions
@@ -7,6 +8,8 @@ trakt.core.CONFIG_PATH = pytrakt_file
 import trakt.users
 import trakt.sync
 import trakt.movies
+from trakt.movies import Movie
+from trakt.tv import TVShow, TVSeason, TVEpisode
 from trakt.errors import OAuthException, ForbiddenException
 
 from plex_trakt_sync.logging import logging
@@ -55,8 +58,27 @@ class TraktApi:
     @nocache
     @rate_limit()
     def movie_collection(self):
+        return self.me.movie_collection
+
+    @property
+    @memoize
+    @nocache
+    @rate_limit()
+    def show_collection(self):
+        return self.me.show_collection
+
+    @nocache
+    @rate_limit(delay=TRAKT_POST_DELAY)
+    def remove_from_library(self, media: Union[Movie, TVShow, TVSeason, TVEpisode]):
+        if not isinstance(media, (Movie, TVShow, TVSeason, TVEpisode)):
+            raise ValueError("Must be valid media type")
+        media.remove_from_library()
+
+    @property
+    @memoize
+    def movie_collection_set(self):
         return set(
-            map(lambda m: m.trakt, self.me.movie_collection)
+            map(lambda m: m.trakt, self.movie_collection)
         )
 
     @property
