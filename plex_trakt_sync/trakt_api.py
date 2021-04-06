@@ -29,17 +29,17 @@ class ScrobblerProxy:
         self.scrobbler = scrobbler
 
     @nocache
-    @rate_limit()
+    @rate_limit(delay=TRAKT_POST_DELAY)
     def update(self, progress: float):
         self.scrobbler.update(progress)
 
     @nocache
-    @rate_limit()
+    @rate_limit(delay=TRAKT_POST_DELAY)
     def pause(self):
         self.scrobbler.pause()
 
     @nocache
-    @rate_limit()
+    @rate_limit(delay=TRAKT_POST_DELAY)
     def stop(self):
         self.scrobbler.stop()
 
