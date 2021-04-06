@@ -16,13 +16,23 @@ unlike the Plex app provided by Trakt.
    Downside: Needs to be executed manually or via cronjob,
    can not use live data via webhooks.
 
-## Setup
+## Pre-requisites
 
 The script is known to work with Python 3.6-3.9 versions.
 
-To set up the script on your own machine, first clone or download this repo.
+## Installing
 
-This should install the required Python packages:
+To install this project, find out the latest release:
+- https://github.com/Taxel/PlexTraktSync/releases
+
+Download the `.tar`, or `.zip` or checkout the release with Git.
+
+For example, the command to clone with Git:
+```
+git clone -b 0.5.3 --depth=1 https://github.com/Taxel/PlexTraktSync
+```
+
+In the extracted directory, install the required Python packages:
 ```
 pip3 install -r requirements.txt
 ```
@@ -34,6 +44,8 @@ pipenv run python main.py
 ```
 
 [pipenv]: https://pipenv.pypa.io/
+
+## Setup
 
 To connect to Trakt you need to create a new API app:
 - Visit https://trakt.tv/oauth/applications/new
