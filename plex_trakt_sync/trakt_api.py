@@ -11,6 +11,7 @@ import trakt.movies
 from trakt.movies import Movie
 from trakt.tv import TVShow, TVSeason, TVEpisode
 from trakt.errors import OAuthException, ForbiddenException
+from trakt.sync import Scrobbler
 
 from plex_trakt_sync.logging import logging
 from plex_trakt_sync.decorators import memoize, nocache, rate_limit
@@ -126,6 +127,29 @@ class TraktApi:
     @rate_limit(delay=TRAKT_POST_DELAY)
     def rate(self, m, rating):
         m.rate(rating)
+
+    @nocache
+    @rate_limit()
+    def scrobble(self, media: Union[Movie, TVEpisode], percent: float):
+        progress = int(percent)
+        scrobbler = media.scrobble(progress, None, None)
+        return scrobbler
+
+    @nocache
+    @rate_limit()
+    def scrobbler_pause(self, scrobbler: Scrobbler):
+        scrobbler.pause()
+
+    @nocache
+    @rate_limit()
+    def scrobbler_update(self, scrobbler: Scrobbler, percent: float):
+        progress = int(percent)
+        scrobbler.update(progress)
+
+    @nocache
+    @rate_limit()
+    def scrobbler_stop(self, scrobbler: Scrobbler):
+        scrobbler.stop()
 
     @nocache
     @rate_limit(delay=TRAKT_POST_DELAY)
