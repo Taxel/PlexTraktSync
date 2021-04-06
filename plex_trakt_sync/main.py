@@ -23,9 +23,6 @@ trakt_post_wait = 1.2  # delay in sec between trakt post requests to respect rat
 
 
 def sync_ratings(pm, tm, plex: PlexApi, trakt: TraktApi):
-    if not CONFIG['sync']['ratings']:
-        return
-
     trakt_rating = trakt.rating(tm)
     plex_rating = pm.rating
     if plex_rating is trakt_rating:
@@ -285,8 +282,6 @@ def process_show_section(s, watched_set, listutil):
         except Exception as e:
             logging.error("Show [{} ({})]: {} (GUID {})".format(
                 show.title, show.year, e, guid))
-
-
 
 
 def respect_trakt_rate(last_time):
