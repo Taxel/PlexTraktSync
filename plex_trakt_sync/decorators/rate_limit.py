@@ -31,6 +31,7 @@ def rate_limit(retries=5, delay=None):
                 f'Sleeping for {wait:.3f} seconds'
             )
             sleep(wait)
+        last_time = time()
 
     def decorator(fn):
         @wraps(fn)
