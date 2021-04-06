@@ -61,6 +61,22 @@ type `crontab -e` in the terminal.
 0 */2 * * * cd ~/path/to/this/repo && ./plex_trakt_sync.sh
 ```
 
+## Sync options
+
+The sync subcommand supports `--sync=tv` and `--sync=movies` options,
+so you can sync only specific library types.
+
+```
+➔ ./plex_trakt_sync.sh sync --help
+Usage: main.py sync [OPTIONS]
+
+  Perform sync between Plex and Trakt
+
+Options:
+  --sync [all|movies|tv]  Specify what to sync  [default: all]
+  --help                  Show this message and exit.
+```
+
 ## Sync settings
 
 To disable parts of the functionality of this software, look no further than
