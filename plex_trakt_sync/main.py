@@ -90,7 +90,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                             logging.warning(
                                 "Movie [{} ({})]: Rate Limited on adding to collection. Sleeping {} sec from trakt (GUID: {})".format(movie.title, movie.year, delay, guid))
                             sleep(delay)
-                            retry += retry
+                            retry += 1
                     if retry == 5:
                         logging.warning(
                             "Movie [{} ({})]: Rate Limited 5 times on watched update. Abort trakt request.".format(movie.title, movie.year))
@@ -119,7 +119,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                             logging.warning(
                                 "Movie [{} ({})]: Rate Limited on rating update. Sleeping {} sec from trakt (GUID: {})".format(movie.title, movie.year, delay, guid))
                             sleep(delay)
-                            retry += retry
+                            retry += 1
                     if retry == 5:
                         logging.warning(
                             "Movie [{} ({})]: Rate Limited 5 times on watched update. Abort trakt request.".format(movie.title, movie.year))
@@ -155,7 +155,7 @@ def process_movie_section(s, watched_set, ratings_dict, listutil, collection):
                                 logging.warning(
                                     "Movie [{} ({})]: Rate Limited on watched update. Sleeping {} sec from trakt (GUID: {})".format(movie.title, movie.year, delay, guid))
                                 sleep(delay)
-                                retry += retry
+                                retry += 1
                         if retry == 5:
                             logging.warning(
                                 "Movie [{} ({})]: Rate Limited 5 times on watched update. Abort trakt request.".format(movie.title, movie.year))
@@ -270,7 +270,7 @@ def process_show_section(s, watched_set, listutil):
                                 logging.warning("Show [{} ({})]: Rate limit on collected episode S{:02}E{:02}. Sleeping {} sec from trakt".format(
                                     show.title, show.year, episode.seasonNumber, episode.index, delay))
                                 sleep(delay)
-                                retry += retry
+                                retry += 1
                         if retry == 5:
                             logging.warning(
                                 "Show [{} ({})]: Rate Limited 5 times on collected episode S{:02}E{:02}. Abort trakt request.".format(show.title, show.year, episode.seasonNumber, episode.index))
@@ -298,7 +298,7 @@ def process_show_section(s, watched_set, listutil):
                                     delay = int(e.response.headers.get("Retry-After", 1))
                                     logging.warning("Show [{} ({})]: Rate limit on watched episode S{:02}E{:02}. Sleep {} sec from trakt".format(
                                         show.title, show.year, episode.seasonNumber, episode.index, delay))
-                                    retry += retry
+                                    retry += 1
                                     sleep(delay)
                             if retry == 5:
                                 logging.warning(
