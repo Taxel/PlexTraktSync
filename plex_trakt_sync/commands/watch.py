@@ -47,7 +47,7 @@ class WatchStateUpdater:
 
     def filter_media(self, message):
         for item in self.filter_playing(message):
-            pm = self.plex.fetch_item(item["ratingKey"])
+            pm = self.plex.fetch_item(int(item["ratingKey"]))
             print(f"Found {pm}")
             if not pm:
                 continue
