@@ -8,7 +8,7 @@ from plex_trakt_sync.main import process_show_section
 from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.trakt_list_util import TraktListUtil
-from plex_trakt_sync.logging import logging
+from plex_trakt_sync.logging import logger
 
 
 def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
@@ -18,7 +18,7 @@ def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
     if tm.trakt in trakt_movie_collection:
         return
 
-    logging.info(f"Add to Trakt Collection: {pm}")
+    logger.info(f"Add to Trakt Collection: {pm}")
     trakt.add_to_collection(tm)
 
 
@@ -33,10 +33,10 @@ def sync_ratings(pm, tm, plex: PlexApi, trakt: TraktApi):
 
     # Plex rating takes precedence over Trakt rating
     if plex_rating is not None:
-        logging.info(f"Rating {pm} with {plex_rating} on Trakt")
+        logger.info(f"Rating {pm} with {plex_rating} on Trakt")
         trakt.rate(tm, plex_rating)
     elif trakt_rating is not None:
-        logging.info(f"Rating {pm} with {trakt_rating} on Plex")
+        logger.info(f"Rating {pm} with {trakt_rating} on Plex")
         plex.rate(pm.item, trakt_rating)
 
 
@@ -52,11 +52,11 @@ def sync_watched(pm, tm, plex: PlexApi, trakt: TraktApi, trakt_watched_movies):
     # if watch status is not synced
     # send watched status from plex to trakt
     if watched_on_plex:
-        logging.info(f"Marking as watched on Trakt: {pm}")
+        logger.info(f"Marking as watched on Trakt: {pm}")
         trakt.mark_watched(tm, pm.seen_date)
     # set watched status if movie is watched on Trakt
     elif watched_on_trakt:
-        logging.info(f"Marking as watched in Plex: {pm}")
+        logger.info(f"Marking as watched in Plex: {pm}")
         plex.mark_watched(pm.item)
 
 
@@ -65,12 +65,12 @@ def sync_movies(plex, trakt):
         with measure_time(f"Processing section {section.title}"):
             for pm in section.items():
                 if not pm.provider:
-                    logging.error(f'Movie [{pm}]: Unrecognized GUID {pm.guid}')
+                    logger.error(f'Movie [{pm}]: Unrecognized GUID {pm.guid}')
                     continue
 
                 tm = trakt.find_movie(pm)
                 if tm is None:
-                    logging.warning(f"Movie [{pm})]: Not found from Trakt. Skipping")
+                    logger.warning(f"Movie [{pm})]: Not found from Trakt. Skipping")
                     continue
 
                 yield pm, tm
@@ -98,8 +98,8 @@ def sync_all(movies=True, tv=True):
         listutil.addList(lst['username'], lst['listname'])
 
     with requests_cache.disabled():
-        logging.info("Server version {} updated at: {}".format(server.version, server.updatedAt))
-        logging.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
+        logger.info("Server version {} updated at: {}".format(server.version, server.updatedAt))
+        logger.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
     if movies:
         for pm, tm in sync_movies(plex, trakt):
@@ -134,8 +134,8 @@ def sync(sync_option: str):
         click.echo("Nothing to sync!")
         return
 
-    logging.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['PLEX_USERNAME']}")
-    logging.info(f"Syncing TV={tv}, Movies={movies}")
+    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['PLEX_USERNAME']}")
+    logger.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
         sync_all(movies=movies, tv=tv)

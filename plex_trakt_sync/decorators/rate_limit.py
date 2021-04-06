@@ -1,7 +1,7 @@
 from functools import wraps
 from time import sleep, time
 from trakt.errors import RateLimitException
-from plex_trakt_sync.logging import logging
+from plex_trakt_sync.logging import logger
 
 last_time = None
 
@@ -27,7 +27,7 @@ def rate_limit(retries=5, delay=None):
         diff_time = time() - last_time
         if diff_time < delay:
             wait = delay - diff_time
-            logging.warning(
+            logger.warning(
                 f'Sleeping for {wait:.3f} seconds'
             )
             sleep(wait)
@@ -46,7 +46,7 @@ def rate_limit(retries=5, delay=None):
 
                     seconds = int(e.response.headers.get("Retry-After", 1))
                     retry += 1
-                    logging.warning(
+                    logger.warning(
                         f'RateLimitException for {fn}, retrying after {seconds} seconds (try: {retry}/{retries})'
                     )
                     sleep(seconds)

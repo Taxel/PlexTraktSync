@@ -1,6 +1,6 @@
 import plexapi.server
 from plex_trakt_sync.config import CONFIG
-from plex_trakt_sync.logging import logging
+from plex_trakt_sync.logging import logger
 
 
 def get_plex_server():
@@ -37,7 +37,7 @@ def get_plex_server():
                 CONFIG["PLEX_BASEURL"] = new_plex_baseurl
                 CONFIG["PLEX_FALLBACKURL"] = plex_fallbackurl
                 CONFIG.save()
-                logging.info("Plex server url changed to {}".format(new_plex_baseurl))
+                logger.info("Plex server url changed to {}".format(new_plex_baseurl))
             except Exception:
                 pass
         if server is None and plex_baseurl[:5] == "https":
@@ -45,7 +45,7 @@ def get_plex_server():
             try:  # 2
                 server = plexapi.server.PlexServer(
                     token=plex_token, baseurl=new_plex_baseurl)
-                logging.warning("Switched to Plex unsecure connection because of SSLError.")
+                logger.warning("Switched to Plex unsecure connection because of SSLError.")
             except Exception:
                 pass
     except Exception as e:
@@ -55,9 +55,9 @@ def get_plex_server():
         try:  # 3
             server = plexapi.server.PlexServer(
                 token=plex_token, baseurl=plex_fallbackurl)
-            logging.warning("No response from {}, fallback to {}".format(plex_baseurl, plex_fallbackurl))
+            logger.warning("No response from {}, fallback to {}".format(plex_baseurl, plex_fallbackurl))
         except Exception:
-            logging.error(m)
+            logger.error(m)
             print(m)
             exit(1)
     return server
