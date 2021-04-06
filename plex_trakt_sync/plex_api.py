@@ -502,5 +502,9 @@ class PlexApi:
             logger.debug(f"Playlist '{name}' not found, so it could not be deleted")
 
     @nocache
+    def history(self, m):
+        yield from m.history()
+
+    @nocache
     def mark_watched(self, m):
         m.markWatched()
