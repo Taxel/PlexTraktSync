@@ -60,17 +60,17 @@ def sync_watched(pm, tm, plex: PlexApi, trakt: TraktApi, trakt_watched_movies):
         plex.mark_watched(pm.item)
 
 
-def sync_movies(plex, trakt):
-    for section in plex.movie_sections:
+def for_each_pair(sections, trakt: TraktApi):
+    for section in sections:
         with measure_time(f"Processing section {section.title}"):
             for pm in section.items():
                 if not pm.provider:
-                    logger.error(f'Movie [{pm}]: Unrecognized GUID {pm.guid}')
+                    logger.error(f'[{pm}]: Unrecognized GUID {pm.guid}')
                     continue
 
                 tm = trakt.find_movie(pm)
                 if tm is None:
-                    logger.warning(f"Movie [{pm})]: Not found from Trakt. Skipping")
+                    logger.warning(f"[{pm})]: Not found from Trakt. Skipping")
                     continue
 
                 yield pm, tm
@@ -102,7 +102,7 @@ def sync_all(movies=True, tv=True):
         logger.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
     if movies:
-        for pm, tm in sync_movies(plex, trakt):
+        for pm, tm in for_each_pair(plex.movie_sections, trakt):
             sync_collection(pm, tm, trakt, trakt_movie_collection)
             sync_ratings(pm, tm, plex, trakt)
             sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
