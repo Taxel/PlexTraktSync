@@ -22,7 +22,7 @@ def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
     trakt.add_to_collection(tm, pm)
 
 
-def sync_show_collection(pm, tm, pe, te, trakt: TraktApi):
+def sync_show_collection(tm, pe, te, trakt: TraktApi):
     if not CONFIG['sync']['collection']:
         return
 
@@ -73,7 +73,7 @@ def sync_watched(pm, tm, plex: PlexApi, trakt: TraktApi, trakt_watched_movies):
         plex.mark_watched(pm.item)
 
 
-def sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt: TraktApi):
+def sync_show_watched(tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt: TraktApi):
     if not CONFIG['sync']['watched_status']:
         return
 
@@ -136,7 +136,7 @@ def for_each_episode(sections, trakt: TraktApi):
                     logger.error(f"Show [{pm}]: Invalid episode: {pe}")
                 continue
 
-            yield pm, tm, pe, te
+            yield tm, pe, te
 
 
 def sync_all(movies=True, tv=True):
@@ -171,9 +171,9 @@ def sync_all(movies=True, tv=True):
             sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
 
     if tv:
-        for pm, tm, pe, te in for_each_episode(plex.show_sections, trakt):
-            sync_show_collection(pm, tm, pe, te, trakt)
-            sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex, trakt)
+        for tm, pe, te in for_each_episode(plex.show_sections, trakt):
+            sync_show_collection(tm, pe, te, trakt)
+            sync_show_watched(tm, pe, te, trakt_watched_shows, plex, trakt)
 
             # add to plex lists
             listutil.addPlexItemToLists(te.instance.trakt, pe.item)
