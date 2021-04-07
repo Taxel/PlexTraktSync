@@ -1,3 +1,4 @@
+from json import JSONDecodeError
 from typing import Union
 import trakt
 
@@ -171,9 +172,11 @@ class TraktApi:
     def find_movie(self, movie):
         try:
             search = trakt.sync.search_by_id(movie.id, id_type=movie.provider)
+        except JSONDecodeError as e:
+            raise ValueError(f"Unable to search result for {movie.provider}: {movie.id}: {e.doc!r}") from e
         except ValueError as e:
-            # ValueError: search_type must be one of ('trakt', 'trakt-movie', 'trakt-show', 'trakt-episode', 'trakt-person', 'imdb', 'tmdb', 'tvdb')
-            raise e
+            # Search_type must be one of ('trakt', ..., 'imdb', 'tmdb', 'tvdb')
+            raise ValueError(f"Invalid id_type: {movie.provider}") from e
         # look for the first movie in the results
         for m in search:
             if type(m) is trakt.movies.Movie:
