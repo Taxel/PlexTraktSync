@@ -31,7 +31,7 @@ def sync_show_collection(pm, tm, pe, te, trakt: TraktApi):
     if is_collected:
         return
 
-    logger.info(f"Add to Trakt Collection: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
+    logger.info(f"Add to Trakt Collection: {pe}")
     trakt.add_to_collection(te.instance, pe)
 
 
@@ -84,11 +84,11 @@ def sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt:
         return
 
     if watched_on_plex:
-        logger.info(f"Marking as watched in Trakt: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
+        logger.info(f"Marking as watched in Trakt: {pe}")
         m = PlexLibraryItem(pe)
         trakt.mark_watched(te.instance, m.seen_date)
     elif watched_on_trakt:
-        logger.info(f"Marking as watched in Plex: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
+        logger.info(f"Marking as watched in Plex: {pe}")
         plex.mark_watched(pe)
 
 
@@ -132,7 +132,7 @@ def for_each_episode(sections, trakt: TraktApi):
                 te = lookup[pe.seasonNumber][pe.index]
             except KeyError:
                 try:
-                    logger.warning(f"Show [{pm}: Key not found: S{pe.seasonNumber:02}E{pe.seasonNumber:02}")
+                    logger.warning(f"Show {pe}: Key not found")
                 except TypeError:
                     logger.error(f"Show [{pm}]: Invalid episode: {pe}")
                 continue
