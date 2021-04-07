@@ -4,6 +4,7 @@ import trakt
 
 from plex_trakt_sync import pytrakt_extensions
 from plex_trakt_sync.path import pytrakt_file
+from plex_trakt_sync.plex_api import PlexLibraryItem
 
 trakt.core.CONFIG_PATH = pytrakt_file
 import trakt.users
@@ -169,17 +170,17 @@ class TraktApi:
 
     @memoize
     @rate_limit()
-    def find_movie(self, movie):
+    def find_movie(self, media: PlexLibraryItem):
         try:
-            search = trakt.sync.search_by_id(movie.id, id_type=movie.provider)
+            search = trakt.sync.search_by_id(media.id, id_type=media.provider, media_type=media.media_type)
         except JSONDecodeError as e:
-            raise ValueError(f"Unable to search result for {movie.provider}: {movie.id}: {e.doc!r}") from e
+            raise ValueError(f"Unable parse search result for {media.provider}/{media.id}: {e.doc!r}") from e
         except ValueError as e:
             # Search_type must be one of ('trakt', ..., 'imdb', 'tmdb', 'tvdb')
-            raise ValueError(f"Invalid id_type: {movie.provider}") from e
-        # look for the first movie in the results
+            raise ValueError(f"Invalid id_type: {media.provider}") from e
+        # look for the first wanted type in the results
         for m in search:
-            if type(m) is trakt.movies.Movie:
+            if m.media_type == media.type:
                 return m
 
         return None
