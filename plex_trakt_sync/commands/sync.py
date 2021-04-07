@@ -27,7 +27,7 @@ def sync_show_collection(pm, tm, pe, te, trakt: TraktApi):
         return
 
     collected = trakt.collected(tm)
-    is_collected = collected.get_completed(pe.seasonNumber, pe.index)
+    is_collected = collected.get_completed(pe.season_number, pe.episode_number)
     if is_collected:
         return
 
@@ -77,19 +77,18 @@ def sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt:
     if not CONFIG['sync']['watched_status']:
         return
 
-    watched_on_plex = pe.isWatched
-    watched_on_trakt = trakt_watched_shows.get_completed(tm.trakt, pe.seasonNumber, pe.index)
+    watched_on_plex = pe.item.isWatched
+    watched_on_trakt = trakt_watched_shows.get_completed(tm.trakt, pe.season_number, pe.episode_number)
 
     if watched_on_plex == watched_on_trakt:
         return
 
     if watched_on_plex:
         logger.info(f"Marking as watched in Trakt: {pe}")
-        m = PlexLibraryItem(pe)
-        trakt.mark_watched(te.instance, m.seen_date)
+        trakt.mark_watched(te.instance, pe.seen_date)
     elif watched_on_trakt:
         logger.info(f"Marking as watched in Plex: {pe}")
-        plex.mark_watched(pe)
+        plex.mark_watched(pe.item)
 
 
 def for_each_pair(sections, trakt: TraktApi):
@@ -127,9 +126,9 @@ def for_each_episode(sections, trakt: TraktApi):
         lookup = trakt.lookup(tm)
 
         # loop over episodes in plex db
-        for pe in pm.item.episodes():
+        for pe in pm.episodes():
             try:
-                te = lookup[pe.seasonNumber][pe.index]
+                te = lookup[pe.season_number][pe.episode_number]
             except KeyError:
                 try:
                     logger.warning(f"Show {pe}: Key not found")
@@ -177,7 +176,7 @@ def sync_all(movies=True, tv=True):
             sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex, trakt)
 
             # add to plex lists
-            listutil.addPlexItemToLists(te.instance.trakt, pe)
+            listutil.addPlexItemToLists(te.instance.trakt, pe.item)
 
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(server)
