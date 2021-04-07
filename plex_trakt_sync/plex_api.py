@@ -27,6 +27,14 @@ class PlexLibraryItem:
 
     @property
     @memoize
+    def media_type(self):
+        if type(self.item) is Movie:
+            return "movie"
+        if type(self.item) is Show:
+            return "show"
+
+    @property
+    @memoize
     def provider(self):
         if self.guid_is_imdb_legacy:
             return "imdb"
