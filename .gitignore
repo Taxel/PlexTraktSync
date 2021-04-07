@@ -5,6 +5,7 @@
 /.pytrakt.json
 /.vscode/
 /config.json
+/dist/
 /last_update.log
 /tests/.env
 /tests/config.json
