@@ -7,11 +7,21 @@ from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
 
 
+class ScrobblerCollection(dict):
+    def __init__(self, trakt: TraktApi):
+        super(dict, self).__init__()
+        self.trakt = trakt
+
+    def __missing__(self, key):
+        self[key] = value = self.trakt.scrobbler(key)
+        return value
+
+
 class WatchStateUpdater:
     def __init__(self, plex: PlexApi, trakt: TraktApi):
         self.plex = plex
         self.trakt = trakt
-        self.play_state = dict()
+        self.scrobblers = ScrobblerCollection(trakt)
 
     def __call__(self, message):
         for pm, tm, item in self.filter_media(message):
@@ -25,31 +35,15 @@ class WatchStateUpdater:
             self.scrobble(tm, percent, item["state"])
 
     def scrobble(self, tm, percent, state):
-        if state == "stopped":
-            if tm not in self.play_state:
-                scrobbler = self.trakt.scrobble(tm, 0)
-                self.trakt.scrobbler_stop(scrobbler)
-            else:
-                scrobbler = self.play_state[tm]
-                self.trakt.scrobbler_stop(scrobbler)
-                del self.play_state[tm]
-
         if state == "playing":
-            if tm not in self.play_state:
-                scrobbler = self.trakt.scrobble(tm, percent)
-                self.play_state[tm] = scrobbler
-            else:
-                scrobbler = self.play_state[tm]
-                self.trakt.scrobbler_update(scrobbler, percent)
+            return self.scrobblers[tm].update(percent)
 
         if state == "paused":
-            if tm not in self.play_state:
-                scrobbler = self.trakt.scrobble(tm, 0)
-                self.play_state[tm] = scrobbler
-                self.trakt.scrobbler_pause(scrobbler)
-            else:
-                scrobbler = self.play_state[tm]
-                self.trakt.scrobbler_pause(scrobbler)
+            return self.scrobblers[tm].pause()
+
+        if state == "stopped":
+            self.scrobblers[tm].stop()
+            del self.scrobblers[tm]
 
     def filter_media(self, message):
         for item in self.filter_playing(message):

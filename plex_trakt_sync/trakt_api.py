@@ -20,6 +20,30 @@ from plex_trakt_sync.config import CONFIG
 TRAKT_POST_DELAY = 1.1
 
 
+class ScrobblerProxy:
+    """
+    Proxy to Scrobbler that handles requsts cache and rate limiting
+    """
+
+    def __init__(self, scrobbler: Scrobbler):
+        self.scrobbler = scrobbler
+
+    @nocache
+    @rate_limit(delay=TRAKT_POST_DELAY)
+    def update(self, progress: float):
+        self.scrobbler.update(progress)
+
+    @nocache
+    @rate_limit(delay=TRAKT_POST_DELAY)
+    def pause(self):
+        self.scrobbler.pause()
+
+    @nocache
+    @rate_limit(delay=TRAKT_POST_DELAY)
+    def stop(self):
+        self.scrobbler.stop()
+
+
 class TraktApi:
     """
     Trakt API class abstracting common data access and dealing with requests cache.
@@ -128,28 +152,9 @@ class TraktApi:
     def rate(self, m, rating):
         m.rate(rating)
 
-    @nocache
-    @rate_limit()
-    def scrobble(self, media: Union[Movie, TVEpisode], percent: float):
-        progress = int(percent)
-        scrobbler = media.scrobble(progress, None, None)
-        return scrobbler
-
-    @nocache
-    @rate_limit()
-    def scrobbler_pause(self, scrobbler: Scrobbler):
-        scrobbler.pause()
-
-    @nocache
-    @rate_limit()
-    def scrobbler_update(self, scrobbler: Scrobbler, percent: float):
-        progress = int(percent)
-        scrobbler.update(progress)
-
-    @nocache
-    @rate_limit()
-    def scrobbler_stop(self, scrobbler: Scrobbler):
-        scrobbler.stop()
+    def scrobbler(self, media: Union[Movie, TVEpisode]) -> ScrobblerProxy:
+        scrobbler = media.scrobble(0, None, None)
+        return ScrobblerProxy(scrobbler)
 
     @nocache
     @rate_limit(delay=TRAKT_POST_DELAY)
@@ -161,6 +166,7 @@ class TraktApi:
     def add_to_collection(self, m):
         m.add_to_library()
 
+    @memoize
     @rate_limit()
     def find_movie(self, movie):
         try:
