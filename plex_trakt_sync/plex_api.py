@@ -80,6 +80,20 @@ class PlexLibraryItem:
         percent = view_offset / self.item.duration * 100
         return percent
 
+    def episodes(self):
+        for ep in self.item.episodes():
+            yield PlexLibraryItem(ep)
+
+    @property
+    @memoize
+    def season_number(self):
+        return self.item.seasonNumber
+
+    @property
+    @memoize
+    def episode_number(self):
+        return self.item.index
+
     @property
     @memoize
     def guid_is_imdb_legacy(self):
