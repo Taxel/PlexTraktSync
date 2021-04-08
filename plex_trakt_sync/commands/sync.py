@@ -4,8 +4,7 @@ from plex_trakt_sync.requests_cache import requests_cache
 from plex_trakt_sync.plex_server import get_plex_server
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.decorators import measure_time
-from plex_trakt_sync.main import process_show_section
-from plex_trakt_sync.plex_api import PlexApi
+from plex_trakt_sync.plex_api import PlexApi, PlexLibraryItem
 from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.logging import logger
@@ -20,6 +19,19 @@ def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
 
     logger.info(f"Add to Trakt Collection: {pm}")
     trakt.add_to_collection(tm)
+
+
+def sync_show_collection(pm, tm, pe, te, trakt: TraktApi):
+    if not CONFIG['sync']['collection']:
+        return
+
+    collected = trakt.collected(tm)
+    is_collected = collected.get_completed(pe.seasonNumber, pe.index)
+    if is_collected:
+        return
+
+    logger.info(f"Add to Trakt Collection: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
+    trakt.add_to_collection(te.instance)
 
 
 def sync_ratings(pm, tm, plex: PlexApi, trakt: TraktApi):
@@ -60,20 +72,57 @@ def sync_watched(pm, tm, plex: PlexApi, trakt: TraktApi, trakt_watched_movies):
         plex.mark_watched(pm.item)
 
 
-def sync_movies(plex, trakt):
-    for section in plex.movie_sections:
+def sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt: TraktApi):
+    if not CONFIG['sync']['watched_status']:
+        return
+
+    watched_on_plex = pe.isWatched
+    watched_on_trakt = trakt_watched_shows.get_completed(tm.trakt, pe.seasonNumber, pe.index)
+
+    if watched_on_plex == watched_on_trakt:
+        return
+
+    if watched_on_plex:
+        logger.info(f"Marking as watched in Trakt: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
+        m = PlexLibraryItem(pe)
+        trakt.mark_watched(te.instance, m.seen_date)
+    elif watched_on_trakt:
+        logger.info(f"Marking as watched in Plex: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
+        plex.mark_watched(pe)
+
+
+def for_each_pair(sections, trakt: TraktApi):
+    for section in sections:
         with measure_time(f"Processing section {section.title}"):
             for pm in section.items():
                 if not pm.provider:
-                    logger.error(f'Movie [{pm}]: Unrecognized GUID {pm.guid}')
+                    logger.error(f'[{pm}]: Unrecognized GUID {pm.guid}')
                     continue
 
                 tm = trakt.find_movie(pm)
                 if tm is None:
-                    logger.warning(f"Movie [{pm})]: Not found from Trakt. Skipping")
+                    logger.warning(f"[{pm})]: Not found from Trakt. Skipping")
                     continue
 
                 yield pm, tm
+
+
+def for_each_episode(sections, trakt: TraktApi):
+    for pm, tm in for_each_pair(sections, trakt):
+        lookup = trakt.lookup(tm)
+
+        # loop over episodes in plex db
+        for pe in pm.item.episodes():
+            try:
+                te = lookup[pe.seasonNumber][pe.index]
+            except KeyError:
+                try:
+                    logger.warning(f"Show [{pm}: Key not found: S{pe.seasonNumber:02}E{pe.seasonNumber:02}")
+                except TypeError:
+                    logger.error(f"Show [{pm}]: Invalid episode: {pe}")
+                continue
+
+            yield pm, tm, pe, te
 
 
 def sync_all(movies=True, tv=True):
@@ -102,15 +151,18 @@ def sync_all(movies=True, tv=True):
         logger.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
     if movies:
-        for pm, tm in sync_movies(plex, trakt):
+        for pm, tm in for_each_pair(plex.movie_sections, trakt):
             sync_collection(pm, tm, trakt, trakt_movie_collection)
             sync_ratings(pm, tm, plex, trakt)
             sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
 
     if tv:
-        for section in plex.show_sections:
-            with measure_time("Processing section %s" % section.title):
-                process_show_section(section, trakt_watched_shows, listutil)
+        for pm, tm, pe, te in for_each_episode(plex.show_sections, trakt):
+            sync_show_collection(pm, tm, pe, te, trakt)
+            sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex, trakt)
+
+            # add to plex lists
+            listutil.addPlexItemToLists(te.instance.trakt, pe)
 
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(server)

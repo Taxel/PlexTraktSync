@@ -169,6 +169,21 @@ class TraktApi:
         m.add_to_library()
 
     @memoize
+    @nocache
+    @rate_limit()
+    def collected(self, tm: TVShow):
+        return pytrakt_extensions.collected(tm.trakt)
+
+    @memoize
+    @nocache
+    @rate_limit()
+    def lookup(self, tm: TVShow):
+        """
+        This lookup-table is accessible via lookup[season][episode]
+        """
+        return pytrakt_extensions.lookup_table(tm)
+
+    @memoize
     @rate_limit()
     def find_movie(self, media: PlexLibraryItem):
         try:
