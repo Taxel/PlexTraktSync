@@ -168,9 +168,16 @@ class TraktApi:
     def add_to_collection(self, m, pm: PlexLibraryItem):
         # support is missing, compose custom json ourselves
         # https://github.com/moogar0880/PyTrakt/issues/143
-        json = m.to_json()
-        json.update(pm.to_json())
-        trakt.sync.add_to_collection(json)
+        if m.media_type == "movies":
+            json = {
+                m.media_type: dict(
+                    **m.ids,
+                    **pm.to_json(),
+                ),
+            }
+            trakt.sync.add_to_collection(json)
+        else:
+            m.add_to_library()
 
     @memoize
     @nocache
