@@ -68,6 +68,11 @@ class PlexLibraryItem:
     def seen_date(self):
         return self.date_value(self.item.lastViewedAt)
 
+    @property
+    @memoize
+    def collected_at(self):
+        return self.date_value(self.item.addedAt)
+
     def watch_progress(self, view_offset):
         percent = view_offset / self.item.duration * 100
         return percent
