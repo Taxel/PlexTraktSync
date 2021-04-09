@@ -170,14 +170,14 @@ class TraktApi:
         # https://github.com/moogar0880/PyTrakt/issues/143
         if m.media_type == "movies":
             json = {
-                m.media_type: dict(
+                m.media_type: [dict(
                     **m.ids,
                     **pm.to_json(),
-                ),
+                )],
             }
-            trakt.sync.add_to_collection(json)
+            return trakt.sync.add_to_collection(json)
         else:
-            m.add_to_library()
+            return m.add_to_library()
 
     @memoize
     @nocache
