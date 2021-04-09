@@ -94,17 +94,18 @@ def sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt:
 def for_each_pair(sections, trakt: TraktApi):
     for section in sections:
         with measure_time(f"Processing section {section.title}"):
-            for pm in section.items():
-                if not pm.provider:
-                    logger.error(f'[{pm}]: Unrecognized GUID {pm.guid}')
-                    continue
+            with click.progressbar(section.items(), label=f"Processing {section.title}") as items:
+                for pm in items:
+                    if not pm.provider:
+                        logger.error(f'[{pm}]: Unrecognized GUID {pm.guid}')
+                        continue
 
-                tm = trakt.find_movie(pm)
-                if tm is None:
-                    logger.warning(f"[{pm})]: Not found from Trakt. Skipping")
-                    continue
+                    tm = trakt.find_movie(pm)
+                    if tm is None:
+                        logger.warning(f"[{pm})]: Not found from Trakt. Skipping")
+                        continue
 
-                yield pm, tm
+                    yield pm, tm
 
 
 def for_each_episode(sections, trakt: TraktApi):
