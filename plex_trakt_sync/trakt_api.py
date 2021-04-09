@@ -165,8 +165,12 @@ class TraktApi:
 
     @nocache
     @rate_limit(delay=TRAKT_POST_DELAY)
-    def add_to_collection(self, m):
-        m.add_to_library()
+    def add_to_collection(self, m, pm: PlexLibraryItem):
+        # support is missing, compose custom json ourselves
+        # https://github.com/moogar0880/PyTrakt/issues/143
+        json = m.to_json()
+        json.update(pm.to_json())
+        trakt.sync.add_to_collection(json)
 
     @memoize
     @nocache

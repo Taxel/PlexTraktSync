@@ -18,7 +18,7 @@ def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
         return
 
     logger.info(f"Add to Trakt Collection: {pm}")
-    trakt.add_to_collection(tm)
+    trakt.add_to_collection(tm, pm)
 
 
 def sync_show_collection(pm, tm, pe, te, trakt: TraktApi):
@@ -31,7 +31,7 @@ def sync_show_collection(pm, tm, pe, te, trakt: TraktApi):
         return
 
     logger.info(f"Add to Trakt Collection: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
-    trakt.add_to_collection(te.instance)
+    trakt.add_to_collection(te.instance, pe)
 
 
 def sync_ratings(pm, tm, plex: PlexApi, trakt: TraktApi):
