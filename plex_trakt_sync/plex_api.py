@@ -97,6 +97,10 @@ class PlexLibraryItem:
     def __repr__(self):
         return "<%s:%s:%s>" % (self.provider, self.id, self.item)
 
+    def to_json(self):
+        return {
+            "collected_at": self.collected_at,
+        }
 
 class PlexLibrarySection:
     def __init__(self, section: LibrarySection):
