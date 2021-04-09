@@ -1,5 +1,6 @@
 import click
 from plexapi.exceptions import NotFound
+from requests import ReadTimeout
 
 from plex_trakt_sync.requests_cache import requests_cache
 from plex_trakt_sync.plex_server import get_plex_server
@@ -163,14 +164,20 @@ def sync_all(movies=True, tv=True):
 
     if movies:
         for pm, tm in for_each_pair(plex.movie_sections, trakt):
-            sync_collection(pm, tm, trakt, trakt_movie_collection)
-            sync_ratings(pm, tm, plex, trakt)
-            sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
+            try:
+                sync_collection(pm, tm, trakt, trakt_movie_collection)
+                sync_ratings(pm, tm, plex, trakt)
+                sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
+            except ReadTimeout as e:
+                logger.error(f"{pm}: Skipping due exception: {e}")
 
     if tv:
         for tm, pe, te in for_each_episode(plex.show_sections, trakt):
-            sync_show_collection(tm, pe, te, trakt)
-            sync_show_watched(tm, pe, te, trakt_watched_shows, plex, trakt)
+            try:
+                sync_show_collection(tm, pe, te, trakt)
+                sync_show_watched(tm, pe, te, trakt_watched_shows, plex, trakt)
+            except ReadTimeout as e:
+                logger.error(f"{pe}: Skipping due exception: {e}")
 
             # add to plex lists
             listutil.addPlexItemToLists(te.instance.trakt, pe.item)
