@@ -5,6 +5,7 @@ from plexapi.library import MovieSection, ShowSection, LibrarySection
 from plexapi.video import Movie, Show
 from plex_trakt_sync.decorators import memoize, nocache
 from plex_trakt_sync.config import CONFIG
+from trakt.utils import timestamp
 
 
 class PlexLibraryItem:
@@ -99,8 +100,9 @@ class PlexLibraryItem:
 
     def to_json(self):
         return {
-            "collected_at": self.collected_at,
+            "collected_at": timestamp(self.collected_at),
         }
+
 
 class PlexLibrarySection:
     def __init__(self, section: LibrarySection):
