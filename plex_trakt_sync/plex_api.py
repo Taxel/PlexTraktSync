@@ -66,16 +66,7 @@ class PlexLibraryItem:
     @property
     @memoize
     def seen_date(self):
-        media = self.item
-        if not media.lastViewedAt:
-            raise ValueError('lastViewedAt is not set')
-
-        date = media.lastViewedAt
-
-        try:
-            return date.astimezone(datetime.timezone.utc)
-        except ValueError:  # for py<3.6
-            return date
+        return self.date_value(self.item.lastViewedAt)
 
     def watch_progress(self, view_offset):
         percent = view_offset / self.item.duration * 100
@@ -88,6 +79,15 @@ class PlexLibraryItem:
 
         # old item, like imdb 'tt0112253'
         return guid[0:2] == "tt" and guid[2:].isnumeric()
+
+    def date_value(self, date):
+        if not date:
+            raise ValueError("Value can't be None")
+
+        try:
+            return date.astimezone(datetime.timezone.utc)
+        except ValueError:  # for py<3.6
+            return date
 
     def __repr__(self):
         return "<%s:%s:%s>" % (self.provider, self.id, self.item)
