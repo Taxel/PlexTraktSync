@@ -238,6 +238,10 @@ class PlexLibraryItem:
         return {
             "collected_at": timestamp(self.collected_at),
             "media_type": "digital",
+            "resolution": self.resolution,
+            # "hdr": "dolby_vision",
+            # "audio": "dts_ma",
+            "audio_channels": self.audio_channels,
         }
 
 
