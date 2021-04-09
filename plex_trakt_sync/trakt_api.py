@@ -171,6 +171,8 @@ class TraktApi:
         if m.media_type == "movies":
             json = {
                 m.media_type: [dict(
+                    title=m.title,
+                    year=m.year,
                     **m.ids,
                     **pm.to_json(),
                 )],
