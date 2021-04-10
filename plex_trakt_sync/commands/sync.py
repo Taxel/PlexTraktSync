@@ -186,7 +186,7 @@ def sync(sync_option: str):
         click.echo("Nothing to sync!")
         return
 
-    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['PLEX_USERNAME']}")
+    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
     logger.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
