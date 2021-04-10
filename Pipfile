@@ -10,7 +10,7 @@ click = "==7.1.2"
 plexapi = "==4.5.0"
 python-dotenv = "==0.15.0"
 python-git-info = "==0.6.1"
-requests-cache = "==0.5.2"
+requests-cache = "==0.6.0"
 trakt = "==3.1.0"
 
 [requires]
