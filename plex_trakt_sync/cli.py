@@ -1,5 +1,6 @@
 import click
 
+from plex_trakt_sync.commands.cache import cache
 from plex_trakt_sync.commands.clear_collections import clear_collections
 from plex_trakt_sync.commands.inspect import inspect
 from plex_trakt_sync.commands.plex_login import plex_login
@@ -18,6 +19,7 @@ def cli(ctx):
         sync()
 
 
+cli.add_command(cache)
 cli.add_command(clear_collections)
 cli.add_command(inspect)
 cli.add_command(plex_login)
