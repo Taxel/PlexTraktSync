@@ -27,3 +27,17 @@ def test_tv_lookup():
     assert m.provider == 'imdb'
     assert m.id == 'tt2661044'
     assert m.media_type == 'show'
+
+
+def test_tv_lookup_none():
+    m = PlexLibraryItem(make(
+        cls='plexapi.video.Show',
+        guid='tv.plex.agents.none://68178',
+        guids=[
+        ],
+        type='show',
+    ))
+
+    assert m.provider == 'none'
+    assert m.id == '68178'
+    assert m.media_type == 'show'
