@@ -14,7 +14,7 @@ class PlexLibraryItem:
     @property
     @memoize
     def guid(self):
-        if self.item.guid.startswith('plex://movie/'):
+        if self.item.guid.startswith('plex://'):
             if len(self.item.guids) > 0:
                 return self.item.guids[0].id
         return self.item.guid
