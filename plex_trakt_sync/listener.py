@@ -29,6 +29,10 @@ class WebSocketListener:
             for handler in self.event_handlers[event_type]:
                 handler(data)
 
-        notifier = self.plex.startAlertListener(callback=handler)
-        while notifier.is_alive():
+        while True:
+            notifier = self.plex.startAlertListener(callback=handler)
+            while notifier.is_alive():
+                sleep(self.interval)
+
+            self.logger.debug(f"Listener finished. Restarting in {self.interval}")
             sleep(self.interval)
