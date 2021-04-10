@@ -23,18 +23,12 @@ class PlexLibraryItem:
     @property
     @memoize
     def type(self):
-        if type(self.item) is Movie:
-            return "movies"
-        if type(self.item) is Show:
-            return "shows"
+        return f"{self.media_type}s"
 
     @property
     @memoize
     def media_type(self):
-        if type(self.item) is Movie:
-            return "movie"
-        if type(self.item) is Show:
-            return "show"
+        return self.item.type
 
     @property
     @memoize
