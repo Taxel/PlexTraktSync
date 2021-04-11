@@ -124,6 +124,11 @@ class PlexLibrarySection:
 
             if provider in ["local", "none", "agents.none"]:
                 continue
+
+            if provider not in ["imdb", "tmdb", "tvdb"]:
+                logger.error(f"{item}: Unable to parse a valid provider from guid:'{item.guid}', guids:{item.guids}")
+                continue
+
             result.append(item)
 
         return result

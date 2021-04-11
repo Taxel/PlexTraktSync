@@ -95,13 +95,9 @@ def for_each_pair(sections, trakt: TraktApi):
     for section in sections:
         with measure_time(f"Processing section {section.title}"):
             for pm in section.items():
-                if not pm.provider:
-                    logger.error(f'[{pm}]: Unrecognized GUID {pm.guid}')
-                    continue
-
                 tm = trakt.find_movie(pm)
                 if tm is None:
-                    logger.warning(f"[{pm})]: Not found from Trakt. Skipping")
+                    logger.warning(f"[{pm})]: Not found on Trakt. Skipping")
                     continue
 
                 yield pm, tm
