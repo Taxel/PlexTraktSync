@@ -94,8 +94,9 @@ def sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt:
 
 def for_each_pair(sections, trakt: TraktApi):
     for section in sections:
-        with measure_time(f"Processing section {section.title}"):
-            pb = click.progressbar(section.items(), length=len(section), label=f"Processing {section.title}")
+        label = f"Processing {section.title}"
+        with measure_time(label):
+            pb = click.progressbar(section.items(), length=len(section), show_pos=True, label=label)
             with pb as items:
                 for pm in items:
                     try:
