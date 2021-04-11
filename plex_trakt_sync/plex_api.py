@@ -1,8 +1,11 @@
 import datetime
 from typing import Union
 
+from plexapi.exceptions import NotFound
 from plexapi.library import MovieSection, ShowSection, LibrarySection
 from plexapi.video import Movie, Show
+
+from plex_trakt_sync.logging import logger
 from plex_trakt_sync.decorators import memoize, nocache
 from plex_trakt_sync.config import CONFIG
 
@@ -108,7 +111,13 @@ class PlexLibrarySection:
     def items(self):
         result = []
         for item in (PlexLibraryItem(x) for x in self.all()):
-            if item.provider in ["local", "none", "agents.none"]:
+            try:
+                provider = item.provider
+            except NotFound as e:
+                logger.error(f"{e}, skipping {item}")
+                continue
+
+            if provider in ["local", "none", "agents.none"]:
                 continue
             result.append(item)
 
