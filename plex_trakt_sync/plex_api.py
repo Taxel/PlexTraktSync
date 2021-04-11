@@ -123,9 +123,7 @@ class PlexLibrarySection:
     def all(self):
         return self.section.all()
 
-    @memoize
     def items(self):
-        result = []
         for item in (PlexLibraryItem(x) for x in self.all()):
             try:
                 provider = item.provider
@@ -140,9 +138,7 @@ class PlexLibrarySection:
                 logger.error(f"{item}: Unable to parse a valid provider from guid:'{item.guid}', guids:{item.guids}")
                 continue
 
-            result.append(item)
-
-        return result
+            yield item
 
 
 class PlexApi:
