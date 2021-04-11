@@ -102,7 +102,7 @@ def for_each_pair(sections, trakt: TraktApi):
                     try:
                         provider = pm.provider
                     except NotFound as e:
-                        logger.error(f"Sipping {pm}: {e}")
+                        logger.error(f"Skipping {pm}: {e}")
                         continue
 
                     if provider in ["local", "none", "agents.none"]:
