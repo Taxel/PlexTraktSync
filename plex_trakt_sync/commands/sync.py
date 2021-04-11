@@ -1,4 +1,5 @@
 import click
+from plexapi.exceptions import NotFound
 
 from plex_trakt_sync.requests_cache import requests_cache
 from plex_trakt_sync.plex_server import get_plex_server
@@ -93,9 +94,26 @@ def sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt:
 
 def for_each_pair(sections, trakt: TraktApi):
     for section in sections:
-        with measure_time(f"Processing section {section.title}"):
-            with click.progressbar(section.items(), label=f"Processing {section.title}") as items:
+        label = f"Processing {section.title}"
+        with measure_time(label):
+            pb = click.progressbar(section.items(), length=len(section), show_pos=True, label=label)
+            with pb as items:
                 for pm in items:
+                    try:
+                        provider = pm.provider
+                    except NotFound as e:
+                        logger.error(f"Sipping {pm}: {e}")
+                        continue
+
+                    if provider in ["local", "none", "agents.none"]:
+                        continue
+
+                    if provider not in ["imdb", "tmdb", "tvdb"]:
+                        logger.error(
+                            f"{pm}: Unable to parse a valid provider from guid:'{pm.guid}', guids:{pm.guids}"
+                        )
+                        continue
+
                     tm = trakt.find_movie(pm)
                     if tm is None:
                         logger.warning(f"[{pm})]: Not found on Trakt. Skipping")

@@ -3,7 +3,6 @@ from typing import Union
 
 from plexapi.exceptions import NotFound
 from plexapi.library import MovieSection, ShowSection, LibrarySection
-from plexapi.video import Movie, Show
 
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.decorators import memoize, nocache
@@ -123,26 +122,9 @@ class PlexLibrarySection:
     def all(self):
         return self.section.all()
 
-    @memoize
     def items(self):
-        result = []
         for item in (PlexLibraryItem(x) for x in self.all()):
-            try:
-                provider = item.provider
-            except NotFound as e:
-                logger.error(f"{e}, skipping {item}")
-                continue
-
-            if provider in ["local", "none", "agents.none"]:
-                continue
-
-            if provider not in ["imdb", "tmdb", "tvdb"]:
-                logger.error(f"{item}: Unable to parse a valid provider from guid:'{item.guid}', guids:{item.guids}")
-                continue
-
-            result.append(item)
-
-        return result
+            yield item
 
 
 class PlexApi:
