@@ -24,6 +24,11 @@ class PlexLibraryItem:
 
     @property
     @memoize
+    def guids(self):
+        return self.item.guids
+
+    @property
+    @memoize
     def type(self):
         return f"{self.media_type}s"
 
