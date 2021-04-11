@@ -22,16 +22,16 @@ def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
     trakt.add_to_collection(tm, pm)
 
 
-def sync_show_collection(pm, tm, pe, te, trakt: TraktApi):
+def sync_show_collection(tm, pe, te, trakt: TraktApi):
     if not CONFIG['sync']['collection']:
         return
 
     collected = trakt.collected(tm)
-    is_collected = collected.get_completed(pe.seasonNumber, pe.index)
+    is_collected = collected.get_completed(pe.season_number, pe.episode_number)
     if is_collected:
         return
 
-    logger.info(f"Add to Trakt Collection: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
+    logger.info(f"Add to Trakt Collection: {pe}")
     trakt.add_to_collection(te.instance, pe)
 
 
@@ -73,23 +73,22 @@ def sync_watched(pm, tm, plex: PlexApi, trakt: TraktApi, trakt_watched_movies):
         plex.mark_watched(pm.item)
 
 
-def sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt: TraktApi):
+def sync_show_watched(tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt: TraktApi):
     if not CONFIG['sync']['watched_status']:
         return
 
-    watched_on_plex = pe.isWatched
-    watched_on_trakt = trakt_watched_shows.get_completed(tm.trakt, pe.seasonNumber, pe.index)
+    watched_on_plex = pe.item.isWatched
+    watched_on_trakt = trakt_watched_shows.get_completed(tm.trakt, pe.season_number, pe.episode_number)
 
     if watched_on_plex == watched_on_trakt:
         return
 
     if watched_on_plex:
-        logger.info(f"Marking as watched in Trakt: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
-        m = PlexLibraryItem(pe)
-        trakt.mark_watched(te.instance, m.seen_date)
+        logger.info(f"Marking as watched in Trakt: {pe}")
+        trakt.mark_watched(te.instance, pe.seen_date)
     elif watched_on_trakt:
-        logger.info(f"Marking as watched in Plex: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
-        plex.mark_watched(pe)
+        logger.info(f"Marking as watched in Plex: {pe}")
+        plex.mark_watched(pe.item)
 
 
 def for_each_pair(sections, trakt: TraktApi):
@@ -127,17 +126,14 @@ def for_each_episode(sections, trakt: TraktApi):
         lookup = trakt.lookup(tm)
 
         # loop over episodes in plex db
-        for pe in pm.item.episodes():
+        for pe in pm.episodes():
             try:
-                te = lookup[pe.seasonNumber][pe.index]
+                te = lookup[pe.season_number][pe.episode_number]
             except KeyError:
-                try:
-                    logger.warning(f"Show [{pm}: Key not found: S{pe.seasonNumber:02}E{pe.seasonNumber:02}")
-                except TypeError:
-                    logger.error(f"Show [{pm}]: Invalid episode: {pe}")
+                logger.warning(f"Skipping {pe}: Not found on Trakt")
                 continue
 
-            yield pm, tm, pe, te
+            yield tm, pe, te
 
 
 def sync_all(movies=True, tv=True):
@@ -172,12 +168,12 @@ def sync_all(movies=True, tv=True):
             sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
 
     if tv:
-        for pm, tm, pe, te in for_each_episode(plex.show_sections, trakt):
-            sync_show_collection(pm, tm, pe, te, trakt)
-            sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex, trakt)
+        for tm, pe, te in for_each_episode(plex.show_sections, trakt):
+            sync_show_collection(tm, pe, te, trakt)
+            sync_show_watched(tm, pe, te, trakt_watched_shows, plex, trakt)
 
             # add to plex lists
-            listutil.addPlexItemToLists(te.instance.trakt, pe)
+            listutil.addPlexItemToLists(te.instance.trakt, pe.item)
 
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(server)
