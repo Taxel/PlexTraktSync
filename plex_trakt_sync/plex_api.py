@@ -14,7 +14,7 @@ class PlexLibraryItem:
     @property
     @memoize
     def guid(self):
-        if self.item.guid.startswith('plex://movie/'):
+        if self.item.guid.startswith('plex://'):
             if len(self.item.guids) > 0:
                 return self.item.guids[0].id
         return self.item.guid
@@ -22,18 +22,12 @@ class PlexLibraryItem:
     @property
     @memoize
     def type(self):
-        if type(self.item) is Movie:
-            return "movies"
-        if type(self.item) is Show:
-            return "shows"
+        return f"{self.media_type}s"
 
     @property
     @memoize
     def media_type(self):
-        if type(self.item) is Movie:
-            return "movie"
-        if type(self.item) is Show:
-            return "show"
+        return self.item.type
 
     @property
     @memoize
@@ -42,6 +36,7 @@ class PlexLibraryItem:
             return "imdb"
         x = self.guid.split("://")[0]
         x = x.replace("com.plexapp.agents.", "")
+        x = x.replace("tv.plex.agents.", "")
         x = x.replace("themoviedb", "tmdb")
         x = x.replace("thetvdb", "tvdb")
         if x == "xbmcnfo":
