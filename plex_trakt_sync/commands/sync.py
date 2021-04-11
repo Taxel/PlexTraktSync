@@ -130,10 +130,7 @@ def for_each_episode(sections, trakt: TraktApi):
             try:
                 te = lookup[pe.season_number][pe.episode_number]
             except KeyError:
-                try:
-                    logger.warning(f"Show {pe}: Key not found")
-                except TypeError:
-                    logger.error(f"Show [{pm}]: Invalid episode: {pe}")
+                logger.warning(f"Skipping {pe}: Not found on Trakt")
                 continue
 
             yield tm, pe, te
