@@ -3,7 +3,6 @@ from typing import Union
 
 from plexapi.exceptions import NotFound
 from plexapi.library import MovieSection, ShowSection, LibrarySection
-from plexapi.video import Movie, Show
 
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.decorators import memoize, nocache
