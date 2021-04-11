@@ -116,7 +116,7 @@ def for_each_pair(sections, trakt: TraktApi):
 
                     tm = trakt.find_movie(pm)
                     if tm is None:
-                        logger.warning(f"[{pm})]: Not found on Trakt. Skipping")
+                        logger.warning(f"Skipping {pm}: Not found on Trakt")
                         continue
 
                     yield pm, tm
