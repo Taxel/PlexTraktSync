@@ -205,7 +205,7 @@ class TraktApi:
             raise ValueError(f"Unable parse search result for {media.provider}/{media.id}: {e.doc!r}") from e
         except ValueError as e:
             # Search_type must be one of ('trakt', ..., 'imdb', 'tmdb', 'tvdb')
-            raise ValueError(f"Invalid id_type: {media.provider}") from e
+            raise ValueError(f"Invalid id_type: '{media.provider}', guid: '{media.guid}', guids: '{media.item.guids}': {e}") from e
         # look for the first wanted type in the results
         for m in search:
             if m.media_type == media.type:

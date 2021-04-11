@@ -96,13 +96,9 @@ def for_each_pair(sections, trakt: TraktApi):
         with measure_time(f"Processing section {section.title}"):
             with click.progressbar(section.items(), label=f"Processing {section.title}") as items:
                 for pm in items:
-                    if not pm.provider:
-                        logger.error(f'[{pm}]: Unrecognized GUID {pm.guid}')
-                        continue
-
                     tm = trakt.find_movie(pm)
                     if tm is None:
-                        logger.warning(f"[{pm})]: Not found from Trakt. Skipping")
+                        logger.warning(f"[{pm})]: Not found on Trakt. Skipping")
                         continue
 
                     yield pm, tm
@@ -187,7 +183,7 @@ def sync(sync_option: str):
         click.echo("Nothing to sync!")
         return
 
-    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['PLEX_USERNAME']}")
+    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
     logger.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
