@@ -231,6 +231,9 @@ class TraktBatch:
     @nocache
     @rate_limit(delay=TRAKT_POST_DELAY)
     def submit_collection(self):
+        if not len(self.collection):
+            return None
+
         try:
             return trakt.sync.add_to_collection(self.collection)
         finally:
