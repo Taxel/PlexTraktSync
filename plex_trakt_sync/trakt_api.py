@@ -166,8 +166,6 @@ class TraktApi:
     @nocache
     @rate_limit(delay=TRAKT_POST_DELAY)
     def add_to_collection(self, m, pm: PlexLibraryItem):
-        # support is missing, compose custom json ourselves
-        # https://github.com/moogar0880/PyTrakt/issues/143
         if m.media_type == "movies":
             json = {
                 m.media_type: [dict(
@@ -177,9 +175,17 @@ class TraktApi:
                     **pm.to_json(),
                 )],
             }
-            return trakt.sync.add_to_collection(json)
+        elif m.media_type == "episodes":
+            json = {
+                m.media_type: [dict(
+                    **m.ids,
+                    **pm.to_json(),
+                )],
+            }
         else:
-            return m.add_to_library()
+            raise ValueError(f"Unsupported media type: {m.media_type}")
+
+        return trakt.sync.add_to_collection(json)
 
     @memoize
     @nocache
