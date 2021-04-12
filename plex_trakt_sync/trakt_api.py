@@ -218,3 +218,26 @@ class TraktApi:
                 return m
 
         return None
+
+
+class TraktBatch:
+    def __init__(self, trakt: TraktApi):
+        self.trakt = trakt
+        self.collection = {}
+
+    @nocache
+    @rate_limit(delay=TRAKT_POST_DELAY)
+    def submit_collection(self):
+        try:
+            return trakt.sync.add_to_collection(self.collection)
+        finally:
+            self.collection.clear()
+
+    def add_to_collection(self, media_type: str, item):
+        """
+        Add item of media_type to collection
+        """
+        if media_type not in self.collection:
+            self.collection[media_type] = []
+
+        self.collection[media_type].append(item)
