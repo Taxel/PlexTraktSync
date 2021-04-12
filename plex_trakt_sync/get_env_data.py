@@ -12,7 +12,8 @@ def get_env_data():
     if plex_needed:
         username = input("Please enter your Plex username: ")
         password = input("Please enter your Plex password: ")
-        servername = input("Now enter the server name: ")
+        print("The server name is displayed top left (under the library title) when viewing a library on that server at:\n    https://app.plex.tv/desktop")
+        servername = input("Please enter the server name: ")
         account = MyPlexAccount(username, password)
         plex = account.resource(servername).connect()  # returns a PlexServer instance
         token = plex._token
