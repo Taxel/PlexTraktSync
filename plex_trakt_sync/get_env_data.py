@@ -2,6 +2,7 @@ from plexapi.myplex import MyPlexAccount
 from plex_trakt_sync import util
 import trakt.users
 import getpass
+import stdiomask
 
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.path import pytrakt_file
