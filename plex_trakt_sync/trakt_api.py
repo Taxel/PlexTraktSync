@@ -235,7 +235,9 @@ class TraktBatch:
             return None
 
         try:
-            return trakt.sync.add_to_collection(self.collection)
+            result = trakt.sync.add_to_collection(self.collection)
+            if result:
+                logger.info(f"Updated Trakt collection: {result}")
         finally:
             self.collection.clear()
 
