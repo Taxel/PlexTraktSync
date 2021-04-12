@@ -1,6 +1,7 @@
 from plexapi.myplex import MyPlexAccount
 from plex_trakt_sync import util
 import trakt.users
+import getpass
 
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.path import pytrakt_file
@@ -11,7 +12,7 @@ def get_env_data():
     plex_needed = util.input_yesno("-- Plex --\nAre you logged into this server with a Plex account?")
     if plex_needed:
         username = input("Please enter your Plex username: ")
-        password = input("Please enter your Plex password: ")
+        password = stdiomask.getpass(prompt="    Please enter your Plex password: ")
         print("The server name is displayed top left (under the library title) when viewing a library on that server at:\n    https://app.plex.tv/desktop")
         servername = input("Please enter the server name: ")
         account = MyPlexAccount(username, password)
