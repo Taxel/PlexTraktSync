@@ -178,6 +178,8 @@ def sync_all(movies=True, tv=True):
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(server)
 
+    trakt.flush()
+
 
 @click.command()
 @click.option(

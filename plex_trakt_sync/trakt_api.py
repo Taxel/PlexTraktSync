@@ -51,6 +51,9 @@ class TraktApi:
     Trakt API class abstracting common data access and dealing with requests cache.
     """
 
+    def __init__(self):
+        self.batch = TraktBatch(self)
+
     @property
     @memoize
     @nocache
@@ -163,29 +166,23 @@ class TraktApi:
     def mark_watched(self, m, time):
         m.mark_as_seen(time)
 
-    @nocache
-    @rate_limit(delay=TRAKT_POST_DELAY)
     def add_to_collection(self, m, pm: PlexLibraryItem):
         if m.media_type == "movies":
-            json = {
-                m.media_type: [dict(
-                    title=m.title,
-                    year=m.year,
-                    **m.ids,
-                    **pm.to_json(),
-                )],
-            }
+            item = dict(
+                title=m.title,
+                year=m.year,
+                **m.ids,
+                **pm.to_json(),
+            )
         elif m.media_type == "episodes":
-            json = {
-                m.media_type: [dict(
-                    **m.ids,
-                    **pm.to_json(),
-                )],
-            }
+            item = dict(
+                **m.ids,
+                **pm.to_json()
+            )
         else:
             raise ValueError(f"Unsupported media type: {m.media_type}")
 
-        return trakt.sync.add_to_collection(json)
+        self.batch.add_to_collection(m.media_type, item)
 
     @memoize
     @nocache
@@ -218,6 +215,12 @@ class TraktApi:
                 return m
 
         return None
+
+    def flush(self):
+        """
+        Submit all pending data
+        """
+        self.batch.submit_collection()
 
 
 class TraktBatch:
