@@ -27,9 +27,7 @@ def rate_limit(retries=5, delay=None):
         diff_time = time() - last_time
         if diff_time < delay:
             wait = delay - diff_time
-            logger.warning(
-                f'Sleeping for {wait:.3f} seconds'
-            )
+            logger.debug(f"Sleeping for {wait:.3f} seconds")
             sleep(wait)
         last_time = time()
 
