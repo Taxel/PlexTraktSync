@@ -51,6 +51,9 @@ class TraktApi:
     Trakt API class abstracting common data access and dealing with requests cache.
     """
 
+    def __init__(self):
+        self.batch = TraktBatch(self)
+
     @property
     @memoize
     @nocache
@@ -163,29 +166,23 @@ class TraktApi:
     def mark_watched(self, m, time):
         m.mark_as_seen(time)
 
-    @nocache
-    @rate_limit(delay=TRAKT_POST_DELAY)
     def add_to_collection(self, m, pm: PlexLibraryItem):
         if m.media_type == "movies":
-            json = {
-                m.media_type: [dict(
-                    title=m.title,
-                    year=m.year,
-                    **m.ids,
-                    **pm.to_json(),
-                )],
-            }
+            item = dict(
+                title=m.title,
+                year=m.year,
+                **m.ids,
+                **pm.to_json(),
+            )
         elif m.media_type == "episodes":
-            json = {
-                m.media_type: [dict(
-                    **m.ids,
-                    **pm.to_json(),
-                )],
-            }
+            item = dict(
+                **m.ids,
+                **pm.to_json()
+            )
         else:
             raise ValueError(f"Unsupported media type: {m.media_type}")
 
-        return trakt.sync.add_to_collection(json)
+        self.batch.add_to_collection(m.media_type, item)
 
     @memoize
     @nocache
@@ -218,3 +215,62 @@ class TraktApi:
                 return m
 
         return None
+
+    def flush(self):
+        """
+        Submit all pending data
+        """
+        self.batch.submit_collection()
+
+
+class TraktBatch:
+    def __init__(self, trakt: TraktApi):
+        self.trakt = trakt
+        self.collection = {}
+
+    @nocache
+    @rate_limit(delay=TRAKT_POST_DELAY)
+    def submit_collection(self):
+        if not len(self.collection):
+            return None
+
+        try:
+            result = trakt.sync.add_to_collection(self.collection)
+            result = self.remove_empty_values(result)
+            if result:
+                logger.info(f"Updated Trakt collection: {result}")
+        finally:
+            self.collection.clear()
+
+    def add_to_collection(self, media_type: str, item):
+        """
+        Add item of media_type to collection
+        """
+        if media_type not in self.collection:
+            self.collection[media_type] = []
+
+        self.collection[media_type].append(item)
+
+    def remove_empty_values(self, result):
+        """
+        Update result to remove empty changes.
+        This makes diagnostic printing cleaner if we don't print "changed: 0"
+        """
+        for change_type in ["added", "existing", "updated"]:
+            for media_type, value in result[change_type].copy().items():
+                if value == 0:
+                    del result[change_type][media_type]
+            if len(result[change_type]) == 0:
+                del result[change_type]
+
+        for media_type, items in result["not_found"].copy().items():
+            if len(items) == 0:
+                del result["not_found"][media_type]
+
+        if len(result["not_found"]) == 0:
+            del result["not_found"]
+
+        if len(result) == 0:
+            return None
+
+        return result
