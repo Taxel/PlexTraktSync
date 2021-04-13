@@ -124,16 +124,16 @@ def plex_login(username, password):
             return
 
     account = myplex_login(username, password)
-    click.secho("Login success!", fg="green")
+    click.secho("Login to MyPlex success!", fg="green")
 
     managed_user = choose_managed_user(account)
     if managed_user:
         user = managed_user
-        token = account.user(managed_user).get_token(account.machineIdentifier)
+        token = account.user(managed_user).get_token(account.authenticationToken)
     else:
         user = username
-        token = account.machineIdentifier
 
-    baseurl = account._baseurl
+    [server, plex] = choose_server(account)
+    click.secho(f"Connection to {plex.machineIdentifier} success!", fg="green")
 
-    print(f"User={user}, token={token}, {baseurl}")
+    print(f"User={user}, token={server.accessToken}, {plex._baseurl}")
