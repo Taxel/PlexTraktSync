@@ -103,6 +103,7 @@ def choose_server(account: MyPlexAccount):
         try:
             server = pick_server(account)
             # Connect to obtain baseUrl
+            click.secho(f"Attempting to connect to {server.name}. This may take time and emit some errors.", fg="yellow")
             plex = server.connect()
             # Validate connection again, the way we connect
             plex = PlexServer(token=server.accessToken, baseurl=plex._baseurl)
