@@ -117,7 +117,7 @@ def choose_server(account: MyPlexAccount):
 @click.option("--password", help="Plex password")
 def plex_login(username, password):
     """
-    Log in to Plex Account
+    Log in to Plex Account to obtain Access Token. Optionally can use managed user on servers that you own.
     """
 
     if CONFIG["PLEX_TOKEN"]:
