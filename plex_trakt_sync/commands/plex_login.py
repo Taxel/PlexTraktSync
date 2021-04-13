@@ -1,7 +1,11 @@
+from typing import List
+
 import click
 from click import Choice
 from plexapi.exceptions import Unauthorized
-from plexapi.myplex import MyPlexAccount
+from plexapi.myplex import MyPlexAccount, MyPlexResource
+from plexapi.server import PlexServer
+
 from plex_trakt_sync.config import CONFIG
 
 PROMPT_PLEX_PASSWORD = click.style("Please enter your Plex password", fg="yellow")
@@ -44,6 +48,50 @@ def choose_managed_user(account: MyPlexAccount):
     user_account = account.user(user)
     if user_account:
         return user
+
+    return None
+
+
+def prompt_server(servers: List[MyPlexResource]):
+    def fmt_server(s):
+        return f"- {s.name}: [Last seen: {s.lastSeenAt}, {s.product}/{s.productVersion} on {s.device}: {s.platform}/{s.platformVersion}]"
+
+    owned_servers = [s for s in servers if s.owned]
+    unowned_servers = [s for s in servers if not s.owned]
+
+    server_names = []
+    if owned_servers:
+        click.secho(f"{len(owned_servers)} owned servers found:", fg="green")
+        for s in owned_servers:
+            click.echo(fmt_server(s))
+            server_names.append(s.name)
+    if unowned_servers:
+        click.secho(f"{len(owned_servers)} unowned servers found:", fg="green")
+        for s in unowned_servers:
+            click.echo(fmt_server(s))
+            server_names.append(s.name)
+
+    return click.prompt(
+        click.style("Select default server:", fg="yellow"),
+        type=Choice(server_names),
+        show_default=True,
+    )
+
+
+def choose_server(account: MyPlexAccount):
+    servers = account.resources()
+    if not servers:
+        return None
+
+    if len(servers) == 1:
+        return servers[0]
+
+    server_name = prompt_server(servers)
+
+    # Sanity check, even the user can't choose invalid resource
+    server = account.resource(server_name)
+    if server:
+        return server
 
     return None
 
