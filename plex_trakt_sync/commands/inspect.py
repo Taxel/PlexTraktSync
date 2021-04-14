@@ -16,6 +16,9 @@ def inspect(input):
     server = PlexServer(url, token)
     plex = PlexApi(server)
 
+    if input.isnumeric():
+        input = int(input)
+
     m = plex.fetch_item(input)
     movie = m.item
 
