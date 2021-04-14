@@ -1,12 +1,10 @@
-from http.client import RemoteDisconnected
 from typing import List
 
 import click
 from click import Choice
-from plexapi.exceptions import Unauthorized
+from plexapi.exceptions import Unauthorized, NotFound
 from plexapi.myplex import MyPlexAccount, MyPlexResource
 from plexapi.server import PlexServer
-from urllib3.exceptions import ConnectTimeoutError
 
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.style import prompt, error, success, title, comment
@@ -110,7 +108,7 @@ def choose_server(account: MyPlexAccount):
             # Validate connection again, the way we connect
             plex = PlexServer(token=server.accessToken, baseurl=plex._baseurl)
             return [server, plex]
-        except (ConnectTimeoutError, RemoteDisconnected, Exception) as e:
+        except NotFound as e:
             click.secho(f"{e}, Try another server, {type(e)}")
 
 
