@@ -22,6 +22,9 @@ def inspect(input):
     m = plex.fetch_item(input)
     media = m.item
 
+    print(f"Guid: '{media.guid}'")
+    print(f"Guids: {media.guids}")
+
     audio = media.media[0].parts[0].audioStreams()[0]
     print(f"Audio: '{audio.audioChannelLayout}', '{audio.displayTitle}'")
 
