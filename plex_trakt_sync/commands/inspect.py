@@ -20,10 +20,10 @@ def inspect(input):
         input = int(input)
 
     m = plex.fetch_item(input)
-    movie = m.item
+    media = m.item
 
-    audio = movie.media[0].parts[0].audioStreams()[0]
+    audio = media.media[0].parts[0].audioStreams()[0]
     print(f"Audio: '{audio.audioChannelLayout}', '{audio.displayTitle}'")
 
-    video = movie.media[0].parts[0].videoStreams()[0]
-    print(f"Video: {video.codec}")
+    video = media.media[0].parts[0].videoStreams()[0]
+    print(f"Video: '{video.codec}'")
