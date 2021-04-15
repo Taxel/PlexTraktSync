@@ -36,7 +36,7 @@ def inspect(input):
     try:
         print(f"Provider: {m.provider}")
         print(f"Id: {m.id}")
-        tm = trakt.find_movie(m)
+        tm = trakt.find_by_media(m)
         print(f"Trakt match: {tm}")
     except Exception as e:
         print(f"Error: {e}")

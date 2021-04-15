@@ -201,7 +201,7 @@ class TraktApi:
 
     @memoize
     @rate_limit()
-    def find_movie(self, media: PlexLibraryItem):
+    def find_by_media(self, media: PlexLibraryItem):
         try:
             search = trakt.sync.search_by_id(media.id, id_type=media.provider, media_type=media.type)
         except JSONDecodeError as e:

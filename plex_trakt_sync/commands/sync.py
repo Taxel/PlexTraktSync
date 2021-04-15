@@ -113,7 +113,7 @@ def for_each_pair(sections, trakt: TraktApi):
                         )
                         continue
 
-                    tm = trakt.find_movie(pm)
+                    tm = trakt.find_by_media(pm)
                     if tm is None:
                         logger.warning(f"Skipping {pm}: Not found on Trakt")
                         continue

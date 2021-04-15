@@ -14,7 +14,7 @@ trakt = TraktApi()
 
 def test_tv_lookup():
     m = PlexLibraryItem(make(cls='plexapi.video.Show', guid='imdb://tt10584350', type='show'))
-    tm = trakt.find_movie(m)
+    tm = trakt.find_by_media(m)
     lookup = trakt.lookup(tm)
     te = lookup[1][2].instance
 

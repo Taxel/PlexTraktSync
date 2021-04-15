@@ -52,7 +52,7 @@ class WatchStateUpdater:
             if not pm:
                 continue
 
-            tm = self.trakt.find_movie(pm)
+            tm = self.trakt.find_by_media(pm)
             if not tm:
                 continue
 
