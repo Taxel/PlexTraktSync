@@ -13,6 +13,7 @@ PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
 PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username")
 PROMPT_PLEX_RELOGIN = prompt("You already have Plex Access Token, do you want to log in again?")
 PROMPT_MANAGED_USER = prompt("Do you want to use managed user instead of main account?")
+SUCCESS_MESSAGE = success("Plex Media Server Authentication Token and base URL have been added to .env file")
 
 
 def myplex_login(username, password):
@@ -138,4 +139,10 @@ def plex_login(username, password):
             user = managed_user
             token = account.user(managed_user).get_token(plex.machineIdentifier)
 
-    print(f"User={user}, token={token}, {plex._baseurl}")
+    CONFIG["PLEX_USERNAME"] = user
+    CONFIG["PLEX_TOKEN"] = token
+    CONFIG["PLEX_BASEURL"] = plex._baseurl
+    CONFIG["PLEX_FALLBACKURL"] = "http://localhost:32400"
+    CONFIG.save()
+
+    click.echo(SUCCESS_MESSAGE)
