@@ -213,6 +213,16 @@ class TraktApi:
 
         return None
 
+    def find_episode(self, tm: TVShow, pe: PlexLibraryItem):
+        """
+        Find Trakt Episode from Plex Episode
+        """
+        lookup = self.lookup(tm)
+        try:
+            return lookup[pe.season_number][pe.episode_number].instance
+        except KeyError:
+            return None
+
     def flush(self):
         """
         Submit all pending data
