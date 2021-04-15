@@ -34,10 +34,18 @@ def inspect(input):
     video = media.media[0].parts[0].videoStreams()[0]
     print(f"Video: '{video.codec}'")
 
+    print(f"Provider: {m.provider}")
+    print(f"Id: {m.id}")
+
     try:
-        print(f"Provider: {m.provider}")
-        print(f"Id: {m.id}")
-        tm = trakt.find_by_media(m)
+        if m.type == "episode":
+            show = plex.fetch_item(media.grandparentRatingKey)
+            print(f"Show: {show}")
+            season = plex.fetch_item(media.parentRatingKey)
+            print(f"Season: {season}")
+            tm = trakt.find_episode(m, show)
+        else:
+            tm = trakt.find_by_media(m)
         print(f"Trakt match: {tm}")
     except Exception as e:
         print(f"Error: {e}")
