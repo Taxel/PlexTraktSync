@@ -29,12 +29,12 @@ class PlexLibraryItem:
 
     @property
     @memoize
-    def type(self):
-        return f"{self.media_type}s"
+    def media_type(self):
+        return f"{self.type}s"
 
     @property
     @memoize
-    def media_type(self):
+    def type(self):
         return self.item.type
 
     @property
@@ -48,7 +48,7 @@ class PlexLibraryItem:
         x = x.replace("themoviedb", "tmdb")
         x = x.replace("thetvdb", "tvdb")
         if x == "xbmcnfo":
-            x = CONFIG["xbmc-providers"][self.type]
+            x = CONFIG["xbmc-providers"][self.media_type]
 
         return x
 

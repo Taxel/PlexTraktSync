@@ -203,7 +203,7 @@ class TraktApi:
     @rate_limit()
     def find_movie(self, media: PlexLibraryItem):
         try:
-            search = trakt.sync.search_by_id(media.id, id_type=media.provider, media_type=media.media_type)
+            search = trakt.sync.search_by_id(media.id, id_type=media.provider, media_type=media.type)
         except JSONDecodeError as e:
             raise ValueError(f"Unable parse search result for {media.provider}/{media.id}: {e.doc!r}") from e
         except ValueError as e:
@@ -211,7 +211,7 @@ class TraktApi:
             raise ValueError(f"Invalid id_type: '{media.provider}', guid: '{media.guid}', guids: '{media.item.guids}': {e}") from e
         # look for the first wanted type in the results
         for m in search:
-            if m.media_type == media.type:
+            if m.media_type == media.media_type:
                 return m
 
         return None
