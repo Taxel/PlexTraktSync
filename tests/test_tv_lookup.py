@@ -24,7 +24,7 @@ def test_tv_lookup():
     assert te.imdb == 'tt12057922', f"Unexpected! {te}"
 
 
-def test_tv_lookup_by_episode_id():
+def test_tv_lookup_by_episode_id2():
     pe = PlexLibraryItem(make(
         cls='Episode',
         guid='com.plexapp.agents.thetvdb://77137/1/1?lang=en',
@@ -37,14 +37,20 @@ def test_tv_lookup_by_episode_id():
         trakt.find_by_media(pe)
 
 
-def test_tv_lookup_by_episode_id2():
-    m = PlexLibraryItem(make(
+def test_tv_lookup_by_episode_id3():
+    pm = PlexLibraryItem(make(
+        cls='Show',
+        guid='com.plexapp.agents.thetvdb://77137?lang=en',
+        type='show',
+        trakt=13948,
+    ))
+    pe = PlexLibraryItem(make(
         cls='Episode',
         guid='com.plexapp.agents.thetvdb://77137/1/1?lang=en',
-        type='show',
+        type='episode',
         seasonNumber=1,
         index=1,
     ))
-    te = trakt.find_episode(m)
+    te = trakt.find_episode(pe, pm)
 
     assert te.imdb == 'tt0505457', f"Unexpected! {te}"
