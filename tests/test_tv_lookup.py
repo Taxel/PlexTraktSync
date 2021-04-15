@@ -35,3 +35,16 @@ def test_tv_lookup_by_episode_id():
 
     with pytest.raises(MethodNotAllowedException):
         trakt.find_by_media(pe)
+
+
+def test_tv_lookup_by_episode_id2():
+    m = PlexLibraryItem(make(
+        cls='Episode',
+        guid='com.plexapp.agents.thetvdb://77137/1/1?lang=en',
+        type='show',
+        seasonNumber=1,
+        index=1,
+    ))
+    te = trakt.find_episode(m)
+
+    assert te.imdb == 'tt0505457', f"Unexpected! {te}"
