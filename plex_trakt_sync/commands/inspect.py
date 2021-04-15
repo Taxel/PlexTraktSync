@@ -22,8 +22,9 @@ def inspect(input):
         input = int(input)
 
     m = plex.fetch_item(input)
-    media = m.item
+    print(f"Inspecting: {m}")
 
+    media = m.item
     print(f"Guid: '{media.guid}'")
     print(f"Guids: {media.guids}")
 
