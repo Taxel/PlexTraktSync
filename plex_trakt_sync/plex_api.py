@@ -1,10 +1,8 @@
 import datetime
 from typing import Union
 
-from plexapi.exceptions import NotFound
 from plexapi.library import MovieSection, ShowSection, LibrarySection
 
-from plex_trakt_sync.logging import logger
 from plex_trakt_sync.decorators import memoize, nocache
 from plex_trakt_sync.config import CONFIG
 from trakt.utils import timestamp
