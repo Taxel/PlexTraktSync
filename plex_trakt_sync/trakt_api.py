@@ -222,7 +222,7 @@ class TraktApi:
         if not pm.is_episode:
             return self.find_by_media(pm)
 
-        show = self.find_by_media(pm, media_id=pm.show_id)
+        show = self.find_by_media(pm, media_id=pm.show_id, media_type="show")
         lookup = self.lookup(show)
         try:
             return lookup[pm.season_number][pm.episode_number].instance
