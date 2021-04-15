@@ -32,7 +32,7 @@ def sync_show_collection(tm, pe, te, trakt: TraktApi):
         return
 
     logger.info(f"Add to Trakt Collection: {pe}")
-    trakt.add_to_collection(te.instance, pe)
+    trakt.add_to_collection(te, pe)
 
 
 def sync_ratings(pm, tm, plex: PlexApi, trakt: TraktApi):
@@ -85,7 +85,7 @@ def sync_show_watched(tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt: Tra
 
     if watched_on_plex:
         logger.info(f"Marking as watched in Trakt: {pe}")
-        trakt.mark_watched(te.instance, pe.seen_date)
+        trakt.mark_watched(te, pe.seen_date)
     elif watched_on_trakt:
         logger.info(f"Marking as watched in Plex: {pe}")
         plex.mark_watched(pe.item)
@@ -133,7 +133,7 @@ def for_each_episode(sections, trakt: TraktApi):
                 logger.warning(f"Skipping {pe}: Not found on Trakt")
                 continue
 
-            yield tm, pe, te
+            yield tm, pe, te.instance
 
 
 def sync_all(movies=True, tv=True):
@@ -173,7 +173,7 @@ def sync_all(movies=True, tv=True):
             sync_show_watched(tm, pe, te, trakt_watched_shows, plex, trakt)
 
             # add to plex lists
-            listutil.addPlexItemToLists(te.instance.trakt, pe.item)
+            listutil.addPlexItemToLists(te.trakt, pe.item)
 
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(server)
