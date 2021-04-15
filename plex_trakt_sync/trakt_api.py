@@ -206,7 +206,7 @@ class TraktApi:
             search = trakt.sync.search_by_id(media_id, id_type=media.provider, media_type=media.type)
         except ValueError as e:
             # Search_type must be one of ('trakt', ..., 'imdb', 'tmdb', 'tvdb')
-            raise ValueError(f"Invalid id_type: '{media.provider}', guid: '{media.guid}', guids: '{media.item.guids}': {e}") from e
+            raise ValueError(f"Invalid id_type: '{media.provider}', guid: '{media.guid}', guids: '{media.guids}': {e}") from e
         # look for the first wanted type in the results
         for m in search:
             if m.media_type == media.media_type:
