@@ -26,7 +26,7 @@ def test_tv_lookup():
 
     assert m.provider == 'imdb'
     assert m.id == 'tt2661044'
-    assert m.media_type == 'show'
+    assert m.type == 'show'
 
 
 def test_tv_lookup_none():
@@ -40,4 +40,4 @@ def test_tv_lookup_none():
 
     assert m.provider == 'none'
     assert m.id == '68178'
-    assert m.media_type == 'show'
+    assert m.type == 'show'

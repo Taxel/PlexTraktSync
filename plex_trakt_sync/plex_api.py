@@ -1,10 +1,8 @@
 import datetime
 from typing import Union
 
-from plexapi.exceptions import NotFound
 from plexapi.library import MovieSection, ShowSection, LibrarySection
 
-from plex_trakt_sync.logging import logger
 from plex_trakt_sync.decorators import memoize, nocache
 from plex_trakt_sync.config import CONFIG
 from trakt.utils import timestamp
@@ -29,12 +27,12 @@ class PlexLibraryItem:
 
     @property
     @memoize
-    def type(self):
-        return f"{self.media_type}s"
+    def media_type(self):
+        return f"{self.type}s"
 
     @property
     @memoize
-    def media_type(self):
+    def type(self):
         return self.item.type
 
     @property
@@ -48,7 +46,7 @@ class PlexLibraryItem:
         x = x.replace("themoviedb", "tmdb")
         x = x.replace("thetvdb", "tvdb")
         if x == "xbmcnfo":
-            x = CONFIG["xbmc-providers"][self.type]
+            x = CONFIG["xbmc-providers"][self.media_type]
 
         return x
 
