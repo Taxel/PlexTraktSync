@@ -137,7 +137,7 @@ def find_show_episodes(show, plex: PlexApi, trakt: TraktApi):
 
 def for_each_show_episode(pm, tm, trakt: TraktApi):
     for pe in pm.episodes():
-        te = trakt.find_episode(pe)
+        te = trakt.find_episode(pe, pm)
         if te is None:
             logger.warning(f"Skipping {pe}: Not found on Trakt")
             continue
