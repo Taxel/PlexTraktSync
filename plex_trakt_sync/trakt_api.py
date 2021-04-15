@@ -200,9 +200,10 @@ class TraktApi:
 
     @memoize
     @rate_limit()
-    def find_by_media(self, media: PlexLibraryItem):
+    def find_by_media(self, media: PlexLibraryItem, media_id=None):
+        media_id = media_id if media_id is not None else media.id
         try:
-            search = trakt.sync.search_by_id(media.id, id_type=media.provider, media_type=media.type)
+            search = trakt.sync.search_by_id(media_id, id_type=media.provider, media_type=media.type)
         except ValueError as e:
             # Search_type must be one of ('trakt', ..., 'imdb', 'tmdb', 'tvdb')
             raise ValueError(f"Invalid id_type: '{media.provider}', guid: '{media.guid}', guids: '{media.item.guids}': {e}") from e
