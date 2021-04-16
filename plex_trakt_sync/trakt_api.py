@@ -200,6 +200,10 @@ class TraktApi:
 
     @memoize
     def find_by_media(self, pm: PlexLibraryItem):
+        if pm.type == "episode" and pm.is_episode:
+            ts = self.search_by_id(pm.show_id, id_type=pm.provider, media_type="show")
+            return self.find_episode(ts, pm)
+
         return self.search_by_id(pm.id, id_type=pm.provider, media_type=pm.type)
 
     @rate_limit()
