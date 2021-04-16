@@ -13,6 +13,7 @@ class Media:
     def __init__(self, pm, tm):
         self.pm = pm
         self.tm = tm
+        self.show = None
 
     @property
     def plex(self):
@@ -21,6 +22,11 @@ class Media:
     @property
     def trakt(self):
         return self.tm
+
+    def set_show(self, ps, ts):
+        self.show = Media(ps, ts)
+
+        return self.show
 
 
 class MediaFactory:
