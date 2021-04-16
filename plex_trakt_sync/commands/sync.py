@@ -102,12 +102,12 @@ def for_each_pair(sections, mf: MediaFactory):
                     m = mf.resolve(pm)
                     if not m:
                         continue
-                    yield m.plex, m.trakt
+                    yield m
 
 
 def for_each_episode(sections, mf: MediaFactory):
-    for pm, tm in for_each_pair(sections, mf):
-        for tm, pe, te in for_each_show_episode(pm, tm, mf):
+    for m in for_each_pair(sections, mf):
+        for tm, pe, te in for_each_show_episode(m.plex, m.trakt, mf):
             yield tm, pe, te
 
 
@@ -157,10 +157,10 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
 
     mf = MediaFactory(trakt)
     if movies:
-        for pm, tm in for_each_pair(plex.movie_sections(library=library), mf):
-            sync_collection(pm, tm, trakt, trakt_movie_collection)
-            sync_ratings(pm, tm, plex, trakt)
-            sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
+        for m in for_each_pair(plex.movie_sections(library=library), mf):
+            sync_collection(m.plex, m.trakt, trakt, trakt_movie_collection)
+            sync_ratings(m.plex, m.trakt, plex, trakt)
+            sync_watched(m.plex, m.trakt, plex, trakt, trakt_watched_movies)
 
     if tv:
         if show:
