@@ -123,20 +123,33 @@ def for_each_pair(sections, trakt: TraktApi):
 
 def for_each_episode(sections, trakt: TraktApi):
     for pm, tm in for_each_pair(sections, trakt):
-        lookup = trakt.lookup(tm)
-
-        # loop over episodes in plex db
-        for pe in pm.episodes():
-            try:
-                te = lookup[pe.season_number][pe.episode_number]
-            except KeyError:
-                logger.warning(f"Skipping {pe}: Not found on Trakt")
-                continue
-
-            yield tm, pe, te.instance
+        for tm, pe, te in for_each_show_episode(pm, tm, trakt):
+            yield tm, pe, te
 
 
-def sync_all(movies=True, tv=True):
+def find_show_episodes(show, plex: PlexApi, trakt: TraktApi):
+    search = plex.search(show, libtype='show')
+    for pm in search:
+        tm = trakt.find_by_media(pm)
+        for tm, pe, te in for_each_show_episode(pm, tm, trakt):
+            yield tm, pe, te
+
+
+def for_each_show_episode(pm, tm, trakt: TraktApi):
+    lookup = trakt.lookup(tm)
+
+    # loop over episodes in plex db
+    for pe in pm.episodes():
+        try:
+            te = lookup[pe.season_number][pe.episode_number]
+        except KeyError:
+            logger.warning(f"Skipping {pe}: Not found on Trakt")
+            continue
+
+        yield tm, pe, te.instance
+
+
+def sync_all(movies=True, tv=True, show=None):
     with requests_cache.disabled():
         server = get_plex_server()
     listutil = TraktListUtil()
@@ -168,7 +181,12 @@ def sync_all(movies=True, tv=True):
             sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
 
     if tv:
-        for tm, pe, te in for_each_episode(plex.show_sections, trakt):
+        if show:
+            it = find_show_episodes(show, plex, trakt)
+        else:
+            it = for_each_episode(plex.show_sections, trakt)
+
+        for tm, pe, te in it:
             sync_show_collection(tm, pe, te, trakt)
             sync_show_watched(tm, pe, te, trakt_watched_shows, plex, trakt)
 
@@ -183,24 +201,35 @@ def sync_all(movies=True, tv=True):
 
 @click.command()
 @click.option(
+    "--show", "show",
+    type=str,
+    show_default=True, help="Sync specific show only"
+)
+@click.option(
     "--sync", "sync_option",
     type=click.Choice(["all", "movies", "tv"], case_sensitive=False),
     default="all",
     show_default=True, help="Specify what to sync"
 )
-def sync(sync_option: str):
+def sync(sync_option: str, show: str):
     """
     Perform sync between Plex and Trakt
     """
 
+    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
+
     movies = sync_option in ["all", "movies"]
     tv = sync_option in ["all", "tv"]
-    if not movies and not tv:
+
+    if show:
+        movies = False
+        tv = True
+        logger.info(f"Syncing Show: {show}")
+    elif not movies and not tv:
         click.echo("Nothing to sync!")
         return
-
-    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
-    logger.info(f"Syncing TV={tv}, Movies={movies}")
+    else:
+        logger.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
-        sync_all(movies=movies, tv=tv)
+        sync_all(movies=movies, tv=tv, show=show)
