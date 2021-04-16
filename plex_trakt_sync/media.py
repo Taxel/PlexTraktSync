@@ -67,6 +67,14 @@ class Media:
     def mark_watched_plex(self):
         self.plex_api.mark_watched(self.plex.item)
 
+    @property
+    def trakt_rating(self):
+        return self.trakt_api.rating(self.trakt)
+
+    @property
+    def plex_rating(self):
+        return self.plex.rating
+
     def __str__(self):
         return str(self.plex)
 
