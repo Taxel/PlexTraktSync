@@ -27,18 +27,16 @@ def sync_ratings(m: Media, plex: PlexApi, trakt: TraktApi):
     if not CONFIG['sync']['ratings']:
         return
 
-    trakt_rating = trakt.rating(m.trakt)
-    plex_rating = m.plex.rating
-    if plex_rating is trakt_rating:
+    if m.plex_rating is m.trakt_rating:
         return
 
     # Plex rating takes precedence over Trakt rating
-    if plex_rating is not None:
-        logger.info(f"Rating {m} with {plex_rating} on Trakt")
-        trakt.rate(m.trakt, plex_rating)
-    elif trakt_rating is not None:
-        logger.info(f"Rating {m} with {trakt_rating} on Plex")
-        plex.rate(m.plex.item, trakt_rating)
+    if m.plex_rating is not None:
+        logger.info(f"Rating {m} with {m.plex_rating} on Trakt")
+        trakt.rate(m.trakt, m.plex_rating)
+    elif m.trakt_rating is not None:
+        logger.info(f"Rating {m} with {m.trakt_rating} on Plex")
+        plex.rate(m.plex.item, m.trakt_rating)
 
 
 def sync_watched(m: Media):
