@@ -16,7 +16,7 @@ def sync_collection(m: Media, trakt: TraktApi, trakt_movie_collection):
     if not CONFIG['sync']['collection']:
         return
 
-    if m.trakt.trakt in trakt_movie_collection:
+    if m.trakt_id in trakt_movie_collection:
         return
 
     logger.info(f"To be added to collection: {m}")
@@ -59,7 +59,7 @@ def sync_watched(m: Media, plex: PlexApi, trakt: TraktApi, trakt_watched_movies)
         return
 
     watched_on_plex = m.plex.item.isWatched
-    watched_on_trakt = m.trakt.trakt in trakt_watched_movies
+    watched_on_trakt = m.trakt_id in trakt_watched_movies
     if watched_on_plex is watched_on_trakt:
         return
 
@@ -174,7 +174,7 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
             sync_show_watched(me, trakt_watched_shows, plex, trakt)
 
             # add to plex lists
-            listutil.addPlexItemToLists(me.trakt.trakt, me.plex.item)
+            listutil.addPlexItemToLists(me.trakt_id, me.plex.item)
 
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(server)
