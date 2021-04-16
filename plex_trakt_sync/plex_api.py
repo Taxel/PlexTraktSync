@@ -178,6 +178,12 @@ class PlexApi:
         self.fetch_item.cache_clear()
         return self.fetch_item(pm.item.ratingKey)
 
+    @memoize
+    def search(self, title: str, **kwargs):
+        result = self.plex.library.search(title, **kwargs)
+        for media in result:
+            yield PlexLibraryItem(media)
+
     @property
     @memoize
     @nocache
