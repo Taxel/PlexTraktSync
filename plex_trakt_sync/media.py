@@ -31,7 +31,7 @@ class MediaFactory:
     def __init__(self, trakt: TraktApi):
         self.trakt = trakt
 
-    def resolve(self, pm: PlexLibraryItem):
+    def resolve(self, pm: PlexLibraryItem, tm=None):
         try:
             provider = pm.provider
         except NotFound as e:
@@ -47,7 +47,10 @@ class MediaFactory:
             )
             return None
 
-        tm = self.trakt.find_by_media(pm)
+        if tm:
+            tm = self.trakt.find_episode(tm, pm)
+        else:
+            tm = self.trakt.find_by_media(pm)
         if tm is None:
             logger.warning(f"Skipping {pm}: Not found on Trakt")
             return None
