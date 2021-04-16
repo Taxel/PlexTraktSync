@@ -23,9 +23,6 @@ class Media:
     def trakt(self):
         return self.tm
 
-    def set_show(self, show):
-        self.show = show
-
 
 class MediaFactory:
     """

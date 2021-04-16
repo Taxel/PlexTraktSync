@@ -127,7 +127,7 @@ def for_each_show_episode(m: Media, mf: MediaFactory):
         if not me:
             continue
 
-        me.set_show(m)
+        me.show = m
         yield me
 
 
