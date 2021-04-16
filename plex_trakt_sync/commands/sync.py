@@ -127,7 +127,8 @@ def for_each_show_episode(pm, tm, mf: MediaFactory):
         if not m:
             continue
 
-        yield tm, m.plex, m.trakt
+        show = m.set_show(pm, tm)
+        yield show.trakt, m.plex, m.trakt
 
 
 def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
