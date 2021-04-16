@@ -107,8 +107,8 @@ def for_each_pair(sections, mf: MediaFactory):
 
 def for_each_episode(sections, mf: MediaFactory):
     for m in for_each_pair(sections, mf):
-        for tm, pe, te in for_each_show_episode(m.plex, m.trakt, mf):
-            yield tm, pe, te
+        for me in for_each_show_episode(m.plex, m.trakt, mf):
+            yield me.show.trakt, me.plex, me.trakt
 
 
 def find_show_episodes(show, plex: PlexApi, mf: MediaFactory):
@@ -117,8 +117,8 @@ def find_show_episodes(show, plex: PlexApi, mf: MediaFactory):
         m = mf.resolve(pm)
         if not m:
             continue
-        for tm, pe, te in for_each_show_episode(pm, m.trakt, mf):
-            yield tm, pe, te
+        for me in for_each_show_episode(pm, m.trakt, mf):
+            yield me.show.trakt, me.plex, me.trakt
 
 
 def for_each_show_episode(pm, tm, mf: MediaFactory):
@@ -127,8 +127,8 @@ def for_each_show_episode(pm, tm, mf: MediaFactory):
         if not m:
             continue
 
-        show = m.set_show(pm, tm)
-        yield show.trakt, m.plex, m.trakt
+        m.set_show(pm, tm)
+        yield m
 
 
 def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
