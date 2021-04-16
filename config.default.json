@@ -1,5 +1,8 @@
 {
     "log_debug_messages": false,
+    "logging": {
+        "append": false
+    },
     "sync": {
         "liked_lists": true,
         "watchlist": true,
