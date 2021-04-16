@@ -23,10 +23,8 @@ class Media:
     def trakt(self):
         return self.tm
 
-    def set_show(self, ps, ts):
-        self.show = Media(ps, ts)
-
-        return self.show
+    def set_show(self, show):
+        self.show = show
 
 
 class MediaFactory:
