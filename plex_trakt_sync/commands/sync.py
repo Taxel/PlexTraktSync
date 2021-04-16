@@ -127,6 +127,14 @@ def for_each_episode(sections, trakt: TraktApi):
             yield tm, pe, te
 
 
+def find_show_episodes(show, plex: PlexApi, trakt: TraktApi):
+    search = plex.search(show, libtype='show')
+    for pm in search:
+        tm = trakt.find_by_media(pm)
+        for tm, pe, te in for_each_show_episode(pm, tm, trakt):
+            yield tm, pe, te
+
+
 def for_each_show_episode(pm, tm, trakt: TraktApi):
     lookup = trakt.lookup(tm)
 
@@ -141,7 +149,7 @@ def for_each_show_episode(pm, tm, trakt: TraktApi):
         yield tm, pe, te.instance
 
 
-def sync_all(movies=True, tv=True):
+def sync_all(movies=True, tv=True, show=None):
     with requests_cache.disabled():
         server = get_plex_server()
     listutil = TraktListUtil()
@@ -173,7 +181,12 @@ def sync_all(movies=True, tv=True):
             sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
 
     if tv:
-        for tm, pe, te in for_each_episode(plex.show_sections, trakt):
+        if show:
+            it = find_show_episodes(show, plex, trakt)
+        else:
+            it = for_each_episode(plex.show_sections, trakt)
+
+        for tm, pe, te in it:
             sync_show_collection(tm, pe, te, trakt)
             sync_show_watched(tm, pe, te, trakt_watched_shows, plex, trakt)
 
@@ -219,4 +232,4 @@ def sync(sync_option: str, show: str):
         logger.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
-        sync_all(movies=movies, tv=tv)
+        sync_all(movies=movies, tv=tv, show=show)
