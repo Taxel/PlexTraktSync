@@ -48,30 +48,12 @@ def sync_watched(m: Media):
     if m.watched_on_plex is m.watched_on_trakt:
         return
 
-    # if watch status is not synced
-    # send watched status from plex to trakt
     if m.watched_on_plex:
-        logger.info(f"Marking as watched on Trakt: {m}")
+        logger.info(f"Marking as watched in Trakt: {m}")
         m.mark_watched_trakt()
-    # set watched status if movie is watched on Trakt
     elif m.watched_on_trakt:
         logger.info(f"Marking as watched in Plex: {m}")
         m.mark_watched_plex()
-
-
-def sync_show_watched(me: Media):
-    if not CONFIG['sync']['watched_status']:
-        return
-
-    if me.watched_on_plex == me.watched_on_trakt:
-        return
-
-    if me.watched_on_plex:
-        logger.info(f"Marking as watched in Trakt: {me}")
-        me.mark_watched_trakt()
-    elif me.watched_on_trakt:
-        logger.info(f"Marking as watched in Plex: {me}")
-        me.mark_watched_plex()
 
 
 def for_each_pair(sections, mf: MediaFactory):
@@ -153,7 +135,7 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
 
         for me in it:
             sync_collection(me)
-            sync_show_watched(me)
+            sync_watched(me)
 
             # add to plex lists
             listutil.addPlexItemToLists(me.trakt_id, me.plex.item)
