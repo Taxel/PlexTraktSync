@@ -133,6 +133,9 @@ def find_show_episodes(show, plex: PlexApi, trakt: TraktApi):
         tm = trakt.find_by_media(pm)
         for tm, pe, te in for_each_show_episode(pm, tm, trakt):
             yield tm, pe, te
+        break
+    else:
+        raise RuntimeError(f"Show {show} not found")
 
 
 def for_each_show_episode(pm, tm, trakt: TraktApi):
