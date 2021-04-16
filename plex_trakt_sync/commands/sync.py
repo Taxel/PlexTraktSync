@@ -12,15 +12,15 @@ from plex_trakt_sync.logging import logger
 from plex_trakt_sync.version import git_version_info
 
 
-def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
+def sync_collection(m: Media, trakt: TraktApi, trakt_movie_collection):
     if not CONFIG['sync']['collection']:
         return
 
-    if tm.trakt in trakt_movie_collection:
+    if m.trakt.trakt in trakt_movie_collection:
         return
 
-    logger.info(f"To be added to collection: {pm}")
-    trakt.add_to_collection(tm, pm)
+    logger.info(f"To be added to collection: : {m.plex}")
+    trakt.add_to_collection(m.trakt, m.plex)
 
 
 def sync_show_collection(tm, pe, te, trakt: TraktApi):
@@ -36,42 +36,42 @@ def sync_show_collection(tm, pe, te, trakt: TraktApi):
     trakt.add_to_collection(te, pe)
 
 
-def sync_ratings(pm, tm, plex: PlexApi, trakt: TraktApi):
+def sync_ratings(m: Media, plex: PlexApi, trakt: TraktApi):
     if not CONFIG['sync']['ratings']:
         return
 
-    trakt_rating = trakt.rating(tm)
-    plex_rating = pm.rating
+    trakt_rating = trakt.rating(m.trakt)
+    plex_rating = m.plex.rating
     if plex_rating is trakt_rating:
         return
 
     # Plex rating takes precedence over Trakt rating
     if plex_rating is not None:
-        logger.info(f"Rating {pm} with {plex_rating} on Trakt")
-        trakt.rate(tm, plex_rating)
+        logger.info(f"Rating {m.plex} with {plex_rating} on Trakt")
+        trakt.rate(m.trakt, plex_rating)
     elif trakt_rating is not None:
-        logger.info(f"Rating {pm} with {trakt_rating} on Plex")
-        plex.rate(pm.item, trakt_rating)
+        logger.info(f"Rating {m.plex} with {trakt_rating} on Plex")
+        plex.rate(m.plex.item, trakt_rating)
 
 
-def sync_watched(pm, tm, plex: PlexApi, trakt: TraktApi, trakt_watched_movies):
+def sync_watched(m: Media, plex: PlexApi, trakt: TraktApi, trakt_watched_movies):
     if not CONFIG['sync']['watched_status']:
         return
 
-    watched_on_plex = pm.item.isWatched
-    watched_on_trakt = tm.trakt in trakt_watched_movies
+    watched_on_plex = m.plex.item.isWatched
+    watched_on_trakt = m.trakt.trakt in trakt_watched_movies
     if watched_on_plex is watched_on_trakt:
         return
 
     # if watch status is not synced
     # send watched status from plex to trakt
     if watched_on_plex:
-        logger.info(f"Marking as watched on Trakt: {pm}")
-        trakt.mark_watched(tm, pm.seen_date)
+        logger.info(f"Marking as watched on Trakt: {m.plex}")
+        trakt.mark_watched(m.trakt, m.plex.seen_date)
     # set watched status if movie is watched on Trakt
     elif watched_on_trakt:
-        logger.info(f"Marking as watched in Plex: {pm}")
-        plex.mark_watched(pm.item)
+        logger.info(f"Marking as watched in Plex: {m.plex}")
+        plex.mark_watched(m.plex.item)
 
 
 def sync_show_watched(tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt: TraktApi):
@@ -159,9 +159,9 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
     mf = MediaFactory(trakt)
     if movies:
         for m in for_each_pair(plex.movie_sections(library=library), mf):
-            sync_collection(m.plex, m.trakt, trakt, trakt_movie_collection)
-            sync_ratings(m.plex, m.trakt, plex, trakt)
-            sync_watched(m.plex, m.trakt, plex, trakt, trakt_watched_movies)
+            sync_collection(m, trakt, trakt_movie_collection)
+            sync_ratings(m, plex, trakt)
+            sync_watched(m, plex, trakt, trakt_watched_movies)
 
     if tv:
         if show:
