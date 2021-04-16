@@ -75,6 +75,12 @@ class Media:
     def plex_rating(self):
         return self.plex.rating
 
+    def trakt_rate(self):
+        self.trakt_api.rate(self.trakt, self.plex_rating)
+
+    def plex_rate(self):
+        self.plex_api.rate(self.plex.item, self.trakt_rating)
+
     def __str__(self):
         return str(self.plex)
 
