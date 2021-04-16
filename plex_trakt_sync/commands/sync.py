@@ -19,21 +19,21 @@ def sync_collection(m: Media, trakt: TraktApi, trakt_movie_collection):
     if m.trakt.trakt in trakt_movie_collection:
         return
 
-    logger.info(f"To be added to collection: : {m.plex}")
+    logger.info(f"To be added to collection: {m.plex}")
     trakt.add_to_collection(m.trakt, m.plex)
 
 
-def sync_show_collection(tm, pe, te, trakt: TraktApi):
+def sync_show_collection(me: Media, trakt: TraktApi):
     if not CONFIG['sync']['collection']:
         return
 
-    collected = trakt.collected(tm)
-    is_collected = collected.get_completed(pe.season_number, pe.episode_number)
+    collected = trakt.collected(me.show.trakt)
+    is_collected = collected.get_completed(me.plex.season_number, me.plex.episode_number)
     if is_collected:
         return
 
-    logger.info(f"Add to Trakt Collection: {pe}")
-    trakt.add_to_collection(te, pe)
+    logger.info(f"To be added to collection: {me.plex}")
+    trakt.add_to_collection(me.trakt, me.plex)
 
 
 def sync_ratings(m: Media, plex: PlexApi, trakt: TraktApi):
@@ -74,22 +74,22 @@ def sync_watched(m: Media, plex: PlexApi, trakt: TraktApi, trakt_watched_movies)
         plex.mark_watched(m.plex.item)
 
 
-def sync_show_watched(tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt: TraktApi):
+def sync_show_watched(me: Media, trakt_watched_shows, plex: PlexApi, trakt: TraktApi):
     if not CONFIG['sync']['watched_status']:
         return
 
-    watched_on_plex = pe.item.isWatched
-    watched_on_trakt = trakt_watched_shows.get_completed(tm.trakt, pe.season_number, pe.episode_number)
+    watched_on_plex = me.plex.item.isWatched
+    watched_on_trakt = trakt_watched_shows.get_completed(me.show.trakt.trakt, me.plex.season_number, me.plex.episode_number)
 
     if watched_on_plex == watched_on_trakt:
         return
 
     if watched_on_plex:
-        logger.info(f"Marking as watched in Trakt: {pe}")
-        trakt.mark_watched(te, pe.seen_date)
+        logger.info(f"Marking as watched in Trakt: {me.plex}")
+        trakt.mark_watched(me.trakt, me.plex.seen_date)
     elif watched_on_trakt:
-        logger.info(f"Marking as watched in Plex: {pe}")
-        plex.mark_watched(pe.item)
+        logger.info(f"Marking as watched in Plex: {me.plex}")
+        plex.mark_watched(me.plex.item)
 
 
 def for_each_pair(sections, mf: MediaFactory):
@@ -170,8 +170,8 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
             it = for_each_episode(plex.show_sections(library=library), mf)
 
         for me in it:
-            sync_show_collection(me.show.trakt, me.plex, me.trakt, trakt)
-            sync_show_watched(me.show.trakt, me.plex, me.trakt, trakt_watched_shows, plex, trakt)
+            sync_show_collection(me, trakt)
+            sync_show_watched(me, trakt_watched_shows, plex, trakt)
 
             # add to plex lists
             listutil.addPlexItemToLists(me.trakt.trakt, me.plex.item)
