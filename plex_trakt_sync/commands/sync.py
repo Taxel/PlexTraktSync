@@ -1,6 +1,6 @@
 import click
 
-from plex_trakt_sync.media import MediaFactory
+from plex_trakt_sync.media import MediaFactory, Media
 from plex_trakt_sync.requests_cache import requests_cache
 from plex_trakt_sync.plex_server import get_plex_server
 from plex_trakt_sync.config import CONFIG
@@ -107,7 +107,7 @@ def for_each_pair(sections, mf: MediaFactory):
 
 def for_each_episode(sections, mf: MediaFactory):
     for m in for_each_pair(sections, mf):
-        for me in for_each_show_episode(m.plex, m.trakt, mf):
+        for me in for_each_show_episode(m, mf):
             yield me
 
 
@@ -117,18 +117,18 @@ def find_show_episodes(show, plex: PlexApi, mf: MediaFactory):
         m = mf.resolve(pm)
         if not m:
             continue
-        for me in for_each_show_episode(pm, m.trakt, mf):
+        for me in for_each_show_episode(m, mf):
             yield me
 
 
-def for_each_show_episode(pm, tm, mf: MediaFactory):
-    for pe in pm.episodes():
-        m = mf.resolve(pe, tm)
-        if not m:
+def for_each_show_episode(m: Media, mf: MediaFactory):
+    for pe in m.plex.episodes():
+        me = mf.resolve(pe, m.trakt)
+        if not me:
             continue
 
-        m.set_show(pm, tm)
-        yield m
+        me.set_show(m.plex, m.trakt)
+        yield me
 
 
 def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
