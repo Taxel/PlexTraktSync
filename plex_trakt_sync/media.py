@@ -11,7 +11,8 @@ class Media:
     Class containing Plex and Trakt media items (Movie, Episode)
     """
 
-    def __init__(self, plex, trakt):
+    def __init__(self, plex, trakt, trakt_api: TraktApi):
+        self.trakt_api = trakt_api
         self.plex = plex
         self.trakt = trakt
         self.show = None
@@ -31,6 +32,21 @@ class Media:
     @property
     def show_trakt_id(self):
         return self.show.trakt_id
+
+    @property
+    def is_movie(self):
+        return self.plex.type == "movie"
+
+    @property
+    def is_collected(self):
+        if self.is_movie:
+            return self.trakt_id in self.trakt_api.movie_collection_set
+
+        collected = self.trakt_api.collected(self.show.trakt)
+        return collected.get_completed(self.season_number, self.episode_number)
+
+    def add_to_collection(self):
+        self.trakt_api.add_to_collection(self.trakt, self.plex)
 
     def __str__(self):
         return str(self.plex)
@@ -73,4 +89,4 @@ class MediaFactory:
             logger.warning(f"Skipping {pm}: Not found on Trakt")
             return None
 
-        return Media(pm, tm)
+        return Media(pm, tm, trakt_api=self.trakt)
