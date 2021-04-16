@@ -15,6 +15,9 @@ class Media:
         self.trakt = trakt
         self.show = None
 
+    def __str__(self):
+        return str(self.plex)
+
 
 class MediaFactory:
     """
