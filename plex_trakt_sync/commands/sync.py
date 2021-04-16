@@ -138,7 +138,7 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
         logger.info("Server version {} updated at: {}".format(server.version, server.updatedAt))
         logger.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
-    mf = MediaFactory(trakt)
+    mf = MediaFactory(plex, trakt)
     if movies:
         for m in for_each_pair(plex.movie_sections(library=library), mf):
             sync_collection(m)

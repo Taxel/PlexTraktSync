@@ -2,7 +2,7 @@ from plexapi.exceptions import NotFound
 from trakt.errors import TraktException
 
 from plex_trakt_sync.logging import logger
-from plex_trakt_sync.plex_api import PlexLibraryItem
+from plex_trakt_sync.plex_api import PlexLibraryItem, PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
 
 
@@ -11,7 +11,8 @@ class Media:
     Class containing Plex and Trakt media items (Movie, Episode)
     """
 
-    def __init__(self, plex, trakt, trakt_api: TraktApi = None):
+    def __init__(self, plex, trakt, plex_api: PlexApi = None, trakt_api: TraktApi = None):
+        self.plex_api = plex_api
         self.trakt_api = trakt_api
         self.plex = plex
         self.trakt = trakt
@@ -69,7 +70,8 @@ class MediaFactory:
     Class that is able to resolve Trakt media item from Plex media item and return generic Media class
     """
 
-    def __init__(self, trakt: TraktApi):
+    def __init__(self, plex: PlexApi, trakt: TraktApi):
+        self.plex = plex
         self.trakt = trakt
 
     def resolve(self, pm: PlexLibraryItem, tm=None):
@@ -101,4 +103,4 @@ class MediaFactory:
             logger.warning(f"Skipping {pm}: Not found on Trakt")
             return None
 
-        return Media(pm, tm, trakt_api=self.trakt)
+        return Media(pm, tm, plex_api=self.plex, trakt_api=self.trakt)
