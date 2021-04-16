@@ -41,22 +41,20 @@ def sync_ratings(m: Media, plex: PlexApi, trakt: TraktApi):
         plex.rate(m.plex.item, trakt_rating)
 
 
-def sync_watched(m: Media, plex: PlexApi, trakt: TraktApi, trakt_watched_movies):
+def sync_watched(m: Media, plex: PlexApi, trakt: TraktApi):
     if not CONFIG['sync']['watched_status']:
         return
 
-    watched_on_plex = m.plex.item.isWatched
-    watched_on_trakt = m.trakt_id in trakt_watched_movies
-    if watched_on_plex is watched_on_trakt:
+    if m.watched_on_plex is m.watched_on_trakt:
         return
 
     # if watch status is not synced
     # send watched status from plex to trakt
-    if watched_on_plex:
+    if m.watched_on_plex:
         logger.info(f"Marking as watched on Trakt: {m}")
         trakt.mark_watched(m.trakt, m.plex.seen_date)
     # set watched status if movie is watched on Trakt
-    elif watched_on_trakt:
+    elif m.watched_on_trakt:
         logger.info(f"Marking as watched in Plex: {m}")
         plex.mark_watched(m.plex.item)
 
@@ -148,7 +146,7 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
         for m in for_each_pair(plex.movie_sections(library=library), mf):
             sync_collection(m)
             sync_ratings(m, plex, trakt)
-            sync_watched(m, plex, trakt, trakt_watched_movies)
+            sync_watched(m, plex, trakt)
 
     if tv:
         if show:
