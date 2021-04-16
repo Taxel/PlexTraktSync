@@ -27,6 +27,10 @@ class Media:
     def trakt_id(self):
         return self.trakt.trakt
 
+    @property
+    def show_trakt_id(self):
+        return self.show.trakt_id
+
     def __str__(self):
         return str(self.plex)
 
