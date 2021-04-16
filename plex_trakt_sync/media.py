@@ -15,6 +15,14 @@ class Media:
         self.trakt = trakt
         self.show = None
 
+    @property
+    def season_number(self):
+        return self.plex.season_number
+
+    @property
+    def episode_number(self):
+        return self.plex.episode_number
+
     def __str__(self):
         return str(self.plex)
 
