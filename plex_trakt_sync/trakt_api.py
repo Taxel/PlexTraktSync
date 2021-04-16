@@ -213,6 +213,16 @@ class TraktApi:
 
         return None
 
+    @rate_limit()
+    def search_by_id(self, media_id: str, id_type: str, media_type: str):
+        search = trakt.sync.search_by_id(media_id, id_type=id_type, media_type=media_type)
+        # look for the first wanted type in the results
+        for m in search:
+            if m.media_type == f"{media_type}s":
+                return m
+
+        return None
+
     def find_episode(self, tm: TVShow, pe: PlexLibraryItem):
         """
         Find Trakt Episode from Plex Episode
