@@ -188,24 +188,35 @@ def sync_all(movies=True, tv=True):
 
 @click.command()
 @click.option(
+    "--show", "show",
+    type=str,
+    show_default=True, help="Sync specific show only"
+)
+@click.option(
     "--sync", "sync_option",
     type=click.Choice(["all", "movies", "tv"], case_sensitive=False),
     default="all",
     show_default=True, help="Specify what to sync"
 )
-def sync(sync_option: str):
+def sync(sync_option: str, show: str):
     """
     Perform sync between Plex and Trakt
     """
 
+    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
+
     movies = sync_option in ["all", "movies"]
     tv = sync_option in ["all", "tv"]
-    if not movies and not tv:
+
+    if show:
+        movies = False
+        tv = True
+        logger.info(f"Syncing Show: {show}")
+    elif not movies and not tv:
         click.echo("Nothing to sync!")
         return
-
-    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
-    logger.info(f"Syncing TV={tv}, Movies={movies}")
+    else:
+        logger.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
         sync_all(movies=movies, tv=tv)
