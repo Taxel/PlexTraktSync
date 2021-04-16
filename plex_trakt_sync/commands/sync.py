@@ -28,7 +28,7 @@ def sync_show_collection(me: Media, trakt: TraktApi):
         return
 
     collected = trakt.collected(me.show.trakt)
-    is_collected = collected.get_completed(me.plex.season_number, me.plex.episode_number)
+    is_collected = collected.get_completed(me.season_number, me.episode_number)
     if is_collected:
         return
 
@@ -79,7 +79,7 @@ def sync_show_watched(me: Media, trakt_watched_shows, plex: PlexApi, trakt: Trak
         return
 
     watched_on_plex = me.plex.item.isWatched
-    watched_on_trakt = trakt_watched_shows.get_completed(me.show.trakt.trakt, me.plex.season_number, me.plex.episode_number)
+    watched_on_trakt = trakt_watched_shows.get_completed(me.show.trakt.trakt, me.season_number, me.episode_number)
 
     if watched_on_plex == watched_on_trakt:
         return
