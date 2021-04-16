@@ -41,7 +41,7 @@ def sync_ratings(m: Media, plex: PlexApi, trakt: TraktApi):
         plex.rate(m.plex.item, trakt_rating)
 
 
-def sync_watched(m: Media, plex: PlexApi, trakt: TraktApi):
+def sync_watched(m: Media):
     if not CONFIG['sync']['watched_status']:
         return
 
@@ -52,14 +52,14 @@ def sync_watched(m: Media, plex: PlexApi, trakt: TraktApi):
     # send watched status from plex to trakt
     if m.watched_on_plex:
         logger.info(f"Marking as watched on Trakt: {m}")
-        trakt.mark_watched(m.trakt, m.plex.seen_date)
+        m.mark_watched_trakt()
     # set watched status if movie is watched on Trakt
     elif m.watched_on_trakt:
         logger.info(f"Marking as watched in Plex: {m}")
-        plex.mark_watched(m.plex.item)
+        m.mark_watched_plex()
 
 
-def sync_show_watched(me: Media, plex: PlexApi, trakt: TraktApi):
+def sync_show_watched(me: Media):
     if not CONFIG['sync']['watched_status']:
         return
 
@@ -68,10 +68,10 @@ def sync_show_watched(me: Media, plex: PlexApi, trakt: TraktApi):
 
     if me.watched_on_plex:
         logger.info(f"Marking as watched in Trakt: {me}")
-        trakt.mark_watched(me.trakt, me.plex.seen_date)
+        me.mark_watched_trakt()
     elif me.watched_on_trakt:
         logger.info(f"Marking as watched in Plex: {me}")
-        plex.mark_watched(me.plex.item)
+        me.mark_watched_plex()
 
 
 def for_each_pair(sections, mf: MediaFactory):
@@ -143,7 +143,7 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
         for m in for_each_pair(plex.movie_sections(library=library), mf):
             sync_collection(m)
             sync_ratings(m, plex, trakt)
-            sync_watched(m, plex, trakt)
+            sync_watched(m)
 
     if tv:
         if show:
@@ -153,7 +153,7 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
 
         for me in it:
             sync_collection(me)
-            sync_show_watched(me, plex, trakt)
+            sync_show_watched(me)
 
             # add to plex lists
             listutil.addPlexItemToLists(me.trakt_id, me.plex.item)
