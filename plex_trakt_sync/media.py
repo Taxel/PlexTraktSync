@@ -10,18 +10,10 @@ class Media:
     Class containing Plex and Trakt media items (Movie, Episode)
     """
 
-    def __init__(self, pm, tm):
-        self.pm = pm
-        self.tm = tm
+    def __init__(self, plex, trakt):
+        self.plex = plex
+        self.trakt = trakt
         self.show = None
-
-    @property
-    def plex(self):
-        return self.pm
-
-    @property
-    def trakt(self):
-        return self.tm
 
 
 class MediaFactory:
