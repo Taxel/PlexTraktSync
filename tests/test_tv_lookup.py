@@ -1,6 +1,4 @@
 #!/usr/bin/env python3 -m pytest
-import pytest
-from trakt.errors import MethodNotAllowedException
 
 from plex_trakt_sync.plex_api import PlexLibraryItem
 from plex_trakt_sync.trakt_api import TraktApi
@@ -33,5 +31,6 @@ def test_tv_lookup_by_episode_id():
         index=1,
     ))
 
-    with pytest.raises(MethodNotAllowedException):
-        trakt.find_by_media(pe)
+    te = trakt.find_by_media(pe)
+    assert te.imdb == "tt0505457"
+    assert te.tmdb == 511997
