@@ -123,17 +123,22 @@ def for_each_pair(sections, trakt: TraktApi):
 
 def for_each_episode(sections, trakt: TraktApi):
     for pm, tm in for_each_pair(sections, trakt):
-        lookup = trakt.lookup(tm)
+        for tm, pe, te in for_each_show_episode(pm, tm, trakt):
+            yield tm, pe, te
 
-        # loop over episodes in plex db
-        for pe in pm.episodes():
-            try:
-                te = lookup[pe.season_number][pe.episode_number]
-            except KeyError:
-                logger.warning(f"Skipping {pe}: Not found on Trakt")
-                continue
 
-            yield tm, pe, te.instance
+def for_each_show_episode(pm, tm, trakt: TraktApi):
+    lookup = trakt.lookup(tm)
+
+    # loop over episodes in plex db
+    for pe in pm.episodes():
+        try:
+            te = lookup[pe.season_number][pe.episode_number]
+        except KeyError:
+            logger.warning(f"Skipping {pe}: Not found on Trakt")
+            continue
+
+        yield tm, pe, te.instance
 
 
 def sync_all(movies=True, tv=True):
