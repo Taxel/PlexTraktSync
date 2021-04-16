@@ -48,6 +48,14 @@ class Media:
     def add_to_collection(self):
         self.trakt_api.add_to_collection(self.trakt, self.plex)
 
+    @property
+    def watched_on_plex(self):
+        return self.plex.item.isWatched
+
+    @property
+    def watched_on_trakt(self):
+        return self.trakt_id in self.trakt_api.watched_movies
+
     def __str__(self):
         return str(self.plex)
 
