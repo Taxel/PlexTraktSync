@@ -22,8 +22,9 @@ def inspect(input):
         input = int(input)
 
     m = plex.fetch_item(input)
-    media = m.item
+    print(f"Inspecting: {m}")
 
+    media = m.item
     print(f"Guid: '{media.guid}'")
     print(f"Guids: {media.guids}")
 
@@ -33,9 +34,10 @@ def inspect(input):
     video = media.media[0].parts[0].videoStreams()[0]
     print(f"Video: '{video.codec}'")
 
+    print(f"Provider: {m.provider}")
+    print(f"Id: {m.id}")
+
     try:
-        print(f"Provider: {m.provider}")
-        print(f"Id: {m.id}")
         tm = trakt.find_by_media(m)
         print(f"Trakt match: {tm}")
     except Exception as e:

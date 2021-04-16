@@ -136,17 +136,22 @@ def find_show_episodes(show, plex: PlexApi, trakt: TraktApi):
 
 
 def for_each_show_episode(pm, tm, trakt: TraktApi):
-    lookup = trakt.lookup(tm)
-
-    # loop over episodes in plex db
     for pe in pm.episodes():
         try:
-            te = lookup[pe.season_number][pe.episode_number]
-        except KeyError:
-            logger.warning(f"Skipping {pe}: Not found on Trakt")
+            provider = pe.provider
+        except NotFound as e:
+            logger.error(f"Skipping {pe}: {e}")
             continue
 
-        yield tm, pe, te.instance
+        if provider in ["local", "none", "agents.none"]:
+            logger.error(f"Skipping {pe}: Provider {provider} not supported")
+            continue
+
+        te = trakt.find_episode(tm, pe)
+        if te is None:
+            logger.warning(f"Skipping {pe}: Not found on Trakt")
+            continue
+        yield tm, pe, te
 
 
 def sync_all(movies=True, tv=True, show=None):
