@@ -12,28 +12,26 @@ from plex_trakt_sync.logging import logger
 from plex_trakt_sync.version import git_version_info
 
 
-def sync_collection(m: Media, trakt: TraktApi, trakt_movie_collection):
+def sync_collection(m: Media):
     if not CONFIG['sync']['collection']:
         return
 
-    if m.trakt_id in trakt_movie_collection:
+    if m.is_collected:
         return
 
     logger.info(f"To be added to collection: {m}")
-    trakt.add_to_collection(m.trakt, m.plex)
+    m.add_to_collection()
 
 
-def sync_show_collection(me: Media, trakt: TraktApi):
+def sync_show_collection(me: Media):
     if not CONFIG['sync']['collection']:
         return
 
-    collected = trakt.collected(me.show.trakt)
-    is_collected = collected.get_completed(me.season_number, me.episode_number)
-    if is_collected:
+    if me.is_collected:
         return
 
     logger.info(f"To be added to collection: {me}")
-    trakt.add_to_collection(me.trakt, me.plex)
+    me.add_to_collection()
 
 
 def sync_ratings(m: Media, plex: PlexApi, trakt: TraktApi):
@@ -159,7 +157,7 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
     mf = MediaFactory(trakt)
     if movies:
         for m in for_each_pair(plex.movie_sections(library=library), mf):
-            sync_collection(m, trakt, trakt_movie_collection)
+            sync_collection(m)
             sync_ratings(m, plex, trakt)
             sync_watched(m, plex, trakt, trakt_watched_movies)
 
@@ -170,7 +168,7 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
             it = for_each_episode(plex.show_sections(library=library), mf)
 
         for me in it:
-            sync_show_collection(me, trakt)
+            sync_show_collection(me)
             sync_show_watched(me, trakt_watched_shows, plex, trakt)
 
             # add to plex lists

@@ -11,7 +11,7 @@ class Media:
     Class containing Plex and Trakt media items (Movie, Episode)
     """
 
-    def __init__(self, plex, trakt, trakt_api: TraktApi):
+    def __init__(self, plex, trakt, trakt_api: TraktApi = None):
         self.trakt_api = trakt_api
         self.plex = plex
         self.trakt = trakt
