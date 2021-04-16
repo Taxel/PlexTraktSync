@@ -23,7 +23,7 @@ def sync_collection(m: Media):
     m.add_to_collection()
 
 
-def sync_ratings(m: Media, plex: PlexApi, trakt: TraktApi):
+def sync_ratings(m: Media):
     if not CONFIG['sync']['ratings']:
         return
 
@@ -33,10 +33,10 @@ def sync_ratings(m: Media, plex: PlexApi, trakt: TraktApi):
     # Plex rating takes precedence over Trakt rating
     if m.plex_rating is not None:
         logger.info(f"Rating {m} with {m.plex_rating} on Trakt")
-        trakt.rate(m.trakt, m.plex_rating)
+        m.trakt_rate()
     elif m.trakt_rating is not None:
         logger.info(f"Rating {m} with {m.trakt_rating} on Plex")
-        plex.rate(m.plex.item, m.trakt_rating)
+        m.plex_rate()
 
 
 def sync_watched(m: Media):
@@ -122,7 +122,7 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
     if movies:
         for m in for_each_pair(plex.movie_sections(library=library), mf):
             sync_collection(m)
-            sync_ratings(m, plex, trakt)
+            sync_ratings(m)
             sync_watched(m)
 
     if tv:
