@@ -224,6 +224,9 @@ class TraktApi:
         try:
             return lookup[pe.season_number][pe.episode_number].instance
         except KeyError:
+            # Retry using search for specific Plex Episode
+            if not pe.is_episode:
+                return self.find_by_media(pe)
             return None
 
     def flush(self):
