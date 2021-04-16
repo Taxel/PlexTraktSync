@@ -54,7 +54,11 @@ class Media:
 
     @property
     def watched_on_trakt(self):
-        return self.trakt_id in self.trakt_api.watched_movies
+        if self.is_movie:
+            return self.trakt_id in self.trakt_api.watched_movies
+
+        watched = self.trakt_api.watched_shows
+        return watched.get_completed(self.show_trakt_id, self.season_number, self.episode_number)
 
     def __str__(self):
         return str(self.plex)
