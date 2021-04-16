@@ -23,17 +23,6 @@ def sync_collection(m: Media):
     m.add_to_collection()
 
 
-def sync_show_collection(me: Media):
-    if not CONFIG['sync']['collection']:
-        return
-
-    if me.is_collected:
-        return
-
-    logger.info(f"To be added to collection: {me}")
-    me.add_to_collection()
-
-
 def sync_ratings(m: Media, plex: PlexApi, trakt: TraktApi):
     if not CONFIG['sync']['ratings']:
         return
@@ -168,7 +157,7 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
             it = for_each_episode(plex.show_sections(library=library), mf)
 
         for me in it:
-            sync_show_collection(me)
+            sync_collection(me)
             sync_show_watched(me, trakt_watched_shows, plex, trakt)
 
             # add to plex lists
