@@ -19,6 +19,26 @@ class Config(dict):
         "TRAKT_USERNAME",
     ]
 
+    defaults = {
+        "log_debug_messages": False,
+        "logging": {
+            "append": False,
+        },
+        "sync": {
+            "liked_lists": True,
+            "watchlist": True,
+            "watched_status": True,
+            "collection": True,
+            "ratings": True,
+        },
+        "xbmc-providers": {
+            "movies": "imdb",
+            "shows": "tvdb",
+        },
+        "excluded-libraries": [
+        ],
+    }
+
     initialized = False
 
     def __getitem__(self, item):
@@ -27,6 +47,8 @@ class Config(dict):
         return dict.__getitem__(self, item)
 
     def initialize(self):
+        self.update(self.defaults)
+
         if not exists(config_file):
             with open(default_config_file, "r") as fp:
                 defaults = json.load(fp)
