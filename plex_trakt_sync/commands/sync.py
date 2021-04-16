@@ -19,7 +19,7 @@ def sync_collection(m: Media, trakt: TraktApi, trakt_movie_collection):
     if m.trakt.trakt in trakt_movie_collection:
         return
 
-    logger.info(f"To be added to collection: {m.plex}")
+    logger.info(f"To be added to collection: {m}")
     trakt.add_to_collection(m.trakt, m.plex)
 
 
@@ -32,7 +32,7 @@ def sync_show_collection(me: Media, trakt: TraktApi):
     if is_collected:
         return
 
-    logger.info(f"To be added to collection: {me.plex}")
+    logger.info(f"To be added to collection: {me}")
     trakt.add_to_collection(me.trakt, me.plex)
 
 
@@ -47,10 +47,10 @@ def sync_ratings(m: Media, plex: PlexApi, trakt: TraktApi):
 
     # Plex rating takes precedence over Trakt rating
     if plex_rating is not None:
-        logger.info(f"Rating {m.plex} with {plex_rating} on Trakt")
+        logger.info(f"Rating {m} with {plex_rating} on Trakt")
         trakt.rate(m.trakt, plex_rating)
     elif trakt_rating is not None:
-        logger.info(f"Rating {m.plex} with {trakt_rating} on Plex")
+        logger.info(f"Rating {m} with {trakt_rating} on Plex")
         plex.rate(m.plex.item, trakt_rating)
 
 
@@ -66,11 +66,11 @@ def sync_watched(m: Media, plex: PlexApi, trakt: TraktApi, trakt_watched_movies)
     # if watch status is not synced
     # send watched status from plex to trakt
     if watched_on_plex:
-        logger.info(f"Marking as watched on Trakt: {m.plex}")
+        logger.info(f"Marking as watched on Trakt: {m}")
         trakt.mark_watched(m.trakt, m.plex.seen_date)
     # set watched status if movie is watched on Trakt
     elif watched_on_trakt:
-        logger.info(f"Marking as watched in Plex: {m.plex}")
+        logger.info(f"Marking as watched in Plex: {m}")
         plex.mark_watched(m.plex.item)
 
 
@@ -85,10 +85,10 @@ def sync_show_watched(me: Media, trakt_watched_shows, plex: PlexApi, trakt: Trak
         return
 
     if watched_on_plex:
-        logger.info(f"Marking as watched in Trakt: {me.plex}")
+        logger.info(f"Marking as watched in Trakt: {me}")
         trakt.mark_watched(me.trakt, me.plex.seen_date)
     elif watched_on_trakt:
-        logger.info(f"Marking as watched in Plex: {me.plex}")
+        logger.info(f"Marking as watched in Plex: {me}")
         plex.mark_watched(me.plex.item)
 
 
