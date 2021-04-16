@@ -1,5 +1,7 @@
 from functools import wraps
 from time import sleep, time
+
+from requests.exceptions import ConnectionError
 from trakt.errors import RateLimitException
 from plex_trakt_sync.logging import logger
 
@@ -41,14 +43,14 @@ def rate_limit(retries=5, delay=None):
                 try:
                     respect_trakt_rate()
                     return fn(*args, **kwargs)
-                except RateLimitException as e:
+                except (RateLimitException, ConnectionError) as e:
                     if retry == retries:
                         raise e
 
                     seconds = int(e.response.headers.get("Retry-After", 1))
                     retry += 1
                     logger.warning(
-                        f'RateLimitException for {fn}, retrying after {seconds} seconds (try: {retry}/{retries})'
+                        f"{e} for {fn}, retrying after {seconds} seconds (try: {retry}/{retries})"
                     )
                     sleep(seconds)
 
