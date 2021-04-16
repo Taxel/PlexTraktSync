@@ -1,10 +1,13 @@
 #!/usr/bin/env python3 -m pytest
+from typing import Union
+
+from trakt.tv import TVShow
 
 from plex_trakt_sync.plex_api import PlexLibraryItem
 from plex_trakt_sync.trakt_api import TraktApi
 
 
-def make(cls=None, **kwargs):
+def make(cls=None, **kwargs) -> Union[TVShow]:
     cls = cls if cls is not None else "object"
     # https://stackoverflow.com/a/2827726/2314626
     return type(cls, (object,), kwargs)
