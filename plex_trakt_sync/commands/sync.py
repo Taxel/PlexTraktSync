@@ -108,7 +108,7 @@ def for_each_pair(sections, mf: MediaFactory):
 def for_each_episode(sections, mf: MediaFactory):
     for m in for_each_pair(sections, mf):
         for me in for_each_show_episode(m.plex, m.trakt, mf):
-            yield me.show.trakt, me.plex, me.trakt
+            yield me
 
 
 def find_show_episodes(show, plex: PlexApi, mf: MediaFactory):
@@ -118,7 +118,7 @@ def find_show_episodes(show, plex: PlexApi, mf: MediaFactory):
         if not m:
             continue
         for me in for_each_show_episode(pm, m.trakt, mf):
-            yield me.show.trakt, me.plex, me.trakt
+            yield me
 
 
 def for_each_show_episode(pm, tm, mf: MediaFactory):
@@ -169,12 +169,12 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
         else:
             it = for_each_episode(plex.show_sections(library=library), mf)
 
-        for tm, pe, te in it:
-            sync_show_collection(tm, pe, te, trakt)
-            sync_show_watched(tm, pe, te, trakt_watched_shows, plex, trakt)
+        for me in it:
+            sync_show_collection(me.show.trakt, me.plex, me.trakt, trakt)
+            sync_show_watched(me.show.trakt, me.plex, me.trakt, trakt_watched_shows, plex, trakt)
 
             # add to plex lists
-            listutil.addPlexItemToLists(te.trakt, pe.item)
+            listutil.addPlexItemToLists(me.trakt.trakt, me.plex.item)
 
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(server)
