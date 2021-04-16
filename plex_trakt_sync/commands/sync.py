@@ -1,6 +1,6 @@
 import click
-from plexapi.exceptions import NotFound
 
+from plex_trakt_sync.media import MediaFactory
 from plex_trakt_sync.requests_cache import requests_cache
 from plex_trakt_sync.plex_server import get_plex_server
 from plex_trakt_sync.config import CONFIG
@@ -92,68 +92,42 @@ def sync_show_watched(tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt: Tra
         plex.mark_watched(pe.item)
 
 
-def for_each_pair(sections, trakt: TraktApi):
+def for_each_pair(sections, mf: MediaFactory):
     for section in sections:
         label = f"Processing {section.title}"
         with measure_time(label):
             pb = click.progressbar(section.items(), length=len(section), show_pos=True, label=label)
             with pb as items:
                 for pm in items:
-                    try:
-                        provider = pm.provider
-                    except NotFound as e:
-                        logger.error(f"Skipping {pm}: {e}")
+                    m = mf.resolve(pm)
+                    if not m:
                         continue
-
-                    if provider in ["local", "none", "agents.none"]:
-                        continue
-
-                    if provider not in ["imdb", "tmdb", "tvdb"]:
-                        logger.error(
-                            f"{pm}: Unable to parse a valid provider from guid:'{pm.guid}', guids:{pm.guids}"
-                        )
-                        continue
-
-                    tm = trakt.find_by_media(pm)
-                    if tm is None:
-                        logger.warning(f"Skipping {pm}: Not found on Trakt")
-                        continue
-
-                    yield pm, tm
+                    yield m.plex, m.trakt
 
 
-def for_each_episode(sections, trakt: TraktApi):
-    for pm, tm in for_each_pair(sections, trakt):
-        for tm, pe, te in for_each_show_episode(pm, tm, trakt):
+def for_each_episode(sections, mf: MediaFactory):
+    for pm, tm in for_each_pair(sections, mf):
+        for tm, pe, te in for_each_show_episode(pm, tm, mf):
             yield tm, pe, te
 
 
-def find_show_episodes(show, plex: PlexApi, trakt: TraktApi):
+def find_show_episodes(show, plex: PlexApi, mf: MediaFactory):
     search = plex.search(show, libtype='show')
     for pm in search:
-        tm = trakt.find_by_media(pm)
-        for tm, pe, te in for_each_show_episode(pm, tm, trakt):
+        m = mf.resolve(pm)
+        if not m:
+            continue
+        for tm, pe, te in for_each_show_episode(pm, m.trakt, mf):
             yield tm, pe, te
 
 
-def for_each_show_episode(pm, tm, trakt: TraktApi):
-    lookup = trakt.lookup(tm)
+def for_each_show_episode(pm, tm, mf: MediaFactory):
     for pe in pm.episodes():
-        try:
-            provider = pe.provider
-        except NotFound as e:
-            logger.error(f"Skipping {pe}: {e}")
+        m = mf.resolve(pe, tm)
+        if not m:
             continue
 
-        if provider in ["local", "none", "agents.none"]:
-            logger.error(f"Skipping {pe}: Provider {provider} not supported")
-            continue
-
-        te = trakt.find_episode(tm, pe, lookup)
-        if te is None:
-            logger.warning(f"Skipping {pe}: Not found on Trakt")
-            continue
-        yield tm, pe, te
+        yield tm, m.plex, m.trakt
 
 
 def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
@@ -181,17 +155,18 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
         logger.info("Server version {} updated at: {}".format(server.version, server.updatedAt))
         logger.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
+    mf = MediaFactory(trakt)
     if movies:
-        for pm, tm in for_each_pair(plex.movie_sections(library=library), trakt):
+        for pm, tm in for_each_pair(plex.movie_sections(library=library), mf):
             sync_collection(pm, tm, trakt, trakt_movie_collection)
             sync_ratings(pm, tm, plex, trakt)
             sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
 
     if tv:
         if show:
-            it = find_show_episodes(show, plex, trakt)
+            it = find_show_episodes(show, plex, mf)
         else:
-            it = for_each_episode(plex.show_sections(library=library), trakt)
+            it = for_each_episode(plex.show_sections(library=library), mf)
 
         for tm, pe, te in it:
             sync_show_collection(tm, pe, te, trakt)
