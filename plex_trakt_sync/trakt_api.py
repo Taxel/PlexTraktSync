@@ -1,4 +1,3 @@
-from json import JSONDecodeError
 from typing import Union
 import trakt
 
@@ -204,8 +203,6 @@ class TraktApi:
     def find_by_media(self, media: PlexLibraryItem):
         try:
             search = trakt.sync.search_by_id(media.id, id_type=media.provider, media_type=media.type)
-        except JSONDecodeError as e:
-            raise ValueError(f"Unable parse search result for {media.provider}/{media.id}: {e.doc!r}") from e
         except ValueError as e:
             # Search_type must be one of ('trakt', ..., 'imdb', 'tmdb', 'tvdb')
             raise ValueError(f"Invalid id_type: '{media.provider}', guid: '{media.guid}', guids: '{media.item.guids}': {e}") from e
