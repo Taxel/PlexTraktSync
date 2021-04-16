@@ -34,3 +34,24 @@ def test_tv_lookup_by_episode_id():
     te = trakt.find_by_media(pe)
     assert te.imdb == "tt0505457"
     assert te.tmdb == 511997
+
+
+def test_find_episode():
+    tm = make(
+        cls='TVShow',
+        # trakt=4965066,
+        trakt=176447,
+    )
+
+    pe = PlexLibraryItem(make(
+        cls='Episode',
+        guid='imdb://tt11909222',
+        type='episode',
+        seasonNumber=1,
+        index=1,
+    ))
+
+    te = trakt.find_episode(tm, pe)
+    assert te.season == 1
+    assert te.episode == 1
+    assert te.imdb == "tt11909222"
