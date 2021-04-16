@@ -59,20 +59,17 @@ def sync_watched(m: Media, plex: PlexApi, trakt: TraktApi):
         plex.mark_watched(m.plex.item)
 
 
-def sync_show_watched(me: Media, trakt_watched_shows, plex: PlexApi, trakt: TraktApi):
+def sync_show_watched(me: Media, plex: PlexApi, trakt: TraktApi):
     if not CONFIG['sync']['watched_status']:
         return
 
-    watched_on_plex = me.plex.item.isWatched
-    watched_on_trakt = trakt_watched_shows.get_completed(me.show_trakt_id, me.season_number, me.episode_number)
-
-    if watched_on_plex == watched_on_trakt:
+    if me.watched_on_plex == me.watched_on_trakt:
         return
 
-    if watched_on_plex:
+    if me.watched_on_plex:
         logger.info(f"Marking as watched in Trakt: {me}")
         trakt.mark_watched(me.trakt, me.plex.seen_date)
-    elif watched_on_trakt:
+    elif me.watched_on_trakt:
         logger.info(f"Marking as watched in Plex: {me}")
         plex.mark_watched(me.plex.item)
 
@@ -156,7 +153,7 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
 
         for me in it:
             sync_collection(me)
-            sync_show_watched(me, trakt_watched_shows, plex, trakt)
+            sync_show_watched(me, plex, trakt)
 
             # add to plex lists
             listutil.addPlexItemToLists(me.trakt_id, me.plex.item)
