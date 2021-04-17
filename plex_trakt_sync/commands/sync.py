@@ -154,12 +154,12 @@ def for_each_show_episode(pm, tm, trakt: TraktApi):
         yield tm, pe, te
 
 
-def sync_all(movies=True, tv=True, show=None):
+def sync_all(movies=True, tv=True, show=None, batch_size=None):
     with requests_cache.disabled():
         server = get_plex_server()
     listutil = TraktListUtil()
     plex = PlexApi(server)
-    trakt = TraktApi()
+    trakt = TraktApi(batch_size=batch_size)
 
     with measure_time("Loaded Trakt lists"):
         trakt_watched_movies = trakt.watched_movies
@@ -216,7 +216,13 @@ def sync_all(movies=True, tv=True, show=None):
     default="all",
     show_default=True, help="Specify what to sync"
 )
-def sync(sync_option: str, show: str):
+@click.option(
+    "--batch-size", "batch_size",
+    type=int,
+    default=None,
+    help="Specify batch size for collection submit queue"
+)
+def sync(sync_option: str, show: str, batch_size: int):
     """
     Perform sync between Plex and Trakt
     """
@@ -237,4 +243,4 @@ def sync(sync_option: str, show: str):
         logger.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
-        sync_all(movies=movies, tv=tv, show=show)
+        sync_all(movies=movies, tv=tv, show=show, batch_size=batch_size)

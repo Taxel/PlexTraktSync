@@ -50,8 +50,8 @@ class TraktApi:
     Trakt API class abstracting common data access and dealing with requests cache.
     """
 
-    def __init__(self):
-        self.batch = TraktBatch(self)
+    def __init__(self, batch_size=None):
+        self.batch = TraktBatch(self, batch_size=batch_size)
 
     @property
     @memoize
@@ -234,8 +234,9 @@ class TraktApi:
 
 
 class TraktBatch:
-    def __init__(self, trakt: TraktApi):
+    def __init__(self, trakt: TraktApi, batch_size=None):
         self.trakt = trakt
+        self.batch_size = batch_size
         self.collection = {}
 
     @nocache
