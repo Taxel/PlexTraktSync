@@ -253,6 +253,13 @@ class TraktBatch:
         finally:
             self.collection.clear()
 
+    def queue_size(self):
+        size = 0
+        for media_type in self.collection:
+            size += len(self.collection[media_type])
+
+        return size
+
     def add_to_collection(self, media_type: str, item):
         """
         Add item of media_type to collection
