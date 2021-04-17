@@ -4,6 +4,11 @@ from os import getenv
 from plex_trakt_sync.path import config_file, env_file, default_config_file
 from os.path import exists
 
+"""
+Platform name to identify our application
+"""
+PLEX_PLATFORM = "PlexTraktSync"
+
 
 class Config(dict):
     env_keys = [

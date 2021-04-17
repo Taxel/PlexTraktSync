@@ -6,10 +6,11 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
+click = "==7.1.2"
+plexapi = "==4.5.0"
 python-dotenv = "==0.15.0"
 requests-cache = "==0.5.2"
 trakt = "==3.0.0"
-plexapi = "==4.5.0"
 
 [requires]
 python_version = "3"
