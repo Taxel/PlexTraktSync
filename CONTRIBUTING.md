@@ -49,9 +49,8 @@ and send it to developers.
 The database contains only metadata of your library, not actual media files.
 
 The database contains everything about your setup, including local accounts, so
-send your database only to people you trust. The user passwords are hashed, so
-the passwords are not immediately recoverable but obtaining the password
-hashes, it's possible to brute force passwords.
+send your database only to people you trust. Plex removes password hashes from
+the download, so passwords are not exposed, not even in hashed form.
 
 To download and send the database:
 1. Visit [`Plex Web`] -> `Manage Server` -> `Settings` -> `Troubleshooting` -> `Download database`.
