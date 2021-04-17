@@ -260,6 +260,16 @@ class TraktBatch:
 
         return size
 
+    def flush(self):
+        """
+        Flush the queue if it's bigger than batch_size
+        """
+        if not self.batch_size:
+            return
+
+        if self.queue_size() >= self.batch_size:
+            self.submit_collection()
+
     def add_to_collection(self, media_type: str, item):
         """
         Add item of media_type to collection
@@ -268,6 +278,7 @@ class TraktBatch:
             self.collection[media_type] = []
 
         self.collection[media_type].append(item)
+        self.flush()
 
     def remove_empty_values(self, result):
         """
