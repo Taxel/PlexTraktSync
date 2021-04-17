@@ -11,7 +11,7 @@ unlike the Plex app provided by Trakt.
  - Watched status are synced (dates are not reported from Trakt to Plex)
  - Liked lists in Trakt are downloaded and all movies in Plex belonging to that
    list are added
- - You can edit the [config file](https://github.com/Taxel/PlexTraktSync/blob/master/config.json) to choose what to sync
+ - You can edit the [config file](https://github.com/Taxel/PlexTraktSync/blob/HEAD/config.default.json) to choose what to sync
  - None of the above requires a Plex Pass or Trakt VIP membership.
    Downside: Needs to be executed manually or via cronjob,
    can not use live data via webhooks.
@@ -29,7 +29,7 @@ Download the `.tar`, or `.zip` or checkout the release with Git.
 
 For example, the command to clone with Git:
 ```
-git clone -b 0.5.3 --depth=1 https://github.com/Taxel/PlexTraktSync
+git clone -b 0.7.19 --depth=1 https://github.com/Taxel/PlexTraktSync
 ```
 
 In the extracted directory, install the required Python packages:
