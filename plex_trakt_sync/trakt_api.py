@@ -246,7 +246,7 @@ class TraktBatch:
             return
 
         try:
-            result = trakt.sync.add_to_collection(self.collection)
+            result = self.trakt_sync_collection(self.collection)
             result = self.remove_empty_values(result)
             if result:
                 logger.info(f"Updated Trakt collection: {result}")
@@ -279,6 +279,9 @@ class TraktBatch:
 
         self.collection[media_type].append(item)
         self.flush()
+
+    def trakt_sync_collection(self, media_object):
+        return trakt.sync.add_to_collection(media_object)
 
     def remove_empty_values(self, result):
         """
