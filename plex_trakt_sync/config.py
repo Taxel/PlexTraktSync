@@ -27,9 +27,11 @@ class Config(dict):
         return dict.__getitem__(self, item)
 
     def initialize(self):
+        with open(default_config_file, "r") as fp:
+            defaults = json.load(fp)
+            self.update(defaults)
+
         if not exists(config_file):
-            with open(default_config_file, "r") as fp:
-                defaults = json.load(fp)
             with open(config_file, "w") as fp:
                 fp.write(json.dumps(defaults, indent=4))
 
