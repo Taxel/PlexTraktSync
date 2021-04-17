@@ -41,6 +41,27 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 [issues]: https://github.com/Taxel/PlexTraktSync/issues
 [opening a new issue]: https://github.com/Taxel/PlexTraktSync/issues/new
 
+## Sharing Plex Media Server Database
+
+Sometimes it is useful to share your copy of your Plex Media Server database
+and send it to developers.
+
+The database contains only metadata of your library, not actual media files.
+
+The database contains everything about your setup, including local accounts, so
+send your database only to people you trust. The user passwords are hashed, so
+the passwords are not immediately recoverable but obtaining the password
+hashes, it's possible to brute force passwords.
+
+To download and send the database:
+1. Visit [`Plex Web`] -> `Manage Server` -> `Settings` -> `Troubleshooting` -> `Download database`.
+   This is typically `https://app.plex.tv/desktop/#!/settings/server/<your_server_id>/manage/help`
+1. To find developer email, take any commit made by them, add `.patch` to the url.
+1. Upload the downloaded database `Plex Media Server Databases_*.zip` to https://wetransfer.com/
+1. Provide it to PlexTraktSync developer privately via their e-mail
+
+[`Plex Web`]: https://app.plex.tv/desktop
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under its MIT License.
