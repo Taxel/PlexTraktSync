@@ -1,13 +1,11 @@
 import datetime
 from typing import Union
 
-from plexapi.exceptions import NotFound
 from plexapi.library import MovieSection, ShowSection, LibrarySection
-from plexapi.video import Movie, Show
 
-from plex_trakt_sync.logging import logger
 from plex_trakt_sync.decorators import memoize, nocache
 from plex_trakt_sync.config import CONFIG
+from trakt.utils import timestamp
 
 
 class PlexLibraryItem:
@@ -29,12 +27,12 @@ class PlexLibraryItem:
 
     @property
     @memoize
-    def type(self):
-        return f"{self.media_type}s"
+    def media_type(self):
+        return f"{self.type}s"
 
     @property
     @memoize
-    def media_type(self):
+    def type(self):
         return self.item.type
 
     @property
@@ -48,7 +46,7 @@ class PlexLibraryItem:
         x = x.replace("themoviedb", "tmdb")
         x = x.replace("thetvdb", "tvdb")
         if x == "xbmcnfo":
-            x = CONFIG["xbmc-providers"][self.type]
+            x = CONFIG["xbmc-providers"][self.media_type]
 
         return x
 
@@ -63,26 +61,60 @@ class PlexLibraryItem:
 
     @property
     @memoize
+    def is_episode(self):
+        """
+        Return true of the id is in form of <show>/<season>/<episode>
+        """
+        parts = self.id.split("/")
+        if len(parts) == 3 and all(x.isnumeric() for x in parts):
+            return True
+
+        return False
+
+    @property
+    @memoize
+    def show_id(self):
+        if not self.is_episode:
+            raise ValueError("show_id is not valid for non-episodes")
+
+        show = self.id.split("/", 1)[0]
+        if not show.isnumeric():
+            raise ValueError(f"show_id is not numeric: {show}")
+
+        return int(show)
+
+    @property
+    @memoize
     def rating(self):
         return int(self.item.userRating) if self.item.userRating is not None else None
 
     @property
     @memoize
     def seen_date(self):
-        media = self.item
-        if not media.lastViewedAt:
-            raise ValueError('lastViewedAt is not set')
+        return self.date_value(self.item.lastViewedAt)
 
-        date = media.lastViewedAt
-
-        try:
-            return date.astimezone(datetime.timezone.utc)
-        except ValueError:  # for py<3.6
-            return date
+    @property
+    @memoize
+    def collected_at(self):
+        return self.date_value(self.item.addedAt)
 
     def watch_progress(self, view_offset):
         percent = view_offset / self.item.duration * 100
         return percent
+
+    def episodes(self):
+        for ep in self.item.episodes():
+            yield PlexLibraryItem(ep)
+
+    @property
+    @memoize
+    def season_number(self):
+        return self.item.seasonNumber
+
+    @property
+    @memoize
+    def episode_number(self):
+        return self.item.index
 
     @property
     @memoize
@@ -92,8 +124,22 @@ class PlexLibraryItem:
         # old item, like imdb 'tt0112253'
         return guid[0:2] == "tt" and guid[2:].isnumeric()
 
+    def date_value(self, date):
+        if not date:
+            raise ValueError("Value can't be None")
+
+        try:
+            return date.astimezone(datetime.timezone.utc)
+        except ValueError:  # for py<3.6
+            return date
+
     def __repr__(self):
         return "<%s:%s:%s>" % (self.provider, self.id, self.item)
+
+    def to_json(self):
+        return {
+            "collected_at": timestamp(self.collected_at),
+        }
 
 
 class PlexLibrarySection:
@@ -112,26 +158,9 @@ class PlexLibrarySection:
     def all(self):
         return self.section.all()
 
-    @memoize
     def items(self):
-        result = []
         for item in (PlexLibraryItem(x) for x in self.all()):
-            try:
-                provider = item.provider
-            except NotFound as e:
-                logger.error(f"{e}, skipping {item}")
-                continue
-
-            if provider in ["local", "none", "agents.none"]:
-                continue
-
-            if provider not in ["imdb", "tmdb", "tvdb"]:
-                logger.error(f"{item}: Unable to parse a valid provider from guid:'{item.guid}', guids:{item.guids}")
-                continue
-
-            result.append(item)
-
-        return result
+            yield item
 
 
 class PlexApi:
@@ -172,6 +201,12 @@ class PlexApi:
     def reload_item(self, pm):
         self.fetch_item.cache_clear()
         return self.fetch_item(pm.item.ratingKey)
+
+    @memoize
+    def search(self, title: str, **kwargs):
+        result = self.plex.library.search(title, **kwargs)
+        for media in result:
+            yield PlexLibraryItem(media)
 
     @property
     @memoize

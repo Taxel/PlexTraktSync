@@ -1,10 +1,11 @@
 import click
+from plexapi.exceptions import NotFound
 
 from plex_trakt_sync.requests_cache import requests_cache
 from plex_trakt_sync.plex_server import get_plex_server
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.decorators import measure_time
-from plex_trakt_sync.plex_api import PlexApi, PlexLibraryItem
+from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.logging import logger
@@ -18,20 +19,20 @@ def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
         return
 
     logger.info(f"Add to Trakt Collection: {pm}")
-    trakt.add_to_collection(tm)
+    trakt.add_to_collection(tm, pm)
 
 
-def sync_show_collection(pm, tm, pe, te, trakt: TraktApi):
+def sync_show_collection(tm, pe, te, trakt: TraktApi):
     if not CONFIG['sync']['collection']:
         return
 
     collected = trakt.collected(tm)
-    is_collected = collected.get_completed(pe.seasonNumber, pe.index)
+    is_collected = collected.get_completed(pe.season_number, pe.episode_number)
     if is_collected:
         return
 
-    logger.info(f"Add to Trakt Collection: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
-    trakt.add_to_collection(te.instance)
+    logger.info(f"Add to Trakt Collection: {pe}")
+    trakt.add_to_collection(te, pe)
 
 
 def sync_ratings(pm, tm, plex: PlexApi, trakt: TraktApi):
@@ -72,56 +73,88 @@ def sync_watched(pm, tm, plex: PlexApi, trakt: TraktApi, trakt_watched_movies):
         plex.mark_watched(pm.item)
 
 
-def sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt: TraktApi):
+def sync_show_watched(tm, pe, te, trakt_watched_shows, plex: PlexApi, trakt: TraktApi):
     if not CONFIG['sync']['watched_status']:
         return
 
-    watched_on_plex = pe.isWatched
-    watched_on_trakt = trakt_watched_shows.get_completed(tm.trakt, pe.seasonNumber, pe.index)
+    watched_on_plex = pe.item.isWatched
+    watched_on_trakt = trakt_watched_shows.get_completed(tm.trakt, pe.season_number, pe.episode_number)
 
     if watched_on_plex == watched_on_trakt:
         return
 
     if watched_on_plex:
-        logger.info(f"Marking as watched in Trakt: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
-        m = PlexLibraryItem(pe)
-        trakt.mark_watched(te.instance, m.seen_date)
+        logger.info(f"Marking as watched in Trakt: {pe}")
+        trakt.mark_watched(te, pe.seen_date)
     elif watched_on_trakt:
-        logger.info(f"Marking as watched in Plex: {pm} S{pe.seasonNumber:02}E{pe.index:02}")
-        plex.mark_watched(pe)
+        logger.info(f"Marking as watched in Plex: {pe}")
+        plex.mark_watched(pe.item)
 
 
 def for_each_pair(sections, trakt: TraktApi):
     for section in sections:
-        with measure_time(f"Processing section {section.title}"):
-            for pm in section.items():
-                tm = trakt.find_movie(pm)
-                if tm is None:
-                    logger.warning(f"[{pm})]: Not found on Trakt. Skipping")
-                    continue
+        label = f"Processing {section.title}"
+        with measure_time(label):
+            pb = click.progressbar(section.items(), length=len(section), show_pos=True, label=label)
+            with pb as items:
+                for pm in items:
+                    try:
+                        provider = pm.provider
+                    except NotFound as e:
+                        logger.error(f"Skipping {pm}: {e}")
+                        continue
 
-                yield pm, tm
+                    if provider in ["local", "none", "agents.none"]:
+                        continue
+
+                    if provider not in ["imdb", "tmdb", "tvdb"]:
+                        logger.error(
+                            f"{pm}: Unable to parse a valid provider from guid:'{pm.guid}', guids:{pm.guids}"
+                        )
+                        continue
+
+                    tm = trakt.find_by_media(pm)
+                    if tm is None:
+                        logger.warning(f"Skipping {pm}: Not found on Trakt")
+                        continue
+
+                    yield pm, tm
 
 
 def for_each_episode(sections, trakt: TraktApi):
     for pm, tm in for_each_pair(sections, trakt):
-        lookup = trakt.lookup(tm)
-
-        # loop over episodes in plex db
-        for pe in pm.item.episodes():
-            try:
-                te = lookup[pe.seasonNumber][pe.index]
-            except KeyError:
-                try:
-                    logger.warning(f"Show [{pm}: Key not found: S{pe.seasonNumber:02}E{pe.seasonNumber:02}")
-                except TypeError:
-                    logger.error(f"Show [{pm}]: Invalid episode: {pe}")
-                continue
-
-            yield pm, tm, pe, te
+        for tm, pe, te in for_each_show_episode(pm, tm, trakt):
+            yield tm, pe, te
 
 
-def sync_all(movies=True, tv=True):
+def find_show_episodes(show, plex: PlexApi, trakt: TraktApi):
+    search = plex.search(show, libtype='show')
+    for pm in search:
+        tm = trakt.find_by_media(pm)
+        for tm, pe, te in for_each_show_episode(pm, tm, trakt):
+            yield tm, pe, te
+
+
+def for_each_show_episode(pm, tm, trakt: TraktApi):
+    for pe in pm.episodes():
+        try:
+            provider = pe.provider
+        except NotFound as e:
+            logger.error(f"Skipping {pe}: {e}")
+            continue
+
+        if provider in ["local", "none", "agents.none"]:
+            logger.error(f"Skipping {pe}: Provider {provider} not supported")
+            continue
+
+        te = trakt.find_episode(tm, pe)
+        if te is None:
+            logger.warning(f"Skipping {pe}: Not found on Trakt")
+            continue
+        yield tm, pe, te
+
+
+def sync_all(movies=True, tv=True, show=None):
     with requests_cache.disabled():
         server = get_plex_server()
     listutil = TraktListUtil()
@@ -153,37 +186,55 @@ def sync_all(movies=True, tv=True):
             sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
 
     if tv:
-        for pm, tm, pe, te in for_each_episode(plex.show_sections, trakt):
-            sync_show_collection(pm, tm, pe, te, trakt)
-            sync_show_watched(pm, tm, pe, te, trakt_watched_shows, plex, trakt)
+        if show:
+            it = find_show_episodes(show, plex, trakt)
+        else:
+            it = for_each_episode(plex.show_sections, trakt)
+
+        for tm, pe, te in it:
+            sync_show_collection(tm, pe, te, trakt)
+            sync_show_watched(tm, pe, te, trakt_watched_shows, plex, trakt)
 
             # add to plex lists
-            listutil.addPlexItemToLists(te.instance.trakt, pe)
+            listutil.addPlexItemToLists(te.trakt, pe.item)
 
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(server)
 
+    trakt.flush()
+
 
 @click.command()
+@click.option(
+    "--show", "show",
+    type=str,
+    show_default=True, help="Sync specific show only"
+)
 @click.option(
     "--sync", "sync_option",
     type=click.Choice(["all", "movies", "tv"], case_sensitive=False),
     default="all",
     show_default=True, help="Specify what to sync"
 )
-def sync(sync_option: str):
+def sync(sync_option: str, show: str):
     """
     Perform sync between Plex and Trakt
     """
 
+    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
+
     movies = sync_option in ["all", "movies"]
     tv = sync_option in ["all", "tv"]
-    if not movies and not tv:
+
+    if show:
+        movies = False
+        tv = True
+        logger.info(f"Syncing Show: {show}")
+    elif not movies and not tv:
         click.echo("Nothing to sync!")
         return
-
-    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
-    logger.info(f"Syncing TV={tv}, Movies={movies}")
+    else:
+        logger.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
-        sync_all(movies=movies, tv=tv)
+        sync_all(movies=movies, tv=tv, show=show)

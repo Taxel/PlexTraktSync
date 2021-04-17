@@ -1,4 +1,3 @@
-from json import JSONDecodeError
 from typing import Union
 import trakt
 
@@ -50,6 +49,9 @@ class TraktApi:
     """
     Trakt API class abstracting common data access and dealing with requests cache.
     """
+
+    def __init__(self):
+        self.batch = TraktBatch(self)
 
     @property
     @memoize
@@ -163,10 +165,23 @@ class TraktApi:
     def mark_watched(self, m, time):
         m.mark_as_seen(time)
 
-    @nocache
-    @rate_limit(delay=TRAKT_POST_DELAY)
-    def add_to_collection(self, m):
-        m.add_to_library()
+    def add_to_collection(self, m, pm: PlexLibraryItem):
+        if m.media_type == "movies":
+            item = dict(
+                title=m.title,
+                year=m.year,
+                **m.ids,
+                **pm.to_json(),
+            )
+        elif m.media_type == "episodes":
+            item = dict(
+                **m.ids,
+                **pm.to_json()
+            )
+        else:
+            raise ValueError(f"Unsupported media type: {m.media_type}")
+
+        self.batch.add_to_collection(m.media_type, item)
 
     @memoize
     @nocache
@@ -184,18 +199,88 @@ class TraktApi:
         return pytrakt_extensions.lookup_table(tm)
 
     @memoize
+    def find_by_media(self, pm: PlexLibraryItem):
+        if pm.type == "episode" and pm.is_episode:
+            ts = self.search_by_id(pm.show_id, id_type=pm.provider, media_type="show")
+            return self.find_episode(ts, pm)
+
+        return self.search_by_id(pm.id, id_type=pm.provider, media_type=pm.type)
+
     @rate_limit()
-    def find_movie(self, media: PlexLibraryItem):
-        try:
-            search = trakt.sync.search_by_id(media.id, id_type=media.provider, media_type=media.media_type)
-        except JSONDecodeError as e:
-            raise ValueError(f"Unable parse search result for {media.provider}/{media.id}: {e.doc!r}") from e
-        except ValueError as e:
-            # Search_type must be one of ('trakt', ..., 'imdb', 'tmdb', 'tvdb')
-            raise ValueError(f"Invalid id_type: '{media.provider}', guid: '{media.guid}', guids: '{media.item.guids}': {e}") from e
+    def search_by_id(self, media_id: str, id_type: str, media_type: str):
+        search = trakt.sync.search_by_id(media_id, id_type=id_type, media_type=media_type)
         # look for the first wanted type in the results
         for m in search:
-            if m.media_type == media.type:
+            if m.media_type == f"{media_type}s":
                 return m
 
         return None
+
+    def find_episode(self, tm: TVShow, pe: PlexLibraryItem):
+        """
+        Find Trakt Episode from Plex Episode
+        """
+        lookup = self.lookup(tm)
+        try:
+            return lookup[pe.season_number][pe.episode_number].instance
+        except KeyError:
+            return None
+
+    def flush(self):
+        """
+        Submit all pending data
+        """
+        self.batch.submit_collection()
+
+
+class TraktBatch:
+    def __init__(self, trakt: TraktApi):
+        self.trakt = trakt
+        self.collection = {}
+
+    @nocache
+    @rate_limit(delay=TRAKT_POST_DELAY)
+    def submit_collection(self):
+        if not len(self.collection):
+            return None
+
+        try:
+            result = trakt.sync.add_to_collection(self.collection)
+            result = self.remove_empty_values(result)
+            if result:
+                logger.info(f"Updated Trakt collection: {result}")
+        finally:
+            self.collection.clear()
+
+    def add_to_collection(self, media_type: str, item):
+        """
+        Add item of media_type to collection
+        """
+        if media_type not in self.collection:
+            self.collection[media_type] = []
+
+        self.collection[media_type].append(item)
+
+    def remove_empty_values(self, result):
+        """
+        Update result to remove empty changes.
+        This makes diagnostic printing cleaner if we don't print "changed: 0"
+        """
+        for change_type in ["added", "existing", "updated"]:
+            for media_type, value in result[change_type].copy().items():
+                if value == 0:
+                    del result[change_type][media_type]
+            if len(result[change_type]) == 0:
+                del result[change_type]
+
+        for media_type, items in result["not_found"].copy().items():
+            if len(items) == 0:
+                del result["not_found"][media_type]
+
+        if len(result["not_found"]) == 0:
+            del result["not_found"]
+
+        if len(result) == 0:
+            return None
+
+        return result
