@@ -154,7 +154,7 @@ def for_each_show_episode(pm, tm, trakt: TraktApi):
         yield tm, pe, te
 
 
-def sync_all(movies=True, tv=True, show=None, batch_size=None):
+def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
     with requests_cache.disabled():
         server = get_plex_server()
     listutil = TraktListUtil()
@@ -180,7 +180,7 @@ def sync_all(movies=True, tv=True, show=None, batch_size=None):
         logger.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
     if movies:
-        for pm, tm in for_each_pair(plex.movie_sections(), trakt):
+        for pm, tm in for_each_pair(plex.movie_sections(library=library), trakt):
             sync_collection(pm, tm, trakt, trakt_movie_collection)
             sync_ratings(pm, tm, plex, trakt)
             sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
@@ -189,7 +189,7 @@ def sync_all(movies=True, tv=True, show=None, batch_size=None):
         if show:
             it = find_show_episodes(show, plex, trakt)
         else:
-            it = for_each_episode(plex.show_sections(), trakt)
+            it = for_each_episode(plex.show_sections(library=library), trakt)
 
         for tm, pe, te in it:
             sync_show_collection(tm, pe, te, trakt)
@@ -205,6 +205,10 @@ def sync_all(movies=True, tv=True, show=None, batch_size=None):
 
 
 @click.command()
+@click.option(
+    "--library",
+    help="Specify Library to use"
+)
 @click.option(
     "--show", "show",
     type=str,
@@ -222,7 +226,7 @@ def sync_all(movies=True, tv=True, show=None, batch_size=None):
     default=1, show_default=True,
     help="Batch size for collection submit queue"
 )
-def sync(sync_option: str, show: str, batch_size: int):
+def sync(sync_option: str, library: str, show: str, batch_size: int):
     """
     Perform sync between Plex and Trakt
     """
@@ -243,4 +247,4 @@ def sync(sync_option: str, show: str, batch_size: int):
         logger.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
-        sync_all(movies=movies, tv=tv, show=show, batch_size=batch_size)
+        sync_all(movies=movies, library=library, tv=tv, show=show, batch_size=batch_size)
