@@ -216,14 +216,18 @@ class TraktApi:
 
         return None
 
-    def find_episode(self, tm: TVShow, pe: PlexLibraryItem):
+    def find_episode(self, tm: TVShow, pe: PlexLibraryItem, lookup=None):
         """
         Find Trakt Episode from Plex Episode
         """
-        lookup = self.lookup(tm)
+        lookup = lookup if lookup else self.lookup(tm)
         try:
             return lookup[pe.season_number][pe.episode_number].instance
         except KeyError:
+            # Retry using search for specific Plex Episode
+            logger.warning("Retry using search for specific Plex Episode")
+            if not pe.is_episode:
+                return self.find_by_media(pe)
             return None
 
     def flush(self):
