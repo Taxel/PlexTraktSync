@@ -16,9 +16,7 @@ from trakt.sync import Scrobbler
 
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.decorators import memoize, nocache, rate_limit
-from plex_trakt_sync.config import CONFIG
-
-TRAKT_POST_DELAY = 1.1
+from plex_trakt_sync.config import CONFIG, TRAKT_POST_DELAY
 
 
 class ScrobblerProxy:
