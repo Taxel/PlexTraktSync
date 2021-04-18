@@ -9,6 +9,7 @@ from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.logging import logger
+from plex_trakt_sync.version import git_version_info
 
 
 def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
@@ -221,6 +222,9 @@ def sync(sync_option: str, show: str):
     Perform sync between Plex and Trakt
     """
 
+    git_version = git_version_info()
+    if git_version:
+        logger.info(f"PlexTraktSync [{git_version}]")
     logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
 
     movies = sync_option in ["all", "movies"]
