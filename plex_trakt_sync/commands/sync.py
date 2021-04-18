@@ -136,6 +136,7 @@ def find_show_episodes(show, plex: PlexApi, trakt: TraktApi):
 
 
 def for_each_show_episode(pm, tm, trakt: TraktApi):
+    lookup = trakt.lookup(tm)
     for pe in pm.episodes():
         try:
             provider = pe.provider
@@ -147,7 +148,7 @@ def for_each_show_episode(pm, tm, trakt: TraktApi):
             logger.error(f"Skipping {pe}: Provider {provider} not supported")
             continue
 
-        te = trakt.find_episode(tm, pe)
+        te = trakt.find_episode(tm, pe, lookup)
         if te is None:
             logger.warning(f"Skipping {pe}: Not found on Trakt")
             continue
