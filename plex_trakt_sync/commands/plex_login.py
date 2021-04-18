@@ -5,11 +5,11 @@ from typing import List
 import click
 from click import Choice
 from plexapi.exceptions import Unauthorized, NotFound
-from plexapi.myplex import MyPlexAccount, MyPlexResource
+from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
 from plexapi.server import PlexServer
 
 from plex_trakt_sync.config import CONFIG
-from plex_trakt_sync.style import prompt, error, success, title, comment, disabled
+from plex_trakt_sync.style import prompt, error, success, title, comment, disabled, highlight
 
 PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
 PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username")
@@ -67,7 +67,10 @@ def prompt_server(servers: List[MyPlexResource]):
 
         product = decorator(f"{s.product}/{s.productVersion}")
         platform = decorator(f"{s.device}: {s.platform}/{s.platformVersion}")
-        return f"- {s.name}: [Last seen: {decorator(str(s.lastSeenAt))}, Server: {product} on {platform}]"
+        click.echo(f"- {highlight(s.name)}: [Last seen: {decorator(str(s.lastSeenAt))}, Server: {product} on {platform}]")
+        c: ResourceConnection
+        for c in s.connections:
+            click.echo(f"    {c.uri}")
 
     owned_servers = [s for s in servers if s.owned]
     unowned_servers = [s for s in servers if not s.owned]
@@ -77,12 +80,12 @@ def prompt_server(servers: List[MyPlexResource]):
     if owned_servers:
         click.echo(success(f"{len(owned_servers)} owned servers found:"))
         for s in sorter(owned_servers):
-            click.echo(fmt_server(s))
+            fmt_server(s)
             server_names.append(s.name)
     if unowned_servers:
         click.echo(success(f"{len(owned_servers)} unowned servers found:"))
         for s in sorter(unowned_servers):
-            click.echo(fmt_server(s))
+            fmt_server(s)
             server_names.append(s.name)
 
     return click.prompt(
