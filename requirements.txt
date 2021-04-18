@@ -5,6 +5,7 @@ python-dotenv==0.19.0
 python-git-info==0.7.1
 requests-cache==0.7.3
 requests>=2.25.1
+rich==10.1.0
 tqdm==4.62.1
 trakt==3.2.1
 urllib3>=1.26.6
