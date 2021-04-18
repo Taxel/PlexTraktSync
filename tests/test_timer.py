@@ -23,3 +23,9 @@ def test_timer():
     with timeit() as t:
         timer.wait_if_needed()
     assert t() > time_limit, "Second call must have waited"
+
+    with timeit() as t:
+        timer.wait_if_needed()
+        timer.wait_if_needed()
+        timer.wait_if_needed()
+    assert t() > 3 * time_limit, "Wait three times"
