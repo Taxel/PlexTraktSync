@@ -247,7 +247,7 @@ class TraktBatch:
 
         try:
             result = self.trakt_sync_collection(self.collection)
-            result = self.remove_empty_values(result)
+            result = self.remove_empty_values(result.copy())
             if result:
                 logger.info(f"Updated Trakt collection: {result}")
         finally:
