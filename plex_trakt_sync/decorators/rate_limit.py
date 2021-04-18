@@ -2,7 +2,7 @@ from functools import wraps
 from time import sleep, time
 
 from requests.exceptions import ConnectionError
-from trakt.errors import RateLimitException
+from trakt.errors import RateLimitException, TraktInternalException
 from plex_trakt_sync.logging import logger
 
 last_time = None
@@ -41,7 +41,7 @@ def rate_limit(retries=5, delay=None):
                 try:
                     respect_trakt_rate()
                     return fn(*args, **kwargs)
-                except (RateLimitException, ConnectionError) as e:
+                except (RateLimitException, ConnectionError, TraktInternalException) as e:
                     if retry == retries:
                         raise e
 
