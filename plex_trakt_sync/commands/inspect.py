@@ -3,6 +3,7 @@ from plexapi.server import PlexServer
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
+from plex_trakt_sync.version import git_version_info
 
 
 @click.command()
@@ -11,6 +12,9 @@ def inspect(input):
     """
     Inspect details of an object
     """
+
+    git_version = git_version_info() or 'Unknown version'
+    print(f"PlexTraktSync inspect [{git_version}]")
 
     url = CONFIG["PLEX_BASEURL"]
     token = CONFIG["PLEX_TOKEN"]
