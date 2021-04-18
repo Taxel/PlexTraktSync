@@ -18,7 +18,7 @@ def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
     if tm.trakt in trakt_movie_collection:
         return
 
-    logger.info(f"Add to Trakt Collection: {pm}")
+    logger.info(f"To be added to collection: {pm}")
     trakt.add_to_collection(tm, pm)
 
 
