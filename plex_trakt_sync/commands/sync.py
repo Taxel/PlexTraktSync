@@ -180,7 +180,7 @@ def sync_all(movies=True, tv=True, show=None, batch_size=None):
         logger.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
     if movies:
-        for pm, tm in for_each_pair(plex.movie_sections, trakt):
+        for pm, tm in for_each_pair(plex.movie_sections(), trakt):
             sync_collection(pm, tm, trakt, trakt_movie_collection)
             sync_ratings(pm, tm, plex, trakt)
             sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
@@ -189,7 +189,7 @@ def sync_all(movies=True, tv=True, show=None, batch_size=None):
         if show:
             it = find_show_episodes(show, plex, trakt)
         else:
-            it = for_each_episode(plex.show_sections, trakt)
+            it = for_each_episode(plex.show_sections(), trakt)
 
         for tm, pe, te in it:
             sync_show_collection(tm, pe, te, trakt)

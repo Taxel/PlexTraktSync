@@ -171,7 +171,6 @@ class PlexApi:
     def __init__(self, plex):
         self.plex = plex
 
-    @property
     @memoize
     def movie_sections(self):
         result = []
@@ -182,7 +181,6 @@ class PlexApi:
 
         return result
 
-    @property
     @memoize
     def show_sections(self):
         result = []
