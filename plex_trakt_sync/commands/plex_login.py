@@ -1,3 +1,4 @@
+from functools import partial
 from typing import List
 
 import click
@@ -61,16 +62,17 @@ def prompt_server(servers: List[MyPlexResource]):
 
     owned_servers = [s for s in servers if s.owned]
     unowned_servers = [s for s in servers if not s.owned]
+    sorter = partial(sorted, key=lambda s: s.lastSeenAt)
 
     server_names = []
     if owned_servers:
         click.echo(success(f"{len(owned_servers)} owned servers found:"))
-        for s in owned_servers:
+        for s in sorter(owned_servers):
             click.echo(fmt_server(s))
             server_names.append(s.name)
     if unowned_servers:
         click.echo(success(f"{len(owned_servers)} unowned servers found:"))
-        for s in unowned_servers:
+        for s in sorter(unowned_servers):
             click.echo(fmt_server(s))
             server_names.append(s.name)
 
