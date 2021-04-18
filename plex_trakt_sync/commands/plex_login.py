@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from functools import partial
 from typing import List
 
@@ -8,7 +9,7 @@ from plexapi.myplex import MyPlexAccount, MyPlexResource
 from plexapi.server import PlexServer
 
 from plex_trakt_sync.config import CONFIG
-from plex_trakt_sync.style import prompt, error, success, title, comment
+from plex_trakt_sync.style import prompt, error, success, title, comment, disabled
 
 PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
 PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username")
@@ -56,9 +57,17 @@ def choose_managed_user(account: MyPlexAccount):
 
 
 def prompt_server(servers: List[MyPlexResource]):
+    old_age = datetime.now() - timedelta(weeks=1)
+
     def fmt_server(s):
-        details = comment(f"{s.product}/{s.productVersion} on {s.device}: {s.platform}/{s.platformVersion}")
-        return f"- {s.name}: [Last seen: {comment(str(s.lastSeenAt))}, Server: {details}]"
+        if s.lastSeenAt < old_age:
+            decorator = disabled
+        else:
+            decorator = comment
+
+        product = decorator(f"{s.product}/{s.productVersion}")
+        platform = decorator(f"{s.device}: {s.platform}/{s.platformVersion}")
+        return f"- {s.name}: [Last seen: {decorator(str(s.lastSeenAt))}, Server: {product} on {platform}]"
 
     owned_servers = [s for s in servers if s.owned]
     unowned_servers = [s for s in servers if not s.owned]
