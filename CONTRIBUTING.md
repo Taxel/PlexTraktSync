@@ -41,6 +41,29 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 [issues]: https://github.com/Taxel/PlexTraktSync/issues
 [opening a new issue]: https://github.com/Taxel/PlexTraktSync/issues/new
 
+## Testing
+
+We use [pytest] for testing.
+
+First, ensure you have dependencies installed:
+```
+pip3 install -r tests/requirements.txt
+```
+
+To run all tests:
+
+```
+python3 -m pytest
+```
+
+To run specific test:
+
+```
+python3 -m pytest tests/test_version.py
+```
+
+[pytest]: https://pytest.org/
+
 ## Sharing Plex Media Server Database
 
 Sometimes it is useful to share your copy of your Plex Media Server database
