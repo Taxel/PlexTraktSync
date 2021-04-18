@@ -219,8 +219,8 @@ def sync_all(movies=True, tv=True, show=None, batch_size=None):
 @click.option(
     "--batch-size", "batch_size",
     type=int,
-    default=None,
-    help="Specify batch size for collection submit queue"
+    default=1, show_default=True,
+    help="Batch size for collection submit queue"
 )
 def sync(sync_option: str, show: str, batch_size: int):
     """
