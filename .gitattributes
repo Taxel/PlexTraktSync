@@ -1,1 +1,2 @@
 *.py text=auto diff=python
+/tests/ export-ignore
