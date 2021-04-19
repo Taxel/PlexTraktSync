@@ -1,4 +1,6 @@
 import json
+from json import JSONDecodeError
+
 from dotenv import load_dotenv
 from os import getenv
 from plex_trakt_sync.path import config_file, env_file, default_config_file
@@ -13,6 +15,7 @@ PLEX_PLATFORM = "PlexTraktSync"
 Constant in seconds for how much to wait between Trakt POST API calls.
 """
 TRAKT_POST_DELAY = 1.1
+
 
 class Config(dict):
     env_keys = [
@@ -31,17 +34,15 @@ class Config(dict):
         return dict.__getitem__(self, item)
 
     def initialize(self):
-        with open(default_config_file, "r") as fp:
-            defaults = json.load(fp)
-            self.update(defaults)
+        defaults = self.load_json(default_config_file)
+        self.update(defaults)
 
         if not exists(config_file):
             with open(config_file, "w") as fp:
                 fp.write(json.dumps(defaults, indent=4))
 
-        with open(config_file, "r") as fp:
-            config = json.load(fp)
-            self.update(config)
+        config = self.load_json(config_file)
+        self.update(config)
 
         self.initialized = True
 
@@ -63,6 +64,14 @@ class Config(dict):
                     txt.write("{}={}\n".format(key, self[key]))
                 else:
                     txt.write("{}=\n".format(key))
+
+    def load_json(self, path):
+        with open(path, "r") as fp:
+            try:
+                config = json.load(fp)
+            except JSONDecodeError as e:
+                raise RuntimeError(f"Unable to parse {path}: {e}")
+        return config
 
 
 CONFIG = Config()
