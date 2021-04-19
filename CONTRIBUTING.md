@@ -16,7 +16,7 @@ We use GitHub to host code, to track issues and feature requests, as well as acc
 
 Pull requests are the best way to propose changes to the codebase (we use [GitHub Flow]). We actively welcome your pull requests:
 
-1. Fork the repo and create your branch from `master`.
+1. Fork the repo and create your branch from the default branch (`main`).
 2. If you've added code that should be tested, add tests.
 3. If you've changed APIs, update the documentation.
 4. Ensure the test suite passes.
@@ -40,6 +40,49 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 
 [issues]: https://github.com/Taxel/PlexTraktSync/issues
 [opening a new issue]: https://github.com/Taxel/PlexTraktSync/issues/new
+
+## Testing
+
+We use [pytest] for testing.
+
+First, ensure you have dependencies installed:
+```
+pip3 install -r tests/requirements.txt
+```
+
+To run all tests:
+
+```
+python3 -m pytest
+```
+
+To run specific test:
+
+```
+python3 -m pytest tests/test_version.py
+```
+
+[pytest]: https://pytest.org/
+
+## Sharing Plex Media Server Database
+
+Sometimes it is useful to share your copy of your Plex Media Server database
+and send it to developers.
+
+The database contains only metadata of your library, not actual media files.
+
+The database contains everything about your setup, including local accounts, so
+send your database only to people you trust. Plex removes password hashes from
+the download, so passwords are not exposed, not even in hashed form.
+
+To download and send the database:
+1. Visit [`Plex Web`] -> `Manage Server` -> `Settings` -> `Troubleshooting` -> `Download database`.
+   This is typically `https://app.plex.tv/desktop/#!/settings/server/<your_server_id>/manage/help`
+1. To find developer email, take any commit made by them, add `.patch` to the url.
+1. Upload the downloaded database `Plex Media Server Databases_*.zip` to https://wetransfer.com/
+1. Provide it to PlexTraktSync developer privately via their e-mail
+
+[`Plex Web`]: https://app.plex.tv/desktop
 
 ## License
 
