@@ -1,0 +1,101 @@
+{
+  "movies": [
+    {
+      "collected_at": "2014-09-01T09:10:11.000Z",
+      "title": "Batman Begins",
+      "year": 2005,
+      "ids": {
+        "trakt": 1,
+        "slug": "batman-begins-2005",
+        "imdb": "tt0372784",
+        "tmdb": 272
+      },
+      "media_type": "digital",
+      "resolution": "uhd_4k",
+      "hdr": "dolby_vision",
+      "audio": "dts_ma",
+      "audio_channels": "5.1"
+    },
+    {
+      "ids": {
+        "imdb": "tt0000111"
+      }
+    }
+  ],
+  "shows": [
+    {
+      "title": "Breaking Bad",
+      "year": 2008,
+      "ids": {
+        "trakt": 1,
+        "slug": "breaking-bad",
+        "tvdb": 81189,
+        "imdb": "tt0903747",
+        "tmdb": 1396
+      }
+    },
+    {
+      "title": "The Walking Dead",
+      "year": 2010,
+      "ids": {
+        "trakt": 2,
+        "slug": "the-walking-dead",
+        "tvdb": 153021,
+        "imdb": "tt1520211",
+        "tmdb": 1402
+      },
+      "seasons": [
+        {
+          "number": 3
+        }
+      ]
+    },
+    {
+      "title": "Mad Men",
+      "year": 2007,
+      "ids": {
+        "trakt": 4,
+        "slug": "mad-men",
+        "tvdb": 80337,
+        "imdb": "tt0804503",
+        "tmdb": 1104
+      },
+      "seasons": [
+        {
+          "number": 1,
+          "episodes": [
+            {
+              "number": 1,
+              "media_type": "bluray",
+              "resolution": "hd_1080p",
+              "audio": "dolby_digital_plus",
+              "audio_channels": "5.1"
+            },
+            {
+              "number": 2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "seasons": [
+    {
+      "ids": {
+        "trakt": 140912,
+        "tvdb": 703353,
+        "tmdb": 81266
+      }
+    }
+  ],
+  "episodes": [
+    {
+      "ids": {
+        "trakt": 1061,
+        "tvdb": 1555111,
+        "imdb": "tt007404",
+        "tmdb": 422183
+      }
+    }
+  ]
+}

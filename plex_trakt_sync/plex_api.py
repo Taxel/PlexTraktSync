@@ -171,23 +171,23 @@ class PlexApi:
     def __init__(self, plex):
         self.plex = plex
 
-    @property
-    @memoize
-    def movie_sections(self):
+    def movie_sections(self, library=None):
         result = []
         for section in self.library_sections:
             if not type(section) is MovieSection:
+                continue
+            if library and section.title != library:
                 continue
             result.append(PlexLibrarySection(section))
 
         return result
 
-    @property
-    @memoize
-    def show_sections(self):
+    def show_sections(self, library=None):
         result = []
         for section in self.library_sections:
             if not type(section) is ShowSection:
+                continue
+            if library and section.title != library:
                 continue
             result.append(PlexLibrarySection(section))
 

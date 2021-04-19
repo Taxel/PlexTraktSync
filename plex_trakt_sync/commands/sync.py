@@ -9,6 +9,7 @@ from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.logging import logger
+from plex_trakt_sync.version import git_version_info
 
 
 def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
@@ -18,7 +19,7 @@ def sync_collection(pm, tm, trakt: TraktApi, trakt_movie_collection):
     if tm.trakt in trakt_movie_collection:
         return
 
-    logger.info(f"Add to Trakt Collection: {pm}")
+    logger.info(f"To be added to collection: {pm}")
     trakt.add_to_collection(tm, pm)
 
 
@@ -136,6 +137,7 @@ def find_show_episodes(show, plex: PlexApi, trakt: TraktApi):
 
 
 def for_each_show_episode(pm, tm, trakt: TraktApi):
+    lookup = trakt.lookup(tm)
     for pe in pm.episodes():
         try:
             provider = pe.provider
@@ -147,19 +149,19 @@ def for_each_show_episode(pm, tm, trakt: TraktApi):
             logger.error(f"Skipping {pe}: Provider {provider} not supported")
             continue
 
-        te = trakt.find_episode(tm, pe)
+        te = trakt.find_episode(tm, pe, lookup)
         if te is None:
             logger.warning(f"Skipping {pe}: Not found on Trakt")
             continue
         yield tm, pe, te
 
 
-def sync_all(movies=True, tv=True, show=None):
+def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
     with requests_cache.disabled():
         server = get_plex_server()
     listutil = TraktListUtil()
     plex = PlexApi(server)
-    trakt = TraktApi()
+    trakt = TraktApi(batch_size=batch_size)
 
     with measure_time("Loaded Trakt lists"):
         trakt_watched_movies = trakt.watched_movies
@@ -180,7 +182,7 @@ def sync_all(movies=True, tv=True, show=None):
         logger.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
     if movies:
-        for pm, tm in for_each_pair(plex.movie_sections, trakt):
+        for pm, tm in for_each_pair(plex.movie_sections(library=library), trakt):
             sync_collection(pm, tm, trakt, trakt_movie_collection)
             sync_ratings(pm, tm, plex, trakt)
             sync_watched(pm, tm, plex, trakt, trakt_watched_movies)
@@ -189,7 +191,7 @@ def sync_all(movies=True, tv=True, show=None):
         if show:
             it = find_show_episodes(show, plex, trakt)
         else:
-            it = for_each_episode(plex.show_sections, trakt)
+            it = for_each_episode(plex.show_sections(library=library), trakt)
 
         for tm, pe, te in it:
             sync_show_collection(tm, pe, te, trakt)
@@ -206,6 +208,10 @@ def sync_all(movies=True, tv=True, show=None):
 
 @click.command()
 @click.option(
+    "--library",
+    help="Specify Library to use"
+)
+@click.option(
     "--show", "show",
     type=str,
     show_default=True, help="Sync specific show only"
@@ -216,11 +222,20 @@ def sync_all(movies=True, tv=True, show=None):
     default="all",
     show_default=True, help="Specify what to sync"
 )
-def sync(sync_option: str, show: str):
+@click.option(
+    "--batch-size", "batch_size",
+    type=int,
+    default=1, show_default=True,
+    help="Batch size for collection submit queue"
+)
+def sync(sync_option: str, library: str, show: str, batch_size: int):
     """
     Perform sync between Plex and Trakt
     """
 
+    git_version = git_version_info()
+    if git_version:
+        logger.info(f"PlexTraktSync [{git_version}]")
     logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
 
     movies = sync_option in ["all", "movies"]
@@ -237,4 +252,4 @@ def sync(sync_option: str, show: str):
         logger.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
-        sync_all(movies=movies, tv=tv, show=show)
+        sync_all(movies=movies, library=library, tv=tv, show=show, batch_size=batch_size)

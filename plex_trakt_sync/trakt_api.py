@@ -50,8 +50,8 @@ class TraktApi:
     Trakt API class abstracting common data access and dealing with requests cache.
     """
 
-    def __init__(self):
-        self.batch = TraktBatch(self)
+    def __init__(self, batch_size=None):
+        self.batch = TraktBatch(self, batch_size=batch_size)
 
     @property
     @memoize
@@ -216,14 +216,18 @@ class TraktApi:
 
         return None
 
-    def find_episode(self, tm: TVShow, pe: PlexLibraryItem):
+    def find_episode(self, tm: TVShow, pe: PlexLibraryItem, lookup=None):
         """
         Find Trakt Episode from Plex Episode
         """
-        lookup = self.lookup(tm)
+        lookup = lookup if lookup else self.lookup(tm)
         try:
             return lookup[pe.season_number][pe.episode_number].instance
         except KeyError:
+            # Retry using search for specific Plex Episode
+            logger.warning("Retry using search for specific Plex Episode")
+            if not pe.is_episode:
+                return self.find_by_media(pe)
             return None
 
     def flush(self):
@@ -234,23 +238,41 @@ class TraktApi:
 
 
 class TraktBatch:
-    def __init__(self, trakt: TraktApi):
+    def __init__(self, trakt: TraktApi, batch_size=None):
         self.trakt = trakt
+        self.batch_size = batch_size
         self.collection = {}
 
     @nocache
     @rate_limit(delay=TRAKT_POST_DELAY)
     def submit_collection(self):
-        if not len(self.collection):
-            return None
+        if self.queue_size() == 0:
+            return
 
         try:
-            result = trakt.sync.add_to_collection(self.collection)
-            result = self.remove_empty_values(result)
+            result = self.trakt_sync_collection(self.collection)
+            result = self.remove_empty_values(result.copy())
             if result:
                 logger.info(f"Updated Trakt collection: {result}")
         finally:
             self.collection.clear()
+
+    def queue_size(self):
+        size = 0
+        for media_type in self.collection:
+            size += len(self.collection[media_type])
+
+        return size
+
+    def flush(self):
+        """
+        Flush the queue if it's bigger than batch_size
+        """
+        if not self.batch_size:
+            return
+
+        if self.queue_size() >= self.batch_size:
+            self.submit_collection()
 
     def add_to_collection(self, media_type: str, item):
         """
@@ -260,6 +282,10 @@ class TraktBatch:
             self.collection[media_type] = []
 
         self.collection[media_type].append(item)
+        self.flush()
+
+    def trakt_sync_collection(self, media_object):
+        return trakt.sync.add_to_collection(media_object)
 
     def remove_empty_values(self, result):
         """
