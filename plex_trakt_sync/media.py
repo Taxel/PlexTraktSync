@@ -1,5 +1,5 @@
 from plexapi.exceptions import NotFound
-from requests.exceptions import ConnectionError
+from requests import RequestException
 from trakt.errors import TraktException
 
 from plex_trakt_sync.logging import logger
@@ -118,7 +118,7 @@ class MediaFactory:
                 tm = self.trakt.find_episode(tm, pm)
             else:
                 tm = self.trakt.find_by_media(pm)
-        except (TraktException, ConnectionError) as e:
+        except (TraktException, RequestException) as e:
             logger.warning(f"Skipping {pm}: Trakt errors: {e}")
             return None
 
