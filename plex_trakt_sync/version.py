@@ -1,8 +1,8 @@
 def git_version_info():
     try:
         from gitinfo import get_git_info
-    except ImportError:
-        return
+    except (ImportError, TypeError):
+        return None
 
     commit = get_git_info()
     if not commit:
