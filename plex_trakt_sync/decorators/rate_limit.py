@@ -24,7 +24,10 @@ def rate_limit(retries=5):
                     if retry == retries:
                         raise e
 
-                    seconds = int(e.response.headers.get("Retry-After", 1))
+                    if isinstance(e, RateLimitException):
+                        seconds = int(e.response.headers.get("Retry-After", 1))
+                    else:
+                        seconds = 1 + retry
                     retry += 1
                     logger.warning(
                         f"{e} for {fn}, retrying after {seconds} seconds (try: {retry}/{retries})"
