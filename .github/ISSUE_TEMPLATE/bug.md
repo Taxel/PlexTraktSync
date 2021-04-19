@@ -11,7 +11,7 @@ labels: bug
 _A description of what the bug is, including a complete traceback (if applicable)_
 
 <!--
-Before you continue reporing the bug, be sure that you use the latest released version:
+Before you continue reporting the bug, be sure that you use the latest released version:
 - https://github.com/Taxel/PlexTraktSync/releases
 -->
 
