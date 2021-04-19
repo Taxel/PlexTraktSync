@@ -1,4 +1,5 @@
 from plexapi.exceptions import NotFound
+from trakt.errors import TraktException
 
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.plex_api import PlexLibraryItem
@@ -59,10 +60,15 @@ class MediaFactory:
             )
             return None
 
-        if tm:
-            tm = self.trakt.find_episode(tm, pm)
-        else:
-            tm = self.trakt.find_by_media(pm)
+        try:
+            if tm:
+                tm = self.trakt.find_episode(tm, pm)
+            else:
+                tm = self.trakt.find_by_media(pm)
+        except TraktException as e:
+            logger.warning(f"Skipping {pm}: Trakt errors: {e}")
+            return None
+
         if tm is None:
             logger.warning(f"Skipping {pm}: Not found on Trakt")
             return None
