@@ -103,7 +103,7 @@ class MediaFactory:
             return None
 
         if provider in ["local", "none", "agents.none"]:
-            logger.debug(f"Skipping {pm}: Provider {provider} has no external Id")
+            logger.warning(f"Skipping {pm}: Provider {provider} has no external Id")
 
             return None
 
