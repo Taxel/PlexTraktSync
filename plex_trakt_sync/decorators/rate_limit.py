@@ -1,37 +1,17 @@
 from functools import wraps
-from time import sleep, time
+from time import sleep
 
-from requests.exceptions import ConnectionError
+from requests import RequestException
 from trakt.errors import RateLimitException, TraktInternalException
 from plex_trakt_sync.logging import logger
 
-last_time = None
-
 
 # https://trakt.docs.apiary.io/#introduction/rate-limiting
-def rate_limit(retries=5, delay=None):
+def rate_limit(retries=5):
     """
-
     :param retries: number of retries
-    :param delay: delay in sec between trakt requests to respect rate limit
     :return:
     """
-
-    def respect_trakt_rate():
-        if delay is None:
-            return
-
-        global last_time
-        if last_time is None:
-            last_time = time()
-            return
-
-        diff_time = time() - last_time
-        if diff_time < delay:
-            wait = delay - diff_time
-            logger.debug(f"Sleeping for {wait:.3f} seconds")
-            sleep(wait)
-        last_time = time()
 
     def decorator(fn):
         @wraps(fn)
@@ -39,16 +19,18 @@ def rate_limit(retries=5, delay=None):
             retry = 0
             while True:
                 try:
-                    respect_trakt_rate()
                     return fn(*args, **kwargs)
-                except (RateLimitException, ConnectionError, TraktInternalException) as e:
+                except (RateLimitException, RequestException, TraktInternalException) as e:
                     if retry == retries:
                         raise e
 
-                    seconds = int(e.response.headers.get("Retry-After", 1))
+                    if isinstance(e, RateLimitException):
+                        seconds = int(e.response.headers.get("Retry-After", 1))
+                    else:
+                        seconds = 1 + retry
                     retry += 1
                     logger.warning(
-                        f"{e} for {fn}, retrying after {seconds} seconds (try: {retry}/{retries})"
+                        f"{e} for {fn.__module__}.{fn.__name__}(), retrying after {seconds} seconds (try: {retry}/{retries})"
                     )
                     sleep(seconds)
 

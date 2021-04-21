@@ -15,10 +15,8 @@ from trakt.errors import OAuthException, ForbiddenException
 from trakt.sync import Scrobbler
 
 from plex_trakt_sync.logging import logger
-from plex_trakt_sync.decorators import memoize, nocache, rate_limit
+from plex_trakt_sync.decorators import memoize, nocache, rate_limit, time_limit
 from plex_trakt_sync.config import CONFIG
-
-TRAKT_POST_DELAY = 1.1
 
 
 class ScrobblerProxy:
@@ -30,17 +28,20 @@ class ScrobblerProxy:
         self.scrobbler = scrobbler
 
     @nocache
-    @rate_limit(delay=TRAKT_POST_DELAY)
+    @rate_limit()
+    @time_limit()
     def update(self, progress: float):
         self.scrobbler.update(progress)
 
     @nocache
-    @rate_limit(delay=TRAKT_POST_DELAY)
+    @rate_limit()
+    @time_limit()
     def pause(self):
         self.scrobbler.pause()
 
     @nocache
-    @rate_limit(delay=TRAKT_POST_DELAY)
+    @rate_limit()
+    @time_limit()
     def stop(self):
         self.scrobbler.stop()
 
@@ -97,7 +98,8 @@ class TraktApi:
         return self.me.show_collection
 
     @nocache
-    @rate_limit(delay=TRAKT_POST_DELAY)
+    @rate_limit()
+    @time_limit()
     def remove_from_library(self, media: Union[Movie, TVShow, TVSeason, TVEpisode]):
         if not isinstance(media, (Movie, TVShow, TVSeason, TVEpisode)):
             raise ValueError("Must be valid media type")
@@ -152,7 +154,8 @@ class TraktApi:
         return None
 
     @nocache
-    @rate_limit(delay=TRAKT_POST_DELAY)
+    @rate_limit()
+    @time_limit()
     def rate(self, m, rating):
         m.rate(rating)
 
@@ -161,7 +164,8 @@ class TraktApi:
         return ScrobblerProxy(scrobbler)
 
     @nocache
-    @rate_limit(delay=TRAKT_POST_DELAY)
+    @rate_limit()
+    @time_limit()
     def mark_watched(self, m, time):
         m.mark_as_seen(time)
 
@@ -244,7 +248,8 @@ class TraktBatch:
         self.collection = {}
 
     @nocache
-    @rate_limit(delay=TRAKT_POST_DELAY)
+    @rate_limit()
+    @time_limit()
     def submit_collection(self):
         if self.queue_size() == 0:
             return
