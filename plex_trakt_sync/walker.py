@@ -1,3 +1,5 @@
+from typing import List
+
 from plex_trakt_sync.media import MediaFactory
 from plex_trakt_sync.plex_api import PlexApi
 
@@ -28,9 +30,9 @@ class Walker:
         Iterate over movie sections unless specific movie is requested
         """
         if self.movie:
-            it = self.from_movie_titles(self.movie)
+            it = self.media_from_titles("movie", self.movie)
         else:
-            it = self.from_movie_libraries(self.library)
+            it = self.media_from_sections(self.plex.movie_sections(), self.library)
 
         for pm in it:
             m = self.mf.resolve(pm)
@@ -38,25 +40,34 @@ class Walker:
                 continue
             yield m
 
-    def from_movie_titles(self, titles):
-        for title in titles:
-            search = self.plex.search(title, libtype="movie")
-            yield from search
+    def find_episodes(self):
+        if self.movie:
+            it = self.media_from_titles("show", self.show)
+        else:
+            it = self.media_from_sections(self.plex.show_sections(), self.library)
 
-    def from_movie_libraries(self, titles):
-        for section in self.movie_sections(titles):
-            for pm in section.items():
-                yield pm
+        for plex_show in it:
+            show = self.mf.resolve(plex_show)
+            if not show:
+                continue
+            yield show
 
-    def movie_sections(self, titles):
-        """
-        Return movie sections, optionally filter only matching section names
-        """
-        sections = self.plex.movie_sections()
+    def media_from_sections(self, sections, titles: List[str]):
         if titles:
             # Filter by matching section names
             sections = [x for x in sections if x.title in titles]
-        return sections
 
-    def find_episodes(self):
+        for section in sections:
+            for pm in section.items():
+                yield pm
+
+    def media_from_titles(self, libtype: str, titles: List[str]):
+        for title in titles:
+            search = self.plex.search(title, libtype=libtype)
+            yield from search
+
+    def from_show_titles(self, movie):
+        pass
+
+    def from_show_libraries(self, library):
         pass
