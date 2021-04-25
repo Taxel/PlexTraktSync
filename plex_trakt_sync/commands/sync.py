@@ -56,46 +56,6 @@ def sync_watched(m: Media):
         m.mark_watched_plex()
 
 
-def for_each_pair(sections, mf: MediaFactory):
-    for section in sections:
-        label = f"Processing {section.title}"
-        end_label = f"{section.title} processed"
-        with measure_time(end_label):
-            pb = click.progressbar(section.items(), length=len(section), show_pos=True, label=label)
-            with pb as items:
-                for pm in items:
-                    m = mf.resolve(pm)
-                    if not m:
-                        continue
-                    yield m
-
-
-def for_each_episode(sections, mf: MediaFactory):
-    for m in for_each_pair(sections, mf):
-        for me in for_each_show_episode(m, mf):
-            yield me
-
-
-def find_show_episodes(show, plex: PlexApi, mf: MediaFactory):
-    search = plex.search(show, libtype='show')
-    for pm in search:
-        m = mf.resolve(pm)
-        if not m:
-            continue
-        for me in for_each_show_episode(m, mf):
-            yield me
-
-
-def for_each_show_episode(m: Media, mf: MediaFactory):
-    for pe in m.plex.episodes():
-        me = mf.resolve(pe, m.trakt)
-        if not me:
-            continue
-
-        me.show = m
-        yield me
-
-
 def sync_all(walker: Walker, trakt: TraktApi, server: PlexServer):
     listutil = TraktListUtil()
 
