@@ -27,21 +27,35 @@ class Walker:
         """
         Iterate over movie sections unless specific movie is requested
         """
-        for section in self.movie_sections():
-            for pm in section.items():
-                m = self.mf.resolve(pm)
-                if not m:
-                    continue
-                yield m
+        if self.movie:
+            it = self.from_movie_titles(self.movie)
+        else:
+            it = self.from_movie_libraries(self.library)
 
-    def movie_sections(self):
+        for pm in it:
+            m = self.mf.resolve(pm)
+            if not m:
+                continue
+            yield m
+
+    def from_movie_titles(self, titles):
+        for title in titles:
+            search = self.plex.search(title, libtype="movie")
+            yield from search
+
+    def from_movie_libraries(self, titles):
+        for section in self.movie_sections(titles):
+            for pm in section.items():
+                yield pm
+
+    def movie_sections(self, titles):
         """
         Return movie sections, optionally filter only matching section names
         """
         sections = self.plex.movie_sections()
-        if self.library:
+        if titles:
             # Filter by matching section names
-            sections = [x for x in sections if x.title in self.library]
+            sections = [x for x in sections if x.title in titles]
         return sections
 
     def find_episodes(self):
