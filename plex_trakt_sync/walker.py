@@ -1,6 +1,6 @@
 from typing import List
 
-from plex_trakt_sync.media import MediaFactory
+from plex_trakt_sync.media import MediaFactory, Media
 from plex_trakt_sync.plex_api import PlexApi
 
 
@@ -50,7 +50,7 @@ class Walker:
             show = self.mf.resolve(plex)
             if not show:
                 continue
-            yield show
+            yield from self.episode_from_show(show)
 
     def media_from_sections(self, sections, titles: List[str]):
         if titles:
@@ -65,6 +65,15 @@ class Walker:
         for title in titles:
             search = self.plex.search(title, libtype=libtype)
             yield from search
+
+    def episode_from_show(self, show: Media):
+        for pe in show.plex.episodes():
+            me = self.mf.resolve(pe, show.trakt)
+            if not me:
+                continue
+
+            me.show = show
+            yield me
 
     def from_show_titles(self, movie):
         pass
