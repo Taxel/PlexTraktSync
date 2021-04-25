@@ -1,6 +1,6 @@
 #!/usr/bin/env python3 -m pytest
 from plex_trakt_sync.plex_api import PlexLibraryItem
-from plex_trakt_sync.trakt_api import TraktApi
+from tests.conftest import get_trakt_api
 
 
 def make(cls=None, **kwargs):
@@ -9,7 +9,7 @@ def make(cls=None, **kwargs):
     return type(cls, (object,), kwargs)
 
 
-trakt = TraktApi()
+trakt = get_trakt_api()
 
 
 def test_tv_lookup():
