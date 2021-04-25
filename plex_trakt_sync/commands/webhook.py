@@ -21,4 +21,9 @@ def webhook(bind: str, port: int):
 
     with socketserver.TCPServer((bind, port), HttpRequestHandler) as httpd:
         click.echo(f"Serving at http://{bind}:{port}")
-        httpd.serve_forever()
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            pass
+        httpd.server_close()
+        click.echo("Stopping httpd...")
