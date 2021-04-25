@@ -1,6 +1,8 @@
 import json
 from os.path import dirname, join as join_path
 
+from plex_trakt_sync.decorators import memoize
+
 MOCK_DATA_DIR = join_path(dirname(__file__), "mock_data")
 
 
@@ -10,6 +12,7 @@ def load_mock(name: str):
         return json.load(f)
 
 
+@memoize
 def get_plex_api():
     from plex_trakt_sync.config import CONFIG
     from plex_trakt_sync.plex_api import PlexApi
