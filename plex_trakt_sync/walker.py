@@ -30,24 +30,24 @@ class Walker:
         Iterate over movie sections unless specific movie is requested
         """
         if self.movie:
-            it = self.media_from_titles("movie", self.movie)
+            movies = self.media_from_titles("movie", self.movie)
         else:
-            it = self.media_from_sections(self.plex.movie_sections(), self.library)
+            movies = self.media_from_sections(self.plex.movie_sections(), self.library)
 
-        for pm in it:
-            m = self.mf.resolve(pm)
-            if not m:
+        for plex in movies:
+            movie = self.mf.resolve(plex)
+            if not movie:
                 continue
-            yield m
+            yield movie
 
     def find_episodes(self):
-        if self.movie:
-            it = self.media_from_titles("show", self.show)
+        if self.show:
+            shows = self.media_from_titles("show", self.show)
         else:
-            it = self.media_from_sections(self.plex.show_sections(), self.library)
+            shows = self.media_from_sections(self.plex.show_sections(), self.library)
 
-        for plex_show in it:
-            show = self.mf.resolve(plex_show)
+        for plex in shows:
+            show = self.mf.resolve(plex)
             if not show:
                 continue
             yield show
