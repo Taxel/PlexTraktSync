@@ -1,13 +1,7 @@
 #!/usr/bin/env python3 -m pytest
-from plexapi.server import PlexServer
+from tests.conftest import get_plex_api
 
-from plex_trakt_sync.config import CONFIG
-from plex_trakt_sync.plex_api import PlexApi
-
-url = CONFIG["PLEX_BASEURL"]
-token = CONFIG["PLEX_TOKEN"]
-server = PlexServer(url, token)
-plex = PlexApi(server)
+plex = get_plex_api()
 
 
 def test_plex_search():
