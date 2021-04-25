@@ -176,7 +176,7 @@ def sync(sync_option: str, library: str, show: str, batch_size: int):
     plex = PlexApi(server)
     trakt = TraktApi(batch_size=batch_size)
     mf = MediaFactory(plex, trakt)
-    w = Walker(plex, mf, movies=movies, shows=tv)
+    w = Walker(plex, mf, movies=movies, shows=tv, progressbar=click.progressbar)
 
     if library:
         logger.info(f"Filtering Library: {library}")
