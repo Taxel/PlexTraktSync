@@ -1,5 +1,6 @@
 from typing import List
 
+from plex_trakt_sync.decorators import measure_time
 from plex_trakt_sync.media import MediaFactory, Media
 from plex_trakt_sync.plex_api import PlexApi
 
@@ -67,8 +68,9 @@ class Walker:
             sections = [x for x in sections if x.title in titles]
 
         for section in sections:
-            it = self.progressbar(section.items(), length=len(section), label=f"Processing {section.title}")
-            yield from it
+            with measure_time(f"{section.title} processed"):
+                it = self.progressbar(section.items(), length=len(section), label=f"Processing {section.title}")
+                yield from it
 
     def media_from_titles(self, libtype: str, titles: List[str]):
         it = self.progressbar(titles, label=f"Processing {libtype}s")
