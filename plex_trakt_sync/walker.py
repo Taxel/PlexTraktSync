@@ -71,7 +71,8 @@ class Walker:
             yield from it
 
     def media_from_titles(self, libtype: str, titles: List[str]):
-        for title in titles:
+        it = self.progressbar(titles, label=f"Processing {libtype}s")
+        for title in it:
             search = self.plex.search(title, libtype=libtype)
             yield from search
 
