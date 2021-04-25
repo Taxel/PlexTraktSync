@@ -126,6 +126,9 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
             sync_ratings(m)
             sync_watched(m)
 
+            # add to plex lists
+            listutil.addPlexItemToLists(m.trakt_id, m.plex.item)
+
     if tv:
         if show:
             it = find_show_episodes(show, plex, mf)
