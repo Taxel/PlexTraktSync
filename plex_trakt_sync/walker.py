@@ -67,8 +67,8 @@ class Walker:
             sections = [x for x in sections if x.title in titles]
 
         for section in sections:
-            for pm in section.items():
-                yield pm
+            it = self.progressbar(section.items(), length=len(section), label=f"Processing {section.title}")
+            yield from it
 
     def media_from_titles(self, libtype: str, titles: List[str]):
         for title in titles:
