@@ -9,7 +9,9 @@ class Walker:
     Class dealing with finding and walking library, movies/shows, episodes
     """
 
-    def __init__(self, plex: PlexApi, mf: MediaFactory):
+    def __init__(self, plex: PlexApi, mf: MediaFactory, movies=True, shows=True):
+        self.walk_movies = movies
+        self.walk_shows = shows
         self.plex = plex
         self.mf = mf
         self.library = []
@@ -29,6 +31,9 @@ class Walker:
         """
         Iterate over movie sections unless specific movie is requested
         """
+        if not self.walk_movies:
+            return
+
         if self.movie:
             movies = self.media_from_titles("movie", self.movie)
         else:
@@ -41,6 +46,9 @@ class Walker:
             yield movie
 
     def find_episodes(self):
+        if not self.walk_shows:
+            return
+
         if self.show:
             shows = self.media_from_titles("show", self.show)
         else:
