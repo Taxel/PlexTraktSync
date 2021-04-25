@@ -7,6 +7,7 @@ from plex_trakt_sync.commands.plex_login import plex_login
 from plex_trakt_sync.commands.sync import sync
 from plex_trakt_sync.commands.trakt_login import trakt_login
 from plex_trakt_sync.commands.watch import watch
+from plex_trakt_sync.commands.webhook import webhook
 
 
 @click.group(invoke_without_command=True)
@@ -26,3 +27,4 @@ cli.add_command(plex_login)
 cli.add_command(sync)
 cli.add_command(trakt_login)
 cli.add_command(watch)
+cli.add_command(webhook)
