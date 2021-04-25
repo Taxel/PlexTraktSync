@@ -1,7 +1,14 @@
 import http.server
 import socketserver
+from http import HTTPStatus
 
 import click
+
+
+class HttpRequestHandler(http.server.CGIHTTPRequestHandler):
+    def do_GET(self):
+        self.send_error(HTTPStatus.NOT_FOUND, "File not found")
+        return None
 
 
 @click.command()
@@ -12,7 +19,6 @@ def webhook(bind: str, port: int):
     Listen for WebHook data from HTTP
     """
 
-    Handler = http.server.SimpleHTTPRequestHandler
-    with socketserver.TCPServer((bind, port), Handler) as httpd:
+    with socketserver.TCPServer((bind, port), HttpRequestHandler) as httpd:
         click.echo(f"Serving at http://{bind}:{port}")
         httpd.serve_forever()
