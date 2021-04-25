@@ -9,11 +9,12 @@ class Walker:
     Class dealing with finding and walking library, movies/shows, episodes
     """
 
-    def __init__(self, plex: PlexApi, mf: MediaFactory, movies=True, shows=True):
-        self.walk_movies = movies
-        self.walk_shows = shows
+    def __init__(self, plex: PlexApi, mf: MediaFactory, progressbar=None, movies=True, shows=True):
+        self._progressbar = progressbar
         self.plex = plex
         self.mf = mf
+        self.walk_movies = movies
+        self.walk_shows = shows
         self.library = []
         self.show = []
         self.movie = []
@@ -88,3 +89,11 @@ class Walker:
 
     def from_show_libraries(self, library):
         pass
+
+    def progressbar(self, iterable, **kwargs):
+        if self._progressbar:
+            pb = self._progressbar(iterable, show_pos=True, **kwargs)
+            with pb as it:
+                yield from it
+        else:
+            yield from iterable
