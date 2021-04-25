@@ -57,7 +57,8 @@ def sync_watched(m: Media):
 def for_each_pair(sections, mf: MediaFactory):
     for section in sections:
         label = f"Processing {section.title}"
-        with measure_time(label):
+        end_label = f"{section.title} processed"
+        with measure_time(end_label):
             pb = click.progressbar(section.items(), length=len(section), show_pos=True, label=label)
             with pb as items:
                 for pm in items:
