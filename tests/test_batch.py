@@ -1,9 +1,9 @@
 #!/usr/bin/env python3 -m pytest
-from plex_trakt_sync.trakt_api import TraktApi, TraktBatch
-from tests.conftest import load_mock
+from plex_trakt_sync.trakt_api import TraktBatch
+from tests.conftest import load_mock, get_trakt_api
 from unittest.mock import Mock
 
-trakt = TraktApi()
+trakt = get_trakt_api()
 
 
 def test_batch_size_none():
