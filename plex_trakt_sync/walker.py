@@ -87,12 +87,6 @@ class Walker:
             me.show = show
             yield me
 
-    def from_show_titles(self, movie):
-        pass
-
-    def from_show_libraries(self, library):
-        pass
-
     def progressbar(self, iterable, **kwargs):
         if self._progressbar:
             pb = self._progressbar(iterable, show_pos=True, **kwargs)
