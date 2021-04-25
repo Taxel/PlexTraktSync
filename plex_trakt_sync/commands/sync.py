@@ -1,4 +1,5 @@
 import click
+from plexapi.server import PlexServer
 
 from plex_trakt_sync.media import MediaFactory, Media
 from plex_trakt_sync.requests_cache import requests_cache
@@ -10,6 +11,7 @@ from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.version import git_version_info
+from plex_trakt_sync.walker import Walker
 
 
 def sync_collection(m: Media):
@@ -94,12 +96,8 @@ def for_each_show_episode(m: Media, mf: MediaFactory):
         yield me
 
 
-def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
-    with requests_cache.disabled():
-        server = get_plex_server()
+def sync_all(walker: Walker, trakt: TraktApi, server: PlexServer):
     listutil = TraktListUtil()
-    plex = PlexApi(server)
-    trakt = TraktApi(batch_size=batch_size)
 
     with measure_time("Loaded Trakt lists"):
         trakt_watched_movies = trakt.watched_movies
@@ -119,28 +117,19 @@ def sync_all(library=None, movies=True, tv=True, show=None, batch_size=None):
         logger.info("Server version {} updated at: {}".format(server.version, server.updatedAt))
         logger.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
-    mf = MediaFactory(plex, trakt)
-    if movies:
-        for m in for_each_pair(plex.movie_sections(library=library), mf):
-            sync_collection(m)
-            sync_ratings(m)
-            sync_watched(m)
+    for movie in walker.find_movies():
+        sync_collection(movie)
+        sync_ratings(movie)
+        sync_watched(movie)
+        # add to plex lists
+        listutil.addPlexItemToLists(movie.trakt_id, movie.plex.item)
 
-            # add to plex lists
-            listutil.addPlexItemToLists(m.trakt_id, m.plex.item)
+    for episode in walker.find_episodes():
+        sync_collection(episode)
+        sync_watched(episode)
 
-    if tv:
-        if show:
-            it = find_show_episodes(show, plex, mf)
-        else:
-            it = for_each_episode(plex.show_sections(library=library), mf)
-
-        for me in it:
-            sync_collection(me)
-            sync_watched(me)
-
-            # add to plex lists
-            listutil.addPlexItemToLists(me.trakt_id, me.plex.item)
+        # add to plex lists
+        listutil.addPlexItemToLists(episode.trakt_id, episode.plex.item)
 
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(server)
@@ -183,9 +172,14 @@ def sync(sync_option: str, library: str, show: str, batch_size: int):
     movies = sync_option in ["all", "movies"]
     tv = sync_option in ["all", "tv"]
 
+    server = get_plex_server()
+    plex = PlexApi(server)
+    trakt = TraktApi(batch_size=batch_size)
+    mf = MediaFactory(plex, trakt)
+    w = Walker(plex, mf, movies=movies, shows=tv)
+
     if show:
-        movies = False
-        tv = True
+        w.add_show(show)
         logger.info(f"Syncing Show: {show}")
     elif not movies and not tv:
         click.echo("Nothing to sync!")
@@ -194,4 +188,4 @@ def sync(sync_option: str, library: str, show: str, batch_size: int):
         logger.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
-        sync_all(movies=movies, library=library, tv=tv, show=show, batch_size=batch_size)
+        sync_all(walker=w, trakt=trakt, server=server)
