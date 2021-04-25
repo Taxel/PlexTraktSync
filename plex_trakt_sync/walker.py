@@ -25,9 +25,11 @@ class Walker:
 
     def add_show(self, show):
         self.show.append(show)
+        self.walk_movies = False
 
     def add_movie(self, movie):
         self.movie.append(movie)
+        self.walk_shows = False
 
     def find_movies(self):
         """
