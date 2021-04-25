@@ -33,3 +33,14 @@ def get_plex_api():
     plex = PlexApi(server)
 
     return plex
+
+
+@memoize
+def get_media_factory():
+    from plex_trakt_sync.media import MediaFactory
+
+    trakt = get_trakt_api()
+    plex = get_plex_api()
+    mf = MediaFactory(plex, trakt)
+
+    return mf
