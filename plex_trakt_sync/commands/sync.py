@@ -178,6 +178,10 @@ def sync(sync_option: str, library: str, show: str, batch_size: int):
     mf = MediaFactory(plex, trakt)
     w = Walker(plex, mf, movies=movies, shows=tv)
 
+    if library:
+        logger.info(f"Filtering Library: {library}")
+        w.add_library(library)
+
     if show:
         w.add_show(show)
         logger.info(f"Syncing Show: {show}")
