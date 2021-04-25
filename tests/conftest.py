@@ -13,6 +13,15 @@ def load_mock(name: str):
 
 
 @memoize
+def get_trakt_api():
+    from plex_trakt_sync.trakt_api import TraktApi
+
+    trakt = TraktApi()
+
+    return trakt
+
+
+@memoize
 def get_plex_api():
     from plex_trakt_sync.config import CONFIG
     from plex_trakt_sync.plex_api import PlexApi
