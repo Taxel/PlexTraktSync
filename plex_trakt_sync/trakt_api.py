@@ -127,9 +127,7 @@ class TraktApi:
         if not CONFIG['sync']['watchlist']:
             return []
 
-        return list(
-            map(lambda m: m.trakt, self.me.watchlist_movies)
-        )
+        return self.me.watchlist_movies
 
     @property
     @memoize

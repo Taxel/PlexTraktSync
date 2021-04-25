@@ -68,7 +68,7 @@ def sync_all(walker: Walker, trakt: TraktApi, server: PlexServer):
         trakt_liked_lists = trakt.liked_lists
 
     if trakt_watchlist_movies:
-        listutil.addList(None, "Trakt Watchlist", traktid_list=trakt_watchlist_movies)
+        listutil.addList(None, "Trakt Watchlist", trakt_list=trakt_watchlist_movies)
 
     for lst in trakt_liked_lists:
         listutil.addList(lst['username'], lst['listname'])
@@ -82,14 +82,14 @@ def sync_all(walker: Walker, trakt: TraktApi, server: PlexServer):
         sync_ratings(movie)
         sync_watched(movie)
         # add to plex lists
-        listutil.addPlexItemToLists(movie.trakt_id, movie.plex.item)
+        listutil.addPlexItemToLists(movie)
 
     for episode in walker.find_episodes():
         sync_collection(episode)
         sync_watched(episode)
 
         # add to plex lists
-        listutil.addPlexItemToLists(episode.trakt_id, episode.plex.item)
+        listutil.addPlexItemToLists(episode)
 
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(server)
