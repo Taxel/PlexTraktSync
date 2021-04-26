@@ -21,11 +21,11 @@ class WebhookHandler:
 
     def handle(self, payload):
         logger.debug(f"Handle: {payload}")
-        if "ratingKey" not in payload:
+        if "rating_key" not in payload:
             logger.debug(f"Skip, no ratingKey in payload")
             return
 
-        rating_key = int(payload["ratingKey"])
+        rating_key = int(payload["rating_key"])
         logger.debug(f"RatingKey: {rating_key}")
         if rating_key:
             self.sync(rating_key)
