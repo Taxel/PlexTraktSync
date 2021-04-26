@@ -36,7 +36,7 @@ class TraktList():
             try:
                 plex.playlist(self.name).delete()
             except (NotFound, BadRequest):
-                logger.error("Playlist %s not found, so it could not be deleted. Actual playlists: %s" % (self.name, plex.playlists()))
+                logger.debug("Playlist %s not found, so it could not be deleted. Actual playlists: %s" % (self.name, plex.playlists()))
                 pass
             if len(self.plex_items) > 0:
                 _, plex_items_sorted = zip(*sorted(dict(reversed(self.plex_items)).items()))
