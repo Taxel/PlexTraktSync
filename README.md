@@ -75,7 +75,7 @@ type `crontab -e` in the terminal.
 
 ## Sync options
 
-The sync subcommand supports `--sync=tv` and `--sync=movies` options,
+The `sync` subcommand supports `--sync=tv` and `--sync=movies` options,
 so you can sync only specific library types.
 
 ```
