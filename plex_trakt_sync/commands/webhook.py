@@ -51,7 +51,7 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         self.set_response()
         self.wfile.write(f"PlexTraktSync Webhook for Tautulli. See {TAUTULLI_WEBHOOK_URL}".encode('utf-8'))
 
-    def do_POST(self):
+    def do_PUT(self):
         payload = self.get_payload()
         if not payload:
             return False
