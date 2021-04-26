@@ -6,8 +6,44 @@ from http.server import BaseHTTPRequestHandler
 import click
 
 from plex_trakt_sync.logging import logger
+from plex_trakt_sync.media import MediaFactory
+from plex_trakt_sync.plex_api import PlexApi
+from plex_trakt_sync.plex_server import get_plex_server
+from plex_trakt_sync.trakt_api import TraktApi
 
 TAUTULLI_WEBHOOK_URL = "https://github.com/Taxel/PlexTraktSync#tautulli-webhook"
+
+
+class WebhookHandler:
+    def __init__(self, plex: PlexApi, mf: MediaFactory):
+        self.plex = plex
+        self.mf = mf
+
+    def handle(self, payload):
+        logger.debug(f"Handle: {payload}")
+        if "ratingKey" not in payload:
+            logger.debug(f"Skip, no ratingKey in payload")
+            return
+
+        rating_key = int(payload["ratingKey"])
+        logger.debug(f"RatingKey: {rating_key}")
+        if rating_key:
+            self.sync(rating_key)
+
+    def sync(self, rating_key: int):
+        media = self.find_media(rating_key)
+        logger.debug(f"Found: {media}")
+
+    def find_media(self, rating_key: int):
+        plex = self.plex.fetch_item(rating_key)
+        if not plex:
+            return None
+
+        media = self.mf.resolve(plex)
+        if not media:
+            return None
+
+        return media
 
 
 class HttpRequestHandler(BaseHTTPRequestHandler):
@@ -19,6 +55,11 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
         payload = self.get_payload()
         if not payload:
             return False
+
+        try:
+            self.server.webhook.handle(payload)
+        except Exception as e:
+            return self.error(f"Error handling request: {e}")
 
         self.set_response()
         self.wfile.write('{"status": "ok"}'.encode('utf-8'))
@@ -59,8 +100,15 @@ def webhook(bind: str, port: int):
     """
 
     with socketserver.TCPServer((bind, port), HttpRequestHandler) as httpd:
-        click.echo(f"Serving at http://{bind}:{port}")
+        server = get_plex_server()
+        plex = PlexApi(server)
+        trakt = TraktApi()
+        mf = MediaFactory(server, trakt)
+
+        httpd.webhook = WebhookHandler(plex, mf)
+
         try:
+            click.echo(f"Serving at http://{bind}:{port}")
             httpd.serve_forever()
         except KeyboardInterrupt:
             pass
