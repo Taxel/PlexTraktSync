@@ -99,16 +99,23 @@ def webhook(bind: str, port: int):
     Listen for WebHook data from HTTP
     """
 
-    with socketserver.TCPServer((bind, port), HttpRequestHandler) as httpd:
+    with socketserver.TCPServer((bind, port), HttpRequestHandler, bind_and_activate=False) as httpd:
         server = get_plex_server()
         plex = PlexApi(server)
         trakt = TraktApi()
         mf = MediaFactory(server, trakt)
 
+        httpd.allow_reuse_address = True
         httpd.webhook = WebhookHandler(plex, mf)
 
         try:
             click.echo(f"Serving at http://{bind}:{port}")
+            try:
+                httpd.server_bind()
+                httpd.server_activate()
+            except:
+                httpd.server_close()
+                raise
             httpd.serve_forever()
         except KeyboardInterrupt:
             pass
