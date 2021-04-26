@@ -140,6 +140,45 @@ by user is not implemented [#324].
 
 [#324]: https://github.com/Taxel/PlexTraktSync/issues/324
 
+## Tautulli Webhook
+
+You can have PlexTraktSync to receive events from [Tautulli Notification Agents][tautulli-notification-agents]
+via [Webhook][tautulli-webhook].
+
+[tautulli-notification-agents]: https://github.com/Tautulli/Tautulli/wiki/Notification-Agents-Guide
+[tautulli-webhook]: https://github.com/Tautulli/Tautulli/wiki/Notification-Agents-Guide#webhook
+
+For Tautulli side configuration, use:
+
+- Webhook URL: `http://localhost:7707` (or equivalent that Tautulli can reach)
+- Webhook Method: `PUT`
+- Description: `PlexTraktSync`
+- Notification Triggers:
+    - [x] Notification Triggers
+    - [x] Recently Added
+- Notification Text:
+    - JSON Data: `{ "action": "watched", "rating_key": "{rating_key}" }`
+    - JSON Data: `{ "action": "collected", "rating_key": "{rating_key}" }`
+
+To launch the HTTP server for Webhook:
+
+```bash
+$ ./plex_trakt_sync.sh webhook
+Serving at http://localhost:7707
+```
+
+Use `--help` argument to find options to override listen address.
+
+To test webhook, create file `webhook.json`:
+```json
+{"action": "watched", "ratingKey": "10351"}
+```
+
+And use `curl` to test:
+```bash
+curl -i http://localhost:7707/ --upload-file webhook.json
+```
+
 ## Notes
 
  - The first execution of the script will (depending on your PMS library size)
