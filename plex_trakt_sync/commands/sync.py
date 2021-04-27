@@ -146,18 +146,18 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int)
     if library:
         logger.info(f"Filtering Library: {library}")
         w.add_library(library)
-
     if show:
         w.add_show(show)
         logger.info(f"Syncing Show: {show}")
-    elif movie:
+    if movie:
         w.add_movie(movie)
         logger.info(f"Syncing Movie: {movie}")
-    elif not movies and not tv:
-        click.echo("Nothing to sync!")
+
+    if not w.is_valid():
+        click.echo("Nothing to sync, this is likely due conflicting options given.")
         return
-    else:
-        logger.info(f"Syncing TV={tv}, Movies={movies}")
+
+    logger.info(f"Syncing TV={tv}, Movies={movies}")
 
     with measure_time("Completed full sync"):
         sync_all(walker=w, trakt=trakt, server=server)
