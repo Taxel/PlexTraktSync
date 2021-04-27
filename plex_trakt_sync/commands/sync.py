@@ -75,7 +75,6 @@ def sync_all(walker: Walker, trakt: TraktApi, server: PlexServer):
 
     with requests_cache.disabled():
         logger.info("Server version {} updated at: {}".format(server.version, server.updatedAt))
-        logger.info("Recently added: {}".format(server.library.recentlyAdded()[:5]))
 
     for movie in walker.find_movies():
         sync_collection(movie)
