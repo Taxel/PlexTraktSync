@@ -42,6 +42,16 @@ class Walker:
 
         return False
 
+    def walk_details(self, print=print):
+        print(f"Sync Movies: {self.walk_movies}")
+        print(f"Sync Shows: {self.walk_shows}")
+        if self.library:
+            print(f"Walk libraries: {self.library}")
+        if self.show:
+            print(f"Walk Shows: {self.show}")
+        if self.movie:
+            print(f"Walk Movies: {self.movie}")
+
     def find_movies(self):
         """
         Iterate over movie sections unless specific movie is requested
