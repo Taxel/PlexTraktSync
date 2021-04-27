@@ -32,11 +32,12 @@ def inspect(input):
     print(f"Guid: '{media.guid}'")
     print(f"Guids: {media.guids}")
 
-    audio = media.media[0].parts[0].audioStreams()[0]
-    print(f"Audio: '{audio.audioChannelLayout}', '{audio.displayTitle}'")
+    if media.type in ["episode", "movie"]:
+        audio = media.media[0].parts[0].audioStreams()[0]
+        print(f"Audio: '{audio.audioChannelLayout}', '{audio.displayTitle}'")
 
-    video = media.media[0].parts[0].videoStreams()[0]
-    print(f"Video: '{video.codec}'")
+        video = media.media[0].parts[0].videoStreams()[0]
+        print(f"Video: '{video.codec}'")
 
     print(f"Provider: {m.provider}")
     print(f"Id: {m.id}")
