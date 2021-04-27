@@ -108,6 +108,11 @@ def sync_all(walker: Walker, trakt: TraktApi, server: PlexServer):
     show_default=True, help="Sync specific show only"
 )
 @click.option(
+    "--movie", "movie",
+    type=str,
+    show_default=True, help="Sync specific movie only"
+)
+@click.option(
     "--sync", "sync_option",
     type=click.Choice(["all", "movies", "tv"], case_sensitive=False),
     default="all",
@@ -119,7 +124,7 @@ def sync_all(walker: Walker, trakt: TraktApi, server: PlexServer):
     default=1, show_default=True,
     help="Batch size for collection submit queue"
 )
-def sync(sync_option: str, library: str, show: str, batch_size: int):
+def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int):
     """
     Perform sync between Plex and Trakt
     """
@@ -145,6 +150,9 @@ def sync(sync_option: str, library: str, show: str, batch_size: int):
     if show:
         w.add_show(show)
         logger.info(f"Syncing Show: {show}")
+    elif movie:
+        w.add_movie(movie)
+        logger.info(f"Syncing Movie: {movie}")
     elif not movies and not tv:
         click.echo("Nothing to sync!")
         return
