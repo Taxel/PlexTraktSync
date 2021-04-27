@@ -15,6 +15,18 @@ def get_sorted_cache(session: CachedSession, sorting: str):
     yield from sorter(session.cache._get_valid_responses())
 
 
+# https://stackoverflow.com/questions/36106712/how-can-i-limit-iterations-of-a-loop-in-python
+def limit_iterator(items, limit: int):
+    if not limit or limit <= 0:
+        i = 0
+        for k, v in items:
+            yield i, (k, v)
+            i += 1
+
+    else:
+        yield from zip(range(limit), items)
+
+
 @click.command()
 @click.option(
     "--sort",
@@ -22,7 +34,13 @@ def get_sorted_cache(session: CachedSession, sorting: str):
     default="size",
     show_default=True, help="Sort mode"
 )
-def cache(sort: str):
+@click.option(
+    "--limit",
+    type=int,
+    default=20,
+    show_default=True, help="Limit entries to be printed"
+)
+def cache(sort: str, limit: int):
     """
     Manage and analyze Requests Cache.
     """
@@ -30,5 +48,6 @@ def cache(sort: str):
     click.echo(f"Cache status:\n{session.cache}\n")
 
     click.echo(f"URLs:")
-    for k, r in get_sorted_cache(session, sort):
-        click.echo(f"- {r.created_at}: {r.url}: {len(r.content)} bytes")
+    sorted = get_sorted_cache(session, sort)
+    for i, (k, r) in limit_iterator(sorted, limit):
+        click.echo(f"- {i + 1:3d}. {r.created_at}: {r.url}: {len(r.content)} bytes")
