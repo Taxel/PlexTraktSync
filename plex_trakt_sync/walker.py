@@ -31,6 +31,17 @@ class Walker:
         self.movie.append(movie)
         self.walk_shows = False
 
+    def is_valid(self):
+        # Single item provided
+        if self.library or self.movie or self.show:
+            return True
+
+        # Full sync of movies or shows
+        if self.walk_movies or self.walk_shows:
+            return True
+
+        return False
+
     def find_movies(self):
         """
         Iterate over movie sections unless specific movie is requested
