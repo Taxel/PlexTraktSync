@@ -157,5 +157,7 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int)
         click.echo("Nothing to sync, this is likely due conflicting options given.")
         return
 
+    w.walk_details(print=click.echo)
+
     with measure_time("Completed full sync"):
         sync_all(walker=w, trakt=trakt, server=server)
