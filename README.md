@@ -1,8 +1,12 @@
 # Plex-Trakt-Sync
 
+![Python Versions][python-versions-badge]
+
 This project adds a two-way-sync between trakt.tv and Plex Media Server. It
 requires a trakt.tv account but no Plex premium and no Trakt VIP subscriptions,
 unlike the Plex app provided by Trakt.
+
+[python-versions-badge]: https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8%20%7C%203.9-blue
 
 ## Features
 
