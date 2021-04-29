@@ -12,11 +12,12 @@ def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
         raise RuntimeError(f"This command requires requests_cache 0.7.x")
 
     sorters = {
-        "size": partial(sorted, reverse=reverse, key=lambda r: r.size),
-        "date": partial(sorted, reverse=reverse, key=lambda r: r.created_at),
-        "url": partial(sorted, reverse=reverse, key=lambda r: r.url),
+        "size": lambda r: r.size,
+        "date": lambda r: r.created_at,
+        "url": lambda r: r.url,
     }
-    sorter = sorters[sorting]
+    sorter = partial(sorted, reverse=reverse, key=sorters[sorting])
+
     yield from sorter(get_responses())
 
 
