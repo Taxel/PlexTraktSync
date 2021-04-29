@@ -131,6 +131,13 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int)
     git_version = git_version_info()
     if git_version:
         logger.info(f"PlexTraktSync [{git_version}]")
+
+    if not CONFIG["PLEX_TOKEN"] or not CONFIG["TRAKT_USERNAME"]:
+        click.echo("First run, please follow those configuration instructions.")
+        from get_env_data import get_env_data
+        get_env_data()
+        CONFIG.initialize()
+
     logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
 
     movies = sync_option in ["all", "movies"]
