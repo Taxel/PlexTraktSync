@@ -127,9 +127,7 @@ class TraktApi:
         if not CONFIG['sync']['watchlist']:
             return []
 
-        return list(
-            map(lambda m: m.trakt, self.me.watchlist_movies)
-        )
+        return self.me.watchlist_movies
 
     @property
     @memoize
@@ -214,9 +212,14 @@ class TraktApi:
     def search_by_id(self, media_id: str, id_type: str, media_type: str):
         search = trakt.sync.search_by_id(media_id, id_type=id_type, media_type=media_type)
         # look for the first wanted type in the results
+        # NOTE: this is not needed, kept around for caution
         for m in search:
-            if m.media_type == f"{media_type}s":
-                return m
+            if m.media_type != f"{media_type}s":
+                logger.error(
+                    f"Internal error, wrong media type: {m.media_type}. Please report this to PlexTraktSync developers"
+                )
+                continue
+            return m
 
         return None
 

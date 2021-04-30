@@ -1,9 +1,20 @@
 import plexapi.server
 from plex_trakt_sync.config import CONFIG, PLEX_PLATFORM
+from plex_trakt_sync.decorators import nocache
 from plex_trakt_sync.logging import logger
 
 
+class PlexServer:
+    @nocache
+    def connect(self):
+        return _get_plex_server()
+
+
 def get_plex_server():
+    return PlexServer().connect()
+
+
+def _get_plex_server():
     plex_token = CONFIG["PLEX_TOKEN"]
     plex_baseurl = CONFIG["PLEX_BASEURL"]
     plex_fallbackurl = CONFIG["PLEX_FALLBACKURL"]

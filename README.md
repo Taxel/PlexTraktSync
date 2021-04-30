@@ -108,6 +108,24 @@ sync) you can copy and edit `config.json` before launching the script.
  - Syncing the watched status between Plex and Trakt
  - Syncing the collected status between Plex and Trakt
 
+## Watch command
+
+You can use `watch` command to listen to events from Plex Media Server
+and scrobble plays.
+
+> What is scrobbling?
+>
+> _Scrobbling simply means automatically tracking what you’re watching. Instead
+> of checking in from your phone of the website, this command runs in the
+> background and automatically scrobbles back to Trakt while you enjoy watching
+> your media_ - [Plex Scrobbler@blog.trakt.tv][plex-scrobbler]
+
+[plex-scrobbler]: https://blog.trakt.tv/plex-scrobbler-52db9b016ead
+
+```shell
+$ ./plex_trakt_sync.sh watch
+```
+
 ## Notes
 
  - The first execution of the script will (depending on your PMS library size)

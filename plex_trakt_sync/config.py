@@ -44,17 +44,11 @@ class Config(dict):
         config = self.load_json(config_file)
         self.update(config)
 
-        self.initialized = True
-
         load_dotenv()
-        if not getenv("PLEX_TOKEN") or not getenv("TRAKT_USERNAME"):
-            print("First run, please follow those configuration instructions.")
-            from get_env_data import get_env_data
-            get_env_data()
-            load_dotenv()
-
         for key in self.env_keys:
             self[key] = getenv(key)
+
+        self.initialized = True
 
     def save(self):
         with open(env_file, "w") as txt:
