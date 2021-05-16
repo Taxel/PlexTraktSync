@@ -53,9 +53,7 @@ def inspect(input):
 
     if input == 6114:
         mi = mf.resolve(m)
-        wms = mi.trakt_api.me.watched_movies
-        wm = [x for x in wms if x.trakt == mi.trakt_id][0]
-        watched_at = wm.last_watched_at
+        watched_at = mi.trakt_api.last_watched_at(mi.trakt)
 
         db = PlexDatabase(Database('com.plexapp.plugins.library.db'))
         db.mark_watched(mi, watched_at)
