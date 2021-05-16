@@ -52,9 +52,8 @@ def inspect(input):
         print(f"Error: {e}")
 
     mi = mf.resolve(m)
-    watched_at = mi.trakt_api.last_watched_at(mi.trakt)
-    print(f"Trakt watched at: {watched_at}")
+    print(f"Trakt watched at: {mi.trakt_last_watched_at}")
 
     if input == 6114:
         db = PlexDatabase(Database('com.plexapp.plugins.library.db'))
-        db.mark_watched(mi, watched_at)
+        db.mark_watched(mi, mi.trakt_last_watched_at)
