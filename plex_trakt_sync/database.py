@@ -1,6 +1,8 @@
 import sqlite3
 from datetime import datetime
 
+from plexapi.server import PlexServer
+
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.media import Media
 
@@ -89,7 +91,13 @@ class PlexDatabase:
         self.db = db
 
     def mark_watched(self, media: Media, time: datetime):
-        account_id = 1
+        plex: PlexServer = media.plex_api.plex
+
+        account = plex.systemAccount(0)
+        device = plex.systemDevice(1)
+
+        account_id = account.id
+        device_id = device.id
         metadata_type = 1
         library_section_id = 2
         grandparent_title = ''
@@ -100,7 +108,6 @@ class PlexDatabase:
         thumb_url = 'metadata://posters/com.plexapp.agents.imdb_3eea3b08fc7094167eee68cca64f8be407be0cbe'
         grandparent_guid = ''
         originally_available_at = '2019-11-19 00:00:00'
-        device_id = 20
 
         with self.db as db:
             viewed_at = db.format_time(time)
