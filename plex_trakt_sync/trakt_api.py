@@ -1,5 +1,5 @@
 from typing import Union
-from datetime import datetime
+from datetime import datetime, timezone
 
 import trakt
 
@@ -176,7 +176,10 @@ class TraktApi:
             return None
         watched_at = match[0].last_watched_at
 
-        return datetime.strptime(watched_at, '%Y-%m-%dT%H:%M:%S.000Z')
+        date = datetime.strptime(watched_at, '%Y-%m-%dT%H:%M:%S.000Z')
+        utcdate = date.replace(tzinfo=timezone.utc)
+
+        return utcdate
 
     def add_to_collection(self, m, pm: PlexLibraryItem):
         if m.media_type == "movies":
