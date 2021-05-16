@@ -1,4 +1,6 @@
 from typing import Union
+from datetime import datetime
+
 import trakt
 
 from plex_trakt_sync import pytrakt_extensions
@@ -166,6 +168,15 @@ class TraktApi:
     @time_limit()
     def mark_watched(self, m, time):
         m.mark_as_seen(time)
+
+    @memoize
+    def last_watched_at(self, m: Union[Movie, TVEpisode]):
+        match = [x for x in self.me.watched_movies if x.trakt == m.trakt]
+        if not match:
+            return None
+        watched_at = match[0].last_watched_at
+
+        return datetime.strptime(watched_at, '%Y-%m-%dT%H:%M:%S.000Z')
 
     def add_to_collection(self, m, pm: PlexLibraryItem):
         if m.media_type == "movies":
