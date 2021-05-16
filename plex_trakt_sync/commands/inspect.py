@@ -51,9 +51,10 @@ def inspect(input):
     except Exception as e:
         print(f"Error: {e}")
 
-    if input == 6114:
-        mi = mf.resolve(m)
-        watched_at = mi.trakt_api.last_watched_at(mi.trakt)
+    mi = mf.resolve(m)
+    watched_at = mi.trakt_api.last_watched_at(mi.trakt)
+    print(f"Trakt watched at: {watched_at}")
 
+    if input == 6114:
         db = PlexDatabase(Database('com.plexapp.plugins.library.db'))
         db.mark_watched(mi, watched_at)
