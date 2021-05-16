@@ -1,7 +1,9 @@
 import sqlite3
 from datetime import datetime
+from typing import Union
 
 from plexapi.server import PlexServer
+from plexapi.video import Movie, Episode
 
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.media import Media
@@ -92,6 +94,7 @@ class PlexDatabase:
 
     def mark_watched(self, media: Media, time: datetime):
         plex: PlexServer = media.plex_api.plex
+        pm: Union[Movie, Episode] = media.plex.item
 
         account = plex.systemAccount(0)
         device = plex.systemDevice(1)
@@ -107,9 +110,9 @@ class PlexDatabase:
         title = 'Coma'
         thumb_url = 'metadata://posters/com.plexapp.agents.imdb_3eea3b08fc7094167eee68cca64f8be407be0cbe'
         grandparent_guid = ''
-        originally_available_at = '2019-11-19 00:00:00'
 
         with self.db as db:
+            originally_available_at = db.format_time(pm.originallyAvailableAt)
             viewed_at = db.format_time(time)
             db.cursor.execute(self._insert_watched, (
                 account_id,
