@@ -1,14 +1,10 @@
 from typing import Union
+
 import trakt
-
-from plex_trakt_sync import pytrakt_extensions
-from plex_trakt_sync.path import pytrakt_file
-from plex_trakt_sync.plex_api import PlexLibraryItem
-
-trakt.core.CONFIG_PATH = pytrakt_file
 import trakt.users
 import trakt.sync
 import trakt.movies
+from trakt.core import load_config
 from trakt.movies import Movie
 from trakt.tv import TVShow, TVSeason, TVEpisode
 from trakt.errors import OAuthException, ForbiddenException
@@ -17,6 +13,9 @@ from trakt.sync import Scrobbler
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.decorators import memoize, nocache, rate_limit, time_limit
 from plex_trakt_sync.config import CONFIG
+from plex_trakt_sync import pytrakt_extensions
+from plex_trakt_sync.path import pytrakt_file
+from plex_trakt_sync.plex_api import PlexLibraryItem
 
 
 class ScrobblerProxy:
@@ -53,6 +52,8 @@ class TraktApi:
 
     def __init__(self, batch_size=None):
         self.batch = TraktBatch(self, batch_size=batch_size)
+        trakt.core.CONFIG_PATH = pytrakt_file
+        load_config()
 
     @property
     @memoize
