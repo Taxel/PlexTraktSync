@@ -35,6 +35,10 @@ class Database:
 
         self._connection.close()
 
+    def execute(self, query, *args):
+        self._uncommited = True
+        return self.cursor.execute(query, *args)
+
     def commit(self):
         self._connection.commit()
         self._uncommited = False
