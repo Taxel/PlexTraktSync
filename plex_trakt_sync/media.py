@@ -2,6 +2,7 @@ from plexapi.exceptions import PlexApiException
 from requests import RequestException, ReadTimeout
 from trakt.errors import TraktException
 
+from plex_trakt_sync.decorators import memoize
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.plex_api import PlexLibraryItem, PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
@@ -67,6 +68,11 @@ class Media:
 
     def mark_watched_plex(self):
         self.plex_api.mark_watched(self.plex.item)
+
+    @property
+    @memoize
+    def trakt_last_watched_at(self):
+        return self.trakt_api.last_watched_at(self.trakt)
 
     @property
     def trakt_rating(self):
