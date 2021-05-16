@@ -40,6 +40,10 @@ class Database(object):
 
         self._connection.close()
 
+    def execute(self, query, *args):
+        self._uncommited = True
+        return self.cursor.execute(query, *args)
+
     def commit(self):
         self._connection.commit()
         self._uncommited = False
@@ -114,7 +118,7 @@ class PlexDatabase:
         with self.db as db:
             originally_available_at = db.format_time(pm.originallyAvailableAt)
             viewed_at = db.format_time(time)
-            db.cursor.execute(self._insert_watched, (
+            db.execute(self._insert_watched, (
                 account_id,
                 media.plex.guid,
                 metadata_type,
@@ -130,7 +134,7 @@ class PlexDatabase:
                 originally_available_at,
                 device_id
             ))
-            db.cursor.execute(self._update_metadata_item_settings, (
-                time,
+            db.execute(self._update_metadata_item_settings, (
+                viewed_at,
                 media.plex.guid,
             ))
