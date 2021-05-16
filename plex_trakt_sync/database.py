@@ -70,6 +70,15 @@ class PlexDatabase:
         )
     """
 
+    _update_metadata_item_settings = """
+        UPDATE metadata_item_settings
+        SET
+            view_count = view_count+1,
+            last_viewed_at = ?
+        WHERE
+            guid = ?
+    """
+
     def __init__(self, db: Database):
         self.db = db
 
@@ -104,4 +113,8 @@ class PlexDatabase:
                 grandparent_guid,
                 originally_available_at,
                 device_id
+            ))
+            db.cursor.execute(self._update_metadata_item_settings, (
+                time,
+                media.plex.guid,
             ))
