@@ -1,6 +1,8 @@
 import click
 from plexapi.server import PlexServer
 from plex_trakt_sync.config import CONFIG
+from plex_trakt_sync.database import PlexDatabase, Database
+from plex_trakt_sync.media import MediaFactory
 from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.version import git_version_info
@@ -21,6 +23,7 @@ def inspect(input):
     server = PlexServer(url, token)
     plex = PlexApi(server)
     trakt = TraktApi()
+    mf = MediaFactory(plex=plex, trakt=trakt)
 
     if input.isnumeric():
         input = int(input)
@@ -47,3 +50,12 @@ def inspect(input):
         print(f"Trakt match: {tm}")
     except Exception as e:
         print(f"Error: {e}")
+
+    if input == 6114:
+        mi = mf.resolve(m)
+        wms = mi.trakt_api.me.watched_movies
+        wm = [x for x in wms if x.trakt == mi.trakt_id][0]
+        watched_at = wm.last_watched_at
+
+        db = PlexDatabase(Database('com.plexapp.plugins.library.db'))
+        db.mark_watched(mi, watched_at)
