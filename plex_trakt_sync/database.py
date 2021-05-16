@@ -134,6 +134,7 @@ class PlexDatabase:
                 originally_available_at,
                 device_id
             ))
+            # TODO: if uypdate fails, must insert
             db.execute(self._update_metadata_item_settings, (
                 viewed_at,
                 media.plex.guid,
