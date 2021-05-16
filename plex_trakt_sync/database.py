@@ -47,6 +47,12 @@ class Database(object):
     def has_uncommited(self):
         return self._uncommited
 
+    def format_time(self, time: datetime):
+        """
+        Format datetime for sqlite, Plex dates are in localtime.
+        """
+        return time.astimezone().replace(tzinfo=None).isoformat(' ', timespec='seconds')
+
 
 class PlexDatabase:
     _insert_watched = """
