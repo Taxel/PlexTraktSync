@@ -102,14 +102,14 @@ class PlexDatabase:
         account_id = account.id
         device_id = device.id
         metadata_type = 1
-        library_section_id = 2
-        grandparent_title = ''
+        library_section_id = pm.librarySectionID
+        grandparent_title = None
         parent_index = -1
-        parent_title = ''
+        parent_title = None
         index = 1
-        title = 'Coma'
-        thumb_url = 'metadata://posters/com.plexapp.agents.imdb_3eea3b08fc7094167eee68cca64f8be407be0cbe'
-        grandparent_guid = ''
+        title = pm.title
+        thumb_url = None
+        grandparent_guid = None
 
         with self.db as db:
             originally_available_at = db.format_time(pm.originallyAvailableAt)
