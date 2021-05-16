@@ -22,6 +22,10 @@ class Database:
             self.logger.error(e)
             raise e
 
+    @property
+    def cursor(self):
+        return self._cursor
+
     def __enter__(self):
         return self
 
