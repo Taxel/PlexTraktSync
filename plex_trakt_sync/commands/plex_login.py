@@ -130,6 +130,10 @@ def choose_server(account: MyPlexAccount):
             click.secho(f"{e}, Try another server, {type(e)}")
 
 
+def has_plex_token():
+    return CONFIG["PLEX_TOKEN"] is not None and CONFIG["PLEX_TOKEN"] != "-"
+
+
 @click.command()
 @click.option("--username", help="Plex login", default=CONFIG["PLEX_USERNAME"])
 @click.option("--password", help="Plex password")
@@ -138,7 +142,7 @@ def plex_login(username, password):
     Log in to Plex Account to obtain Access Token. Optionally can use managed user on servers that you own.
     """
 
-    if CONFIG["PLEX_TOKEN"]:
+    if has_plex_token():
         if not click.confirm(PROMPT_PLEX_RELOGIN, default=True):
             return
 
