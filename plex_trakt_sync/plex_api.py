@@ -45,6 +45,9 @@ class PlexGuid:
         # old item, like imdb 'tt0112253'
         return guid[0:2] == "tt" and guid[2:].isnumeric()
 
+    def __str__(self):
+        return self.guid
+
 
 class PlexLibraryItem:
     def __init__(self, item):
