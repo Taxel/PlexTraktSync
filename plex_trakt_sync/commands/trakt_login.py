@@ -34,6 +34,10 @@ def trakt_authenticate():
             click.echo(error(f"Log in to Trakt failed: {e}, Try again."))
 
 
+def has_trakt_token():
+    return CONFIG["TRAKT_USERNAME"] is not None
+
+
 @click.command()
 def trakt_login():
     """
