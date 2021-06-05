@@ -36,7 +36,7 @@ def trakt_authenticate():
 
 
 def has_trakt_token():
-    return CONFIG["TRAKT_USERNAME"] is not None
+    return CONFIG["TRAKT_USERNAME"] is not None and CONFIG["TRAKT_USERNAME"] != "None"
 
 
 @click.command()
