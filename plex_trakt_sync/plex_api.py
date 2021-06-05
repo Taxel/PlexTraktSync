@@ -58,13 +58,13 @@ class PlexLibraryItem:
     def guid(self):
         if self.item.guid.startswith('plex://'):
             if len(self.item.guids) > 0:
-                return self.item.guids[0].id
-        return self.item.guid
+                return PlexGuid(self.item.guids[0].id, self.media_type)
+        return PlexGuid(self.item.guid, self.media_type)
 
     @property
     @memoize
     def guids(self):
-        return self.item.guids
+        return [PlexGuid(guid.id, self.media_type) for guid in self.item.guids]
 
     @property
     @memoize
@@ -79,26 +79,12 @@ class PlexLibraryItem:
     @property
     @memoize
     def provider(self):
-        if self.guid_is_imdb_legacy:
-            return "imdb"
-        x = self.guid.split("://")[0]
-        x = x.replace("com.plexapp.agents.", "")
-        x = x.replace("tv.plex.agents.", "")
-        x = x.replace("themoviedb", "tmdb")
-        x = x.replace("thetvdb", "tvdb")
-        if x == "xbmcnfo":
-            x = CONFIG["xbmc-providers"][self.media_type]
-
-        return x
+        return self.guid.provider
 
     @property
     @memoize
     def id(self):
-        if self.guid_is_imdb_legacy:
-            return self.item.guid
-        x = self.guid.split("://")[1]
-        x = x.split("?")[0]
-        return x
+        return self.guid.id
 
     @property
     @memoize
@@ -156,14 +142,6 @@ class PlexLibraryItem:
     @memoize
     def episode_number(self):
         return self.item.index
-
-    @property
-    @memoize
-    def guid_is_imdb_legacy(self):
-        guid = self.item.guid
-
-        # old item, like imdb 'tt0112253'
-        return guid[0:2] == "tt" and guid[2:].isnumeric()
 
     def date_value(self, date):
         if not date:
