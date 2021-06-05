@@ -4,9 +4,9 @@ from plex_trakt_sync.commands.cache import cache
 from plex_trakt_sync.commands.clear_collections import clear_collections
 from plex_trakt_sync.commands.inspect import inspect
 from plex_trakt_sync.commands.login import login
-from plex_trakt_sync.commands.plex_login import plex_login, has_plex_token
+from plex_trakt_sync.commands.plex_login import plex_login
 from plex_trakt_sync.commands.sync import sync
-from plex_trakt_sync.commands.trakt_login import trakt_login, has_trakt_token
+from plex_trakt_sync.commands.trakt_login import trakt_login
 from plex_trakt_sync.commands.watch import watch
 from plex_trakt_sync.commands.webhook import webhook
 
@@ -18,10 +18,6 @@ def cli(ctx):
     Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
     """
     if not ctx.invoked_subcommand:
-        if not has_plex_token():
-            plex_login()
-        if not has_trakt_token():
-            trakt_login()
         sync()
 
 
