@@ -8,6 +8,44 @@ from plex_trakt_sync.config import CONFIG
 from trakt.utils import timestamp
 
 
+class PlexGuid:
+    def __init__(self, guid: str, media_type: str):
+        self.guid = guid
+        self.media_type = media_type
+
+    @property
+    @memoize
+    def provider(self):
+        if self.guid_is_imdb_legacy:
+            return "imdb"
+        x = self.guid.split("://")[0]
+        x = x.replace("com.plexapp.agents.", "")
+        x = x.replace("tv.plex.agents.", "")
+        x = x.replace("themoviedb", "tmdb")
+        x = x.replace("thetvdb", "tvdb")
+        if x == "xbmcnfo":
+            x = CONFIG["xbmc-providers"][self.media_type]
+
+        return x
+
+    @property
+    @memoize
+    def id(self):
+        if self.guid_is_imdb_legacy:
+            return self.guid
+        x = self.guid.split("://")[1]
+        x = x.split("?")[0]
+        return x
+
+    @property
+    @memoize
+    def guid_is_imdb_legacy(self):
+        guid = self.guid
+
+        # old item, like imdb 'tt0112253'
+        return guid[0:2] == "tt" and guid[2:].isnumeric()
+
+
 class PlexLibraryItem:
     def __init__(self, item):
         self.item = item
