@@ -4,3 +4,4 @@ python-dotenv==0.15.0
 python-git-info==0.6.1
 requests-cache==0.6.3
 trakt==3.1.0
+websocket-client==1.0.1
