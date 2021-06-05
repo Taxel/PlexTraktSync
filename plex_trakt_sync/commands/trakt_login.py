@@ -2,7 +2,6 @@ from json import JSONDecodeError
 from os.path import exists
 
 import click
-import trakt.core
 from trakt.errors import ForbiddenException
 
 from plex_trakt_sync.config import CONFIG
@@ -18,10 +17,8 @@ TRAKT_LOGIN_SUCCESS = success(
 )
 
 
-def trakt_authenticate():
+def trakt_authenticate(api: TraktApi):
     click.echo(title("Sign in to Trakt"))
-    trakt.core.AUTH_METHOD = trakt.core.DEVICE_AUTH
-    trakt.core.CONFIG_PATH = pytrakt_file
 
     click.echo("If you do not have a client ID and secret. Please visit the following url to create them.")
     click.echo("  https://trakt.tv/oauth/applications")
@@ -33,7 +30,7 @@ def trakt_authenticate():
 
         click.echo("Attempting to authenticate with Trakt")
         try:
-            return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
+            return api.device_auth(client_id=client_id, client_secret=client_secret)
         except (ForbiddenException, JSONDecodeError) as e:
             click.echo(error(f"Log in to Trakt failed: {e}, Try again."))
 
@@ -50,8 +47,8 @@ def trakt_login():
     Log in to Trakt Account to obtain Access Token.
     """
 
-    trakt_authenticate()
     api = TraktApi()
+    trakt_authenticate(api)
     user = api.me.username
 
     CONFIG["TRAKT_USERNAME"] = user
