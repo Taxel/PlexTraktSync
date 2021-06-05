@@ -56,15 +56,21 @@ class PlexLibraryItem:
     @property
     @memoize
     def guid(self):
-        if self.item.guid.startswith('plex://'):
-            if len(self.item.guids) > 0:
-                return PlexGuid(self.item.guids[0].id, self.media_type)
+        if self.item.guid.startswith('plex://') and len(self.item.guids) > 0:
+            return self.guids[0]
         return PlexGuid(self.item.guid, self.media_type)
 
     @property
     @memoize
     def guids(self):
-        return [PlexGuid(guid.id, self.media_type) for guid in self.item.guids]
+        guids = [PlexGuid(guid.id, self.media_type) for guid in self.item.guids]
+
+        # take guid in this order:
+        # - tmdb, tvdb, then imdb
+        # https://github.com/Taxel/PlexTraktSync/issues/313#issuecomment-838447631
+        sort_order = {"tmdb": 1, "tvdb": 2, "imdb": 3}
+        ordered = sorted(guids, key=lambda guid: sort_order[guid.provider])
+        return ordered
 
     @property
     @memoize
