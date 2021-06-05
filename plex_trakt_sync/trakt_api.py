@@ -55,6 +55,11 @@ class TraktApi:
         trakt.core.CONFIG_PATH = pytrakt_file
         load_config()
 
+    def device_auth(self, client_id: str, client_secret: str):
+        trakt.core.AUTH_METHOD = trakt.core.DEVICE_AUTH
+
+        return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
+
     @property
     @memoize
     @nocache
