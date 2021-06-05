@@ -8,32 +8,10 @@ from plex_trakt_sync.config import CONFIG
 from trakt.utils import timestamp
 
 
-class PlexLibraryItem:
-    def __init__(self, item):
-        self.item = item
-
-    @property
-    @memoize
-    def guid(self):
-        if self.item.guid.startswith('plex://'):
-            if len(self.item.guids) > 0:
-                return self.item.guids[0].id
-        return self.item.guid
-
-    @property
-    @memoize
-    def guids(self):
-        return self.item.guids
-
-    @property
-    @memoize
-    def media_type(self):
-        return f"{self.type}s"
-
-    @property
-    @memoize
-    def type(self):
-        return self.item.type
+class PlexGuid:
+    def __init__(self, guid: str, media_type: str):
+        self.guid = guid
+        self.media_type = media_type
 
     @property
     @memoize
@@ -54,10 +32,65 @@ class PlexLibraryItem:
     @memoize
     def id(self):
         if self.guid_is_imdb_legacy:
-            return self.item.guid
+            return self.guid
         x = self.guid.split("://")[1]
         x = x.split("?")[0]
         return x
+
+    @property
+    @memoize
+    def guid_is_imdb_legacy(self):
+        guid = self.guid
+
+        # old item, like imdb 'tt0112253'
+        return guid[0:2] == "tt" and guid[2:].isnumeric()
+
+    def __str__(self):
+        return self.guid
+
+
+class PlexLibraryItem:
+    def __init__(self, item):
+        self.item = item
+
+    @property
+    @memoize
+    def guid(self):
+        if self.item.guid.startswith('plex://') and len(self.item.guids) > 0:
+            return self.guids[0]
+        return PlexGuid(self.item.guid, self.media_type)
+
+    @property
+    @memoize
+    def guids(self):
+        guids = [PlexGuid(guid.id, self.media_type) for guid in self.item.guids]
+
+        # take guid in this order:
+        # - tmdb, tvdb, then imdb
+        # https://github.com/Taxel/PlexTraktSync/issues/313#issuecomment-838447631
+        sort_order = {"tmdb": 1, "tvdb": 2, "imdb": 3}
+        ordered = sorted(guids, key=lambda guid: sort_order[guid.provider])
+        return ordered
+
+    @property
+    @memoize
+    def media_type(self):
+        return f"{self.type}s"
+
+    @property
+    @memoize
+    def type(self):
+        return self.item.type
+
+    @property
+    @memoize
+    def provider(self):
+        return self.guid.provider
+
+    @property
+    @memoize
+    def id(self):
+        return self.guid.id
 
     @property
     @memoize
@@ -115,14 +148,6 @@ class PlexLibraryItem:
     @memoize
     def episode_number(self):
         return self.item.index
-
-    @property
-    @memoize
-    def guid_is_imdb_legacy(self):
-        guid = self.item.guid
-
-        # old item, like imdb 'tt0112253'
-        return guid[0:2] == "tt" and guid[2:].isnumeric()
 
     def date_value(self, date):
         if not date:
