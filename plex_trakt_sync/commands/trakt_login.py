@@ -19,6 +19,7 @@ TRAKT_LOGIN_SUCCESS = success(
 def trakt_authenticate():
     click.echo(title("Sign in to Trakt"))
     trakt.core.AUTH_METHOD = trakt.core.DEVICE_AUTH
+    trakt.core.CONFIG_PATH = pytrakt_file
 
     click.echo("If you do not have a client ID and secret. Please visit the following url to create them.")
     click.echo("  https://trakt.tv/oauth/applications")
