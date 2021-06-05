@@ -29,6 +29,7 @@ def trakt_authenticate():
         client_id = click.prompt(PROMPT_TRAKT_CLIENT_ID, type=str)
         client_secret = click.prompt(PROMPT_TRAKT_CLIENT_SECRET, type=str)
 
+        click.echo("Attempting to authenticate with Trakt")
         try:
             return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
         except (ForbiddenException, JSONDecodeError) as e:
