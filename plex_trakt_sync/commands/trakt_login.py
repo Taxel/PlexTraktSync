@@ -1,10 +1,12 @@
 from json import JSONDecodeError
+from os.path import exists
 
 import click
 import trakt.core
 from trakt.errors import ForbiddenException
 
 from plex_trakt_sync.config import CONFIG
+from plex_trakt_sync.path import pytrakt_file
 from plex_trakt_sync.style import title, success, error, prompt
 from plex_trakt_sync.trakt_api import TraktApi
 
@@ -37,6 +39,8 @@ def trakt_authenticate():
 
 
 def has_trakt_token():
+    if not exists(pytrakt_file):
+        return False
     return CONFIG["TRAKT_USERNAME"] is not None and CONFIG["TRAKT_USERNAME"] != "None"
 
 
