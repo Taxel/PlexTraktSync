@@ -1,7 +1,7 @@
 import click
 from plexapi.server import PlexServer
 
-from plex_trakt_sync.commands.login import login
+from plex_trakt_sync.commands.login import ensure_login
 from plex_trakt_sync.media import MediaFactory, Media
 from plex_trakt_sync.requests_cache import requests_cache
 from plex_trakt_sync.plex_server import get_plex_server
@@ -133,7 +133,7 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int)
     if git_version:
         logger.info(f"PlexTraktSync [{git_version}]")
 
-    login.main(standalone_mode=False)
+    ensure_login()
     logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
 
     movies = sync_option in ["all", "movies"]
