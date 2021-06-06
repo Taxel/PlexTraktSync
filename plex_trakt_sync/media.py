@@ -96,6 +96,12 @@ class MediaFactory:
         self.trakt = trakt
 
     def resolve_any(self, pm: PlexLibraryItem, tm=None):
+        # quick search for old code (faster)
+        m = self.resolve(pm, tm)
+        if m:
+            return m
+
+        # walk over all guids (slower)
         for guid in pm.guids:
             m = self.resolve_guid(guid, tm)
             if m:
