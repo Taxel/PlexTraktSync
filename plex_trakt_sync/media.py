@@ -125,7 +125,7 @@ class MediaFactory:
 
         try:
             if tm:
-                tm = self.trakt.find_episode(tm, guid.pm)
+                tm = self.trakt.find_episode_guid(tm, guid)
             else:
                 tm = self.trakt.find_by_guid(guid)
         except (TraktException, RequestException) as e:
