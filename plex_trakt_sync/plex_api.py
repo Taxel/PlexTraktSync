@@ -10,9 +10,14 @@ from trakt.utils import timestamp
 
 
 class PlexGuid:
-    def __init__(self, guid: str, media_type: str):
+    def __init__(self, guid: str, type: str):
         self.guid = guid
-        self.media_type = media_type
+        self.type = type
+
+    @property
+    @memoize
+    def media_type(self):
+        return f"{self.type}s"
 
     @property
     @memoize
@@ -59,12 +64,12 @@ class PlexLibraryItem:
     def guid(self):
         if self.item.guid.startswith('plex://') and len(self.item.guids) > 0:
             return self.guids[0]
-        return PlexGuid(self.item.guid, self.media_type)
+        return PlexGuid(self.item.guid, self.type)
 
     @property
     @memoize
     def guids(self):
-        guids = [PlexGuid(guid.id, self.media_type) for guid in self.item.guids]
+        guids = [PlexGuid(guid.id, self.type) for guid in self.item.guids]
 
         # take guid in this order:
         # - tmdb, tvdb, then imdb
