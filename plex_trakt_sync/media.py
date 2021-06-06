@@ -127,7 +127,7 @@ class MediaFactory:
             if tm:
                 tm = self.trakt.find_episode(tm, guid.pm)
             else:
-                tm = self.trakt.find_by_media(guid.pm)
+                tm = self.trakt.find_by_guid(guid)
         except (TraktException, RequestException) as e:
             logger.warning(f"Skipping {guid.pm}: Trakt errors: {e}")
             return None
