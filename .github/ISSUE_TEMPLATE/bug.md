@@ -13,6 +13,8 @@ _A description of what the bug is, including a complete traceback (if applicable
 <!--
 Before you continue reporting the bug, be sure that you use the latest released version:
 - https://github.com/Taxel/PlexTraktSync/releases
+
+Remove the placeholders when filling the bug report, leave omly your input.
 -->
 
 ### Expected behavior
@@ -29,6 +31,6 @@ _Is there an existing workaround for this issue?_
 
 ### Environment
 
-- Version: e.g. `0.7.0` or `main`
-- Python version: e.g. `3.9`
-- Platform: e.g. `Debian 10`
+- Version: <!-- e.g. `0.7.0` or `main` -->
+- Python version: <!-- e.g. `3.9` -->
+- Platform: <!-- e.g. `Debian 10` -->
