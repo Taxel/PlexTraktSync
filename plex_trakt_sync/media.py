@@ -95,6 +95,13 @@ class MediaFactory:
         self.plex = plex
         self.trakt = trakt
 
+    def resolve_any(self, pm: PlexLibraryItem, tm=None):
+        for guid in pm.guids:
+            m = self.resolve_guid(guid, tm)
+            if m:
+                return m
+        return None
+
     def resolve(self, pm: PlexLibraryItem, tm=None):
         try:
             guid = pm.guid
