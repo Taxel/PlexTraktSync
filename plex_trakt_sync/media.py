@@ -3,7 +3,7 @@ from requests import RequestException, ReadTimeout
 from trakt.errors import TraktException
 
 from plex_trakt_sync.logging import logger
-from plex_trakt_sync.plex_api import PlexLibraryItem, PlexApi
+from plex_trakt_sync.plex_api import PlexLibraryItem, PlexApi, PlexGuid
 from plex_trakt_sync.trakt_api import TraktApi
 
 
@@ -97,33 +97,36 @@ class MediaFactory:
 
     def resolve(self, pm: PlexLibraryItem, tm=None):
         try:
-            provider = pm.provider
+            guid = pm.guid
         except (PlexApiException, RequestException) as e:
             logger.error(f"Skipping {pm}: {e}")
             return None
 
-        if provider in ["local", "none", "agents.none"]:
-            logger.warning(f"Skipping {pm}: Provider {provider} has no external Id")
+        return self.resolve_guid(guid, tm)
+
+    def resolve_guid(self, guid: PlexGuid, tm=None):
+        if guid.provider in ["local", "none", "agents.none"]:
+            logger.warning(f"Skipping {guid}: Provider {guid.provider} has no external Id")
 
             return None
 
-        if provider not in ["imdb", "tmdb", "tvdb"]:
+        if guid.provider not in ["imdb", "tmdb", "tvdb"]:
             logger.error(
-                f"{pm}: Unable to parse a valid provider from guid:{pm.guid}, guids:{pm.guids}"
+                f"Unable to parse a valid provider from guid:{guid}"
             )
             return None
 
         try:
             if tm:
-                tm = self.trakt.find_episode(tm, pm)
+                tm = self.trakt.find_episode(tm, guid.pm)
             else:
-                tm = self.trakt.find_by_media(pm)
+                tm = self.trakt.find_by_media(guid.pm)
         except (TraktException, RequestException) as e:
-            logger.warning(f"Skipping {pm}: Trakt errors: {e}")
+            logger.warning(f"Skipping {guid.pm}: Trakt errors: {e}")
             return None
 
         if tm is None:
-            logger.warning(f"Skipping {pm}: Not found on Trakt")
+            logger.warning(f"Skipping {guid.pm}: Not found on Trakt")
             return None
 
-        return Media(pm, tm, plex_api=self.plex, trakt_api=self.trakt)
+        return Media(guid.pm, tm, plex_api=self.plex, trakt_api=self.trakt)
