@@ -95,6 +95,8 @@ class PlexLibraryItem:
     @memoize
     def guids(self):
         guids = [PlexGuid(guid.id, self.type, self) for guid in self.item.guids]
+        if not guids:
+            guids = [self.guid]
 
         # take guid in this order:
         # - tmdb, tvdb, then imdb
