@@ -69,7 +69,12 @@ class PlexLibraryItem:
         # take guid in this order:
         # - tmdb, tvdb, then imdb
         # https://github.com/Taxel/PlexTraktSync/issues/313#issuecomment-838447631
-        sort_order = {"tmdb": 1, "tvdb": 2, "imdb": 3}
+        sort_order = {
+            "tmdb": 1,
+            "tvdb": 2,
+            "imdb": 3,
+            "local": 100,
+        }
         ordered = sorted(guids, key=lambda guid: sort_order[guid.provider])
         return ordered
 
