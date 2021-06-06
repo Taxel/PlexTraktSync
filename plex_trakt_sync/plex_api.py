@@ -45,6 +45,30 @@ class PlexGuid:
 
     @property
     @memoize
+    def is_episode(self):
+        """
+        Return true of the id is in form of <show>/<season>/<episode>
+        """
+        parts = self.id.split("/")
+        if len(parts) == 3 and all(x.isnumeric() for x in parts):
+            return True
+
+        return False
+
+    @property
+    @memoize
+    def show_id(self):
+        if not self.is_episode:
+            raise ValueError("show_id is not valid for non-episodes")
+
+        show = self.id.split("/", 1)[0]
+        if not show.isnumeric():
+            raise ValueError(f"show_id is not numeric: {show}")
+
+        return int(show)
+
+    @property
+    @memoize
     def guid_is_imdb_legacy(self):
         guid = self.guid
 
@@ -106,26 +130,12 @@ class PlexLibraryItem:
     @property
     @memoize
     def is_episode(self):
-        """
-        Return true of the id is in form of <show>/<season>/<episode>
-        """
-        parts = self.id.split("/")
-        if len(parts) == 3 and all(x.isnumeric() for x in parts):
-            return True
-
-        return False
+        return self.guid.is_episode
 
     @property
     @memoize
     def show_id(self):
-        if not self.is_episode:
-            raise ValueError("show_id is not valid for non-episodes")
-
-        show = self.id.split("/", 1)[0]
-        if not show.isnumeric():
-            raise ValueError(f"show_id is not numeric: {show}")
-
-        return int(show)
+        return self.guid.show_id
 
     @property
     @memoize
