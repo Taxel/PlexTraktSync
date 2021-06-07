@@ -14,7 +14,7 @@ _A description of what the bug is, including a complete traceback (if applicable
 Before you continue reporting the bug, be sure that you use the latest released version:
 - https://github.com/Taxel/PlexTraktSync/releases
 
-Remove the placeholders when filling the bug report, leave omly your input.
+Remove the placeholders when filling the bug report, leave only your input.
 -->
 
 ### Expected behavior
