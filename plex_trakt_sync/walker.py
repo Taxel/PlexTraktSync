@@ -65,7 +65,7 @@ class Walker:
             movies = self.media_from_sections(self.plex.movie_sections(), self.library)
 
         for plex in movies:
-            movie = self.mf.resolve(plex)
+            movie = self.mf.resolve_any(plex)
             if not movie:
                 continue
             yield movie
@@ -80,7 +80,7 @@ class Walker:
             shows = self.media_from_sections(self.plex.show_sections(), self.library)
 
         for plex in shows:
-            show = self.mf.resolve(plex)
+            show = self.mf.resolve_any(plex)
             if not show:
                 continue
             yield from self.episode_from_show(show)

@@ -39,7 +39,7 @@ class WebhookHandler:
         if not plex:
             return None
 
-        media = self.mf.resolve(plex)
+        media = self.mf.resolve_any(plex)
         if not media:
             return None
 

@@ -15,7 +15,7 @@ from plex_trakt_sync.decorators import memoize, nocache, rate_limit, time_limit
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync import pytrakt_extensions
 from plex_trakt_sync.path import pytrakt_file
-from plex_trakt_sync.plex_api import PlexLibraryItem
+from plex_trakt_sync.plex_api import PlexLibraryItem, PlexGuid
 
 
 class ScrobblerProxy:
@@ -207,6 +207,14 @@ class TraktApi:
         return pytrakt_extensions.lookup_table(tm)
 
     @memoize
+    def find_by_guid(self, guid: PlexGuid):
+        if guid.type == "episode" and guid.is_episode:
+            ts = self.search_by_id(guid.show_id, id_type=guid.provider, media_type="show")
+            return self.find_episode(ts, guid.pm)
+
+        return self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
+
+    @memoize
     def find_by_media(self, pm: PlexLibraryItem):
         if pm.type == "episode" and pm.is_episode:
             ts = self.search_by_id(pm.show_id, id_type=pm.provider, media_type="show")
@@ -228,6 +236,20 @@ class TraktApi:
             return m
 
         return None
+
+    def find_episode_guid(self, tm: TVShow, guid: PlexGuid, lookup=None):
+        """
+        Find Trakt Episode from Guid of Plex Episode
+        """
+        lookup = lookup if lookup else self.lookup(tm)
+        try:
+            return lookup[guid.pm.season_number][guid.pm.episode_number].instance
+        except KeyError:
+            # Retry using search for specific Plex Episode
+            logger.warning("Retry using search for specific Plex Episode")
+            if not guid.is_episode:
+                return self.find_by_guid(guid)
+            return None
 
     def find_episode(self, tm: TVShow, pe: PlexLibraryItem, lookup=None):
         """

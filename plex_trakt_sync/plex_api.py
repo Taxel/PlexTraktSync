@@ -10,9 +10,15 @@ from trakt.utils import timestamp
 
 
 class PlexGuid:
-    def __init__(self, guid: str, media_type: str):
+    def __init__(self, guid: str, type: str, pm: PlexLibraryItem):
         self.guid = guid
-        self.media_type = media_type
+        self.type = type
+        self.pm = pm
+
+    @property
+    @memoize
+    def media_type(self):
+        return f"{self.type}s"
 
     @property
     @memoize
@@ -40,6 +46,30 @@ class PlexGuid:
 
     @property
     @memoize
+    def is_episode(self):
+        """
+        Return true of the id is in form of <show>/<season>/<episode>
+        """
+        parts = self.id.split("/")
+        if len(parts) == 3 and all(x.isnumeric() for x in parts):
+            return True
+
+        return False
+
+    @property
+    @memoize
+    def show_id(self):
+        if not self.is_episode:
+            raise ValueError("show_id is not valid for non-episodes")
+
+        show = self.id.split("/", 1)[0]
+        if not show.isnumeric():
+            raise ValueError(f"show_id is not numeric: {show}")
+
+        return int(show)
+
+    @property
+    @memoize
     def guid_is_imdb_legacy(self):
         guid = self.guid
 
@@ -59,17 +89,24 @@ class PlexLibraryItem:
     def guid(self):
         if self.item.guid.startswith('plex://') and len(self.item.guids) > 0:
             return self.guids[0]
-        return PlexGuid(self.item.guid, self.media_type)
+        return PlexGuid(self.item.guid, self.type, self)
 
     @property
     @memoize
     def guids(self):
-        guids = [PlexGuid(guid.id, self.media_type) for guid in self.item.guids]
+        guids = [PlexGuid(guid.id, self.type, self) for guid in self.item.guids]
+        if not guids:
+            guids = [self.guid]
 
         # take guid in this order:
         # - tmdb, tvdb, then imdb
         # https://github.com/Taxel/PlexTraktSync/issues/313#issuecomment-838447631
-        sort_order = {"tmdb": 1, "tvdb": 2, "imdb": 3}
+        sort_order = {
+            "tmdb": 1,
+            "tvdb": 2,
+            "imdb": 3,
+            "local": 100,
+        }
         ordered = sorted(guids, key=lambda guid: sort_order[guid.provider])
         return ordered
 
@@ -96,26 +133,12 @@ class PlexLibraryItem:
     @property
     @memoize
     def is_episode(self):
-        """
-        Return true of the id is in form of <show>/<season>/<episode>
-        """
-        parts = self.id.split("/")
-        if len(parts) == 3 and all(x.isnumeric() for x in parts):
-            return True
-
-        return False
+        return self.guid.is_episode
 
     @property
     @memoize
     def show_id(self):
-        if not self.is_episode:
-            raise ValueError("show_id is not valid for non-episodes")
-
-        show = self.id.split("/", 1)[0]
-        if not show.isnumeric():
-            raise ValueError(f"show_id is not numeric: {show}")
-
-        return int(show)
+        return self.guid.show_id
 
     @property
     @memoize
