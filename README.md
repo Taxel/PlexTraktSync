@@ -44,6 +44,7 @@ pip3 install -r requirements.txt
 Alternatively you can use [pipenv]:
 ```
 pip3 install pipenv
+pipenv install
 pipenv run python main.py
 ```
 
