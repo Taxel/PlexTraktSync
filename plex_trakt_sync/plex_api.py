@@ -3,6 +3,7 @@ import datetime
 from typing import Union
 
 from plexapi.library import MovieSection, ShowSection, LibrarySection
+from plexapi.server import PlexServer
 
 from plex_trakt_sync.decorators import memoize, nocache
 from plex_trakt_sync.config import CONFIG
@@ -217,8 +218,13 @@ class PlexApi:
     Plex API class abstracting common data access and dealing with requests cache.
     """
 
-    def __init__(self, plex):
+    def __init__(self, plex: PlexServer):
         self.plex = plex
+
+    @property
+    @memoize
+    def plex_base_url(self):
+        return f"https://app.plex.tv/desktop/#!/server/{self.plex.machineIdentifier}"
 
     def movie_sections(self, library=None):
         result = []
@@ -250,6 +256,9 @@ class PlexApi:
     def reload_item(self, pm):
         self.fetch_item.cache_clear()
         return self.fetch_item(pm.item.ratingKey)
+
+    def media_url(self, m: PlexLibraryItem):
+        return f"{self.plex_base_url}/details?key={m.item.key}"
 
     @memoize
     def search(self, title: str, **kwargs):
