@@ -35,3 +35,6 @@ class Factory:
         mf = MediaFactory(plex, trakt)
 
         return mf
+
+
+factory = Factory()
