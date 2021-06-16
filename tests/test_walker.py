@@ -1,9 +1,9 @@
 #!/usr/bin/env python3 -m pytest
 from plex_trakt_sync.walker import Walker
-from tests.conftest import get_plex_api, get_media_factory
+from tests.conftest import factory
 
-plex = get_plex_api()
-mf = get_media_factory()
+plex = factory.plex_api()
+mf = factory.media_factory()
 
 
 def test_walker():
