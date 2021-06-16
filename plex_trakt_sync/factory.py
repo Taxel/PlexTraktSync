@@ -12,13 +12,9 @@ class Factory:
 
     @memoize
     def plex_api(self):
-        from plex_trakt_sync.config import CONFIG
         from plex_trakt_sync.plex_api import PlexApi
-        from plexapi.server import PlexServer
 
-        url = CONFIG["PLEX_BASEURL"]
-        token = CONFIG["PLEX_TOKEN"]
-        server = PlexServer(url, token)
+        server = self.plex_server()
         plex = PlexApi(server)
 
         return plex
