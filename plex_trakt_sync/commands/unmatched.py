@@ -31,8 +31,10 @@ def unmatched():
 
     for pm in failed:
         p = pm.item
+        url = plex.media_url(pm)
         print("=" * 80)
-        print(f"No match: {pm}: {p.key}")
+        print(f"No match: {pm}")
+        print(f"URL: {url}")
         print(f"Title: {p.title}")
         print(f"Year: {p.year}")
         print(f"Updated At: {p.updatedAt}")
