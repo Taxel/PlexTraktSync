@@ -24,10 +24,10 @@ class Factory:
         return plex
 
     @memoize
-    def media_factory(self):
+    def media_factory(self, batch_size=None):
         from plex_trakt_sync.media import MediaFactory
 
-        trakt = self.trakt_api()
+        trakt = self.trakt_api(batch_size=batch_size)
         plex = self.plex_api()
         mf = MediaFactory(plex, trakt)
 
