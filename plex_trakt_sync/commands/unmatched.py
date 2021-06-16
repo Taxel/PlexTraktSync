@@ -22,5 +22,12 @@ def unmatched():
 
     walker.walk_details(print=click.echo)
 
-    for movie in walker.find_movies():
-        print(f"{movie}")
+    failed = []
+    for pm in walker.get_plex_movies():
+        movie = mf.resolve_any(pm)
+        if not movie:
+            failed.append(pm)
+            continue
+
+    for pm in failed:
+        print(f"Failed: {pm}")
