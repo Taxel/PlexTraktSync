@@ -30,4 +30,13 @@ def unmatched():
             continue
 
     for pm in failed:
-        print(f"Failed: {pm}")
+        p = pm.item
+        print("=" * 80)
+        print(f"No match: {pm}: {p.key}")
+        print(f"Title: {p.title}")
+        print(f"Year: {p.year}")
+        print(f"Updated At: {p.updatedAt}")
+        for l in p.locations:
+            print(f"Location: {l}")
+
+        print("")

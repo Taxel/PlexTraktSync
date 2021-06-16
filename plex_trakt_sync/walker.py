@@ -73,7 +73,7 @@ class Walker:
                 continue
             yield movie
 
-    def find_episodes(self):
+    def get_plex_shows(self):
         if not self.walk_shows:
             return
 
@@ -82,7 +82,10 @@ class Walker:
         else:
             shows = self.media_from_sections(self.plex.show_sections(), self.library)
 
-        for plex in shows:
+        yield from shows
+
+    def find_episodes(self):
+        for plex in self.get_plex_shows():
             show = self.mf.resolve_any(plex)
             if not show:
                 continue
