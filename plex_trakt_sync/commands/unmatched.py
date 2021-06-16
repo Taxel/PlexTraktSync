@@ -1,10 +1,7 @@
 import click
 
 from plex_trakt_sync.commands.login import ensure_login
-from plex_trakt_sync.media import MediaFactory
-from plex_trakt_sync.plex_api import PlexApi
-from plex_trakt_sync.plex_server import get_plex_server
-from plex_trakt_sync.trakt_api import TraktApi
+from plex_trakt_sync.factory import factory
 from plex_trakt_sync.walker import Walker
 
 
@@ -15,10 +12,8 @@ def unmatched():
     """
 
     ensure_login()
-    server = get_plex_server()
-    plex = PlexApi(server)
-    trakt = TraktApi()
-    mf = MediaFactory(plex, trakt)
+    plex = factory.plex_api()
+    mf = factory.media_factory()
     walker = Walker(plex, mf, progressbar=click.progressbar)
 
     if not walker.is_valid():
