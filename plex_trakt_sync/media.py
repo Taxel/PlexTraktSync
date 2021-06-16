@@ -96,12 +96,12 @@ class MediaFactory:
         self.trakt = trakt
 
     def resolve_any(self, pm: PlexLibraryItem, tm=None):
-        # quick search for old code (faster)
-        m = self.resolve(pm, tm)
-        if m:
-            return m
+        # old code reads only first guid
+        #m = self.resolve(pm, tm)
+        #if m:
+        #    return m
 
-        # walk over all guids (slower)
+        # walk over all guids
         for guid in pm.guids:
             m = self.resolve_guid(guid, tm)
             if m:
@@ -139,7 +139,7 @@ class MediaFactory:
             return None
 
         if tm is None:
-            logger.warning(f"Skipping {guid.pm}: Not found on Trakt")
+            logger.debug(f"Skipping {guid.pm}: Not found on Trakt")
             return None
 
         return Media(guid.pm, tm, plex_api=self.plex, trakt_api=self.trakt)
