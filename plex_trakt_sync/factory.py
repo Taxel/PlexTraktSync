@@ -33,5 +33,11 @@ class Factory:
 
         return mf
 
+    @memoize
+    def plex_server(self):
+        from plex_trakt_sync.plex_server import get_plex_server
+
+        return get_plex_server()
+
 
 factory = Factory()
