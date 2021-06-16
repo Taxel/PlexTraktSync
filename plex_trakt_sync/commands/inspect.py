@@ -1,8 +1,5 @@
 import click
-from plexapi.server import PlexServer
-from plex_trakt_sync.config import CONFIG
-from plex_trakt_sync.plex_api import PlexApi
-from plex_trakt_sync.trakt_api import TraktApi
+from plex_trakt_sync.factory import factory
 from plex_trakt_sync.version import git_version_info
 
 
@@ -16,11 +13,8 @@ def inspect(input):
     git_version = git_version_info() or 'Unknown version'
     print(f"PlexTraktSync inspect [{git_version}]")
 
-    url = CONFIG["PLEX_BASEURL"]
-    token = CONFIG["PLEX_TOKEN"]
-    server = PlexServer(url, token)
-    plex = PlexApi(server)
-    trakt = TraktApi()
+    plex = factory.plex_api()
+    trakt = factory.trakt_api()
 
     if input.isnumeric():
         input = int(input)

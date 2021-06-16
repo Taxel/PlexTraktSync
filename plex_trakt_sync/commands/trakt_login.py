@@ -5,6 +5,7 @@ import click
 from trakt.errors import ForbiddenException
 
 from plex_trakt_sync.config import CONFIG
+from plex_trakt_sync.factory import factory
 from plex_trakt_sync.path import pytrakt_file
 from plex_trakt_sync.style import title, success, error, prompt
 from plex_trakt_sync.trakt_api import TraktApi
@@ -47,7 +48,7 @@ def trakt_login():
     Log in to Trakt Account to obtain Access Token.
     """
 
-    api = TraktApi()
+    api = factory.trakt_api()
     trakt_authenticate(api)
     user = api.me.username
 
