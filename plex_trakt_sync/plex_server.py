@@ -5,14 +5,14 @@ from plex_trakt_sync.factory import factory
 from plex_trakt_sync.logging import logger
 
 
-class PlexServer:
+class PlexServerConnection:
     @nocache
     def connect(self):
         return _get_plex_server()
 
 
 def get_plex_server():
-    return PlexServer().connect()
+    return PlexServerConnection().connect()
 
 
 def _get_plex_server():
