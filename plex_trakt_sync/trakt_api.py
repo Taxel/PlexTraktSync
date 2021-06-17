@@ -224,6 +224,12 @@ class TraktApi:
 
     @rate_limit()
     def search_by_id(self, media_id: str, id_type: str, media_type: str):
+        if id_type == "tvdb" and media_type == "movie":
+            # Skip invalid search.
+            # The Trakt API states that tvdb is only for shows and episodes:
+            # https://trakt.docs.apiary.io/#reference/search/id-lookup/get-id-lookup-results
+            return None
+
         search = trakt.sync.search_by_id(media_id, id_type=id_type, media_type=media_type)
         # look for the first wanted type in the results
         # NOTE: this is not needed, kept around for caution
