@@ -272,7 +272,7 @@ class TraktApi:
             # Retry using search for specific Plex Episode
             logger.warning("Retry using search for specific Plex Episode")
             if not pe.guid.is_episode:
-                return self.find_by_media(pe)
+                return self.find_by_guid(pe.guid)
             return None
 
     def flush(self):

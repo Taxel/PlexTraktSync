@@ -38,7 +38,7 @@ def inspect(input):
         print(f"  Guid: {guid}, Id: {guid.id}, Provider: {guid.provider}")
 
     try:
-        tm = trakt.find_by_media(m)
+        tm = trakt.find_by_media(m.guid)
         print(f"Trakt match: {tm}")
     except Exception as e:
         print(f"Error: {e}")
