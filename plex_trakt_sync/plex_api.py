@@ -269,6 +269,18 @@ class PlexApi:
     @property
     @memoize
     @nocache
+    def version(self):
+        return self.plex.version
+
+    @property
+    @memoize
+    @nocache
+    def updated_at(self):
+        return self.plex.updatedAt
+
+    @property
+    @memoize
+    @nocache
     def library_sections(self):
         result = []
         for section in self.plex.library.sections():
