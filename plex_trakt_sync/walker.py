@@ -1,6 +1,6 @@
 from typing import List
 
-from plex_trakt_sync.decorators import measure_time
+from plex_trakt_sync.decorators.measure_time import measure_time
 from plex_trakt_sync.media import MediaFactory, Media
 from plex_trakt_sync.plex_api import PlexApi
 

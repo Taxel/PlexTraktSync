@@ -1,4 +1,4 @@
-from plex_trakt_sync.decorators import memoize
+from plex_trakt_sync.decorators.memoize import memoize
 
 
 class Factory:

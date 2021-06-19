@@ -11,7 +11,10 @@ from trakt.errors import OAuthException, ForbiddenException
 from trakt.sync import Scrobbler
 
 from plex_trakt_sync.logging import logger
-from plex_trakt_sync.decorators import memoize, nocache, rate_limit, time_limit
+from plex_trakt_sync.decorators.memoize import memoize
+from plex_trakt_sync.decorators.nocache import nocache
+from plex_trakt_sync.decorators.rate_limit import rate_limit
+from plex_trakt_sync.decorators.time_limit import time_limit
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync import pytrakt_extensions
 from plex_trakt_sync.path import pytrakt_file
