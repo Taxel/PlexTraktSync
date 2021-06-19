@@ -1,6 +1,6 @@
 import plexapi.server
 from plex_trakt_sync.config import CONFIG, PLEX_PLATFORM
-from plex_trakt_sync.decorators import nocache
+from plex_trakt_sync.decorators.nocache import nocache
 from plex_trakt_sync.logging import logger
 
 

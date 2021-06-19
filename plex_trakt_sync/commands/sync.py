@@ -5,7 +5,7 @@ from plex_trakt_sync.factory import factory
 from plex_trakt_sync.media import Media
 from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.config import CONFIG
-from plex_trakt_sync.decorators import measure_time
+from plex_trakt_sync.decorators.measure_time import measure_time
 from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.logging import logger

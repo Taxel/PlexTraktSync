@@ -6,7 +6,8 @@ from plexapi.exceptions import BadRequest, NotFound
 from plexapi.library import MovieSection, ShowSection, LibrarySection
 from plexapi.server import PlexServer
 
-from plex_trakt_sync.decorators import memoize, nocache
+from plex_trakt_sync.decorators.memoize import memoize
+from plex_trakt_sync.decorators.nocache import nocache
 from plex_trakt_sync.config import CONFIG
 from trakt.utils import timestamp
 

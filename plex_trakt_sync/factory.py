@@ -1,4 +1,4 @@
-from plex_trakt_sync.decorators import memoize
+from plex_trakt_sync.decorators.memoize import memoize
 
 
 class Factory:
@@ -34,6 +34,22 @@ class Factory:
         from plex_trakt_sync.plex_server import get_plex_server
 
         return get_plex_server()
+
+    @memoize
+    def session(self):
+        import requests
+        session = requests.Session()
+
+        return session
+
+    @memoize
+    def requests_cache(self):
+        import requests_cache
+        from plex_trakt_sync.path import trakt_cache
+
+        requests_cache.install_cache(trakt_cache)
+
+        return requests_cache
 
 
 factory = Factory()
