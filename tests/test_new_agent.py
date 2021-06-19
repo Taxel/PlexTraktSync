@@ -1,8 +1,8 @@
 #!/usr/bin/env python3 -m pytest
 from plex_trakt_sync.plex_api import PlexLibraryItem
-from tests.conftest import get_trakt_api, make
+from tests.conftest import make, factory
 
-trakt = get_trakt_api()
+trakt = factory.trakt_api()
 
 
 def test_tv_lookup():

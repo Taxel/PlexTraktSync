@@ -1,6 +1,7 @@
 import click
 from plexapi.server import PlexServer
 
+from plex_trakt_sync.factory import factory
 from plex_trakt_sync.listener import WebSocketListener, PLAYING
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.plex_api import PlexApi
@@ -86,11 +87,9 @@ def watch():
     Listen to events from Plex
     """
 
-    url = CONFIG["PLEX_BASEURL"]
-    token = CONFIG["PLEX_TOKEN"]
-    server = PlexServer(url, token)
-    trakt = TraktApi()
-    plex = PlexApi(server)
+    server = factory.plex_server()
+    trakt = factory.trakt_api()
+    plex = factory.plex_api()
 
     ws = WebSocketListener(server)
     ws.on(PLAYING, WatchStateUpdater(plex, trakt))

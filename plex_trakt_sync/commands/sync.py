@@ -2,12 +2,11 @@ import click
 from plexapi.server import PlexServer
 
 from plex_trakt_sync.commands.login import ensure_login
-from plex_trakt_sync.media import MediaFactory, Media
+from plex_trakt_sync.factory import factory
+from plex_trakt_sync.media import Media
 from plex_trakt_sync.requests_cache import requests_cache
-from plex_trakt_sync.plex_server import get_plex_server
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.decorators import measure_time
-from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.logging import logger
@@ -139,10 +138,10 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int)
     movies = sync_option in ["all", "movies"]
     tv = sync_option in ["all", "tv"]
 
-    server = get_plex_server()
-    plex = PlexApi(server)
-    trakt = TraktApi(batch_size=batch_size)
-    mf = MediaFactory(plex, trakt)
+    server = factory.plex_server()
+    plex = factory.plex_api()
+    trakt = factory.trakt_api(batch_size=batch_size)
+    mf = factory.media_factory(batch_size=batch_size)
     w = Walker(plex, mf, movies=movies, shows=tv, progressbar=click.progressbar)
 
     if library:

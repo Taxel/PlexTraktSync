@@ -1,6 +1,7 @@
 import click
+
+from plex_trakt_sync.factory import factory
 from plex_trakt_sync.logging import logger
-from plex_trakt_sync.trakt_api import TraktApi
 
 
 @click.command()
@@ -15,7 +16,7 @@ def clear_collections(confirm, dry_run):
         click.echo('You need to pass --confirm or --dry-run option to proceed')
         return
 
-    trakt = TraktApi()
+    trakt = factory.trakt_api()
 
     for movie in trakt.movie_collection:
         logger.info(f"Deleting: {movie}")
