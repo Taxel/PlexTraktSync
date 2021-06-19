@@ -52,7 +52,7 @@ class Walker:
         if self.movie:
             print(f"Walk Movies: {self.movie}")
 
-    def find_movies(self):
+    def get_plex_movies(self):
         """
         Iterate over movie sections unless specific movie is requested
         """
@@ -64,13 +64,16 @@ class Walker:
         else:
             movies = self.media_from_sections(self.plex.movie_sections(), self.library)
 
-        for plex in movies:
+        yield from movies
+
+    def find_movies(self):
+        for plex in self.get_plex_movies():
             movie = self.mf.resolve_any(plex)
             if not movie:
                 continue
             yield movie
 
-    def find_episodes(self):
+    def get_plex_shows(self):
         if not self.walk_shows:
             return
 
@@ -79,7 +82,10 @@ class Walker:
         else:
             shows = self.media_from_sections(self.plex.show_sections(), self.library)
 
-        for plex in shows:
+        yield from shows
+
+    def find_episodes(self):
+        for plex in self.get_plex_shows():
             show = self.mf.resolve_any(plex)
             if not show:
                 continue
