@@ -1,4 +1,5 @@
 click==7.1.2
+deprecated==1.2.12
 plexapi==4.5.0
 python-dotenv==0.15.0
 python-git-info==0.7.1
