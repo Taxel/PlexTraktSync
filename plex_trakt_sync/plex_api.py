@@ -338,6 +338,10 @@ class PlexApi:
 
         return result
 
+    @property
+    def library_section_names(self):
+        return [s.title for s in self.library_sections]
+
     @nocache
     def rate(self, m, rating):
         m.rate(rating)
