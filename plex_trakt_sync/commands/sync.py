@@ -89,7 +89,7 @@ def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi):
         listutil.addPlexItemToLists(episode)
 
     with measure_time("Updated plex watchlist"):
-        listutil.updatePlexLists(server)
+        listutil.updatePlexLists(plex)
 
     trakt.flush()
 
