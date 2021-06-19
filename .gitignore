@@ -1,4 +1,6 @@
+/.direnv/python-3.*/
 /.env
+/.envrc.local
 /.idea/
 /.pytrakt.json
 /.vscode/
