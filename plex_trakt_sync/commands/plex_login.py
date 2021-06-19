@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from functools import partial
 from typing import List
+from os import environ
 
 import click
 from click import Choice
@@ -135,8 +136,8 @@ def has_plex_token():
 
 
 @click.command()
-@click.option("--username", help="Plex login", default=CONFIG["PLEX_USERNAME"])
-@click.option("--password", help="Plex password")
+@click.option("--username", help="Plex login", default=lambda: environ.get("PLEX_USERNAME", CONFIG["PLEX_USERNAME"]))
+@click.option("--password", help="Plex password", default=lambda: environ.get("PLEX_PASSWORD", None))
 def plex_login(username, password):
     """
     Log in to Plex Account to obtain Access Token. Optionally can use managed user on servers that you own.
