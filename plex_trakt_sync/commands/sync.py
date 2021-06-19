@@ -1,10 +1,9 @@
 import click
-from plexapi.server import PlexServer
 
 from plex_trakt_sync.commands.login import ensure_login
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.media import Media
-from plex_trakt_sync.requests_cache import requests_cache
+from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.decorators import measure_time
 from plex_trakt_sync.trakt_api import TraktApi
@@ -56,7 +55,7 @@ def sync_watched(m: Media):
         m.mark_watched_plex()
 
 
-def sync_all(walker: Walker, trakt: TraktApi, server: PlexServer):
+def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi):
     listutil = TraktListUtil()
 
     with measure_time("Loaded Trakt lists"):
@@ -73,8 +72,7 @@ def sync_all(walker: Walker, trakt: TraktApi, server: PlexServer):
     for lst in trakt_liked_lists:
         listutil.addList(lst['username'], lst['listname'])
 
-    with requests_cache.disabled():
-        logger.info("Server version {} updated at: {}".format(server.version, server.updatedAt))
+    logger.info(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
 
     for movie in walker.find_movies():
         sync_collection(movie)
@@ -138,7 +136,6 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int)
     movies = sync_option in ["all", "movies"]
     tv = sync_option in ["all", "tv"]
 
-    server = factory.plex_server()
     plex = factory.plex_api()
     trakt = factory.trakt_api(batch_size=batch_size)
     mf = factory.media_factory(batch_size=batch_size)
@@ -161,4 +158,4 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int)
     w.walk_details(print=click.echo)
 
     with measure_time("Completed full sync"):
-        sync_all(walker=w, trakt=trakt, server=server)
+        sync_all(walker=w, trakt=trakt, plex=plex)
