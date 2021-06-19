@@ -109,7 +109,13 @@ sync) you can copy and edit `config.json` before launching the script.
  - Syncing the watched status between Plex and Trakt
  - Syncing the collected status between Plex and Trakt
 
-## Watch command
+## The unmatched command
+
+You can use `unmatched` command to scan your library and display unmatched movies.
+
+Support for unmatched shows is not yet implemented.
+
+## The watch command
 
 You can use `watch` command to listen to events from Plex Media Server
 and scrobble plays.
