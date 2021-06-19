@@ -2,12 +2,15 @@ from __future__ import annotations
 import datetime
 from typing import Union
 
+from plexapi.exceptions import BadRequest, NotFound
 from plexapi.library import MovieSection, ShowSection, LibrarySection
 from plexapi.server import PlexServer
 
 from plex_trakt_sync.decorators import memoize, nocache
 from plex_trakt_sync.config import CONFIG
 from trakt.utils import timestamp
+
+from plex_trakt_sync.logging import logger
 
 
 class PlexGuid:
@@ -269,6 +272,18 @@ class PlexApi:
     @property
     @memoize
     @nocache
+    def version(self):
+        return self.plex.version
+
+    @property
+    @memoize
+    @nocache
+    def updated_at(self):
+        return self.plex.updatedAt
+
+    @property
+    @memoize
+    @nocache
     def library_sections(self):
         result = []
         for section in self.plex.library.sections():
@@ -281,6 +296,18 @@ class PlexApi:
     @nocache
     def rate(self, m, rating):
         m.rate(rating)
+
+    @nocache
+    def create_playlist(self, name: str, items):
+        _, plex_items_sorted = zip(*sorted(dict(reversed(items)).items()))
+        self.plex.createPlaylist(name, items=plex_items_sorted)
+
+    @nocache
+    def delete_playlist(self, name: str):
+        try:
+            self.plex.playlist(name).delete()
+        except (NotFound, BadRequest):
+            logger.debug(f"Playlist '{name}' not found, so it could not be deleted")
 
     @nocache
     def mark_watched(self, m):
