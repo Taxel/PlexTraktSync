@@ -37,8 +37,8 @@ class Factory:
 
     @memoize
     def session(self):
-        import requests
-        session = requests.Session()
+        from requests_cache import CachedSession
+        session = CachedSession()
 
         return session
 
