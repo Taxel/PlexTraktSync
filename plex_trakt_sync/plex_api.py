@@ -193,6 +193,7 @@ class PlexLibraryItem:
     def to_json(self):
         return {
             "collected_at": timestamp(self.collected_at),
+            "media_type": "digital",
         }
 
 
