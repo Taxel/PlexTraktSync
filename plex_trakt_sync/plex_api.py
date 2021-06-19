@@ -193,7 +193,7 @@ class PlexLibraryItem:
             return date
 
     def __repr__(self):
-        return "<%s:%s:%s>" % (self.provider, self.id, self.item)
+        return "<%s:%s:%s>" % (self.guid.provider, self.guid.id, self.item)
 
     def to_json(self):
         return {

@@ -23,8 +23,8 @@ def inspect(input):
     print(f"Inspecting: {m}")
 
     media = m.item
-    print(f"Guid: '{media.guid}'")
-    print(f"Guids: {media.guids}")
+    print(f"Media.Guid: '{media.guid}'")
+    print(f"Media.Guids: {media.guids}")
 
     if media.type in ["episode", "movie"]:
         audio = media.media[0].parts[0].audioStreams()[0]
@@ -33,8 +33,9 @@ def inspect(input):
         video = media.media[0].parts[0].videoStreams()[0]
         print(f"Video: '{video.codec}'")
 
-    print(f"Provider: {m.provider}")
-    print(f"Id: {m.id}")
+    print(f"Guids:")
+    for guid in m.guids:
+        print(f"  Guid: {guid}, Id: {guid.id}, Provider: {guid.provider}")
 
     try:
         tm = trakt.find_by_media(m)
