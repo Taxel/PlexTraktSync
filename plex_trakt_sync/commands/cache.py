@@ -14,6 +14,7 @@ def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
     sorters = {
         "size": partial(sorted, reverse=reverse, key=lambda x: len(x[1].content)),
         "date": partial(sorted, reverse=reverse, key=lambda x: x[1].created_at),
+        "url": partial(sorted, reverse=reverse, key=lambda x: x[1].url),
     }
     sorter = sorters[sorting]
     yield from sorter(get_valid_responses())
@@ -34,7 +35,7 @@ def limit_iterator(items, limit: int):
 @click.command()
 @click.option(
     "--sort",
-    type=click.Choice(["size", "date"], case_sensitive=False),
+    type=click.Choice(["size", "date", "url"], case_sensitive=False),
     default="size",
     show_default=True, help="Sort mode"
 )
