@@ -3,7 +3,7 @@ deprecated==1.2.12
 plexapi==4.6.1
 python-dotenv==0.15.0
 python-git-info==0.7.1
-requests-cache==0.7.0.dev289
+requests-cache==0.7.0.dev452
 requests>=2.25.1
 trakt==3.2.0
 urllib3>=1.26.5
