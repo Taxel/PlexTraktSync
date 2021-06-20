@@ -11,6 +11,7 @@ from trakt.errors import OAuthException, ForbiddenException
 from trakt.sync import Scrobbler
 
 from plex_trakt_sync.logging import logger
+from plex_trakt_sync.decorators.deprecated import deprecated
 from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.decorators.nocache import nocache
 from plex_trakt_sync.decorators.rate_limit import rate_limit
@@ -218,12 +219,9 @@ class TraktApi:
         return self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
 
     @memoize
+    @deprecated("Use find_by_guid")
     def find_by_media(self, pm: PlexLibraryItem):
-        if pm.type == "episode" and pm.is_episode:
-            ts = self.search_by_id(pm.show_id, id_type=pm.provider, media_type="show")
-            return self.find_episode(ts, pm)
-
-        return self.search_by_id(pm.id, id_type=pm.provider, media_type=pm.type)
+        return self.find_by_guid(pm.guid)
 
     @rate_limit()
     def search_by_id(self, media_id: str, id_type: str, media_type: str):
