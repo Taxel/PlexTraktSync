@@ -10,6 +10,7 @@ from trakt.tv import TVShow, TVSeason, TVEpisode
 from trakt.errors import OAuthException, ForbiddenException
 from trakt.sync import Scrobbler
 
+from plex_trakt_sync.factory import factory
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.decorators.deprecated import deprecated
 from plex_trakt_sync.decorators.memoize import memoize
@@ -57,6 +58,7 @@ class TraktApi:
     def __init__(self, batch_size=None):
         self.batch = TraktBatch(self, batch_size=batch_size)
         trakt.core.CONFIG_PATH = pytrakt_file
+        trakt.core.session = factory.session()
         load_config()
 
     def device_auth(self, client_id: str, client_secret: str):
