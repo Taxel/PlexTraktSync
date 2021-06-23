@@ -7,7 +7,8 @@ trakt = factory.trakt_api()
 
 def test_tv_lookup():
     m = PlexLibraryItem(make(cls='plexapi.video.Show', guid='imdb://tt10584350', type='show'))
-    tm = trakt.find_by_media(m)
+    guid = m.guids[0]
+    tm = trakt.find_by_guid(guid)
     lookup = trakt.lookup(tm)
     te = lookup[1][2].instance
 
@@ -23,7 +24,8 @@ def test_tv_lookup_by_episode_id():
         index=1,
     ))
 
-    te = trakt.find_by_media(pe)
+    guid = pe.guids[0]
+    te = trakt.find_by_guid(guid)
     assert te.imdb == "tt0505457"
     assert te.tmdb == 511997
 
@@ -43,7 +45,8 @@ def test_find_episode():
         index=1,
     ))
 
-    te = trakt.find_episode(tm, pe)
+    guid = pe.guids[0]
+    te = trakt.find_episode_guid(tm, guid)
     assert te.season == 1
     assert te.episode == 1
     assert te.imdb == "tt11909222"
