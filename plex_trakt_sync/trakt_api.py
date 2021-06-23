@@ -261,19 +261,9 @@ class TraktApi:
                 return self.find_by_guid(guid)
             return None
 
+    @deprecated("Use find_episode_guid")
     def find_episode(self, tm: TVShow, pe: PlexLibraryItem, lookup=None):
-        """
-        Find Trakt Episode from Plex Episode
-        """
-        lookup = lookup if lookup else self.lookup(tm)
-        try:
-            return lookup[pe.season_number][pe.episode_number].instance
-        except KeyError:
-            # Retry using search for specific Plex Episode
-            logger.warning("Retry using search for specific Plex Episode")
-            if not pe.guid.is_episode:
-                return self.find_by_guid(pe.guid)
-            return None
+        return self.find_episode_guid(tm, pe.guid, lookup)
 
     def flush(self):
         """
