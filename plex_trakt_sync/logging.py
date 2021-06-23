@@ -27,7 +27,12 @@ def initialize():
     ]
     logging.basicConfig(format=log_format, handlers=handlers, level=log_level)
 
+    # Set debug for other components as well
+    if log_level == logging.DEBUG:
+        from plexapi import log as logger
+        logger.setLevel(logging.DEBUG)
+        logger.addHandler(file_handler)
+
 
 initialize()
-
 logger = logging.getLogger('PlexTraktSync')
