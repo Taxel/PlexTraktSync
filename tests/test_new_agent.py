@@ -19,8 +19,8 @@ def test_tv_lookup():
 
     guid = m.guids[0]
 
-    assert guid.provider == 'imdb'
-    assert guid.id == 'tt2661044'
+    assert guid.provider == 'tmdb'
+    assert guid.id == '48866'
     assert m.type == 'show'
 
 
