@@ -2,6 +2,7 @@ from plexapi.exceptions import PlexApiException
 from requests import RequestException, ReadTimeout
 from trakt.errors import TraktException
 
+from plex_trakt_sync.decorators.deprecated import deprecated
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.plex_api import PlexLibraryItem, PlexApi, PlexGuid
 from plex_trakt_sync.trakt_api import TraktApi
@@ -102,6 +103,7 @@ class MediaFactory:
                 return m
         return None
 
+    @deprecated("use resolve_any")
     def resolve(self, pm: PlexLibraryItem, tm=None):
         try:
             guid = pm.guid
