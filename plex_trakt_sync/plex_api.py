@@ -90,19 +90,29 @@ class PlexLibraryItem:
     def __init__(self, item):
         self.item = item
 
+    @memoize
+    def is_legacy_agent(self):
+        return not self.item.guid.startswith('plex://')
+
     @property
     @memoize
+    @deprecated("Use .guids directly")
     def guid(self):
-        if self.item.guid.startswith('plex://') and len(self.item.guids) > 0:
+        if not self.is_legacy_agent:
             return self.guids[0]
         return PlexGuid(self.item.guid, self.type, self)
 
     @property
     @memoize
     def guids(self):
+        # return early if legacy agent
+        # accessing .guids for legacy agent
+        # will make another round-trip to plex server
+        # and the result is always empty.
+        if self.is_legacy_agent:
+            return [self.guid]
+
         guids = [PlexGuid(guid.id, self.type, self) for guid in self.item.guids]
-        if not guids:
-            guids = [self.guid]
 
         # take guid in this order:
         # - tmdb, tvdb, then imdb
