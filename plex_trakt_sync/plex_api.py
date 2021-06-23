@@ -90,6 +90,7 @@ class PlexLibraryItem:
     def __init__(self, item):
         self.item = item
 
+    @property
     @memoize
     def is_legacy_agent(self):
         return not self.item.guid.startswith('plex://')
