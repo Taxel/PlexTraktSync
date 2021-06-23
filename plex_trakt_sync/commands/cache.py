@@ -7,25 +7,26 @@ from plex_trakt_sync.path import trakt_cache
 
 
 def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
-    get_valid_responses = getattr(session.cache, "_get_valid_responses", None)
-    if not callable(get_valid_responses):
-        raise RuntimeError(f"This command requires requests_cache 0.6.x")
+    get_responses = getattr(session.cache, "values", None)
+    if not callable(get_responses):
+        raise RuntimeError(f"This command requires requests_cache 0.7.x")
 
     sorters = {
-        "size": partial(sorted, reverse=reverse, key=lambda x: len(x[1].content)),
-        "date": partial(sorted, reverse=reverse, key=lambda x: x[1].created_at),
-        "url": partial(sorted, reverse=reverse, key=lambda x: x[1].url),
+        "size": lambda r: r.size,
+        "date": lambda r: r.created_at,
+        "url": lambda r: r.url,
     }
-    sorter = sorters[sorting]
-    yield from sorter(get_valid_responses())
+    sorter = partial(sorted, reverse=reverse, key=sorters[sorting])
+
+    yield from sorter(get_responses())
 
 
 # https://stackoverflow.com/questions/36106712/how-can-i-limit-iterations-of-a-loop-in-python
 def limit_iterator(items, limit: int):
     if not limit or limit <= 0:
         i = 0
-        for k, v in items:
-            yield i, (k, v)
+        for v in items:
+            yield i, v
             i += 1
 
     else:
@@ -60,5 +61,5 @@ def cache(sort: str, limit: int, reverse: bool):
 
     click.echo(f"URLs:")
     sorted = get_sorted_cache(session, sort, reverse)
-    for i, (k, r) in limit_iterator(sorted, limit):
-        click.echo(f"- {i + 1:3d}. {r.created_at}: {r.url}: {len(r.content)} bytes")
+    for i, r in limit_iterator(sorted, limit):
+        click.echo(f"- {i + 1:3d}. {r}")
