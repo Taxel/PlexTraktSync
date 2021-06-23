@@ -11,7 +11,7 @@ def test_plex_search():
     assert len(results) == 1
 
     m = results[0]
-    guid = m.guid
+    guid = m.guids[0]
 
     assert m.type == "show"
     assert m.item.title == "The Addams Family (1964)"

@@ -17,7 +17,7 @@ def test_tv_lookup():
         type='show',
     ))
 
-    guid = m.guid
+    guid = m.guids[0]
 
     assert guid.provider == 'imdb'
     assert guid.id == 'tt2661044'
@@ -33,7 +33,7 @@ def test_tv_lookup_none():
         type='show',
     ))
 
-    guid = m.guid
+    guid = m.guids[0]
 
     assert guid.provider == 'none'
     assert guid.id == '68178'
