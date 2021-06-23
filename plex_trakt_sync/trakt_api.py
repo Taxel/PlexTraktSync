@@ -216,7 +216,7 @@ class TraktApi:
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
             ts = self.search_by_id(guid.show_id, id_type=guid.provider, media_type="show")
-            return self.find_episode(ts, guid.pm)
+            return self.find_episode_guid(ts, guid)
 
         return self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
 
