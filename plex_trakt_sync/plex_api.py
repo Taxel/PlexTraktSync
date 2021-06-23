@@ -96,6 +96,7 @@ class PlexLibraryItem:
 
     @property
     @memoize
+    @deprecated("Use .guids directly")
     def guid(self):
         if not self.is_legacy_agent:
             return self.guids[0]
