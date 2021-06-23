@@ -73,7 +73,9 @@ def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi):
     for lst in trakt_liked_lists:
         listutil.addList(lst['username'], lst['listname'])
 
-    logger.info(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
+    click.echo(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
+    # Load sections, this will attempt to connect to Plex
+    click.echo(f"Server has {len(plex.library_sections)} libraries: {plex.library_section_names}")
 
     for movie in walker.find_movies():
         sync_collection(movie)
