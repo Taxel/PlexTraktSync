@@ -1,3 +1,5 @@
+import importlib
+
 EVENTS = {
     "account": "AccountUpdateNotification",
     "activity": "ActivityNotification",
@@ -11,7 +13,50 @@ EVENTS = {
 }
 
 
+class Event(dict):
+    pass
+
+
+class AccountUpdateNotification(Event):
+    pass
+
+
+class ActivityNotification(Event):
+    pass
+
+
+class BackgroundProcessingQueueEventNotification(Event):
+    pass
+
+
+class PlaySessionStateNotification(Event):
+    pass
+
+
+class Setting(Event):
+    pass
+
+
+class ProgressNotification(Event):
+    pass
+
+
+class ReachabilityNotification(Event):
+    pass
+
+
+class StatusNotification(Event):
+    pass
+
+
+class TimelineEntry(Event):
+    pass
+
+
 class EventFactory:
+    def __init__(self):
+        self.module = importlib.import_module(self.__module__)
+
     def get_events(self, message):
         if message["size"] != 1:
             raise ValueError(f"Unexpected size: {message}")
@@ -23,10 +68,9 @@ class EventFactory:
         if class_name not in message:
             return
         for data in message[class_name]:
-            event = self.create(cls=class_name, **data)
+            event = self.create(class_name, **data)
             yield event
 
-    @staticmethod
-    def create(cls, **kwargs):
-        # https://stackoverflow.com/a/2827726/2314626
-        return type(cls, (object,), kwargs)
+    def create(self, name, **kwargs):
+        cls = getattr(self.module, name)
+        return cls(**kwargs)
