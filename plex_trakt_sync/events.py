@@ -14,7 +14,8 @@ EVENTS = {
 
 
 class Event(dict):
-    pass
+    def __str__(self):
+        return f"{self.__class__}:{str(self.copy())}"
 
 
 class AccountUpdateNotification(Event):
