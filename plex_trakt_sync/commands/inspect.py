@@ -37,6 +37,8 @@ def inspect(input):
     for guid in m.guids:
         print(f"  Guid: {guid}, Id: {guid.id}, Provider: {guid.provider}")
 
+    print(f"Metadata: {m.to_json()}")
+
     try:
         tm = trakt.find_by_media(m)
         print(f"Trakt match: {tm}")
