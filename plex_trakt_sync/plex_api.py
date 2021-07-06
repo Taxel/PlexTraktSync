@@ -236,6 +236,8 @@ class PlexLibraryItem:
 
             if regex and regex.match(codec):
                 return key
+        
+        return None
 
     @property
     @memoize
