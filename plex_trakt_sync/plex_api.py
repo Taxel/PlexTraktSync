@@ -206,7 +206,7 @@ class PlexLibraryItem:
     @memoize
     def audio_channels(self):
         """
-        Set to 1.0, 2.0, 2.1, 3.0, 3.1, 4.0, 4.1, 5.0, 5.1, 5.1.2, 5.1.4, 6.1, 7.1, 7.1.2, 7.1.4, 9.1, or 10.1
+        Set to 1.0, 2.0, 2.1, 3.0, 3.1, 4.1, 5.1, 6.1, 7.1, 9.1, or 10.1
         """
 
         media = self.item.media[0]
