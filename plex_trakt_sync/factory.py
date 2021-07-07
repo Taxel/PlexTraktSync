@@ -53,5 +53,11 @@ class Factory:
 
         return requests_cache
 
+    @memoize
+    def config(self):
+        from plex_trakt_sync.config import CONFIG
+
+        return CONFIG
+
 
 factory = Factory()
