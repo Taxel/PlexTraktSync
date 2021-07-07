@@ -59,7 +59,7 @@ class Config(dict):
         with open(self.env_file, "w") as txt:
             txt.write("# This is .env file for PlexTraktSync\n")
             for key in self.env_keys:
-                if key in self:
+                if key in self and self[key] is not None:
                     txt.write("{}={}\n".format(key, self[key]))
                 else:
                     txt.write("{}=\n".format(key))
