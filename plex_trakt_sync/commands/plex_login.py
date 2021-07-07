@@ -132,7 +132,7 @@ def choose_server(account: MyPlexAccount):
 
 
 def has_plex_token():
-    return CONFIG["PLEX_TOKEN"] is not None and CONFIG["PLEX_TOKEN"] != "-"
+    return CONFIG["PLEX_TOKEN"] is not None
 
 
 @click.command()

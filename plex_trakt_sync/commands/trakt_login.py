@@ -39,7 +39,7 @@ def trakt_authenticate(api: TraktApi):
 def has_trakt_token():
     if not exists(pytrakt_file):
         return False
-    return CONFIG["TRAKT_USERNAME"] is not None and CONFIG["TRAKT_USERNAME"] != "None"
+    return CONFIG["TRAKT_USERNAME"] is not None
 
 
 @click.command()
