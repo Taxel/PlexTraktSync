@@ -28,6 +28,7 @@ class Config(dict):
 
     initialized = False
     config_file = config_file
+    env_file = env_file
 
     def __getitem__(self, item):
         if not self.initialized:
@@ -45,7 +46,7 @@ class Config(dict):
         config = self.load_json(self.config_file)
         self.update(config)
 
-        load_dotenv()
+        load_dotenv(self.env_file)
         for key in self.env_keys:
             value = getenv(key)
             if value == "-" or value == "None":
@@ -55,7 +56,7 @@ class Config(dict):
         self.initialized = True
 
     def save(self):
-        with open(env_file, "w") as txt:
+        with open(self.env_file, "w") as txt:
             txt.write("# This is .env file for PlexTraktSync\n")
             for key in self.env_keys:
                 if key in self:
