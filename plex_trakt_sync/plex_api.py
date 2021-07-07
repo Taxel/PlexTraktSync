@@ -209,10 +209,11 @@ class PlexLibraryItem:
         Set to 1.0, 2.0, 2.1, 3.0, 3.1, 4.1, 5.1, 6.1, 7.1, 9.1, or 10.1
         """
 
-        media = self.item.media[0]
+        
         try:
+            media = self.item.media[0]
             channels = media.audioChannels
-        except AttributeError:
+        except (AttributeError, IndexError, TypeError):
             return None
 
         if channels < 3:
@@ -223,11 +224,11 @@ class PlexLibraryItem:
     @property
     @memoize
     def audio_codec(self):
-        media = self.item.media[0]
 
         try:
+            media = self.item.media[0]
             codec = media.audioCodec
-        except AttributeError:
+        except (AttributeError, IndexError, TypeError):
             return None
 
         for key, regex in AUDIO_CODECS.items():
@@ -245,10 +246,10 @@ class PlexLibraryItem:
         """
         Set to uhd_4k, hd_1080p, hd_1080i, hd_720p, sd_480p, sd_480i, sd_576p, or sd_576i.
         """
-        media = self.item.media[0]
         try:
+            media = self.item.media[0]
             height = media.height
-        except AttributeError:
+        except (AttributeError, IndexError, TypeError):
             return None
         # 4k
         if height > 1100:
@@ -268,6 +269,34 @@ class PlexLibraryItem:
 
         # 480
         return 'sd_480p'
+
+    @property
+    @memoize
+    def hdr(self):
+        """
+        Set to dolby_vision, hdr10, hdr10_plus, or hlg
+        """
+        try:
+            stream = self.item.media[0].parts[0].streams[0]
+            colorTrc = stream.colorTrc
+        except (AttributeError, IndexError, TypeError):
+            return None
+
+        if colorTrc == 'smpte2084':
+            return 'hdr10'
+        elif colorTrc == 'arib-std-b67':
+            return 'hlg'
+        
+        try:
+            dovi = stream.DOVIPresent
+        except AttributeError:
+            return None
+        
+        if dovi:
+            return 'dolby_vision'
+        
+        return None
+
 
     def watch_progress(self, view_offset):
         percent = view_offset / self.item.duration * 100
@@ -305,7 +334,7 @@ class PlexLibraryItem:
             "collected_at": timestamp(self.collected_at),
             "media_type": "digital",
             "resolution": self.resolution,
-            # "hdr": "dolby_vision",
+            "hdr": self.hdr,
             "audio": self.audio_codec,
             "audio_channels": self.audio_channels,
         }
