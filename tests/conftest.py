@@ -6,8 +6,14 @@ from trakt.tv import TVShow
 
 from plex_trakt_sync.factory import Factory
 
-MOCK_DATA_DIR = join_path(dirname(__file__), "mock_data")
+TESTS_DIR = dirname(__file__)
+MOCK_DATA_DIR = join_path(TESTS_DIR, "mock_data")
 factory = Factory()
+
+# Patch config to use separate config for tests
+config = factory.config()
+config.config_file = join_path(TESTS_DIR, "config.json")
+config.env_file = join_path(TESTS_DIR, ".env")
 
 
 def load_mock(name: str):
