@@ -46,7 +46,10 @@ class Config(dict):
 
         load_dotenv()
         for key in self.env_keys:
-            self[key] = getenv(key)
+            value = getenv(key)
+            if value == "-" or value == "None":
+                value = None
+            self[key] = value
 
         self.initialized = True
 
