@@ -9,9 +9,9 @@ from plexapi.server import PlexServer
 from plex_trakt_sync.decorators.deprecated import deprecated
 from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.decorators.nocache import nocache
-from plex_trakt_sync.config import CONFIG
 from trakt.utils import timestamp
 
+from plex_trakt_sync.factory import factory
 from plex_trakt_sync.logging import logger
 
 
@@ -37,6 +37,7 @@ class PlexGuid:
         x = x.replace("themoviedb", "tmdb")
         x = x.replace("thetvdb", "tvdb")
         if x == "xbmcnfo":
+            CONFIG = factory.config()
             x = CONFIG["xbmc-providers"][self.media_type]
 
         return x
@@ -331,6 +332,7 @@ class PlexApi:
     @memoize
     @nocache
     def library_sections(self):
+        CONFIG = factory.config()
         result = []
         for section in self.plex.library.sections():
             if section.title in CONFIG["excluded-libraries"]:

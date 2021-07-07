@@ -1,6 +1,7 @@
 import plexapi.server
-from plex_trakt_sync.config import CONFIG, PLEX_PLATFORM
+from plex_trakt_sync.config import PLEX_PLATFORM
 from plex_trakt_sync.decorators.nocache import nocache
+from plex_trakt_sync.factory import factory
 from plex_trakt_sync.logging import logger
 
 
@@ -15,6 +16,7 @@ def get_plex_server():
 
 
 def _get_plex_server():
+    CONFIG = factory.config()
     plex_token = CONFIG["PLEX_TOKEN"]
     plex_baseurl = CONFIG["PLEX_BASEURL"]
     plex_fallbackurl = CONFIG["PLEX_FALLBACKURL"]

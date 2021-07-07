@@ -17,7 +17,6 @@ from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.decorators.nocache import nocache
 from plex_trakt_sync.decorators.rate_limit import rate_limit
 from plex_trakt_sync.decorators.time_limit import time_limit
-from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync import pytrakt_extensions
 from plex_trakt_sync.path import pytrakt_file
 from plex_trakt_sync.plex_api import PlexLibraryItem, PlexGuid
@@ -82,6 +81,7 @@ class TraktApi:
     @nocache
     @rate_limit()
     def liked_lists(self):
+        CONFIG = factory.config()
         if not CONFIG['sync']['liked_lists']:
             return []
         return pytrakt_extensions.get_liked_lists()
@@ -136,6 +136,7 @@ class TraktApi:
     @nocache
     @rate_limit()
     def watchlist_movies(self):
+        CONFIG = factory.config()
         if not CONFIG['sync']['watchlist']:
             return []
 
