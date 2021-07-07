@@ -27,6 +27,7 @@ class Config(dict):
     ]
 
     initialized = False
+    config_file = config_file
 
     def __getitem__(self, item):
         if not self.initialized:
@@ -37,11 +38,11 @@ class Config(dict):
         defaults = self.load_json(default_config_file)
         self.update(defaults)
 
-        if not exists(config_file):
-            with open(config_file, "w") as fp:
+        if not exists(self.config_file):
+            with open(self.config_file, "w") as fp:
                 fp.write(json.dumps(defaults, indent=4))
 
-        config = self.load_json(config_file)
+        config = self.load_json(self.config_file)
         self.update(config)
 
         load_dotenv()
