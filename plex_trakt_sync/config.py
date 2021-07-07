@@ -49,7 +49,7 @@ class Config(dict):
         load_dotenv(self.env_file)
         for key in self.env_keys:
             value = getenv(key)
-            if value == "-" or value == "None":
+            if value == "-" or value == "None" or value == "":
                 value = None
             self[key] = value
 
