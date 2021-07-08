@@ -226,10 +226,7 @@ class PlexLibraryItem:
         if not date:
             raise ValueError("Value can't be None")
 
-        try:
-            return date.astimezone(datetime.timezone.utc)
-        except ValueError:  # for py<3.6
-            return date
+        return date.astimezone(datetime.timezone.utc)
 
     def __repr__(self):
         return "<%s:%s:%s>" % (self.guid.provider, self.guid.id, self.item)
