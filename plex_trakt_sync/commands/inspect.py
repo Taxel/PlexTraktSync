@@ -22,6 +22,9 @@ def inspect(input):
     m = plex.fetch_item(input)
     print(f"Inspecting: {m}")
 
+    url = plex.media_url(m)
+    print(f"URL: {url}")
+
     media = m.item
     print(f"Media.Guid: '{media.guid}'")
     print(f"Media.Guids: {media.guids}")
