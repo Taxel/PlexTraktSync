@@ -4,7 +4,6 @@ from os.path import exists
 import click
 from trakt.errors import ForbiddenException
 
-from plex_trakt_sync.config import CONFIG
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.path import pytrakt_file
 from plex_trakt_sync.style import title, success, error, prompt
@@ -39,7 +38,9 @@ def trakt_authenticate(api: TraktApi):
 def has_trakt_token():
     if not exists(pytrakt_file):
         return False
-    return CONFIG["TRAKT_USERNAME"] is not None and CONFIG["TRAKT_USERNAME"] != "None"
+
+    CONFIG = factory.config()
+    return CONFIG["TRAKT_USERNAME"] is not None
 
 
 @click.command()
@@ -52,6 +53,7 @@ def trakt_login():
     trakt_authenticate(api)
     user = api.me.username
 
+    CONFIG = factory.config()
     CONFIG["TRAKT_USERNAME"] = user
     CONFIG.save()
 

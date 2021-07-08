@@ -6,5 +6,7 @@
 /.vscode/
 /config.json
 /last_update.log
+/tests/.env
+/tests/config.json
 /trakt_cache.sqlite
 __pycache__/
