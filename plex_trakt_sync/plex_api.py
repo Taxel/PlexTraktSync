@@ -1,4 +1,5 @@
 from __future__ import annotations
+import re
 import datetime
 from typing import Union
 
@@ -13,6 +14,33 @@ from trakt.utils import timestamp
 
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.logging import logger
+
+AUDIO_CODECS = {
+    'lpcm':                 'pcm',
+    'mp3':                  None,
+    'aac':                  None,
+    'ogg':                  'vorbis',
+    'wma':                  None,
+
+    'dts':                  '(dca|dta)',
+    'dts_ma':               'dtsma',
+
+    'dolby_prologic':       'dolby.?pro',
+    'dolby_digital':        'ac.?3',
+    'dolby_digital_plus':   'eac.?3',
+    'dolby_truehd':         'truehd'
+}
+
+# compile patterns in `AUDIO_CODECS`
+for k, v in AUDIO_CODECS.items():
+    if v is None:
+        continue
+
+    try:
+        AUDIO_CODECS[k] = re.compile(v, re.IGNORECASE)
+    except Exception:
+        logger.warn('Unable to compile regex pattern: %r', v, exc_info=True)
+
 
 
 class PlexGuid:
@@ -179,16 +207,39 @@ class PlexLibraryItem:
     @memoize
     def audio_channels(self):
         """
-        Set to 1.0, 2.0, 2.1, 3.0, 3.1, 4.0, 4.1, 5.0, 5.1, 5.1.2, 5.1.4, 6.1, 7.1, 7.1.2, 7.1.4, 9.1, or 10.1
+        Set to 1.0, 2.0, 2.1, 3.0, 3.1, 4.1, 5.1, 6.1, 7.1, 9.1, or 10.1
         """
-        map = {
-            2: "2.0",
-        }
-        media = self.item.media[0]
+
+        
         try:
-            return map[media.audioChannels]
-        except KeyError:
+            media = self.item.media[0]
+            channels = media.audioChannels
+        except (AttributeError, IndexError, TypeError):
             return None
+
+        if channels < 3:
+            return '%.01f' % channels
+
+        return '%.01f' % (channels - 0.9)
+
+    @property
+    @memoize
+    def audio_codec(self):
+
+        try:
+            media = self.item.media[0]
+            codec = media.audioCodec
+        except (AttributeError, IndexError, TypeError):
+            return None
+
+        for key, regex in AUDIO_CODECS.items():
+            if key == codec:
+                return key
+
+            if regex and regex.match(codec):
+                return key
+        
+        return None
 
     @property
     @memoize
@@ -196,14 +247,57 @@ class PlexLibraryItem:
         """
         Set to uhd_4k, hd_1080p, hd_1080i, hd_720p, sd_480p, sd_480i, sd_576p, or sd_576i.
         """
-        map = {
-            "720": "hd_720p",
-        }
-        media = self.item.media[0]
         try:
-            return map[media.videoResolution]
-        except KeyError:
+            media = self.item.media[0]
+            height = media.height
+        except (AttributeError, IndexError, TypeError):
             return None
+        # 4k
+        if height > 1100:
+            return 'uhd_4k'
+
+        # 1080
+        if height > 720:
+            return 'hd_1080p'
+
+        # 720
+        if height > 576:
+            return 'hd_720p'
+
+        # 576
+        if height > 480:
+            return 'sd_576p'
+
+        # 480
+        return 'sd_480p'
+
+    @property
+    @memoize
+    def hdr(self):
+        """
+        Set to dolby_vision, hdr10, hdr10_plus, or hlg
+        """
+        try:
+            stream = self.item.media[0].parts[0].streams[0]
+            colorTrc = stream.colorTrc
+        except (AttributeError, IndexError, TypeError):
+            return None
+
+        if colorTrc == 'smpte2084':
+            return 'hdr10'
+        elif colorTrc == 'arib-std-b67':
+            return 'hlg'
+        
+        try:
+            dovi = stream.DOVIPresent
+        except AttributeError:
+            return None
+        
+        if dovi:
+            return 'dolby_vision'
+        
+        return None
+
 
     def watch_progress(self, view_offset):
         percent = view_offset / self.item.duration * 100
@@ -233,10 +327,17 @@ class PlexLibraryItem:
         return "<%s:%s:%s>" % (self.guid.provider, self.guid.id, self.item)
 
     def to_json(self):
-        return {
+
+        metadata = {
             "collected_at": timestamp(self.collected_at),
             "media_type": "digital",
+            "resolution": self.resolution,
+            "hdr": self.hdr,
+            "audio": self.audio_codec,
+            "audio_channels": self.audio_channels,
         }
+        
+        return {k: v for k, v in metadata.items() if v is not None}
 
 
 class PlexLibrarySection:
