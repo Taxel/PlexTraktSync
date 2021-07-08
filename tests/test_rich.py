@@ -7,16 +7,11 @@ from rich.console import Console
 from rich.markup import render
 from rich.style import Style
 
-# Add our module to system path
-sys.path.insert(0, dirname(dirname(abspath(__file__))))
-
-from plex_trakt_sync.commands.sync import for_each_pair, sync_collection, sync_ratings, sync_watched, for_each_episode, \
-    for_each_show_episode
+from plex_trakt_sync.commands.sync import sync_collection, sync_ratings, sync_watched
+from plex_trakt_sync.factory import factory
 from plex_trakt_sync.media import MediaFactory
 from plex_trakt_sync.plex_api import PlexApi
-from plex_trakt_sync.plex_server import get_plex_server
 from plex_trakt_sync.trakt_api import TraktApi
-from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.version import git_version_info
 
 console = Console()
@@ -105,11 +100,10 @@ def test_run():
     )
 
     with progress:
-        server = get_plex_server()
-        plex = PlexApi(server)
-        trakt = TraktApi()
+        plex = factory.plex_api()
+        trakt = factory.trakt_api()
+        mf = factory.media_factory()
 
-        mf = MediaFactory(plex, trakt)
         progress.log(f"Sync movies")
 
         for section in plex.movie_sections():
@@ -117,7 +111,7 @@ def test_run():
             progress.start_task(show_task)
 
             for pm in progress.track(section.items(), total=len(section), task_id=show_task):
-                m = mf.resolve(pm)
+                m = mf.resolve_any(pm)
                 if not m:
                     continue
                 sync_collection(m)
@@ -132,14 +126,14 @@ def test_run():
             show_task = progress.add_task(f"{section.title}")
             progress.start_task(show_task)
             for pm in progress.track(section.items(), total=len(section), task_id=show_task):
-                m = mf.resolve(pm)
+                m = mf.resolve_any(pm)
                 if not m:
                     continue
 
                 # episode_task = progress.add_task(f"{m.plex.item.title}")
                 # for pe in progress.track(list(m.plex.episodes()), task_id=episode_task):
                 for pe in m.plex.episodes():
-                    me = mf.resolve(pe, m.trakt)
+                    me = mf.resolve_any(pe, m.trakt)
                     if not me:
                         continue
                     me.show = m
