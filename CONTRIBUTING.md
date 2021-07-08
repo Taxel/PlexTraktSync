@@ -84,6 +84,19 @@ To download and send the database:
 
 [`Plex Web`]: https://app.plex.tv/desktop
 
+## Plex Media XML
+
+Sometimes it's useful to share a fragment, or a complete XML of the item in
+your library.
+
+The XML can be viewed from Plex Media Servers that you own:
+
+  - Overflow menu → Get Info → View XML in bottom-left corner of the modal
+
+![][xml-menu]
+
+[xml-menu]: https://user-images.githubusercontent.com/19761269/114267878-f0d1ae00-9a1b-11eb-8f3b-90110316ed11.png
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under its MIT License.
