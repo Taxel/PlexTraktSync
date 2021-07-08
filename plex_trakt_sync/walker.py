@@ -109,7 +109,7 @@ class Walker:
 
     def episode_from_show(self, show: Media):
         for pe in show.plex.episodes():
-            me = self.mf.resolve(pe, show.trakt)
+            me = self.mf.resolve_any(pe, show.trakt)
             if not me:
                 continue
 

@@ -324,7 +324,8 @@ class PlexLibraryItem:
         return date.astimezone(datetime.timezone.utc)
 
     def __repr__(self):
-        return "<%s:%s:%s>" % (self.guid.provider, self.guid.id, self.item)
+        guid = self.guids[0]
+        return "<%s:%s:%s>" % (guid.provider, guid.id, self.item)
 
     def to_json(self):
 
