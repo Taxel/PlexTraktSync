@@ -20,8 +20,13 @@ TRAKT_LOGIN_SUCCESS = success(
 def trakt_authenticate(api: TraktApi):
     click.echo(title("Sign in to Trakt"))
 
-    click.echo("If you do not have a client ID and secret. Please visit the following url to create them.")
-    click.echo("  https://trakt.tv/oauth/applications")
+    click.echo("If you do not have a Trakt client ID and secret:")
+    click.echo("      1 - Open http://trakt.tv/oauth/applications on any computer")
+    click.echo("      2 - Login to your Trakt account")
+    click.echo("      3 - Press the NEW APPLICATION button")
+    click.echo("      4 - Set the NAME field = plex")
+    click.echo("      5 - Set the REDIRECT URL field = urn:ietf:wg:oauth:2.0:oob")
+    click.echo("      6 - Press the SAVE APP button")
     click.echo("")
 
     while True:
