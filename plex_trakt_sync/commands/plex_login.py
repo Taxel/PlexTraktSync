@@ -23,6 +23,7 @@ CONFIG = factory.config()
 def myplex_login(username, password):
     while True:
         username = click.prompt(PROMPT_PLEX_USERNAME, type=str, default=username)
+        click.echo(comment(f"If you have 2 Factor Authentication enabled on Plex you can append the code to your password below (eg. passwordCODE)"))
         password = click.prompt(PROMPT_PLEX_PASSWORD, type=str, default=password, hide_input=True, show_default=False)
         try:
             return MyPlexAccount(username, password)
