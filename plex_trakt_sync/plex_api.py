@@ -42,7 +42,6 @@ for k, v in AUDIO_CODECS.items():
         logger.warn('Unable to compile regex pattern: %r', v, exc_info=True)
 
 
-
 class PlexGuid:
     def __init__(self, guid: str, type: str, pm: PlexLibraryItem):
         self.guid = guid
@@ -210,7 +209,6 @@ class PlexLibraryItem:
         Set to 1.0, 2.0, 2.1, 3.0, 3.1, 4.1, 5.1, 6.1, 7.1, 9.1, or 10.1
         """
 
-        
         try:
             media = self.item.media[0]
             channels = media.audioChannels
@@ -238,7 +236,7 @@ class PlexLibraryItem:
 
             if regex and regex.match(codec):
                 return key
-        
+
         return None
 
     @property
@@ -287,17 +285,16 @@ class PlexLibraryItem:
             return 'hdr10'
         elif colorTrc == 'arib-std-b67':
             return 'hlg'
-        
+
         try:
             dovi = stream.DOVIPresent
         except AttributeError:
             return None
-        
+
         if dovi:
             return 'dolby_vision'
-        
-        return None
 
+        return None
 
     def watch_progress(self, view_offset):
         percent = view_offset / self.item.duration * 100
@@ -337,7 +334,7 @@ class PlexLibraryItem:
             "audio": self.audio_codec,
             "audio_channels": self.audio_channels,
         }
-        
+
         return {k: v for k, v in metadata.items() if v is not None}
 
 
