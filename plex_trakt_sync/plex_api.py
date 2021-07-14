@@ -212,7 +212,8 @@ class PlexLibraryItem:
         try:
             media = self.item.media[0]
             channels = media.audioChannels
-        except (AttributeError, IndexError, TypeError):
+            assert channels is not None
+        except (AttributeError, IndexError, TypeError, AssertionError):
             return None
 
         if channels < 3:
@@ -227,7 +228,8 @@ class PlexLibraryItem:
         try:
             media = self.item.media[0]
             codec = media.audioCodec
-        except (AttributeError, IndexError, TypeError):
+            assert codec is not None
+        except (AttributeError, IndexError, TypeError, AssertionError):
             return None
 
         for key, regex in AUDIO_CODECS.items():
@@ -248,7 +250,8 @@ class PlexLibraryItem:
         try:
             media = self.item.media[0]
             height = media.height
-        except (AttributeError, IndexError, TypeError):
+            assert height is not None
+        except (AttributeError, IndexError, TypeError, AssertionError):
             return None
         # 4k
         if height > 1100:
