@@ -8,3 +8,4 @@ requests>=2.25.1
 trakt==3.2.0
 urllib3>=1.26.6
 websocket-client==1.0.1
+tqdm==4.61.2
