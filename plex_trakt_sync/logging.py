@@ -7,8 +7,6 @@ from .path import log_file
 
 
 class TqdmLoggingHandler(logging.StreamHandler):
-    def __init__(self, stream=None):
-        super().__init__(stream)
 
     def emit(self, record):
         try:

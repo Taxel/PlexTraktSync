@@ -16,6 +16,7 @@ requests-cache = "==0.7.1"
 trakt = "==3.2.0"
 urllib3 = ">=1.26.6"
 websocket-client = "==1.0.1"
+tqdm = "==4.61.2"
 
 [requires]
 python_version = "3"
