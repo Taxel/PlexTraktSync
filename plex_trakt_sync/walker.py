@@ -98,11 +98,11 @@ class Walker:
 
         for section in sections:
             with measure_time(f"{section.title} processed"):
-                it = self.progressbar(section.items(), length=len(section), label=f"Processing {section.title}")
+                it = self.progressbar(section.items(), total=len(section), desc=f"Processing {section.title}")
                 yield from it
 
     def media_from_titles(self, libtype: str, titles: List[str]):
-        it = self.progressbar(titles, label=f"Processing {libtype}s")
+        it = self.progressbar(titles, desc=f"Processing {libtype}s")
         for title in it:
             search = self.plex.search(title, libtype=libtype)
             yield from search
@@ -118,7 +118,7 @@ class Walker:
 
     def progressbar(self, iterable, **kwargs):
         if self._progressbar:
-            pb = self._progressbar(iterable, show_pos=True, **kwargs)
+            pb = self._progressbar(iterable, **kwargs)
             with pb as it:
                 yield from it
         else:

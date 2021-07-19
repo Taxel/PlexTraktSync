@@ -1,4 +1,5 @@
 import click
+from tqdm import tqdm
 
 from plex_trakt_sync.commands.login import ensure_login
 from plex_trakt_sync.factory import factory
@@ -142,7 +143,7 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int)
     plex = factory.plex_api()
     trakt = factory.trakt_api(batch_size=batch_size)
     mf = factory.media_factory(batch_size=batch_size)
-    w = Walker(plex, mf, movies=movies, shows=tv, progressbar=click.progressbar)
+    w = Walker(plex, mf, movies=movies, shows=tv, progressbar=tqdm)
 
     if library:
         logger.info(f"Filtering Library: {library}")
@@ -158,7 +159,7 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int)
         click.echo("Nothing to sync, this is likely due conflicting options given.")
         return
 
-    w.walk_details(print=click.echo)
+    w.walk_details(print=tqdm.write)
 
     with measure_time("Completed full sync"):
         sync_all(walker=w, trakt=trakt, plex=plex)
