@@ -1,6 +1,10 @@
 version = 1
 
 [[analyzers]]
+name = "docker"
+enabled = true
+
+[[analyzers]]
 name = "shell"
 enabled = true
 
@@ -12,8 +16,8 @@ enabled = true
 name = "python"
 enabled = true
 
-[analyzers.meta]
-runtime_version = "3.x.x"
+  [analyzers.meta]
+  runtime_version = "3.x.x"
 
 [[analyzers]]
 name = "test-coverage"
