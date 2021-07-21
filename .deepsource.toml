@@ -1,8 +1,6 @@
 version = 1
 
-[[analyzers]]
-name = "docker"
-enabled = true
+test_patterns = ["tests/**"]
 
 [[analyzers]]
 name = "shell"
