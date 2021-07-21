@@ -3,6 +3,14 @@ version = 1
 test_patterns = ["tests/**"]
 
 [[analyzers]]
+name = "sql"
+enabled = true
+
+[[analyzers]]
+name = "docker"
+enabled = true
+
+[[analyzers]]
 name = "shell"
 enabled = true
 
@@ -19,4 +27,20 @@ enabled = true
 
 [[analyzers]]
 name = "test-coverage"
+enabled = true
+
+[[transformers]]
+name = "yapf"
+enabled = true
+
+[[transformers]]
+name = "isort"
+enabled = true
+
+[[transformers]]
+name = "black"
+enabled = true
+
+[[transformers]]
+name = "autopep8"
 enabled = true
