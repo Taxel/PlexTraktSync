@@ -23,7 +23,7 @@ def rate_limit(retries=5):
                 except (RateLimitException, RequestException, TraktInternalException) as e:
                     if retry == retries:
                         logger.error(f"Error: {e}")
-                        logger.error(f"API didn't respond properly, script will abort now. Please try again later.")
+                        logger.error("API didn't respond properly, script will abort now. Please try again later.")
                         exit(1)
 
                     if isinstance(e, RateLimitException):

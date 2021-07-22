@@ -126,7 +126,7 @@ def choose_server(account: MyPlexAccount):
             server = pick_server(account)
             # Connect to obtain baseUrl
             click.echo(title(f"Attempting to connect to {server.name}. This may take time and print some errors."))
-            click.echo(title(f"Server connections:"))
+            click.echo(title("Server connections:"))
             for c in server.connections:
                 click.echo(f"    {c.uri}")
             plex = server.connect()
