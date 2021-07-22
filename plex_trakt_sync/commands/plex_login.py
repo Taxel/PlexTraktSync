@@ -17,13 +17,17 @@ PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username")
 PROMPT_PLEX_RELOGIN = prompt("You already have Plex Access Token, do you want to log in again?")
 PROMPT_MANAGED_USER = prompt("Do you want to use managed user instead of main account?")
 SUCCESS_MESSAGE = success("Plex Media Server Authentication Token and base URL have been added to .env file")
+NOTICE_2FA_PASSWORD = comment(
+    "If you have 2 Factor Authentication enabled on Plex "
+    "you can append the code to your password below (eg. passwordCODE)"
+)
 CONFIG = factory.config()
 
 
 def myplex_login(username, password):
     while True:
         username = click.prompt(PROMPT_PLEX_USERNAME, type=str, default=username)
-        click.echo(comment(f"If you have 2 Factor Authentication enabled on Plex you can append the code to your password below (eg. passwordCODE)"))
+        click.echo(NOTICE_2FA_PASSWORD)
         password = click.prompt(PROMPT_PLEX_PASSWORD, type=str, default=password, hide_input=True, show_default=False)
         try:
             return MyPlexAccount(username, password)
