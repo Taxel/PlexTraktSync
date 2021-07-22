@@ -1,5 +1,5 @@
 from plexapi.exceptions import PlexApiException
-from requests import RequestException, ReadTimeout
+from requests import RequestException
 from trakt.errors import TraktException
 
 from plex_trakt_sync.decorators.deprecated import deprecated
