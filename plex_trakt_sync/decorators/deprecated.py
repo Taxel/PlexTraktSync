@@ -1,6 +1,6 @@
 try:
     from deprecated import deprecated
-except ImportError as e:
+except ImportError:
     import warnings
     from functools import wraps
 
