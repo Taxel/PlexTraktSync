@@ -15,7 +15,7 @@ class TqdmLoggingHandler(logging.StreamHandler):
             self.flush()
         except (KeyboardInterrupt, SystemExit):
             raise
-        except:
+        except Exception:
             self.handleError(record)  
 
 

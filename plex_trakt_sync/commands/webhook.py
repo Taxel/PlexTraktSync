@@ -110,7 +110,7 @@ def webhook(bind: str, port: int):
             try:
                 httpd.server_bind()
                 httpd.server_activate()
-            except:
+            except Exception:
                 httpd.server_close()
                 raise
             httpd.serve_forever()
