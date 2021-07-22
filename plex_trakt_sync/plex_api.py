@@ -12,6 +12,7 @@ from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.decorators.nocache import nocache
 from trakt.utils import timestamp
 
+from plex_trakt_sync.decorators.rate_limit import rate_limit
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.logging import logger
 
@@ -129,6 +130,10 @@ class PlexLibraryItem:
     def guid(self):
         return self.guids[0]
 
+    @rate_limit()
+    def get_guids(self):
+        return self.item.guids
+
     @property
     @memoize
     def guids(self):
@@ -139,7 +144,7 @@ class PlexLibraryItem:
         if self.is_legacy_agent:
             return [PlexGuid(self.item.guid, self.type, self)]
 
-        guids = [PlexGuid(guid.id, self.type, self) for guid in self.item.guids]
+        guids = [PlexGuid(guid.id, self.type, self) for guid in self.get_guids()]
 
         # take guid in this order:
         # - tmdb, tvdb, then imdb
