@@ -1,0 +1,68 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Cron Python application
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+  
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v2
+
+    # Setup Python (faster than using Python container)
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Cache pip, pipenv,db
+      uses: actions/cache@v2
+      with:
+        # This path is specific to Ubuntu
+        path: |
+          ~/.cache/pip
+          ~/.local/share/virtualenvs
+          trakt_cache.sqlite
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pipenv-
+          ${{ runner.os }}-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+        if [ -f Pipfile.lock ]; then pipenv install --dev --verbose; fi
+
+    - name: Setup .env
+      run: |
+        echo "# This is .env file for PlexTraktSync
+        PLEX_BASEURL=${{ secrets.PLEX_BASEURL }}
+        PLEX_FALLBACKURL=${{ secrets.PLEX_FALLBACKURL }}
+        PLEX_TOKEN=${{ secrets.PLEX_TOKEN }}
+        PLEX_USERNAME=${{ secrets.PLEX_USERNAME }}
+        TRAKT_USERNAME=${{ secrets.TRAKT_USERNAME }}" > .env
+
+    - name: Setup .pytrakt.json
+      run: |
+        echo '{
+                "CLIENT_ID": "${{ secrets.CLIENT_ID }}",
+                "CLIENT_SECRET": "${{ secrets.CLIENT_SECRET }}",
+                "OAUTH_TOKEN": "${{ secrets.OAUTH_TOKEN }}",
+                "OAUTH_REFRESH": "${{ secrets.OAUTH_REFRESH }}",
+                "OAUTH_EXPIRES_AT": ${{ secrets.OAUTH_EXPIRES_AT }}
+              }' > .pytrakt.json
+
+    - name: Run Sync
+      run: |
+        pipenv run python main.py
