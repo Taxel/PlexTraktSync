@@ -61,7 +61,6 @@ def watched(show_id):
 def collected(show_id):
     # returns a ShowProgress object containing the watched states of the passed show
     data = yield 'shows/{}/progress/collection?specials=true'.format(show_id)
-    #print(data)
     yield ShowProgress(**data)
 
 
@@ -74,7 +73,6 @@ class EpisodeProgress():
             self.completed = True
         self.last_watched_at = last_watched_at
         self.collected_at = collected_at
-        #print("Episode {} completed: {}".format(number, completed))
 
     def get_completed(self):
         return self.completed
@@ -90,7 +88,6 @@ class SeasonProgress():
             self.episodes[prog.number] = prog
 
         self.completed = completed == len(episodes)
-        #print("Season {} completed: {}".format(number, self.completed))
 
     def get_completed(self, episode):
         if self.completed:
@@ -120,7 +117,6 @@ class ShowProgress():
             allCompleted = allCompleted and prog.completed
 
         self.completed = allCompleted if len(seasons) > 0 else False
-        #print("Series completed: {}".format(self.completed))
 
     def get_completed(self, season, episode):
         if self.completed:

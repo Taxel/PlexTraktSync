@@ -9,7 +9,7 @@ from plex_trakt_sync.path import trakt_cache
 def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
     get_responses = getattr(session.cache, "values", None)
     if not callable(get_responses):
-        raise RuntimeError(f"This command requires requests_cache 0.7.x")
+        raise RuntimeError("This command requires requests_cache 0.7.x")
 
     sorters = {
         "size": lambda r: r.size,
@@ -59,7 +59,7 @@ def cache(sort: str, limit: int, reverse: bool):
     session = CachedSession(cache_name=trakt_cache, backend='sqlite')
     click.echo(f"Cache status:\n{session.cache}\n")
 
-    click.echo(f"URLs:")
+    click.echo("URLs:")
     sorted = get_sorted_cache(session, sort, reverse)
     for i, r in limit_iterator(sorted, limit):
         click.echo(f"- {i + 1:3d}. {r}")

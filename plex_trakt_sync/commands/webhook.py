@@ -21,7 +21,7 @@ class WebhookHandler:
     def handle(self, payload):
         logger.debug(f"Handle: {payload}")
         if "rating_key" not in payload:
-            logger.debug(f"Skip, no ratingKey in payload")
+            logger.debug("Skip, no ratingKey in payload")
             return
 
         rating_key = int(payload["rating_key"])
@@ -66,11 +66,11 @@ class HttpRequestHandler(BaseHTTPRequestHandler):
     def get_payload(self):
         content_length = int(self.headers['Content-Length'] or 0)
         if not content_length:
-            return self.error(f"No Content-Length header")
+            return self.error("No Content-Length header")
 
         post_data = self.rfile.read(content_length)
         if not post_data:
-            return self.error(f"No POST data provided")
+            return self.error("No POST data provided")
         try:
             payload = json.loads(post_data)
         except json.decoder.JSONDecodeError as e:
@@ -110,7 +110,7 @@ def webhook(bind: str, port: int):
             try:
                 httpd.server_bind()
                 httpd.server_activate()
-            except:
+            except Exception:
                 httpd.server_close()
                 raise
             httpd.serve_forever()

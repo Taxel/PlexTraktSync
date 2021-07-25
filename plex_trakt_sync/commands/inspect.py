@@ -36,7 +36,7 @@ def inspect(input):
         video = media.media[0].parts[0].videoStreams()[0]
         print(f"Video: '{video.codec}'")
 
-    print(f"Guids:")
+    print("Guids:")
     for guid in m.guids:
         print(f"  Guid: {guid}, Id: {guid.id}, Provider: {guid.provider}")
 
