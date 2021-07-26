@@ -160,7 +160,7 @@ def plex_login(username, password):
     click.echo(success(f"Connection to {plex.friendlyName} established successfully!"))
 
     token = server.accessToken
-    user = username
+    user = account.username
     if server.owned:
         managed_user = choose_managed_user(account)
         if managed_user:
