@@ -13,12 +13,15 @@ class Media:
     Class containing Plex and Trakt media items (Movie, Episode)
     """
 
-    def __init__(self, plex, trakt, plex_api: PlexApi = None, trakt_api: TraktApi = None):
+    def __init__(self, plex: PlexLibraryItem, trakt, plex_api: PlexApi = None, trakt_api: TraktApi = None):
         self.plex_api = plex_api
         self.trakt_api = trakt_api
         self.plex = plex
         self.trakt = trakt
         self.show = None
+
+    def refresh_item(self):
+        self.plex = self.plex_api.reload_item(self.plex)
 
     @property
     def season_number(self):
@@ -53,6 +56,7 @@ class Media:
 
     @property
     def watched_on_plex(self):
+        self.refresh_item()
         return self.plex.item.isWatched
 
     @property
