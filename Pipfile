@@ -8,7 +8,7 @@ verify_ssl = true
 [packages]
 click = "==7.1.2"
 deprecated = "==1.2.12"
-plexapi = "==4.6.1"
+plexapi = "==4.7.0"
 python-dotenv = "==0.19.0"
 python-git-info = "==0.7.1"
 requests = ">=2.25.1"
