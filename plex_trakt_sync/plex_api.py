@@ -357,7 +357,6 @@ class PlexLibrarySection:
     def title(self):
         return self.section.title
 
-    @memoize
     @nocache
     def all(self):
         return self.section.all()
