@@ -130,6 +130,7 @@ class PlexLibraryItem:
     def guid(self):
         return self.guids[0]
 
+    @nocache
     @rate_limit()
     def get_guids(self):
         return self.item.guids
