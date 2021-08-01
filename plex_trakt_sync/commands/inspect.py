@@ -27,7 +27,8 @@ def inspect(input):
 
     media = pm.item
     print(f"Media.Guid: '{media.guid}'")
-    print(f"Media.Guids: {media.guids}")
+    if not pm.is_legacy_agent:
+        print(f"Media.Guids: {media.guids}")
 
     if media.type in ["episode", "movie"]:
         audio = media.media[0].parts[0].audioStreams()[0]
