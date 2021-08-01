@@ -14,7 +14,7 @@ def inspect(input):
     print(f"PlexTraktSync inspect [{git_version}]")
 
     plex = factory.plex_api()
-    trakt = factory.trakt_api()
+    mf = factory.media_factory()
 
     if input.isnumeric():
         input = int(input)
@@ -42,8 +42,8 @@ def inspect(input):
 
     print(f"Metadata: {pm.to_json()}")
 
-    try:
-        tm = trakt.find_by_media(pm)
-        print(f"Trakt match: {tm}")
-    except Exception as e:
-        print(f"Error: {e}")
+    m = mf.resolve_any(pm)
+    if not m:
+        return
+
+    print(f"Trakt: {m.trakt_url}")
