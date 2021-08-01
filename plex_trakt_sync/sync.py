@@ -11,19 +11,19 @@ class Sync:
         self.sync_ratings_enabled = config["sync"]["ratings"]
         self.sync_watched_status_enabled = config["sync"]["watched_status"]
 
-    def sync(self, walker: Walker, listutil: TraktListUtil):
+    def sync(self, walker: Walker, listutil: TraktListUtil, dry_run=False):
         for movie in walker.find_movies():
-            self.sync_collection(movie)
-            self.sync_ratings(movie)
-            self.sync_watched(movie)
+            self.sync_collection(movie, dry_run=dry_run)
+            self.sync_ratings(movie, dry_run=dry_run)
+            self.sync_watched(movie, dry_run=dry_run)
             listutil.addPlexItemToLists(movie)
 
         for episode in walker.find_episodes():
-            self.sync_collection(episode)
-            self.sync_watched(episode)
+            self.sync_collection(episode, dry_run=dry_run)
+            self.sync_watched(episode, dry_run=dry_run)
             listutil.addPlexItemToLists(episode)
 
-    def sync_collection(self, m: Media):
+    def sync_collection(self, m: Media, dry_run=False):
         if not self.sync_collection_enabled:
             return
 
@@ -31,9 +31,10 @@ class Sync:
             return
 
         logger.info(f"To be added to collection: {m}")
-        m.add_to_collection()
+        if not dry_run:
+            m.add_to_collection()
 
-    def sync_ratings(self, m: Media):
+    def sync_ratings(self, m: Media, dry_run=False):
         if not self.sync_ratings_enabled:
             return
 
@@ -43,12 +44,14 @@ class Sync:
         # Plex rating takes precedence over Trakt rating
         if m.plex_rating is not None:
             logger.info(f"Rating {m} with {m.plex_rating} on Trakt")
-            m.trakt_rate()
+            if not dry_run:
+                m.trakt_rate()
         elif m.trakt_rating is not None:
             logger.info(f"Rating {m} with {m.trakt_rating} on Plex")
-            m.plex_rate()
+            if not dry_run:
+                m.plex_rate()
 
-    def sync_watched(self, m: Media):
+    def sync_watched(self, m: Media, dry_run=False):
         if not self.sync_watched_status_enabled:
             return
 
@@ -57,7 +60,9 @@ class Sync:
 
         if m.watched_on_plex:
             logger.info(f"Marking as watched in Trakt: {m}")
-            m.mark_watched_trakt()
+            if not dry_run:
+                m.mark_watched_trakt()
         elif m.watched_on_trakt:
             logger.info(f"Marking as watched in Plex: {m}")
-            m.mark_watched_plex()
+            if not dry_run:
+                m.mark_watched_plex()
