@@ -1,10 +1,11 @@
 from functools import wraps
 
 from plex_trakt_sync.factory import factory
-from plex_trakt_sync.path import trakt_cache
 
 cache = factory.requests_cache()
 session = factory.session()
+config = factory.config()
+trakt_cache = config["cache"]["path"]
 
 
 def http_cache(method, expire_after=None):
