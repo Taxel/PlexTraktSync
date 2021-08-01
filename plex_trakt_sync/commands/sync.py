@@ -3,9 +3,9 @@ from tqdm import tqdm
 
 from plex_trakt_sync.commands.login import ensure_login
 from plex_trakt_sync.factory import factory
-from plex_trakt_sync.media import Media
 from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.decorators.measure_time import measure_time
+from plex_trakt_sync.sync import Sync
 from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.logging import logger
@@ -13,48 +13,6 @@ from plex_trakt_sync.version import git_version_info
 from plex_trakt_sync.walker import Walker
 
 CONFIG = factory.config()
-
-
-def sync_collection(m: Media):
-    if not CONFIG['sync']['collection']:
-        return
-
-    if m.is_collected:
-        return
-
-    logger.info(f"To be added to collection: {m}")
-    m.add_to_collection()
-
-
-def sync_ratings(m: Media):
-    if not CONFIG['sync']['ratings']:
-        return
-
-    if m.plex_rating is m.trakt_rating:
-        return
-
-    # Plex rating takes precedence over Trakt rating
-    if m.plex_rating is not None:
-        logger.info(f"Rating {m} with {m.plex_rating} on Trakt")
-        m.trakt_rate()
-    elif m.trakt_rating is not None:
-        logger.info(f"Rating {m} with {m.trakt_rating} on Plex")
-        m.plex_rate()
-
-
-def sync_watched(m: Media):
-    if not CONFIG['sync']['watched_status']:
-        return
-
-    if m.watched_on_plex is m.watched_on_trakt:
-        return
-
-    if m.watched_on_plex:
-        logger.info(f"Marking as watched in Trakt: {m}")
-        m.mark_watched_trakt()
-    elif m.watched_on_trakt:
-        logger.info(f"Marking as watched in Plex: {m}")
-        m.mark_watched_plex()
 
 
 def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi):
@@ -78,19 +36,8 @@ def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi):
     # Load sections, this will attempt to connect to Plex
     click.echo(f"Server has {len(plex.library_sections)} libraries: {plex.library_section_names}")
 
-    for movie in walker.find_movies():
-        sync_collection(movie)
-        sync_ratings(movie)
-        sync_watched(movie)
-        # add to plex lists
-        listutil.addPlexItemToLists(movie)
-
-    for episode in walker.find_episodes():
-        sync_collection(episode)
-        sync_watched(episode)
-
-        # add to plex lists
-        listutil.addPlexItemToLists(episode)
+    runner = Sync(CONFIG)
+    runner.sync(walker, listutil)
 
     with measure_time("Updated plex watchlist"):
         listutil.updatePlexLists(plex)
