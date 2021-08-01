@@ -3,7 +3,7 @@ from functools import partial
 import click
 from requests_cache import CachedSession
 
-from plex_trakt_sync.path import trakt_cache
+from plex_trakt_sync.factory import factory
 
 
 def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
@@ -83,6 +83,9 @@ def cache(sort: str, limit: int, reverse: bool, url: str):
     """
     Manage and analyze Requests Cache.
     """
+
+    config = factory.config()
+    trakt_cache = config["cache"]["path"]
     session = CachedSession(cache_name=trakt_cache, backend='sqlite')
 
     if url:

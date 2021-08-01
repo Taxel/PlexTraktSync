@@ -3,6 +3,9 @@
     "logging": {
         "append": false
     },
+    "cache": {
+        "path": "trakt_cache"
+    },
     "sync": {
         "liked_lists": true,
         "watchlist": true,
