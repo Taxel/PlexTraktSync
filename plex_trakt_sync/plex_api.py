@@ -254,24 +254,24 @@ class PlexLibraryItem:
         """
         try:
             media = self.item.media[0]
-            height = media.height
-            assert height is not None
+            width = media.width
+            assert width is not None
         except (AttributeError, IndexError, TypeError, AssertionError):
             return None
         # 4k
-        if height > 1100:
+        if width >= 3840:
             return 'uhd_4k'
 
         # 1080
-        if height > 720:
+        if width >= 1920:
             return 'hd_1080p'
 
         # 720
-        if height > 576:
+        if width >= 1280:
             return 'hd_720p'
 
         # 576
-        if height > 480:
+        if width >= 768:
             return 'sd_576p'
 
         # 480
