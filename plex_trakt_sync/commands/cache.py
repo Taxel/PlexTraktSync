@@ -33,6 +33,32 @@ def limit_iterator(items, limit: int):
         yield from zip(range(limit), items)
 
 
+def render_xml(data):
+    from xml.etree import ElementTree
+
+    if not data.strip():
+        return None
+
+    root = ElementTree.fromstring(data)
+
+    return ElementTree.tostring(root, encoding='utf8').decode('utf8')
+
+
+def inspect_url(session: CachedSession, url: str):
+    matches = [
+        response
+        for response in session.cache.responses.values()
+        if response.url == url
+    ]
+    for m in matches:
+        print(f"## {m.url}")
+        content_type = m.headers['Content-Type']
+        if content_type[:8] == 'text/xml':
+            print(render_xml(m.content))
+        else:
+            print(m.content)
+
+
 @click.command()
 @click.option(
     "--sort",
@@ -52,11 +78,17 @@ def limit_iterator(items, limit: int):
     default=False,
     help="Sort reverse"
 )
-def cache(sort: str, limit: int, reverse: bool):
+@click.argument("url", required=False)
+def cache(sort: str, limit: int, reverse: bool, url: str):
     """
     Manage and analyze Requests Cache.
     """
     session = CachedSession(cache_name=trakt_cache, backend='sqlite')
+
+    if url:
+        inspect_url(session, url)
+        return
+
     click.echo(f"Cache status:\n{session.cache}\n")
 
     click.echo("URLs:")
