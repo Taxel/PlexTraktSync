@@ -14,18 +14,18 @@ def inspect(input):
     print(f"PlexTraktSync inspect [{git_version}]")
 
     plex = factory.plex_api()
-    trakt = factory.trakt_api()
+    mf = factory.media_factory()
 
     if input.isnumeric():
         input = int(input)
 
-    m = plex.fetch_item(input)
-    print(f"Inspecting: {m}")
+    pm = plex.fetch_item(input)
+    print(f"Inspecting: {pm}")
 
-    url = plex.media_url(m)
+    url = plex.media_url(pm)
     print(f"URL: {url}")
 
-    media = m.item
+    media = pm.item
     print(f"Media.Guid: '{media.guid}'")
     print(f"Media.Guids: {media.guids}")
 
@@ -37,13 +37,15 @@ def inspect(input):
         print(f"Video: '{video.codec}'")
 
     print("Guids:")
-    for guid in m.guids:
+    for guid in pm.guids:
         print(f"  Guid: {guid}, Id: {guid.id}, Provider: {guid.provider}")
 
-    print(f"Metadata: {m.to_json()}")
+    print(f"Metadata: {pm.to_json()}")
 
-    try:
-        tm = trakt.find_by_media(m)
-        print(f"Trakt match: {tm}")
-    except Exception as e:
-        print(f"Error: {e}")
+    m = mf.resolve_any(pm)
+    if not m:
+        return
+
+    print(f"Trakt: {m.trakt_url}")
+    print(f"Watched on Plex: {m.watched_on_plex}")
+    print(f"Warched on Trakt: {m.watched_on_trakt}")
