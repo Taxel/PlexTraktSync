@@ -105,10 +105,17 @@ class MediaFactory:
         self.trakt = trakt
 
     def resolve_any(self, pm: PlexLibraryItem, tm=None):
-        for guid in pm.guids:
+        try:
+            guids = pm.guids
+        except (PlexApiException, RequestException) as e:
+            logger.error(f"Skipping {pm}: {e}")
+            return None
+
+        for guid in guids:
             m = self.resolve_guid(guid, tm)
             if m:
                 return m
+
         return None
 
     @deprecated("use resolve_any")
