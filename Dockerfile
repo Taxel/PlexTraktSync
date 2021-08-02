@@ -4,7 +4,7 @@ WORKDIR /app
 ENTRYPOINT ["/app/main.py"]
 
 # Install app depedencies
-RUN pip install pipenv
+RUN pip install --no-cache-dir pipenv
 COPY Pipfile* ./
 RUN pipenv install --system --deploy
 
