@@ -130,13 +130,13 @@ class MediaFactory:
 
     def resolve_guid(self, guid: PlexGuid, tm=None):
         if guid.provider in ["local", "none", "agents.none"]:
-            logger.warning(f"Skipping {guid}: Provider {guid.provider} has no external Id")
+            logger.warning(f"Skipping {guid.pm}: Provider {guid.provider} has no external Id")
 
             return None
 
         if guid.provider not in ["imdb", "tmdb", "tvdb"]:
             logger.error(
-                f"Unable to parse a valid provider from guid:{guid}"
+                f"{guid.pm}: Unable to parse a valid provider from guid:{guid}"
             )
             return None
 
