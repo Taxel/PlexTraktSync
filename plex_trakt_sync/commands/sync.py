@@ -3,9 +3,9 @@ from tqdm import tqdm
 
 from plex_trakt_sync.commands.login import ensure_login
 from plex_trakt_sync.factory import factory
-from plex_trakt_sync.media import Media
 from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.decorators.measure_time import measure_time
+from plex_trakt_sync.sync import Sync
 from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.logging import logger
@@ -15,49 +15,7 @@ from plex_trakt_sync.walker import Walker
 CONFIG = factory.config()
 
 
-def sync_collection(m: Media):
-    if not CONFIG['sync']['collection']:
-        return
-
-    if m.is_collected:
-        return
-
-    logger.info(f"To be added to collection: {m}")
-    m.add_to_collection()
-
-
-def sync_ratings(m: Media):
-    if not CONFIG['sync']['ratings']:
-        return
-
-    if m.plex_rating is m.trakt_rating:
-        return
-
-    # Plex rating takes precedence over Trakt rating
-    if m.plex_rating is not None:
-        logger.info(f"Rating {m} with {m.plex_rating} on Trakt")
-        m.trakt_rate()
-    elif m.trakt_rating is not None:
-        logger.info(f"Rating {m} with {m.trakt_rating} on Plex")
-        m.plex_rate()
-
-
-def sync_watched(m: Media):
-    if not CONFIG['sync']['watched_status']:
-        return
-
-    if m.watched_on_plex is m.watched_on_trakt:
-        return
-
-    if m.watched_on_plex:
-        logger.info(f"Marking as watched in Trakt: {m}")
-        m.mark_watched_trakt()
-    elif m.watched_on_trakt:
-        logger.info(f"Marking as watched in Plex: {m}")
-        m.mark_watched_plex()
-
-
-def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi):
+def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi, dry_run: bool):
     listutil = TraktListUtil()
 
     with measure_time("Loaded Trakt lists"):
@@ -78,24 +36,15 @@ def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi):
     # Load sections, this will attempt to connect to Plex
     click.echo(f"Server has {len(plex.library_sections)} libraries: {plex.library_section_names}")
 
-    for movie in walker.find_movies():
-        sync_collection(movie)
-        sync_ratings(movie)
-        sync_watched(movie)
-        # add to plex lists
-        listutil.addPlexItemToLists(movie)
+    runner = Sync(CONFIG)
+    runner.sync(walker, listutil, dry_run=dry_run)
 
-    for episode in walker.find_episodes():
-        sync_collection(episode)
-        sync_watched(episode)
+    if not dry_run:
+        with measure_time("Updated plex watchlist"):
+            listutil.updatePlexLists(plex)
 
-        # add to plex lists
-        listutil.addPlexItemToLists(episode)
-
-    with measure_time("Updated plex watchlist"):
-        listutil.updatePlexLists(plex)
-
-    trakt.flush()
+    if not dry_run:
+        trakt.flush()
 
 
 @click.command()
@@ -125,7 +74,14 @@ def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi):
     default=1, show_default=True,
     help="Batch size for collection submit queue"
 )
-def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int):
+@click.option(
+    "--dry-run", "dry_run",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Dry run: Do not make changes"
+)
+def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int, dry_run: bool):
     """
     Perform sync between Plex and Trakt
     """
@@ -159,7 +115,9 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int)
         click.echo("Nothing to sync, this is likely due conflicting options given.")
         return
 
+    if dry_run:
+        print("Enabled dry-run mode: not making actual changes")
     w.walk_details(print=tqdm.write)
 
     with measure_time("Completed full sync"):
-        sync_all(walker=w, trakt=trakt, plex=plex)
+        sync_all(walker=w, trakt=trakt, plex=plex, dry_run=dry_run)
