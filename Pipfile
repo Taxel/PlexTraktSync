@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-click = "==7.1.2"
+click = "==8.0.1"
 deprecated = "==1.2.12"
 plexapi = "==4.7.0"
 python-dotenv = "==0.19.0"
