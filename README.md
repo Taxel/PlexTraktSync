@@ -135,6 +135,11 @@ and scrobble plays.
 $ ./plex_trakt_sync.sh watch
 ```
 
+NOTE: The `watch` command will scrobble all Plex Watches to Trakt as filtering
+by user is not implemented [#324].
+
+[#324]: https://github.com/Taxel/PlexTraktSync/issues/324
+
 ## Notes
 
  - The first execution of the script will (depending on your PMS library size)
