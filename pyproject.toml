@@ -1,5 +1,6 @@
 [build-system]
 requires = [
+    "setuptools-declarative-requirements",
     "setuptools>=42",
     "wheel",
 ]
