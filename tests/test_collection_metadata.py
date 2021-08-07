@@ -10,7 +10,7 @@ testdata = [
             addedAt=datetime(1999, 1, 1),
             media=[
                 make(
-                    videoResolution="720",
+                    width=1280,
                     audioChannels=2,
                 ),
             ],
@@ -27,7 +27,7 @@ testdata = [
             addedAt=datetime(1999, 1, 1),
             media=[
                 make(
-                    videoResolution="720",
+                    width=1280,
                     audioChannels=2,
                     parts=make(
                         streams=[
