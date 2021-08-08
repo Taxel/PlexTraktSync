@@ -47,7 +47,7 @@ Alternatively you can use [pipenv]:
 ```
 pip3 install pipenv
 pipenv install
-pipenv run python main.py
+pipenv run plex-trakt-sync
 ```
 
 [pipenv]: https://pipenv.pypa.io/
