@@ -50,6 +50,8 @@ pipenv install
 pipenv run plex-trakt-sync
 ```
 
+NOTE: For Windows 10 environments you may have better luck using `py` instead of `python3`.
+
 [pipenv]: https://pipenv.pypa.io/
 
 ## Setup
