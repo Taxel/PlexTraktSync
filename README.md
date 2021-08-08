@@ -60,7 +60,7 @@ To connect to Trakt you need to create a new API app:
 - Enter `urn:ietf:wg:oauth:2.0:oob` as the redirect url
 - You can leave Javascript origins and the Permissions checkboxes blank
 
-Then, run `python3 main.py`.
+Then, run `python3 -m plex_trakt_sync`.
 
 At first run, you will be asked to setup Trakt and Plex access.
 Follow the instructions, your credentials and API keys will be stored in
@@ -77,7 +77,7 @@ To set up to run this script in a cronjob every two hours,
 type `crontab -e` in the terminal.
 
 ```
-0 */2 * * * cd ~/path/to/this/repo && ./plex_trakt_sync.sh
+0 */2 * * * cd ~/path/to/this/repo && python3 -m plex_trakt_sync
 ```
 
 ## Sync options
@@ -86,8 +86,8 @@ The `sync` subcommand supports `--sync=tv` and `--sync=movies` options,
 so you can sync only specific library types.
 
 ```
-➔ ./plex_trakt_sync.sh sync --help
-Usage: main.py sync [OPTIONS]
+➔ python3 -m plex_trakt_sync sync --help
+Usage: plex_trakt_sync sync [OPTIONS]
 
   Perform sync between Plex and Trakt
 
@@ -132,7 +132,7 @@ and scrobble plays.
 [plex-scrobbler]: https://blog.trakt.tv/plex-scrobbler-52db9b016ead
 
 ```shell
-$ ./plex_trakt_sync.sh watch
+$ python3 -m plex_trakt_sync watch
 ```
 
 NOTE: The `watch` command will scrobble all Plex Watches to Trakt as filtering
