@@ -40,12 +40,12 @@ git clone -b 0.7.19 --depth=1 https://github.com/Taxel/PlexTraktSync
 
 In the extracted directory, install the required Python packages:
 ```
-pip3 install -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 
 Alternatively you can use [pipenv]:
 ```
-pip3 install pipenv
+python3 -m pip install pipenv
 pipenv install
 pipenv run plex-trakt-sync
 ```
