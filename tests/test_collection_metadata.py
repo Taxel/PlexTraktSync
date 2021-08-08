@@ -1,13 +1,13 @@
 #!/usr/bin/env python3 -m pytest
 import pytest
-from datetime import datetime
+from datetime import datetime, timezone
 from plex_trakt_sync.plex_api import PlexLibraryItem
 from tests.conftest import make
 
 testdata = [
     (
         make(
-            addedAt=datetime(1999, 1, 1),
+            addedAt=datetime(1999, 1, 1, tzinfo=timezone.utc),
             media=[
                 make(
                     width=1280,
@@ -16,7 +16,7 @@ testdata = [
             ],
         ),
         {
-            'collected_at': '1998-12-31:T22:00:00.000Z',
+            'collected_at': '1999-01-01:T00:00:00.000Z',
             'media_type': 'digital',
             'resolution': 'hd_720p',
             'audio_channels': '2.0',
@@ -24,7 +24,7 @@ testdata = [
     ),
     (
         make(
-            addedAt=datetime(1999, 1, 1),
+            addedAt=datetime(1999, 1, 1, tzinfo=timezone.utc),
             media=[
                 make(
                     width=1280,
@@ -48,7 +48,7 @@ testdata = [
             ],
         ),
         {
-            'collected_at': '1998-12-31:T22:00:00.000Z',
+            'collected_at': '1999-01-01:T00:00:00.000Z',
             'media_type': 'digital',
             'resolution': 'hd_720p',
             'audio_channels': '2.0',
