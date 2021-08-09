@@ -20,3 +20,6 @@ tqdm = "==4.62.0"
 
 [requires]
 python_version = "3"
+
+[scripts]
+plex-trakt-sync = "python -m plex_trakt_sync"
