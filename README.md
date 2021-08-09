@@ -50,9 +50,10 @@ pipenv install
 pipenv run plex-trakt-sync
 ```
 
-NOTE: For Windows 10 environments you may have better luck using `py` instead of `python3`.
+NOTE: For Windows 10 environments you may have better luck using [`py`][py] instead of `python3`.
 
 [pipenv]: https://pipenv.pypa.io/
+[py]: https://stackoverflow.com/questions/50896496/what-is-the-difference-between-py-and-python-in-the-terminal
 
 ## Setup
 
