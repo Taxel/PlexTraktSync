@@ -354,8 +354,9 @@ class PlexLibrarySection:
     def __init__(self, section: LibrarySection):
         self.section = section
 
+    @nocache
     def __len__(self):
-        return len(self.all())
+        return self.section.totalSize
 
     @property
     def title(self):
