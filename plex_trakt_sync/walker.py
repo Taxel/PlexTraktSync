@@ -2,7 +2,7 @@ from typing import List
 
 from plex_trakt_sync.decorators.measure_time import measure_time
 from plex_trakt_sync.media import MediaFactory, Media
-from plex_trakt_sync.plex_api import PlexApi
+from plex_trakt_sync.plex_api import PlexApi, PlexLibrarySection
 
 
 class Walker:
@@ -91,14 +91,15 @@ class Walker:
                 continue
             yield from self.episode_from_show(show)
 
-    def media_from_sections(self, sections, titles: List[str]):
+    def media_from_sections(self, sections: List[PlexLibrarySection], titles: List[str]):
         if titles:
             # Filter by matching section names
             sections = [x for x in sections if x.title in titles]
 
         for section in sections:
             with measure_time(f"{section.title} processed"):
-                it = self.progressbar(section.items(), total=len(section), desc=f"Processing {section.title}")
+                total = len(section)
+                it = self.progressbar(section.items(total), total=total, desc=f"Processing {section.title}")
                 yield from it
 
     def media_from_titles(self, libtype: str, titles: List[str]):

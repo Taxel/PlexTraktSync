@@ -355,7 +355,6 @@ class PlexLibrarySection:
     def __init__(self, section: LibrarySection):
         self.section = section
 
-    @memoize
     @nocache
     def __len__(self):
         return self.section.totalSize
@@ -364,12 +363,11 @@ class PlexLibrarySection:
     def title(self):
         return self.section.title
 
-    def all(self):
+    def all(self, max_items: int):
         libtype = self.section.TYPE
         key = self.section._buildSearchKey(libtype=libtype, returnKwargs=False)
         start = 0
         size = X_PLEX_CONTAINER_SIZE
-        length = len(self)
 
         while True:
             items = self.fetch_items(key, size, start)
@@ -379,18 +377,15 @@ class PlexLibrarySection:
             yield from items
 
             start += size
-            if start > length:
+            if start > max_items:
                 break
-
-        # clear cached value for next call to all() to be accurate if library changes
-        self.__len__.cache_clear()
 
     @nocache
     def fetch_items(self, key: str, size: int, start: int):
         return self.section.fetchItems(key, container_start=start, container_size=size)
 
-    def items(self):
-        for item in (PlexLibraryItem(x) for x in self.all()):
+    def items(self, max_items: int):
+        for item in (PlexLibraryItem(x) for x in self.all(max_items)):
             yield item
 
 
