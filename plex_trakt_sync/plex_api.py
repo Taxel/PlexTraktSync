@@ -385,8 +385,8 @@ class PlexLibrarySection:
         return self.section.fetchItems(key, container_start=start, container_size=size)
 
     def items(self, max_items: int):
-        for item in (PlexLibraryItem(x) for x in self.all(max_items)):
-            yield item
+        for item in self.all(max_items):
+            yield PlexLibraryItem(item)
 
 
 class PlexApi:
