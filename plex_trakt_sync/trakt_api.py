@@ -60,7 +60,8 @@ class TraktApi:
         trakt.core.session = factory.session()
         load_config()
 
-    def device_auth(self, client_id: str, client_secret: str):
+    @staticmethod
+    def device_auth(client_id: str, client_secret: str):
         trakt.core.AUTH_METHOD = trakt.core.DEVICE_AUTH
 
         return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
@@ -170,7 +171,8 @@ class TraktApi:
     def rate(self, m, rating):
         m.rate(rating)
 
-    def scrobbler(self, media: Union[Movie, TVEpisode]) -> ScrobblerProxy:
+    @staticmethod
+    def scrobbler(media: Union[Movie, TVEpisode]) -> ScrobblerProxy:
         scrobbler = media.scrobble(0, None, None)
         return ScrobblerProxy(scrobbler)
 
@@ -321,10 +323,12 @@ class TraktBatch:
         self.collection[media_type].append(item)
         self.flush()
 
-    def trakt_sync_collection(self, media_object):
+    @staticmethod
+    def trakt_sync_collection(media_object):
         return trakt.sync.add_to_collection(media_object)
 
-    def remove_empty_values(self, result):
+    @staticmethod
+    def remove_empty_values(result):
         """
         Update result to remove empty changes.
         This makes diagnostic printing cleaner if we don't print "changed: 0"

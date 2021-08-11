@@ -323,7 +323,8 @@ class PlexLibraryItem:
     def episode_number(self):
         return self.item.index
 
-    def date_value(self, date):
+    @staticmethod
+    def date_value(date):
         if not date:
             raise ValueError("Value can't be None")
 
