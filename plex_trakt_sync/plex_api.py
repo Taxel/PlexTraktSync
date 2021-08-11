@@ -355,6 +355,7 @@ class PlexLibrarySection:
     def __init__(self, section: LibrarySection):
         self.section = section
 
+    @memoize
     @nocache
     def __len__(self):
         return self.section.totalSize
@@ -380,6 +381,9 @@ class PlexLibrarySection:
             start += size
             if start > length:
                 break
+
+        # clear cached value for next call to all() to be accurate if library changes
+        self.__len__.cache_clear()
 
     @nocache
     def fetch_items(self, key: str, size: int, start: int):
