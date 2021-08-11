@@ -3,6 +3,7 @@ import re
 import datetime
 from typing import Union
 
+from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound
 from plexapi.library import MovieSection, ShowSection, LibrarySection
 from plexapi.server import PlexServer
@@ -362,9 +363,27 @@ class PlexLibrarySection:
     def title(self):
         return self.section.title
 
-    @nocache
     def all(self):
-        return self.section.all()
+        libtype = self.section.TYPE
+        key = self.section._buildSearchKey(libtype=libtype, returnKwargs=False)
+        start = 0
+        size = X_PLEX_CONTAINER_SIZE
+        length = len(self)
+
+        while True:
+            items = self.fetch_items(key, size, start)
+            if not len(items):
+                break
+
+            yield from items
+
+            start += size
+            if start > length:
+                break
+
+    @nocache
+    def fetch_items(self, key: str, size: int, start: int):
+        return self.section.fetchItems(key, container_start=start, container_size=size)
 
     def items(self):
         for item in (PlexLibraryItem(x) for x in self.all()):
