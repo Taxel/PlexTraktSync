@@ -81,7 +81,14 @@ def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi, dry_run: bool):
     is_flag=True,
     help="Dry run: Do not make changes"
 )
-def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int, dry_run: bool):
+@click.option(
+    "--no-progress-bar", "no_progress_bar",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Don't output progress bars"
+)
+def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int, dry_run: bool, no_progress_bar: bool):
     """
     Perform sync between Plex and Trakt
     """
@@ -99,7 +106,8 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int,
     plex = factory.plex_api()
     trakt = factory.trakt_api(batch_size=batch_size)
     mf = factory.media_factory(batch_size=batch_size)
-    w = Walker(plex, mf, movies=movies, shows=tv, progressbar=tqdm)
+    pb = None if no_progress_bar else tqdm
+    w = Walker(plex, mf, movies=movies, shows=tv, progressbar=pb)
 
     if library:
         logger.info(f"Filtering Library: {library}")
