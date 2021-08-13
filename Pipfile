@@ -15,7 +15,7 @@ requests = ">=2.25.1"
 requests-cache = "==0.7.3"
 trakt = "==3.2.1"
 urllib3 = ">=1.26.6"
-websocket-client = "==1.2.0"
+websocket-client = "==1.2.1"
 tqdm = "==4.62.0"
 
 [requires]
