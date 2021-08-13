@@ -6,8 +6,15 @@ from plex_trakt_sync.factory import factory
 from plex_trakt_sync.walker import Walker
 
 
+@click.option(
+    "--no-progress-bar", "no_progress_bar",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Don't output progress bars"
+)
 @click.command()
-def unmatched():
+def unmatched(no_progress_bar: bool):
     """
     List media that has no match in Plex
     """
@@ -15,7 +22,8 @@ def unmatched():
     ensure_login()
     plex = factory.plex_api()
     mf = factory.media_factory()
-    walker = Walker(plex, mf, progressbar=tqdm)
+    pb = None if no_progress_bar else tqdm
+    walker = Walker(plex, mf, progressbar=pb)
 
     if not walker.is_valid():
         click.echo("Nothing to scan, this is likely due conflicting options given.")
