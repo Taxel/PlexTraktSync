@@ -64,7 +64,8 @@ class Config(dict):
                 else:
                     txt.write("{}=\n".format(key))
 
-    def load_json(self, path):
+    @staticmethod
+    def load_json(path):
         with open(path, "r") as fp:
             try:
                 config = json.load(fp)

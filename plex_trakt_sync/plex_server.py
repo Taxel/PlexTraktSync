@@ -9,8 +9,9 @@ from plex_trakt_sync.logging import logger
 
 
 class PlexServerConnection:
+    @staticmethod
     @nocache
-    def connect(self):
+    def connect():
         return _get_plex_server()
 
 
