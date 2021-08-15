@@ -1,16 +1,17 @@
 from datetime import datetime, timedelta
 from functools import partial
-from typing import List
 from os import environ
+from typing import List
 
 import click
 from click import Choice
-from plexapi.exceptions import Unauthorized, NotFound
+from plexapi.exceptions import NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
 from plexapi.server import PlexServer
 
 from plex_trakt_sync.factory import factory
-from plex_trakt_sync.style import prompt, error, success, title, comment, disabled, highlight
+from plex_trakt_sync.style import (comment, disabled, error, highlight, prompt,
+                                   success, title)
 
 PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
 PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username")

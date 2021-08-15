@@ -3,6 +3,7 @@ from time import sleep
 
 from requests import RequestException
 from trakt.errors import RateLimitException, TraktInternalException
+
 from plex_trakt_sync.logging import logger
 
 

@@ -1,4 +1,5 @@
 from time import sleep
+
 from plexapi.server import PlexServer
 
 from plex_trakt_sync.logging import logging

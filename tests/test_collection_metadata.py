@@ -1,6 +1,8 @@
 #!/usr/bin/env python3 -m pytest
-import pytest
 from datetime import datetime, timezone
+
+import pytest
+
 from plex_trakt_sync.plex_api import PlexLibraryItem
 from tests.conftest import make
 

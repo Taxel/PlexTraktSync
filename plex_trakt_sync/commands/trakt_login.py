@@ -6,7 +6,7 @@ from trakt.errors import ForbiddenException
 
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.path import pytrakt_file
-from plex_trakt_sync.style import title, success, error, prompt
+from plex_trakt_sync.style import error, prompt, success, title
 from plex_trakt_sync.trakt_api import TraktApi
 
 PROMPT_TRAKT_CLIENT_ID = prompt("Please enter your client id")

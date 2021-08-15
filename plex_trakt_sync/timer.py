@@ -1,4 +1,4 @@
-from time import sleep, monotonic
+from time import monotonic, sleep
 
 from plex_trakt_sync.logging import logger
 

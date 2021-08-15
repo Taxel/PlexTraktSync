@@ -2,13 +2,13 @@ import click
 from tqdm import tqdm
 
 from plex_trakt_sync.commands.login import ensure_login
-from plex_trakt_sync.factory import factory
-from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.decorators.measure_time import measure_time
+from plex_trakt_sync.factory import factory
+from plex_trakt_sync.logging import logger
+from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.sync import Sync
 from plex_trakt_sync.trakt_api import TraktApi
 from plex_trakt_sync.trakt_list_util import TraktListUtil
-from plex_trakt_sync.logging import logger
 from plex_trakt_sync.version import git_version_info
 from plex_trakt_sync.walker import Walker
 

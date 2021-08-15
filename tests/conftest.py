@@ -1,6 +1,7 @@
 import json
 from os import environ
-from os.path import dirname, join as join_path
+from os.path import dirname
+from os.path import join as join_path
 from typing import Union
 
 from trakt.tv import TVShow

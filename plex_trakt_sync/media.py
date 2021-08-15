@@ -4,7 +4,7 @@ from trakt.errors import TraktException
 
 from plex_trakt_sync.decorators.deprecated import deprecated
 from plex_trakt_sync.logging import logger
-from plex_trakt_sync.plex_api import PlexLibraryItem, PlexApi, PlexGuid
+from plex_trakt_sync.plex_api import PlexApi, PlexGuid, PlexLibraryItem
 from plex_trakt_sync.trakt_api import TraktApi
 
 

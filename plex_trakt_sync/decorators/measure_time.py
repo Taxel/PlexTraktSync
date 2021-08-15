@@ -1,6 +1,7 @@
-from plex_trakt_sync.logging import logging, logger
 from contextlib import contextmanager
 from time import time
+
+from plex_trakt_sync.logging import logger, logging
 
 
 @contextmanager

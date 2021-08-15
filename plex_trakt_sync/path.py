@@ -1,4 +1,4 @@
-from os.path import dirname, abspath, join
+from os.path import abspath, dirname, join
 
 app_path = dirname(dirname(abspath(__file__)))
 default_config_file = join(app_path, "config.default.json")

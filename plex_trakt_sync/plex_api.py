@@ -1,18 +1,18 @@
 from __future__ import annotations
-import re
+
 import datetime
+import re
 from typing import Union
 
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound
-from plexapi.library import MovieSection, ShowSection, LibrarySection
+from plexapi.library import LibrarySection, MovieSection, ShowSection
 from plexapi.server import PlexServer
+from trakt.utils import timestamp
 
 from plex_trakt_sync.decorators.deprecated import deprecated
 from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.decorators.nocache import nocache
-from trakt.utils import timestamp
-
 from plex_trakt_sync.decorators.rate_limit import rate_limit
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.logging import logger

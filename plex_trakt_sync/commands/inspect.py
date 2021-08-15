@@ -1,4 +1,5 @@
 import click
+
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.version import git_version_info
 

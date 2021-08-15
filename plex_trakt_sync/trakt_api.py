@@ -1,25 +1,25 @@
 from typing import Union
 
 import trakt
-import trakt.users
-import trakt.sync
 import trakt.movies
+import trakt.sync
+import trakt.users
 from trakt.core import load_config
+from trakt.errors import ForbiddenException, OAuthException
 from trakt.movies import Movie
-from trakt.tv import TVShow, TVSeason, TVEpisode
-from trakt.errors import OAuthException, ForbiddenException
 from trakt.sync import Scrobbler
+from trakt.tv import TVEpisode, TVSeason, TVShow
 
-from plex_trakt_sync.factory import factory
-from plex_trakt_sync.logging import logger
+from plex_trakt_sync import pytrakt_extensions
 from plex_trakt_sync.decorators.deprecated import deprecated
 from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.decorators.nocache import nocache
 from plex_trakt_sync.decorators.rate_limit import rate_limit
 from plex_trakt_sync.decorators.time_limit import time_limit
-from plex_trakt_sync import pytrakt_extensions
+from plex_trakt_sync.factory import factory
+from plex_trakt_sync.logging import logger
 from plex_trakt_sync.path import pytrakt_file
-from plex_trakt_sync.plex_api import PlexLibraryItem, PlexGuid
+from plex_trakt_sync.plex_api import PlexGuid, PlexLibraryItem
 
 
 class ScrobblerProxy:

@@ -1,13 +1,13 @@
 from itertools import count
 
-from trakt.users import UserList
+from plexapi.video import Episode
 from trakt.errors import NotFoundException, OAuthException
 from trakt.movies import Movie
 from trakt.tv import TVEpisode
-from plexapi.video import Episode
+from trakt.users import UserList
 
-from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.logging import logger
+from plex_trakt_sync.plex_api import PlexApi
 
 
 class TraktList():
