@@ -22,7 +22,7 @@ def unmatched(no_progress_bar: bool):
     ensure_login()
     plex = factory.plex_api()
     mf = factory.media_factory()
-    pb = None if no_progress_bar else tqdm
+    pb = factory.progressbar(not no_progress_bar)
     walker = Walker(plex, mf, progressbar=pb)
 
     if not walker.is_valid():
