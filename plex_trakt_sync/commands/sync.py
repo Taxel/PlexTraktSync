@@ -106,7 +106,7 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int,
     plex = factory.plex_api()
     trakt = factory.trakt_api(batch_size=batch_size)
     mf = factory.media_factory(batch_size=batch_size)
-    pb = None if no_progress_bar else tqdm
+    pb = factory.progressbar(not no_progress_bar)
     w = Walker(plex, mf, movies=movies, shows=tv, progressbar=pb)
 
     if library:
