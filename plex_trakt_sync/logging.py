@@ -1,23 +1,7 @@
 import logging
-import sys
-
-import tqdm
 
 from .factory import factory
 from .path import log_file
-
-
-class TqdmLoggingHandler(logging.StreamHandler):
-
-    def emit(self, record):
-        try:
-            msg = self.format(record)
-            tqdm.tqdm.write(msg)
-            self.flush()
-        except (KeyboardInterrupt, SystemExit):
-            raise
-        except Exception:
-            self.handleError(record)
 
 
 def initialize():
@@ -27,7 +11,8 @@ def initialize():
     log_format = '%(asctime)s %(levelname)s:%(message)s'
 
     # messages with info and above are printed to stdout
-    console_handler = TqdmLoggingHandler(sys.stdout)
+    console_handler = logging.StreamHandler(factory.progressbar())
+    console_handler.terminator = ""
     console_handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
     console_handler.setLevel(logging.INFO)
 
