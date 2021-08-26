@@ -68,6 +68,9 @@ class PlexGuid:
         if x == "xbmcnfo":
             CONFIG = factory.config()
             x = CONFIG["xbmc-providers"][self.media_type]
+        if x == "xbmcnfotv":
+            CONFIG = factory.config()
+            x = CONFIG["xbmc-providers"]["shows"]
 
         return x
 
