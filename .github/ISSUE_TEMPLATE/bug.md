@@ -11,10 +11,17 @@ labels: bug
 _A description of what the bug is, including a complete traceback (if applicable)_
 
 <!--
+
 Before you continue reporting the bug, be sure that you use the latest released version:
 - https://github.com/Taxel/PlexTraktSync/releases
 
+Using branch, e.g "main" is not supported, you must use released version when reporting a bug.
+
+Be sure to use required pip packages matching the release, see
+- https://github.com/Taxel/PlexTraktSync#installing
+
 Remove the placeholders when filling the bug report, leave only your input.
+
 -->
 
 ### Expected behavior
@@ -31,6 +38,6 @@ _Is there an existing workaround for this issue?_
 
 ### Environment
 
-- Version: <!-- e.g. `0.7.0` or `main` -->
+- Version: <!-- e.g. `0.12.18` -->
 - Python version: <!-- e.g. `3.9` -->
 - Platform: <!-- e.g. `Debian 10` -->
