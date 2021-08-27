@@ -21,7 +21,7 @@ def inspect(input):
         input = int(input)
 
     pm = plex.fetch_item(input)
-    print(f"Inspecting: {pm}")
+    print(f"Inspecting {input}: {pm}")
 
     url = plex.media_url(pm)
     print(f"URL: {url}")
