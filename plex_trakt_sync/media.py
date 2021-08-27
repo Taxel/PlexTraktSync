@@ -51,6 +51,10 @@ class Media:
         return self.plex.type == "movie"
 
     @property
+    def is_episode(self):
+        return self.plex.type == "episode"
+
+    @property
     def is_collected(self):
         if self.is_movie:
             return self.trakt_id in self.trakt_api.movie_collection_set
