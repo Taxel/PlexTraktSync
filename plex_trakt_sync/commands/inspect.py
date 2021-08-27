@@ -1,6 +1,7 @@
 import click
 
 from plex_trakt_sync.factory import factory
+from plex_trakt_sync.media import Media
 from plex_trakt_sync.version import git_version_info
 
 
@@ -48,6 +49,12 @@ def inspect(input):
     m = mf.resolve_any(pm)
     if not m:
         return
+
+    # fetch show property for watched_on_trakt
+    if m.is_episode:
+        ps = plex.fetch_item(m.plex.item.grandparentRatingKey)
+        ms = mf.resolve_any(ps)
+        m.show = ms
 
     print(f"Trakt: {m.trakt_url}")
     print(f"Watched on Plex: {m.watched_on_plex}")
