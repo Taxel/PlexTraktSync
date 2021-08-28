@@ -38,15 +38,21 @@ class Media:
 
     @property
     def trakt_url(self):
-        return f"https://trakt.tv/{self.trakt.media_type}/{self.trakt.trakt}"
+        return f"https://trakt.tv/{self.trakt.media_type}/{self.trakt_id}"
 
     @property
     def show_trakt_id(self):
+        if not self.show:
+            raise RuntimeError(f"Unexpected call: episode without show property")
         return self.show.trakt_id
 
     @property
     def is_movie(self):
         return self.plex.type == "movie"
+
+    @property
+    def is_episode(self):
+        return self.plex.type == "episode"
 
     @property
     def is_collected(self):
