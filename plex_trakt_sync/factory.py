@@ -59,7 +59,7 @@ class Factory:
     @memoize
     def progressbar(self, enabled=True):
         if enabled:
-            from tqdm import tqdm
+            from tqdm.rich import tqdm
 
             return tqdm
 
