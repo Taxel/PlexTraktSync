@@ -1,0 +1,11 @@
+services:
+  plex-trakt-sync:
+    image: ghcr.io/taxel/plextraktsync
+    volumes:
+      - ./config:/app/config
+    environment:
+      - PTS_CONFIG_DIR=/app/config
+      - PTS_CACHE_DIR=/app/config
+      - PTS_LOG_DIR=/app/config
+
+# vim:ts=2:sw=2:et
