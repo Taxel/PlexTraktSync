@@ -27,6 +27,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Set version variable
+        id: vars
+        run: |
+          if [[ "${GITHUB_REF#refs/heads/}" = "${GITHUB_REF}" ]]; then
+            APP_VERSION=${GITHUB_REF#refs/tags/}
+          else
+            git fetch --tags --unshallow
+            APP_VERSION=$(git describe --tags)_${GITHUB_REF#refs/heads/}
+          fi
+          echo ::set-output name=version::$APP_VERSION
+
       - name: Log in to the Container registry
         uses: docker/login-action@v1.10.0
         with:
@@ -47,8 +58,14 @@ jobs:
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2.7.0
+        env:
+          APP_VERSION: ${{ steps.vars.outputs.version }}
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            APP_VERSION=${{ env.APP_VERSION }}
+
+# vim:ts=2:sw=2:et
