@@ -14,7 +14,7 @@ from plex_trakt_sync.style import (comment, disabled, error, highlight, prompt,
                                    success, title)
 
 PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
-PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username")
+PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username or e-mail")
 PROMPT_PLEX_RELOGIN = prompt("You already have Plex Access Token, do you want to log in again?")
 PROMPT_MANAGED_USER = prompt("Do you want to use managed user instead of main account?")
 SUCCESS_MESSAGE = success("Plex Media Server Authentication Token and base URL have been added to .env file")
