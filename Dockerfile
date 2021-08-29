@@ -10,3 +10,5 @@ RUN pipenv install --system --deploy
 
 # Copy rest of the app
 COPY . .
+ARG APP_VERSION=$APP_VERSION
+ENV APP_VERSION=$APP_VERSION
