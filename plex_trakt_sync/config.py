@@ -5,7 +5,7 @@ from os.path import exists
 
 from dotenv import load_dotenv
 
-from plex_trakt_sync.path import config_file, default_config_file, env_file
+from plex_trakt_sync.path import config_file, default_config_file, env_file, PTS_CACHE_DIR
 
 """
 Platform name to identify our application
@@ -45,6 +45,7 @@ class Config(dict):
                 fp.write(json.dumps(defaults, indent=4))
 
         config = self.load_json(self.config_file)
+        config["cache"]["path"] = config["cache"]["path"].replace("$PTS_CACHE_DIR", PTS_CACHE_DIR)
         self.update(config)
 
         load_dotenv(self.env_file)

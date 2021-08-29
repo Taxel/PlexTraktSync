@@ -4,7 +4,7 @@
         "append": false
     },
     "cache": {
-        "path": "trakt_cache"
+        "path": "$PTS_CACHE_DIR/trakt_cache"
     },
     "sync": {
         "liked_lists": true,
