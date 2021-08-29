@@ -7,11 +7,17 @@
         "path": "$PTS_CACHE_DIR/trakt_cache"
     },
     "sync": {
-        "liked_lists": true,
-        "watchlist": true,
-        "watched_status": true,
-        "collection": true,
-        "ratings": true
+        "trakt_to_plex": {
+            "watched_status": true,
+            "ratings": true,
+            "liked_lists": true,
+            "watchlist": true
+        },
+        "plex_to_trakt": {
+            "watched_status": true,
+            "ratings": true,
+            "collection": true
+        }
     },
     "watch": {
         "username_filter": false
