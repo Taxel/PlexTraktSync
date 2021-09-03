@@ -58,4 +58,4 @@ def inspect(input):
 
     print(f"Trakt: {m.trakt_url}")
     print(f"Watched on Plex: {m.watched_on_plex}")
-    print(f"Warched on Trakt: {m.watched_on_trakt}")
+    print(f"Watched on Trakt: {m.watched_on_trakt}")
