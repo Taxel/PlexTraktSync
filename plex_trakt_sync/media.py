@@ -97,6 +97,9 @@ class Media:
     def plex_rate(self):
         self.plex_api.rate(self.plex.item, self.trakt_rating)
 
+    def plex_history(self, **kwargs):
+        yield from self.plex_api.history(self.plex.item, **kwargs)
+
     def __str__(self):
         return str(self.plex)
 
