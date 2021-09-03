@@ -59,3 +59,7 @@ def inspect(input):
     print(f"Trakt: {m.trakt_url}")
     print(f"Watched on Plex: {m.watched_on_plex}")
     print(f"Watched on Trakt: {m.watched_on_trakt}")
+
+    print("Play history:")
+    for h in m.plex_history(device=True, account=True):
+        print(f"- {h.lastViewedAt} by {h.account.name} with {h.device.name} on {h.device.platform}")
