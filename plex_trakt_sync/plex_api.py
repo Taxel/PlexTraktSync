@@ -314,8 +314,12 @@ class PlexLibraryItem:
         return percent
 
     def episodes(self):
-        for ep in self.item.episodes():
+        for ep in self._get_episodes():
             yield PlexLibraryItem(ep)
+
+    @nocache
+    def _get_episodes(self):
+        return self.item.episodes()
 
     @property
     @memoize
