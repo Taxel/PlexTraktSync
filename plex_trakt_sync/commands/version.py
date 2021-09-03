@@ -1,8 +1,8 @@
 import sys
 
 import click
-from trakt import __version__ as TRAKT_API_VERSION
 from plexapi import VERSION as PLEX_API_VERSION
+from trakt import __version__ as TRAKT_API_VERSION
 
 from plex_trakt_sync.__init__ import __version__ as PTS_VERSION
 from plex_trakt_sync.version import git_version_info

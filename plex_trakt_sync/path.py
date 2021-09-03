@@ -1,5 +1,5 @@
-from os.path import abspath, dirname, join
 from os import getenv
+from os.path import abspath, dirname, join
 
 app_path = dirname(dirname(abspath(__file__)))
 
