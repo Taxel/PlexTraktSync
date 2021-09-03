@@ -5,7 +5,7 @@ import re
 from typing import Union
 
 from plexapi import X_PLEX_CONTAINER_SIZE
-from plexapi.exceptions import BadRequest, NotFound
+from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.library import LibrarySection, MovieSection, ShowSection
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from trakt.utils import timestamp
@@ -503,7 +503,13 @@ class PlexApi:
 
     @nocache
     def history(self, m, device=False, account=False):
-        for h in m.history():
+        try:
+            history = m.history()
+        except Unauthorized as e:
+            logger.debug(f"No permission to access play history: {e}")
+            return
+
+        for h in history:
             if device:
                 h.device = self.system_device(h.deviceID)
             if account:
