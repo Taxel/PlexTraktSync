@@ -45,7 +45,6 @@ class Config(dict):
                 fp.write(json.dumps(defaults, indent=4))
 
         config = self.load_json(self.config_file)
-        config["cache"]["path"] = config["cache"]["path"].replace("$PTS_CACHE_DIR", PTS_CACHE_DIR)
         self.update(config)
 
         load_dotenv(self.env_file)
@@ -56,6 +55,8 @@ class Config(dict):
             self[key] = value
 
         self.initialized = True
+
+        self["cache"]["path"] = self["cache"]["path"].replace("$PTS_CACHE_DIR", PTS_CACHE_DIR)
 
     def save(self):
         with open(self.env_file, "w") as txt:
