@@ -5,9 +5,9 @@ import re
 from typing import Union
 
 from plexapi import X_PLEX_CONTAINER_SIZE
-from plexapi.exceptions import BadRequest, NotFound
+from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.library import LibrarySection, MovieSection, ShowSection
-from plexapi.server import PlexServer
+from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from trakt.utils import timestamp
 
 from plex_trakt_sync.decorators.deprecated import deprecated
@@ -475,6 +475,16 @@ class PlexApi:
     def library_section_names(self):
         return [s.title for s in self.library_sections]
 
+    @memoize
+    @nocache
+    def system_device(self, device_id: int) -> SystemDevice:
+        return self.plex.systemDevice(device_id)
+
+    @memoize
+    @nocache
+    def system_account(self, account_id: int) -> SystemAccount:
+        return self.plex.systemAccount(account_id)
+
     @nocache
     def rate(self, m, rating):
         m.rate(rating)
@@ -490,6 +500,21 @@ class PlexApi:
             self.plex.playlist(name).delete()
         except (NotFound, BadRequest):
             logger.debug(f"Playlist '{name}' not found, so it could not be deleted")
+
+    @nocache
+    def history(self, m, device=False, account=False):
+        try:
+            history = m.history()
+        except Unauthorized as e:
+            logger.debug(f"No permission to access play history: {e}")
+            return
+
+        for h in history:
+            if device:
+                h.device = self.system_device(h.deviceID)
+            if account:
+                h.account = self.system_account(h.accountID)
+            yield h
 
     @nocache
     def mark_watched(self, m):
