@@ -7,7 +7,7 @@ from typing import Union
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound
 from plexapi.library import LibrarySection, MovieSection, ShowSection
-from plexapi.server import PlexServer, SystemDevice
+from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from trakt.utils import timestamp
 
 from plex_trakt_sync.decorators.deprecated import deprecated
@@ -479,6 +479,11 @@ class PlexApi:
     @nocache
     def system_device(self, device_id: int) -> SystemDevice:
         return self.plex.systemDevice(device_id)
+
+    @memoize
+    @nocache
+    def system_account(self, account_id: int) -> SystemAccount:
+        return self.plex.systemAccount(account_id)
 
     @nocache
     def rate(self, m, rating):
