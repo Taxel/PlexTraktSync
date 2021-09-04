@@ -158,6 +158,10 @@ docker run \
 	-e PTS_LOG_DIR=/app/config \ # As per github.com/Taxel/PlexTraktSync/docker-compose.yml
 	ghcr.io/taxel/plextraktsync:latest
 ```
+Keep running this until you've completed your first successful sync between Plex Media Server and Trakt.  That should be three times...
+
+ 1. Setup link with Plex
+
 ~~Setup~~
 ~~Docker Compose~~
 
@@ -174,6 +178,6 @@ docker run \
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4MzM1ODU5ODUsMTg5MzkyMDczMiwyOT
+eyJoaXN0b3J5IjpbLTE0MTM0MDMzNzQsMTg5MzkyMDczMiwyOT
 kzNDgzNDNdfQ==
 -->
