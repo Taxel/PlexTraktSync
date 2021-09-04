@@ -143,7 +143,9 @@ by user is not implemented [#324].
 ## Docker Compose
 
 This will show you how to set up PlexTraktSync for one user on a Plex Media Server for Docker Compose.  Duplicate this for each additional user wanting to sync to Trakt.
+
 ### Setup
+
 First we need to create the configuration files needed.  This can be done by running the following command line...
 ```bash
 docker run \
@@ -170,8 +172,9 @@ Keep running this until you've completed your first successful sync between Plex
  1. Setup link with Plex Media Server
  2. Setup link with Trakt
  3. Sync between Plex Media Server and Trakt.
- 
+
 ### Docker Compose
+
 Once you have your configuration files created, you need to make sure they have the correct permissions to be used by docker compose as they've probably been created with ```root:root```.
 
 Docker normally uses the local user and the docker group, so run ```sudo chown user:docker /home/user/docker/appdata/plextraktsync-john -R``` .  Check your own setup incase it is different.
@@ -208,8 +211,8 @@ You can now set up a docker container in your docker compose file that will scro
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExMDUxODc3NDgsLTE0NTg0ODA5OTIsLT
-ExODg3NzkyNTQsLTEwMjYxOTY3MywxMDcxMDUzMzM1LC03Njc3
-ODc2OCw4MDYxOTgyMTgsLTE1NzI5NTc3ODQsMTg5MzkyMDczMi
-wyOTkzNDgzNDNdfQ==
+eyJoaXN0b3J5IjpbMzM5Njg4MzYsLTE0NTg0ODA5OTIsLTExOD
+g3NzkyNTQsLTEwMjYxOTY3MywxMDcxMDUzMzM1LC03Njc3ODc2
+OCw4MDYxOTgyMTgsLTE1NzI5NTc3ODQsMTg5MzkyMDczMiwyOT
+kzNDgzNDNdfQ==
 -->
