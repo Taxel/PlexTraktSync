@@ -145,13 +145,14 @@ by user is not implemented [#324].
 This will show you how to set up PlexTraktSync for one user on a Plex Media Server for Docker Compose.  Duplicate this for each additional user wanting to sync to Trakt.
 
 **Setup**
+
 First we need to create the configuration files needed.  This can be done by running the following command line...
 ```bash
 docker run \
 	-it --rm \
 	--name plextraktsync-john \
 	--network t2_proxy \
-	-v /home/james/docker/appdata/plextraktsync-john/config:/app/config \
+	-v /home/user/docker/appdata/plextraktsync-john/config:/app/config \
 	-e PTS_CONFIG_DIR=/app/config \
 	-e PTS_CACHE_DIR=/app/config \
 	-e PTS_LOG_DIR=/app/config \
@@ -163,7 +164,7 @@ docker run \
 | ```--rm``` | Removes the session once closed |
 | ```--name plextraktsync-john``` | Naming the session can help with diagnosing issues |
 | ```--network t2_proxy``` | Name of the same docker network Plex Media Server is on |
-| ```-v /home/james/docker/appdata/plextraktsync-john/config:/app/config``` | Before ":" is the path to a unique folder for this Plex user |
+| ```-v /home/user/docker/appdata/plextraktsync-john/config:/app/config``` | Before ":" is the path to a unique folder for this Plex user |
 | ```-e PTS_CONFIG_DIR=/app/config```<br>```-e PTS_CACHE_DIR=/app/config```<br>```-e PTS_LOG_DIR=/app/config``` | Environment variables as per PlexTraktSync/docker-compose.yml |
 
 Keep running this until you've completed your first successful sync between Plex Media Server and Trakt.  That should be three times...
@@ -173,6 +174,7 @@ Keep running this until you've completed your first successful sync between Plex
  3. Sync between Plex Media Server and Trakt.
 
 **Docker Compose**
+
 Once you have your configuration files created, you can now set up a docker container in your docker compose file.
 ```yaml
   plextraktsync-john:
@@ -207,6 +209,6 @@ Once you have your configuration files created, you can now set up a docker cont
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODA2MTk4MjE4LC0xNTcyOTU3Nzg0LDE4OT
-M5MjA3MzIsMjk5MzQ4MzQzXX0=
+eyJoaXN0b3J5IjpbLTE5Mzc5Mzg1NTIsODA2MTk4MjE4LC0xNT
+cyOTU3Nzg0LDE4OTM5MjA3MzIsMjk5MzQ4MzQzXX0=
 -->
