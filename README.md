@@ -167,7 +167,22 @@ Keep running this until you've completed your first successful sync between Plex
 **Docker Compose**
 Once you have your configuration files created, you can now set up a docker container in your docker compose file.
 ```yaml
-
+  plextraktsync-john:
+    image: ghcr.io/taxel/plextraktsync:latest
+    container_name: plextraktsync-john
+    networks:
+      - t2_proxy
+    depends_on:
+      - plex
+    restart: unless-stopped
+    user: "1000:998"
+    volumes:
+      - $DOCKERDIR/appdata/plextraktsync-james/config:/app/config
+    environment:
+      - PTS_CONFIG_DIR=/app/config
+      - PTS_CACHE_DIR=/app/config
+      - PTS_LOG_DIR=/app/config
+    entrypoint: ["python3", "main.py", "watch"]
 ```
 
 
@@ -184,6 +199,6 @@ Once you have your configuration files created, you can now set up a docker cont
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzQxOTQ2NDE1LDE4OTM5MjA3MzIsMjk5Mz
-Q4MzQzXX0=
+eyJoaXN0b3J5IjpbLTIxMjg2NzM5MTgsMTg5MzkyMDczMiwyOT
+kzNDgzNDNdfQ==
 -->
