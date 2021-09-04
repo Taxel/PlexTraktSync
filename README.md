@@ -176,8 +176,8 @@ Keep running this until you've completed your first successful sync between Plex
 **Docker Compose**
 
 Once you have your configuration files created, you need to make sure they have the correct permissions to be used by docker compose as they've probably been created with ```root:root```.
-In my setup, docker uses the local user and the docker group, so I run ```bash sudo chown user:docker /home/user/docker/appdata/plextraktsync-john -R```
 
+Docker normally uses the local user and the docker group, so run ```bash sudo chown user:docker /home/user/docker/appdata/plextraktsync-john -R``` .  Check your own setup incase it is different.
 
 you can now set up a docker container in your docker compose file that will scrobble that Plex user's activities to
 ```yaml
@@ -211,7 +211,7 @@ you can now set up a docker container in your docker compose file that will scro
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIxMjQ4OTExMCwtMTAyNjE5NjczLDEwNz
-EwNTMzMzUsLTc2Nzc4NzY4LDgwNjE5ODIxOCwtMTU3Mjk1Nzc4
-NCwxODkzOTIwNzMyLDI5OTM0ODM0M119
+eyJoaXN0b3J5IjpbLTE5OTE0NjI0OTQsLTEwMjYxOTY3MywxMD
+cxMDUzMzM1LC03Njc3ODc2OCw4MDYxOTgyMTgsLTE1NzI5NTc3
+ODQsMTg5MzkyMDczMiwyOTkzNDgzNDNdfQ==
 -->
