@@ -160,7 +160,10 @@ docker run \
 |Command|Explanation  |
 |--|--|
 | ```-it``` | Runs session as interactive |
-| ```--name``` | Naming 
+| ```--rm``` | Removes the session once closed |
+| ```--name plextraktsync-john``` | Naming the session can help with diagnosing issues |
+| ```--network t2_proxy``` | Name of the same docker network Plex Media Server is on |
+| ```
 
 
 Keep running this until you've completed your first successful sync between Plex Media Server and Trakt.  That should be three times...
@@ -204,6 +207,6 @@ Once you have your configuration files created, you can now set up a docker cont
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTgwNjcyNTI2NiwxODkzOTIwNzMyLDI5OT
-M0ODM0M119
+eyJoaXN0b3J5IjpbMzU4NTU2MDk0LDE4OTM5MjA3MzIsMjk5Mz
+Q4MzQzXX0=
 -->
