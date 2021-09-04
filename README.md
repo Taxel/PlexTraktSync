@@ -152,11 +152,17 @@ docker run \
 	--name plextraktsync-john \
 	--network t2_proxy \
 	-v /home/james/docker/appdata/plextraktsync-john/config:/app/config \
-	-e PTS_CONFIG_DIR=/app/config \ # As per github.com/Taxel/PlexTraktSync/docker-compose.yml
-	-e PTS_CACHE_DIR=/app/config \ # As per github.com/Taxel/PlexTraktSync/docker-compose.yml
-	-e PTS_LOG_DIR=/app/config \ # As per github.com/Taxel/PlexTraktSync/docker-compose.yml
+	-e PTS_CONFIG_DIR=/app/config \
+	-e PTS_CACHE_DIR=/app/config \
+	-e PTS_LOG_DIR=/app/config \
 	ghcr.io/taxel/plextraktsync:latest
 ```
+|Command|Explanation  |
+|--|--|
+| ```-it``` | Runs session as interactive |
+| ```--name``` | Naming 
+
+
 Keep running this until you've completed your first successful sync between Plex Media Server and Trakt.  That should be three times...
 
  1. Setup link with Plex Media Server
@@ -198,6 +204,6 @@ Once you have your configuration files created, you can now set up a docker cont
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIxMDI3MDE4ODUsMTg5MzkyMDczMiwyOT
-kzNDgzNDNdfQ==
+eyJoaXN0b3J5IjpbMTgwNjcyNTI2NiwxODkzOTIwNzMyLDI5OT
+M0ODM0M119
 -->
