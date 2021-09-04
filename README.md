@@ -158,7 +158,7 @@ docker run \
 	ghcr.io/taxel/plextraktsync:latest
 ```
 |Command|Explanation  |
-|--|--|
+|:--:|--|
 | ```-it``` | Runs session as interactive |
 | ```--rm``` | Removes the session once closed |
 | ```--name plextraktsync-john``` | Naming the session can help with diagnosing issues |
@@ -208,6 +208,6 @@ Once you have your configuration files created, you can now set up a docker cont
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1NzI5NTc3ODQsMTg5MzkyMDczMiwyOT
-kzNDgzNDNdfQ==
+eyJoaXN0b3J5IjpbMTcwMzIyNDIzMiwtMTU3Mjk1Nzc4NCwxOD
+kzOTIwNzMyLDI5OTM0ODM0M119
 -->
