@@ -144,6 +144,10 @@ by user is not implemented [#324].
 
 This will show you how to set up PlexTraktSync for one user on a Plex Media Server for Docker Compose.  Duplicate this for each additional user wanting to sync to Trakt.
 
+**Setup**
+
+```bash
+```
 ~~Setup~~
 ~~Docker Compose~~
 
@@ -160,5 +164,5 @@ This will show you how to set up PlexTraktSync for one user on a Plex Media Serv
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjk5MzQ4MzQzXX0=
+eyJoaXN0b3J5IjpbMTg5MzkyMDczMiwyOTkzNDgzNDNdfQ==
 -->
