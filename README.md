@@ -191,7 +191,7 @@ Once you have your configuration files created, you can now set up a docker cont
       - PTS_CONFIG_DIR=/app/config
       - PTS_CACHE_DIR=/app/config
       - PTS_LOG_DIR=/app/config
-    entrypoint: ["python3", "main.py", "watch"]
+    entrypoint: ["python3", "-m", "plex_trakt_sync", "watch"]
 ```
 
 ## Notes
@@ -207,6 +207,6 @@ Once you have your configuration files created, you can now set up a docker cont
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTMzMjQ0MTYxNiw4MDYxOTgyMTgsLTE1Nz
-I5NTc3ODQsMTg5MzkyMDczMiwyOTkzNDgzNDNdfQ==
+eyJoaXN0b3J5IjpbLTc2Nzc4NzY4LDgwNjE5ODIxOCwtMTU3Mj
+k1Nzc4NCwxODkzOTIwNzMyLDI5OTM0ODM0M119
 -->
