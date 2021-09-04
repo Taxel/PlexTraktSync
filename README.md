@@ -210,9 +210,3 @@ You can now set up a docker container in your docker compose file that will scro
 
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMzM5Njg4MzYsLTE0NTg0ODA5OTIsLTExOD
-g3NzkyNTQsLTEwMjYxOTY3MywxMDcxMDUzMzM1LC03Njc3ODc2
-OCw4MDYxOTgyMTgsLTE1NzI5NTc3ODQsMTg5MzkyMDczMiwyOT
-kzNDgzNDNdfQ==
--->
