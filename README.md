@@ -153,9 +153,9 @@ docker run \
 	--name plextraktsync-jimbob \ # Name of the session, helps with diagnosing issues if they happen
 	--network t2_proxy \ # Name of the same network that your Plex Media Server container is running on
 	-v /home/james/docker/appdata/plextraktsync-jimbob/config:/app/config \ # Before ":" is the name of the unique folder for this Plex user
-	-e PTS_CONFIG_DIR=/app/config \ 
-	-e PTS_CACHE_DIR=/app/config \
-	-e PTS_LOG_DIR=/app/config \
+	-e PTS_CONFIG_DIR=/app/config \ # As per github.com/Taxel/PlexTraktSync/docker-compose.yml
+	-e PTS_CACHE_DIR=/app/config \ # As per github.com/Taxel/PlexTraktSync/docker-compose.yml
+	-e PTS_LOG_DIR=/app/config \ # As per github.com/Taxel/PlexTraktSync/docker-compose.yml
 	ghcr.io/taxel/plextraktsync:latest
 ```
 ~~Setup~~
@@ -174,6 +174,6 @@ docker run \
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU1MjY2NDk4OSwxODkzOTIwNzMyLDI5OT
-M0ODM0M119
+eyJoaXN0b3J5IjpbLTE4MzM1ODU5ODUsMTg5MzkyMDczMiwyOT
+kzNDgzNDNdfQ==
 -->
