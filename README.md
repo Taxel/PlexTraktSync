@@ -160,9 +160,10 @@ docker run \
 ```
 Keep running this until you've completed your first successful sync between Plex Media Server and Trakt.  That should be three times...
 
- 1. Setup link with Plex
+ 1. Setup link with Plex Media Server
+ 2. Setup link with Trakt
+ 3. Sync between Plex Media Server and Trakt.
 
-~~Setup~~
 ~~Docker Compose~~
 
 ## Notes
@@ -178,6 +179,6 @@ Keep running this until you've completed your first successful sync between Plex
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0MTM0MDMzNzQsMTg5MzkyMDczMiwyOT
-kzNDgzNDNdfQ==
+eyJoaXN0b3J5IjpbNzk4ODc3OTEyLDE4OTM5MjA3MzIsMjk5Mz
+Q4MzQzXX0=
 -->
