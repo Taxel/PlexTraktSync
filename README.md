@@ -161,8 +161,8 @@ docker run \
 |Command|Explanation  |
 |:--:|--|
 | ```-it``` | Runs session as interactive |
-| ```--rm``` | Removes the session once closed |
-| ```--name plextraktsync-john``` | Naming the session can help with diagnosing issues |
+| ```--rm``` | Removes the container once the session is closed |
+| ```--name plextraktsync-john``` | Naming the session helps diagnosing issues if they happen |
 | ```--network t2_proxy``` | Name of the same docker network Plex Media Server is on |
 | ```-v /home/user/docker/appdata/plextraktsync-john/config:/app/config``` | Before ":" is the path to a unique folder for this Plex user |
 | ```-e PTS_CONFIG_DIR=/app/config```<br>```-e PTS_CACHE_DIR=/app/config```<br>```-e PTS_LOG_DIR=/app/config``` | Environment variables as per PlexTraktSync/docker-compose.yml |
@@ -207,6 +207,7 @@ Once you have your configuration files created, you can now set up a docker cont
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTc2Nzc4NzY4LDgwNjE5ODIxOCwtMTU3Mj
-k1Nzc4NCwxODkzOTIwNzMyLDI5OTM0ODM0M119
+eyJoaXN0b3J5IjpbLTEyMDEzMzYwNjAsLTc2Nzc4NzY4LDgwNj
+E5ODIxOCwtMTU3Mjk1Nzc4NCwxODkzOTIwNzMyLDI5OTM0ODM0
+M119
 -->
