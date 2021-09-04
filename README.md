@@ -149,14 +149,14 @@ This will show you how to set up PlexTraktSync for one user on a Plex Media Serv
 First we need to create the configuration files needed.  This can be done by running the following command line...
 ```bash
 docker run \
-	-it --rm \
-	--name plextraktsync-john \
-	--network t2_proxy \
-	-v /home/user/docker/appdata/plextraktsync-john/config:/app/config \
-	-e PTS_CONFIG_DIR=/app/config \
-	-e PTS_CACHE_DIR=/app/config \
-	-e PTS_LOG_DIR=/app/config \
-	ghcr.io/taxel/plextraktsync:latest
+  -it --rm \
+  --name plextraktsync-john \
+  --network t2_proxy \
+  -v /home/user/docker/appdata/plextraktsync-john/config:/app/config \
+  -e PTS_CONFIG_DIR=/app/config \
+  -e PTS_CACHE_DIR=/app/config \
+  -e PTS_LOG_DIR=/app/config \
+  ghcr.io/taxel/plextraktsync:latest
 ```
 |Command|Explanation  |
 |:--:|--|
@@ -207,7 +207,7 @@ Once you have your configuration files created, you can now set up a docker cont
  - The PyTrakt API keys are not stored securely, so if you do not want to have
    a file containing those on your harddrive, you can not use this project.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTA3MTA1MzMzNSwtNzY3Nzg3NjgsODA2MT
-k4MjE4LC0xNTcyOTU3Nzg0LDE4OTM5MjA3MzIsMjk5MzQ4MzQz
-XX0=
+eyJoaXN0b3J5IjpbLTEwMjYxOTY3MywxMDcxMDUzMzM1LC03Nj
+c3ODc2OCw4MDYxOTgyMTgsLTE1NzI5NTc3ODQsMTg5MzkyMDcz
+MiwyOTkzNDgzNDNdfQ==
 -->
