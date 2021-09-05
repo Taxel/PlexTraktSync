@@ -175,9 +175,9 @@ Keep running this until you've completed your first successful sync between Plex
 
 ### Docker Compose
 
-Once you have your configuration files created, you need to make sure they have the correct permissions to be used by docker compose as they've probably been created with ```root:root```.
+Once you have your configuration files created, you need to make sure they have the correct permissions to be used by Docker Compose as they've probably been created with ```root:root```.
 
-Docker normally uses the local user and the docker group, so run ```sudo chown user:docker /home/user/docker/appdata/plextraktsync-john -R``` .  Check your own setup incase it is different.
+Docker Compose normally uses the local user and the docker group, so run ```sudo chown user:docker /home/user/docker/appdata/plextraktsync-john -R``` .  Check your own setup incase it is different.
 
 You can now set up a docker container in your docker compose file that will scrobble that Plex user's activities to
 ```yaml
