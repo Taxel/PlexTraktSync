@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 from functools import partial
 from os import environ
 from typing import List
+from subprocess import check_output
+import socket
 
 import click
 from click import Choice
@@ -171,7 +173,17 @@ def plex_login(username, password):
     CONFIG["PLEX_USERNAME"] = user
     CONFIG["PLEX_TOKEN"] = token
     CONFIG["PLEX_BASEURL"] = plex._baseurl
-    CONFIG["PLEX_FALLBACKURL"] = "http://localhost:32400"
+    if environ.get("PTS_IN_DOCKER"):
+        try:
+            host_ip = socket.gethostbyname("host.docker.internal")
+        except socket.gaierror:
+            try:
+                host_ip = check_output("ip -4 route show default | awk '{ print $3 }'", shell=True).decode().rstrip()
+            except:
+                host_ip = "172.17.0.1"
+        CONFIG["PLEX_FALLBACKURL"] = f"http://{host_ip}:32400"
+    else:
+        CONFIG["PLEX_FALLBACKURL"] = "http://localhost:32400"
     CONFIG.save()
 
     click.echo(SUCCESS_MESSAGE)
