@@ -8,6 +8,13 @@ RUN pip install --no-cache-dir pipenv
 COPY Pipfile* ./
 RUN pipenv install --system --deploy
 
+ENV \
+	PTS_CONFIG_DIR=/app/config \
+	PTS_CACHE_DIR=/app/config \
+	PTS_LOG_DIR=/app/config
+
+VOLUME /app/config
+
 # Copy rest of the app
 COPY . .
 ARG APP_VERSION=$APP_VERSION
