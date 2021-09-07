@@ -181,6 +181,7 @@ class TraktApi:
     @time_limit()
     def mark_watched(self, m, time):
         m.mark_as_seen(time)
+        self.watched_movies.add(m.trakt)
 
     def add_to_collection(self, m, pm: PlexLibraryItem):
         if m.media_type == "movies":
