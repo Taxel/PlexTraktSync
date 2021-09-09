@@ -20,5 +20,8 @@
     "excluded-libraries": [
         "Private",
         "Family Holidays"
-    ]
+    ],
+    "watch": {
+        "username_filter": false
+    }
 }

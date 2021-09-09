@@ -33,29 +33,33 @@ class WatchStateUpdater:
                 movie, percent, movie.isWatched, movie.lastViewedAt
             ))
             
-            plex_sessions = self.plex.get_sessions()
-            current_sessionKeys = []
             
-            for session in plex_sessions:
-                current_sessionKeys.append(session.sessionKey)
-            
-            if 1 in current_sessionKeys and not self.sessions_cleared:
-                self.sessions_from_username.clear()
-                self.sessions_cleared = True
-            elif 1 not in current_sessionKeys:
-                self.sessions_cleared = False
+            if factory.config()['watch']['username_filter']:
+                plex_sessions = self.plex.get_sessions()
+                current_sessionKeys = []
+                
+                for session in plex_sessions:
+                    current_sessionKeys.append(session.sessionKey)
+                
+                if 1 in current_sessionKeys and not self.sessions_cleared:
+                    self.sessions_from_username.clear()
+                    self.sessions_cleared = True
+                elif 1 not in current_sessionKeys:
+                    self.sessions_cleared = False
 
-            for session in plex_sessions:
-                if (int(item['sessionKey']) == session.sessionKey) and (session.usernames[0] == factory.config()['PLEX_USERNAME']) and (int(item['sessionKey']) not in self.sessions_from_username):
-                    print("New session from %s: %s" % (factory.config()['PLEX_USERNAME'], item['sessionKey']))
-                    self.sessions_from_username.append(int(item['sessionKey']))
+                for session in plex_sessions:
+                    if (int(item['sessionKey']) == session.sessionKey) and (session.usernames[0] == factory.config()['PLEX_USERNAME']) and (int(item['sessionKey']) not in self.sessions_from_username):
+                        print("New session from %s: %s" % (factory.config()['PLEX_USERNAME'], item['sessionKey']))
+                        self.sessions_from_username.append(int(item['sessionKey']))
 
-            if int(item['sessionKey']) in self.sessions_from_username:
-                print("From username's session %s" % (item['sessionKey']))
+                if int(item['sessionKey']) in self.sessions_from_username:
+                    print("From username's session %s" % (item['sessionKey']))
+                    self.scrobble(tm, percent, item["state"])
+                    if item['state'] == "stopped":
+                        self.sessions_from_username.remove(int(item['sessionKey']))
+                        print("Remaining sessions from %s: %s" % (factory.config()['PLEX_USERNAME'], self.sessions_from_username))
+            else:
                 self.scrobble(tm, percent, item["state"])
-                if item['state'] == "stopped":
-                    self.sessions_from_username.remove(int(item['sessionKey']))
-                    print("Remaining sessions from %s: %s" % (factory.config()['PLEX_USERNAME'], self.sessions_from_username))
 
 
     def scrobble(self, tm, percent, state):
