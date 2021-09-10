@@ -1,7 +1,7 @@
 FROM python:3.9-alpine3.13 AS base
 
 WORKDIR /app
-ENTRYPOINT ["python", "-u", "-m", "plex_trakt_sync"]
+ENTRYPOINT ["python", "-m", "plex_trakt_sync"]
 
 # Install app depedencies
 RUN pip install --no-cache-dir pipenv
@@ -12,7 +12,8 @@ ENV \
 	PTS_CONFIG_DIR=/app/config \
 	PTS_CACHE_DIR=/app/config \
 	PTS_LOG_DIR=/app/config \
-    PTS_IN_DOCKER=1
+	PTS_IN_DOCKER=1 \
+	PYTHONUNBUFFERED=1
 
 VOLUME /app/config
 
