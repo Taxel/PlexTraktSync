@@ -1,7 +1,7 @@
 FROM python:3.9-alpine3.13 AS base
 
 WORKDIR /app
-ENTRYPOINT ["python", "-m", "plex_trakt_sync"]
+ENTRYPOINT ["python", "-u", "-m", "plex_trakt_sync"]
 
 # Install app depedencies
 RUN pip install --no-cache-dir pipenv
