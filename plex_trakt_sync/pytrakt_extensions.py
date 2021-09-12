@@ -140,6 +140,17 @@ class AllWatchedShows():
             return False
         return self.shows[trakt_id].seasons[season].get_completed(episode)
 
+    def add(self, trakt_id, season, episode):
+        episode_prog = {"number":episode, "completed":True}
+        season_prog = {"number":season, "episodes":[episode_prog]}
+        if trakt_id in self.shows:
+            if season in self.shows[trakt_id].seasons:
+                self.shows[trakt_id].seasons[season].episodes[episode] = EpisodeProgress(**episode_prog)
+            else:
+                self.shows[trakt_id].seasons[season] = SeasonProgress(**season_prog)
+        else:
+            self.shows[trakt_id] = ShowProgress(seasons=[season_prog])
+
 
 if __name__ == "__main__":
     print(get_liked_lists())
