@@ -12,7 +12,8 @@ ENV \
 	PTS_CONFIG_DIR=/app/config \
 	PTS_CACHE_DIR=/app/config \
 	PTS_LOG_DIR=/app/config \
-    PTS_IN_DOCKER=1
+	PTS_IN_DOCKER=1 \
+	PYTHONUNBUFFERED=1
 
 VOLUME /app/config
 
