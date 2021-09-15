@@ -191,10 +191,6 @@ You can now set up a docker container in your docker compose file that will scro
     restart: unless-stopped
     volumes:
       - $DOCKERDIR/appdata/plextraktsync-john/config:/app/config
-    environment:
-      - PTS_CONFIG_DIR=/app/config
-      - PTS_CACHE_DIR=/app/config
-      - PTS_LOG_DIR=/app/config
     entrypoint: ["python3", "-m", "plex_trakt_sync", "watch"]
 ```
 
