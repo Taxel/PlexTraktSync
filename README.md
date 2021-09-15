@@ -153,9 +153,6 @@ docker run \
   --name plextraktsync-john \
   --network t2_proxy \
   -v /home/user/docker/appdata/plextraktsync-john/config:/app/config \
-  -e PTS_CONFIG_DIR=/app/config \
-  -e PTS_CACHE_DIR=/app/config \
-  -e PTS_LOG_DIR=/app/config \
   ghcr.io/taxel/plextraktsync:latest
 ```
 |Command|Explanation  |
@@ -165,7 +162,6 @@ docker run \
 | ```--name plextraktsync-john``` | Naming the session helps diagnosing issues if they happen |
 | ```--network t2_proxy``` | Name of the same docker network Plex Media Server is on, remove if nessessary |
 | ```-v /home/user/docker/appdata/plextraktsync-john/config:/app/config``` | Before ":" is the path to a unique folder for this Plex user |
-| ```-e PTS_CONFIG_DIR=/app/config```<br>```-e PTS_CACHE_DIR=/app/config```<br>```-e PTS_LOG_DIR=/app/config``` | Environment variables as per ```PlexTraktSync/docker-compose.yml``` example |
 
 Keep running this until you've completed your first successful sync between Plex Media Server and Trakt.  That should be three times...
 
