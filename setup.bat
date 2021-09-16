@@ -26,7 +26,7 @@ IF /I "%APICONT%" EQU "N" GOTO :ENDIT
 echo.
 echo Checking for Python...
 :: Check for Python Installation
-py --version 2>NUL
+python --version 2>NUL
 if errorlevel 1 goto errorNoPython
 echo.
 
@@ -36,7 +36,6 @@ echo WARNING: SETUP HAS ALRADY BEEN RUN!
 echo.
 echo What would you like to do?
 echo  1. Reset all settings and start again from scratch
-:: echo  2. Configure the script to work with multiple servers
 echo  2. Cancel
 echo.
 SET /P CONFIGCHOICE="Please enter your choice (1 -2): "
