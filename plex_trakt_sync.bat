@@ -8,7 +8,7 @@ cd %mypath%\
 cls
 
 :: Check for Python Installation
-py --version 2>NUL
+python --version 2>NUL
 if errorlevel 1 goto errorNoPython
 
 cls
@@ -16,7 +16,7 @@ cls
 title Plex - Trakt Sync
 
 
-py -m plex_trakt_sync
+python -m plex_trakt_sync
 goto:eof
 
 :errorNoPython
