@@ -6,6 +6,8 @@ This project adds a two-way-sync between trakt.tv and Plex Media Server. It
 requires a trakt.tv account but no Plex premium and no Trakt VIP subscriptions,
 unlike the Plex app provided by Trakt.
 
+Note: The PyTrakt API keys are not stored securely, so if you do not want to have a file containing those on your harddrive, you can not use this project.
+
 **To contribute, please find issues with the [`help-wanted`](https://github.com/Taxel/PlexTraktSync/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label, thank you.**
 
 [python-versions-badge]: https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9-blue
@@ -26,61 +28,78 @@ unlike the Plex app provided by Trakt.
 
 The script is known to work with Python 3.7-3.9 versions.
 
-## Installing
+## Installation
+To install this project on Linux, macOS or Windows WSL:   
+- Verify the latest release at https://github.com/Taxel/PlexTraktSync/releases
 
-To install this project, find out the latest release:
-- https://github.com/Taxel/PlexTraktSync/releases
+- Download the `.tar` or `.zip`   
+  *or* checkout the release with Git (For example, the command to clone with Git):
+  ```
+  git clone -b 0.7.19 --depth=1 https://github.com/Taxel/PlexTraktSync
+  ```
 
-Download the `.tar`, or `.zip` or checkout the release with Git.
+- In the extracted directory, install the required Python packages:
+  ```
+  python3 -m pip install -r requirements.txt
+  ```
 
-For example, the command to clone with Git:
-```
-git clone -b 0.7.19 --depth=1 https://github.com/Taxel/PlexTraktSync
-```
+  *or* alternatively you can use [pipenv]:
+  ```
+  python3 -m pip install pipenv
+  pipenv install
+  pipenv run plex-trakt-sync
+  ```
 
-In the extracted directory, install the required Python packages:
-```
-python3 -m pip install -r requirements.txt
-```
-
-Alternatively you can use [pipenv]:
-```
-python3 -m pip install pipenv
-pipenv install
-pipenv run plex-trakt-sync
-```
-
-[pipenv]: https://pipenv.pypa.io/
+  [pipenv]: https://pipenv.pypa.io/
 
 ## Setup
+- Run `python3 -m plex_trakt_sync`.
 
-To connect to Trakt you need to create a new API app:
-- Visit https://trakt.tv/oauth/applications/new
-- Give it a meaningful name
-- Enter `urn:ietf:wg:oauth:2.0:oob` as the redirect url
-- You can leave Javascript origins and the Permissions checkboxes blank
+  - At first run you will be asked to setup Trakt and Plex access.   
+  Follow the instructions, your credentials and API keys will be stored in
+  `.env` and `.pytrakt.json` files.   
+  If you have [2 Factor Authentication enabled on Plex](https://support.plex.tv/articles/two-factor-authentication/#toc-1:~:text=Old%20Third%2DParty%20Apps%20%26%20Tools), you can append the code to your password.
 
-Then, run `python3 -m plex_trakt_sync`.
+  - You will also be asked to connect to Trakt by creating a new API app:
+    - Visit https://trakt.tv/oauth/applications/new
+    - Give it a meaningful name
+    - Enter `urn:ietf:wg:oauth:2.0:oob` as the redirect url
+    - You can leave Javascript origins and the Permissions checkboxes blank
 
-At first run, you will be asked to setup Trakt and Plex access.
-Follow the instructions, your credentials and API keys will be stored in
-`.env` and `.pytrakt.json` files.
+- Cronjobs can be optionally used on Linux or macOS to run the script at set intervals.   
+  For example, to run this script in a cronjob every two hours:  
+  ```
+  crontab -e
+  0 */2 * * * cd ~/path/to/this/repo && python3 -m plex_trakt_sync
+  ```
 
-If you have [2 Factor Authentication enabled on Plex][2fa], you can append the code to your password.
+## Sync settings
 
-[2fa]: https://support.plex.tv/articles/two-factor-authentication/#toc-1:~:text=Old%20Third%2DParty%20Apps%20%26%20Tools
+To disable parts of the functionality of this software, look no further than
+`config.json`. Here, in the sync section, you can disable the following things
+by setting them from `true` to `false` in a text editor:
 
-You can take a look at the progress in the `last_update.log` file which will
-be created. 
+At first run, the script will create `config.json` based on `config.default.json`.
+If you want to customize settings before first run (eg. you don't want full
+sync) you can copy and edit `config.json` before launching the script.
 
-To set up to run this script in a cronjob every two hours,
-type `crontab -e` in the terminal.
+ - Downloading liked lists from Trakt and adding them to Plex
+ - Downloading your watchlist from Trakt and adding it to Plex
+ - Syncing the watched status between Plex and Trakt
+ - Syncing the collected status between Plex and Trakt
 
-```
-0 */2 * * * cd ~/path/to/this/repo && python3 -m plex_trakt_sync
-```
+ The first execution of the script will (depending on your PMS library size)
+ take a long time. After that, movie details and Trakt lists are cached, so
+ it should run a lot quicker the second time. This does mean, however, that
+ Trakt lists are not updated dynamically (which is fine for lists like "2018
+ Academy Award Nominees" but might not be ideal for lists that are updated
+ often). Here are the execution times on my Plex server: First run - 1228
+ seconds, second run - 111 seconds    
 
-## Sync options
+You can view sync progress in the `last_update.log` file which will be created. 
+
+## Commands
+### Sync
 
 The `sync` subcommand supports `--sync=tv` and `--sync=movies` options,
 so you can sync only specific library types.
@@ -96,31 +115,17 @@ Options:
   --help                  Show this message and exit.
 ```
 
-## Sync settings
+### Unmatched 
+You can use `unmatched` command to scan your library and display unmatched movies.   
+Support for unmatched shows is not yet implemented.   
 
-To disable parts of the functionality of this software, look no further than
-`config.json`. Here, in the sync section, you can disable the following things
-by setting them from `true` to `false` in a text editor:
+`python3 -m plex_trakt_sync unmatched`   
 
-At first run, the script will create `config.json` based on `config.default.json`.
-If you want to customize settings before first run (ex. you don't want full
-sync) you can copy and edit `config.json` before launching the script.
+### Watch
+You can use the `watch` command to listen to events from Plex Media Server
+and scrobble plays.   
 
- - Downloading liked lists from Trakt and adding them to Plex
- - Downloading your watchlist from Trakt and adding it to Plex
- - Syncing the watched status between Plex and Trakt
- - Syncing the collected status between Plex and Trakt
-
-## The unmatched command
-
-You can use `unmatched` command to scan your library and display unmatched movies.
-
-Support for unmatched shows is not yet implemented.
-
-## The watch command
-
-You can use `watch` command to listen to events from Plex Media Server
-and scrobble plays.
+`python3 -m plex_trakt_sync watch`   
 
 > What is scrobbling?
 >
@@ -131,24 +136,7 @@ and scrobble plays.
 
 [plex-scrobbler]: https://blog.trakt.tv/plex-scrobbler-52db9b016ead
 
-```shell
-$ python3 -m plex_trakt_sync watch
-```
-
 NOTE: The `watch` command will scrobble all Plex Watches to Trakt as filtering
 by user is not implemented [#324].
 
 [#324]: https://github.com/Taxel/PlexTraktSync/issues/324
-
-## Notes
-
- - The first execution of the script will (depending on your PMS library size)
-   take a long time. After that, movie details and Trakt lists are cached, so
-   it should run a lot quicker the second time. This does mean, however, that
-   Trakt lists are not updated dynamically (which is fine for lists like "2018
-   Academy Award Nominees" but might not be ideal for lists that are updated
-   often). Here are the execution times on my Plex server: First run - 1228
-   seconds, second run - 111 seconds
-
- - The PyTrakt API keys are not stored securely, so if you do not want to have
-   a file containing those on your harddrive, you can not use this project.
