@@ -53,18 +53,19 @@ To install this project on Linux, macOS or Windows WSL:
   [pipenv]: https://pipenv.pypa.io/
 
 ## Setup
-- Run `python3 -m plex_trakt_sync`.
-
-  - At first run you will be asked to setup Trakt and Plex access.   
-  Follow the instructions, your credentials and API keys will be stored in
-  `.env` and `.pytrakt.json` files.   
-  If you have [2 Factor Authentication enabled on Plex](https://support.plex.tv/articles/two-factor-authentication/#toc-1:~:text=Old%20Third%2DParty%20Apps%20%26%20Tools), you can append the code to your password.
-
-  - You will also be asked to connect to Trakt by creating a new API app:
+  - You will need to create a Trakt API app if you do not already have one:
     - Visit https://trakt.tv/oauth/applications/new
     - Give it a meaningful name
     - Enter `urn:ietf:wg:oauth:2.0:oob` as the redirect url
     - You can leave Javascript origins and the Permissions checkboxes blank
+
+  - Run `python3 -m plex_trakt_sync`.
+
+  - At first run you will be asked to setup Trakt and Plex access.   
+  Follow the instructions, your credentials and API keys will be stored in
+  `.env` and `.pytrakt.json` files.   
+  If you have [2 Factor Authentication enabled on Plex](https://support.plex.tv/articles/two-factor-authentication/#toc-1:~:text=Old%20Third%2DParty%20Apps%20%26%20Tools) you can append the code to your password.
+
 
 - Cronjobs can be optionally used on Linux or macOS to run the script at set intervals.   
   For example, to run this script in a cronjob every two hours:  
