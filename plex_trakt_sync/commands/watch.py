@@ -1,9 +1,10 @@
 import click
 
+from plex_trakt_sync.config import Config
 from plex_trakt_sync.events import PlaySessionStateNotification, ActivityNotification
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.listener import WebSocketListener
-from plex_trakt_sync.media import MediaFactory
+from plex_trakt_sync.media import MediaFactory, Media
 from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
 
@@ -39,11 +40,16 @@ class SessionCollection(dict):
 
 
 class WatchStateUpdater:
-    def __init__(self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory):
+    def __init__(self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory, config: Config):
         self.plex = plex
         self.trakt = trakt
         self.mf = mf
         self.scrobblers = ScrobblerCollection(trakt)
+        if config["watch"]["username_filter"]:
+            self.username_filter = config["PLEX_USERNAME"]
+        else:
+            self.username_filter = None
+        self.sessions = SessionCollection(plex)
 
     def find_by_key(self, key: str, reload=False):
         pm = self.plex.fetch_item(key)
@@ -62,6 +68,9 @@ class WatchStateUpdater:
         print(f"Activity: {m}: Watched: Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}")
 
     def on_play(self, event: PlaySessionStateNotification):
+        if not self.can_scrobble(event):
+            return
+
         m = self.find_by_key(event.key)
         if not m:
             return
@@ -70,10 +79,18 @@ class WatchStateUpdater:
         percent = m.plex.watch_progress(event.view_offset)
 
         print(f"{movie}: {percent:.6F}% Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}")
+        self.scrobble(m, percent, event)
 
-        self.scrobble(m.trakt, percent, event.state)
+    def can_scrobble(self, event: PlaySessionStateNotification):
+        if not self.username_filter:
+            return True
 
-    def scrobble(self, tm, percent, state):
+        return self.sessions[event.session_key] == self.username_filter
+
+    def scrobble(self, m: Media, percent: float, event: PlaySessionStateNotification):
+        tm = m.trakt
+        state = event.state
+
         if state == "playing":
             return self.scrobblers[tm].update(percent)
 
@@ -83,6 +100,7 @@ class WatchStateUpdater:
         if state == "stopped":
             self.scrobblers[tm].stop()
             del self.scrobblers[tm]
+            del self.sessions[event.session_key]
 
 
 @click.command()
@@ -95,9 +113,10 @@ def watch():
     trakt = factory.trakt_api()
     plex = factory.plex_api()
     mf = factory.media_factory()
-
+    config = factory.config()
     ws = WebSocketListener(server)
-    updater = WatchStateUpdater(plex, trakt, mf)
+    updater = WatchStateUpdater(plex, trakt, mf, config)
+
     ws.on(PlaySessionStateNotification, updater.on_play, state=["playing", "stopped", "paused"])
     ws.on(ActivityNotification, updater.on_activity, event=["ended"], progress=100)
 

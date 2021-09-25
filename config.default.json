@@ -13,6 +13,9 @@
         "collection": true,
         "ratings": true
     },
+    "watch": {
+        "username_filter": false
+    },
     "xbmc-providers": {
         "movies": "imdb",
         "shows": "tvdb"
