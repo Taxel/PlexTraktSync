@@ -42,6 +42,10 @@ class EventDispatcher:
 
         if listener["filters"]:
             for name, value in listener["filters"].items():
+                # test event property
+                if hasattr(event, name) and getattr(event, name) == value:
+                    return True
+                # test event dictionary items
                 if name not in event:
                     return False
                 if event[name] not in value:
