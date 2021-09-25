@@ -433,11 +433,12 @@ class PlexApi:
         return result
 
     @memoize
+    @nocache
     def fetch_item(self, key: Union[int, str]):
         media = self.plex.library.fetchItem(key)
         return PlexLibraryItem(media)
 
-    def reload_item(self, pm):
+    def reload_item(self, pm: PlexLibraryItem):
         self.fetch_item.cache_clear()
         return self.fetch_item(pm.item.ratingKey)
 
