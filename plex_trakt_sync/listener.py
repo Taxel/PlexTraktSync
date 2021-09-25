@@ -20,6 +20,7 @@ class EventDispatcher:
             "event_type": event_type,
             "filters": kwargs,
         })
+        return self
 
     def event_handler(self, data):
         self.logger.debug(data)
