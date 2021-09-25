@@ -8,13 +8,11 @@ from plex_trakt_sync.logging import logging
 PLAYING = "playing"
 
 
-class WebSocketListener:
-    def __init__(self, plex: PlexServer, interval=1):
-        self.plex = plex
-        self.interval = interval
+class EventDispatcher:
+    def __init__(self):
         self.event_listeners = list()
         self.event_factory = EventFactory()
-        self.logger = logging.getLogger("PlexTraktSync.WebSocketListener")
+        self.logger = logging.getLogger("PlexTraktSync.EventDispatcher")
 
     def on(self, event_type, listener, **kwargs):
         self.event_listeners.append({
@@ -22,6 +20,13 @@ class WebSocketListener:
             "event_type": event_type,
             "filters": kwargs,
         })
+        return self
+
+    def event_handler(self, data):
+        self.logger.debug(data)
+        events = self.event_factory.get_events(data)
+        for event in events:
+            self.dispatch(event)
 
     def dispatch(self, event):
         for listener in self.event_listeners:
@@ -37,6 +42,10 @@ class WebSocketListener:
 
         if listener["filters"]:
             for name, value in listener["filters"].items():
+                # test event property
+                if hasattr(event, name) and getattr(event, name) == value:
+                    return True
+                # test event dictionary items
                 if name not in event:
                     return False
                 if event[name] not in value:
@@ -44,15 +53,20 @@ class WebSocketListener:
 
         return True
 
-    def listen(self):
-        def handler(data):
-            self.logger.debug(data)
-            events = self.event_factory.get_events(data)
-            for event in events:
-                self.dispatch(event)
 
+class WebSocketListener:
+    def __init__(self, plex: PlexServer, interval=1):
+        self.plex = plex
+        self.interval = interval
+        self.dispatcher = EventDispatcher()
+        self.logger = logging.getLogger("PlexTraktSync.WebSocketListener")
+
+    def on(self, event_type, listener, **kwargs):
+        self.dispatcher.on(event_type, listener, **kwargs)
+
+    def listen(self):
         while True:
-            notifier = self.plex.startAlertListener(callback=handler)
+            notifier = self.plex.startAlertListener(callback=self.dispatcher.event_handler)
             while notifier.is_alive():
                 sleep(self.interval)
 

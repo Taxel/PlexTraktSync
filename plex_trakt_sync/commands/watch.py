@@ -36,8 +36,6 @@ class WatchStateUpdater:
         return m
 
     def on_activity(self, activity: ActivityNotification):
-        if activity.progress != 100:
-            return
         m = self.find_by_key(activity.key, reload=True)
         if not m:
             return
@@ -81,7 +79,7 @@ def watch():
     ws = WebSocketListener(server)
     updater = WatchStateUpdater(plex, trakt, mf)
     ws.on(PlaySessionStateNotification, updater.on_play, state=["playing", "stopped", "paused"])
-    ws.on(ActivityNotification, updater.on_activity, event=["ended"])
+    ws.on(ActivityNotification, updater.on_activity, event=["ended"], progress=100)
 
     print("Listening for events!")
     ws.listen()

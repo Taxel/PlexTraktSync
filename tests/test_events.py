@@ -1,5 +1,6 @@
 #!/usr/bin/env python3 -m pytest
-from plex_trakt_sync.events import EventFactory
+from plex_trakt_sync.events import EventFactory, ActivityNotification
+from plex_trakt_sync.listener import EventDispatcher
 from tests.conftest import load_mock
 
 
@@ -25,3 +26,27 @@ def test_event_played():
     assert events[4]["Activity"]["type"] == "library.refresh.items"
     assert events[4]["Activity"]["progress"] == 100
     assert events[4]["Activity"]["Context"]["key"] == "/library/metadata/513"
+
+
+def test_event_dispatcher():
+    raw_events = load_mock("events-played.json")
+
+    events = []
+    dispatcher = EventDispatcher().on(ActivityNotification, lambda x: events.append(x), event=["ended"])
+    dispatcher.event_handler(raw_events[4])
+    assert len(events) == 1, "Matched event=ended"
+
+    events = []
+    dispatcher = EventDispatcher().on(ActivityNotification, lambda x: events.append(x), progress=100)
+    dispatcher.event_handler(raw_events[4])
+    assert len(events) == 1, "Test property progress=100"
+
+    events = []
+    dispatcher = EventDispatcher().on(ActivityNotification, lambda x: events.append(x), event=["ended"], progress=100)
+    dispatcher.event_handler(raw_events[4])
+    assert len(events) == 1, "Matched event=ended and progress=100"
+
+    events = []
+    dispatcher = EventDispatcher().on(ActivityNotification, lambda x: events.append(x), event=["ended"], progress=99)
+    dispatcher.event_handler(raw_events[4])
+    assert len(events) == 0, "No match for event=ended and progress=99"
