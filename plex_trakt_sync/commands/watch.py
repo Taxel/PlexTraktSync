@@ -25,8 +25,10 @@ class WatchStateUpdater:
         self.mf = mf
         self.scrobblers = ScrobblerCollection(trakt)
 
-    def find_by_key(self, key: str):
+    def find_by_key(self, key: str, reload=False):
         pm = self.plex.fetch_item(key)
+        if reload:
+            pm = self.plex.reload_item(pm)
         if not pm:
             return None
 
