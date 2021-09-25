@@ -433,6 +433,7 @@ class PlexApi:
         return result
 
     @memoize
+    @nocache
     def fetch_item(self, key: Union[int, str]):
         media = self.plex.library.fetchItem(key)
         return PlexLibraryItem(media)
