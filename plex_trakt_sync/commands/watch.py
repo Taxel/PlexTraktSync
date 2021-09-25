@@ -1,6 +1,6 @@
 import click
 
-from plex_trakt_sync.events import PlaySessionStateNotification
+from plex_trakt_sync.events import PlaySessionStateNotification, ActivityNotification
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.listener import WebSocketListener
 from plex_trakt_sync.media import MediaFactory
@@ -34,6 +34,14 @@ class WatchStateUpdater:
 
         m = self.mf.resolve_any(pm)
         return m
+
+    def on_activity(self, activity: ActivityNotification):
+        if activity.progress != 100:
+            return
+        m = self.find_by_key(activity.key, reload=True)
+        if not m:
+            return
+        print(f"Activity: {m}: Watched: Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}")
 
     def on_play(self, event: PlaySessionStateNotification):
         m = self.find_by_key(event.key)
@@ -73,6 +81,7 @@ def watch():
     ws = WebSocketListener(server)
     updater = WatchStateUpdater(plex, trakt, mf)
     ws.on(PlaySessionStateNotification, updater.on_play, state=["playing", "stopped", "paused"])
+    ws.on(ActivityNotification, updater.on_activity, event=["ended"])
 
     print("Listening for events!")
     ws.listen()
