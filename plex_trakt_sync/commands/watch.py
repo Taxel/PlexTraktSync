@@ -34,21 +34,16 @@ class WatchStateUpdater:
         return m
 
     def on_play(self, event: PlaySessionStateNotification):
-        pm = self.plex.fetch_item(event.key)
-        print(f"Found {pm}")
-        if not pm:
+        m = self.find_by_key(event.key)
+        if not m:
             return
 
-        tm = self.trakt.find_by_media(pm)
-        if not tm:
-            return
-
-        movie = pm.item
-        percent = pm.watch_progress(event.view_offset)
+        movie = m.plex.item
+        percent = m.plex.watch_progress(event.view_offset)
 
         print(f"{movie}: {percent:.6F}% Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}")
 
-        self.scrobble(tm, percent, event.state)
+        self.scrobble(m.trakt, percent, event.state)
 
     def scrobble(self, tm, percent, state):
         if state == "playing":
