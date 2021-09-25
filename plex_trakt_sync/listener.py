@@ -30,25 +30,30 @@ class EventDispatcher:
 
     def dispatch(self, event):
         for listener in self.event_listeners:
-            if not self.is_candidate(event, listener):
+            if not self.match_event(listener, event):
                 continue
 
             listener["listener"](event)
 
     @staticmethod
-    def is_candidate(event, listener):
+    def match_filter(event, name, value):
+        # test event property
+        if hasattr(event, name) and getattr(event, name) == value:
+            return True
+        # test event dictionary items
+        if name not in event:
+            return False
+        if event[name] not in value:
+            return False
+        return True
+
+    def match_event(self, listener, event):
         if not isinstance(event, listener["event_type"]):
             return False
 
         if listener["filters"]:
             for name, value in listener["filters"].items():
-                # test event property
-                if hasattr(event, name) and getattr(event, name) == value:
-                    return True
-                # test event dictionary items
-                if name not in event:
-                    return False
-                if event[name] not in value:
+                if not self.match_filter(event, name, value):
                     return False
 
         return True
