@@ -524,3 +524,7 @@ class PlexApi:
     @nocache
     def mark_watched(self, m):
         m.markWatched()
+
+    @nocache
+    def get_sessions(self):
+        return self.plex.sessions()

@@ -49,6 +49,10 @@ class PlaySessionStateNotification(Event):
     def state(self):
         return self["state"]
 
+    @property
+    def session_key(self):
+        return self["sessionKey"]
+
 
 class Setting(Event):
     pass
