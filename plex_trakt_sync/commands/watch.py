@@ -3,6 +3,7 @@ import click
 from plex_trakt_sync.events import PlaySessionStateNotification
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.listener import WebSocketListener
+from plex_trakt_sync.media import MediaFactory
 from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
 
@@ -18,10 +19,19 @@ class ScrobblerCollection(dict):
 
 
 class WatchStateUpdater:
-    def __init__(self, plex: PlexApi, trakt: TraktApi):
+    def __init__(self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory):
         self.plex = plex
         self.trakt = trakt
+        self.mf = mf
         self.scrobblers = ScrobblerCollection(trakt)
+
+    def find_by_key(self, key: str):
+        pm = self.plex.fetch_item(key)
+        if not pm:
+            return None
+
+        m = self.mf.resolve_any(pm)
+        return m
 
     def on_play(self, event: PlaySessionStateNotification):
         pm = self.plex.fetch_item(event.key)
@@ -61,9 +71,10 @@ def watch():
     server = factory.plex_server()
     trakt = factory.trakt_api()
     plex = factory.plex_api()
+    mf = factory.media_factory()
 
     ws = WebSocketListener(server)
-    updater = WatchStateUpdater(plex, trakt)
+    updater = WatchStateUpdater(plex, trakt, mf)
     ws.on(PlaySessionStateNotification, updater.on_play, state=["playing", "stopped", "paused"])
 
     print("Listening for events!")
