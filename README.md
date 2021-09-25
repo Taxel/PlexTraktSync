@@ -29,7 +29,9 @@ Note: The PyTrakt API keys are not stored securely, so if you do not want to hav
 The script is known to work with Python 3.7-3.9 versions.
 
 ## Installation
+
 To install this project on Linux, macOS or Windows WSL:   
+
 - Verify the latest release at https://github.com/Taxel/PlexTraktSync/releases
 
 - Download the `.tar` or `.zip`   
@@ -51,6 +53,30 @@ To install this project on Linux, macOS or Windows WSL:
   ```
 
   [pipenv]: https://pipenv.pypa.io/
+
+## Docker Compose
+
+You can setup docker compose file like this:
+
+```yaml
+services:
+  plex-trakt-sync:
+    image: ghcr.io/taxel/plextraktsync
+    volumes:
+      - ./config:/app/config
+```
+
+To run sync:
+
+```
+docker-compose run --rm plex-trakt-sync
+```
+
+To run `watch` command:
+
+```
+docker-compose run --rm plex-trakt-sync watch
+```
 
 ## Setup
   - You will need to create a Trakt API app if you do not already have one:
