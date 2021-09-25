@@ -18,6 +18,26 @@ class ScrobblerCollection(dict):
         return value
 
 
+class SessionCollection(dict):
+    def __init__(self, plex: PlexApi):
+        super(dict, self).__init__()
+        self.plex = plex
+
+    def __missing__(self, key: str):
+        self.update_sessions()
+        if key not in self:
+            # Session probably ended
+            return None
+
+        return self[key]
+
+    def update_sessions(self):
+        sessions = self.plex.get_sessions()
+        self.clear()
+        for session in sessions:
+            self[str(session.sessionKey)] = session.usernames[0]
+
+
 class WatchStateUpdater:
     def __init__(self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory):
         self.plex = plex
