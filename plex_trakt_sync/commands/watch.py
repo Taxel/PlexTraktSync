@@ -3,6 +3,7 @@ import click
 from plex_trakt_sync.events import PlaySessionStateNotification
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.listener import WebSocketListener
+from plex_trakt_sync.media import MediaFactory
 from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.trakt_api import TraktApi
 
@@ -18,27 +19,31 @@ class ScrobblerCollection(dict):
 
 
 class WatchStateUpdater:
-    def __init__(self, plex: PlexApi, trakt: TraktApi):
+    def __init__(self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory):
         self.plex = plex
         self.trakt = trakt
+        self.mf = mf
         self.scrobblers = ScrobblerCollection(trakt)
 
-    def on_play(self, event: PlaySessionStateNotification):
-        pm = self.plex.fetch_item(event.key)
-        print(f"Found {pm}")
+    def find_by_key(self, key: str):
+        pm = self.plex.fetch_item(key)
         if not pm:
+            return None
+
+        m = self.mf.resolve_any(pm)
+        return m
+
+    def on_play(self, event: PlaySessionStateNotification):
+        m = self.find_by_key(event.key)
+        if not m:
             return
 
-        tm = self.trakt.find_by_media(pm)
-        if not tm:
-            return
-
-        movie = pm.item
-        percent = pm.watch_progress(event.view_offset)
+        movie = m.plex.item
+        percent = m.plex.watch_progress(event.view_offset)
 
         print(f"{movie}: {percent:.6F}% Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}")
 
-        self.scrobble(tm, percent, event.state)
+        self.scrobble(m.trakt, percent, event.state)
 
     def scrobble(self, tm, percent, state):
         if state == "playing":
@@ -61,9 +66,10 @@ def watch():
     server = factory.plex_server()
     trakt = factory.trakt_api()
     plex = factory.plex_api()
+    mf = factory.media_factory()
 
     ws = WebSocketListener(server)
-    updater = WatchStateUpdater(plex, trakt)
+    updater = WatchStateUpdater(plex, trakt, mf)
     ws.on(PlaySessionStateNotification, updater.on_play, state=["playing", "stopped", "paused"])
 
     print("Listening for events!")
