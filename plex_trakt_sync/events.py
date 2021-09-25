@@ -23,7 +23,13 @@ class AccountUpdateNotification(Event):
 
 
 class ActivityNotification(Event):
-    pass
+    @property
+    def progress(self):
+        return self["Activity"]["progress"]
+
+    @property
+    def key(self):
+        return self["Activity"]["Context"]["key"]
 
 
 class BackgroundProcessingQueueEventNotification(Event):
@@ -31,7 +37,17 @@ class BackgroundProcessingQueueEventNotification(Event):
 
 
 class PlaySessionStateNotification(Event):
-    pass
+    @property
+    def key(self):
+        return self["key"]
+
+    @property
+    def view_offset(self):
+        return self["viewOffset"]
+
+    @property
+    def state(self):
+        return self["state"]
 
 
 class Setting(Event):
