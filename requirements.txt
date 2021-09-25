@@ -3,7 +3,7 @@ deprecated==1.2.13
 plexapi==4.7.1
 python-dotenv==0.19.0
 python-git-info==0.7.1
-requests-cache==0.7.4
+requests-cache==0.8.1
 requests>=2.25.1
 rich==10.11.0
 tqdm==4.62.3
