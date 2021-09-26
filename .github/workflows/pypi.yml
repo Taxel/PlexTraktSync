@@ -20,12 +20,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Set version variable
+      id: vars
+      run: |
+        if [[ "${GITHUB_REF#refs/heads/}" = "${GITHUB_REF}" ]]; then
+          APP_VERSION=${GITHUB_REF#refs/tags/}
+        else
+          git fetch --tags --unshallow
+          APP_VERSION=$(git describe --tags)_${GITHUB_REF#refs/heads/}
+        fi
+        echo ::set-output name=version::$APP_VERSION
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: ${{ env.DEFAULT_PYTHON }}
 
     - name: Install dependencies and build
+      env:
+        APP_VERSION: ${{ steps.vars.outputs.version }}
       run: |
         python -m pip install --upgrade build
         python -m build
