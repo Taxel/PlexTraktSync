@@ -1,3 +1,5 @@
+*.bat text eol=crlf
+*.ico -text
 *.py text=auto diff=python
 /.gitattributes export-ignore
 /.github/ export-ignore

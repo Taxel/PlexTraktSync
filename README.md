@@ -100,6 +100,11 @@ docker-compose run --rm plex-trakt-sync watch
   0 */2 * * * cd ~/path/to/this/repo && python3 -m plex_trakt_sync
   ```
 
+## Windows Setup (optional alternative)
+
+- Download the latest `.zip` release from https://github.com/Taxel/PlexTraktSync/releases
+- Run `setup.bat` to install requirements and create optional shortcuts and routines *(requires Windows 7sp1 - 11)*.
+
 ## Sync settings
 
 To disable parts of the functionality of this software, look no further than
