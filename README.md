@@ -168,7 +168,7 @@ and scrobble plays.
 
 [plex-scrobbler]: https://blog.trakt.tv/plex-scrobbler-52db9b016ead
 
-Create a systemd daemon so that it scrobbles automatically in the background:
+Create a systemd unit so that it scrobbles automatically in the background:
 
 ```ini
 [Unit]
