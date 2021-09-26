@@ -27,8 +27,9 @@ jobs:
           APP_VERSION=${GITHUB_REF#refs/tags/}
         else
           git fetch --tags --unshallow
-          version=$(git describe --tags)
-          APP_VERSION=$(IFS=-; set -- $version; echo "$1.post$2")
+          version=$(git describe --tags --abbrev=0)
+          subver=${{ github.run_number }}
+          APP_VERSION=$version.post$subver
         fi
         echo ::set-output name=version::$APP_VERSION
 
