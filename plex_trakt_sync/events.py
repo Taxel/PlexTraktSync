@@ -18,6 +18,10 @@ class Event(dict):
         return f"{self.__class__}:{str(self.copy())}"
 
 
+class Error(Event):
+    pass
+
+
 class AccountUpdateNotification(Event):
     pass
 
