@@ -7,6 +7,7 @@ from plex_trakt_sync.decorators.memoize import memoize
 
 class Path:
     def __init__(self):
+        self.app_name = "PlexTraktSync"
         self.module_path = dirname(abspath(__file__))
         self.app_path = dirname(self.module_path)
 
@@ -19,18 +20,43 @@ class Path:
     @property
     @memoize
     def config_dir(self):
+        if self.installed:
+            from appdirs import user_config_dir
+
+            return user_config_dir(self.app_name)
+
         return getenv("PTS_CONFIG_DIR", self.app_path)
 
     @property
     @memoize
     def cache_dir(self):
+        if self.installed:
+            from appdirs import user_cache_dir
+
+            return user_cache_dir(self.app_name)
+
         return getenv("PTS_CACHE_DIR", self.app_path)
 
     @property
     @memoize
     def log_dir(self):
+        if self.installed:
+            from appdirs import user_log_dir
+
+            return user_log_dir(self.app_name)
+
         return getenv("PTS_LOG_DIR", self.app_path)
 
+    @property
+    @memoize
+    def installed(self):
+        """
+        Return true if this package is installed to site-packages
+        """
+        absdir = dirname(dirname(__file__))
+        paths = site.getsitepackages()
+
+        return absdir in paths
 
 p = Path()
 
