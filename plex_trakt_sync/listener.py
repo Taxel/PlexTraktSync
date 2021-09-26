@@ -2,7 +2,7 @@ from time import sleep
 
 from plexapi.server import PlexServer
 
-from plex_trakt_sync.events import EventFactory
+from plex_trakt_sync.events import EventFactory, Error
 from plex_trakt_sync.logging import logging
 
 PLAYING = "playing"
@@ -24,6 +24,9 @@ class EventDispatcher:
 
     def event_handler(self, data):
         self.logger.debug(data)
+        if isinstance(data, Error):
+            return self.dispatch(data)
+
         events = self.event_factory.get_events(data)
         for event in events:
             self.dispatch(event)
@@ -75,5 +78,6 @@ class WebSocketListener:
             while notifier.is_alive():
                 sleep(self.interval)
 
-            self.logger.debug(f"Listener finished. Restarting in {self.interval}")
+            self.dispatcher.event_handler(Error(msg='Server closed connection'))
+            self.logger.error(f"Listener finished. Restarting in {self.interval} seconds")
             sleep(self.interval)

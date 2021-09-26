@@ -1,7 +1,8 @@
 import click
 
+from plex_trakt_sync.logging import logging
 from plex_trakt_sync.config import Config
-from plex_trakt_sync.events import PlaySessionStateNotification, ActivityNotification
+from plex_trakt_sync.events import PlaySessionStateNotification, ActivityNotification, Error
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.listener import WebSocketListener
 from plex_trakt_sync.media import MediaFactory, Media
@@ -44,6 +45,7 @@ class WatchStateUpdater:
         self.plex = plex
         self.trakt = trakt
         self.mf = mf
+        self.logger = logging.getLogger("PlexTraktSync.WatchStateUpdater")
         self.scrobblers = ScrobblerCollection(trakt)
         if config["watch"]["username_filter"]:
             self.username_filter = config["PLEX_USERNAME"]
@@ -61,11 +63,16 @@ class WatchStateUpdater:
         m = self.mf.resolve_any(pm)
         return m
 
+    def on_error(self, error: Error):
+        self.logger.error(error.msg)
+        self.scrobblers.clear()
+        self.sessions.clear()
+
     def on_activity(self, activity: ActivityNotification):
         m = self.find_by_key(activity.key, reload=True)
         if not m:
             return
-        print(f"Activity: {m}: Watched: Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}")
+        self.logger.info(f"Activity: {m}: Watched: Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}")
 
     def on_play(self, event: PlaySessionStateNotification):
         if not self.can_scrobble(event):
@@ -78,7 +85,7 @@ class WatchStateUpdater:
         movie = m.plex.item
         percent = m.plex.watch_progress(event.view_offset)
 
-        print(f"{movie}: {percent:.6F}% Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}")
+        self.logger.info(f"{movie}: {percent:.6F}% Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}")
         self.scrobble(m, percent, event)
 
     def can_scrobble(self, event: PlaySessionStateNotification):
@@ -119,6 +126,7 @@ def watch():
 
     ws.on(PlaySessionStateNotification, updater.on_play, state=["playing", "stopped", "paused"])
     ws.on(ActivityNotification, updater.on_activity, type="library.refresh.items", event=["ended"], progress=100)
+    ws.on(Error, updater.on_error)
 
     print("Listening for events!")
     ws.listen()
