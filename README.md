@@ -19,7 +19,7 @@ Note: The PyTrakt API keys are not stored securely, so if you do not want to hav
  - Watched status are synced (dates are not reported from Trakt to Plex)
  - Liked lists in Trakt are downloaded and all movies in Plex belonging to that
    list are added
- - You can edit the [config file](https://github.com/Taxel/PlexTraktSync/blob/HEAD/config.default.json) to choose what to sync
+ - You can edit the [config file](https://github.com/Taxel/PlexTraktSync/blob/HEAD/plex_trakt_sync/config.default.json) to choose what to sync
  - None of the above requires a Plex Pass or Trakt VIP membership.
    Downside: Needs to be executed manually or via cronjob,
    can not use live data via webhooks.

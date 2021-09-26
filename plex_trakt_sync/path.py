@@ -5,9 +5,10 @@ from os.path import abspath, dirname, join
 
 class Path:
     def __init__(self):
-        self.app_path = dirname(dirname(abspath(__file__)))
+        self.module_path = dirname(abspath(__file__))
+        self.app_path = dirname(self.module_path)
 
-        self.default_config_file = join(self.app_path, "config.default.json")
+        self.default_config_file = join(self.module_path, "config.default.json")
         self.config_file = join(self.config_dir, "config.json")
         self.pytrakt_file = join(self.config_dir, ".pytrakt.json")
         self.env_file = join(self.config_dir, ".env")
