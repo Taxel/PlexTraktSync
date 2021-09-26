@@ -2,7 +2,7 @@ import click
 
 from plex_trakt_sync.logging import logging
 from plex_trakt_sync.config import Config
-from plex_trakt_sync.events import PlaySessionStateNotification, ActivityNotification
+from plex_trakt_sync.events import PlaySessionStateNotification, ActivityNotification, Error
 from plex_trakt_sync.factory import factory
 from plex_trakt_sync.listener import WebSocketListener
 from plex_trakt_sync.media import MediaFactory, Media
@@ -63,6 +63,11 @@ class WatchStateUpdater:
         m = self.mf.resolve_any(pm)
         return m
 
+    def on_error(self, error: Error):
+        self.logger.error(error.msg)
+        self.scrobblers.clear()
+        self.sessions.clear()
+
     def on_activity(self, activity: ActivityNotification):
         m = self.find_by_key(activity.key, reload=True)
         if not m:
@@ -121,6 +126,7 @@ def watch():
 
     ws.on(PlaySessionStateNotification, updater.on_play, state=["playing", "stopped", "paused"])
     ws.on(ActivityNotification, updater.on_activity, type="library.refresh.items", event=["ended"], progress=100)
+    ws.on(Error, updater.on_error)
 
     print("Listening for events!")
     ws.listen()
