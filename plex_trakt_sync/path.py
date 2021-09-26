@@ -1,6 +1,6 @@
 import site
-from os import getenv
-from os.path import abspath, dirname, join
+from os import getenv, makedirs
+from os.path import abspath, dirname, join, exists
 
 from plex_trakt_sync.decorators.memoize import memoize
 
@@ -10,6 +10,10 @@ class Path:
         self.app_name = "PlexTraktSync"
         self.module_path = dirname(abspath(__file__))
         self.app_path = dirname(self.module_path)
+
+        self.ensure_dir(self.config_dir)
+        self.ensure_dir(self.log_dir)
+        self.ensure_dir(self.cache_dir)
 
         self.default_config_file = join(self.module_path, "config.default.json")
         self.config_file = join(self.config_dir, "config.json")
@@ -57,6 +61,12 @@ class Path:
         paths = site.getsitepackages()
 
         return absdir in paths
+
+    @staticmethod
+    def ensure_dir(directory):
+        if not exists(directory):
+            makedirs(directory)
+
 
 p = Path()
 
