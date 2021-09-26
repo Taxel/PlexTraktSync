@@ -118,7 +118,7 @@ def watch():
     updater = WatchStateUpdater(plex, trakt, mf, config)
 
     ws.on(PlaySessionStateNotification, updater.on_play, state=["playing", "stopped", "paused"])
-    ws.on(ActivityNotification, updater.on_activity, event=["ended"], progress=100)
+    ws.on(ActivityNotification, updater.on_activity, type="library.refresh.items", event=["ended"], progress=100)
 
     print("Listening for events!")
     ws.listen()
