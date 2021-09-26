@@ -5,6 +5,7 @@ from plexapi import VERSION as PLEX_API_VERSION
 from trakt import __version__ as TRAKT_API_VERSION
 
 from plex_trakt_sync.__init__ import __version__ as PTS_VERSION
+from plex_trakt_sync.path import cache_dir, config_dir, log_dir
 from plex_trakt_sync.version import git_version_info
 
 
@@ -23,3 +24,6 @@ def version():
     print(f"Python Version: {sys.version}")
     print(f"Plex API Version: {PLEX_API_VERSION}")
     print(f"Trakt API Version: {TRAKT_API_VERSION}")
+    print(f"Cache Dir: {cache_dir}")
+    print(f"Config Dir: {config_dir}")
+    print(f"Log Dir: {log_dir}")
