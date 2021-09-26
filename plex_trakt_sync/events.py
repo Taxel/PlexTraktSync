@@ -19,7 +19,9 @@ class Event(dict):
 
 
 class Error(Event):
-    pass
+    @property
+    def msg(self):
+        return self["msg"]
 
 
 class AccountUpdateNotification(Event):
