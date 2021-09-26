@@ -63,9 +63,10 @@ class EventDispatcher:
 
 
 class WebSocketListener:
-    def __init__(self, plex: PlexServer, interval=1):
+    def __init__(self, plex: PlexServer, poll_interval=5, restart_interval=15):
         self.plex = plex
-        self.interval = interval
+        self.poll_interval = poll_interval
+        self.restart_interval = restart_interval
         self.dispatcher = EventDispatcher()
         self.logger = logging.getLogger("PlexTraktSync.WebSocketListener")
 
@@ -76,8 +77,8 @@ class WebSocketListener:
         while True:
             notifier = self.plex.startAlertListener(callback=self.dispatcher.event_handler)
             while notifier.is_alive():
-                sleep(self.interval)
+                sleep(self.poll_interval)
 
             self.dispatcher.event_handler(Error(msg='Server closed connection'))
-            self.logger.error(f"Listener finished. Restarting in {self.interval} seconds")
-            sleep(self.interval)
+            self.logger.error(f"Listener finished. Restarting in {self.restart_interval} seconds")
+            sleep(self.restart_interval)
