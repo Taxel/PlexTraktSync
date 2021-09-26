@@ -24,6 +24,10 @@ class AccountUpdateNotification(Event):
 
 class ActivityNotification(Event):
     @property
+    def type(self):
+        return self["Activity"]["type"]
+
+    @property
     def progress(self):
         return self["Activity"]["progress"]
 
