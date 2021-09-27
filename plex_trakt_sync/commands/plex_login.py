@@ -18,7 +18,6 @@ from plex_trakt_sync.style import (comment, disabled, error, highlight, prompt,
 PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
 PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username or e-mail")
 PROMPT_PLEX_RELOGIN = prompt("You already have Plex Access Token, do you want to log in again?")
-PROMPT_MANAGED_USER = prompt("Do you want to use managed user instead of main account?")
 SUCCESS_MESSAGE = success("Plex Media Server Authentication Token and base URL have been added to .env file")
 NOTICE_2FA_PASSWORD = comment(
     "If you have 2 Factor Authentication enabled on Plex "
@@ -26,6 +25,10 @@ NOTICE_2FA_PASSWORD = comment(
 )
 CONFIG = factory.config()
 
+from InquirerPy import get_style
+from InquirerPy import inquirer
+
+style = get_style({"questionmark": "hidden", "question": "ansiyellow", "pointer": "fg:ansiblack bg:ansiyellow", })
 
 def myplex_login(username, password):
     while True:
@@ -45,18 +48,11 @@ def choose_managed_user(account: MyPlexAccount):
 
     click.echo(success("Managed user(s) found:"))
     users = sorted(users)
-    for user in users:
-        click.echo(f"- {user}")
+    users.insert(0, "MAIN USER")
+    user = inquirer.select(message="Select the user you would like to use (default is main user):", choices=users, default=None, style=style, qmark="", pointer=">",).execute()
 
-    if not click.confirm(PROMPT_MANAGED_USER):
+    if user == "MAIN USER":
         return None
-
-    # choice = prompt_choice(users)
-    user = click.prompt(
-        title("Please select:"),
-        type=Choice(users),
-        show_default=True,
-    )
 
     # Sanity check, even the user can't input invalid user
     user_account = account.user(user)
@@ -98,12 +94,7 @@ def prompt_server(servers: List[MyPlexResource]):
             fmt_server(s)
             server_names.append(s.name)
 
-    return click.prompt(
-        title("Select default server:"),
-        type=Choice(server_names),
-        show_default=True,
-    )
-
+    return inquirer.select(message="Select default server:", choices=server_names, default=None, style=style, qmark="", pointer=">",).execute()
 
 def pick_server(account: MyPlexAccount):
     servers = account.resources()
