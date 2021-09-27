@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
+appdirs = "==1.4.4"
 click = "==8.0.1"
 deprecated = "==1.2.13"
 plexapi = "==4.7.1"

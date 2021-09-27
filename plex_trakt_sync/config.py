@@ -5,7 +5,7 @@ from os.path import exists
 
 from dotenv import load_dotenv
 
-from plex_trakt_sync.path import (PTS_CACHE_DIR, config_file,
+from plex_trakt_sync.path import (cache_dir, config_file,
                                   default_config_file, env_file)
 
 """
@@ -57,7 +57,7 @@ class Config(dict):
 
         self.initialized = True
 
-        self["cache"]["path"] = self["cache"]["path"].replace("$PTS_CACHE_DIR", PTS_CACHE_DIR)
+        self["cache"]["path"] = self["cache"]["path"].replace("$PTS_CACHE_DIR", cache_dir)
 
     def save(self):
         with open(self.env_file, "w") as txt:

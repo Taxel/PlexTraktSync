@@ -1,14 +1,82 @@
-from os import getenv
-from os.path import abspath, dirname, join
+import site
+from os import getenv, makedirs
+from os.path import abspath, dirname, join, exists
 
-app_path = dirname(dirname(abspath(__file__)))
+from plex_trakt_sync.decorators.memoize import memoize
 
-PTS_CONFIG_DIR = getenv("PTS_CONFIG_DIR", app_path)
-PTS_CACHE_DIR = getenv("PTS_CACHE_DIR", app_path)
-PTS_LOG_DIR = getenv("PTS_LOG_DIR", app_path)
 
-default_config_file = join(app_path, "config.default.json")
-config_file = join(PTS_CONFIG_DIR, "config.json")
-pytrakt_file = join(PTS_CONFIG_DIR, ".pytrakt.json")
-env_file = join(PTS_CONFIG_DIR, ".env")
-log_file = join(PTS_LOG_DIR, "last_update.log")
+class Path:
+    def __init__(self):
+        self.app_name = "PlexTraktSync"
+        self.module_path = dirname(abspath(__file__))
+        self.app_path = dirname(self.module_path)
+
+        self.ensure_dir(self.config_dir)
+        self.ensure_dir(self.log_dir)
+        self.ensure_dir(self.cache_dir)
+
+        self.default_config_file = join(self.module_path, "config.default.json")
+        self.config_file = join(self.config_dir, "config.json")
+        self.pytrakt_file = join(self.config_dir, ".pytrakt.json")
+        self.env_file = join(self.config_dir, ".env")
+        self.log_file = join(self.log_dir, "last_update.log")
+
+    @property
+    @memoize
+    def config_dir(self):
+        if self.installed:
+            return self.app_dir.user_config_dir
+
+        return getenv("PTS_CONFIG_DIR", self.app_path)
+
+    @property
+    @memoize
+    def cache_dir(self):
+        if self.installed:
+            return self.app_dir.user_cache_dir
+
+        return getenv("PTS_CACHE_DIR", self.app_path)
+
+    @property
+    @memoize
+    def log_dir(self):
+        if self.installed:
+            return self.app_dir.user_log_dir
+
+        return getenv("PTS_LOG_DIR", self.app_path)
+
+    @property
+    @memoize
+    def app_dir(self):
+        from appdirs import AppDirs
+
+        return AppDirs(self.app_name)
+
+    @property
+    @memoize
+    def installed(self):
+        """
+        Return true if this package is installed to site-packages
+        """
+        absdir = dirname(dirname(__file__))
+        paths = site.getsitepackages()
+
+        return absdir in paths
+
+    @staticmethod
+    def ensure_dir(directory):
+        if not exists(directory):
+            makedirs(directory)
+
+
+p = Path()
+
+cache_dir = p.cache_dir
+config_dir = p.config_dir
+log_dir = p.log_dir
+
+default_config_file = p.default_config_file
+config_file = p.config_file
+pytrakt_file = p.pytrakt_file
+env_file = p.env_file
+log_file = p.log_file
