@@ -168,6 +168,25 @@ and scrobble plays.
 
 [plex-scrobbler]: https://blog.trakt.tv/plex-scrobbler-52db9b016ead
 
+Create a systemd unit so that it scrobbles automatically in the background:
+
+```ini
+[Unit]
+Description=PlexTraktSync watch daemon
+After=network-online.target
+
+[Service]
+ExecStart=/path/to/PlexTraktSync/plex_trakt_sync.sh watch
+
+Restart=on-failure
+RestartSec=10
+User=user
+Group=user
+
+[Install]
+WantedBy=multi-user.target
+```
+
 NOTE: The `watch` command will scrobble all Plex Watches to Trakt as filtering
 by user is not implemented [#324].
 
