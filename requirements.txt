@@ -1,6 +1,7 @@
 appdirs==1.4.4
 click==8.0.1
 deprecated==1.2.13
+inquirerpy==0.2.4
 plexapi==4.7.1
 python-dotenv==0.19.0
 python-git-info==0.7.1

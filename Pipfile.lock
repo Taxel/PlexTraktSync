@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2fc0672e6173b5522e140185b7ff9cbe53d3bcd17ae80acb09472043d90dc686"
+            "sha256": "915a6023706c21958d1c7ed03c3cb0e14659217c0d0de52ca417209fba1fc861"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -21,6 +21,7 @@
                 "sha256:7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41",
                 "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"
             ],
+            "index": "pypi",
             "version": "==1.4.4"
         },
         "attrs": {
@@ -93,6 +94,14 @@
             "markers": "python_version >= '3'",
             "version": "==3.2"
         },
+        "inquirerpy": {
+            "hashes": [
+                "sha256:051ec6a5f9f7f93f6db6a1bb87a07a5d876cc6cb818b8816f9ba2ae52d43c56b",
+                "sha256:22d50a9d7361377b8eb334964b1d52922a7fc8680864139e35fd64a73e71bb65"
+            ],
+            "index": "pypi",
+            "version": "==0.2.4"
+        },
         "oauthlib": {
             "hashes": [
                 "sha256:42bf6354c2ed8c6acb54d971fce6f88193d97297e18602a3a886603f9d7730cc",
@@ -108,6 +117,14 @@
             ],
             "index": "pypi",
             "version": "==4.7.1"
+        },
+        "prompt-toolkit": {
+            "hashes": [
+                "sha256:6076e46efae19b1e0ca1ec003ed37a933dc94b4d20f486235d436e64771dcd5c",
+                "sha256:eb71d5a6b72ce6db177af4a7d4d7085b99756bf656d98ffcc4fecd36850eea6c"
+            ],
+            "markers": "python_full_version >= '3.6.2'",
+            "version": "==3.0.20"
         },
         "pygments": {
             "hashes": [
@@ -203,6 +220,13 @@
             ],
             "index": "pypi",
             "version": "==1.26.7"
+        },
+        "wcwidth": {
+            "hashes": [
+                "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784",
+                "sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"
+            ],
+            "version": "==0.2.5"
         },
         "websocket-client": {
             "hashes": [
