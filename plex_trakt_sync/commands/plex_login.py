@@ -41,17 +41,17 @@ def myplex_login(username, password):
             click.echo(error(f"Log in to Plex failed: {e}, Try again."))
 
 
-def choose_managed_user(account: MyPlexAccount):
+def choose_managed_user(account: MyPlexAccount, username):
     users = [u.title for u in account.users() if u.friend]
     if not users:
         return None
 
     click.echo(success("Managed user(s) found:"))
     users = sorted(users)
-    users.insert(0, "MAIN USER")
-    user = inquirer.select(message="Select the user you would like to use (default is main user):", choices=users, default=None, style=style, qmark="", pointer=">",).execute()
+    users.insert(0, username)
+    user = inquirer.select(message="Select the user you would like to use:", choices=users, default=None, style=style, qmark="", pointer=">",).execute()
 
-    if user == "MAIN USER":
+    if user == username:
         return None
 
     # Sanity check, even the user can't input invalid user
@@ -94,7 +94,7 @@ def prompt_server(servers: List[MyPlexResource]):
             fmt_server(s)
             server_names.append(s.name)
 
-    return inquirer.select(message="Select default server:", choices=server_names, default=None, style=style, qmark="", pointer=">",).execute()
+    return inquirer.select(message="Select default server:", choices=sorted(server_names), default=None, style=style, qmark="", pointer=">",).execute()
 
 def pick_server(account: MyPlexAccount):
     servers = account.resources()
@@ -156,7 +156,7 @@ def plex_login(username, password):
     token = server.accessToken
     user = account.username
     if server.owned:
-        managed_user = choose_managed_user(account)
+        managed_user = choose_managed_user(account, user)
         if managed_user:
             user = managed_user
             token = account.user(managed_user).get_token(plex.machineIdentifier)
