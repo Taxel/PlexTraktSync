@@ -93,7 +93,7 @@ def prompt_server(servers: List[MyPlexResource]):
             fmt_server(s)
             server_names.append(s.name)
     if unowned_servers:
-        click.echo(success(f"{len(owned_servers)} unowned servers found:"))
+        click.echo(success(f"{len(unowned_servers)} unowned servers found:"))
         for s in sorter(unowned_servers):
             fmt_server(s)
             server_names.append(s.name)
