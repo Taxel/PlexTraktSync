@@ -5,9 +5,36 @@ from trakt.errors import NotFoundException, OAuthException
 from trakt.movies import Movie
 from trakt.tv import TVEpisode
 from trakt.users import UserList
+from trakt.core import get
+from trakt.utils import slugify, extract_ids
 
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.plex_api import PlexApi
+
+
+class LazyUserList(UserList):
+    @get
+    def get_items(self):
+        data = yield 'users/{user}/lists/{id}/items'.format(
+            user=slugify(self.creator), id=self.slug)
+        for item in data:
+            if 'type' not in item:
+                continue
+            item_type = item['type']
+            item_data = item.pop(item_type)
+            extract_ids(item_data)
+            self._items.append((item_type + 's', item_data['trakt']))
+        yield self._items
+
+    @classmethod
+    @get
+    def _get(cls, title, creator):
+        data = yield 'users/{user}/lists/{id}'.format(user=slugify(creator),
+                                                      id=slugify(title))
+        extract_ids(data)
+        ulist = LazyUserList(creator=creator, **data)
+        ulist.get_items()
+        yield ulist
 
 
 class TraktList():
@@ -15,7 +42,8 @@ class TraktList():
         self.name = listname
         self.plex_items = []
         if username is not None:
-            self.trakt_items = dict(zip([(elem.media_type, elem.trakt) for elem in UserList._get(listname, username)._items if isinstance(elem, (Movie, TVEpisode))], count(1)))
+            prelist = [(elem[0], elem[1]) for elem in LazyUserList._get(listname, username)._items if elem[0] in ["movies", "episodes"]]
+            self.trakt_items = dict(zip(prelist, count(1)))
 
     @staticmethod
     def from_trakt_list(listname, trakt_list):
