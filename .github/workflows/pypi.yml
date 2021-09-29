@@ -42,6 +42,10 @@ jobs:
       env:
         APP_VERSION: ${{ steps.vars.outputs.version }}
       run: |
+        set -x
+        echo "__version__ = '$APP_VERSION'" > plex_trakt_sync/__init__.py
+        cat plex_trakt_sync/__init__.py
+        python -c "from plex_trakt_sync import __version__; print(__version__)"
         python -m pip install --upgrade build
         python -m build
 
