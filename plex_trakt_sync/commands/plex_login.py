@@ -41,17 +41,17 @@ def myplex_login(username, password):
             click.echo(error(f"Log in to Plex failed: {e}, Try again."))
 
 
-def choose_managed_user(account: MyPlexAccount, username):
+def choose_managed_user(account: MyPlexAccount):
     users = [u.title for u in account.users() if u.friend]
     if not users:
         return None
 
     click.echo(success("Managed user(s) found:"))
     users = sorted(users)
-    users.insert(0, username)
+    users.insert(0, account.username)
     user = inquirer.select(message="Select the user you would like to use:", choices=users, default=None, style=style, qmark="", pointer=">",).execute()
 
-    if user == username:
+    if user == account.username:
         return None
 
     # Sanity check, even the user can't input invalid user
@@ -156,7 +156,7 @@ def plex_login(username, password):
     token = server.accessToken
     user = account.username
     if server.owned:
-        managed_user = choose_managed_user(account, user)
+        managed_user = choose_managed_user(account)
         if managed_user:
             user = managed_user
             token = account.user(managed_user).get_token(plex.machineIdentifier)
