@@ -30,7 +30,32 @@ The script is known to work with Python 3.7-3.10 versions.
 
 ## Installation
 
-To install this project on Linux, macOS or Windows WSL:
+### pipx
+
+_This is the recommended installation method_
+
+```
+pipx install PlexTraktSync
+```
+
+and to upgrade:
+
+```
+pipx upgrade PlexTraktSync
+```
+
+To install `pipx` you may try these depending on your platform:
+
+```
+brew install pipx
+python3 -m pip install pipx
+```
+
+If that doesn't work, see detailed instructions from [pipx README][install-pipx].
+
+[install-pipx]: https://github.com/pypa/pipx#install-pipx
+
+### GitHub download
 
 - Verify the latest release at https://github.com/Taxel/PlexTraktSync/releases
 
