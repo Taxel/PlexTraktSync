@@ -20,14 +20,16 @@ def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi, runner: Sync, dry_r
     console = Console()
     listutil = TraktListUtil()
 
-    with console.status("[bold green]Caching Trakt..."):
-        trakt_watched_movies = trakt.watched_movies
-        trakt_watched_shows = trakt.watched_shows
-        trakt_movie_collection = trakt.movie_collection_set
-        trakt_ratings = trakt.ratings
-        trakt_watchlist_movies = trakt.watchlist_movies
-        trakt_liked_lists = trakt.liked_lists
-        console.log(f"Cached Trakt lists")
+    with console.status("[bold green]Caching Trakt items..."):
+        n = len([
+            trakt.watched_movies,
+            trakt.watched_shows,
+            trakt.movie_collection_set,
+            trakt.ratings,
+            trakt.watchlist_movies,
+            trakt.liked_lists,
+        ])
+        console.log(f"Cached {n} Trakt items")
 
     if trakt.watchlist_movies:
         listutil.addList(None, "Trakt Watchlist", trakt_list=trakt.watchlist_movies)
