@@ -1,4 +1,4 @@
-FROM python:3.9-alpine3.13 AS base
+FROM python:3.10-alpine3.13 AS base
 
 WORKDIR /app
 ENTRYPOINT ["python", "-m", "plex_trakt_sync"]
