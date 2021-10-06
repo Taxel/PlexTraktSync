@@ -26,7 +26,7 @@ Note: The PyTrakt API keys are not stored securely, so if you do not want to hav
 
 ## Pre-requisites
 
-The script is known to work with Python 3.7-3.9 versions.
+The script is known to work with Python 3.7-3.10 versions.
 
 ## Installation
 
