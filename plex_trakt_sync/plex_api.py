@@ -201,7 +201,10 @@ class PlexLibraryItem:
     @memoize
     @rate_limit(retries=1)
     def rating(self):
-        return int(self.item.userRating) if self.item.userRating is not None else None
+        if self.item.userRating is None:
+            return None
+
+        return int(self.item.userRating)
 
     @property
     @memoize
