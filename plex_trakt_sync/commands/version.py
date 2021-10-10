@@ -21,7 +21,8 @@ def version():
     if git_version:
         print(f"PlexTraktSync Git Version: [{git_version}]")
 
-    print(f"Python Version: {sys.version}")
+    py_version = sys.version.replace("\n", "")
+    print(f"Python Version: {py_version}")
     print(f"Plex API Version: {PLEX_API_VERSION}")
     print(f"Trakt API Version: {TRAKT_API_VERSION}")
     print(f"Cache Dir: {cache_dir}")
