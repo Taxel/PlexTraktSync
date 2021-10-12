@@ -251,8 +251,3 @@ Group=user
 [Install]
 WantedBy=multi-user.target
 ```
-
-NOTE: The `watch` command will scrobble all Plex Watches to Trakt as filtering
-by user is not implemented [#324].
-
-[#324]: https://github.com/Taxel/PlexTraktSync/issues/324
