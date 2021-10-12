@@ -30,9 +30,14 @@ The script is known to work with Python 3.7-3.10 versions.
 
 ## Installation
 
+- [pipx](#pipx) - _This is the recommended installation method_
+- [GitHub download](#github-download)
+- [Docker Compose](#docker-compose)
+- [Windows Setup (optional alternative)](#windows-setup-optional-alternative)
+
 ### pipx
 
-_This is the recommended installation method_
+Installation with [pipx][install-pipx].
 
 ```
 pipx install PlexTraktSync
@@ -44,14 +49,11 @@ and to upgrade:
 pipx upgrade PlexTraktSync
 ```
 
-To install `pipx` you may try these depending on your platform:
+to run:
 
 ```
-brew install pipx
-python3 -m pip install pipx
+plex-trakt-sync
 ```
-
-If that doesn't work, see detailed instructions from [pipx README][install-pipx].
 
 [install-pipx]: https://github.com/pypa/pipx#install-pipx
 
@@ -127,6 +129,7 @@ docker-compose run --rm plex-trakt-sync watch
 * Cronjobs can be optionally used on Linux or macOS to run the script at set intervals.
 
   For example, to run this script in a cronjob every two hours:
+
   ```
   crontab -e
   0 */2 * * * cd ~/path/to/this/repo && python3 -m plex_trakt_sync
