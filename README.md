@@ -32,6 +32,7 @@ The script is known to work with Python 3.7-3.10 versions.
 
 - [pipx](#pipx) - _This is the recommended installation method_
 - [GitHub download](#github-download)
+- [GitHub clone](#github-clone)
 - [Docker Compose](#docker-compose)
 - [Windows Setup (optional alternative)](#windows-setup-optional-alternative)
 
@@ -59,30 +60,52 @@ plex-trakt-sync
 
 ### GitHub download
 
-- Verify the latest release at https://github.com/Taxel/PlexTraktSync/releases
-
+- Find the latest release from https://github.com/Taxel/PlexTraktSync/releases
 - Download the `.tar` or `.zip`
-  _or_ checkout the release with Git (For example, the command to clone with Git):
+- Extract to `PlexTraktSync` directory
 
-  ```
-  git clone -b 0.7.19 --depth=1 https://github.com/Taxel/PlexTraktSync
-  ```
+Proceed to [Install dependencies](#install-dependencies)
 
-- In the extracted directory, install the required Python packages:
+### GitHub clone
 
+- Find the latest release from https://github.com/Taxel/PlexTraktSync/releases
+- Checkout the release with Git:
   ```
-  python3 -m pip install -r requirements.txt
-  ```
-
-  _or_ alternatively you can use [pipenv]:
-
-  ```
-  python3 -m pip install pipenv
-  pipenv install
-  pipenv run plex-trakt-sync
+  git clone -b 0.15.0 --depth=1 https://github.com/Taxel/PlexTraktSync
   ```
 
-  [pipenv]: https://pipenv.pypa.io/
+NOTE: Use released versions, when making bug reports.
+
+Proceed to [Install dependencies](#install-dependencies)
+
+### Install dependencies
+
+This applies to [GitHub download](#github-download) and [GitHub clone](#github-clone).
+
+In the `PlexTraktSync` directory, install the required Python packages:
+```
+python3 -m pip install -r requirements.txt
+```
+
+To run from `PlexTraktSync` directory:
+```
+python3 -m plex_trakt_sync
+```
+
+Or use a wrapper which is able to change directory accordingly:
+```
+/path/to/PlexTraktSync/plex_trakt_sync.sh
+```
+
+*or* alternatively you can use [pipenv]:
+
+```
+python3 -m pip install pipenv
+pipenv install
+pipenv run plex-trakt-sync
+```
+
+[pipenv]: https://pipenv.pypa.io/
 
 ## Docker Compose
 
