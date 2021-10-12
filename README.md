@@ -217,6 +217,22 @@ Support for unmatched shows is not yet implemented.
 
 `python3 -m plex_trakt_sync unmatched`
 
+### Version command
+
+Version command can be used to print package versions and locations of Cache, Config and Logs directories:
+
+```
+$ plex_trakt_sync version
+PlexTraktSync Version: 0.15.0
+PlexTraktSync Git Version: [0.15.0]
+Python Version: 3.10.0 (default, Oct  6 2021, 01:11:32) [Clang 13.0.0 (clang-1300.0.29.3)]
+Plex API Version: 4.7.2
+Trakt API Version: 3.2.1
+Cache Dir: /Users/glen/Library/Caches/PlexTraktSync
+Config Dir: /Users/glen/Library/Application Support/PlexTraktSync
+Log Dir: /Users/glen/Library/Logs/PlexTraktSync
+```
+
 ### Watch
 
 You can use the `watch` command to listen to events from Plex Media Server
