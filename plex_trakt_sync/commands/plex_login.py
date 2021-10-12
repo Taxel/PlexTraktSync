@@ -135,7 +135,13 @@ def has_plex_token():
     return CONFIG["PLEX_TOKEN"] is not None
 
 
-@click.command()
+def plex_login_autoconfig():
+    username = environ.get("PLEX_USERNAME", CONFIG["PLEX_USERNAME"])
+    password = environ.get("PLEX_PASSWORD", None)
+    login(username, password)
+
+
+@click.command("plex-login")
 @click.option("--username", help="Plex login", default=lambda: environ.get("PLEX_USERNAME", CONFIG["PLEX_USERNAME"]))
 @click.option("--password", help="Plex password", default=lambda: environ.get("PLEX_PASSWORD", None))
 def plex_login(username, password):
@@ -143,6 +149,10 @@ def plex_login(username, password):
     Log in to Plex Account to obtain Access Token. Optionally can use managed user on servers that you own.
     """
 
+    login(username, password)
+
+
+def login(username: str, password: str):
     if has_plex_token():
         if not click.confirm(PROMPT_PLEX_RELOGIN, default=True):
             return

@@ -48,12 +48,19 @@ def has_trakt_token():
     return CONFIG["TRAKT_USERNAME"] is not None
 
 
+def trakt_login_autoconfig():
+    login()
+
+
 @click.command()
 def trakt_login():
     """
     Log in to Trakt Account to obtain Access Token.
     """
+    login()
 
+
+def login():
     api = factory.trakt_api()
     trakt_authenticate(api)
     user = api.me.username
