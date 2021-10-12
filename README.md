@@ -56,6 +56,9 @@ to run:
 plex-trakt-sync
 ```
 
+NOTE: `pipx` install will use OS specific paths for Config, Logs, Cache, see [appdirs] documentation for details.
+
+[appdirs]: https://pypi.org/project/appdirs
 [install-pipx]: https://github.com/pypa/pipx#install-pipx
 
 ### GitHub download
