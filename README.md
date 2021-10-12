@@ -233,6 +233,8 @@ and scrobble plays.
 
 [plex-scrobbler]: https://blog.trakt.tv/plex-scrobbler-52db9b016ead
 
+### Systemd setup
+
 Create a systemd unit so that it scrobbles automatically in the background:
 
 ```ini
