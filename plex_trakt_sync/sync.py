@@ -57,9 +57,7 @@ class SyncConfig:
 
 class Sync:
     def __init__(self, config: Config):
-        self.sync_collection_enabled = config["sync"]["collection"]
-        self.sync_ratings_enabled = config["sync"]["ratings"]
-        self.sync_watched_status_enabled = config["sync"]["watched_status"]
+        self.config = SyncConfig(config)
 
     def sync(self, walker: Walker, dry_run=False):
         listutil = TraktListUtil()
@@ -102,7 +100,7 @@ class Sync:
             trakt.flush()
 
     def sync_collection(self, m: Media, dry_run=False):
-        if not self.sync_collection_enabled:
+        if not self.config.plex_to_trakt["collection"]:
             return
 
         if m.is_collected:
@@ -113,7 +111,7 @@ class Sync:
             m.add_to_collection()
 
     def sync_ratings(self, m: Media, dry_run=False):
-        if not self.sync_ratings_enabled:
+        if not self.config.sync_ratings:
             return
 
         if m.plex_rating is m.trakt_rating:
@@ -121,26 +119,34 @@ class Sync:
 
         # Plex rating takes precedence over Trakt rating
         if m.plex_rating is not None:
+            if not self.config.plex_to_trakt["ratings"]:
+                return
             logger.info(f"Rating {m} with {m.plex_rating} on Trakt")
             if not dry_run:
                 m.trakt_rate()
         elif m.trakt_rating is not None:
+            if not self.config.trakt_to_plex["ratings"]:
+                return
             logger.info(f"Rating {m} with {m.trakt_rating} on Plex")
             if not dry_run:
                 m.plex_rate()
 
     def sync_watched(self, m: Media, dry_run=False):
-        if not self.sync_watched_status_enabled:
+        if not self.config.sync_watched_status:
             return
 
         if m.watched_on_plex is m.watched_on_trakt:
             return
 
         if m.watched_on_plex:
+            if not self.config.plex_to_trakt["watched_status"]:
+                return
             logger.info(f"Marking as watched in Trakt: {m}")
             if not dry_run:
                 m.mark_watched_trakt()
         elif m.watched_on_trakt:
+            if not self.config.trakt_to_plex["watched_status"]:
+                return
             logger.info(f"Marking as watched in Plex: {m}")
             if not dry_run:
                 m.mark_watched_plex()
