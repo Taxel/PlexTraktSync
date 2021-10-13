@@ -57,6 +57,14 @@ class Factory:
         return requests_cache
 
     @memoize
+    def sync(self):
+        from plex_trakt_sync.sync import Sync
+
+        config = self.config()
+
+        return Sync(config)
+
+    @memoize
     def progressbar(self, enabled=True):
         if enabled:
             from tqdm.rich import tqdm
