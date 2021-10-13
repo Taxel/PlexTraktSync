@@ -50,6 +50,10 @@ jobs:
         cat plex_trakt_sync/__init__.py
         python -c "from plex_trakt_sync import __version__; print(__version__)"
         python -m pip install --upgrade build
+        #
+        # Patch requirements.txt fpor setuptools-declarative-requirements:
+        # https://github.com/s0undt3ch/setuptools-declarative-requirements/issues/6
+        sed -i -e '/^-i/d' requirements.txt
         python -m build
 
     - name: Publish to PyPI
