@@ -15,7 +15,7 @@ from plex_trakt_sync.walker import Walker
 CONFIG = factory.config()
 
 
-def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi, dry_run: bool):
+def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi, runner: Sync, dry_run: bool):
     listutil = TraktListUtil()
 
     with measure_time("Loaded Trakt lists"):
@@ -36,7 +36,6 @@ def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi, dry_run: bool):
     # Load sections, this will attempt to connect to Plex
     click.echo(f"Server has {len(plex.library_sections)} libraries: {plex.library_section_names}")
 
-    runner = Sync(CONFIG)
     runner.sync(walker, listutil, dry_run=dry_run)
 
     if not dry_run:
@@ -128,4 +127,4 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int,
     w.walk_details(print=tqdm.write)
 
     with measure_time("Completed full sync"):
-        sync_all(walker=w, trakt=trakt, plex=plex, dry_run=dry_run)
+        sync_all(walker=w, trakt=trakt, plex=plex, runner=factory.sync(), dry_run=dry_run)
