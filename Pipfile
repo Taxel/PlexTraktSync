@@ -19,7 +19,7 @@ tqdm = "==4.62.3"
 trakt = "==3.2.1"
 urllib3 = ">=1.26.6"
 websocket-client = "==1.2.1"
-inquirerpy = "==0.2.4"
+inquirerpy = "==0.3.0"
 
 [requires]
 python_version = "3"
