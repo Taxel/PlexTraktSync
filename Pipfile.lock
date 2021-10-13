@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6faf6c136be8fdb2aceef34dffa7fa2cd77048d91acbfc37aa13a87c8416fe4f"
+            "sha256": "8f884f67369ce5878e4bdf960e3ea1510eab19bbebda8ac9c01fa11169c2b6d1"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -96,11 +96,11 @@
         },
         "inquirerpy": {
             "hashes": [
-                "sha256:051ec6a5f9f7f93f6db6a1bb87a07a5d876cc6cb818b8816f9ba2ae52d43c56b",
-                "sha256:22d50a9d7361377b8eb334964b1d52922a7fc8680864139e35fd64a73e71bb65"
+                "sha256:3f45515dfb58c590759df91ae9534f9391f241480cc535e7e134fb3c3bd3d269",
+                "sha256:8849da1e2dfa4b1d576a9cd9b158ad0755d7fc6883eb0cf839b6a2fc6b1a10fb"
             ],
             "index": "pypi",
-            "version": "==0.2.4"
+            "version": "==0.3.0"
         },
         "oauthlib": {
             "hashes": [
@@ -109,6 +109,14 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==3.1.1"
+        },
+        "pfzy": {
+            "hashes": [
+                "sha256:33682ed1929c5ff85c0c57e3b3cfa5c355063138be3560a1797378cf08fb05a2",
+                "sha256:3efd83e49d854830369173b44e64a2cd9adcb9d5382698a792474c7d18e2fe32"
+            ],
+            "markers": "python_version >= '3.7' and python_version < '4.0'",
+            "version": "==0.3.3"
         },
         "plexapi": {
             "hashes": [
