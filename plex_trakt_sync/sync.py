@@ -2,10 +2,47 @@ from rich.console import Console
 
 from plex_trakt_sync.config import Config
 from plex_trakt_sync.decorators.measure_time import measure_time
+from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.media import Media
 from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.walker import Walker
+
+
+class SyncConfig:
+    def __init__(self, config: Config):
+        self.config = dict(config["sync"])
+
+    def __getitem__(self, key):
+        return self.config[key]
+
+    def __contains__(self, key):
+        return key in self.config
+
+    @property
+    @memoize
+    def trakt_to_plex(self):
+        if "trakt_to_plex" not in self:
+            return {
+                "watched_status": self["watched_status"],
+                "ratings": self["ratings"],
+                "liked_lists": self["liked_lists"],
+                "watchlist": self["watchlist"],
+            }
+
+        return self["trakt_to_plex"]
+
+    @property
+    @memoize
+    def plex_to_trakt(self):
+        if "plex_to_trakt" not in self:
+            return {
+                "watched_status": self["watched_status"],
+                "ratings": self["ratings"],
+                "collection": self["collection"]
+            }
+
+        return self["plex_to_trakt"]
 
 
 class Sync:
