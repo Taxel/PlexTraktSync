@@ -49,6 +49,11 @@ class SyncConfig:
     def sync_ratings(self):
         return self.trakt_to_plex["ratings"] or self.plex_to_trakt["ratings"]
 
+    @property
+    @memoize
+    def sync_watched_status(self):
+        return self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
+
 
 class Sync:
     def __init__(self, config: Config):
