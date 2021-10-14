@@ -72,6 +72,9 @@ class PlexGuid:
             CONFIG = factory.config()
             x = CONFIG["xbmc-providers"]["shows"]
 
+        if self.guid_is_hama:
+            return "tvdb"
+
         return x
 
     @property
@@ -81,6 +84,10 @@ class PlexGuid:
             return self.guid
         x = self.guid.split("://")[1]
         x = x.split("?")[0]
+
+        if self.guid_is_hama:
+            return x[5:]
+
         return x
 
     @property
@@ -114,6 +121,11 @@ class PlexGuid:
 
         # old item, like imdb 'tt0112253'
         return guid[0:2] == "tt" and guid[2:].isnumeric()
+
+    @property
+    @memoize
+    def guid_is_hama(self):
+        return self.guid.startswith('com.plexapp.agents.hama://tvdb-')
 
     def __str__(self):
         return self.guid
