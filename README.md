@@ -44,6 +44,12 @@ Installation with [pipx][install-pipx].
 pipx install PlexTraktSync
 ```
 
+to install specific version:
+
+```
+pipx install PlexTraktSync==0.15.2 --force
+```
+
 and to upgrade:
 
 ```
