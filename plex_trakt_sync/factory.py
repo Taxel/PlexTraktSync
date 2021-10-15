@@ -1,4 +1,5 @@
 from plex_trakt_sync.decorators.memoize import memoize
+from plex_trakt_sync.decorators.deprecated import deprecated
 
 
 class Factory:
@@ -46,6 +47,7 @@ class Factory:
         return session
 
     @memoize
+    @deprecated("Use session instead")
     def requests_cache(self):
         import requests_cache
 
