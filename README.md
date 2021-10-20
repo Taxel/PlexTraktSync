@@ -59,7 +59,7 @@ pipx upgrade PlexTraktSync
 to run:
 
 ```
-plex-trakt-sync
+plextraktsync
 ```
 
 NOTE: `pipx` install will use OS specific paths for Config, Logs, Cache, see [appdirs] documentation for details
