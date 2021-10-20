@@ -59,24 +59,24 @@ echo Restoring default settings... Done!
 
 
 :START
-powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%cd%\Plex Trakt Sync.lnk');$s.WorkingDirectory = '%cd%\';$s.TargetPath='%cd%\plex_trakt_sync.bat';$s.IconLocation='%cd%\trakt.ico';$s.Save()"
+powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%cd%\Plex Trakt Sync.lnk');$s.WorkingDirectory = '%cd%\';$s.TargetPath='%cd%\plextraktsync.bat';$s.IconLocation='%cd%\trakt.ico';$s.Save()"
 
 
 echo.
 SET /P SCHEDULED=Would you like to schedule sync to run daily? (Y/[N])?
 IF /I "%SCHEDULED%" NEQ "Y" GOTO :NOSCHEDULE
 SET /P SCHEDULED_TIME=What time would you like the sync to run (Use 24 hour time. eg: 01:00, 23:42)?
-SCHTASKS /CREATE /SC DAILY /TN "Plex Trakt Sync" /TR "%cd%\plex_trakt_sync.bat" /ST "%SCHEDULED_TIME%" > nul
+SCHTASKS /CREATE /SC DAILY /TN "Plex Trakt Sync" /TR "%cd%\plextraktsync.bat" /ST "%SCHEDULED_TIME%" > nul
 
 :NOSCHEDULE
 SET /P STARTUP=Would you like to schedule sync to run on system start up? (Y/[N])?
 IF /I "%STARTUP%" NEQ "Y" GOTO :NOSTARTUP
-powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%userprofile%\Start Menu\Programs\Startup\Plex Trakt Sync.lnk');$s.WorkingDirectory = '%cd%\';$s.TargetPath='%cd%\plex_trakt_sync.bat';$s.IconLocation='%cd%\trakt.ico';$s.Save()"
+powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%userprofile%\Start Menu\Programs\Startup\Plex Trakt Sync.lnk');$s.WorkingDirectory = '%cd%\';$s.TargetPath='%cd%\plextraktsync.bat';$s.IconLocation='%cd%\trakt.ico';$s.Save()"
 
 :NOSTARTUP
 SET /P DESKTOPQ=Would you like to create a desktop shortcut to run sync manually? (Y/[N])?
 IF /I "%DESKTOPQ%" NEQ "Y" GOTO :NODESKTOP
-powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%userprofile%\Desktop\Plex Trakt Sync.lnk');$s.WorkingDirectory = '%cd%\';$s.TargetPath='%cd%\plex_trakt_sync.bat';$s.IconLocation='%cd%\trakt.ico';$s.Save()"
+powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%userprofile%\Desktop\Plex Trakt Sync.lnk');$s.WorkingDirectory = '%cd%\';$s.TargetPath='%cd%\plextraktsync.bat';$s.IconLocation='%cd%\trakt.ico';$s.Save()"
 
 :NODESKTOP
 echo Once fully configured the sync will occur:
@@ -92,7 +92,7 @@ pause > nul
 echo Installing Python requirements...
 pip install -r requirements.txt
 Pushd "%~dp0"
-call "plex_trakt_sync.bat"
+call "plextraktsync.bat"
 goto :ENDIT
 
 :errorNoPython
