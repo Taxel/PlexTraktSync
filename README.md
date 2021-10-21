@@ -256,6 +256,16 @@ and scrobble plays.
 
 [plex-scrobbler]: https://blog.trakt.tv/plex-scrobbler-52db9b016ead
 
+To restrict scrobbling to your user **only** (recommended), set the following in your `config.json`:
+
+```json
+{
+    "watch": {
+        "username_filter": true
+    }
+}
+```
+
 ### Systemd setup
 
 Create a systemd unit so that it scrobbles automatically in the background:
