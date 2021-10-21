@@ -277,7 +277,8 @@ After=network-online.target
 
 [Service]
 ExecStart=/path/to/PlexTraktSync/plex_trakt_sync.sh watch
-StandardOutput=null # Already being logged to last_update.log
+StandardOutput=null
+# Since it's already logged to last_update.log
 Restart=on-failure
 RestartSec=10
 User=user
