@@ -138,7 +138,7 @@ docker-compose run --rm plex-trakt-sync
 To run `watch` command:
 
 ```
-docker-compose run --rm plex-trakt-sync watch
+docker-compose run plex-trakt-sync watch
 ```
 
 ## Setup
@@ -256,6 +256,16 @@ and scrobble plays.
 
 [plex-scrobbler]: https://blog.trakt.tv/plex-scrobbler-52db9b016ead
 
+To restrict scrobbling to your user **only** (recommended), set the following in your `config.json`:
+
+```json
+{
+    "watch": {
+        "username_filter": true
+    }
+}
+```
+
 ### Systemd setup
 
 Create a systemd unit so that it scrobbles automatically in the background:
@@ -267,7 +277,7 @@ After=network-online.target
 
 [Service]
 ExecStart=/path/to/PlexTraktSync/plex_trakt_sync.sh watch
-
+StandardOutput=null # Already being logged to last_update.log
 Restart=on-failure
 RestartSec=10
 User=user
