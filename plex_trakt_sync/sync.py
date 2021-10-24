@@ -70,16 +70,16 @@ class Sync:
                 trakt.watched_shows,
                 trakt.movie_collection_set,
                 trakt.ratings,
-                trakt.watchlist_movies,
                 trakt.liked_lists,
             ])
             console.log(f"Cached {n} Trakt items")
 
-        if trakt.watchlist_movies:
+        if self.config.trakt_to_plex["watchlist"] and trakt.watchlist_movies:
             listutil.addList(None, "Trakt Watchlist", trakt_list=trakt.watchlist_movies)
 
-        for lst in trakt.liked_lists:
-            listutil.addList(lst['username'], lst['listname'])
+        if self.config.trakt_to_plex["liked_lists"]:
+            for lst in trakt.liked_lists:
+                listutil.addList(lst['username'], lst['listname'])
 
         for movie in walker.find_movies():
             self.sync_collection(movie, dry_run=dry_run)
