@@ -1,4 +1,7 @@
+from rich.console import Console
+
 from plex_trakt_sync.config import Config
+from plex_trakt_sync.decorators.measure_time import measure_time
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.media import Media
 from plex_trakt_sync.trakt_list_util import TraktListUtil
@@ -11,7 +14,28 @@ class Sync:
         self.sync_ratings_enabled = config["sync"]["ratings"]
         self.sync_watched_status_enabled = config["sync"]["watched_status"]
 
-    def sync(self, walker: Walker, listutil: TraktListUtil, dry_run=False):
+    def sync(self, walker: Walker, dry_run=False):
+        listutil = TraktListUtil()
+        trakt = walker.trakt
+        console = Console()
+
+        with console.status("[bold green]Caching Trakt items..."):
+            n = len([
+                trakt.watched_movies,
+                trakt.watched_shows,
+                trakt.movie_collection_set,
+                trakt.ratings,
+                trakt.watchlist_movies,
+                trakt.liked_lists,
+            ])
+            console.log(f"Cached {n} Trakt items")
+
+        if trakt.watchlist_movies:
+            listutil.addList(None, "Trakt Watchlist", trakt_list=trakt.watchlist_movies)
+
+        for lst in trakt.liked_lists:
+            listutil.addList(lst['username'], lst['listname'])
+
         for movie in walker.find_movies():
             self.sync_collection(movie, dry_run=dry_run)
             self.sync_ratings(movie, dry_run=dry_run)
@@ -22,6 +46,13 @@ class Sync:
             self.sync_collection(episode, dry_run=dry_run)
             self.sync_watched(episode, dry_run=dry_run)
             listutil.addPlexItemToLists(episode)
+
+        if not dry_run:
+            with measure_time("Updated plex watchlist"):
+                listutil.updatePlexLists(walker.plex)
+
+        if not dry_run:
+            trakt.flush()
 
     def sync_collection(self, m: Media, dry_run=False):
         if not self.sync_collection_enabled:
