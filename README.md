@@ -112,7 +112,7 @@ Or use a wrapper which is able to change directory accordingly:
 ```
 python3 -m pip install pipenv
 pipenv install
-pipenv run plex-trakt-sync
+pipenv run plextraktsync
 ```
 
 [pipenv]: https://pipenv.pypa.io/
