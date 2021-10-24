@@ -104,7 +104,7 @@ python3 -m plex_trakt_sync
 
 Or use a wrapper which is able to change directory accordingly:
 ```
-/path/to/PlexTraktSync/plex_trakt_sync.sh
+/path/to/PlexTraktSync/plextraktsync.sh
 ```
 
 *or* alternatively you can use [pipenv]:
@@ -266,7 +266,7 @@ Description=PlexTraktSync watch daemon
 After=network-online.target
 
 [Service]
-ExecStart=/path/to/PlexTraktSync/plex_trakt_sync.sh watch
+ExecStart=/path/to/PlexTraktSync/plextraktsync.sh watch
 
 Restart=on-failure
 RestartSec=10
