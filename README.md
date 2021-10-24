@@ -123,7 +123,7 @@ You can setup docker compose file like this:
 
 ```yaml
 services:
-  plex-trakt-sync:
+  plextraktsync:
     image: ghcr.io/taxel/plextraktsync
     volumes:
       - ./config:/app/config
