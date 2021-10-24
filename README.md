@@ -132,13 +132,13 @@ services:
 To run sync:
 
 ```
-docker-compose run --rm plex-trakt-sync
+docker-compose run --rm plextraktsync
 ```
 
 To run `watch` command:
 
 ```
-docker-compose run --rm plex-trakt-sync watch
+docker-compose run --rm plextraktsync watch
 ```
 
 ## Setup
