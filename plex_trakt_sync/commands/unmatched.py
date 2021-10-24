@@ -1,5 +1,4 @@
 import click
-from tqdm import tqdm
 
 from plex_trakt_sync.commands.login import ensure_login
 from plex_trakt_sync.factory import factory
@@ -21,9 +20,10 @@ def unmatched(no_progress_bar: bool):
 
     ensure_login()
     plex = factory.plex_api()
+    trakt = factory.trakt_api()
     mf = factory.media_factory()
     pb = factory.progressbar(not no_progress_bar)
-    walker = Walker(plex, mf, progressbar=pb)
+    walker = Walker(plex, trakt, mf, progressbar=pb)
 
     if not walker.is_valid():
         click.echo("Nothing to scan, this is likely due conflicting options given.")
