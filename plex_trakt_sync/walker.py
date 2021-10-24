@@ -3,6 +3,7 @@ from typing import List
 from plex_trakt_sync.decorators.measure_time import measure_time
 from plex_trakt_sync.media import Media, MediaFactory
 from plex_trakt_sync.plex_api import PlexApi, PlexLibrarySection
+from plex_trakt_sync.trakt_api import TraktApi
 
 
 class Walker:
@@ -10,9 +11,10 @@ class Walker:
     Class dealing with finding and walking library, movies/shows, episodes
     """
 
-    def __init__(self, plex: PlexApi, mf: MediaFactory, progressbar=None, movies=True, shows=True):
+    def __init__(self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory, progressbar=None, movies=True, shows=True):
         self._progressbar = progressbar
         self.plex = plex
+        self.trakt = trakt
         self.mf = mf
         self.walk_movies = movies
         self.walk_shows = shows

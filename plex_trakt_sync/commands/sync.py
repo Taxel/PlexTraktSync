@@ -1,6 +1,5 @@
 import click
 from tqdm import tqdm
-from rich.console import Console
 
 from plex_trakt_sync.commands.login import ensure_login
 from plex_trakt_sync.decorators.measure_time import measure_time
@@ -8,47 +7,15 @@ from plex_trakt_sync.factory import factory
 from plex_trakt_sync.logging import logger
 from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.sync import Sync
-from plex_trakt_sync.trakt_api import TraktApi
-from plex_trakt_sync.trakt_list_util import TraktListUtil
 from plex_trakt_sync.version import git_version_info
 from plex_trakt_sync.walker import Walker
 
-CONFIG = factory.config()
 
-
-def sync_all(walker: Walker, trakt: TraktApi, plex: PlexApi, runner: Sync, dry_run: bool):
-    console = Console()
-    listutil = TraktListUtil()
-
-    with console.status("[bold green]Caching Trakt items..."):
-        n = len([
-            trakt.watched_movies,
-            trakt.watched_shows,
-            trakt.movie_collection_set,
-            trakt.ratings,
-            trakt.watchlist_movies,
-            trakt.liked_lists,
-        ])
-        console.log(f"Cached {n} Trakt items")
-
-    if trakt.watchlist_movies:
-        listutil.addList(None, "Trakt Watchlist", trakt_list=trakt.watchlist_movies)
-
-    for lst in trakt.liked_lists:
-        listutil.addList(lst['username'], lst['listname'])
-
+def sync_all(walker: Walker, plex: PlexApi, runner: Sync, dry_run: bool):
     click.echo(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
-    # Load sections, this will attempt to connect to Plex
     click.echo(f"Server has {len(plex.library_sections)} libraries: {plex.library_section_names}")
 
-    runner.sync(walker, listutil, dry_run=dry_run)
-
-    if not dry_run:
-        with measure_time("Updated plex watchlist"):
-            listutil.updatePlexLists(plex)
-
-    if not dry_run:
-        trakt.flush()
+    runner.sync(walker, dry_run=dry_run)
 
 
 @click.command()
@@ -102,6 +69,7 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int,
         logger.info(f"PlexTraktSync [{git_version}]")
 
     ensure_login()
+    CONFIG = factory.config()
     logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
 
     movies = sync_option in ["all", "movies"]
@@ -111,7 +79,7 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int,
     trakt = factory.trakt_api(batch_size=batch_size)
     mf = factory.media_factory(batch_size=batch_size)
     pb = factory.progressbar(not no_progress_bar)
-    w = Walker(plex, mf, movies=movies, shows=tv, progressbar=pb)
+    w = Walker(plex=plex, trakt=trakt, mf=mf, movies=movies, shows=tv, progressbar=pb)
 
     if library:
         logger.info(f"Filtering Library: {library}")
@@ -132,4 +100,4 @@ def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int,
     w.walk_details(print=tqdm.write)
 
     with measure_time("Completed full sync"):
-        sync_all(walker=w, trakt=trakt, plex=plex, runner=factory.sync(), dry_run=dry_run)
+        sync_all(walker=w, plex=plex, runner=factory.sync(), dry_run=dry_run)
