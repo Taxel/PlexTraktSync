@@ -16,7 +16,7 @@ cls
 title Plex - Trakt Sync
 
 
-python -m plex_trakt_sync
+python -m plex_trakt_sync %*
 goto:eof
 
 :errorNoPython
