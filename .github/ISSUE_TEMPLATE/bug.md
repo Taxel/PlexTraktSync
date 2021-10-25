@@ -38,6 +38,7 @@ _Is there an existing workaround for this issue?_
 
 ### Environment
 
+- Installation method: <!-- e.g. `pipx`, `pip`, `docker`, zip download, git -->
 - Version: <!-- e.g. `0.12.18` -->
 - Python version: <!-- e.g. `3.9` -->
 - Platform: <!-- e.g. `Debian 10` -->
