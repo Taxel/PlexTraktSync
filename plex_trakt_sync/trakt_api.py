@@ -82,9 +82,6 @@ class TraktApi:
     @nocache
     @rate_limit()
     def liked_lists(self):
-        CONFIG = factory.config()
-        if not CONFIG['sync']['liked_lists']:
-            return []
         return pytrakt_extensions.get_liked_lists()
 
     @property
@@ -137,10 +134,6 @@ class TraktApi:
     @nocache
     @rate_limit()
     def watchlist_movies(self):
-        CONFIG = factory.config()
-        if not CONFIG['sync']['watchlist']:
-            return []
-
         return self.me.watchlist_movies
 
     @property
