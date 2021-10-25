@@ -46,7 +46,7 @@ jobs:
           echo ::set-output name=version::$APP_VERSION
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v1.10.0
+        uses: docker/login-action@v1
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -54,7 +54,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3.5.0
+        uses: docker/metadata-action@v3
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
@@ -79,7 +79,7 @@ jobs:
           docker run --rm ${{ env.TEST_IMAGE }} version
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v2.7.0
+        uses: docker/build-push-action@v2
         env:
           APP_VERSION: ${{ steps.vars.outputs.version }}
         with:
