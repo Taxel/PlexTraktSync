@@ -59,7 +59,15 @@ def sync_all(walker: Walker, plex: PlexApi, runner: Sync, dry_run: bool):
     is_flag=True,
     help="Don't output progress bars"
 )
-def sync(sync_option: str, library: str, show: str, movie: str, batch_size: int, dry_run: bool, no_progress_bar: bool):
+def sync(
+        sync_option: str,
+        library: str,
+        show: str,
+        movie: str,
+        batch_size: int,
+        dry_run: bool,
+        no_progress_bar: bool,
+):
     """
     Perform sync between Plex and Trakt
     """
