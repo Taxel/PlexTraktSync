@@ -88,6 +88,7 @@ class Sync:
 
         for episode in walker.find_episodes():
             self.sync_collection(episode, dry_run=dry_run)
+            self.sync_ratings(episode, dry_run=dry_run)
             self.sync_watched(episode, dry_run=dry_run)
             listutil.addPlexItemToLists(episode)
 
