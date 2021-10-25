@@ -9,6 +9,7 @@ verify_ssl = true
 appdirs = "==1.4.4"
 click = "==8.0.3"
 deprecated = "==1.2.13"
+inquirerpy = "==0.3.0"
 plexapi = "==4.7.2"
 python-dotenv = "==0.19.1"
 python-git-info = "==0.7.1"
@@ -19,7 +20,6 @@ tqdm = "==4.62.3"
 trakt = "==3.2.1"
 urllib3 = ">=1.26.6"
 websocket-client = "==1.2.1"
-inquirerpy = "==0.3.0"
 
 [requires]
 python_version = "3"
