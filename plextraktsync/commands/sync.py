@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from plextraktsync.commands.login import ensure_login
+from plextraktsync.decorators.coro import coro
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import factory, logger
 
 
-def sync(
+@coro
+async def sync(
     sync_option: str,
     library: str,
     show: str,
