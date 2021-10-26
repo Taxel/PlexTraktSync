@@ -70,7 +70,6 @@ class Sync:
                 trakt.watched_shows,
                 trakt.movie_collection_set,
                 trakt.ratings,
-                trakt.liked_lists,
             ])
             console.log(f"Cached {n} Trakt items")
 
