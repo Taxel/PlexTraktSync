@@ -1,0 +1,98 @@
+name: 🐞 Bug Report
+description: Create a bug report to help us improve.
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before you continue reporting the bug, be sure that you use the latest released version:
+
+        - https://github.com/Taxel/PlexTraktSync/releases
+
+        Using branch, e.g "main" is not supported, you must use released version when reporting a bug.
+
+        Be sure to use required pip packages matching the release, see
+
+        - https://github.com/Taxel/PlexTraktSync#installing
+
+  - type: textarea
+    id: description
+    attributes:
+      label: The problem
+      description: A description of what the bug is
+    validations:
+      required: true
+
+  - type: textarea
+    id: traceback
+    attributes:
+      render: text
+      label: Error trace
+      description: >
+        A complete traceback of the error.
+
+        This will be automatically formatted into code, so no need for backticks.
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: A description of what you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce the behavior
+      description: With a complete code example, if possible
+
+  - type: textarea
+    id: workarounds
+    attributes:
+      label: Workarounds
+      description: Is there an existing workaround for this issue?
+
+  - type: dropdown
+    id: install-method
+    attributes:
+      label: Install method
+      description: How did you install PlexTraktSync
+      options:
+        - pipx (Recommended)
+        - pip
+        - docker-compose
+        - git clone
+        - zip download
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Run plextraktsync version
+      placeholder: eg. 0.15.0
+    validations:
+      required: true
+
+  - type: input
+    id: python
+    attributes:
+      label: Python Version
+      placeholder: eg. 3.7.10
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating System and Version
+      placeholder: eg. Windows 10, macOS 10.15, Ubuntu 20.04, etc.
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        Make sure to close your issue when it's solved! If you found the solution yourself please comment so that others benefit from it.
