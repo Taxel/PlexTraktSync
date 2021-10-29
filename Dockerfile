@@ -30,6 +30,6 @@ ENV \
 VOLUME /app/config
 
 # Copy things together
-COPY . .
+COPY plex_trakt_sync ./plex_trakt_sync/
 COPY --from=version /app/plex_trakt_sync/__init__.py plex_trakt_sync/
 COPY --from=build /root/.local/share/virtualenvs/app-*/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
