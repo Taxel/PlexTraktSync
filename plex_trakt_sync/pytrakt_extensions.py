@@ -4,7 +4,7 @@ from trakt.tv import TVEpisode
 
 @get
 def get_liked_lists():
-    data = yield 'users/likes/lists'
+    data = yield 'users/likes/lists?limit=1000'
     retVal = []
     for lst in data:
         thisList = {}
