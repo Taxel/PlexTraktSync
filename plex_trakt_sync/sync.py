@@ -1,5 +1,3 @@
-from rich.console import Console
-
 from plex_trakt_sync.config import Config
 from plex_trakt_sync.decorators.measure_time import measure_time
 from plex_trakt_sync.decorators.memoize import memoize
@@ -62,16 +60,6 @@ class Sync:
     def sync(self, walker: Walker, dry_run=False):
         listutil = TraktListUtil()
         trakt = walker.trakt
-        console = Console()
-
-        with console.status("[bold green]Caching Trakt items..."):
-            n = len([
-                trakt.watched_movies,
-                trakt.watched_shows,
-                trakt.movie_collection_set,
-                trakt.ratings,
-            ])
-            console.log(f"Cached {n} Trakt items")
 
         if self.config.trakt_to_plex["watchlist"] and trakt.watchlist_movies:
             listutil.addList(None, "Trakt Watchlist", trakt_list=trakt.watchlist_movies)
