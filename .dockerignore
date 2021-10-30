@@ -1,6 +1,5 @@
 # https://docs.docker.com/engine/reference/builder/#dockerignore-file
 /*
-!/*.py
 !/Pipfile
 !/Pipfile.lock
 !/plex_trakt_sync/config.default.json
