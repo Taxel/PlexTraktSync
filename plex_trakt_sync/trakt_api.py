@@ -141,22 +141,20 @@ class TraktApi:
     @nocache
     @rate_limit()
     def movie_ratings(self):
-        return self.me.get_ratings(media_type='movies')
+        ratings = {}
+        for r in self.me.get_ratings(media_type='movies'):
+            ratings[r['movie']['ids']['trakt']] = r['rating']
+        return ratings
 
     @property
     @memoize
-    def ratings(self):
+    @nocache
+    @rate_limit()
+    def episode_ratings(self):
         ratings = {}
-        for r in self.movie_ratings:
-            ratings[r['movie']['ids']['slug']] = r['rating']
-
+        for r in self.me.get_ratings(media_type='episodes'):
+            ratings[r['episode']['ids']['trakt']] = r['rating']
         return ratings
-
-    def rating(self, m):
-        if m.slug in self.ratings:
-            return int(self.ratings[m.slug])
-
-        return None
 
     @nocache
     @rate_limit()
