@@ -70,7 +70,7 @@ or check output of [version command](#version-command).
 
 ### GitHub download
 
-- Find the latest release from https://github.com/Taxel/PlexTraktSync/releases
+- Find the latest release from https://github.com/Taxel/PlexTraktSync/tags
 - Download the `.tar` or `.zip`
 - Extract to `PlexTraktSync` directory
 
@@ -78,7 +78,7 @@ Proceed to [Install dependencies](#install-dependencies)
 
 ### GitHub clone
 
-- Find the latest release from https://github.com/Taxel/PlexTraktSync/releases
+- Find the latest release from https://github.com/Taxel/PlexTraktSync/tags
 - Checkout the release with Git:
   ```
   git clone -b 0.15.0 --depth=1 https://github.com/Taxel/PlexTraktSync
@@ -170,7 +170,7 @@ docker-compose run --rm plextraktsync watch
 
 ## Windows Setup (optional alternative)
 
-- Download the latest `.zip` release from https://github.com/Taxel/PlexTraktSync/releases
+- Download the latest `.zip` release from https://github.com/Taxel/PlexTraktSync/tags
 - Run `setup.bat` to install requirements and create optional shortcuts and routines _(requires Windows 7sp1 - 11)_.
 
 ## Sync settings
