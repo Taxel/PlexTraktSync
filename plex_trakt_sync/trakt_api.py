@@ -175,7 +175,7 @@ class TraktApi:
         if m.media_type == "movies":
             self.watched_movies.add(m.trakt)
         if m.media_type == "episodes":
-            self.watched_shows.add(m.show.trakt, m.season, m.number)
+            self.watched_shows.add(TVShow(m.show).trakt, m.season, m.number)
 
     def add_to_collection(self, m, pm: PlexLibraryItem):
         if m.media_type == "movies":

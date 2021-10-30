@@ -39,7 +39,7 @@ class LazyEpisode():
     @property
     def instance(self):
         if self._instance is None:
-            self._instance = TVEpisode(self.show, self.season, number=self.number, **self.ids)
+            self._instance = TVEpisode(self.show.title, self.season, number=self.number, **self.ids)
         return self._instance
 
 
