@@ -21,9 +21,13 @@ class Walker:
         self.library = []
         self.show = []
         self.movie = []
+        self.id = []
 
     def add_library(self, library):
         self.library.append(library)
+
+    def add_id(self, id):
+        self.id.append(id)
 
     def add_show(self, show):
         self.show.append(show)
@@ -35,7 +39,7 @@ class Walker:
 
     def is_valid(self):
         # Single item provided
-        if self.library or self.movie or self.show:
+        if self.library or self.movie or self.show or self.id:
             return True
 
         # Full sync of movies or shows
@@ -47,6 +51,8 @@ class Walker:
     def walk_details(self, print=print):
         print(f"Sync Movies: {self.walk_movies}")
         print(f"Sync Shows: {self.walk_shows}")
+        if self.id:
+            print(f"Sync Id: {self.id}")
         if self.library:
             print(f"Walk libraries: {self.library}")
         if self.show:
