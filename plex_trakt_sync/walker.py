@@ -1,5 +1,6 @@
 from typing import List, NamedTuple
 
+from plex_trakt_sync.decorators.deprecated import deprecated
 from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.decorators.measure_time import measure_time
 from plex_trakt_sync.media import Media, MediaFactory
@@ -223,6 +224,7 @@ class Walker:
         it = self.progressbar(items, desc=f"Processing {libtype}s")
         yield from it
 
+    @deprecated("No longer used")
     def media_from_titles(self, libtype: str, titles: List[str]):
         it = self.progressbar(titles, desc=f"Processing {libtype}s")
         for title in it:
