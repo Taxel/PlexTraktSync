@@ -404,6 +404,9 @@ class PlexLibrarySection:
         for item in self.all(max_items):
             yield PlexLibraryItem(item)
 
+    def __repr__(self):
+        return f"<PlexLibrarySection:{self.type}:{self.title}>"
+
 
 class PlexApi:
     """
