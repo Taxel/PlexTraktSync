@@ -379,6 +379,20 @@ class PlexLibrarySection:
     def title(self):
         return self.section.title
 
+    @nocache
+    def find_by_title(self, name: str):
+        try:
+            return self.section.get(name)
+        except NotFound:
+            return None
+
+    @nocache
+    def find_by_id(self, id: str):
+        try:
+            return self.section.fetchItem(int(id))
+        except NotFound:
+            return None
+
     def all(self, max_items: int):
         libtype = self.section.TYPE
         key = self.section._buildSearchKey(libtype=libtype, returnKwargs=False)
