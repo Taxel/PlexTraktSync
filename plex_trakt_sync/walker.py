@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, NamedTuple
 
 from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.decorators.measure_time import measure_time
@@ -57,6 +57,107 @@ class WalkConfig:
             print(f"Walk Movies: {self.movie}")
 
 
+class WalkPlan(NamedTuple):
+    movie_sections: List
+    show_sections: List
+    movies: List
+    shows: List
+
+
+class WalkPlanner:
+    def __init__(self, plex: PlexApi, config: WalkConfig):
+        self.plex = plex
+        self.config = config
+
+    def plan(self):
+        movie_sections, show_sections = self.find_sections()
+        movies, shows = self.find_by_id(movie_sections, show_sections)
+        shows = self.find_from_sections_by_title(show_sections, self.config.show, shows)
+        movies = self.find_from_sections_by_title(movie_sections, self.config.movie, movies)
+
+        # reset sections if movie/shows have been picked
+        movie_sections = [] if movies else movie_sections
+        show_sections = [] if shows else show_sections
+
+        return WalkPlan(
+            movie_sections,
+            show_sections,
+            movies,
+            shows,
+        )
+
+    def find_by_id(self, movie_sections, show_sections):
+        if not self.config.id:
+            return [None, None]
+
+        movies = []
+        shows = []
+        for id in self.config.id:
+            movie = self.find_from_sections_by_id(movie_sections, id) if self.config.walk_movies else []
+            if movie:
+                movies.extend(movie)
+                continue
+            show = self.find_from_sections_by_id(show_sections, id) if self.config.walk_shows else []
+            if show:
+                shows.extend(show)
+                continue
+            raise RuntimeError(f"Id '{id}' not found")
+        return [movies, shows]
+
+    @staticmethod
+    def find_from_sections_by_id(sections, id):
+        results = []
+        for section in sections:
+            m = section.find_by_id(id)
+            if m:
+                results.append(m)
+        return results
+
+    @staticmethod
+    def find_from_sections_by_title(sections, names, items):
+        if not names:
+            return items
+
+        for name in names:
+            found = False
+            for section in sections:
+                m = section.find_by_title(name)
+                if m:
+                    items.append(m)
+                    found = True
+            if not found:
+                raise RuntimeError(f"Show/Movie '{name}' not found")
+
+        return items
+
+    def find_sections(self):
+        """
+        Build movie and show sections based on library and walk_movies/walk_shows.
+        A valid match must be found if such filter is enabled.
+
+        :return: [movie_sections, show_sections]
+        """
+        if not self.config.library:
+            movie_sections = self.plex.movie_sections() if self.config.walk_movies else []
+            show_sections = self.plex.show_sections() if self.config.walk_shows else []
+            return [movie_sections, show_sections]
+
+        movie_sections = []
+        show_sections = []
+        for library in self.config.library:
+            movie_section = self.plex.movie_sections(library) if self.config.walk_movies else []
+            if movie_section:
+                movie_sections.extend(movie_section)
+                continue
+            show_section = self.plex.show_sections(library) if self.config.walk_shows else []
+            if show_section:
+                show_sections.extend(show_section)
+                continue
+            raise RuntimeError(f"Library '{library}' not found")
+
+        return [movie_sections, show_sections]
+
+
 class Walker:
     """
     Class dealing with finding and walking library, movies/shows, episodes
@@ -69,17 +170,19 @@ class Walker:
         self.mf = mf
         self.config = config
 
+    @property
+    @memoize
+    def plan(self):
+        return WalkPlanner(self.plex, self.config).plan()
+
     def get_plex_movies(self):
         """
         Iterate over movie sections unless specific movie is requested
         """
-        if not self.config.walk_movies:
-            return
-
-        if self.config.movie:
-            movies = self.media_from_titles("movie", self.config.movie)
+        if self.plan.movies:
+            movies = self.media_from_items("movie", self.plan.movies)
         else:
-            movies = self.media_from_sections(self.plex.movie_sections(), self.config.library)
+            movies = self.media_from_sections(self.plan.movie_sections)
 
         yield from movies
 
@@ -91,13 +194,10 @@ class Walker:
             yield movie
 
     def get_plex_shows(self):
-        if not self.config.walk_shows:
-            return
-
-        if self.config.show:
-            shows = self.media_from_titles("show", self.config.show)
+        if self.plan.shows:
+            shows = self.media_from_items("show", self.plan.shows)
         else:
-            shows = self.media_from_sections(self.plex.show_sections(), self.config.library)
+            shows = self.media_from_sections(self.plex.show_sections())
 
         yield from shows
 
@@ -108,7 +208,7 @@ class Walker:
                 continue
             yield from self.episode_from_show(show)
 
-    def media_from_sections(self, sections: List[PlexLibrarySection], titles: List[str]):
+    def media_from_sections(self, sections: List[PlexLibrarySection], titles: List[str] = None):
         if titles:
             # Filter by matching section names
             sections = [x for x in sections if x.title in titles]
@@ -118,6 +218,10 @@ class Walker:
                 total = len(section)
                 it = self.progressbar(section.items(total), total=total, desc=f"Processing {section.title}")
                 yield from it
+
+    def media_from_items(self, libtype: str, items: List):
+        it = self.progressbar(items, desc=f"Processing {libtype}s")
+        yield from it
 
     def media_from_titles(self, libtype: str, titles: List[str]):
         it = self.progressbar(titles, desc=f"Processing {libtype}s")
