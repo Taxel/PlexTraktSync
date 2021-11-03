@@ -34,6 +34,11 @@ def sync_all(walker: Walker, plex: PlexApi, runner: Sync, dry_run: bool):
     show_default=True, help="Sync specific movie only"
 )
 @click.option(
+    "--id",
+    type=str,
+    show_default=True, help="Sync specific item only"
+)
+@click.option(
     "--sync", "sync_option",
     type=click.Choice(["all", "movies", "tv"], case_sensitive=False),
     default="all",
@@ -64,6 +69,7 @@ def sync(
         library: str,
         show: str,
         movie: str,
+        id: str,
         batch_size: int,
         dry_run: bool,
         no_progress_bar: bool,
@@ -89,6 +95,9 @@ def sync(
     pb = factory.progressbar(not no_progress_bar)
     w = Walker(plex=plex, trakt=trakt, mf=mf, movies=movies, shows=tv, progressbar=pb)
 
+    if id:
+        logger.info(f"Syncing item: {id}")
+        w.add_id(library)
     if library:
         logger.info(f"Filtering Library: {library}")
         w.add_library(library)
