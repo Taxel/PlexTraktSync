@@ -1,27 +1,23 @@
 from typing import List
 
+from plex_trakt_sync.decorators.memoize import memoize
 from plex_trakt_sync.decorators.measure_time import measure_time
 from plex_trakt_sync.media import Media, MediaFactory
 from plex_trakt_sync.plex_api import PlexApi, PlexLibrarySection
 from plex_trakt_sync.trakt_api import TraktApi
 
 
-class Walker:
-    """
-    Class dealing with finding and walking library, movies/shows, episodes
-    """
+class WalkConfig:
+    walk_movies = True
+    walk_shows = True
+    library = []
+    show = []
+    movie = []
+    id = []
 
-    def __init__(self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory, progressbar=None, movies=True, shows=True):
-        self._progressbar = progressbar
-        self.plex = plex
-        self.trakt = trakt
-        self.mf = mf
+    def __init__(self, movies=True, shows=True):
         self.walk_movies = movies
         self.walk_shows = shows
-        self.library = []
-        self.show = []
-        self.movie = []
-        self.id = []
 
     def add_library(self, library):
         self.library.append(library)
@@ -60,17 +56,30 @@ class Walker:
         if self.movie:
             print(f"Walk Movies: {self.movie}")
 
+
+class Walker:
+    """
+    Class dealing with finding and walking library, movies/shows, episodes
+    """
+
+    def __init__(self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory, config: WalkConfig, progressbar=None):
+        self._progressbar = progressbar
+        self.plex = plex
+        self.trakt = trakt
+        self.mf = mf
+        self.config = config
+
     def get_plex_movies(self):
         """
         Iterate over movie sections unless specific movie is requested
         """
-        if not self.walk_movies:
+        if not self.config.walk_movies:
             return
 
-        if self.movie:
-            movies = self.media_from_titles("movie", self.movie)
+        if self.config.movie:
+            movies = self.media_from_titles("movie", self.config.movie)
         else:
-            movies = self.media_from_sections(self.plex.movie_sections(), self.library)
+            movies = self.media_from_sections(self.plex.movie_sections(), self.config.library)
 
         yield from movies
 
@@ -82,13 +91,13 @@ class Walker:
             yield movie
 
     def get_plex_shows(self):
-        if not self.walk_shows:
+        if not self.config.walk_shows:
             return
 
-        if self.show:
-            shows = self.media_from_titles("show", self.show)
+        if self.config.show:
+            shows = self.media_from_titles("show", self.config.show)
         else:
-            shows = self.media_from_sections(self.plex.show_sections(), self.library)
+            shows = self.media_from_sections(self.plex.show_sections(), self.config.library)
 
         yield from shows
 
