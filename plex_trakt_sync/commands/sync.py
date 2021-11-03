@@ -1,4 +1,5 @@
 import click
+from click import ClickException
 from tqdm import tqdm
 
 from plex_trakt_sync.commands.login import ensure_login
@@ -118,4 +119,7 @@ def sync(
     wc.walk_details(print=tqdm.write)
 
     with measure_time("Completed full sync"):
-        sync_all(walker=w, plex=plex, runner=factory.sync(), dry_run=dry_run)
+        try:
+            sync_all(walker=w, plex=plex, runner=factory.sync(), dry_run=dry_run)
+        except RuntimeError as e:
+            raise ClickException(str(e))
