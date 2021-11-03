@@ -372,6 +372,10 @@ class PlexLibrarySection:
         return self.section.totalSize
 
     @property
+    def type(self):
+        return self.section.type
+
+    @property
     def title(self):
         return self.section.title
 
