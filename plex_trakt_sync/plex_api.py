@@ -373,8 +373,26 @@ class PlexLibrarySection:
         return self.section.totalSize
 
     @property
+    def type(self):
+        return self.section.type
+
+    @property
     def title(self):
         return self.section.title
+
+    @nocache
+    def find_by_title(self, name: str):
+        try:
+            return self.section.get(name)
+        except NotFound:
+            return None
+
+    @nocache
+    def find_by_id(self, id: str):
+        try:
+            return self.section.fetchItem(int(id))
+        except NotFound:
+            return None
 
     def all(self, max_items: int):
         libtype = self.section.TYPE
@@ -400,6 +418,9 @@ class PlexLibrarySection:
     def items(self, max_items: int):
         for item in self.all(max_items):
             yield PlexLibraryItem(item)
+
+    def __repr__(self):
+        return f"<PlexLibrarySection:{self.type}:{self.title}>"
 
 
 class PlexApi:

@@ -2,7 +2,7 @@ import click
 
 from plex_trakt_sync.commands.login import ensure_login
 from plex_trakt_sync.factory import factory
-from plex_trakt_sync.walker import Walker
+from plex_trakt_sync.walker import Walker, WalkConfig
 
 
 @click.option(
@@ -23,13 +23,14 @@ def unmatched(no_progress_bar: bool):
     trakt = factory.trakt_api()
     mf = factory.media_factory()
     pb = factory.progressbar(not no_progress_bar)
-    walker = Walker(plex, trakt, mf, progressbar=pb)
+    wc = WalkConfig()
+    walker = Walker(plex, trakt, mf, wc, progressbar=pb)
 
-    if not walker.is_valid():
+    if not wc.is_valid():
         click.echo("Nothing to scan, this is likely due conflicting options given.")
         return
 
-    walker.walk_details(print=click.echo)
+    wc.walk_details(print=click.echo)
 
     failed = []
     for pm in walker.get_plex_movies():

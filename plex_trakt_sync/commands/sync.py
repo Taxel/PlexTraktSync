@@ -1,4 +1,5 @@
 import click
+from click import ClickException
 from tqdm import tqdm
 
 from plex_trakt_sync.commands.login import ensure_login
@@ -8,7 +9,7 @@ from plex_trakt_sync.logging import logger
 from plex_trakt_sync.plex_api import PlexApi
 from plex_trakt_sync.sync import Sync
 from plex_trakt_sync.version import git_version_info
-from plex_trakt_sync.walker import Walker
+from plex_trakt_sync.walker import Walker, WalkConfig
 
 
 def sync_all(walker: Walker, plex: PlexApi, runner: Sync, dry_run: bool):
@@ -93,28 +94,32 @@ def sync(
     trakt = factory.trakt_api(batch_size=batch_size)
     mf = factory.media_factory(batch_size=batch_size)
     pb = factory.progressbar(not no_progress_bar)
-    w = Walker(plex=plex, trakt=trakt, mf=mf, movies=movies, shows=tv, progressbar=pb)
+    wc = WalkConfig(movies=movies, shows=tv)
+    w = Walker(plex=plex, trakt=trakt, mf=mf, config=wc, progressbar=pb)
 
     if id:
         logger.info(f"Syncing item: {id}")
-        w.add_id(library)
+        wc.add_id(id)
     if library:
         logger.info(f"Filtering Library: {library}")
-        w.add_library(library)
+        wc.add_library(library)
     if show:
-        w.add_show(show)
+        wc.add_show(show)
         logger.info(f"Syncing Show: {show}")
     if movie:
-        w.add_movie(movie)
+        wc.add_movie(movie)
         logger.info(f"Syncing Movie: {movie}")
 
-    if not w.is_valid():
+    if not wc.is_valid():
         click.echo("Nothing to sync, this is likely due conflicting options given.")
         return
 
     if dry_run:
         print("Enabled dry-run mode: not making actual changes")
-    w.walk_details(print=tqdm.write)
+    wc.walk_details(print=tqdm.write)
 
     with measure_time("Completed full sync"):
-        sync_all(walker=w, plex=plex, runner=factory.sync(), dry_run=dry_run)
+        try:
+            sync_all(walker=w, plex=plex, runner=factory.sync(), dry_run=dry_run)
+        except RuntimeError as e:
+            raise ClickException(str(e))

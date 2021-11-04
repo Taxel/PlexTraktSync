@@ -1,19 +1,21 @@
 #!/usr/bin/env python3 -m pytest
-from plex_trakt_sync.walker import Walker
+from plex_trakt_sync.walker import Walker, WalkConfig
 from tests.conftest import factory
 
 plex = factory.plex_api()
+trakt = factory.trakt_api()
 mf = factory.media_factory()
 
 
 def test_walker():
-    w = Walker(plex, mf)
+    wc = WalkConfig()
+    w = Walker(plex, trakt, mf, wc)
     assert type(w) == Walker
 
-    w.add_library("TV Shows")
-    w.add_library("Movies (Tuti)")
-    w.add_show("Breaking Bad")
-    w.add_movie("Batman Begins")
+    wc.add_library("TV Shows")
+    wc.add_library("Movies (Tuti)")
+    wc.add_show("Breaking Bad")
+    wc.add_movie("Batman Begins")
 
     episodes = list(w.find_episodes())
     movies = list(w.find_movies())
