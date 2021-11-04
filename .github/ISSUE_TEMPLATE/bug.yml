@@ -48,6 +48,14 @@ body:
       description: With a complete code example, if possible
 
   - type: textarea
+    id: inspect
+    attributes:
+      render: text
+      label: Insect of problematic items
+      description: >
+        Post here `plextraktsync inspect ID` if needed to understand the problem.
+
+  - type: textarea
     id: workarounds
     attributes:
       label: Workarounds
