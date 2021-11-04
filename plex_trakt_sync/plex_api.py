@@ -322,6 +322,7 @@ class PlexLibraryItem:
             yield PlexLibraryItem(ep)
 
     @nocache
+    @rate_limit()
     def _get_episodes(self):
         return self.item.episodes()
 
