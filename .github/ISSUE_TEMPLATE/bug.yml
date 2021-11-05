@@ -51,7 +51,7 @@ body:
     id: inspect
     attributes:
       render: text
-      label: Insect of problematic items
+      label: Inspect of problematic items
       description: >
         Post here `plextraktsync inspect ID` if needed to understand the problem.
 
