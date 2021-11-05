@@ -2,7 +2,7 @@
 from contextlib import contextmanager
 from time import perf_counter
 
-from plex_trakt_sync.timer import Timer
+from plextraktsync.timer import Timer
 
 
 @contextmanager

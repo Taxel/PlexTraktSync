@@ -6,7 +6,7 @@ from typing import Union
 
 from trakt.tv import TVShow
 
-from plex_trakt_sync.factory import Factory
+from plextraktsync.factory import Factory
 
 TESTS_DIR = dirname(__file__)
 MOCK_DATA_DIR = join_path(TESTS_DIR, "mock_data")

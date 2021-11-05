@@ -1,7 +1,7 @@
 #!/usr/bin/env python3 -m pytest
 from unittest.mock import Mock
 
-from plex_trakt_sync.trakt_api import TraktBatch
+from plextraktsync.trakt_api import TraktBatch
 from tests.conftest import factory, load_mock
 
 trakt = factory.trakt_api()

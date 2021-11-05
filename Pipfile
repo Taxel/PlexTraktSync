@@ -25,4 +25,4 @@ websocket-client = "==1.2.1"
 python_version = "3"
 
 [scripts]
-plextraktsync = "python -m plex_trakt_sync"
+plextraktsync = "python -m plextraktsync"

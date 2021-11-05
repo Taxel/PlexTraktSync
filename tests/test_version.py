@@ -1,5 +1,5 @@
 #!/usr/bin/env python3 -m pytest
-from plex_trakt_sync.version import git_version_info
+from plextraktsync.version import git_version_info
 
 
 def test_version():
