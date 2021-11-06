@@ -30,8 +30,6 @@ def unmatched(no_progress_bar: bool):
         click.echo("Nothing to scan, this is likely due conflicting options given.")
         return
 
-    wc.walk_details(print=click.echo)
-
     failed = []
     for pm in walker.get_plex_movies():
         movie = mf.resolve_any(pm)
