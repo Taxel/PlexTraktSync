@@ -4,9 +4,8 @@ import click
 from plexapi import VERSION as PLEX_API_VERSION
 from trakt import __version__ as TRAKT_API_VERSION
 
-from plextraktsync.__init__ import __version__ as PTS_VERSION
 from plextraktsync.path import cache_dir, config_dir, log_dir
-from plextraktsync.version import git_version_info
+from plextraktsync.version import version as get_version
 
 
 @click.command()
@@ -15,11 +14,7 @@ def version():
     Print application and environment version info
     """
 
-    print(f"PlexTraktSync Version: {PTS_VERSION}")
-
-    git_version = git_version_info()
-    if git_version:
-        print(f"PlexTraktSync Git Version: [{git_version}]")
+    print(f"PlexTraktSync Version: {get_version()}")
 
     py_version = sys.version.replace("\n", "")
     print(f"Python Version: {py_version}")
