@@ -5,12 +5,41 @@ from plextraktsync.media import Media
 from plextraktsync.version import git_version_info
 
 
+def print_watched_shows():
+    from rich.console import Console
+    from rich.table import Table
+
+    trakt = factory.trakt_api()
+    console = Console()
+
+    table = Table(show_header=True, header_style="bold magenta", title="Watched shows on Trakt")
+    table.add_column("Id", style="dim", width=6)
+    table.add_column("Slug")
+    table.add_column("Seasons", justify="right")
+    for show_id, progress in sorted(trakt.watched_shows.shows.items()):
+        id = f"[link=https://trakt.tv/shows/{show_id}]{show_id}[/]"
+        slug = f"[link=https://trakt.tv/shows/{progress.slug}]{progress.slug}[/]"
+        table.add_row(id, slug, str(len(progress.seasons)))
+
+    console.print(table)
+
+
 @click.command()
-@click.argument('input')
-def inspect(input):
+@click.argument('input', nargs=-1)
+@click.option(
+    "--watched-shows",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Print Trakt watched_shows and exit"
+)
+def inspect(input, watched_shows):
     """
     Inspect details of an object
     """
+    if watched_shows:
+        print_watched_shows()
+        return
 
     git_version = git_version_info() or 'Unknown version'
     print(f"PlexTraktSync inspect [{git_version}]")
