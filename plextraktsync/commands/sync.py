@@ -41,7 +41,7 @@ def sync_all(walker: Walker, plex: PlexApi, runner: Sync, dry_run: bool):
 )
 @click.option(
     "--sync", "sync_option",
-    type=click.Choice(["all", "movies", "tv"], case_sensitive=False),
+    type=click.Choice(["all", "movies", "tv", "shows"], case_sensitive=False),
     default="all",
     show_default=True, help="Specify what to sync"
 )
@@ -88,13 +88,13 @@ def sync(
     logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
 
     movies = sync_option in ["all", "movies"]
-    tv = sync_option in ["all", "tv"]
+    shows = sync_option in ["all", "tv", "shows"]
 
     plex = factory.plex_api()
     trakt = factory.trakt_api(batch_size=batch_size)
     mf = factory.media_factory(batch_size=batch_size)
     pb = factory.progressbar(not no_progress_bar)
-    wc = WalkConfig(movies=movies, shows=tv)
+    wc = WalkConfig(movies=movies, shows=shows)
     w = Walker(plex=plex, trakt=trakt, mf=mf, config=wc, progressbar=pb)
 
     if id:
