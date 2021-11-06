@@ -50,9 +50,9 @@ del "%userprofile%\Desktop\Plex Trakt Sync.lnk" /f >nul 2>&1
 del ".env" /f >nul 2>&1
 del ".pytrakt.json" /f >nul 2>&1
 del "trakt_cache.sqlite" /f >nul 2>&1
-rmdir /q /s "plex_trakt_sync\__pycache__" >nul 2>&1
-rmdir /q /s "plex_trakt_sync\commands\__pycache__" >nul 2>&1
-rmdir /q /s "plex_trakt_sync\decorators\__pycache__" >nul 2>&1
+rmdir /q /s "plextraktsync\__pycache__" >nul 2>&1
+rmdir /q /s "plextraktsync\commands\__pycache__" >nul 2>&1
+rmdir /q /s "plextraktsync\decorators\__pycache__" >nul 2>&1
 echo Restoring default settings... Done!
 
 

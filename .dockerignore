@@ -2,7 +2,7 @@
 /*
 !/Pipfile
 !/Pipfile.lock
-!/plex_trakt_sync/config.default.json
-!/plex_trakt_sync/*.py
-!/plex_trakt_sync/commands/*.py
-!/plex_trakt_sync/decorators/*.py
+!/plextraktsync/config.default.json
+!/plextraktsync/*.py
+!/plextraktsync/commands/*.py
+!/plextraktsync/decorators/*.py

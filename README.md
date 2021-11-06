@@ -19,7 +19,7 @@ Note: The PyTrakt API keys are not stored securely, so if you do not want to hav
 - Watched status are synced (dates are not reported from Trakt to Plex)
 - Liked lists in Trakt are downloaded and all movies in Plex belonging to that
   list are added
-- You can edit the [config file](https://github.com/Taxel/PlexTraktSync/blob/HEAD/plex_trakt_sync/config.default.json) to choose what to sync
+- You can edit the [config file](https://github.com/Taxel/PlexTraktSync/blob/HEAD/plextraktsync/config.default.json) to choose what to sync
 - None of the above requires a Plex Pass or Trakt VIP membership.
   Downside: Needs to be executed manually or via cronjob,
   can not use live data via webhooks.
@@ -99,7 +99,7 @@ python3 -m pip install -r requirements.txt
 
 To run from `PlexTraktSync` directory:
 ```
-python3 -m plex_trakt_sync
+python3 -m plextraktsync
 ```
 
 Or use a wrapper which is able to change directory accordingly:
@@ -150,7 +150,7 @@ docker-compose run --rm plextraktsync watch
   - Enter `urn:ietf:wg:oauth:2.0:oob` as the redirect url
   - You can leave Javascript origins and the Permissions checkboxes blank
 
-- Run `python3 -m plex_trakt_sync`.
+- Run `python3 -m plextraktsync`.
 
 - At first run you will be asked to setup Trakt and Plex access.
 
@@ -165,7 +165,7 @@ docker-compose run --rm plextraktsync watch
 
   ```
   crontab -e
-  0 */2 * * * cd ~/path/to/this/repo && python3 -m plex_trakt_sync
+  0 */2 * * * cd ~/path/to/this/repo && python3 -m plextraktsync
   ```
 
 ## Windows Setup (optional alternative)
@@ -206,8 +206,8 @@ The `sync` subcommand supports `--sync=tv` and `--sync=movies` options,
 so you can sync only specific library types.
 
 ```
-➔ python3 -m plex_trakt_sync sync --help
-Usage: plex_trakt_sync sync [OPTIONS]
+➔ python3 -m plextraktsync sync --help
+Usage: plextraktsync sync [OPTIONS]
 
   Perform sync between Plex and Trakt
 
@@ -222,14 +222,14 @@ You can use `unmatched` command to scan your library and display unmatched movie
 
 Support for unmatched shows is not yet implemented.
 
-`python3 -m plex_trakt_sync unmatched`
+`python3 -m plextraktsync unmatched`
 
 ### Version command
 
 Version command can be used to print package versions and locations of Cache, Config and Logs directories:
 
 ```
-$ plex_trakt_sync version
+$ plextraktsync version
 PlexTraktSync Version: 0.15.0
 PlexTraktSync Git Version: [0.15.0]
 Python Version: 3.10.0 (default, Oct  6 2021, 01:11:32) [Clang 13.0.0 (clang-1300.0.29.3)]
@@ -245,7 +245,7 @@ Log Dir: /Users/glen/Library/Logs/PlexTraktSync
 You can use the `watch` command to listen to events from Plex Media Server
 and scrobble plays.
 
-`python3 -m plex_trakt_sync watch`
+`python3 -m plextraktsync watch`
 
 > What is scrobbling?
 >

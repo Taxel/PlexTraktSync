@@ -1,5 +1,5 @@
 #!/usr/bin/env python3 -m pytest
-from plex_trakt_sync.walker import Walker, WalkConfig
+from plextraktsync.walker import Walker, WalkConfig
 from tests.conftest import factory
 
 plex = factory.plex_api()

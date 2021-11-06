@@ -1,7 +1,7 @@
 #!/usr/bin/env python3 -m pytest
 from os import environ
 
-from plex_trakt_sync.factory import factory
+from plextraktsync.factory import factory
 
 
 def test_config():
