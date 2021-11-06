@@ -5,7 +5,7 @@ from plextraktsync.decorators.deprecated import deprecated
 def release_version():
     from plextraktsync import __version__
 
-    if __version__[:-1] != 'x':
+    if __version__[-1] != 'x':
         return __version__
 
     return None
