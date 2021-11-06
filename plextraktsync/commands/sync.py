@@ -114,7 +114,7 @@ def sync(
 
     if dry_run:
         print("Enabled dry-run mode: not making actual changes")
-    wc.walk_details(print=tqdm.write)
+    w.print_plan(print=tqdm.write)
 
     with measure_time("Completed full sync"):
         try:

@@ -1,6 +1,5 @@
 from typing import List, NamedTuple
 
-from plextraktsync.logging import logging
 from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.decorators.memoize import memoize
@@ -20,25 +19,20 @@ class WalkConfig:
     def __init__(self, movies=True, shows=True):
         self.walk_movies = movies
         self.walk_shows = shows
-        self.logger = logging.getLogger('PlexTraktSync.WalkConfig')
 
     def add_library(self, library):
         self.library.append(library)
-        self.logger.info(f"Filtering Library: {library}")
 
     def add_id(self, id):
         self.id.append(id)
-        self.logger.info(f"Syncing item: {id}")
 
     def add_show(self, show):
         self.show.append(show)
         self.walk_movies = False
-        self.logger.info(f"Syncing Show: {show}")
 
     def add_movie(self, movie):
         self.movie.append(movie)
         self.walk_shows = False
-        self.logger.info(f"Syncing Movie: {movie}")
 
     def is_valid(self):
         # Single item provided
@@ -50,18 +44,6 @@ class WalkConfig:
             return True
 
         return False
-
-    def walk_details(self, print=print):
-        print(f"Sync Movies: {self.walk_movies}")
-        print(f"Sync Shows: {self.walk_shows}")
-        if self.id:
-            print(f"Sync Id: {self.id}")
-        if self.library:
-            print(f"Walk libraries: {self.library}")
-        if self.show:
-            print(f"Walk Shows: {self.show}")
-        if self.movie:
-            print(f"Walk Movies: {self.movie}")
 
 
 class WalkPlan(NamedTuple):
@@ -181,6 +163,19 @@ class Walker:
     @memoize
     def plan(self):
         return WalkPlanner(self.plex, self.config).plan()
+
+    def print_plan(self, print=print):
+        if self.plan.movie_sections:
+            print(f"Sync Movie sections: {self.plan.movie_sections}")
+
+        if self.plan.show_sections:
+            print(f"Sync Show sections: {self.plan.show_sections}")
+
+        if self.plan.movies:
+            print(f"Sync Movies: {self.plan.movies}")
+
+        if self.plan.shows:
+            print(f"Sync Shows: {self.plan.shows}")
 
     def get_plex_movies(self):
         """
