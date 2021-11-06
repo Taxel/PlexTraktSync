@@ -4,6 +4,7 @@ import click
 from plexapi import VERSION as PLEX_API_VERSION
 from trakt import __version__ as TRAKT_API_VERSION
 
+from plextraktsync.factory import factory
 from plextraktsync.path import cache_dir, config_dir, log_dir
 from plextraktsync.version import version as get_version
 
@@ -23,3 +24,6 @@ def info():
     print(f"Cache Dir: {cache_dir}")
     print(f"Config Dir: {config_dir}")
     print(f"Log Dir: {log_dir}")
+
+    plex = factory.plex_api()
+    print(f"Enabled {len(plex.library_sections)} libraries in Plex Server: {plex.library_section_names}")

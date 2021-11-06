@@ -16,7 +16,6 @@ from plextraktsync.walker import Walker
 
 def sync_all(walker: Walker, plex: PlexApi, runner: Sync, dry_run: bool):
     click.echo(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
-    click.echo(f"Server has {len(plex.library_sections)} libraries: {plex.library_section_names}")
 
     runner.sync(walker, dry_run=dry_run)
 
