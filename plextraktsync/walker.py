@@ -1,5 +1,8 @@
 from typing import List, NamedTuple
 
+from plexapi.library import MovieSection, ShowSection
+from plexapi.video import Movie, Show
+
 from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.decorators.memoize import memoize
@@ -47,10 +50,10 @@ class WalkConfig:
 
 
 class WalkPlan(NamedTuple):
-    movie_sections: List
-    show_sections: List
-    movies: List
-    shows: List
+    movie_sections: List[MovieSection]
+    show_sections: List[ShowSection]
+    movies: List[Movie]
+    shows: List[Show]
 
 
 class WalkPlanner:
