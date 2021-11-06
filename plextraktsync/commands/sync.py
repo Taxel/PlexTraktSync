@@ -9,7 +9,7 @@ from plextraktsync.logging import logger
 from plextraktsync.plex_api import PlexApi
 from plextraktsync.sync import Sync
 from plextraktsync.version import git_version_info
-from plextraktsync.walker import Walker, WalkConfig
+from plextraktsync.walker import WalkConfig, Walker
 
 
 def sync_all(walker: Walker, plex: PlexApi, runner: Sync, dry_run: bool):

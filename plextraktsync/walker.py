@@ -1,8 +1,8 @@
 from typing import List, NamedTuple
 
 from plextraktsync.decorators.deprecated import deprecated
-from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.measure_time import measure_time
+from plextraktsync.decorators.memoize import memoize
 from plextraktsync.media import Media, MediaFactory
 from plextraktsync.plex_api import PlexApi, PlexLibrarySection
 from plextraktsync.trakt_api import TraktApi

@@ -5,8 +5,8 @@ from os.path import exists
 
 from dotenv import load_dotenv
 
-from plextraktsync.path import (cache_dir, config_file,
-                                default_config_file, env_file)
+from plextraktsync.path import (cache_dir, config_file, default_config_file,
+                                env_file)
 
 """
 Platform name to identify our application

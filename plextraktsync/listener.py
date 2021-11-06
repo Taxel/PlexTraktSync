@@ -2,7 +2,7 @@ from time import sleep
 
 from plexapi.server import PlexServer
 
-from plextraktsync.events import EventFactory, Error
+from plextraktsync.events import Error, EventFactory
 from plextraktsync.logging import logging
 
 PLAYING = "playing"

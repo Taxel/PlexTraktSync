@@ -1,6 +1,6 @@
 import site
 from os import getenv, makedirs
-from os.path import abspath, dirname, join, exists
+from os.path import abspath, dirname, exists, join
 
 from plextraktsync.decorators.memoize import memoize
 

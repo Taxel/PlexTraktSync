@@ -1,9 +1,9 @@
+import socket
 from datetime import datetime, timedelta
 from functools import partial
 from os import environ
-from typing import List
 from subprocess import check_output
-import socket
+from typing import List
 
 import click
 from click import Choice
@@ -25,8 +25,7 @@ NOTICE_2FA_PASSWORD = comment(
 )
 CONFIG = factory.config()
 
-from InquirerPy import get_style
-from InquirerPy import inquirer
+from InquirerPy import get_style, inquirer
 
 style = get_style({"questionmark": "hidden", "question": "ansiyellow", "pointer": "fg:ansiblack bg:ansiyellow", })
 

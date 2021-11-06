@@ -2,7 +2,7 @@ import click
 
 from plextraktsync.commands.login import ensure_login
 from plextraktsync.factory import factory
-from plextraktsync.walker import Walker, WalkConfig
+from plextraktsync.walker import WalkConfig, Walker
 
 
 @click.option(

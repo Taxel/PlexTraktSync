@@ -1,11 +1,12 @@
 import click
 
-from plextraktsync.logging import logging
 from plextraktsync.config import Config
-from plextraktsync.events import PlaySessionStateNotification, ActivityNotification, Error
+from plextraktsync.events import (ActivityNotification, Error,
+                                  PlaySessionStateNotification)
 from plextraktsync.factory import factory
 from plextraktsync.listener import WebSocketListener
-from plextraktsync.media import MediaFactory, Media
+from plextraktsync.logging import logging
+from plextraktsync.media import Media, MediaFactory
 from plextraktsync.plex_api import PlexApi
 from plextraktsync.trakt_api import TraktApi
 

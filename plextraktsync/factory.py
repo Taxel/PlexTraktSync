@@ -1,5 +1,5 @@
-from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.deprecated import deprecated
+from plextraktsync.decorators.memoize import memoize
 
 
 class Factory:
