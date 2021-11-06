@@ -202,7 +202,7 @@ You can view sync progress in the `last_update.log` file which will be created.
 
 ### Sync
 
-The `sync` subcommand supports `--sync=tv` and `--sync=movies` options,
+The `sync` subcommand supports `--sync=shows` and `--sync=movies` options,
 so you can sync only specific library types.
 
 ```
@@ -212,8 +212,8 @@ Usage: plextraktsync sync [OPTIONS]
   Perform sync between Plex and Trakt
 
 Options:
-  --sync [all|movies|tv]  Specify what to sync  [default: all]
-  --help                  Show this message and exit.
+  --sync [all|movies|shows] Specify what to sync  [default: all]
+  --help                    Show this message and exit.
 ```
 
 ### Unmatched
