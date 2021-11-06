@@ -1,3 +1,7 @@
+from plextraktsync.decorators.deprecated import deprecated
+
+
+@deprecated("Use version() instead")
 def release_version():
     from plextraktsync import __version__
 
@@ -7,6 +11,7 @@ def release_version():
     return None
 
 
+@deprecated("Use version() instead")
 def git_version_info():
     try:
         from gitinfo import get_git_info
@@ -20,3 +25,16 @@ def git_version_info():
     message = commit['message'].split("\n")[0]
 
     return f"{commit['commit'][0:8]}: {message} @{commit['author_date']}"
+
+
+def version():
+    v = release_version()
+    if v:
+        return v
+
+    from plextraktsync import __version__
+    gv = git_version_info()
+    if gv:
+        return f"{__version__}: {gv}"
+
+    return __version__
