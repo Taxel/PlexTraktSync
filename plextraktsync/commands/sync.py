@@ -8,7 +8,7 @@ from plextraktsync.factory import factory
 from plextraktsync.logging import logger
 from plextraktsync.plex_api import PlexApi
 from plextraktsync.sync import Sync
-from plextraktsync.version import git_version_info
+from plextraktsync.version import version
 from plextraktsync.walker import WalkConfig, Walker
 
 
@@ -79,9 +79,7 @@ def sync(
     Perform sync between Plex and Trakt
     """
 
-    git_version = git_version_info()
-    if git_version:
-        logger.info(f"PlexTraktSync [{git_version}]")
+    logger.info(f"PlexTraktSync [{version()}]")
 
     ensure_login()
     CONFIG = factory.config()
