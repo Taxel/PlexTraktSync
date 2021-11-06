@@ -6,11 +6,20 @@ from plextraktsync.version import git_version_info
 
 
 def print_watched_shows():
-    print("Watched shows on Trakt")
+    from rich.console import Console
+    from rich.table import Table
+
     trakt = factory.trakt_api()
-    shows = trakt.watched_shows
-    for show_id, progress in sorted(shows.shows.items()):
-        print(f"- {show_id}: {progress.slug}, {len(progress.seasons)} seasons")
+    console = Console()
+
+    table = Table(show_header=True, header_style="bold magenta", title="Watched shows on Trakt")
+    table.add_column("Id", style="dim", width=6)
+    table.add_column("Slug")
+    table.add_column("Seasons", justify="right")
+    for show_id, progress in sorted(trakt.watched_shows.shows.items()):
+        table.add_row(str(show_id), progress.slug, str(len(progress.seasons)))
+
+    console.print(table)
 
 
 @click.command()
