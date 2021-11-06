@@ -5,12 +5,30 @@ from plextraktsync.media import Media
 from plextraktsync.version import git_version_info
 
 
+def print_watched_shows():
+    print("Watched shows on Trakt")
+    trakt = factory.trakt_api()
+    shows = trakt.watched_shows
+    for show_id, progress in sorted(shows.shows.items()):
+        print(f"- {show_id}: {progress.slug}, {len(progress.seasons)} seasons")
+
+
 @click.command()
-@click.argument('input')
-def inspect(input):
+@click.argument('input', nargs=-1)
+@click.option(
+    "--watched-shows",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Print Trakt watched_shows and exit"
+)
+def inspect(input, watched_shows):
     """
     Inspect details of an object
     """
+    if watched_shows:
+        print_watched_shows()
+        return
 
     git_version = git_version_info() or 'Unknown version'
     print(f"PlexTraktSync inspect [{git_version}]")
