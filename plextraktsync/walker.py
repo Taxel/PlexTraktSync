@@ -7,7 +7,7 @@ from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.media import Media, MediaFactory
-from plextraktsync.plex_api import PlexApi, PlexLibrarySection
+from plextraktsync.plex_api import PlexApi, PlexLibraryItem, PlexLibrarySection
 from plextraktsync.trakt_api import TraktApi
 
 
@@ -226,7 +226,8 @@ class Walker:
 
     def media_from_items(self, libtype: str, items: List):
         it = self.progressbar(items, desc=f"Processing {libtype}s")
-        yield from it
+        for m in it:
+            yield PlexLibraryItem(m)
 
     @deprecated("No longer used")
     def media_from_titles(self, libtype: str, titles: List[str]):
