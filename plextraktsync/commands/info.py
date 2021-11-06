@@ -9,7 +9,7 @@ from plextraktsync.version import version as get_version
 
 
 @click.command()
-def version():
+def info():
     """
     Print application and environment version info
     """
