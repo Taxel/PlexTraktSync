@@ -1,8 +1,7 @@
 import click
 
 from plextraktsync.factory import factory
-from plextraktsync.media import Media
-from plextraktsync.version import git_version_info
+from plextraktsync.version import version
 
 
 def print_watched_shows():
@@ -24,34 +23,13 @@ def print_watched_shows():
     console.print(table)
 
 
-@click.command()
-@click.argument('input', nargs=-1)
-@click.option(
-    "--watched-shows",
-    type=bool,
-    default=False,
-    is_flag=True,
-    help="Print Trakt watched_shows and exit"
-)
-def inspect(input, watched_shows):
-    """
-    Inspect details of an object
-    """
-    if watched_shows:
-        print_watched_shows()
-        return
-
-    git_version = git_version_info() or 'Unknown version'
-    print(f"PlexTraktSync inspect [{git_version}]")
-
+def inspect_media(id):
     plex = factory.plex_api()
     mf = factory.media_factory()
 
-    if input.isnumeric():
-        input = int(input)
-
-    pm = plex.fetch_item(input)
-    print(f"Inspecting {input}: {pm}")
+    pm = plex.fetch_item(id)
+    print("")
+    print(f"Inspecting {id}: {pm}")
 
     url = plex.media_url(pm)
     print(f"URL: {url}")
@@ -92,3 +70,29 @@ def inspect(input, watched_shows):
     print("Play history:")
     for h in m.plex_history(device=True, account=True):
         print(f"- {h.lastViewedAt} by {h.account.name} with {h.device.name} on {h.device.platform}")
+
+
+@click.command()
+@click.argument('input', nargs=-1)
+@click.option(
+    "--watched-shows",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Print Trakt watched_shows and exit"
+)
+def inspect(input, watched_shows: bool):
+    """
+    Inspect details of an object
+    """
+
+    print(f"PlexTraktSync [{version()}]")
+
+    if watched_shows:
+        print_watched_shows()
+        return
+
+    for id in input:
+        if id.isnumeric():
+            id = int(id)
+        inspect_media(id)
