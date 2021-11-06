@@ -1,5 +1,6 @@
 from typing import List, NamedTuple
 
+from plextraktsync.logging import logging
 from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.decorators.memoize import memoize
@@ -19,20 +20,25 @@ class WalkConfig:
     def __init__(self, movies=True, shows=True):
         self.walk_movies = movies
         self.walk_shows = shows
+        self.logger = logging.getLogger('PlexTraktSync.WalkConfig')
 
     def add_library(self, library):
         self.library.append(library)
+        self.logger.info(f"Filtering Library: {library}")
 
     def add_id(self, id):
         self.id.append(id)
+        self.logger.info(f"Syncing item: {id}")
 
     def add_show(self, show):
         self.show.append(show)
         self.walk_movies = False
+        self.logger.info(f"Syncing Show: {show}")
 
     def add_movie(self, movie):
         self.movie.append(movie)
         self.walk_shows = False
+        self.logger.info(f"Syncing Movie: {movie}")
 
     def is_valid(self):
         # Single item provided

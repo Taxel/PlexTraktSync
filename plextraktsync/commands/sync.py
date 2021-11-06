@@ -96,17 +96,13 @@ def sync(
     w = Walker(plex=plex, trakt=trakt, mf=mf, config=wc, progressbar=pb)
 
     if id:
-        logger.info(f"Syncing item: {id}")
         wc.add_id(id)
     if library:
-        logger.info(f"Filtering Library: {library}")
         wc.add_library(library)
     if show:
         wc.add_show(show)
-        logger.info(f"Syncing Show: {show}")
     if movie:
         wc.add_movie(movie)
-        logger.info(f"Syncing Movie: {movie}")
 
     if not wc.is_valid():
         click.echo("Nothing to sync, this is likely due conflicting options given.")
