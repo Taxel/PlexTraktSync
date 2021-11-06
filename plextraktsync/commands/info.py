@@ -25,6 +25,10 @@ def info():
     print(f"Config Dir: {config_dir}")
     print(f"Log Dir: {log_dir}")
 
+    config = factory.config()
+    print(f"Plex username: {config['PLEX_USERNAME']}")
+    print(f"Trakt username: {config['TRAKT_USERNAME']}")
+
     plex = factory.plex_api()
     print(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
     print(f"Enabled {len(plex.library_sections)} libraries in Plex Server: {plex.library_section_names}")

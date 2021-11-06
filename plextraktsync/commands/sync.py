@@ -74,10 +74,7 @@ def sync(
     """
 
     logger.info(f"PlexTraktSync [{version()}]")
-
     ensure_login()
-    CONFIG = factory.config()
-    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
 
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]
