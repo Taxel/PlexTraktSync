@@ -1,3 +1,5 @@
+from typing import List
+
 import click
 from click import ClickException
 from tqdm import tqdm
@@ -35,8 +37,9 @@ def sync_all(walker: Walker, plex: PlexApi, runner: Sync, dry_run: bool):
     show_default=True, help="Sync specific movie only"
 )
 @click.option(
-    "--id",
+    "--id", "ids",
     type=str,
+    multiple=True,
     show_default=True, help="Sync specific item only"
 )
 @click.option(
@@ -70,7 +73,7 @@ def sync(
         library: str,
         show: str,
         movie: str,
-        id: str,
+        ids: List[str],
         batch_size: int,
         dry_run: bool,
         no_progress_bar: bool,
@@ -95,18 +98,15 @@ def sync(
     wc = WalkConfig(movies=movies, shows=tv)
     w = Walker(plex=plex, trakt=trakt, mf=mf, config=wc, progressbar=pb)
 
-    if id:
-        logger.info(f"Syncing item: {id}")
-        wc.add_id(id)
+    if ids:
+        for id in ids:
+            wc.add_id(id)
     if library:
-        logger.info(f"Filtering Library: {library}")
         wc.add_library(library)
     if show:
         wc.add_show(show)
-        logger.info(f"Syncing Show: {show}")
     if movie:
         wc.add_movie(movie)
-        logger.info(f"Syncing Movie: {movie}")
 
     if not wc.is_valid():
         click.echo("Nothing to sync, this is likely due conflicting options given.")
@@ -114,7 +114,7 @@ def sync(
 
     if dry_run:
         print("Enabled dry-run mode: not making actual changes")
-    wc.walk_details(print=tqdm.write)
+    w.print_plan(print=tqdm.write)
 
     with measure_time("Completed full sync"):
         try:

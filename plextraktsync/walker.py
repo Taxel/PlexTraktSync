@@ -1,10 +1,13 @@
 from typing import List, NamedTuple
 
+from plexapi.library import MovieSection, ShowSection
+from plexapi.video import Movie, Show
+
 from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.media import Media, MediaFactory
-from plextraktsync.plex_api import PlexApi, PlexLibrarySection
+from plextraktsync.plex_api import PlexApi, PlexLibraryItem, PlexLibrarySection
 from plextraktsync.trakt_api import TraktApi
 
 
@@ -45,24 +48,12 @@ class WalkConfig:
 
         return False
 
-    def walk_details(self, print=print):
-        print(f"Sync Movies: {self.walk_movies}")
-        print(f"Sync Shows: {self.walk_shows}")
-        if self.id:
-            print(f"Sync Id: {self.id}")
-        if self.library:
-            print(f"Walk libraries: {self.library}")
-        if self.show:
-            print(f"Walk Shows: {self.show}")
-        if self.movie:
-            print(f"Walk Movies: {self.movie}")
-
 
 class WalkPlan(NamedTuple):
-    movie_sections: List
-    show_sections: List
-    movies: List
-    shows: List
+    movie_sections: List[MovieSection]
+    show_sections: List[ShowSection]
+    movies: List[Movie]
+    shows: List[Show]
 
 
 class WalkPlanner:
@@ -176,6 +167,19 @@ class Walker:
     def plan(self):
         return WalkPlanner(self.plex, self.config).plan()
 
+    def print_plan(self, print=print):
+        if self.plan.movie_sections:
+            print(f"Sync Movie sections: {self.plan.movie_sections}")
+
+        if self.plan.show_sections:
+            print(f"Sync Show sections: {self.plan.show_sections}")
+
+        if self.plan.movies:
+            print(f"Sync Movies: {self.plan.movies}")
+
+        if self.plan.shows:
+            print(f"Sync Shows: {self.plan.shows}")
+
     def get_plex_movies(self):
         """
         Iterate over movie sections unless specific movie is requested
@@ -222,7 +226,8 @@ class Walker:
 
     def media_from_items(self, libtype: str, items: List):
         it = self.progressbar(items, desc=f"Processing {libtype}s")
-        yield from it
+        for m in it:
+            yield PlexLibraryItem(m)
 
     @deprecated("No longer used")
     def media_from_titles(self, libtype: str, titles: List[str]):
