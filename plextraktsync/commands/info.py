@@ -26,4 +26,5 @@ def info():
     print(f"Log Dir: {log_dir}")
 
     plex = factory.plex_api()
+    print(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
     print(f"Enabled {len(plex.library_sections)} libraries in Plex Server: {plex.library_section_names}")
