@@ -11,7 +11,6 @@ from trakt.sync import Scrobbler
 from trakt.tv import TVEpisode, TVSeason, TVShow
 
 from plextraktsync import pytrakt_extensions
-from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
@@ -218,11 +217,6 @@ class TraktApi:
 
         return self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
 
-    @memoize
-    @deprecated("Use find_by_guid")
-    def find_by_media(self, pm: PlexLibraryItem):
-        return self.find_by_guid(pm.guid)
-
     @rate_limit()
     def search_by_id(self, media_id: str, id_type: str, media_type: str):
         if id_type == "tvdb" and media_type == "movie":
@@ -258,10 +252,6 @@ class TraktApi:
             if not guid.is_episode:
                 return self.find_by_guid(guid)
             return None
-
-    @deprecated("Use find_episode_guid")
-    def find_episode(self, tm: TVShow, pe: PlexLibraryItem, lookup=None):
-        return self.find_episode_guid(tm, pe.guid, lookup)
 
     def flush(self):
         """

@@ -10,7 +10,6 @@ from plexapi.library import LibrarySection, MovieSection, ShowSection
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from trakt.utils import timestamp
 
-from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
@@ -127,12 +126,6 @@ class PlexLibraryItem:
     @memoize
     def is_legacy_agent(self):
         return not self.item.guid.startswith('plex://')
-
-    @property
-    @memoize
-    @deprecated("Use .guids directly")
-    def guid(self):
-        return self.guids[0]
 
     @nocache
     @rate_limit()

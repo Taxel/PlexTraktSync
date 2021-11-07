@@ -133,16 +133,6 @@ class MediaFactory:
 
         return None
 
-    @deprecated("use resolve_any")
-    def resolve(self, pm: PlexLibraryItem, tm=None):
-        try:
-            guid = pm.guid
-        except (PlexApiException, RequestException) as e:
-            logger.error(f"Skipping {pm}: {e}")
-            return None
-
-        return self.resolve_guid(guid, tm)
-
     def resolve_guid(self, guid: PlexGuid, tm=None):
         if guid.provider in ["local", "none", "agents.none"]:
             logger.warning(f"{guid.pm.item}: Skipping guid {guid} because provider {guid.provider} has no external Id")
