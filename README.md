@@ -286,3 +286,20 @@ Group=user
 [Install]
 WantedBy=multi-user.target
 ```
+
+### Unraid setup
+
+Create a Unraid container of PlexTraktSync:
+
+- Go to the Docker section, under "Docker Containers" and click "Add Container".
+  - Click the advanced view to see all of the available parameters.
+  - Leave the template blank/unselected.
+  - Under Name: enter a name for the docker (e.g., PlexTraktSync).
+  - Under Repository: enter `ghcr.io/taxel/plextraktsync:main` (or whatever tag you want).
+  - Under Extra Parameters: enter `-it` for interactive mode.
+- Click "Apply".
+- The container should start automatically. If not, start it.
+- Enter the console for the container.
+- Enter `python3 -m plextraktsync` to start the credential process described above.
+  
+
