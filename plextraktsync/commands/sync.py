@@ -91,10 +91,11 @@ def sync(
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]
 
+    config = factory.run_config().update(batch_size=batch_size, dry_run=dry_run, progressbar=not no_progress_bar)
     plex = factory.plex_api()
-    trakt = factory.trakt_api(batch_size=batch_size)
-    mf = factory.media_factory(batch_size=batch_size)
-    pb = factory.progressbar(not no_progress_bar)
+    trakt = factory.trakt_api()
+    mf = factory.media_factory()
+    pb = factory.progressbar(config.progressbar)
     wc = WalkConfig(movies=movies, shows=shows)
     w = Walker(plex=plex, trakt=trakt, mf=mf, config=wc, progressbar=pb)
 

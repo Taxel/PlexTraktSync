@@ -4,10 +4,11 @@ from plextraktsync.decorators.memoize import memoize
 
 class Factory:
     @memoize
-    def trakt_api(self, batch_size=None):
+    def trakt_api(self):
         from plextraktsync.trakt_api import TraktApi
 
-        trakt = TraktApi(batch_size=batch_size)
+        config = self.run_config()
+        trakt = TraktApi(batch_size=config.batch_size)
 
         return trakt
 
@@ -21,10 +22,10 @@ class Factory:
         return plex
 
     @memoize
-    def media_factory(self, batch_size=None):
+    def media_factory(self):
         from plextraktsync.media import MediaFactory
 
-        trakt = self.trakt_api(batch_size=batch_size)
+        trakt = self.trakt_api()
         plex = self.plex_api()
         mf = MediaFactory(plex, trakt)
 
@@ -79,6 +80,14 @@ class Factory:
             return tqdm
 
         return None
+
+    @memoize
+    def run_config(self):
+        from plextraktsync.config import RunConfig
+
+        config = RunConfig()
+
+        return config
 
     @memoize
     def config(self):

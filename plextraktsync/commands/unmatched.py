@@ -18,11 +18,12 @@ def unmatched(no_progress_bar: bool):
     List media that has no match in Plex
     """
 
+    config = factory.run_config().update(progressbar=not no_progress_bar)
     ensure_login()
     plex = factory.plex_api()
     trakt = factory.trakt_api()
     mf = factory.media_factory()
-    pb = factory.progressbar(not no_progress_bar)
+    pb = factory.progressbar(config.progressbar)
     wc = WalkConfig()
     walker = Walker(plex, trakt, mf, wc, progressbar=pb)
 
