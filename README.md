@@ -295,7 +295,7 @@ Create a Unraid container of PlexTraktSync:
   - Click the advanced view to see all of the available parameters.
   - Leave the template blank/unselected.
   - Under Name: enter a name for the docker (e.g., PlexTraktSync).
-  - Under Repository: enter `ghcr.io/taxel/plextraktsync:main` (or whatever tag you want).
+  - Under Repository: enter `ghcr.io/taxel/plextraktsync:latest` (or whatever tag you want).
   - Under Extra Parameters: enter `-it` for interactive mode.
 - Click "Apply".
 - The container should start automatically. If not, start it.
