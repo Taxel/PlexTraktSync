@@ -11,7 +11,7 @@ from plextraktsync.logging import logger
 from plextraktsync.plex_api import PlexApi
 from plextraktsync.sync import Sync
 from plextraktsync.version import version
-from plextraktsync.walker import WalkConfig, Walker
+from plextraktsync.walker import Walker
 
 
 def sync_all(walker: Walker, plex: PlexApi, runner: Sync, dry_run: bool):
@@ -91,12 +91,9 @@ def sync(
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]
 
-    plex = factory.plex_api()
-    trakt = factory.trakt_api(batch_size=batch_size)
-    mf = factory.media_factory(batch_size=batch_size)
-    pb = factory.progressbar(not no_progress_bar)
-    wc = WalkConfig(movies=movies, shows=shows)
-    w = Walker(plex=plex, trakt=trakt, mf=mf, config=wc, progressbar=pb)
+    config = factory.run_config().update(batch_size=batch_size, dry_run=dry_run, progressbar=not no_progress_bar)
+    wc = factory.walk_config().update(movies=movies, shows=shows)
+    w = factory.walker()
 
     if ids:
         for id in ids:
@@ -116,8 +113,9 @@ def sync(
         print("Enabled dry-run mode: not making actual changes")
     w.print_plan(print=tqdm.write)
 
+    plex = factory.plex_api()
     with measure_time("Completed full sync"):
         try:
-            sync_all(walker=w, plex=plex, runner=factory.sync(), dry_run=dry_run)
+            sync_all(walker=w, plex=plex, runner=factory.sync(), dry_run=config.dry_run)
         except RuntimeError as e:
             raise ClickException(str(e))

@@ -23,6 +23,14 @@ class WalkConfig:
         self.walk_movies = movies
         self.walk_shows = shows
 
+    def update(self, movies=None, shows=None):
+        if movies is not None:
+            self.walk_movies = movies
+        if shows is not None:
+            self.walk_shows = shows
+
+        return self
+
     def add_library(self, library):
         self.library.append(library)
 
