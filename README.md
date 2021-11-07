@@ -276,8 +276,7 @@ Description=PlexTraktSync watch daemon
 After=network-online.target
 
 [Service]
-ExecStart=/path/to/PlexTraktSync/plextraktsync.sh watch
-
+ExecStart=plextraktsync watch
 Restart=on-failure
 RestartSec=10
 User=user
