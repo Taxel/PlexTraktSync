@@ -8,6 +8,17 @@ from plextraktsync.walker import Walker
 from tests.conftest import factory
 
 
+async def items(max_items: int):
+    for item in range(max_items):
+        yield item
+
+
+async def test_async_generator():
+    async for item in items(3):
+        print(item)
+    # print(c)
+
+
 @pytest.mark.asyncio
 async def test_plex_sync():
     walker: Walker = factory.walker
@@ -17,3 +28,4 @@ async def test_plex_sync():
 
 if __name__ == '__main__':
     asyncio.run(test_plex_sync())
+    # asyncio.run(test_async_generator())
