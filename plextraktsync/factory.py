@@ -90,6 +90,28 @@ class Factory:
         return config
 
     @memoize
+    def walk_config(self):
+        from plextraktsync.walker import WalkConfig
+
+        wc = WalkConfig()
+
+        return wc
+
+    @memoize
+    def walker(self):
+        from plextraktsync.walker import Walker
+
+        config = self.run_config()
+        walk_config = self.walk_config()
+        plex = self.plex_api()
+        trakt = self.trakt_api()
+        mf = self.media_factory()
+        pb = self.progressbar(config.progressbar)
+        w = Walker(plex=plex, trakt=trakt, mf=mf, config=walk_config, progressbar=pb)
+
+        return w
+
+    @memoize
     def config(self):
         from plextraktsync.config import CONFIG
 
