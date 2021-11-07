@@ -1,4 +1,5 @@
 import json
+from dataclasses import dataclass
 from json import JSONDecodeError
 from os import getenv
 from os.path import exists
@@ -17,6 +18,22 @@ PLEX_PLATFORM = "PlexTraktSync"
 Constant in seconds for how much to wait between Trakt POST API calls.
 """
 TRAKT_POST_DELAY = 1.1
+
+
+@dataclass
+class RunConfig:
+    """
+    Class to hold runtime config parameters
+    """
+    dry_run: bool = False
+    batch_size: int = 1
+    progressbar: bool = True
+
+    def update(self, **kwargs):
+        for name, value in kwargs.items():
+            self.__setattr__(name, value)
+
+        return self
 
 
 class Config(dict):
