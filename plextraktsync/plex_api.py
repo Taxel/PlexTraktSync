@@ -175,30 +175,6 @@ class PlexLibraryItem:
 
     @property
     @memoize
-    @deprecated("Use .guid.provider directly")
-    def provider(self):
-        return self.guid.provider
-
-    @property
-    @memoize
-    @deprecated("Use .guid.id directly")
-    def id(self):
-        return self.guid.id
-
-    @property
-    @memoize
-    @deprecated("Use .guid.is_episode directly")
-    def is_episode(self):
-        return self.guid.is_episode
-
-    @property
-    @memoize
-    @deprecated("Use .guid.show_id directly")
-    def show_id(self):
-        return self.guid.show_id
-
-    @property
-    @memoize
     @rate_limit(retries=1)
     def rating(self):
         if self.item.userRating is None:

@@ -20,7 +20,6 @@ from plextraktsync.factory import factory
 from plextraktsync.logging import logger
 from plextraktsync.path import pytrakt_file
 from plextraktsync.plex_api import PlexGuid, PlexLibraryItem
-from plextraktsync.pytrakt_extensions import AllWatchedShows
 
 
 class ScrobblerProxy:
