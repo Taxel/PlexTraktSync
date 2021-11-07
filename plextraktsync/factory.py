@@ -70,6 +70,7 @@ class Factory:
     def progressbar(self, enabled=True):
         if enabled:
             import warnings
+
             from tqdm import TqdmExperimentalWarning
             from tqdm.rich import tqdm
 
