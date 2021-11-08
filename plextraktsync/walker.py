@@ -1,7 +1,6 @@
 from collections import defaultdict
 from typing import List, NamedTuple
 
-from plexapi.library import MovieSection, ShowSection
 from plexapi.video import Movie, Show, Episode
 
 from plextraktsync.decorators.deprecated import deprecated
@@ -57,8 +56,8 @@ class WalkConfig:
 
 
 class WalkPlan(NamedTuple):
-    movie_sections: List[MovieSection]
-    show_sections: List[ShowSection]
+    movie_sections: List[PlexLibrarySection]
+    show_sections: List[PlexLibrarySection]
     movies: List[Movie]
     shows: List[Show]
     episodes: List[Episode]
