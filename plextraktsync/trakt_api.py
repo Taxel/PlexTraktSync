@@ -226,6 +226,11 @@ class TraktApi:
             logger.debug("tvdb does not support movie provider")
             return None
 
+        if not self.valid_trakt_id(media_id):
+            logger.error(f"Ignoring invalid id: '{media_id}'")
+
+            return None
+
         search = trakt.sync.search_by_id(media_id, id_type=id_type, media_type=media_type)
         # look for the first wanted type in the results
         # NOTE: this is not needed, kept around for caution
@@ -238,6 +243,23 @@ class TraktApi:
             return m
 
         return None
+
+    @staticmethod
+    def valid_trakt_id(media_id: str):
+        """
+        to prevent sending junk to trakt.tv,
+        validate that the id is valid for trakt
+        """
+        # imdb: tt + numbers
+        if media_id[0:2] == 'tt' and media_id[2:].isnumeric():
+            return True
+
+        # must be numeric
+        if not media_id.isnumeric():
+            return False
+
+        # must be shorter than 12 numbers
+        return len(media_id) < 12
 
     def find_episode_guid(self, tm: TVShow, guid: PlexGuid, lookup=None):
         """
