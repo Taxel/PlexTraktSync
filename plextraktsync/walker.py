@@ -91,13 +91,13 @@ class WalkPlanner:
         movies = []
         shows = []
         for id in self.config.id:
-            movie = self.find_from_sections_by_id(movie_sections, id) if self.config.walk_movies else []
-            if movie:
-                movies.extend(movie)
-                continue
             show = self.find_from_sections_by_id(show_sections, id) if self.config.walk_shows else []
             if show:
                 shows.extend(show)
+                continue
+            movie = self.find_from_sections_by_id(movie_sections, id) if self.config.walk_movies else []
+            if movie:
+                movies.extend(movie)
                 continue
             raise RuntimeError(f"Id '{id}' not found")
         return [movies, shows]
