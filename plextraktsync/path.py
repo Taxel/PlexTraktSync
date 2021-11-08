@@ -24,26 +24,20 @@ class Path:
     @property
     @memoize
     def config_dir(self):
-        if self.installed:
-            return self.app_dir.user_config_dir
-
-        return getenv("PTS_CONFIG_DIR", self.app_path)
+        d = self.app_dir.user_config_dir if self.installed else self.app_path
+        return getenv("PTS_CONFIG_DIR", d)
 
     @property
     @memoize
     def cache_dir(self):
-        if self.installed:
-            return self.app_dir.user_cache_dir
-
-        return getenv("PTS_CACHE_DIR", self.app_path)
+        d = self.app_dir.user_cache_dir if self.installed else self.app_path
+        return getenv("PTS_CACHE_DIR", d)
 
     @property
     @memoize
     def log_dir(self):
-        if self.installed:
-            return self.app_dir.user_log_dir
-
-        return getenv("PTS_LOG_DIR", self.app_path)
+        d = self.app_dir.user_log_dir if self.installed else self.app_path
+        return getenv("PTS_LOG_DIR", d)
 
     @property
     @memoize
