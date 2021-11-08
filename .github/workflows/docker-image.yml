@@ -76,7 +76,7 @@ jobs:
 
       - name: Test Docker image
         run: |
-          docker run --rm ${{ env.TEST_IMAGE }} version
+          docker run --rm ${{ env.TEST_IMAGE }} info
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
