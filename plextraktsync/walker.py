@@ -1,13 +1,13 @@
+from collections import defaultdict
 from typing import List, NamedTuple
 
-from plexapi.library import MovieSection, ShowSection
-from plexapi.video import Movie, Show
+from plexapi.video import Movie, Show, Episode
 
 from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.media import Media, MediaFactory
-from plextraktsync.plex_api import PlexApi, PlexLibraryItem, PlexLibrarySection
+from plextraktsync.plex_api import PlexApi, PlexLibraryItem, PlexLibrarySection, PlexGuid
 from plextraktsync.trakt_api import TraktApi
 
 
@@ -56,10 +56,11 @@ class WalkConfig:
 
 
 class WalkPlan(NamedTuple):
-    movie_sections: List[MovieSection]
-    show_sections: List[ShowSection]
+    movie_sections: List[PlexLibrarySection]
+    show_sections: List[PlexLibrarySection]
     movies: List[Movie]
     shows: List[Show]
+    episodes: List[Episode]
 
 
 class WalkPlanner:
@@ -69,47 +70,61 @@ class WalkPlanner:
 
     def plan(self):
         movie_sections, show_sections = self.find_sections()
-        movies, shows = self.find_by_id(movie_sections, show_sections)
+        movies, shows, episodes = self.find_by_id(movie_sections, show_sections)
         shows = self.find_from_sections_by_title(show_sections, self.config.show, shows)
         movies = self.find_from_sections_by_title(movie_sections, self.config.movie, movies)
 
         # reset sections if movie/shows have been picked
-        movie_sections = [] if movies else movie_sections
-        show_sections = [] if shows else show_sections
+        if movies or shows or episodes:
+            movie_sections = []
+            show_sections = []
 
         return WalkPlan(
             movie_sections,
             show_sections,
             movies,
             shows,
+            episodes,
         )
 
     def find_by_id(self, movie_sections, show_sections):
         if not self.config.id:
-            return [None, None]
+            return [None, None, None]
+
+        results = defaultdict(list[Movie, Show, Episode])
+        for id in self.config.id:
+            found = self.find_from_sections_by_id(show_sections, id, results) if self.config.walk_shows else None
+            if found:
+                continue
+            found = self.find_from_sections_by_id(movie_sections, id, results) if self.config.walk_movies else None
+            if found:
+                continue
+            raise RuntimeError(f"Id '{id}' not found")
 
         movies = []
         shows = []
-        for id in self.config.id:
-            movie = self.find_from_sections_by_id(movie_sections, id) if self.config.walk_movies else []
-            if movie:
-                movies.extend(movie)
-                continue
-            show = self.find_from_sections_by_id(show_sections, id) if self.config.walk_shows else []
-            if show:
-                shows.extend(show)
-                continue
-            raise RuntimeError(f"Id '{id}' not found")
-        return [movies, shows]
+        episodes = []
+        for mediatype, items in results.items():
+            if mediatype == "episode":
+                episodes.extend(items)
+            elif mediatype == "show":
+                shows.extend(items)
+            elif mediatype == "movie":
+                movies.extend(items)
+            else:
+                raise RuntimeError(f"Unsupported type: {m.type}")
+
+        return [movies, shows, episodes]
 
     @staticmethod
-    def find_from_sections_by_id(sections, id):
-        results = []
+    def find_from_sections_by_id(sections, id, results):
+        found = False
         for section in sections:
             m = section.find_by_id(id)
             if m:
-                results.append(m)
-        return results
+                results[m.type].append(m)
+                found = True
+        return found
 
     @staticmethod
     def find_from_sections_by_title(sections, names, items):
@@ -189,14 +204,19 @@ class Walker:
         if self.plan.shows:
             print(f"Sync Shows: {self.plan.shows}")
 
+        if self.plan.episodes:
+            print(f"Sync Episodes: {self.plan.episodes}")
+
     def get_plex_movies(self):
         """
         Iterate over movie sections unless specific movie is requested
         """
         if self.plan.movies:
             movies = self.media_from_items("movie", self.plan.movies)
-        else:
+        elif self.plan.movie_sections:
             movies = self.media_from_sections(self.plan.movie_sections)
+        else:
+            return
 
         yield from movies
 
@@ -210,17 +230,36 @@ class Walker:
     def get_plex_shows(self):
         if self.plan.shows:
             shows = self.media_from_items("show", self.plan.shows)
+        elif self.plan.show_sections:
+            shows = self.media_from_sections(self.plan.show_sections)
         else:
-            shows = self.media_from_sections(self.plex.show_sections())
+            return
 
         yield from shows
 
     def find_episodes(self):
-        for plex in self.get_plex_shows():
-            show = self.mf.resolve_any(plex)
+        if self.plan.episodes:
+            yield from self.get_plex_episodes(self.plan.episodes)
+
+        for ps in self.get_plex_shows():
+            show = self.mf.resolve_any(ps)
             if not show:
                 continue
             yield from self.episode_from_show(show)
+
+    def get_plex_episodes(self, episodes):
+        it = self.progressbar(episodes, desc=f"Processing episodes")
+        for pe in it:
+            guid = PlexGuid(pe.grandparentGuid, "show")
+            show = self.mf.resolve_guid(guid)
+            if not show:
+                continue
+            me = self.mf.resolve_any(PlexLibraryItem(pe), show.trakt)
+            if not me:
+                continue
+
+            me.show = show
+            yield me
 
     def media_from_sections(self, sections: List[PlexLibrarySection], titles: List[str] = None):
         if titles:
