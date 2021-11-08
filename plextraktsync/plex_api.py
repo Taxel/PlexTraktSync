@@ -10,7 +10,6 @@ from plexapi.library import LibrarySection, MovieSection, ShowSection
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from trakt.utils import timestamp
 
-from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
@@ -128,12 +127,6 @@ class PlexLibraryItem:
     def is_legacy_agent(self):
         return not self.item.guid.startswith('plex://')
 
-    @property
-    @memoize
-    @deprecated("Use .guids directly")
-    def guid(self):
-        return self.guids[0]
-
     @nocache
     @rate_limit()
     def get_guids(self):
@@ -172,30 +165,6 @@ class PlexLibraryItem:
     @memoize
     def type(self):
         return self.item.type
-
-    @property
-    @memoize
-    @deprecated("Use .guid.provider directly")
-    def provider(self):
-        return self.guid.provider
-
-    @property
-    @memoize
-    @deprecated("Use .guid.id directly")
-    def id(self):
-        return self.guid.id
-
-    @property
-    @memoize
-    @deprecated("Use .guid.is_episode directly")
-    def is_episode(self):
-        return self.guid.is_episode
-
-    @property
-    @memoize
-    @deprecated("Use .guid.show_id directly")
-    def show_id(self):
-        return self.guid.show_id
 
     @property
     @memoize
