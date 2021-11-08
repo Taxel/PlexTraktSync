@@ -1,24 +1,59 @@
 #!/usr/bin/env python3 -m pytest
-from plextraktsync.walker import WalkConfig, Walker
-from tests.conftest import factory
+from plextraktsync.plex_api import PlexApi, PlexLibrarySection
+from plextraktsync.walker import WalkConfig, WalkPlanner
 
-plex = factory.plex_api()
-trakt = factory.trakt_api()
-mf = factory.media_factory()
+
+class PlexLibrarySectionMock(PlexLibrarySection):
+    def __init__(self, data):
+        self.data = data
+
+    def find_by_title(self, name: str):
+        items = [item for item in self.data["items"] if item["title"] == name]
+        assert len(items) == 1
+        return items[0]
+
+
+class PlexMock(PlexApi):
+    def __init__(self, sections):
+        self.sections = sections
+
+    def movie_sections(self, library=None):
+        by_type = self.sections_by_type("movie", library)
+        return by_type
+
+    def show_sections(self, library=None):
+        return self.sections_by_type("show", library)
+
+    def sections_by_type(self, libtype, title):
+        result = []
+        for section in self.sections:
+            if section["type"] != libtype:
+                continue
+            if title and section["title"] != title:
+                continue
+            result.append(PlexLibrarySectionMock(section))
+
+        return result
 
 
 def test_walker():
+    plex = PlexMock([
+        {"type": "movie", "title": "Movies", "items": [
+            {"title": "Batman Begins"},
+        ]},
+        {"type": "show", "title": "TV Shows", "items": [
+            {"title": "Breaking Bad"},
+        ]},
+    ])
+
     wc = WalkConfig()
-    w = Walker(plex, trakt, mf, wc)
-    assert type(w) == Walker
-
-    wc.add_library("TV Shows")
-    wc.add_library("Movies (Tuti)")
-    wc.add_show("Breaking Bad")
+    wc.add_library("Movies")
     wc.add_movie("Batman Begins")
+    wc.add_library("TV Shows")
+    wc.add_show("Breaking Bad")
+    plan = WalkPlanner(plex, wc).plan()
 
-    episodes = list(w.find_episodes())
-    movies = list(w.find_movies())
-
-    assert len(episodes) == 0
-    assert len(movies) == 0
+    assert len(plan.movie_sections) == 0
+    assert len(plan.show_sections) == 0
+    assert len(plan.movies) == 1
+    assert len(plan.shows) == 1

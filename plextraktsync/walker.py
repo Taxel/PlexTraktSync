@@ -39,11 +39,9 @@ class WalkConfig:
 
     def add_show(self, show):
         self.show.append(show)
-        self.walk_movies = False
 
     def add_movie(self, movie):
         self.movie.append(movie)
-        self.walk_shows = False
 
     def is_valid(self):
         # Single item provided
@@ -117,6 +115,9 @@ class WalkPlanner:
     def find_from_sections_by_title(sections, names, items):
         if not names:
             return items
+
+        if not items:
+            items = []
 
         for name in names:
             found = False
