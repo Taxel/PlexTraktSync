@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import List, NamedTuple
 
 from plexapi.library import MovieSection, ShowSection
@@ -70,8 +71,7 @@ class WalkPlanner:
 
     def plan(self):
         movie_sections, show_sections = self.find_sections()
-        episodes = []
-        movies, shows = self.find_by_id(movie_sections, show_sections)
+        movies, shows, episodes = self.find_by_id(movie_sections, show_sections)
         shows = self.find_from_sections_by_title(show_sections, self.config.show, shows)
         movies = self.find_from_sections_by_title(movie_sections, self.config.movie, movies)
 
@@ -85,34 +85,47 @@ class WalkPlanner:
             show_sections,
             movies,
             shows,
+            episodes,
         )
 
     def find_by_id(self, movie_sections, show_sections):
         if not self.config.id:
-            return [None, None]
+            return [None, None, None]
+
+        results = defaultdict(list[Movie, Show, Episode])
+        for id in self.config.id:
+            found = self.find_from_sections_by_id(show_sections, id, results) if self.config.walk_shows else None
+            if found:
+                continue
+            found = self.find_from_sections_by_id(movie_sections, id, results) if self.config.walk_movies else None
+            if found:
+                continue
+            raise RuntimeError(f"Id '{id}' not found")
 
         movies = []
         shows = []
-        for id in self.config.id:
-            show = self.find_from_sections_by_id(show_sections, id) if self.config.walk_shows else []
-            if show:
-                shows.extend(show)
-                continue
-            movie = self.find_from_sections_by_id(movie_sections, id) if self.config.walk_movies else []
-            if movie:
-                movies.extend(movie)
-                continue
-            raise RuntimeError(f"Id '{id}' not found")
-        return [movies, shows]
+        episodes = []
+        for mediatype, items in results.items():
+            if mediatype == "episode":
+                episodes.extend(items)
+            elif mediatype == "show":
+                shows.extend(items)
+            elif mediatype == "movie":
+                movies.extend(items)
+            else:
+                raise RuntimeError(f"Unsupported type: {m.type}")
+
+        return [movies, shows, episodes]
 
     @staticmethod
-    def find_from_sections_by_id(sections, id):
-        results = []
+    def find_from_sections_by_id(sections, id, results):
+        found = False
         for section in sections:
             m = section.find_by_id(id)
             if m:
-                results.append(m)
-        return results
+                results[m.type].append(m)
+                found = True
+        return found
 
     @staticmethod
     def find_from_sections_by_title(sections, names, items):
