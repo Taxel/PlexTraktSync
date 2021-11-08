@@ -63,7 +63,7 @@ plextraktsync
 ```
 
 NOTE: `pipx` install will use OS specific paths for Config, Logs, Cache, see [appdirs] documentation for details
-or check output of [version command](#version-command).
+or check output of [info command](#info-command).
 
 [appdirs]: https://pypi.org/project/appdirs
 [install-pipx]: https://github.com/pypa/pipx#install-pipx
@@ -224,20 +224,25 @@ Support for unmatched shows is not yet implemented.
 
 `python3 -m plextraktsync unmatched`
 
-### Version command
+### Info command
 
-Version command can be used to print package versions and locations of Cache, Config and Logs directories:
+The info command can be used to print package versions,
+account information,
+locations of Cache, Config and Logs directories
 
 ```
-$ plextraktsync version
-PlexTraktSync Version: 0.15.0
-PlexTraktSync Git Version: [0.15.0]
+$ plextraktsync info
+PlexTraktSync Version: 0.16.0
 Python Version: 3.10.0 (default, Oct  6 2021, 01:11:32) [Clang 13.0.0 (clang-1300.0.29.3)]
 Plex API Version: 4.7.2
 Trakt API Version: 3.2.1
 Cache Dir: /Users/glen/Library/Caches/PlexTraktSync
 Config Dir: /Users/glen/Library/Application Support/PlexTraktSync
 Log Dir: /Users/glen/Library/Logs/PlexTraktSync
+Plex username: nobody
+Trakt username: nobody
+Plex Server version: 1.24.3.5033-757abe6b4, updated at: 2021-02-21 17:00:00
+Server has 2 libraries: ['Movies', 'TV Shows']
 ```
 
 ### Watch

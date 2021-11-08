@@ -8,17 +8,8 @@ from plextraktsync.commands.login import ensure_login
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import factory
 from plextraktsync.logging import logger
-from plextraktsync.plex_api import PlexApi
-from plextraktsync.sync import Sync
 from plextraktsync.version import version
 from plextraktsync.walker import Walker
-
-
-def sync_all(walker: Walker, plex: PlexApi, runner: Sync, dry_run: bool):
-    click.echo(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
-    click.echo(f"Server has {len(plex.library_sections)} libraries: {plex.library_section_names}")
-
-    runner.sync(walker, dry_run=dry_run)
 
 
 @click.command()
@@ -83,10 +74,7 @@ def sync(
     """
 
     logger.info(f"PlexTraktSync [{version()}]")
-
     ensure_login()
-    CONFIG = factory.config()
-    logger.info(f"Syncing with Plex {CONFIG['PLEX_USERNAME']} and Trakt {CONFIG['TRAKT_USERNAME']}")
 
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]
@@ -113,9 +101,9 @@ def sync(
         print("Enabled dry-run mode: not making actual changes")
     w.print_plan(print=tqdm.write)
 
-    plex = factory.plex_api()
     with measure_time("Completed full sync"):
         try:
-            sync_all(walker=w, plex=plex, runner=factory.sync(), dry_run=config.dry_run)
+            runner = factory.sync()
+            runner.sync(walker=w, dry_run=config.dry_run)
         except RuntimeError as e:
             raise ClickException(str(e))
