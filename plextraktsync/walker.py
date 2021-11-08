@@ -230,7 +230,7 @@ class Walker:
         if self.plan.shows:
             shows = self.media_from_items("show", self.plan.shows)
         else:
-            shows = self.media_from_sections(self.plex.show_sections())
+            shows = self.media_from_sections(self.plan.show_sections)
 
         yield from shows
 
