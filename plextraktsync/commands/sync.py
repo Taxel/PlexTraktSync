@@ -97,9 +97,13 @@ def sync(
         click.echo("Nothing to sync, this is likely due conflicting options given.")
         return
 
+    try:
+        w.print_plan(print=tqdm.write)
+    except RuntimeError as e:
+        raise ClickException(str(e))
+
     if dry_run:
         print("Enabled dry-run mode: not making actual changes")
-    w.print_plan(print=tqdm.write)
 
     with measure_time("Completed full sync"):
         try:
