@@ -1,7 +1,7 @@
 from typing import List, NamedTuple
 
 from plexapi.library import MovieSection, ShowSection
-from plexapi.video import Movie, Show
+from plexapi.video import Movie, Show, Episode
 
 from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.measure_time import measure_time
@@ -60,6 +60,7 @@ class WalkPlan(NamedTuple):
     show_sections: List[ShowSection]
     movies: List[Movie]
     shows: List[Show]
+    episodes: List[Episode]
 
 
 class WalkPlanner:
@@ -69,12 +70,13 @@ class WalkPlanner:
 
     def plan(self):
         movie_sections, show_sections = self.find_sections()
+        episodes = []
         movies, shows = self.find_by_id(movie_sections, show_sections)
         shows = self.find_from_sections_by_title(show_sections, self.config.show, shows)
         movies = self.find_from_sections_by_title(movie_sections, self.config.movie, movies)
 
         # reset sections if movie/shows have been picked
-        if movies or shows:
+        if movies or shows or episodes:
             movie_sections = []
             show_sections = []
 
@@ -189,6 +191,9 @@ class Walker:
 
         if self.plan.shows:
             print(f"Sync Shows: {self.plan.shows}")
+
+        if self.plan.episodes:
+            print(f"Sync Episodes: {self.plan.episodes}")
 
     def get_plex_movies(self):
         """
