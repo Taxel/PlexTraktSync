@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import Union
+from typing import Union, List, Optional
 
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.library import LibrarySection, MovieSection, ShowSection
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
+from plexapi.video import Movie, Show, Episode
 from trakt.utils import timestamp
 
 from plextraktsync.decorators.memoize import memoize
@@ -357,7 +358,7 @@ class PlexLibrarySection:
             return None
 
     @nocache
-    def find_by_id(self, id: str):
+    def find_by_id(self, id: str) -> Optional[Union[Movie, Show, Episode]]:
         try:
             return self.section.fetchItem(int(id))
         except NotFound:
