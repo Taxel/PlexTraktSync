@@ -7,7 +7,7 @@ from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.media import Media, MediaFactory
-from plextraktsync.plex_api import PlexApi, PlexLibraryItem, PlexLibrarySection
+from plextraktsync.plex_api import PlexApi, PlexLibraryItem, PlexLibrarySection, PlexGuid
 from plextraktsync.trakt_api import TraktApi
 
 
@@ -238,11 +238,28 @@ class Walker:
         yield from shows
 
     def find_episodes(self):
-        for plex in self.get_plex_shows():
-            show = self.mf.resolve_any(plex)
+        if self.plan.episodes:
+            yield from self.get_plex_episodes(self.plan.episodes)
+
+        for ps in self.get_plex_shows():
+            show = self.mf.resolve_any(ps)
             if not show:
                 continue
             yield from self.episode_from_show(show)
+
+    def get_plex_episodes(self, episodes):
+        it = self.progressbar(episodes, desc=f"Processing episodes")
+        for pe in it:
+            guid = PlexGuid(pe.grandparentGuid, "show")
+            show = self.mf.resolve_guid(guid)
+            if not show:
+                continue
+            me = self.mf.resolve_any(PlexLibraryItem(pe), show.trakt)
+            if not me:
+                continue
+
+            me.show = show
+            yield me
 
     def media_from_sections(self, sections: List[PlexLibrarySection], titles: List[str] = None):
         if titles:
