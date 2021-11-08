@@ -214,8 +214,10 @@ class Walker:
         """
         if self.plan.movies:
             movies = self.media_from_items("movie", self.plan.movies)
-        else:
+        elif self.plan.movie_sections:
             movies = self.media_from_sections(self.plan.movie_sections)
+        else:
+            return
 
         yield from movies
 
@@ -229,8 +231,10 @@ class Walker:
     def get_plex_shows(self):
         if self.plan.shows:
             shows = self.media_from_items("show", self.plan.shows)
-        else:
+        elif self.plan.show_sections:
             shows = self.media_from_sections(self.plan.show_sections)
+        else:
+            return
 
         yield from shows
 
