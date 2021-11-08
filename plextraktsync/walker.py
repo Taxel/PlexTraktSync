@@ -74,8 +74,9 @@ class WalkPlanner:
         movies = self.find_from_sections_by_title(movie_sections, self.config.movie, movies)
 
         # reset sections if movie/shows have been picked
-        movie_sections = [] if movies else movie_sections
-        show_sections = [] if shows else show_sections
+        if movies or shows:
+            movie_sections = []
+            show_sections = []
 
         return WalkPlan(
             movie_sections,
