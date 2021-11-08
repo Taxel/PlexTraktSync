@@ -116,6 +116,9 @@ class WalkPlanner:
         if not names:
             return items
 
+        if not items:
+            items = []
+
         for name in names:
             found = False
             for section in sections:
