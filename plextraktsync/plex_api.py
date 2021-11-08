@@ -45,7 +45,7 @@ for k, v in AUDIO_CODECS.items():
 
 
 class PlexGuid:
-    def __init__(self, guid: str, type: str, pm: PlexLibraryItem):
+    def __init__(self, guid: str, type: str, pm: Optional[PlexLibraryItem] = None):
         self.guid = guid
         self.type = type
         self.pm = pm
