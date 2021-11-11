@@ -63,7 +63,7 @@ class Config(dict):
                 fp.write(json.dumps(defaults, indent=4))
 
         config = self.load_json(self.config_file)
-        self.update(config)
+        self.merge(config, self)
 
         load_dotenv(self.env_file)
         for key in self.env_keys:
@@ -75,6 +75,18 @@ class Config(dict):
         self.initialized = True
 
         self["cache"]["path"] = self["cache"]["path"].replace("$PTS_CACHE_DIR", cache_dir)
+
+    # https://stackoverflow.com/a/20666342/2314626
+    def merge(self, source, destination):
+        for key, value in source.items():
+            if isinstance(value, dict):
+                # get node or create one
+                node = destination.setdefault(key, {})
+                self.merge(value, node)
+            else:
+                destination[key] = value
+
+        return destination
 
     def save(self):
         with open(self.env_file, "w") as txt:
