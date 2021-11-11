@@ -166,9 +166,9 @@ class TraktApi:
         m.rate(rating)
 
     @staticmethod
-    def scrobbler(media: Union[Movie, TVEpisode]) -> ScrobblerProxy:
+    def scrobbler(media: Union[Movie, TVEpisode], threshold=80) -> ScrobblerProxy:
         scrobbler = media.scrobble(0, None, None)
-        return ScrobblerProxy(scrobbler)
+        return ScrobblerProxy(scrobbler, threshold)
 
     @nocache
     @rate_limit()
