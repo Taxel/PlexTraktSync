@@ -4,6 +4,25 @@ from os import environ
 from plextraktsync.factory import factory
 
 
+def test_config_merge():
+    config = factory.config()
+
+    override = {
+        "root": {
+            "key1": "value1"
+        }
+    }
+    config.merge(override, config)
+    override = {
+        "root": {
+            "key2": "value2"
+        }
+    }
+    config.merge(override, config)
+    assert config["root"]["key1"] == "value1"
+    assert config["root"]["key2"] == "value2"
+
+
 def test_config():
     config = factory.config()
 
