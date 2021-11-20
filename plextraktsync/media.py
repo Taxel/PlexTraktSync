@@ -78,7 +78,10 @@ class Media:
         return watched.get_completed(self.show_trakt_id, self.season_number, self.episode_number)
 
     def mark_watched_trakt(self):
-        self.trakt_api.mark_watched(self.trakt, self.plex.seen_date)
+        if self.is_movie:
+            self.trakt_api.mark_watched(self.trakt, self.plex.seen_date)
+        if self.is_episode:
+            self.trakt_api.mark_watched(self.trakt, self.plex.seen_date, self.show_trakt_id)
 
     def mark_watched_plex(self):
         self.plex_api.mark_watched(self.plex.item)
