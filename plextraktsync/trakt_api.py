@@ -169,12 +169,12 @@ class TraktApi:
     @nocache
     @rate_limit()
     @time_limit()
-    def mark_watched(self, m, time):
+    def mark_watched(self, m, time, show_trakt_id=None):
         m.mark_as_seen(time)
         if m.media_type == "movies":
             self.watched_movies.add(m.trakt)
-        if m.media_type == "episodes":
-            self.watched_shows.add(TVShow(m.show).trakt, m.season, m.number)
+        if m.media_type == "episodes" and show_trakt_id:
+            self.watched_shows.add(show_trakt_id, m.season, m.number)
 
     def add_to_collection(self, m, pm: PlexLibraryItem):
         if m.media_type == "movies":
