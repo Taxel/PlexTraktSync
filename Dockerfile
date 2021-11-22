@@ -13,7 +13,7 @@ ARG APP_VERSION=$APP_VERSION
 ENV APP_VERSION=$APP_VERSION
 
 RUN mkdir -p /app/plextraktsync
-RUN echo "__version__ = '$APP_VERSION'" > plextraktsync/__init__.py
+RUN echo "__version__ = '${APP_VERSION:-unknown}'" > plextraktsync/__init__.py
 RUN cat plextraktsync/__init__.py
 RUN python -c "from plextraktsync import __version__; print(__version__)"
 
