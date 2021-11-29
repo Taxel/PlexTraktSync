@@ -19,7 +19,7 @@ idna==3.3; python_version >= '3'
 inquirerpy==0.3.0
 oauthlib==3.1.1; python_version >= '3.6'
 pfzy==0.3.3; python_version >= '3.7' and python_version < '4.0'
-plexapi==4.7.2
+plexapi==4.8.0
 prompt-toolkit==3.0.23; python_full_version >= '3.6.2'
 pygments==2.10.0; python_version >= '3.5'
 python-dotenv==0.19.2
