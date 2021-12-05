@@ -518,6 +518,7 @@ class PlexApi:
             yield h
 
     @nocache
+    @rate_limit()
     def mark_watched(self, m):
         m.markWatched()
 
