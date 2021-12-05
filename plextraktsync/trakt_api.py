@@ -26,8 +26,9 @@ class ScrobblerProxy:
     Proxy to Scrobbler that handles requsts cache and rate limiting
     """
 
-    def __init__(self, scrobbler: Scrobbler):
+    def __init__(self, scrobbler: Scrobbler, threshold=80):
         self.scrobbler = scrobbler
+        self.threshold = threshold
 
     @nocache
     @rate_limit()
@@ -44,8 +45,11 @@ class ScrobblerProxy:
     @nocache
     @rate_limit()
     @time_limit()
-    def stop(self):
-        self.scrobbler.stop()
+    def stop(self, progress: float):
+        if progress >= self.threshold:
+            self.scrobbler.stop()
+        else:
+            self.scrobbler.pause()
 
 
 class TraktApi:
@@ -162,9 +166,9 @@ class TraktApi:
         m.rate(rating)
 
     @staticmethod
-    def scrobbler(media: Union[Movie, TVEpisode]) -> ScrobblerProxy:
+    def scrobbler(media: Union[Movie, TVEpisode], threshold=80) -> ScrobblerProxy:
         scrobbler = media.scrobble(0, None, None)
-        return ScrobblerProxy(scrobbler)
+        return ScrobblerProxy(scrobbler, threshold)
 
     @nocache
     @rate_limit()

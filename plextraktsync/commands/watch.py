@@ -12,12 +12,13 @@ from plextraktsync.trakt_api import TraktApi
 
 
 class ScrobblerCollection(dict):
-    def __init__(self, trakt: TraktApi):
+    def __init__(self, trakt: TraktApi, threshold = 80):
         super(dict, self).__init__()
         self.trakt = trakt
+        self.threshold = threshold
 
     def __missing__(self, key):
-        self[key] = value = self.trakt.scrobbler(key)
+        self[key] = value = self.trakt.scrobbler(key, self.threshold)
         return value
 
 
@@ -47,7 +48,7 @@ class WatchStateUpdater:
         self.trakt = trakt
         self.mf = mf
         self.logger = logging.getLogger("PlexTraktSync.WatchStateUpdater")
-        self.scrobblers = ScrobblerCollection(trakt)
+        self.scrobblers = ScrobblerCollection(trakt, config["watch"]["scrobble_threshold"])
         if config["watch"]["username_filter"]:
             self.username_filter = config["PLEX_USERNAME"]
         else:
@@ -106,7 +107,7 @@ class WatchStateUpdater:
             return self.scrobblers[tm].pause()
 
         if state == "stopped":
-            self.scrobblers[tm].stop()
+            self.scrobblers[tm].stop(percent)
             del self.scrobblers[tm]
             del self.sessions[event.session_key]
 
