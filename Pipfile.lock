@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "13a0c759d13230a83c3756096b200b82e9c9bcf3faa8691e37f08e9cc25c9cff"
+            "sha256": "23580bd39bdd099c96ee1bd0e860813bc8fb7c692b09488f3b07ae83e7624ea5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -34,11 +34,11 @@
         },
         "cattrs": {
             "hashes": [
-                "sha256:5c121ab06a7cac494813c228721a7feb5a6423b17316eeaebf13f5a03e5b0d53",
-                "sha256:901fb2040529ae8fc9d93f48a2cdf7de3e983312ffb2a164ffa4e9847f253af1"
+                "sha256:1ef33f089e0a494e8d1b487508356f055c865b1955b125c00c991a4358543c80",
+                "sha256:8eca49962b1bfc09c24d442aa55688be88efe5c24aeef89d3be135614b95c678"
             ],
-            "markers": "python_version >= '3.7' and python_version < '4'",
-            "version": "==1.8.0"
+            "markers": "python_version >= '3.7' and python_full_version < '4.0.0'",
+            "version": "==1.9.0"
         },
         "certifi": {
             "hashes": [
@@ -49,11 +49,11 @@
         },
         "charset-normalizer": {
             "hashes": [
-                "sha256:735e240d9a8506778cd7a453d97e817e536bb1fc29f4f6961ce297b9c7a917b0",
-                "sha256:83fcdeb225499d6344c8f7f34684c2981270beacc32ede2e669e94f7fa544405"
+                "sha256:1eecaa09422db5be9e29d7fc65664e6c33bd06f9ced7838578ba40d58bdf3721",
+                "sha256:b0b883e8e874edfdece9c28f314e3dd5badf067342e42fb162203335ae61aa2c"
             ],
             "markers": "python_version >= '3'",
-            "version": "==2.0.8"
+            "version": "==2.0.9"
         },
         "click": {
             "hashes": [
@@ -115,7 +115,7 @@
                 "sha256:33682ed1929c5ff85c0c57e3b3cfa5c355063138be3560a1797378cf08fb05a2",
                 "sha256:3efd83e49d854830369173b44e64a2cd9adcb9d5382698a792474c7d18e2fe32"
             ],
-            "markers": "python_version >= '3.7' and python_version < '4'",
+            "markers": "python_version >= '3.7' and python_full_version < '4.0.0'",
             "version": "==0.3.3"
         },
         "plexapi": {
@@ -238,11 +238,11 @@
         },
         "websocket-client": {
             "hashes": [
-                "sha256:0133d2f784858e59959ce82ddac316634229da55b498aac311f1620567a710ec",
-                "sha256:8dfb715d8a992f5712fff8c843adae94e22b22a99b2c5e6b0ec4a1a981cc4e0d"
+                "sha256:21861f8645eb5725d1becfe86d7e7ae1a31d98b72556f9d44fcc5100976353cf",
+                "sha256:5d6a25cf0a8e936f473eceb53c4017ca85d91c7bc45c31634b62ec7190f5728e"
             ],
             "index": "pypi",
-            "version": "==1.2.1"
+            "version": "==1.2.2"
         },
         "wrapt": {
             "hashes": [
