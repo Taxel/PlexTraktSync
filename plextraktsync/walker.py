@@ -91,7 +91,7 @@ class WalkPlanner:
         if not self.config.id:
             return [None, None, None]
 
-        results = defaultdict(list[Movie, Show, Episode])
+        results = defaultdict(list)
         for id in self.config.id:
             found = self.find_from_sections_by_id(show_sections, id, results) if self.config.walk_shows else None
             if found:
