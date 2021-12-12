@@ -9,7 +9,6 @@ from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import factory
 from plextraktsync.logging import logger
 from plextraktsync.version import version
-from plextraktsync.walker import Walker
 
 
 @click.command()
