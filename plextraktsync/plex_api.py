@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import Union, List, Optional
+from typing import List, Optional, Union
 
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.library import LibrarySection, MovieSection, ShowSection
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
-from plexapi.video import Movie, Show, Episode
+from plexapi.video import Episode, Movie, Show
 from trakt.utils import timestamp
 
 from plextraktsync.decorators.memoize import memoize

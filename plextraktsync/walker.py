@@ -1,13 +1,13 @@
 from collections import defaultdict
 from typing import List, NamedTuple
 
-from plexapi.video import Movie, Show, Episode
+from plexapi.video import Episode, Movie, Show
 
 from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.media import Media, MediaFactory
-from plextraktsync.plex_api import PlexApi, PlexLibraryItem, PlexLibrarySection, PlexGuid
+from plextraktsync.plex_api import PlexApi, PlexGuid, PlexLibraryItem, PlexLibrarySection
 from plextraktsync.trakt_api import TraktApi
 
 
