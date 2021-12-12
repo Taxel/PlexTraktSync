@@ -105,7 +105,7 @@ class PlexGuid:
         if not show.isnumeric():
             raise ValueError(f"show_id is not numeric: {show}")
 
-        return int(show)
+        return show
 
     @property
     @memoize
