@@ -9,7 +9,7 @@ verify_ssl = true
 appdirs = "==1.4.4"
 click = "==8.0.3"
 deprecated = "==1.2.13"
-inquirerpy = "==0.3.0"
+inquirerpy = "==0.3.1"
 plexapi = "==4.8.0"
 python-dotenv = "==0.19.2"
 python-git-info = "==0.7.1"
