@@ -350,7 +350,7 @@ class PlexLibraryItem:
 
     def episodes(self):
         for ep in self._get_episodes():
-            yield PlexLibraryItem(ep, self.plex)
+            yield PlexLibraryItem(ep, plex=self.plex)
 
     @nocache
     @rate_limit()
@@ -393,7 +393,7 @@ class PlexLibraryItem:
 
 
 class PlexLibrarySection:
-    def __init__(self, section: LibrarySection, plex=None):
+    def __init__(self, section: LibrarySection, plex: PlexApi = None):
         self.section = section
         self.plex = plex
 
@@ -500,7 +500,7 @@ class PlexApi:
         except NotFound:
             return None
 
-        return PlexLibraryItem(media)
+        return PlexLibraryItem(media, plex=self)
 
     def reload_item(self, pm: PlexLibraryItem):
         self.fetch_item.cache_clear()
@@ -512,7 +512,7 @@ class PlexApi:
     def search(self, title: str, **kwargs):
         result = self.plex.library.search(title, **kwargs)
         for media in result:
-            yield PlexLibraryItem(media)
+            yield PlexLibraryItem(media, plex=self)
 
     @cached_property
     @nocache
