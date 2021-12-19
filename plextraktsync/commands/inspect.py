@@ -75,7 +75,7 @@ def inspect_media(id):
     print(f"Watched on Plex: {m.watched_on_plex}")
     print(f"Watched on Trakt: {m.watched_on_trakt}")
 
-    print("Play history:")
+    print("Plex play history:")
     for h in m.plex_history(device=True, account=True):
         print(f"- {h.viewedAt} by {h.account.name} on {h.device.name} with {h.device.platform}")
 
