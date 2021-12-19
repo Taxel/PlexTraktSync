@@ -7,10 +7,12 @@ from typing import List, Optional, Union
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.library import LibrarySection, MovieSection, ShowSection
+from plexapi.media import VideoStream
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plexapi.video import Episode, Movie, Show
 from trakt.utils import timestamp
 
+from plextraktsync.decorators.flatten import flatten
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
@@ -185,6 +187,18 @@ class PlexLibraryItem:
     @memoize
     def collected_at(self):
         return self.date_value(self.item.addedAt)
+
+    @flatten
+    def streams(self, cls):
+        for media in self.item.media:
+            for part in media.parts:
+                for stream in part.streams:
+                    if isinstance(stream, cls):
+                        yield stream
+
+    @property
+    def video_streams(self):
+        return self.streams(VideoStream)
 
     @property
     @memoize
