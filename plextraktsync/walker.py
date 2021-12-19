@@ -254,7 +254,7 @@ class Walker:
             show = self.mf.resolve_guid(guid)
             if not show:
                 continue
-            me = self.mf.resolve_any(PlexLibraryItem(pe), show.trakt)
+            me = self.mf.resolve_any(PlexLibraryItem(pe, plex=self.plex), show.trakt)
             if not me:
                 continue
 
@@ -275,7 +275,7 @@ class Walker:
     def media_from_items(self, libtype: str, items: List):
         it = self.progressbar(items, desc=f"Processing {libtype}s")
         for m in it:
-            yield PlexLibraryItem(m)
+            yield PlexLibraryItem(m, plex=self.plex)
 
     @deprecated("No longer used")
     def media_from_titles(self, libtype: str, titles: List[str]):
