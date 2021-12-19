@@ -56,9 +56,9 @@ class TraktList():
         if rank is not None:
             self.plex_items.append((rank, plex_item))
             if isinstance(plex_item, Episode):
-                logger.info('Show [{} ({})]: {} added to list {}'.format(plex_item.show().title, plex_item.show().year, plex_item.seasonEpisode, self.name))
+                logger.info(f"Added to list {self.name}: {plex_item.show()}: {plex_item.seasonEpisode}")
             else:
-                logger.info('Movie [{} ({})]: added to list {}'.format(plex_item.title, plex_item.year, self.name))
+                logger.info(f"Added to list {self.name}: {plex_item}")
 
     def updatePlexList(self, plex: PlexApi):
         plex.delete_playlist(self.name)
