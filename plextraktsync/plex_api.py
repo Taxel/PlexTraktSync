@@ -433,27 +433,23 @@ class PlexApi:
     def plex_base_url(self):
         return f"https://app.plex.tv/desktop/#!/server/{self.plex.machineIdentifier}"
 
-    def movie_sections(self, library=None):
-        result = []
+    @flatten_list
+    def movie_sections(self, library=None) -> List[PlexLibrarySection]:
         for section in self.library_sections:
             if not type(section) is MovieSection:
                 continue
             if library and section.title != library:
                 continue
-            result.append(PlexLibrarySection(section))
+            yield PlexLibrarySection(section)
 
-        return result
-
-    def show_sections(self, library=None):
-        result = []
+    @flatten_list
+    def show_sections(self, library=None) -> List[PlexLibrarySection]:
         for section in self.library_sections:
             if not type(section) is ShowSection:
                 continue
             if library and section.title != library:
                 continue
-            result.append(PlexLibrarySection(section))
-
-        return result
+            yield PlexLibrarySection(section)
 
     @memoize
     @nocache
