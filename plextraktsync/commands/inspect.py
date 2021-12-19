@@ -1,4 +1,4 @@
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, quote_plus, urlparse
 
 from plextraktsync.console import print
 from plextraktsync.factory import factory
@@ -54,7 +54,7 @@ def inspect_media(id):
 
         print("Parts:")
         for index, part in enumerate(pm.parts, start=1):
-            print(f"  Part {index}: {part.file}")
+            print(f"  Part {index}: [link=file://{quote_plus(part.file)}]{part.file}[/link]")
 
     print("Guids:")
     for guid in pm.guids:
