@@ -169,6 +169,7 @@ class PlexLibraryItem:
         return self.item.type
 
     @property
+    @nocache
     @rate_limit(retries=1)
     def rating(self):
         if self.item.userRating is None:

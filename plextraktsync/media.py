@@ -90,8 +90,10 @@ class Media:
     def trakt_rating(self):
         if self.trakt.media_type == 'movies':
             rating = self.trakt_api.movie_ratings.get(self.trakt.trakt, None)
-        if self.trakt.media_type == 'episodes':
+        elif self.trakt.media_type == 'episodes':
             rating = self.trakt_api.episode_ratings.get(self.trakt.trakt, None)
+        else:
+            raise RuntimeError(f"Unsupported media type: {self.trakt.media_type}")
         if rating:
             return int(rating)
         return None
