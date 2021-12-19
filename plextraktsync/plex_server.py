@@ -68,7 +68,6 @@ def _get_plex_server():
                 pass
     except Exception as e:
         m = "Plex connection error: {}, fallback url {} didn't respond either.".format(str(e), plex_fallbackurl)
-        pass
     if server is None:
         try:  # 3
             server = PlexServer(token=plex_token, baseurl=plex_fallbackurl)

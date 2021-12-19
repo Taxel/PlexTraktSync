@@ -2,7 +2,6 @@ from plexapi.exceptions import PlexApiException
 from requests import RequestException
 from trakt.errors import TraktException
 
-from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.logging import logger
 from plextraktsync.plex_api import PlexApi, PlexGuid, PlexLibraryItem
 from plextraktsync.trakt_api import TraktApi
