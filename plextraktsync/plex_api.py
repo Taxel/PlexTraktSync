@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Any
 
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
@@ -448,8 +448,12 @@ class PlexApi:
 
     @memoize
     @nocache
-    def fetch_item(self, key: Union[int, str]):
-        media = self.plex.library.fetchItem(key)
+    def fetch_item(self, key: Union[int, str]) -> Optional[PlexLibraryItem]:
+        try:
+            media = self.plex.library.fetchItem(key)
+        except NotFound:
+            return None
+
         return PlexLibraryItem(media)
 
     def reload_item(self, pm: PlexLibraryItem):
