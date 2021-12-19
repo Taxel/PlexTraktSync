@@ -3,7 +3,6 @@ from typing import List, NamedTuple
 
 from plexapi.video import Episode, Movie, Show
 
-from plextraktsync.decorators.deprecated import deprecated
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.media import Media, MediaFactory
@@ -272,13 +271,6 @@ class Walker:
         it = self.progressbar(items, desc=f"Processing {libtype}s")
         for m in it:
             yield PlexLibraryItem(m)
-
-    @deprecated("No longer used")
-    def media_from_titles(self, libtype: str, titles: List[str]):
-        it = self.progressbar(titles, desc=f"Processing {libtype}s")
-        for title in it:
-            search = self.plex.search(title, libtype=libtype)
-            yield from search
 
     def episode_from_show(self, show: Media):
         for pe in show.plex.episodes():
