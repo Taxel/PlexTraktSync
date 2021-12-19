@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import List, Optional, Union, Any
+from typing import Any, List, Optional, Union
 
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.library import LibrarySection, MovieSection, ShowSection
-from plexapi.media import VideoStream, AudioStream, MediaPart
+from plexapi.media import AudioStream, MediaPart, VideoStream
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plexapi.video import Episode, Movie, Show
 from trakt.utils import timestamp

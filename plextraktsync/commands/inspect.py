@@ -5,8 +5,9 @@ from plextraktsync.version import version
 
 
 def print_watched_shows():
-    from plextraktsync.console import console
     from rich.table import Table
+
+    from plextraktsync.console import console
 
     trakt = factory.trakt_api()
 
