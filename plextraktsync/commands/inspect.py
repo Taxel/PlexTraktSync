@@ -5,11 +5,10 @@ from plextraktsync.version import version
 
 
 def print_watched_shows():
-    from rich.console import Console
+    from plextraktsync.console import console
     from rich.table import Table
 
     trakt = factory.trakt_api()
-    console = Console()
 
     table = Table(show_header=True, header_style="bold magenta", title="Watched shows on Trakt")
     table.add_column("Id", style="dim", width=6)
