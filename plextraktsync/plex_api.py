@@ -246,6 +246,20 @@ class PlexLibraryItem:
         Set to uhd_4k, hd_1080p, hd_1080i, hd_720p, sd_480p, sd_480i, sd_576p, or sd_576i.
         """
         try:
+            stream = self.video_streams[0]
+            title = stream.displayTitle.split(' ')[0]
+        except IndexError:
+            title = None
+
+        variants = {
+            '1080p': 'hd_1080p',
+            '720p': 'hd_720p',
+        }
+
+        if title in variants:
+            return variants[title]
+
+        try:
             media = self.item.media[0]
             width = media.width
             assert width is not None
@@ -277,7 +291,7 @@ class PlexLibraryItem:
         Set to dolby_vision, hdr10, hdr10_plus, or hlg
         """
         try:
-            stream = self.item.media[0].parts[0].streams[0]
+            stream = self.video_streams[0]
             colorTrc = stream.colorTrc
         except (AttributeError, IndexError, TypeError):
             return None
