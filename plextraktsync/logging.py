@@ -15,9 +15,9 @@ def initialize():
     log_file = join(log_dir, CONFIG["logging"]["filename"])
 
     # messages with info and above are printed to stdout
-    console_handler = logging.StreamHandler(factory.progressbar())
+    console_handler = factory.console_logger()
     console_handler.terminator = ""
-    console_handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
+    console_handler.setFormatter(logging.Formatter("%(message)s"))
     console_handler.setLevel(logging.INFO)
 
     # file handler can log down to debug messages
