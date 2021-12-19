@@ -77,7 +77,7 @@ def inspect_media(id):
 
     print("Play history:")
     for h in m.plex_history(device=True, account=True):
-        print(f"- {h.viewedAt} by {h.account.name} with {h.device.name} on {h.device.platform}")
+        print(f"- {h.viewedAt} by {h.account.name} on {h.device.name} with {h.device.platform}")
 
 
 @click.command()
