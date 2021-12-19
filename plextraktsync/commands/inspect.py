@@ -46,6 +46,10 @@ def inspect_media(id):
         video = pm.video_streams[0]
         print(f"Video: '{video.codec}'")
 
+        print("Parts:")
+        for index, part in enumerate(pm.parts, start=1):
+            print(f"  Part {index}: {part.file}")
+
     print("Guids:")
     for guid in pm.guids:
         print(f"  Guid: {guid}, Id: {guid.id}, Provider: {guid.provider}")
