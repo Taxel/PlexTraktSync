@@ -191,11 +191,10 @@ class PlexLibraryItem:
 
     @flatten
     def streams(self, cls):
-        for media in self.item.media:
-            for part in media.parts:
-                for stream in part.streams:
-                    if isinstance(stream, cls):
-                        yield stream
+        for part in self.parts:
+            for stream in part.streams:
+                if isinstance(stream, cls):
+                    yield stream
 
     @property
     def audio_streams(self):
