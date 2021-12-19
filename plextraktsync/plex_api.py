@@ -384,6 +384,15 @@ class PlexLibrarySection:
         except NotFound:
             return None
 
+    def find_with_rating(self):
+        filters = {
+            'and': [
+                {'userRating>>': -1},
+            ]
+        }
+
+        return self.section.search(filters=filters)
+
     @nocache
     def find_by_id(self, id: Union[str, int]) -> Optional[Union[Movie, Show, Episode]]:
         try:
