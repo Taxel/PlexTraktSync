@@ -20,27 +20,21 @@ class SyncConfig:
     @property
     @memoize
     def trakt_to_plex(self):
-        if "trakt_to_plex" not in self:
-            return {
-                "watched_status": self["watched_status"],
-                "ratings": self["ratings"],
-                "liked_lists": self["liked_lists"],
-                "watchlist": self["watchlist"],
-            }
-
-        return self["trakt_to_plex"]
+        return {
+            "watched_status": self.get("trakt_to_plex", "watched_status"),
+            "ratings": self.get("trakt_to_plex", "ratings"),
+            "liked_lists": self.get("trakt_to_plex", "liked_lists"),
+            "watchlist": self.get("trakt_to_plex", "watchlist"),
+        }
 
     @property
     @memoize
     def plex_to_trakt(self):
-        if "plex_to_trakt" not in self:
-            return {
-                "watched_status": self["watched_status"],
-                "ratings": self["ratings"],
-                "collection": self["collection"]
-            }
-
-        return self["plex_to_trakt"]
+        return {
+            "watched_status": self.get("plex_to_trakt", "watched_status"),
+            "ratings": self.get("plex_to_trakt", "ratings"),
+            "collection": self.get("plex_to_trakt", "collection"),
+        }
 
     @property
     @memoize
@@ -51,6 +45,9 @@ class SyncConfig:
     @memoize
     def sync_watched_status(self):
         return self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
+
+    def get(self, section, key):
+        return self[key] if key in self else self[section][key]
 
 
 class Sync:
