@@ -1,4 +1,6 @@
-from rich import get_console
+from rich.console import Console
 
-console = get_console()
+from plextraktsync.rich_addons import RichHighlighter
+
+console = Console(highlighter=RichHighlighter())
 print = console.print

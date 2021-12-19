@@ -1,6 +1,7 @@
 from deprecated import deprecated
 
 from plextraktsync.decorators.memoize import memoize
+from plextraktsync.rich_addons import RichHighlighter
 
 
 class Factory:
@@ -120,12 +121,11 @@ class Factory:
 
     @memoize
     def console_logger(self):
-        from rich.highlighter import ReprHighlighter
         from rich.logging import RichHandler
 
         from plextraktsync.console import console
 
-        handler = RichHandler(console=console, show_time=False, show_path=False, highlighter=ReprHighlighter())
+        handler = RichHandler(console=console, show_time=False, show_path=False, highlighter=RichHighlighter())
 
         return handler
 
