@@ -261,11 +261,7 @@ class Walker:
             me.show = show
             yield me
 
-    def media_from_sections(self, sections: List[PlexLibrarySection], titles: List[str] = None):
-        if titles:
-            # Filter by matching section names
-            sections = [x for x in sections if x.title in titles]
-
+    def media_from_sections(self, sections: List[PlexLibrarySection]):
         for section in sections:
             with measure_time(f"{section.title} processed"):
                 total = len(section)
