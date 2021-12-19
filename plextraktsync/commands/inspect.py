@@ -40,7 +40,7 @@ def inspect_media(id):
     print(f"URL: {url}")
 
     media = pm.item
-    print(f"Media.Type: {media.type}")
+    print(f"Media.Type: '{media.type}'")
     print(f"Media.Guid: '{media.guid}'")
     if not pm.is_legacy_agent:
         print(f"Media.Guids: {media.guids}")
@@ -58,7 +58,7 @@ def inspect_media(id):
 
     print("Guids:")
     for guid in pm.guids:
-        print(f"  Guid: {guid}, Id: {guid.id}, Provider: {guid.provider}")
+        print(f"  Guid: {guid}, Id: {guid.id}, Provider: '{guid.provider}'")
 
     print(f"Metadata: {pm.to_json()}")
 
