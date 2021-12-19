@@ -1,6 +1,7 @@
 {
     "log_debug_messages": false,
     "logging": {
+        "debug": false,
         "filename": "plextraktsync.log",
         "append": true
     },
