@@ -277,7 +277,7 @@ class PlexLibraryItem:
         Set to dolby_vision, hdr10, hdr10_plus, or hlg
         """
         try:
-            stream = self.item.media[0].parts[0].streams[0]
+            stream = self.video_streams[0]
             colorTrc = stream.colorTrc
         except (AttributeError, IndexError, TypeError):
             return None
