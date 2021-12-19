@@ -9,6 +9,7 @@
 /dist/
 /docker-compose.override.yml
 /last_update.log
+/plextraktsync.log
 /tests/.env
 /tests/config.json
 /trakt_cache.sqlite
