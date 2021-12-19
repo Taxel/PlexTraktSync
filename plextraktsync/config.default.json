@@ -21,7 +21,7 @@
     },
     "watch": {
         "scrobble_threshold": 80,
-        "username_filter": false
+        "username_filter": true
     },
     "xbmc-providers": {
         "movies": "imdb",
