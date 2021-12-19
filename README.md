@@ -196,7 +196,7 @@ Academy Award Nominees" but might not be ideal for lists that are updated
 often). Here are the execution times on my Plex server: First run - 1228
 seconds, second run - 111 seconds
 
-You can view sync progress in the `last_update.log` file which will be created.
+You can view sync progress in the `plextraktsync.log` file which will be created.
 
 ## Commands
 
