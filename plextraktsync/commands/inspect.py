@@ -1,13 +1,12 @@
 from urllib.parse import parse_qs, urlparse
 
+from plextraktsync.console import print
 from plextraktsync.factory import factory
 from plextraktsync.version import version
 
 
 def print_watched_shows():
     from rich.table import Table
-
-    from plextraktsync.console import console
 
     trakt = factory.trakt_api()
 
@@ -22,7 +21,7 @@ def print_watched_shows():
         slug = f"[link=https://trakt.tv/shows/{progress.slug}]{progress.slug}[/]"
         table.add_row(id, slug, str(len(progress.seasons)))
 
-    console.print(table)
+    print(table)
 
 
 def inspect_media(id):
