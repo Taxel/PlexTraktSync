@@ -40,10 +40,10 @@ def inspect_media(id):
         print(f"Media.Guids: {media.guids}")
 
     if media.type in ["episode", "movie"]:
-        audio = media.media[0].parts[0].audioStreams()[0]
+        audio = pm.audio_streams[0]
         print(f"Audio: '{audio.audioChannelLayout}', '{audio.displayTitle}'")
 
-        video = media.media[0].parts[0].videoStreams()[0]
+        video = pm.video_streams[0]
         print(f"Video: '{video.codec}'")
 
     print("Guids:")
