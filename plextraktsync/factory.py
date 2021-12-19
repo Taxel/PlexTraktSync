@@ -119,6 +119,17 @@ class Factory:
         return w
 
     @memoize
+    def console_logger(self):
+        from rich.highlighter import ReprHighlighter
+        from rich.logging import RichHandler
+
+        from plextraktsync.console import console
+
+        handler = RichHandler(console=console, show_time=False, show_path=False, highlighter=ReprHighlighter())
+
+        return handler
+
+    @memoize
     def config(self):
         from plextraktsync.config import CONFIG
 
