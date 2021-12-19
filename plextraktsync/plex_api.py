@@ -126,7 +126,6 @@ class PlexLibraryItem:
         self.item = item
 
     @property
-    @memoize
     def is_legacy_agent(self):
         return not self.item.guid.startswith('plex://')
 
@@ -170,7 +169,6 @@ class PlexLibraryItem:
         return self.item.type
 
     @property
-    @memoize
     @rate_limit(retries=1)
     def rating(self):
         if self.item.userRating is None:
@@ -179,12 +177,10 @@ class PlexLibraryItem:
         return int(self.item.userRating)
 
     @property
-    @memoize
     def seen_date(self):
         return self.date_value(self.item.lastViewedAt)
 
     @property
-    @memoize
     def collected_at(self):
         return self.date_value(self.item.addedAt)
 
@@ -201,7 +197,6 @@ class PlexLibraryItem:
         return self.streams(VideoStream)
 
     @property
-    @memoize
     def audio_channels(self):
         """
         Set to 1.0, 2.0, 2.1, 3.0, 3.1, 4.1, 5.1, 6.1, 7.1, 9.1, or 10.1
@@ -220,9 +215,7 @@ class PlexLibraryItem:
         return '%.01f' % (channels - 0.9)
 
     @property
-    @memoize
     def audio_codec(self):
-
         try:
             media = self.item.media[0]
             codec = media.audioCodec
@@ -240,7 +233,6 @@ class PlexLibraryItem:
         return None
 
     @property
-    @memoize
     def resolution(self):
         """
         Set to uhd_4k, hd_1080p, hd_1080i, hd_720p, sd_480p, sd_480i, sd_576p, or sd_576i.
@@ -285,7 +277,6 @@ class PlexLibraryItem:
         return 'sd_480p'
 
     @property
-    @memoize
     def hdr(self):
         """
         Set to dolby_vision, hdr10, hdr10_plus, or hlg
@@ -349,7 +340,6 @@ class PlexLibraryItem:
             return f"<{self.item}>"
 
     def to_json(self):
-
         metadata = {
             "collected_at": timestamp(self.collected_at),
             "media_type": "digital",
