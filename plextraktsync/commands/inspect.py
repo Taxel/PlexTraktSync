@@ -26,8 +26,12 @@ def inspect_media(id):
     plex = factory.plex_api()
     mf = factory.media_factory()
 
-    pm = plex.fetch_item(id)
     print("")
+    pm = plex.fetch_item(id)
+    if not pm:
+        print(f"Inspecting {id}: Not found")
+        return
+
     print(f"Inspecting {id}: {pm}")
 
     url = plex.media_url(pm)
