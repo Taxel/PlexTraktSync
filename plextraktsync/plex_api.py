@@ -87,7 +87,7 @@ class PlexGuid:
         return guid[0:2] == "tt" and guid[2:].isnumeric()
 
     def __str__(self):
-        return self.guid
+        return f"<PlexGuid:{self.guid}>"
 
 
 class PlexRatingCollection(dict):

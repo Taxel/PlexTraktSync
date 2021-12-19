@@ -180,9 +180,7 @@ class MediaFactory:
 
     def resolve_guid(self, guid: PlexGuid, show: Media = None):
         if guid.provider in ["local", "none", "agents.none"]:
-            logger.warning(
-                f"{guid.pm.item}: Skipping guid {guid} because provider {guid.provider} has no external Id"
-            )
+            logger.warning(f"{guid.pm.item}: Skipping {guid} because provider {guid.provider} has no external Id")
 
             return None
 
