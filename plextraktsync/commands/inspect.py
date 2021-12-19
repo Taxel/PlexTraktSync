@@ -72,6 +72,8 @@ def inspect_media(id):
         m.show = ms
 
     print(f"Trakt: {m.trakt_url}")
+    print(f"Plex Rating: {m.plex_rating}")
+    print(f"Trakt Rating: {m.trakt_rating}")
     print(f"Watched on Plex: {m.watched_on_plex}")
     print(f"Watched on Trakt: {m.watched_on_trakt}")
 
