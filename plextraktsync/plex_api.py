@@ -339,6 +339,12 @@ class PlexLibraryItem:
         except IndexError:
             return f"<{self.item}>"
 
+    def __rich__(self) -> str:
+        guid = self.guids[0]
+        url = self.plex.media_url(self)
+
+        return f"<[link={url}]{guid.provider}:{guid.id}:{self.item}[/link]>"
+
     def to_json(self):
         metadata = {
             "collected_at": timestamp(self.collected_at),
@@ -431,7 +437,7 @@ class PlexApi:
                 continue
             if library and section.title != library:
                 continue
-            result.append(PlexLibrarySection(section))
+            result.append(PlexLibrarySection(section, plex=self))
 
         return result
 
@@ -442,7 +448,7 @@ class PlexApi:
                 continue
             if library and section.title != library:
                 continue
-            result.append(PlexLibrarySection(section))
+            result.append(PlexLibrarySection(section, plex=self))
 
         return result
 
