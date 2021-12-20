@@ -1,13 +1,16 @@
 import logging
 
 from .factory import factory
-from .path import log_file
 
 
 def initialize():
     CONFIG = factory.config()
     # global log level for all messages
-    log_level = logging.DEBUG if CONFIG['log_debug_messages'] else logging.INFO
+    if ("log_debug_messages" in CONFIG and CONFIG["log_debug_messages"]) or CONFIG["logging"]["debug"]:
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.INFO
+    log_file = CONFIG["logging"]["filename"]
     log_format = '%(asctime)s %(levelname)s:%(message)s'
 
     # messages with info and above are printed to stdout

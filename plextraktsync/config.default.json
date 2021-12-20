@@ -1,7 +1,8 @@
 {
-    "log_debug_messages": false,
     "logging": {
-        "append": false
+        "debug": false,
+        "filename": "plextraktsync.log",
+        "append": true
     },
     "cache": {
         "path": "$PTS_CACHE_DIR/trakt_cache"
