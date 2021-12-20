@@ -12,7 +12,7 @@ from plextraktsync.trakt_api import TraktApi
 
 
 class ScrobblerCollection(dict):
-    def __init__(self, trakt: TraktApi, threshold = 80):
+    def __init__(self, trakt: TraktApi, threshold=80):
         super(dict, self).__init__()
         self.trakt = trakt
         self.threshold = threshold
