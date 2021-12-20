@@ -33,7 +33,6 @@ def initialize():
         from plexapi import log as logger, loghandler
         logger.removeHandler(loghandler)
         logger.setLevel(logging.DEBUG)
-        logger.addHandler(file_handler)
 
 
 initialize()
