@@ -538,6 +538,11 @@ class PlexApi:
     def system_account(self, account_id: int) -> SystemAccount:
         return self.plex.systemAccount(account_id)
 
+    @property
+    @memoize
+    def ratings(self):
+        return PlexRatingCollection(self)
+
     @nocache
     def rate(self, m, rating):
         m.rate(rating)
