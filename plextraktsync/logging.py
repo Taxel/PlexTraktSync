@@ -30,9 +30,9 @@ def initialize():
 
     # Set debug for other components as well
     if log_level == logging.DEBUG:
-        from plexapi import log as logger
+        from plexapi import log as logger, loghandler
+        logger.removeHandler(loghandler)
         logger.setLevel(logging.DEBUG)
-        logger.addHandler(file_handler)
 
 
 initialize()
