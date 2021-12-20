@@ -389,8 +389,9 @@ class PlexLibraryItem:
 
 
 class PlexLibrarySection:
-    def __init__(self, section: LibrarySection):
+    def __init__(self, section: LibrarySection, plex=None):
         self.section = section
+        self.plex = plex
 
     @nocache
     def __len__(self):
@@ -450,7 +451,7 @@ class PlexLibrarySection:
 
     def items(self, max_items: int):
         for item in self.all(max_items):
-            yield PlexLibraryItem(item)
+            yield PlexLibraryItem(item, plex=self.plex)
 
     def __repr__(self):
         return f"<PlexLibrarySection:{self.type}:{self.title}>"
@@ -530,7 +531,7 @@ class PlexApi:
         for section in self.plex.library.sections():
             if section.title in CONFIG["excluded-libraries"]:
                 continue
-            yield section.key, PlexLibrarySection(section)
+            yield section.key, PlexLibrarySection(section, plex=self)
 
     @property
     def library_section_names(self):
