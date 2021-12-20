@@ -141,8 +141,9 @@ class PlexRatingCollection(dict):
 
 
 class PlexLibraryItem:
-    def __init__(self, item: Union[Movie, Show, Episode]):
+    def __init__(self, item: Union[Movie, Show, Episode], plex: PlexApi = None):
         self.item = item
+        self.plex = plex
 
     @property
     def is_legacy_agent(self):
@@ -188,13 +189,20 @@ class PlexLibraryItem:
         return self.item.type
 
     @property
+    @memoize
     @nocache
     @rate_limit(retries=1)
     def rating(self):
-        if self.item.userRating is None:
+        if self.plex is not None:
+            ratings = self.plex.ratings[self.item.librarySectionID]
+            user_rating = ratings[self.item.ratingKey] if self.item.ratingKey in ratings else None
+        else:
+            user_rating = self.item.userRating
+
+        if user_rating is None:
             return None
 
-        return int(self.item.userRating)
+        return int(user_rating)
 
     @property
     def seen_date(self):
