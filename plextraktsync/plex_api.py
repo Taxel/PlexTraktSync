@@ -12,7 +12,7 @@ from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plexapi.video import Episode, Movie, Show
 from trakt.utils import timestamp
 
-from plextraktsync.decorators.flatten import flatten_list
+from plextraktsync.decorators.flatten import flatten_dict, flatten_list
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
@@ -435,7 +435,7 @@ class PlexApi:
 
     @flatten_list
     def movie_sections(self, library=None) -> List[PlexLibrarySection]:
-        for section in self.library_sections:
+        for section in self.library_sections.values():
             if not type(section) is MovieSection:
                 continue
             if library and section.title != library:
@@ -444,7 +444,7 @@ class PlexApi:
 
     @flatten_list
     def show_sections(self, library=None) -> List[PlexLibrarySection]:
-        for section in self.library_sections:
+        for section in self.library_sections.values():
             if not type(section) is ShowSection:
                 continue
             if library and section.title != library:
@@ -488,20 +488,18 @@ class PlexApi:
 
     @property
     @memoize
+    @flatten_dict
     @nocache
-    def library_sections(self):
+    def library_sections(self) -> dict[MovieSection, ShowSection]:
         CONFIG = factory.config()
-        result = []
         for section in self.plex.library.sections():
             if section.title in CONFIG["excluded-libraries"]:
                 continue
-            result.append(section)
-
-        return result
+            yield section.key, section
 
     @property
     def library_section_names(self):
-        return [s.title for s in self.library_sections]
+        return [s.title for s in self.library_sections.values()]
 
     @memoize
     @nocache
