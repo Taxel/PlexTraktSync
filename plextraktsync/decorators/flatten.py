@@ -1,7 +1,7 @@
 from functools import wraps
 
 
-def flatten(method):
+def flatten_list(method):
     @wraps(method)
     def inner(*args):
         return list(method(*args))

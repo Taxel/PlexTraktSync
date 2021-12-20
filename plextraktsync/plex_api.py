@@ -12,7 +12,7 @@ from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plexapi.video import Episode, Movie, Show
 from trakt.utils import timestamp
 
-from plextraktsync.decorators.flatten import flatten
+from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
@@ -190,7 +190,7 @@ class PlexLibraryItem:
         for media in self.item.media:
             yield from media.parts
 
-    @flatten
+    @flatten_list
     def streams(self, cls):
         for part in self.parts:
             for stream in part.streams:
