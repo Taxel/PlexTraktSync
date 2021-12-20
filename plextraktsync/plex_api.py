@@ -468,7 +468,6 @@ class PlexApi:
     def media_url(self, m: PlexLibraryItem):
         return f"{self.plex_base_url}/details?key={m.item.key}"
 
-    @memoize
     def search(self, title: str, **kwargs):
         result = self.plex.library.search(title, **kwargs)
         for media in result:
