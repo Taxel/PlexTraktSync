@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Dict
 
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
@@ -121,9 +121,29 @@ class PlexGuid:
         return self.guid
 
 
+class PlexRatingCollection(dict):
+    def __init__(self, plex: PlexApi):
+        super(dict, self).__init__()
+        self.plex = plex
+
+    def __missing__(self, section_id: int):
+        section = self.plex.library_sections[section_id]
+        ratings = self.ratings(section)
+        self[section_id] = ratings
+
+        return ratings
+
+    @flatten_dict
+    def ratings(self, section: PlexLibrarySection):
+        ratings = section.find_with_rating()
+        for item in ratings:
+            yield item.ratingKey, item.userRating
+
+
 class PlexLibraryItem:
-    def __init__(self, item: Union[Movie, Show, Episode]):
+    def __init__(self, item: Union[Movie, Show, Episode], plex: PlexApi = None):
         self.item = item
+        self.plex = plex
 
     @property
     def is_legacy_agent(self):
@@ -169,13 +189,20 @@ class PlexLibraryItem:
         return self.item.type
 
     @property
+    @memoize
     @nocache
     @rate_limit(retries=1)
     def rating(self):
-        if self.item.userRating is None:
+        if self.plex is not None:
+            ratings = self.plex.ratings[self.item.librarySectionID]
+            user_rating = ratings[self.item.ratingKey] if self.item.ratingKey in ratings else None
+        else:
+            user_rating = self.item.userRating
+
+        if user_rating is None:
             return None
 
-        return int(self.item.userRating)
+        return int(user_rating)
 
     @property
     def seen_date(self):
@@ -362,8 +389,9 @@ class PlexLibraryItem:
 
 
 class PlexLibrarySection:
-    def __init__(self, section: LibrarySection):
+    def __init__(self, section: LibrarySection, plex=None):
         self.section = section
+        self.plex = plex
 
     @nocache
     def __len__(self):
@@ -383,6 +411,15 @@ class PlexLibrarySection:
             return self.section.get(name)
         except NotFound:
             return None
+
+    def find_with_rating(self):
+        filters = {
+            'and': [
+                {'userRating>>': -1},
+            ]
+        }
+
+        return self.section.search(filters=filters)
 
     @nocache
     def find_by_id(self, id: Union[str, int]) -> Optional[Union[Movie, Show, Episode]]:
@@ -414,7 +451,7 @@ class PlexLibrarySection:
 
     def items(self, max_items: int):
         for item in self.all(max_items):
-            yield PlexLibraryItem(item)
+            yield PlexLibraryItem(item, plex=self.plex)
 
     def __repr__(self):
         return f"<PlexLibrarySection:{self.type}:{self.title}>"
@@ -489,12 +526,12 @@ class PlexApi:
     @memoize
     @flatten_dict
     @nocache
-    def library_sections(self) -> dict[PlexLibrarySection[MovieSection, ShowSection]]:
+    def library_sections(self) -> Dict[int, PlexLibrarySection]:
         CONFIG = factory.config()
         for section in self.plex.library.sections():
             if section.title in CONFIG["excluded-libraries"]:
                 continue
-            yield section.key, PlexLibrarySection(section)
+            yield section.key, PlexLibrarySection(section, plex=self)
 
     @property
     def library_section_names(self):
@@ -509,6 +546,11 @@ class PlexApi:
     @nocache
     def system_account(self, account_id: int) -> SystemAccount:
         return self.plex.systemAccount(account_id)
+
+    @property
+    @memoize
+    def ratings(self):
+        return PlexRatingCollection(self)
 
     @nocache
     def rate(self, m, rating):
