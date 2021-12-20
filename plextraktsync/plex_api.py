@@ -121,6 +121,25 @@ class PlexGuid:
         return self.guid
 
 
+class PlexRatingCollection(dict):
+    def __init__(self, plex: PlexApi):
+        super(dict, self).__init__()
+        self.plex = plex
+
+    def __missing__(self, section_id):
+        section = self.plex.library_sections[section_id]
+        ratings = self.ratings(section)
+        self[section_id] = ratings
+
+        return ratings
+
+    @flatten_dict
+    def ratings(self, section: PlexLibrarySection):
+        ratings = section.find_with_rating()
+        for item in ratings:
+            yield item.ratingKey, item.userRating
+
+
 class PlexLibraryItem:
     def __init__(self, item: Union[Movie, Show, Episode]):
         self.item = item
