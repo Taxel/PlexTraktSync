@@ -122,7 +122,7 @@ class PlexGuid:
 
 
 class PlexLibraryItem:
-    def __init__(self, item):
+    def __init__(self, item: Union[Movie, Show, Episode]):
         self.item = item
 
     @property
@@ -385,7 +385,7 @@ class PlexLibrarySection:
             return None
 
     @nocache
-    def find_by_id(self, id: str) -> Optional[Union[Movie, Show, Episode]]:
+    def find_by_id(self, id: Union[str, int]) -> Optional[Union[Movie, Show, Episode]]:
         try:
             return self.section.fetchItem(int(id))
         except NotFound:
