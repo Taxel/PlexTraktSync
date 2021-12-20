@@ -436,20 +436,20 @@ class PlexApi:
     @flatten_list
     def movie_sections(self, library=None) -> List[PlexLibrarySection]:
         for section in self.library_sections.values():
-            if not type(section) is MovieSection:
+            if section.type != "movie":
                 continue
             if library and section.title != library:
                 continue
-            yield PlexLibrarySection(section)
+            yield section
 
     @flatten_list
     def show_sections(self, library=None) -> List[PlexLibrarySection]:
         for section in self.library_sections.values():
-            if not type(section) is ShowSection:
+            if section.type != "show":
                 continue
             if library and section.title != library:
                 continue
-            yield PlexLibrarySection(section)
+            yield section
 
     @memoize
     @nocache
@@ -490,12 +490,12 @@ class PlexApi:
     @memoize
     @flatten_dict
     @nocache
-    def library_sections(self) -> dict[MovieSection, ShowSection]:
+    def library_sections(self) -> dict[PlexLibrarySection[MovieSection, ShowSection]]:
         CONFIG = factory.config()
         for section in self.plex.library.sections():
             if section.title in CONFIG["excluded-libraries"]:
                 continue
-            yield section.key, section
+            yield section.key, PlexLibrarySection(section)
 
     @property
     def library_section_names(self):
