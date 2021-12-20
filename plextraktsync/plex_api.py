@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Dict
 
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
@@ -126,7 +126,7 @@ class PlexRatingCollection(dict):
         super(dict, self).__init__()
         self.plex = plex
 
-    def __missing__(self, section_id):
+    def __missing__(self, section_id: int):
         section = self.plex.library_sections[section_id]
         ratings = self.ratings(section)
         self[section_id] = ratings
@@ -526,7 +526,7 @@ class PlexApi:
     @memoize
     @flatten_dict
     @nocache
-    def library_sections(self) -> dict[PlexLibrarySection[MovieSection, ShowSection]]:
+    def library_sections(self) -> Dict[int, PlexLibrarySection]:
         CONFIG = factory.config()
         for section in self.plex.library.sections():
             if section.title in CONFIG["excluded-libraries"]:
