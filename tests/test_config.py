@@ -1,7 +1,10 @@
 #!/usr/bin/env python3 -m pytest
 from os import environ
+from os.path import join
 
+from plextraktsync.config import Config
 from plextraktsync.factory import factory
+from plextraktsync.sync import SyncConfig
 
 
 def test_config_merge():
@@ -21,6 +24,23 @@ def test_config_merge():
     config.merge(override, config)
     assert config["root"]["key1"] == "value1"
     assert config["root"]["key2"] == "value2"
+
+
+def test_config_merge_real():
+    config = Config()
+    from tests.conftest import MOCK_DATA_DIR
+    config.config_file = join(MOCK_DATA_DIR, "673-config.json")
+
+    assert config["sync"]["plex_to_trakt"]["collection"] is False
+
+
+def test_sync_config():
+    config = Config()
+    from tests.conftest import MOCK_DATA_DIR
+    config.config_file = join(MOCK_DATA_DIR, "673-config.json")
+
+    sync_config = SyncConfig(config)
+    assert sync_config.plex_to_trakt["collection"] is False
 
 
 def test_config():
