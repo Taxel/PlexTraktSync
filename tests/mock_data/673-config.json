@@ -1,0 +1,15 @@
+{
+  "sync": {
+    "trakt_to_plex": {
+      "watched_status": true,
+      "ratings": false,
+      "liked_lists": false,
+      "watchlist": false
+    },
+    "plex_to_trakt": {
+      "watched_status": true,
+      "ratings": false,
+      "collection": false
+    }
+  }
+}
