@@ -4,6 +4,7 @@ from os.path import join
 
 from plextraktsync.config import Config
 from plextraktsync.factory import factory
+from plextraktsync.sync import SyncConfig
 
 
 def test_config_merge():
@@ -31,6 +32,15 @@ def test_config_merge_real():
     config.config_file = join(MOCK_DATA_DIR, "673-config.json")
 
     assert config["sync"]["plex_to_trakt"]["collection"] is False
+
+
+def test_sync_config():
+    config = Config()
+    from tests.conftest import MOCK_DATA_DIR
+    config.config_file = join(MOCK_DATA_DIR, "673-config.json")
+
+    sync_config = SyncConfig(config)
+    assert sync_config.plex_to_trakt["collection"] is False
 
 
 def test_config():
