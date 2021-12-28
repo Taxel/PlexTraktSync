@@ -183,7 +183,7 @@ def login(username: str, password: str):
         except socket.gaierror:
             try:
                 host_ip = check_output("ip -4 route show default | awk '{ print $3 }'", shell=True).decode().rstrip()
-            except:
+            except Exception:
                 host_ip = "172.17.0.1"
         CONFIG["PLEX_FALLBACKURL"] = f"http://{host_ip}:32400"
     else:
