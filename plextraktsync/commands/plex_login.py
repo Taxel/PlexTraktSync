@@ -6,7 +6,7 @@ from subprocess import check_output
 from typing import List
 
 import click
-from click import Choice
+from click import Choice, ClickException
 from plexapi.exceptions import NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
 from plexapi.server import PlexServer
@@ -117,6 +117,9 @@ def choose_server(account: MyPlexAccount):
     while True:
         try:
             server = pick_server(account)
+            if not server:
+                raise ClickException("Unable to find server from Plex account")
+
             # Connect to obtain baseUrl
             click.echo(title(f"Attempting to connect to {server.name}. This may take time and print some errors."))
             click.echo(title("Server connections:"))
