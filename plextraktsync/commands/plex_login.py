@@ -29,6 +29,7 @@ from InquirerPy import get_style, inquirer
 
 style = get_style({"questionmark": "hidden", "question": "ansiyellow", "pointer": "fg:ansiblack bg:ansiyellow", })
 
+
 def myplex_login(username, password):
     while True:
         username = click.prompt(PROMPT_PLEX_USERNAME, type=str, default=username)
