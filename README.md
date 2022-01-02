@@ -8,6 +8,29 @@ unlike the Plex app provided by Trakt.
 
 Note: The PyTrakt API keys are not stored securely, so if you do not want to have a file containing those on your harddrive, you can not use this project.
 
+- [Plex-Trakt-Sync](#plex-trakt-sync)
+  - [Features](#features)
+  - [Pre-requisites](#pre-requisites)
+  - [Installation](#installation)
+    - [pipx](#pipx)
+    - [GitHub](#github)
+      - [GitHub download](#github-download)
+      - [GitHub clone](#github-clone)
+      - [Install dependencies](#install-dependencies)
+    - [Docker Compose](#docker-compose)
+    - [Windows Setup (optional alternative)](#windows-setup-optional-alternative)
+    - [Unraid setup](#unraid-setup)
+  - [Setup](#setup)
+  - [Sync settings](#sync-settings)
+    - [Logging](#logging)
+  - [Commands](#commands)
+    - [Sync](#sync)
+    - [Unmatched](#unmatched)
+    - [Info command](#info-command)
+    - [Watch](#watch)
+      - [Systemd setup](#systemd-setup)
+
+
 **To contribute, please find issues with the [`help-wanted`](https://github.com/Taxel/PlexTraktSync/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label, thank you.**
 
 [python-versions-badge]: https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue
@@ -44,7 +67,7 @@ Installation with [pipx][install-pipx].
 pipx install PlexTraktSync
 ```
 
-to install specific version:
+or, to install specific version:
 
 ```
 pipx install PlexTraktSync==0.15.2 --force
@@ -68,7 +91,11 @@ or check output of [info command](#info-command).
 [appdirs]: https://pypi.org/project/appdirs
 [install-pipx]: https://github.com/pypa/pipx#install-pipx
 
-### GitHub download
+### GitHub
+
+There are two methods for installing from GitHub:
+
+#### GitHub download
 
 - Find the latest release from https://github.com/Taxel/PlexTraktSync/tags
 - Download the `.tar` or `.zip`
@@ -76,7 +103,7 @@ or check output of [info command](#info-command).
 
 Proceed to [Install dependencies](#install-dependencies)
 
-### GitHub clone
+#### GitHub clone
 
 - Find the latest release from https://github.com/Taxel/PlexTraktSync/tags
 - Checkout the release with Git:
@@ -86,9 +113,16 @@ Proceed to [Install dependencies](#install-dependencies)
 
 NOTE: Use released versions, when making bug reports.
 
+To upgrade a GitHub clone, find the latest tag and checkout:
+
+```
+git fetch --tags
+git checkout <tag>
+```
+
 Proceed to [Install dependencies](#install-dependencies)
 
-### Install dependencies
+#### Install dependencies
 
 This applies to [GitHub download](#github-download) and [GitHub clone](#github-clone).
 
@@ -117,7 +151,7 @@ pipenv run plextraktsync
 
 [pipenv]: https://pipenv.pypa.io/
 
-## Docker Compose
+### Docker Compose
 
 You can setup docker compose file like this:
 
@@ -140,6 +174,26 @@ To run `watch` command:
 ```
 docker-compose run --rm plextraktsync watch
 ```
+
+### Windows Setup (optional alternative)
+
+- Download the latest `.zip` release from https://github.com/Taxel/PlexTraktSync/tags
+- Run `setup.bat` to install requirements and create optional shortcuts and routines _(requires Windows 7sp1 - 11)_.
+
+### Unraid setup
+
+Create a Unraid container of PlexTraktSync:
+
+- Go to the Docker section, under "Docker Containers" and click "Add Container".
+  - Click the advanced view to see all of the available parameters.
+  - Leave the template blank/unselected.
+  - Under Name: enter a name for the docker (e.g., PlexTraktSync).
+  - Under Repository: enter `ghcr.io/taxel/plextraktsync:latest` (or whatever tag you want).
+  - Under Extra Parameters: enter `-it` for interactive mode.
+- Click "Apply".
+- The container should start automatically. If not, start it.
+- Enter the console for the container.
+- Enter `python3 -m plextraktsync` to start the credential process described above.
 
 ## Setup
 
@@ -168,11 +222,6 @@ docker-compose run --rm plextraktsync watch
   0 */2 * * * cd ~/path/to/this/repo && python3 -m plextraktsync
   ```
 
-## Windows Setup (optional alternative)
-
-- Download the latest `.zip` release from https://github.com/Taxel/PlexTraktSync/tags
-- Run `setup.bat` to install requirements and create optional shortcuts and routines _(requires Windows 7sp1 - 11)_.
-
 ## Sync settings
 
 To disable parts of the functionality of this software, look no further than
@@ -197,6 +246,12 @@ often). Here are the execution times on my Plex server: First run - 1228
 seconds, second run - 111 seconds
 
 You can view sync progress in the `plextraktsync.log` file which will be created.
+
+### Logging
+
+The logging level by default is `INFO`. This can be changed to DEBUG by editing the "debug" variable in `config.json` to `true`.
+
+By default the logs will append, if you wish to maintain the log of only your last run then edit the "append" variable in `config.json` to `false`.
 
 ## Commands
 
@@ -271,7 +326,7 @@ To restrict scrobbling to your user **only** (recommended), set the following in
 }
 ```
 
-### Systemd setup
+#### Systemd setup
 
 Create a systemd unit so that it scrobbles automatically in the background:
 
@@ -290,18 +345,16 @@ Group=user
 [Install]
 WantedBy=multi-user.target
 ```
+Note, depending on your install method you may need to set your ExecStart command as follows:
 
-### Unraid setup
+```
+ExecStart=/path/to/plextraktsync/plextraktsync.sh watch
+```
 
-Create a Unraid container of PlexTraktSync:
+Following that you will need to enable the service:
 
-- Go to the Docker section, under "Docker Containers" and click "Add Container".
-  - Click the advanced view to see all of the available parameters.
-  - Leave the template blank/unselected.
-  - Under Name: enter a name for the docker (e.g., PlexTraktSync).
-  - Under Repository: enter `ghcr.io/taxel/plextraktsync:latest` (or whatever tag you want).
-  - Under Extra Parameters: enter `-it` for interactive mode.
-- Click "Apply".
-- The container should start automatically. If not, start it.
-- Enter the console for the container.
-- Enter `python3 -m plextraktsync` to start the credential process described above.
+```
+sudo systemctl daemon-reload
+sudo systemctl start PlexTrackSync.service
+sudo systemctl enable PlexTrackSync.service
+```
