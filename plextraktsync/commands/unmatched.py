@@ -12,10 +12,17 @@ from plextraktsync.walker import WalkConfig, Walker
     is_flag=True,
     help="Don't output progress bars"
 )
+@click.option(
+    "--local",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Show only local files (no match in Plex)"
+)
 @click.command()
-def unmatched(no_progress_bar: bool):
+def unmatched(no_progress_bar: bool, local: bool):
     """
-    List media that has no match in Plex
+    List media that has no match in Trakt or Plex
     """
 
     config = factory.run_config().update(progressbar=not no_progress_bar)
@@ -32,11 +39,15 @@ def unmatched(no_progress_bar: bool):
         return
 
     failed = []
-    for pm in walker.get_plex_movies():
-        movie = mf.resolve_any(pm)
-        if not movie:
-            failed.append(pm)
-            continue
+    if local:
+        for pm in walker.get_plex_movies():
+            if pm.guids[0].provider == 'local':
+                failed.append(pm)
+    else:
+        for pm in walker.get_plex_movies():
+            movie = mf.resolve_any(pm)
+            if not movie:
+                failed.append(pm)
 
     for pm in failed:
         p = pm.item
