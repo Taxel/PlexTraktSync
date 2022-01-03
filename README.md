@@ -13,13 +13,10 @@ Note: The PyTrakt API keys are not stored securely, so if you do not want to hav
   - [Pre-requisites](#pre-requisites)
   - [Installation](#installation)
     - [pipx](#pipx)
-    - [GitHub](#github)
-      - [GitHub download](#github-download)
-      - [GitHub clone](#github-clone)
-      - [Install dependencies](#install-dependencies)
     - [Docker Compose](#docker-compose)
     - [Windows Setup (optional alternative)](#windows-setup-optional-alternative)
     - [Unraid setup](#unraid-setup)
+    - [GitHub](#github)
   - [Setup](#setup)
   - [Sync settings](#sync-settings)
     - [Logging](#logging)
@@ -54,10 +51,9 @@ The script is known to work with Python 3.7-3.10 versions.
 ## Installation
 
 - [pipx](#pipx) - _This is the recommended installation method_
-- [GitHub download](#github-download)
-- [GitHub clone](#github-clone)
 - [Docker Compose](#docker-compose)
 - [Windows Setup (optional alternative)](#windows-setup-optional-alternative)
+- [GitHub](#github)
 
 ### pipx
 
@@ -91,65 +87,6 @@ or check output of [info command](#info-command).
 [appdirs]: https://pypi.org/project/appdirs
 [install-pipx]: https://github.com/pypa/pipx#install-pipx
 
-### GitHub
-
-There are two methods for installing from GitHub:
-
-#### GitHub download
-
-- Find the latest release from https://github.com/Taxel/PlexTraktSync/tags
-- Download the `.tar` or `.zip`
-- Extract to `PlexTraktSync` directory
-
-Proceed to [Install dependencies](#install-dependencies)
-
-#### GitHub clone
-
-- Find the latest release from https://github.com/Taxel/PlexTraktSync/tags
-- Checkout the release with Git:
-  ```
-  git clone -b 0.15.0 --depth=1 https://github.com/Taxel/PlexTraktSync
-  ```
-
-NOTE: Use released versions, when making bug reports.
-
-To upgrade a GitHub clone, find the latest tag and checkout:
-
-```
-git fetch --tags
-git checkout <tag>
-```
-
-Proceed to [Install dependencies](#install-dependencies)
-
-#### Install dependencies
-
-This applies to [GitHub download](#github-download) and [GitHub clone](#github-clone).
-
-In the `PlexTraktSync` directory, install the required Python packages:
-```
-python3 -m pip install -r requirements.txt
-```
-
-To run from `PlexTraktSync` directory:
-```
-python3 -m plextraktsync
-```
-
-Or use a wrapper which is able to change directory accordingly:
-```
-/path/to/PlexTraktSync/plextraktsync.sh
-```
-
-*or* alternatively you can use [pipenv]:
-
-```
-python3 -m pip install pipenv
-pipenv install
-pipenv run plextraktsync
-```
-
-[pipenv]: https://pipenv.pypa.io/
 
 ### Docker Compose
 
@@ -194,6 +131,10 @@ Create a Unraid container of PlexTraktSync:
 - The container should start automatically. If not, start it.
 - Enter the console for the container.
 - Enter `python3 -m plextraktsync` to start the credential process described above.
+
+### GitHub
+
+If you wish to install from a specific GitHub tagged release, read the guidance in [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Setup
 
