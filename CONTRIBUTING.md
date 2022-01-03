@@ -41,6 +41,68 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 [issues]: https://github.com/Taxel/PlexTraktSync/issues
 [opening a new issue]: https://github.com/Taxel/PlexTraktSync/issues/new
 
+## GitHub Tags
+
+Releases are made through tags. If you wish to access a download a specific release for testing this can be done in one of two ways:
+
+Note: Development should be done against the main branch and not a specific tag.
+
+### GitHub download
+
+- Find the latest release from https://github.com/Taxel/PlexTraktSync/tags
+- Download the `.tar` or `.zip`
+- Extract to `PlexTraktSync` directory
+
+Proceed to [Install dependencies](#install-dependencies)
+
+### GitHub clone
+
+- Find the latest release from https://github.com/Taxel/PlexTraktSync/tags
+- Checkout the release with Git:
+  ```
+  git clone -b 0.15.0 --depth=1 https://github.com/Taxel/PlexTraktSync
+  ```
+
+NOTE: Use released versions, when making bug reports.
+
+To upgrade a GitHub clone, find the latest tag and checkout:
+
+```
+git fetch --tags
+git checkout <tag>
+```
+
+Proceed to [Install dependencies](#install-dependencies)
+
+### Install dependencies
+
+This applies to [GitHub download](#github-download) and [GitHub clone](#github-clone).
+
+In the `PlexTraktSync` directory, install the required Python packages:
+```
+python3 -m pip install -r requirements.txt
+```
+
+To run from `PlexTraktSync` directory:
+```
+python3 -m plextraktsync
+```
+
+Or use a wrapper which is able to change directory accordingly:
+```
+/path/to/PlexTraktSync/plextraktsync.sh
+```
+
+*or* alternatively you can use [pipenv]:
+
+```
+python3 -m pip install pipenv
+pipenv install
+pipenv run plextraktsync
+```
+
+[pipenv]: https://pipenv.pypa.io/
+
 ## Testing
 
 We use [pytest] for testing.
