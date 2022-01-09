@@ -42,7 +42,7 @@ def myplex_login(username, password):
 
 
 def choose_managed_user(account: MyPlexAccount):
-    users = [u.title for u in account.users() if u.friend]
+    users = [u.title for u in account.users()]
     if not users:
         return None
 
