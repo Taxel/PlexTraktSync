@@ -64,6 +64,9 @@ class Media:
     def add_to_collection(self):
         self.trakt_api.add_to_collection(self.trakt, self.plex)
 
+    def remove_from_collection(self):
+        self.trakt_api.remove_from_library(self.trakt)
+
     @property
     def watched_on_plex(self):
         return self.plex.item.isWatched
