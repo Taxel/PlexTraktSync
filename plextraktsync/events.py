@@ -81,7 +81,21 @@ class StatusNotification(Event):
 
 
 class TimelineEntry(Event):
-    pass
+    @property
+    def state(self):
+        return self["state"]
+
+    @property
+    def item_id(self):
+        return int(self["itemID"])
+
+    @property
+    def metadata_state(self):
+        return self["metadataState"]
+
+    @property
+    def title(self):
+        return self["title"]
 
 
 class EventFactory:
