@@ -27,7 +27,6 @@ Note: The PyTrakt API keys are not stored securely, so if you do not want to hav
     - [Watch](#watch)
       - [Systemd setup](#systemd-setup)
 
-
 **To contribute, please find issues with the [`help-wanted`](https://github.com/Taxel/PlexTraktSync/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label, thank you.**
 
 [python-versions-badge]: https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue
@@ -87,7 +86,6 @@ or check output of [info command](#info-command).
 [appdirs]: https://pypi.org/project/appdirs
 [install-pipx]: https://github.com/pypa/pipx#install-pipx
 
-
 ### Docker Compose
 
 You can setup docker compose file like this:
@@ -134,7 +132,8 @@ Create a Unraid container of PlexTraktSync:
 
 ### GitHub
 
-If you wish to install from a specific GitHub tagged release, read the guidance in [CONTRIBUTING.md](CONTRIBUTING.md)
+Installing from GitHub is considered developer mode and it's documented in
+[CONTRIBUTING.md](CONTRIBUTING.md#checking-out-code).
 
 ## Setup
 

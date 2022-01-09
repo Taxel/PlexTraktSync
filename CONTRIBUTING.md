@@ -41,11 +41,13 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 [issues]: https://github.com/Taxel/PlexTraktSync/issues
 [opening a new issue]: https://github.com/Taxel/PlexTraktSync/issues/new
 
-## GitHub Tags
+## Checking out code
 
-Releases are made through tags. If you wish to access a download a specific release for testing this can be done in one of two ways:
+If you checkout a specific version, this can be done in one of two ways:
+- [GitHub download](#github-download)
+- [Git clone](#git-clone)
 
-Note: Development should be done against the main branch and not a specific tag.
+Note: Development should be done against the `main` branch and not a specific tag.
 
 ### GitHub download
 
@@ -55,7 +57,7 @@ Note: Development should be done against the main branch and not a specific tag.
 
 Proceed to [Install dependencies](#install-dependencies)
 
-### GitHub clone
+### Git clone
 
 - Find the latest release from https://github.com/Taxel/PlexTraktSync/tags
 - Checkout the release with Git:
@@ -63,9 +65,7 @@ Proceed to [Install dependencies](#install-dependencies)
   git clone -b 0.15.0 --depth=1 https://github.com/Taxel/PlexTraktSync
   ```
 
-NOTE: Use released versions, when making bug reports.
-
-To upgrade a GitHub clone, find the latest tag and checkout:
+To switch to a different version, find the latest tag and checkout:
 
 ```
 git fetch --tags
@@ -76,7 +76,7 @@ Proceed to [Install dependencies](#install-dependencies)
 
 ### Install dependencies
 
-This applies to [GitHub download](#github-download) and [GitHub clone](#github-clone).
+This applies to [GitHub download](#github-download) and [Git clone](#git-clone).
 
 In the `PlexTraktSync` directory, install the required Python packages:
 ```

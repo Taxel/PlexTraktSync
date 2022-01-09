@@ -5,15 +5,12 @@ body:
   - type: markdown
     attributes:
       value: |
-        Before you continue reporting the bug, be sure that you use the latest released version:
+        Before you continue reporting the bug, be sure that you are using supported installation method, see
 
+        - https://github.com/Taxel/PlexTraktSync#installation
+
+        You can find latest version from here:
         - https://github.com/Taxel/PlexTraktSync/tags
-
-        Using branch, e.g "main" is not supported, you must use released version when reporting a bug.
-
-        Be sure to use required pip packages matching the release, see
-
-        - https://github.com/Taxel/PlexTraktSync#installing
 
   - type: textarea
     id: description
