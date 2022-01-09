@@ -17,7 +17,7 @@ requests = ">=2.25.1"
 requests-cache = "==0.9.0"
 rich = "==10.16.2"
 tqdm = "==4.62.3"
-trakt = "==3.2.2"
+trakt = "==3.3.0"
 urllib3 = ">=1.26.6"
 websocket-client = "==1.2.3"
 
