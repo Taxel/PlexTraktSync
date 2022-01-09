@@ -44,6 +44,13 @@ def render_xml(data):
     return ElementTree.tostring(root, encoding='utf8').decode('utf8')
 
 
+def render_json(data):
+    from json import loads, dumps
+
+    decoded = loads(data)
+    return dumps(decoded, indent=2)
+
+
 def inspect_url(session: CachedSession, url: str):
     matches = [
         response
@@ -51,11 +58,15 @@ def inspect_url(session: CachedSession, url: str):
         if response.url == url
     ]
     for m in matches:
-        print(f"## {m.url}")
         content_type = m.headers['Content-Type']
-        if content_type[:8] == 'text/xml':
+        if content_type.startswith('text/xml'):
+            print(f"<!-- {m.url} -->")
             print(render_xml(m.content))
+        elif content_type.startswith('application/json'):
+            print(f"// {m.url}")
+            print(render_json(m.content))
         else:
+            print(f"# {content_type}: {m.url}")
             print(m.content)
 
 
