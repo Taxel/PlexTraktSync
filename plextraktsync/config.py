@@ -54,6 +54,11 @@ class Config(dict):
             self.initialize()
         return dict.__getitem__(self, item)
 
+    def __contains__(self, item):
+        if not self.initialized:
+            self.initialize()
+        return dict.__contains__(self, item)
+
     def initialize(self):
         defaults = self.load_json(default_config_file)
         self.update(defaults)
