@@ -524,8 +524,8 @@ class PlexApi:
 
     @property
     @memoize
-    @flatten_dict
     @nocache
+    @flatten_dict
     def library_sections(self) -> Dict[int, PlexLibrarySection]:
         CONFIG = factory.config()
         for section in self.plex.library.sections():
@@ -569,6 +569,7 @@ class PlexApi:
             logger.debug(f"Playlist '{name}' not found, so it could not be deleted")
 
     @nocache
+    @flatten_list
     def history(self, m, device=False, account=False):
         try:
             history = m.history()
