@@ -144,7 +144,7 @@ Installing from GitHub is considered developer mode and it's documented in
   - Enter `urn:ietf:wg:oauth:2.0:oob` as the redirect url
   - You can leave Javascript origins and the Permissions checkboxes blank
 
-- Run `python3 -m plextraktsync`.
+- Run `plextraktsync`, the script will ask for missing credentials
 
 - At first run you will be asked to setup Trakt and Plex access.
 
@@ -158,8 +158,8 @@ Installing from GitHub is considered developer mode and it's documented in
   For example, to run this script in a cronjob every two hours:
 
   ```
-  crontab -e
-  0 */2 * * * cd ~/path/to/this/repo && python3 -m plextraktsync
+  $ crontab -e
+  0 */2 * * * plextraktsync
   ```
 
 ## Sync settings
@@ -201,7 +201,7 @@ The `sync` subcommand supports `--sync=shows` and `--sync=movies` options,
 so you can sync only specific library types.
 
 ```
-➔ python3 -m plextraktsync sync --help
+➔ plextraktsync sync --help
 Usage: plextraktsync sync [OPTIONS]
 
   Perform sync between Plex and Trakt
@@ -217,7 +217,7 @@ You can use `unmatched` command to scan your library and display unmatched movie
 
 Support for unmatched shows is not yet implemented.
 
-`python3 -m plextraktsync unmatched`
+`plextraktsync unmatched`
 
 ### Info command
 
@@ -245,7 +245,7 @@ Server has 2 libraries: ['Movies', 'TV Shows']
 You can use the `watch` command to listen to events from Plex Media Server
 and scrobble plays.
 
-`python3 -m plextraktsync watch`
+`plextraktsync watch`
 
 > What is scrobbling?
 >
