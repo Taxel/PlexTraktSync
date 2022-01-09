@@ -524,8 +524,8 @@ class PlexApi:
 
     @property
     @memoize
-    @flatten_dict
     @nocache
+    @flatten_dict
     def library_sections(self) -> Dict[int, PlexLibrarySection]:
         CONFIG = factory.config()
         for section in self.plex.library.sections():
