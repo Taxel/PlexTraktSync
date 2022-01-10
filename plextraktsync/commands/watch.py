@@ -2,7 +2,7 @@ import click
 
 from plextraktsync.config import Config
 from plextraktsync.events import (ActivityNotification, Error,
-                                  PlaySessionStateNotification)
+                                  PlaySessionStateNotification, TimelineEntry)
 from plextraktsync.factory import factory
 from plextraktsync.listener import WebSocketListener
 from plextraktsync.logging import logging
@@ -49,6 +49,7 @@ class WatchStateUpdater:
         self.mf = mf
         self.logger = logging.getLogger("PlexTraktSync.WatchStateUpdater")
         self.scrobblers = ScrobblerCollection(trakt, config["watch"]["scrobble_threshold"])
+        self.remove_collection = config["watch"]["remove_collection"]
         if config["watch"]["username_filter"]:
             self.username_filter = config["PLEX_USERNAME"]
         else:
@@ -84,6 +85,17 @@ class WatchStateUpdater:
         if not m:
             return
         self.logger.info(f"Activity: {m}: Watched: Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}")
+
+    def on_delete(self, event: TimelineEntry):
+        self.logger.info(f"Deleted {event.title}")
+
+        m = self.find_by_key(event.item_id)
+        if not m:
+            return
+
+        if self.remove_collection:
+            m.remove_from_collection()
+            self.logger.info(f"Removed from Collection: {m}")
 
     def on_play(self, event: PlaySessionStateNotification):
         if not self.can_scrobble(event):
@@ -137,6 +149,7 @@ def watch():
 
     ws.on(PlaySessionStateNotification, updater.on_play, state=["playing", "stopped", "paused"])
     ws.on(ActivityNotification, updater.on_activity, type="library.refresh.items", event=["ended"], progress=100)
+    ws.on(TimelineEntry, updater.on_delete, state=9, metadata_state="deleted")
     ws.on(Error, updater.on_error)
 
     print("Listening for events!")

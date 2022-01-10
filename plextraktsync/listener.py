@@ -44,6 +44,9 @@ class EventDispatcher:
         # test event dictionary items
         if name not in event:
             return False
+        # accept only arrays
+        if not isinstance(value, list):
+            return False
         if event[name] not in value:
             return False
         return True
