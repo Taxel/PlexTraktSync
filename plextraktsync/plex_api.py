@@ -6,7 +6,7 @@ from typing import List, Optional, Union, Dict
 
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
-from plexapi.library import LibrarySection, MovieSection, ShowSection
+from plexapi.library import LibrarySection
 from plexapi.media import AudioStream, MediaPart, VideoStream
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plexapi.video import Episode, Movie, Show
