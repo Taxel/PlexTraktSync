@@ -38,18 +38,13 @@ class EventDispatcher:
 
     @staticmethod
     def match_filter(event, key, match):
-        if hasattr(event, key):
-            # test event property
-            value = getattr(event, key)
-        elif key in event:
-            # test event dictionary items
-            value = event[key]
-        else:
+        if not hasattr(event, key):
             return False
+        value = getattr(event, key)
 
         # check for arrays
-        if isinstance(match, list) and value in match:
-            return True
+        if isinstance(match, list):
+            return value in match
 
         # check for scalars
         return value == match
