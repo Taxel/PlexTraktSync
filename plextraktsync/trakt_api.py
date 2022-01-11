@@ -15,7 +15,7 @@ from trakt.tv import TVEpisode, TVSeason, TVShow
 
 from plextraktsync import pytrakt_extensions
 from plextraktsync.decorators.cached_property import cached_property
-from plextraktsync.decorators.flatten import flatten_dict
+from plextraktsync.decorators.flatten import flatten_dict, flatten_list
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
@@ -142,8 +142,13 @@ class TraktApi:
     @nocache
     @rate_limit()
     @retry()
+    @flatten_list
     def liked_lists(self):
-        return pytrakt_extensions.get_liked_lists()
+        for item in self.me.get_liked_lists("lists", limit=1000):
+            yield {
+                'listname': item['list']['name'],
+                'username': item['list']['user']['ids']['slug'],
+            }
 
     @cached_property
     @nocache
