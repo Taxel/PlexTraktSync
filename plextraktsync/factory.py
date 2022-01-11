@@ -1,4 +1,5 @@
-from plextraktsync.decorators.deprecated import deprecated
+from deprecated import deprecated
+
 from plextraktsync.decorators.memoize import memoize
 
 
