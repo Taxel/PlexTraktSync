@@ -148,7 +148,7 @@ def watch():
     updater = WatchStateUpdater(plex, trakt, mf, config)
 
     ws.on(PlaySessionStateNotification, updater.on_play, state=["playing", "stopped", "paused"])
-    ws.on(ActivityNotification, updater.on_activity, type="library.refresh.items", event=["ended"], progress=100)
+    ws.on(ActivityNotification, updater.on_activity, type="library.refresh.items", event="ended", progress=100)
     ws.on(TimelineEntry, updater.on_delete, state=9, metadata_state="deleted")
     ws.on(Error, updater.on_error)
 
