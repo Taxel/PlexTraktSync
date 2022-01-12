@@ -1,6 +1,8 @@
 import logging
+from os.path import join
 
 from .factory import factory
+from .path import log_dir
 
 
 def initialize():
@@ -10,7 +12,7 @@ def initialize():
         log_level = logging.DEBUG
     else:
         log_level = logging.INFO
-    log_file = CONFIG["logging"]["filename"]
+    log_file = join(log_dir, CONFIG["logging"]["filename"])
     log_format = '%(asctime)s %(levelname)s:%(message)s'
 
     # messages with info and above are printed to stdout
