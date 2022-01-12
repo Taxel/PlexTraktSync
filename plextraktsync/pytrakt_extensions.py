@@ -1,22 +1,4 @@
 from trakt.core import get
-from trakt.tv import TVEpisode
-
-
-class LazyEpisode:
-    def __init__(self, show, season, number, ids):
-        self.show = show
-        self.season = season
-        self.number = number
-        self.ids = ids
-        self._instance = None
-
-    @property
-    def instance(self):
-        if self._instance is None:
-            self._instance = TVEpisode(
-                self.show.title, self.season, number=self.number, **self.ids
-            )
-        return self._instance
 
 
 @get
