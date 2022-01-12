@@ -37,19 +37,17 @@ class EventDispatcher:
             listener["listener"](event)
 
     @staticmethod
-    def match_filter(event, name, value):
-        # test event property
-        if hasattr(event, name) and getattr(event, name) == value:
-            return True
-        # test event dictionary items
-        if name not in event:
+    def match_filter(event, key, match):
+        if not hasattr(event, key):
             return False
-        # accept only arrays
-        if not isinstance(value, list):
-            return False
-        if event[name] not in value:
-            return False
-        return True
+        value = getattr(event, key)
+
+        # check for arrays
+        if isinstance(match, list):
+            return value in match
+
+        # check for scalars
+        return value == match
 
     def match_event(self, listener, event):
         if not isinstance(event, listener["event_type"]):

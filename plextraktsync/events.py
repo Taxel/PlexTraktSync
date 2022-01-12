@@ -41,6 +41,10 @@ class ActivityNotification(Event):
     def key(self):
         return self["Activity"]["Context"]["key"]
 
+    @property
+    def event(self):
+        return self["event"]
+
 
 class BackgroundProcessingQueueEventNotification(Event):
     pass
