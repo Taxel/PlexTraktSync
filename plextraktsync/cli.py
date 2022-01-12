@@ -6,7 +6,7 @@ from plextraktsync.commands.info import info
 from plextraktsync.commands.inspect import inspect
 from plextraktsync.commands.login import login
 from plextraktsync.commands.plex_login import plex_login
-from plextraktsync.commands.self_update import self_update
+from plextraktsync.commands.self_update import self_update, enable_self_update
 from plextraktsync.commands.sync import sync
 from plextraktsync.commands.trakt_login import trakt_login
 from plextraktsync.commands.unmatched import unmatched
@@ -30,7 +30,8 @@ cli.add_command(info)
 cli.add_command(inspect)
 cli.add_command(login)
 cli.add_command(plex_login)
-cli.add_command(self_update)
+if enable_self_update():
+    cli.add_command(self_update)
 cli.add_command(sync)
 cli.add_command(trakt_login)
 cli.add_command(unmatched)
