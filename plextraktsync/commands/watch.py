@@ -50,6 +50,7 @@ class WatchStateUpdater:
         self.logger = logging.getLogger("PlexTraktSync.WatchStateUpdater")
         self.scrobblers = ScrobblerCollection(trakt, config["watch"]["scrobble_threshold"])
         self.remove_collection = config["watch"]["remove_collection"]
+        self.add_collection = config["watch"]["add_collection"]
         if config["watch"]["username_filter"]:
             self.username_filter = config["PLEX_USERNAME"]
         else:
@@ -84,7 +85,12 @@ class WatchStateUpdater:
         m = self.find_by_key(activity.key, reload=True)
         if not m:
             return
-        self.logger.info(f"Activity: {m}: Watched: Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}")
+        self.logger.info(f"Activity: {m}: Watched: [Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}]")
+
+        if self.add_collection and not m.is_collected:
+            self.logger.info(f"Add to collection: {m}")
+            m.add_to_collection()
+            self.trakt.flush()
 
     def on_delete(self, event: TimelineEntry):
         self.logger.info(f"Deleted {event.title}")
