@@ -6,7 +6,7 @@ from plextraktsync.commands.info import info
 from plextraktsync.commands.inspect import inspect
 from plextraktsync.commands.login import login
 from plextraktsync.commands.plex_login import plex_login
-from plextraktsync.commands.self_update import self_update, enable_self_update
+from plextraktsync.commands.self_update import enable_self_update, self_update
 from plextraktsync.commands.sync import sync
 from plextraktsync.commands.trakt_login import trakt_login
 from plextraktsync.commands.unmatched import unmatched

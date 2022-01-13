@@ -45,7 +45,7 @@ def render_xml(data):
 
 
 def render_json(data):
-    from json import loads, dumps
+    from json import dumps, loads
 
     decoded = loads(data)
     return dumps(decoded, indent=2)

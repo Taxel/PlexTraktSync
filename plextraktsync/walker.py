@@ -6,7 +6,8 @@ from plexapi.video import Episode, Movie, Show
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.media import Media, MediaFactory
-from plextraktsync.plex_api import PlexApi, PlexGuid, PlexLibraryItem, PlexLibrarySection
+from plextraktsync.plex_api import (PlexApi, PlexGuid, PlexLibraryItem,
+                                    PlexLibrarySection)
 from plextraktsync.trakt_api import TraktApi
 
 

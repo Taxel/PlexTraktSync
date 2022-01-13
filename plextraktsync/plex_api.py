@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 import re
-from typing import List, Optional, Union, Dict
+from typing import Dict, List, Optional, Union
 
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized

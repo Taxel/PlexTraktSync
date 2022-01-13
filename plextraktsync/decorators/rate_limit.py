@@ -2,7 +2,8 @@ from functools import wraps
 from time import sleep
 
 from requests import RequestException
-from trakt.errors import RateLimitException, TraktInternalException, LockedUserAccountException
+from trakt.errors import (LockedUserAccountException, RateLimitException,
+                          TraktInternalException)
 
 from plextraktsync.logging import logger
 
