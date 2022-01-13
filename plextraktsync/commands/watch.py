@@ -85,7 +85,7 @@ class WatchStateUpdater:
         m = self.find_by_key(activity.key, reload=True)
         if not m:
             return
-        self.logger.info(f"Activity: {m}: Watched: [Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}]")
+        self.logger.info(f"Activity: {m}: Collected: {m.is_collected}, Watched: [Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}]")
 
         if self.add_collection and not m.is_collected:
             self.logger.info(f"Add to collection: {m}")
