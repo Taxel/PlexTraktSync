@@ -77,6 +77,13 @@ class Media:
     def remove_from_collection(self):
         self.trakt_api.remove_from_library(self.trakt)
 
+    @cached_property
+    def seasons(self):
+        if self.media_type != "shows":
+            raise RuntimeError(f"seasons: Unsupported media type: {self.media_type}")
+
+        return self.trakt_api.lookup(self.trakt)
+
     @property
     def watched_on_plex(self):
         return self.plex.item.isWatched
