@@ -3,8 +3,8 @@ from typing import List, NamedTuple
 
 from plexapi.video import Episode, Movie, Show
 
+from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.measure_time import measure_time
-from plextraktsync.decorators.memoize import memoize
 from plextraktsync.media import Media, MediaFactory
 from plextraktsync.plex_api import (PlexApi, PlexGuid, PlexLibraryItem,
                                     PlexLibrarySection)
@@ -186,8 +186,7 @@ class Walker:
         self.mf = mf
         self.config = config
 
-    @property
-    @memoize
+    @cached_property
     def plan(self):
         return WalkPlanner(self.plex, self.config).plan()
 
