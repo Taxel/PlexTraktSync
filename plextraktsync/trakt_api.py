@@ -5,6 +5,7 @@ import trakt
 import trakt.movies
 import trakt.sync
 import trakt.users
+from deprecated import deprecated
 from trakt.errors import ForbiddenException, OAuthException
 from trakt.movies import Movie
 from trakt.sync import Scrobbler
@@ -157,6 +158,7 @@ class TraktApi:
     @cached_property
     @nocache
     @rate_limit()
+    @deprecated("Use .ratings directly")
     def movie_ratings(self):
         ratings = {}
         for r in self.me.get_ratings(media_type='movies'):
@@ -166,6 +168,7 @@ class TraktApi:
     @cached_property
     @nocache
     @rate_limit()
+    @deprecated("Use .ratings directly")
     def show_ratings(self):
         ratings = {}
         for r in self.me.get_ratings(media_type='shows'):
@@ -175,6 +178,7 @@ class TraktApi:
     @cached_property
     @nocache
     @rate_limit()
+    @deprecated("Use .ratings directly")
     def episode_ratings(self):
         ratings = {}
         for r in self.me.get_ratings(media_type='episodes'):
