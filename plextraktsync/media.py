@@ -1,3 +1,5 @@
+from typing import Optional
+
 from plexapi.exceptions import PlexApiException
 from requests import RequestException
 from trakt.errors import TraktException
@@ -12,6 +14,7 @@ class Media:
     """
     Class containing Plex and Trakt media items (Movie, Episode)
     """
+    show: Optional['Media']
 
     def __init__(self, plex, trakt, plex_api: PlexApi = None, trakt_api: TraktApi = None):
         self.plex_api = plex_api
