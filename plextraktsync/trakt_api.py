@@ -11,6 +11,7 @@ from trakt.sync import Scrobbler
 from trakt.tv import TVEpisode, TVSeason, TVShow
 
 from plextraktsync import pytrakt_extensions
+from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
@@ -69,8 +70,7 @@ class TraktApi:
 
         return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     @rate_limit()
     def me(self):
@@ -80,15 +80,13 @@ class TraktApi:
             logger.fatal("Trakt authentication error: {}".format(str(e)))
             raise e
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     @rate_limit()
     def liked_lists(self):
         return pytrakt_extensions.get_liked_lists()
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     @rate_limit()
     def watched_movies(self):
@@ -96,15 +94,13 @@ class TraktApi:
             map(lambda m: m.trakt, self.me.watched_movies)
         )
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     @rate_limit()
     def movie_collection(self):
         return self.me.movie_collection
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     @rate_limit()
     def show_collection(self):
@@ -118,29 +114,25 @@ class TraktApi:
             raise ValueError("Must be valid media type")
         media.remove_from_library()
 
-    @property
-    @memoize
+    @cached_property
     def movie_collection_set(self):
         return set(
             map(lambda m: m.trakt, self.movie_collection)
         )
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     @rate_limit()
     def watched_shows(self):
         return pytrakt_extensions.allwatched()
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     @rate_limit()
     def watchlist_movies(self):
         return self.me.watchlist_movies
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     @rate_limit()
     def movie_ratings(self):
@@ -149,8 +141,7 @@ class TraktApi:
             ratings[r['movie']['ids']['trakt']] = r['rating']
         return ratings
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     @rate_limit()
     def episode_ratings(self):

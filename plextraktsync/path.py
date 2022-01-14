@@ -2,7 +2,7 @@ import site
 from os import getenv, makedirs
 from os.path import abspath, dirname, exists, join
 
-from plextraktsync.decorators.memoize import memoize
+from plextraktsync.decorators.cached_property import cached_property
 
 
 class Path:
@@ -21,33 +21,28 @@ class Path:
         self.env_file = join(self.config_dir, ".env")
         self.log_file = join(self.log_dir, "last_update.log")
 
-    @property
-    @memoize
+    @cached_property
     def config_dir(self):
         d = self.app_dir.user_config_dir if self.installed else self.app_path
         return getenv("PTS_CONFIG_DIR", d)
 
-    @property
-    @memoize
+    @cached_property
     def cache_dir(self):
         d = self.app_dir.user_cache_dir if self.installed else self.app_path
         return getenv("PTS_CACHE_DIR", d)
 
-    @property
-    @memoize
+    @cached_property
     def log_dir(self):
         d = self.app_dir.user_log_dir if self.installed else self.app_path
         return getenv("PTS_LOG_DIR", d)
 
-    @property
-    @memoize
+    @cached_property
     def app_dir(self):
         from appdirs import AppDirs
 
         return AppDirs(self.app_name)
 
-    @property
-    @memoize
+    @cached_property
     def installed(self):
         """
         Return true if this package is installed to site-packages

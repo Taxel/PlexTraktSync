@@ -12,6 +12,7 @@ from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plexapi.video import Episode, Movie, Show
 from trakt.utils import timestamp
 
+from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_dict, flatten_list
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.nocache import nocache
@@ -52,13 +53,11 @@ class PlexGuid:
         self.type = type
         self.pm = pm
 
-    @property
-    @memoize
+    @cached_property
     def media_type(self):
         return f"{self.type}s"
 
-    @property
-    @memoize
+    @cached_property
     def provider(self):
         if self.guid_is_imdb_legacy:
             return "imdb"
@@ -76,8 +75,7 @@ class PlexGuid:
 
         return x
 
-    @property
-    @memoize
+    @cached_property
     def id(self):
         if self.guid_is_imdb_legacy:
             return self.guid
@@ -85,8 +83,7 @@ class PlexGuid:
         x = x.split("?")[0]
         return x
 
-    @property
-    @memoize
+    @cached_property
     def is_episode(self):
         """
         Return true of the id is in form of <show>/<season>/<episode>
@@ -97,8 +94,7 @@ class PlexGuid:
 
         return False
 
-    @property
-    @memoize
+    @cached_property
     def show_id(self):
         if not self.is_episode:
             raise ValueError("show_id is not valid for non-episodes")
@@ -109,8 +105,7 @@ class PlexGuid:
 
         return show
 
-    @property
-    @memoize
+    @cached_property
     def guid_is_imdb_legacy(self):
         guid = self.guid
 
@@ -154,8 +149,7 @@ class PlexLibraryItem:
     def get_guids(self):
         return self.item.guids
 
-    @property
-    @memoize
+    @cached_property
     def guids(self):
         # return early if legacy agent
         # accessing .guids for legacy agent
@@ -178,18 +172,15 @@ class PlexLibraryItem:
         ordered = sorted(guids, key=lambda guid: sort_order[guid.provider])
         return ordered
 
-    @property
-    @memoize
+    @cached_property
     def media_type(self):
         return f"{self.type}s"
 
-    @property
-    @memoize
+    @cached_property
     def type(self):
         return self.item.type
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     @rate_limit(retries=1)
     def rating(self):
@@ -351,13 +342,11 @@ class PlexLibraryItem:
     def _get_episodes(self):
         return self.item.episodes()
 
-    @property
-    @memoize
+    @cached_property
     def season_number(self):
         return self.item.seasonNumber
 
-    @property
-    @memoize
+    @cached_property
     def episode_number(self):
         return self.item.index
 
@@ -465,8 +454,7 @@ class PlexApi:
     def __init__(self, plex: PlexServer):
         self.plex = plex
 
-    @property
-    @memoize
+    @cached_property
     def plex_base_url(self):
         return f"https://app.plex.tv/desktop/#!/server/{self.plex.machineIdentifier}"
 
@@ -510,20 +498,17 @@ class PlexApi:
         for media in result:
             yield PlexLibraryItem(media)
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     def version(self):
         return self.plex.version
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     def updated_at(self):
         return self.plex.updatedAt
 
-    @property
-    @memoize
+    @cached_property
     @nocache
     @flatten_dict
     def library_sections(self) -> Dict[int, PlexLibrarySection]:
@@ -547,8 +532,7 @@ class PlexApi:
     def system_account(self, account_id: int) -> SystemAccount:
         return self.plex.systemAccount(account_id)
 
-    @property
-    @memoize
+    @cached_property
     def ratings(self):
         return PlexRatingCollection(self)
 

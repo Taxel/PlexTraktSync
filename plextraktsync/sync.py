@@ -1,6 +1,6 @@
 from plextraktsync.config import Config
+from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.measure_time import measure_time
-from plextraktsync.decorators.memoize import memoize
 from plextraktsync.logging import logger
 from plextraktsync.media import Media
 from plextraktsync.trakt_list_util import TraktListUtil
@@ -17,8 +17,7 @@ class SyncConfig:
     def __contains__(self, key):
         return key in self.config
 
-    @property
-    @memoize
+    @cached_property
     def trakt_to_plex(self):
         return {
             "watched_status": self.get("trakt_to_plex", "watched_status"),
@@ -27,8 +26,7 @@ class SyncConfig:
             "watchlist": self.get("trakt_to_plex", "watchlist"),
         }
 
-    @property
-    @memoize
+    @cached_property
     def plex_to_trakt(self):
         return {
             "watched_status": self.get("plex_to_trakt", "watched_status"),
@@ -36,13 +34,11 @@ class SyncConfig:
             "collection": self.get("plex_to_trakt", "collection"),
         }
 
-    @property
-    @memoize
+    @cached_property
     def sync_ratings(self):
         return self.trakt_to_plex["ratings"] or self.plex_to_trakt["ratings"]
 
-    @property
-    @memoize
+    @cached_property
     def sync_watched_status(self):
         return self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
 
