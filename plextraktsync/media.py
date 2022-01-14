@@ -23,6 +23,10 @@ class Media:
         self.trakt = trakt
         self.show = None
 
+    @cached_property
+    def media_type(self):
+        return self.trakt.media_type
+
     @property
     def season_number(self):
         return self.plex.season_number
