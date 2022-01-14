@@ -232,7 +232,6 @@ class TraktApi:
     def collected(self, tm: TVShow):
         return pytrakt_extensions.collected(tm.trakt)
 
-    @memoize
     @nocache
     @rate_limit()
     def lookup(self, tm: TVShow):
@@ -245,7 +244,9 @@ class TraktApi:
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
             ts = self.search_by_id(guid.show_id, id_type=guid.provider, media_type="show")
-            return self.find_episode_guid(ts, guid)
+            lookup = self.lookup(ts)
+
+            return self.find_episode_guid(guid, lookup)
 
         return self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
 
@@ -293,11 +294,10 @@ class TraktApi:
         # must be shorter than 12 numbers
         return len(media_id) < 12
 
-    def find_episode_guid(self, tm: TVShow, guid: PlexGuid, lookup=None):
+    def find_episode_guid(self, guid: PlexGuid, lookup):
         """
         Find Trakt Episode from Guid of Plex Episode
         """
-        lookup = lookup if lookup else self.lookup(tm)
         try:
             return lookup[guid.pm.season_number][guid.pm.episode_number].instance
         except KeyError:

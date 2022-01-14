@@ -142,7 +142,7 @@ class MediaFactory:
         self.plex = plex
         self.trakt = trakt
 
-    def resolve_any(self, pm: PlexLibraryItem, tm=None):
+    def resolve_any(self, pm: PlexLibraryItem, show: Media = None):
         try:
             guids = pm.guids
         except (PlexApiException, RequestException) as e:
@@ -150,13 +150,13 @@ class MediaFactory:
             return None
 
         for guid in guids:
-            m = self.resolve_guid(guid, tm)
+            m = self.resolve_guid(guid, show)
             if m:
                 return m
 
         return None
 
-    def resolve_guid(self, guid: PlexGuid, tm=None):
+    def resolve_guid(self, guid: PlexGuid, show: Media = None):
         if guid.provider in ["local", "none", "agents.none"]:
             logger.warning(f"{guid.pm.item}: Skipping guid {guid} because provider {guid.provider} has no external Id")
 
@@ -169,8 +169,8 @@ class MediaFactory:
             return None
 
         try:
-            if tm:
-                tm = self.trakt.find_episode_guid(tm, guid)
+            if show:
+                tm = self.trakt.find_episode_guid(guid, show.seasons)
             else:
                 tm = self.trakt.find_by_guid(guid)
         except (TraktException, RequestException) as e:
