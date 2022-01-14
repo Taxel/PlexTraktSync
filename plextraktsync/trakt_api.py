@@ -142,6 +142,15 @@ class TraktApi:
     @cached_property
     @nocache
     @rate_limit()
+    def show_ratings(self):
+        ratings = {}
+        for r in self.me.get_ratings(media_type='shows'):
+            ratings[r['show']['ids']['trakt']] = r['rating']
+        return ratings
+
+    @cached_property
+    @nocache
+    @rate_limit()
     def episode_ratings(self):
         ratings = {}
         for r in self.me.get_ratings(media_type='episodes'):
