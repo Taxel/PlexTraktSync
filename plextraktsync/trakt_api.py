@@ -1,9 +1,11 @@
+from __future__ import annotations
 from typing import Union
 
 import trakt
 import trakt.movies
 import trakt.sync
 import trakt.users
+from deprecated import deprecated
 from trakt.errors import ForbiddenException, OAuthException
 from trakt.movies import Movie
 from trakt.sync import Scrobbler
@@ -11,6 +13,7 @@ from trakt.tv import TVEpisode, TVSeason, TVShow
 
 from plextraktsync import pytrakt_extensions
 from plextraktsync.decorators.cached_property import cached_property
+from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
@@ -50,6 +53,24 @@ class ScrobblerProxy:
             self.scrobbler.stop()
         else:
             self.scrobbler.pause()
+
+
+class TraktRatingCollection(dict):
+    def __init__(self, trakt: TraktApi):
+        super(dict, self).__init__()
+        self.trakt = trakt
+
+    def __missing__(self, media_type: str):
+        ratings = self.ratings(media_type)
+        self[media_type] = ratings
+
+        return ratings
+
+    @flatten_dict
+    def ratings(self, media_type: str):
+        index = media_type.rstrip('s')
+        for r in self.trakt.me.get_ratings(media_type):
+            yield r[index]['ids']['trakt'], r['rating']
 
 
 class TraktApi:
@@ -131,8 +152,13 @@ class TraktApi:
         return self.me.watchlist_movies
 
     @cached_property
+    def ratings(self):
+        return TraktRatingCollection(self)
+
+    @cached_property
     @nocache
     @rate_limit()
+    @deprecated("Use .ratings directly")
     def movie_ratings(self):
         ratings = {}
         for r in self.me.get_ratings(media_type='movies'):
@@ -142,6 +168,17 @@ class TraktApi:
     @cached_property
     @nocache
     @rate_limit()
+    @deprecated("Use .ratings directly")
+    def show_ratings(self):
+        ratings = {}
+        for r in self.me.get_ratings(media_type='shows'):
+            ratings[r['show']['ids']['trakt']] = r['rating']
+        return ratings
+
+    @cached_property
+    @nocache
+    @rate_limit()
+    @deprecated("Use .ratings directly")
     def episode_ratings(self):
         ratings = {}
         for r in self.me.get_ratings(media_type='episodes'):
