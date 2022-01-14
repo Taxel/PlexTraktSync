@@ -2,6 +2,7 @@ from plexapi.exceptions import PlexApiException
 from requests import RequestException
 from trakt.errors import TraktException
 
+from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.logging import logger
 from plextraktsync.plex_api import PlexApi, PlexGuid, PlexLibraryItem
 from plextraktsync.trakt_api import TraktApi
@@ -45,11 +46,11 @@ class Media:
             raise RuntimeError(f"Unexpected call: episode without show property")
         return self.show.trakt_id
 
-    @property
+    @cached_property
     def is_movie(self):
         return self.plex.type == "movie"
 
-    @property
+    @cached_property
     def is_episode(self):
         return self.plex.type == "episode"
 
