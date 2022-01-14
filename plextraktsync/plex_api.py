@@ -335,7 +335,7 @@ class PlexLibraryItem:
 
     def episodes(self):
         for ep in self._get_episodes():
-            yield PlexLibraryItem(ep)
+            yield PlexLibraryItem(ep, self.plex)
 
     @nocache
     @rate_limit()
