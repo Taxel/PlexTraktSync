@@ -249,7 +249,7 @@ class Walker:
     def walk_shows(self, shows: set[Media], title="Processing Shows"):
         if not shows:
             return
-        return self.progressbar(shows, desc=title)
+        yield from self.progressbar(shows, desc=title)
 
     def get_plex_episodes(self, episodes):
         it = self.progressbar(episodes, desc=f"Processing episodes")
