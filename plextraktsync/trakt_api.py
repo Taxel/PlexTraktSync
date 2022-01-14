@@ -226,7 +226,6 @@ class TraktApi:
 
         self.batch.add_to_collection(m.media_type, item)
 
-    @memoize
     @nocache
     @rate_limit()
     def collected(self, tm: TVShow):
