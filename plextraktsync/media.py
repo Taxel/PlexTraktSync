@@ -23,6 +23,10 @@ class Media:
         self.trakt = trakt
         self.show = None
 
+    @cached_property
+    def media_type(self):
+        return self.trakt.media_type
+
     @property
     def season_number(self):
         return self.plex.season_number
@@ -31,7 +35,7 @@ class Media:
     def episode_number(self):
         return self.plex.episode_number
 
-    @property
+    @cached_property
     def trakt_id(self):
         return self.trakt.trakt
 
@@ -41,7 +45,7 @@ class Media:
 
     @property
     def trakt_url(self):
-        return f"https://trakt.tv/{self.trakt.media_type}/{self.trakt_id}"
+        return f"https://trakt.tv/{self.media_type}/{self.trakt_id}"
 
     @property
     def show_trakt_id(self):
@@ -62,7 +66,7 @@ class Media:
         if self.is_movie:
             return self.trakt_id in self.trakt_api.movie_collection_set
         elif not self.is_episode:
-            raise RuntimeError(f"is_collected: Unsupported media type: {self.trakt.media_type}")
+            raise RuntimeError(f"is_collected: Unsupported media type: {self.media_type}")
 
         collected = self.trakt_api.collected(self.show.trakt)
         return collected.get_completed(self.season_number, self.episode_number)
@@ -82,7 +86,7 @@ class Media:
         if self.is_movie:
             return self.trakt_id in self.trakt_api.watched_movies
         elif not self.is_episode:
-            raise RuntimeError(f"watched_on_trakt: Unsupported media type: {self.trakt.media_type}")
+            raise RuntimeError(f"watched_on_trakt: Unsupported media type: {self.media_type}")
 
         watched = self.trakt_api.watched_shows
         return watched.get_completed(self.show_trakt_id, self.season_number, self.episode_number)
@@ -93,19 +97,19 @@ class Media:
         elif self.is_episode:
             self.trakt_api.mark_watched(self.trakt, self.plex.seen_date, self.show_trakt_id)
         else:
-            raise RuntimeError(f"mark_watched_trakt: Unsupported media type: {self.trakt.media_type}")
+            raise RuntimeError(f"mark_watched_trakt: Unsupported media type: {self.media_type}")
 
     def mark_watched_plex(self):
         self.plex_api.mark_watched(self.plex.item)
 
     @property
     def trakt_rating(self):
-        if self.trakt.media_type == 'movies':
-            rating = self.trakt_api.movie_ratings.get(self.trakt.trakt, None)
-        elif self.trakt.media_type == 'episodes':
-            rating = self.trakt_api.episode_ratings.get(self.trakt.trakt, None)
+        if self.media_type == 'movies':
+            rating = self.trakt_api.movie_ratings.get(self.trakt_id, None)
+        elif self.media_type == 'episodes':
+            rating = self.trakt_api.episode_ratings.get(self.trakt_id, None)
         else:
-            raise RuntimeError(f"trakt_rating: Unsupported media type: {self.trakt.media_type}")
+            raise RuntimeError(f"trakt_rating: Unsupported media type: {self.media_type}")
         if rating:
             return int(rating)
         return None
