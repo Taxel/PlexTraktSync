@@ -166,8 +166,10 @@ class TraktApi:
         m.mark_as_seen(time)
         if m.media_type == "movies":
             self.watched_movies.add(m.trakt)
-        if m.media_type == "episodes" and show_trakt_id:
+        elif m.media_type == "episodes" and show_trakt_id:
             self.watched_shows.add(show_trakt_id, m.season, m.number)
+        else:
+            raise RuntimeError(f"mark_watched: Unsupported media type: {m.media_type}")
 
     def add_to_collection(self, m, pm: PlexLibraryItem):
         if m.media_type == "movies":
