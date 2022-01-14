@@ -4,7 +4,6 @@ import trakt
 import trakt.movies
 import trakt.sync
 import trakt.users
-from trakt.core import load_config
 from trakt.errors import ForbiddenException, OAuthException
 from trakt.movies import Movie
 from trakt.sync import Scrobbler
@@ -62,7 +61,6 @@ class TraktApi:
         self.batch = TraktBatch(self, batch_size=batch_size)
         trakt.core.CONFIG_PATH = pytrakt_file
         trakt.core.session = factory.session()
-        load_config()
 
     @staticmethod
     def device_auth(client_id: str, client_secret: str):
