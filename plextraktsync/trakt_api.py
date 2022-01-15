@@ -239,7 +239,6 @@ class TraktApi:
         """
         return pytrakt_extensions.lookup_table(tm)
 
-    @memoize
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
             ts = self.search_by_id(guid.show_id, id_type=guid.provider, media_type="show")
