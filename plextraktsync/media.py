@@ -68,14 +68,28 @@ class Media:
         elif not self.is_episode:
             raise RuntimeError(f"is_collected: Unsupported media type: {self.media_type}")
 
-        collected = self.trakt_api.collected(self.show.trakt)
+        collected = self.show.collected
         return collected.get_completed(self.season_number, self.episode_number)
+
+    @cached_property
+    def collected(self):
+        if self.media_type != "shows":
+            raise RuntimeError(f"show_collected: Unsupported media type: {self.media_type}")
+
+        return self.trakt_api.collected(self.trakt)
 
     def add_to_collection(self):
         self.trakt_api.add_to_collection(self.trakt, self.plex)
 
     def remove_from_collection(self):
         self.trakt_api.remove_from_library(self.trakt)
+
+    @cached_property
+    def seasons(self):
+        if self.media_type != "shows":
+            raise RuntimeError(f"seasons: Unsupported media type: {self.media_type}")
+
+        return self.trakt_api.lookup(self.trakt)
 
     @property
     def watched_on_plex(self):
@@ -135,7 +149,7 @@ class MediaFactory:
         self.plex = plex
         self.trakt = trakt
 
-    def resolve_any(self, pm: PlexLibraryItem, tm=None):
+    def resolve_any(self, pm: PlexLibraryItem, show: Media = None):
         try:
             guids = pm.guids
         except (PlexApiException, RequestException) as e:
@@ -143,13 +157,13 @@ class MediaFactory:
             return None
 
         for guid in guids:
-            m = self.resolve_guid(guid, tm)
+            m = self.resolve_guid(guid, show)
             if m:
                 return m
 
         return None
 
-    def resolve_guid(self, guid: PlexGuid, tm=None):
+    def resolve_guid(self, guid: PlexGuid, show: Media = None):
         if guid.provider in ["local", "none", "agents.none"]:
             logger.warning(f"{guid.pm.item}: Skipping guid {guid} because provider {guid.provider} has no external Id")
 
@@ -162,8 +176,8 @@ class MediaFactory:
             return None
 
         try:
-            if tm:
-                tm = self.trakt.find_episode_guid(tm, guid)
+            if show:
+                tm = self.trakt.find_episode_guid(guid, show.seasons)
             else:
                 tm = self.trakt.find_by_guid(guid)
         except (TraktException, RequestException) as e:

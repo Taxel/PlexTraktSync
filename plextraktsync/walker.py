@@ -253,7 +253,7 @@ class Walker:
             show = self.mf.resolve_guid(guid)
             if not show:
                 continue
-            me = self.mf.resolve_any(PlexLibraryItem(pe), show.trakt)
+            me = self.mf.resolve_any(PlexLibraryItem(pe), show)
             if not me:
                 continue
 
@@ -274,7 +274,7 @@ class Walker:
 
     def episode_from_show(self, show: Media):
         for pe in show.plex.episodes():
-            me = self.mf.resolve_any(pe, show.trakt)
+            me = self.mf.resolve_any(pe, show)
             if not me:
                 continue
 

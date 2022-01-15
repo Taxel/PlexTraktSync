@@ -46,7 +46,8 @@ def test_find_episode():
     ))
 
     guid = pe.guids[0]
-    te = trakt.find_episode_guid(tm, guid)
+    lookup = trakt.lookup(tm)
+    te = trakt.find_episode_guid(guid, lookup)
     assert te.season == 1
     assert te.episode == 1
     assert te.imdb == "tt11909222"
