@@ -6,8 +6,6 @@ from typing import List, Union
 
 import click
 
-from plextraktsync.version import version as get_version
-
 
 def execx(command: Union[str, List[str]]):
     if isinstance(command, str):
