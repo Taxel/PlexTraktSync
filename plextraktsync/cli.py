@@ -1,12 +1,16 @@
 from functools import wraps
+from os import environ
+
 import click
 
-from plextraktsync.commands.plex_login import plex_login
 from plextraktsync.commands.self_update import enable_self_update, self_update
 from plextraktsync.commands.sync import sync
 from plextraktsync.commands.trakt_login import trakt_login
 from plextraktsync.commands.unmatched import unmatched
 from plextraktsync.commands.watch import watch
+from plextraktsync.factory import factory
+
+CONFIG = factory.config()
 
 
 def command():
@@ -108,6 +112,16 @@ def inspect():
 def login():
     """
     Log in to Plex and Trakt if needed
+    """
+    pass
+
+
+@command()
+@click.option("--username", help="Plex login", default=lambda: environ.get("PLEX_USERNAME", CONFIG["PLEX_USERNAME"]))
+@click.option("--password", help="Plex password", default=lambda: environ.get("PLEX_PASSWORD", None))
+def plex_login():
+    """
+    Log in to Plex Account to obtain Access Token. Optionally can use managed user on servers that you own.
     """
     pass
 

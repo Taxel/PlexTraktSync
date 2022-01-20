@@ -6,7 +6,8 @@ from subprocess import check_output
 from typing import List
 
 import click
-from click import Choice, ClickException
+from click import ClickException
+from InquirerPy import get_style, inquirer
 from plexapi.exceptions import NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
 from plexapi.server import PlexServer
@@ -25,7 +26,6 @@ NOTICE_2FA_PASSWORD = comment(
 )
 CONFIG = factory.config()
 
-from InquirerPy import get_style, inquirer
 
 style = get_style({"questionmark": "hidden", "question": "ansiyellow", "pointer": "fg:ansiblack bg:ansiyellow", })
 
@@ -49,7 +49,8 @@ def choose_managed_user(account: MyPlexAccount):
     click.echo(success("Managed user(s) found:"))
     users = sorted(users)
     users.insert(0, account.username)
-    user = inquirer.select(message="Select the user you would like to use:", choices=users, default=None, style=style, qmark="", pointer=">",).execute()
+    user = inquirer.select(message="Select the user you would like to use:", choices=users, default=None, style=style,
+                           qmark="", pointer=">", ).execute()
 
     if user == account.username:
         return None
@@ -73,7 +74,8 @@ def prompt_server(servers: List[MyPlexResource]):
 
         product = decorator(f"{s.product}/{s.productVersion}")
         platform = decorator(f"{s.device}: {s.platform}/{s.platformVersion}")
-        click.echo(f"- {highlight(s.name)}: [Last seen: {decorator(str(s.lastSeenAt))}, Server: {product} on {platform}]")
+        click.echo(
+            f"- {highlight(s.name)}: [Last seen: {decorator(str(s.lastSeenAt))}, Server: {product} on {platform}]")
         c: ResourceConnection
         for c in s.connections:
             click.echo(f"    {c.uri}")
@@ -94,7 +96,9 @@ def prompt_server(servers: List[MyPlexResource]):
             fmt_server(s)
             server_names.append(s.name)
 
-    return inquirer.select(message="Select default server:", choices=sorted(server_names), default=None, style=style, qmark="", pointer=">",).execute()
+    return inquirer.select(message="Select default server:", choices=sorted(server_names), default=None, style=style,
+                           qmark="", pointer=">", ).execute()
+
 
 def pick_server(account: MyPlexAccount):
     servers = account.resources()
@@ -144,14 +148,7 @@ def plex_login_autoconfig():
     login(username, password)
 
 
-@click.command("plex-login")
-@click.option("--username", help="Plex login", default=lambda: environ.get("PLEX_USERNAME", CONFIG["PLEX_USERNAME"]))
-@click.option("--password", help="Plex password", default=lambda: environ.get("PLEX_PASSWORD", None))
 def plex_login(username, password):
-    """
-    Log in to Plex Account to obtain Access Token. Optionally can use managed user on servers that you own.
-    """
-
     login(username, password)
 
 
