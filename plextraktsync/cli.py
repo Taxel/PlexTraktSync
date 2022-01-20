@@ -1,7 +1,6 @@
 from functools import wraps
 import click
 
-from plextraktsync.commands.clear_collections import clear_collections
 from plextraktsync.commands.info import info
 from plextraktsync.commands.inspect import inspect
 from plextraktsync.commands.login import login
@@ -68,6 +67,17 @@ def cache():
     """
     Manage and analyze Requests Cache.
     """
+    pass
+
+
+@command()
+@click.option('--confirm', is_flag=True, help='Confirm the dangerous action')
+@click.option('--dry-run', is_flag=True, help='Do not perform delete actions')
+def clear_collections():
+    """
+    Clear Movies and Shows collections in Trakt
+    """
+
     pass
 
 
