@@ -128,7 +128,7 @@ Create a Unraid container of PlexTraktSync:
 - Click "Apply".
 - The container should start automatically. If not, start it.
 - Enter the console for the container.
-- Enter `python3 -m plextraktsync` to start the credential process described above.
+- Enter `plextraktsync` to start the credential process described above.
 
 ### GitHub
 
