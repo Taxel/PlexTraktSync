@@ -1,7 +1,6 @@
 from typing import List
 
 import click
-from click import ClickException
 from tqdm import tqdm
 
 from plextraktsync.commands.login import ensure_login
@@ -49,17 +48,11 @@ def sync(
         click.echo("Nothing to sync, this is likely due conflicting options given.")
         return
 
-    try:
-        w.print_plan(print=tqdm.write)
-    except RuntimeError as e:
-        raise ClickException(str(e))
+    w.print_plan(print=tqdm.write)
 
     if dry_run:
         print("Enabled dry-run mode: not making actual changes")
 
     with measure_time("Completed full sync"):
-        try:
-            runner = factory.sync()
-            runner.sync(walker=w, dry_run=config.dry_run)
-        except RuntimeError as e:
-            raise ClickException(str(e))
+        runner = factory.sync()
+        runner.sync(walker=w, dry_run=config.dry_run)

@@ -23,7 +23,13 @@ def command():
             name = fn.__name__
             module = importlib.import_module(f'.commands.{name}', package=__package__)
             cmd = getattr(module, name)
-            cmd(*args, **kwargs)
+
+            try:
+                cmd(*args, **kwargs)
+            except RuntimeError as e:
+                from click import ClickException
+
+                raise ClickException(f"Error running {name} command: {str(e)}")
 
         return wrap
 
