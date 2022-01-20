@@ -4,7 +4,6 @@ from os import environ
 import click
 
 from plextraktsync.commands.self_update import enable_self_update, self_update
-from plextraktsync.commands.watch import watch
 from plextraktsync.factory import factory
 
 CONFIG = factory.config()
@@ -206,6 +205,14 @@ def unmatched():
     List media that has no match in Trakt or Plex
     """
 
+    pass
+
+
+@command()
+def watch():
+    """
+    Listen to events from Plex
+    """
     pass
 
 
