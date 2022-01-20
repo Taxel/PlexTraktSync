@@ -1,7 +1,6 @@
 from functools import wraps
 import click
 
-from plextraktsync.commands.inspect import inspect
 from plextraktsync.commands.login import login
 from plextraktsync.commands.plex_login import plex_login
 from plextraktsync.commands.self_update import enable_self_update, self_update
@@ -84,6 +83,23 @@ def clear_collections():
 def info():
     """
     Print application and environment version info
+    """
+
+    pass
+
+
+@command()
+@click.argument('input', nargs=-1)
+@click.option(
+    "--watched-shows",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Print Trakt watched_shows and exit"
+)
+def inspect():
+    """
+    Inspect details of an object
     """
 
     pass
