@@ -1,3 +1,4 @@
+from functools import wraps
 import click
 
 from plextraktsync.commands.cache import cache
@@ -11,6 +12,27 @@ from plextraktsync.commands.sync import sync
 from plextraktsync.commands.trakt_login import trakt_login
 from plextraktsync.commands.unmatched import unmatched
 from plextraktsync.commands.watch import watch
+
+
+def command():
+    """
+    Wrapper to lazy load commands when commands being executed only
+    """
+
+    def decorator(fn):
+        @click.command()
+        @wraps(fn)
+        def wrap(*args, **kwargs):
+            import importlib
+
+            name = fn.__name__
+            module = importlib.import_module(f'.commands.{name}', package=__package__)
+            cmd = getattr(module, name)
+            cmd(*args, **kwargs)
+
+        return wrap
+
+    return decorator
 
 
 @click.group(invoke_without_command=True)
