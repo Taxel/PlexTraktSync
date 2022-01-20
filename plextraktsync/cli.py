@@ -11,7 +11,6 @@ from plextraktsync.commands.sync import sync
 from plextraktsync.commands.trakt_login import trakt_login
 from plextraktsync.commands.unmatched import unmatched
 from plextraktsync.commands.watch import watch
-from plextraktsync.commands.webhook import webhook
 
 
 @click.group(invoke_without_command=True)
@@ -36,4 +35,3 @@ cli.add_command(sync)
 cli.add_command(trakt_login)
 cli.add_command(unmatched)
 cli.add_command(watch)
-cli.add_command(webhook)
