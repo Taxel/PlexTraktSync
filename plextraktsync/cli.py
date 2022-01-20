@@ -1,7 +1,6 @@
 from functools import wraps
 import click
 
-from plextraktsync.commands.login import login
 from plextraktsync.commands.plex_login import plex_login
 from plextraktsync.commands.self_update import enable_self_update, self_update
 from plextraktsync.commands.sync import sync
@@ -102,6 +101,14 @@ def inspect():
     Inspect details of an object
     """
 
+    pass
+
+
+@command()
+def login():
+    """
+    Log in to Plex and Trakt if needed
+    """
     pass
 
 
