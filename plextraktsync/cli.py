@@ -1,7 +1,6 @@
 from functools import wraps
 import click
 
-from plextraktsync.commands.cache import cache
 from plextraktsync.commands.clear_collections import clear_collections
 from plextraktsync.commands.info import info
 from plextraktsync.commands.inspect import inspect
@@ -43,6 +42,33 @@ def cli(ctx):
     """
     if not ctx.invoked_subcommand:
         sync()
+
+
+@command()
+@click.option(
+    "--sort",
+    type=click.Choice(["size", "date", "url"], case_sensitive=False),
+    default="size",
+    show_default=True, help="Sort mode"
+)
+@click.option(
+    "--limit",
+    type=int,
+    default=20,
+    show_default=True, help="Limit entries to be printed"
+)
+@click.option(
+    "--reverse",
+    is_flag=True,
+    default=False,
+    help="Sort reverse"
+)
+@click.argument("url", required=False)
+def cache():
+    """
+    Manage and analyze Requests Cache.
+    """
+    pass
 
 
 cli.add_command(cache)
