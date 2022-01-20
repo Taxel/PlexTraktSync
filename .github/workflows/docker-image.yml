@@ -73,6 +73,8 @@ jobs:
           tags: ${{ env.TEST_IMAGE }}
           build-args: |
             APP_VERSION=${{ env.APP_VERSION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Test Docker image
         run: |
@@ -90,5 +92,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             APP_VERSION=${{ env.APP_VERSION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
 # vim:ts=2:sw=2:et
