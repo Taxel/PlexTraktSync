@@ -4,7 +4,6 @@ from os import environ
 import click
 
 from plextraktsync.commands.self_update import enable_self_update, self_update
-from plextraktsync.commands.unmatched import unmatched
 from plextraktsync.commands.watch import watch
 from plextraktsync.factory import factory
 
@@ -183,6 +182,30 @@ def trakt_login():
     """
     Log in to Trakt Account to obtain Access Token.
     """
+    pass
+
+
+@command()
+@click.option(
+    "--no-progress-bar", "no_progress_bar",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Don't output progress bars"
+)
+@click.option(
+    "--local",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Show only local files (no match in Plex)"
+)
+@click.command()
+def unmatched():
+    """
+    List media that has no match in Trakt or Plex
+    """
+
     pass
 
 
