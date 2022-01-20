@@ -37,3 +37,4 @@ VOLUME /app/config
 # Copy things together
 COPY --from=build /root/.local/share/virtualenvs/app-*/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
 COPY --from=compile /app ./
+RUN ln -s /app/plextraktsync.sh /usr/bin/plextraktsync
