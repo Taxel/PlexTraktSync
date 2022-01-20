@@ -4,7 +4,6 @@ from os import environ
 import click
 
 from plextraktsync.commands.self_update import enable_self_update, self_update
-from plextraktsync.commands.trakt_login import trakt_login
 from plextraktsync.commands.unmatched import unmatched
 from plextraktsync.commands.watch import watch
 from plextraktsync.factory import factory
@@ -175,6 +174,14 @@ def plex_login():
 def sync():
     """
     Perform sync between Plex and Trakt
+    """
+    pass
+
+
+@command()
+def trakt_login():
+    """
+    Log in to Trakt Account to obtain Access Token.
     """
     pass
 
