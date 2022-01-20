@@ -1,7 +1,6 @@
 from functools import wraps
 import click
 
-from plextraktsync.commands.info import info
 from plextraktsync.commands.inspect import inspect
 from plextraktsync.commands.login import login
 from plextraktsync.commands.plex_login import plex_login
@@ -76,6 +75,15 @@ def cache():
 def clear_collections():
     """
     Clear Movies and Shows collections in Trakt
+    """
+
+    pass
+
+
+@command()
+def info():
+    """
+    Print application and environment version info
     """
 
     pass
