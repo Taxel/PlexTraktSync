@@ -12,6 +12,7 @@ ARG APP_VERSION=$APP_VERSION
 ENV APP_VERSION=$APP_VERSION
 
 COPY plextraktsync ./plextraktsync/
+COPY plextraktsync.sh .
 # Create __version__ from $APP_VERSION
 RUN echo "__version__ = '${APP_VERSION:-unknown}'" > plextraktsync/__init__.py
 RUN cat plextraktsync/__init__.py
@@ -35,4 +36,5 @@ VOLUME /app/config
 
 # Copy things together
 COPY --from=build /root/.local/share/virtualenvs/app-*/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
-COPY --from=compile /app/plextraktsync plextraktsync/
+COPY --from=compile /app ./
+RUN ln -s /app/plextraktsync.sh /usr/bin/plextraktsync
