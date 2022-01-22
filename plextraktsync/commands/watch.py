@@ -47,6 +47,7 @@ class WatchStateUpdater:
         self.plex = plex
         self.trakt = trakt
         self.mf = mf
+        self.threshold = config["watch"]["scrobble_threshold"]
         self.logger = logging.getLogger("PlexTraktSync.WatchStateUpdater")
         self.scrobblers = ScrobblerCollection(trakt, config["watch"]["scrobble_threshold"])
         self.remove_collection = config["watch"]["remove_collection"]
@@ -134,6 +135,10 @@ class WatchStateUpdater:
             return self.scrobblers[tm].pause()
 
         if state == "stopped":
+            if percent >= self.threshold and not m.watched_on_trakt:
+                self.logger.info(f"Marking as watched in Trakt: {m}")
+                m.mark_watched_trakt()
+                self.trakt.flush()
             self.scrobblers[tm].stop(percent)
             del self.scrobblers[tm]
             del self.sessions[event.session_key]
