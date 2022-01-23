@@ -1,6 +1,5 @@
 import sys
 
-import click
 from plexapi import VERSION as PLEX_API_VERSION
 from trakt import __version__ as TRAKT_API_VERSION
 
@@ -10,12 +9,7 @@ from plextraktsync.path import cache_dir, config_dir, log_dir
 from plextraktsync.version import version as get_version
 
 
-@click.command()
 def info():
-    """
-    Print application and environment version info
-    """
-
     print(f"PlexTraktSync Version: {get_version()}")
 
     py_version = sys.version.replace("\n", "")

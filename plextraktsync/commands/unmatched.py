@@ -5,26 +5,7 @@ from plextraktsync.factory import factory
 from plextraktsync.walker import WalkConfig, Walker
 
 
-@click.option(
-    "--no-progress-bar", "no_progress_bar",
-    type=bool,
-    default=False,
-    is_flag=True,
-    help="Don't output progress bars"
-)
-@click.option(
-    "--local",
-    type=bool,
-    default=False,
-    is_flag=True,
-    help="Show only local files (no match in Plex)"
-)
-@click.command()
 def unmatched(no_progress_bar: bool, local: bool):
-    """
-    List media that has no match in Trakt or Plex
-    """
-
     config = factory.run_config().update(progressbar=not no_progress_bar)
     ensure_login()
     plex = factory.plex_api()

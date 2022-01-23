@@ -1,5 +1,3 @@
-import click
-
 from plextraktsync.config import Config
 from plextraktsync.events import (ActivityNotification, Error,
                                   PlaySessionStateNotification, TimelineEntry)
@@ -85,7 +83,8 @@ class WatchStateUpdater:
         m = self.find_by_key(activity.key, reload=True)
         if not m:
             return
-        self.logger.info(f"Activity: {m}: Collected: {m.is_collected}, Watched: [Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}]")
+        self.logger.info(
+            f"Activity: {m}: Collected: {m.is_collected}, Watched: [Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}]")
 
         if m.watched_on_plex and not m.watched_on_trakt:
             self.logger.info(f"Marking as watched in Trakt: {m}")
@@ -144,12 +143,7 @@ class WatchStateUpdater:
             del self.sessions[event.session_key]
 
 
-@click.command()
 def watch():
-    """
-    Listen to events from Plex
-    """
-
     server = factory.plex_server()
     trakt = factory.trakt_api()
     plex = factory.plex_api()

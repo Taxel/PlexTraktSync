@@ -70,31 +70,7 @@ def inspect_url(session: CachedSession, url: str):
             print(m.content)
 
 
-@click.command()
-@click.option(
-    "--sort",
-    type=click.Choice(["size", "date", "url"], case_sensitive=False),
-    default="size",
-    show_default=True, help="Sort mode"
-)
-@click.option(
-    "--limit",
-    type=int,
-    default=20,
-    show_default=True, help="Limit entries to be printed"
-)
-@click.option(
-    "--reverse",
-    is_flag=True,
-    default=False,
-    help="Sort reverse"
-)
-@click.argument("url", required=False)
 def cache(sort: str, limit: int, reverse: bool, url: str):
-    """
-    Manage and analyze Requests Cache.
-    """
-
     config = factory.config()
     trakt_cache = config["cache"]["path"]
     session = CachedSession(cache_name=trakt_cache, backend='sqlite')

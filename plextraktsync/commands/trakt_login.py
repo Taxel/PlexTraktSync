@@ -52,7 +52,6 @@ def trakt_login_autoconfig():
     login()
 
 
-@click.command()
 def trakt_login():
     """
     Log in to Trakt Account to obtain Access Token.
