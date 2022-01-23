@@ -50,7 +50,11 @@ class WatchStateUpdater:
         self.remove_collection = config["watch"]["remove_collection"]
         self.add_collection = config["watch"]["add_collection"]
         if config["watch"]["username_filter"]:
-            self.username_filter = config["PLEX_USERNAME"]
+            if not self.plex.has_sessions():
+                self.logger.warning('No permission to access sessions, disabling username filter')
+                self.username_filter = None
+            else:
+                self.username_filter = config["PLEX_USERNAME"]
         else:
             self.username_filter = None
         self.sessions = SessionCollection(plex)
