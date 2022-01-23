@@ -8,6 +8,12 @@ unlike the Plex app provided by Trakt.
 
 Note: The PyTrakt API keys are not stored securely, so if you do not want to have a file containing those on your harddrive, you can not use this project.
 
+**Looking for a way to contribute? Please find issues with the [help-wanted] label
+or to improve documentation [docs-needed], thank you.**
+
+[help-wanted]: https://github.com/Taxel/PlexTraktSync/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22
+[docs-needed]: https://github.com/Taxel/PlexTraktSync/issues?q=label%3A%22docs+needed%22+sort%3Aupdated-desc
+
 - [Plex-Trakt-Sync](#plex-trakt-sync)
   - [Features](#features)
   - [Pre-requisites](#pre-requisites)
@@ -26,8 +32,6 @@ Note: The PyTrakt API keys are not stored securely, so if you do not want to hav
     - [Info command](#info-command)
     - [Watch](#watch)
       - [Systemd setup](#systemd-setup)
-
-**To contribute, please find issues with the [`help-wanted`](https://github.com/Taxel/PlexTraktSync/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label, thank you.**
 
 [python-versions-badge]: https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue
 
