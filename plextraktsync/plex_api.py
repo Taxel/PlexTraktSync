@@ -537,6 +537,7 @@ class PlexApi:
         return PlexRatingCollection(self)
 
     @nocache
+    @rate_limit()
     def rate(self, m, rating):
         m.rate(rating)
 
