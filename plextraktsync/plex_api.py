@@ -574,5 +574,13 @@ class PlexApi:
         m.markWatched()
 
     @nocache
+    def has_sessions(self):
+        try:
+            self.plex.sessions()
+            return True
+        except Unauthorized:
+            return False
+
+    @nocache
     def get_sessions(self):
         return self.plex.sessions()
