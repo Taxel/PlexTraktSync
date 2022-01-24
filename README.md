@@ -113,6 +113,16 @@ To run `watch` command:
 ```
 docker-compose run --rm plextraktsync watch
 ```
+or add `command: watch` to docker compose file, and `docker-compose up -d plextraktsync` to start the container detached:
+
+```yaml
+services:
+  plextraktsync:
+    image: ghcr.io/taxel/plextraktsync
+    volumes:
+      - ./config:/app/config
+    command: watch
+```
 
 ### Windows Setup (optional alternative)
 
