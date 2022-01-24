@@ -205,7 +205,6 @@ def trakt_login():
     is_flag=True,
     help="Show only local files (no match in Plex)"
 )
-@click.command()
 def unmatched():
     """
     List media that has no match in Trakt or Plex
