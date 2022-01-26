@@ -121,7 +121,7 @@ class WatchStateUpdater:
         movie = m.plex.item
         percent = m.plex.watch_progress(event.view_offset)
         
-        if percent >= self.scrobblers.threshold:
+        if percent >= self.threshold:
             m.mark_watched_plex()
 
         self.logger.info(f"{movie}: {percent:.6F}% Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}")
