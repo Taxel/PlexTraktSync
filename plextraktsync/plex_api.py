@@ -200,6 +200,11 @@ class PlexLibraryItem:
         return self.date_value(self.item.lastViewedAt)
 
     @property
+    @nocache
+    def is_watched(self):
+        return self.item.isWatched
+
+    @property
     def collected_at(self):
         return self.date_value(self.item.addedAt)
 
