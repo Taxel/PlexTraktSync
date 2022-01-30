@@ -93,7 +93,7 @@ class Media:
 
     @property
     def watched_on_plex(self):
-        return self.plex.item.isWatched
+        return self.plex.is_watched
 
     @property
     def watched_on_trakt(self):
