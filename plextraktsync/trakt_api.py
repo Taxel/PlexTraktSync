@@ -38,7 +38,7 @@ class ScrobblerProxy:
     @time_limit()
     def update(self, progress: float):
         self.logger.debug(f'update({self.scrobbler.media}): {progress}')
-        self.scrobbler.update(progress)
+        return self.scrobbler.update(progress)
 
     @nocache
     @rate_limit()
@@ -46,7 +46,7 @@ class ScrobblerProxy:
     def pause(self, progress: float):
         self.logger.debug(f'pause({self.scrobbler.media}): {progress}')
         self.scrobbler.progress = progress
-        self.scrobbler.pause()
+        return self.scrobbler.pause()
 
     @nocache
     @rate_limit()
@@ -55,11 +55,11 @@ class ScrobblerProxy:
         if progress >= self.threshold:
             self.logger.debug(f'stop({self.scrobbler.media}): {progress}')
             self.scrobbler.progress = progress
-            self.scrobbler.stop()
+            return self.scrobbler.stop()
         else:
             self.logger.debug(f'pause({self.scrobbler.media}): {progress}')
             self.scrobbler.progress = progress
-            self.scrobbler.pause()
+            return self.scrobbler.pause()
 
 
 class TraktRatingCollection(dict):

@@ -151,9 +151,10 @@ class WatchStateUpdater:
             return self.scrobblers[tm].pause(percent)
 
         if state == "stopped":
-            self.scrobblers[tm].stop(percent)
+            value = self.scrobblers[tm].stop(percent)
             del self.scrobblers[tm]
             del self.sessions[event.session_key]
+            return value
 
 
 def watch():
