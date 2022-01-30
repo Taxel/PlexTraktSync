@@ -106,4 +106,6 @@ def inspect(input, watched_shows: bool):
     for id in input:
         if id.isnumeric():
             id = int(id)
+        elif id.startswith('https:') or id.startswith('http:'):
+            id = id_from_url(id)
         inspect_media(id)
