@@ -1,5 +1,6 @@
 from plextraktsync.factory import factory
 from plextraktsync.version import version
+from urllib.parse import urlparse, parse_qs
 
 
 def print_watched_shows():
@@ -80,6 +81,21 @@ def inspect_media(id):
         print(f"- {h.viewedAt} by {h.account.name} on {h.device.name} with {h.device.platform}")
 
 
+def id_from_url(url: str):
+    """
+    Extracts id from urls like:
+      https://app.plex.tv/desktop/#!/server/abcdefg/details?key=%2Flibrary%2Fmetadata%2F13202
+    """
+    result = urlparse(url)
+    if result.fragment[0] == '!':
+        parsed = parse_qs(urlparse(result.fragment).query)
+        key = ','.join(parsed['key'])
+        if key.startswith('/library/metadata/'):
+            return int(key[len('/library/metadata/'):])
+
+    return url
+
+
 def inspect(input, watched_shows: bool):
     print(f"PlexTraktSync [{version()}]")
 
@@ -90,4 +106,6 @@ def inspect(input, watched_shows: bool):
     for id in input:
         if id.isnumeric():
             id = int(id)
+        elif id.startswith('https:') or id.startswith('http:'):
+            id = id_from_url(id)
         inspect_media(id)
