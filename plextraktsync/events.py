@@ -10,6 +10,9 @@ EVENTS = {
     "reachability": "ReachabilityNotification",
     "status": "StatusNotification",
     "timeline": "TimelineEntry",
+    "transcodeSession.end": "TranscodeSession",
+    "transcodeSession.start": "TranscodeSession",
+    "transcodeSession.update": "TranscodeSession",
 }
 
 
@@ -100,6 +103,10 @@ class TimelineEntry(Event):
     @property
     def title(self):
         return self["title"]
+
+
+class TranscodeSession(Event):
+    pass
 
 
 class EventFactory:
