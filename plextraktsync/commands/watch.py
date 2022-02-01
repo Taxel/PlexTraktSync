@@ -87,27 +87,27 @@ class WatchStateUpdater:
         m = self.find_by_key(activity.key, reload=True)
         if not m:
             return
-        self.logger.info(
-            f"Activity: {m}: Collected: {m.is_collected}, Watched: [Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}]")
+        self.logger.info(f"on_activity: {m}: Collected: {m.is_collected}, Watched: [Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}]")
 
         if m.watched_on_plex and not m.watched_on_trakt:
-            self.logger.info(f"Marking as watched in Trakt: {m}")
+            self.logger.info(f"on_activity: Marking {activity.key} as watched in Trakt: {m}")
             m.mark_watched_trakt()
 
         if self.add_collection and not m.is_collected:
-            self.logger.info(f"Add to collection: {m}")
+            self.logger.info(f"on_activity: Add {activity.key} to collection: {m}")
             m.add_to_collection()
 
     def on_delete(self, event: TimelineEntry):
-        self.logger.info(f"Deleted {event.title}")
+        self.logger.info(f"on_delete: Deleted on Plex: {event.item_id}: {event.title}")
 
         m = self.find_by_key(event.item_id)
         if not m:
+            self.logger.error(f"on_delete: Not found: {event.item_id}")
             return
 
         if self.remove_collection:
             m.remove_from_collection()
-            self.logger.info(f"Removed from Collection: {m}")
+            self.logger.info(f"on_delete: Removed {event.item_id} from Collection: {m}")
 
     def on_play(self, event: PlaySessionStateNotification):
         if not self.can_scrobble(event):
@@ -115,12 +115,13 @@ class WatchStateUpdater:
 
         m = self.find_by_key(event.key)
         if not m:
+            self.logger.error(f"on_play: Not found: {event.key}")
             return
 
         movie = m.plex.item
         percent = m.plex.watch_progress(event.view_offset)
 
-        self.logger.info(f"{movie}: {percent:.6F}% Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}")
+        self.logger.info(f"on_play: {movie}: {percent:.6F}% Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}")
         self.scrobble(m, percent, event)
 
     def can_scrobble(self, event: PlaySessionStateNotification):
