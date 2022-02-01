@@ -181,7 +181,7 @@ class TraktApi:
         else:
             raise RuntimeError(f"mark_watched: Unsupported media type: {m.media_type}")
 
-    def add_to_collection(self, m, pm: PlexLibraryItem):
+    def add_to_collection(self, m, pm: PlexLibraryItem, batch=False):
         if m.media_type == "movies":
             item = dict(
                 title=m.title,
@@ -197,7 +197,10 @@ class TraktApi:
         else:
             raise ValueError(f"Unsupported media type: {m.media_type}")
 
-        self.batch.add_to_collection(m.media_type, item)
+        if batch:
+            self.batch.add_to_collection(m.media_type, item)
+        else:
+            trakt.sync.add_to_collection(item)
 
     @nocache
     @rate_limit()
