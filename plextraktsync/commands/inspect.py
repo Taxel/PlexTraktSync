@@ -1,6 +1,7 @@
+from urllib.parse import parse_qs, urlparse
+
 from plextraktsync.factory import factory
 from plextraktsync.version import version
-from urllib.parse import urlparse, parse_qs
 
 
 def print_watched_shows():
