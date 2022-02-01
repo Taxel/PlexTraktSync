@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import datetime
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 from trakt.utils import timestamp
 
-from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory
 from plextraktsync.plex.PlexGuid import PlexGuid

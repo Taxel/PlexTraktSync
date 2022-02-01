@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from functools import cached_property
 from typing import TYPE_CHECKING
 
-from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import logger
 

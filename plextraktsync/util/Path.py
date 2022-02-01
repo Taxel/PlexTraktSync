@@ -1,7 +1,6 @@
+from functools import cached_property
 from os import getenv, makedirs
 from os.path import abspath, dirname, exists, join
-
-from plextraktsync.decorators.cached_property import cached_property
 
 
 class Path:

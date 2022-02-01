@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import csv
 from dataclasses import dataclass
+from functools import cached_property
 from typing import TYPE_CHECKING
 
-from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.factory import factory
 
 if TYPE_CHECKING:
