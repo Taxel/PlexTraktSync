@@ -78,7 +78,7 @@ class TraktApi:
     """
 
     def __init__(self, batch_size=None):
-        self.batch = TraktBatch(self, batch_size=batch_size)
+        self.batch_size = batch_size
         trakt.core.CONFIG_PATH = pytrakt_file
         trakt.core.session = factory.session()
 
@@ -87,6 +87,10 @@ class TraktApi:
         trakt.core.AUTH_METHOD = trakt.core.DEVICE_AUTH
 
         return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
+
+    @cached_property
+    def batch(self):
+        return TraktBatch(self, batch_size=self.batch_size)
 
     @cached_property
     @nocache
@@ -177,7 +181,7 @@ class TraktApi:
         else:
             raise RuntimeError(f"mark_watched: Unsupported media type: {m.media_type}")
 
-    def add_to_collection(self, m, pm: PlexLibraryItem):
+    def add_to_collection(self, m, pm: PlexLibraryItem, batch=False):
         if m.media_type == "movies":
             item = dict(
                 title=m.title,
@@ -193,7 +197,10 @@ class TraktApi:
         else:
             raise ValueError(f"Unsupported media type: {m.media_type}")
 
-        self.batch.add_to_collection(m.media_type, item)
+        if batch:
+            self.batch.add_to_collection(m.media_type, item)
+        else:
+            trakt.sync.add_to_collection(item)
 
     @nocache
     @rate_limit()

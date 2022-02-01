@@ -89,7 +89,7 @@ class Sync:
 
         logger.info(f"To be added to collection: {m}")
         if not dry_run:
-            m.add_to_collection()
+            m.add_to_collection(batch=True)
 
     def sync_ratings(self, m: Media, dry_run=False):
         if not self.config.sync_ratings:
