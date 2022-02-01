@@ -78,8 +78,8 @@ class Media:
 
         return self.trakt_api.collected(self.trakt)
 
-    def add_to_collection(self):
-        self.trakt_api.add_to_collection(self.trakt, self.plex)
+    def add_to_collection(self, batch=False):
+        self.trakt_api.add_to_collection(self.trakt, self.plex, batch=batch)
 
     def remove_from_collection(self):
         self.trakt_api.remove_from_library(self.trakt)

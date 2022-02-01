@@ -97,7 +97,6 @@ class WatchStateUpdater:
         if self.add_collection and not m.is_collected:
             self.logger.info(f"Add to collection: {m}")
             m.add_to_collection()
-            self.trakt.flush()
 
     def on_delete(self, event: TimelineEntry):
         self.logger.info(f"Deleted {event.title}")
