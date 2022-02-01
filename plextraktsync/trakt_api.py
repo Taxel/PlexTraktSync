@@ -78,7 +78,7 @@ class TraktApi:
     """
 
     def __init__(self, batch_size=None):
-        self.batch = TraktBatch(self, batch_size=batch_size)
+        self.batch_size = batch_size
         trakt.core.CONFIG_PATH = pytrakt_file
         trakt.core.session = factory.session()
 
@@ -87,6 +87,10 @@ class TraktApi:
         trakt.core.AUTH_METHOD = trakt.core.DEVICE_AUTH
 
         return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
+
+    @cached_property
+    def batch(self):
+        return TraktBatch(self, batch_size=self.batch_size)
 
     @cached_property
     @nocache
