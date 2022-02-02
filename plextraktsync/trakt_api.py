@@ -18,7 +18,7 @@ from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import factory
-from plextraktsync.logging import logger
+from plextraktsync.logging import logger, logging
 from plextraktsync.path import pytrakt_file
 from plextraktsync.plex_api import PlexGuid, PlexLibraryItem
 
@@ -31,17 +31,20 @@ class ScrobblerProxy:
     def __init__(self, scrobbler: Scrobbler, threshold=80):
         self.scrobbler = scrobbler
         self.threshold = threshold
+        self.logger = logging.getLogger("PlexTraktSync.ScrobblerProxy")
 
     @nocache
     @rate_limit()
     @time_limit()
     def update(self, progress: float):
+        self.logger.debug(f'update: {progress}')
         self.scrobbler.update(progress)
 
     @nocache
     @rate_limit()
     @time_limit()
     def pause(self):
+        self.logger.debug(f'pause: {self.scrobbler.progress}')
         self.scrobbler.pause()
 
     @nocache
@@ -49,8 +52,10 @@ class ScrobblerProxy:
     @time_limit()
     def stop(self, progress: float):
         if progress >= self.threshold:
+            self.logger.debug(f'stop: {progress}')
             self.scrobbler.stop()
         else:
+            self.logger.debug(f'pause: {progress}')
             self.scrobbler.pause()
 
 
