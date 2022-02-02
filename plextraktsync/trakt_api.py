@@ -37,14 +37,14 @@ class ScrobblerProxy:
     @rate_limit()
     @time_limit()
     def update(self, progress: float):
-        self.logger.debug(f'update: {progress}')
+        self.logger.debug(f'update({self.scrobbler.media}): {progress}')
         self.scrobbler.update(progress)
 
     @nocache
     @rate_limit()
     @time_limit()
     def pause(self):
-        self.logger.debug(f'pause: {self.scrobbler.progress}')
+        self.logger.debug(f'pause({self.scrobbler.media}): {self.scrobbler.progress}')
         self.scrobbler.pause()
 
     @nocache
@@ -52,10 +52,10 @@ class ScrobblerProxy:
     @time_limit()
     def stop(self, progress: float):
         if progress >= self.threshold:
-            self.logger.debug(f'stop: {progress}')
+            self.logger.debug(f'stop({self.scrobbler.media}): {progress}')
             self.scrobbler.stop()
         else:
-            self.logger.debug(f'pause: {progress}')
+            self.logger.debug(f'pause({self.scrobbler.media}): {progress}')
             self.scrobbler.pause()
 
 
