@@ -64,8 +64,13 @@ class ScrobblerProxy:
 
     # Copied method, until upstream is merged
     # https://github.com/moogar0880/PyTrakt/pull/196
+    @nocache
+    @rate_limit()
+    @time_limit()
     @post
-    def _post(self, uri):
+    def _post(self, method: str, progress: float):
+        self.scrobbler.progress = progress
+        uri = f'scrobble/{method}'
         payload = dict(
             progress=self.scrobbler.progress,
             app_version=self.scrobbler.version,
