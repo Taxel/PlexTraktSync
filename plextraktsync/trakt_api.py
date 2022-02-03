@@ -6,6 +6,7 @@ import trakt
 import trakt.movies
 import trakt.sync
 import trakt.users
+from trakt import post
 from trakt.errors import ForbiddenException, OAuthException
 from trakt.movies import Movie
 from trakt.sync import Scrobbler
@@ -33,33 +34,39 @@ class ScrobblerProxy:
         self.threshold = threshold
         self.logger = logging.getLogger("PlexTraktSync.ScrobblerProxy")
 
-    @nocache
-    @rate_limit()
-    @time_limit()
     def update(self, progress: float):
         self.logger.debug(f'update({self.scrobbler.media}): {progress}')
-        self.scrobbler.update(progress)
+        return self._post('start', progress)
 
-    @nocache
-    @rate_limit()
-    @time_limit()
     def pause(self, progress: float):
         self.logger.debug(f'pause({self.scrobbler.media}): {progress}')
-        self.scrobbler.progress = progress
-        self.scrobbler.pause()
+        return self._post('pause', progress)
 
-    @nocache
-    @rate_limit()
-    @time_limit()
     def stop(self, progress: float):
         if progress >= self.threshold:
             self.logger.debug(f'stop({self.scrobbler.media}): {progress}')
-            self.scrobbler.progress = progress
-            self.scrobbler.stop()
+            return self._post('stop', progress)
         else:
             self.logger.debug(f'pause({self.scrobbler.media}): {progress}')
-            self.scrobbler.progress = progress
-            self.scrobbler.pause()
+            return self._post('pause', progress)
+
+    # Copied method, until upstream is merged
+    # https://github.com/moogar0880/PyTrakt/pull/196
+    @nocache
+    @rate_limit()
+    @time_limit()
+    @post
+    def _post(self, method: str, progress: float):
+        self.scrobbler.progress = progress
+        uri = f'scrobble/{method}'
+        payload = dict(
+            progress=self.scrobbler.progress,
+            app_version=self.scrobbler.version,
+            date=self.scrobbler.date
+        )
+        payload.update(self.scrobbler.media.to_json_singular())
+        response = yield uri, payload
+        yield response
 
 
 class TraktRatingCollection(dict):

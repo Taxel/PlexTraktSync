@@ -132,7 +132,8 @@ class WatchStateUpdater:
         percent = m.plex.watch_progress(event.view_offset)
 
         self.logger.info(f"on_play: {movie}: {percent:.6F}% Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}")
-        self.scrobble(m, percent, event)
+        scrobbled = self.scrobble(m, percent, event)
+        self.logger.debug(f"Scrobbled: {scrobbled}")
 
     def can_scrobble(self, event: PlaySessionStateNotification):
         if not self.username_filter:
@@ -151,9 +152,10 @@ class WatchStateUpdater:
             return self.scrobblers[tm].pause(percent)
 
         if state == "stopped":
-            self.scrobblers[tm].stop(percent)
+            value = self.scrobblers[tm].stop(percent)
             del self.scrobblers[tm]
             del self.sessions[event.session_key]
+            return value
 
 
 def watch():
