@@ -6,6 +6,11 @@ This project adds a two-way-sync between trakt.tv and Plex Media Server. It
 requires a trakt.tv account but no Plex premium and no Trakt VIP subscriptions,
 unlike the Plex app provided by Trakt.
 
+Originally created by [@Taxel], but now maintained by [contributors].
+
+[@Taxel]: https://github.com/Taxel
+[contributors]: https://github.com/Taxel/PlexTraktSync/graphs/contributors
+
 Note: The PyTrakt API keys are not stored securely, so if you do not want to have a file containing those on your harddrive, you can not use this project.
 
 **Looking for a way to contribute? Please find issues with the [help-wanted] label
