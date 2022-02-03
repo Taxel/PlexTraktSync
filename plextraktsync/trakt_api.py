@@ -54,9 +54,11 @@ class ScrobblerProxy:
     def stop(self, progress: float):
         if progress >= self.threshold:
             self.logger.debug(f'stop({self.scrobbler.media}): {progress}')
+            self.scrobbler.progress = progress
             self.scrobbler.stop()
         else:
             self.logger.debug(f'pause({self.scrobbler.media}): {progress}')
+            self.scrobbler.progress = progress
             self.scrobbler.pause()
 
 
