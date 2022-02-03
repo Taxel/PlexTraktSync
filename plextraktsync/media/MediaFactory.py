@@ -41,7 +41,7 @@ class MediaFactory:
         return None
 
     def resolve_guid(self, guid: PlexGuid, show: Media = None):
-        if guid.provider in ["youtube"]:
+        if guid.provider in ["youtube", "xmltv"]:
             logger.debug(f"{guid.title_link}: Skipping {guid} because unsupported provider '{guid.provider}'", extra={"markup": True})
             return None
 
