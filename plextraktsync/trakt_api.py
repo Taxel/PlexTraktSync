@@ -43,8 +43,9 @@ class ScrobblerProxy:
     @nocache
     @rate_limit()
     @time_limit()
-    def pause(self):
-        self.logger.debug(f'pause({self.scrobbler.media}): {self.scrobbler.progress}')
+    def pause(self, progress: float):
+        self.logger.debug(f'pause({self.scrobbler.media}): {progress}')
+        self.scrobbler.progress = progress
         self.scrobbler.pause()
 
     @nocache

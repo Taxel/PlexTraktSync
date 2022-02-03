@@ -148,7 +148,7 @@ class WatchStateUpdater:
             return self.scrobblers[tm].update(percent)
 
         if state == "paused":
-            return self.scrobblers[tm].pause()
+            return self.scrobblers[tm].pause(percent)
 
         if state == "stopped":
             self.scrobblers[tm].stop(percent)
