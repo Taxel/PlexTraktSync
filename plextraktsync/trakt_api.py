@@ -34,33 +34,21 @@ class ScrobblerProxy:
         self.threshold = threshold
         self.logger = logging.getLogger("PlexTraktSync.ScrobblerProxy")
 
-    @nocache
-    @rate_limit()
-    @time_limit()
     def update(self, progress: float):
         self.logger.debug(f'update({self.scrobbler.media}): {progress}')
-        return self.scrobbler.update(progress)
+        return self._post('start', progress)
 
-    @nocache
-    @rate_limit()
-    @time_limit()
     def pause(self, progress: float):
         self.logger.debug(f'pause({self.scrobbler.media}): {progress}')
-        self.scrobbler.progress = progress
-        return self.scrobbler.pause()
+        return self._post('pause', progress)
 
-    @nocache
-    @rate_limit()
-    @time_limit()
     def stop(self, progress: float):
         if progress >= self.threshold:
             self.logger.debug(f'stop({self.scrobbler.media}): {progress}')
-            self.scrobbler.progress = progress
-            return self.scrobbler.stop()
+            return self._post('stop', progress)
         else:
             self.logger.debug(f'pause({self.scrobbler.media}): {progress}')
-            self.scrobbler.progress = progress
-            return self.scrobbler.pause()
+            return self._post('pause', progress)
 
     # Copied method, until upstream is merged
     # https://github.com/moogar0880/PyTrakt/pull/196
