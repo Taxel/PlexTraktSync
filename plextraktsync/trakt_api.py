@@ -6,6 +6,7 @@ import trakt
 import trakt.movies
 import trakt.sync
 import trakt.users
+from trakt import post
 from trakt.errors import ForbiddenException, OAuthException
 from trakt.movies import Movie
 from trakt.sync import Scrobbler
@@ -60,6 +61,19 @@ class ScrobblerProxy:
             self.logger.debug(f'pause({self.scrobbler.media}): {progress}')
             self.scrobbler.progress = progress
             return self.scrobbler.pause()
+
+    # Copied method, until upstream is merged
+    # https://github.com/moogar0880/PyTrakt/pull/196
+    @post
+    def _post(self, uri):
+        payload = dict(
+            progress=self.scrobbler.progress,
+            app_version=self.scrobbler.version,
+            date=self.scrobbler.date
+        )
+        payload.update(self.scrobbler.media.to_json_singular())
+        response = yield uri, payload
+        yield response
 
 
 class TraktRatingCollection(dict):
