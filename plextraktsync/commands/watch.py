@@ -1,4 +1,10 @@
+from typing import Union
+
+from trakt.movies import Movie
+from trakt.tv import TVEpisode
+
 from plextraktsync.config import Config
+from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.events import (ActivityNotification, Error,
                                   PlaySessionStateNotification, TimelineEntry)
 from plextraktsync.factory import factory
@@ -15,7 +21,7 @@ class ScrobblerCollection(dict):
         self.trakt = trakt
         self.threshold = threshold
 
-    def __missing__(self, key):
+    def __missing__(self, key: Union[Movie, TVEpisode]):
         self[key] = value = self.trakt.scrobbler(key, self.threshold)
         return value
 
@@ -46,7 +52,7 @@ class WatchStateUpdater:
         self.trakt = trakt
         self.mf = mf
         self.logger = logging.getLogger("PlexTraktSync.WatchStateUpdater")
-        self.scrobblers = ScrobblerCollection(trakt, config["watch"]["scrobble_threshold"])
+        self.threshold = config["watch"]["scrobble_threshold"]
         self.remove_collection = config["watch"]["remove_collection"]
         self.add_collection = config["watch"]["add_collection"]
         if config["watch"]["username_filter"]:
@@ -58,6 +64,10 @@ class WatchStateUpdater:
         else:
             self.username_filter = None
         self.sessions = SessionCollection(plex)
+
+    @cached_property
+    def scrobblers(self):
+        return ScrobblerCollection(self.trakt, self.threshold)
 
     def find_by_key(self, key: str, reload=False):
         pm = self.plex.fetch_item(key)
@@ -138,7 +148,7 @@ class WatchStateUpdater:
             return self.scrobblers[tm].update(percent)
 
         if state == "paused":
-            return self.scrobblers[tm].pause()
+            return self.scrobblers[tm].pause(percent)
 
         if state == "stopped":
             self.scrobblers[tm].stop(percent)
