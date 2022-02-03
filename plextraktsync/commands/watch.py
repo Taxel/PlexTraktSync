@@ -1,3 +1,8 @@
+from typing import Union
+
+from trakt.movies import Movie
+from trakt.tv import TVEpisode
+
 from plextraktsync.config import Config
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.events import (ActivityNotification, Error,
@@ -16,7 +21,7 @@ class ScrobblerCollection(dict):
         self.trakt = trakt
         self.threshold = threshold
 
-    def __missing__(self, key):
+    def __missing__(self, key: Union[Movie, TVEpisode]):
         self[key] = value = self.trakt.scrobbler(key, self.threshold)
         return value
 
