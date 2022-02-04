@@ -67,11 +67,18 @@ class Sync:
             self.sync_watched(movie, dry_run=dry_run)
             listutil.addPlexItemToLists(movie)
 
+        shows = set()
         for episode in walker.find_episodes():
             self.sync_collection(episode, dry_run=dry_run)
             self.sync_ratings(episode, dry_run=dry_run)
             self.sync_watched(episode, dry_run=dry_run)
             listutil.addPlexItemToLists(episode)
+            if self.config.sync_ratings:
+                # collect shows for later ratings sync
+                shows.add(episode.show)
+
+        for show in walker.walk_shows(shows, title="Syncing show ratings"):
+            self.sync_ratings(show, dry_run=dry_run)
 
         if not dry_run:
             with measure_time("Updated plex watchlist"):

@@ -246,6 +246,11 @@ class Walker:
                 continue
             yield from self.episode_from_show(show)
 
+    def walk_shows(self, shows: set[Media], title="Processing Shows"):
+        if not shows:
+            return
+        yield from self.progressbar(shows, desc=title)
+
     def get_plex_episodes(self, episodes):
         it = self.progressbar(episodes, desc=f"Processing episodes")
         for pe in it:
