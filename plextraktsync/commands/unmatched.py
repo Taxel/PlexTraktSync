@@ -39,7 +39,7 @@ def unmatched(no_progress_bar: bool, local: bool):
         print(f"Title: {p.title}")
         print(f"Year: {p.year}")
         print(f"Updated At: {p.updatedAt}")
-        for l in p.locations:
-            print(f"Location: {l}")
+        for location in p.locations:
+            print(f"Location: {location}")
 
         print("")

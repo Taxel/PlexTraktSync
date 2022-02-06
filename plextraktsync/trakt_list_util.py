@@ -45,9 +45,9 @@ class TraktList():
 
     @staticmethod
     def from_trakt_list(listname, trakt_list):
-        l = TraktList(None, listname)
-        l.trakt_items = dict(zip([(elem.media_type, elem.trakt) for elem in trakt_list], count(1)))
-        return l
+        tl = TraktList(None, listname)
+        tl.trakt_items = dict(zip([(elem.media_type, elem.trakt) for elem in trakt_list], count(1)))
+        return tl
 
     def addPlexItem(self, trakt_item, plex_item):
         rank = self.trakt_items.get((trakt_item.media_type, trakt_item.trakt))
@@ -81,9 +81,9 @@ class TraktListUtil():
             logger.warning("Failed to get list {} by user {}".format(listname, username))
 
     def addPlexItemToLists(self, m):
-        for l in self.lists:
-            l.addPlexItem(m.trakt, m.plex.item)
+        for tl in self.lists:
+            tl.addPlexItem(m.trakt, m.plex.item)
 
     def updatePlexLists(self, plex: PlexApi):
-        for l in self.lists:
-            l.updatePlexList(plex)
+        for tl in self.lists:
+            tl.updatePlexList(plex)
