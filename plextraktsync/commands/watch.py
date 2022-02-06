@@ -115,6 +115,7 @@ class WatchStateUpdater:
             self.username_filter = None
         if self.username_filter:
             self.logger.info(f"Filtering for user: {self.username_filter}")
+        self.logger.info(f"Scrobble thresholds: Movies: {self.config.movie_threshold}%, Episodes: {self.config.episode_threshold}%")
         self.sessions = SessionCollection(plex)
 
     @cached_property
