@@ -296,14 +296,7 @@ class PlexLibraryItem:
         except (AttributeError, IndexError, TypeError, AssertionError):
             return None
 
-        for key, regex in AUDIO_CODECS.items():
-            if key == codec:
-                return key
-
-            if regex and regex.match(codec):
-                return key
-
-        return None
+        return factory.plex_audio_codec().match(codec)
 
     @property
     def resolution(self):
