@@ -20,13 +20,22 @@ from plextraktsync.trakt_api import TraktApi
 
 
 class ScrobblerCollection(dict):
-    def __init__(self, trakt: TraktApi, threshold=80):
+    def __init__(self, trakt: TraktApi, scrobble_movie_threshold: int = 80, scrobble_episode_threshold: int = 80):
         super(dict, self).__init__()
         self.trakt = trakt
-        self.threshold = threshold
+        self.episode_threshold = scrobble_episode_threshold
+        self.movie_threshold = scrobble_movie_threshold
 
-    def __missing__(self, key: Union[Movie, TVEpisode]):
-        self[key] = value = self.trakt.scrobbler(key, self.threshold)
+    def __missing__(self, media: Union[Movie, TVEpisode]):
+        if media.media_type == "movies":
+            threshold = self.movie_threshold
+        elif media.media_type == "episodes":
+            threshold = self.episode_threshold
+        else:
+            raise RuntimeError(f"Unsupported media type {media.media_type}")
+
+        self[media] = value = self.trakt.scrobbler(media, threshold)
+
         return value
 
 
