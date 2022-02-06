@@ -113,6 +113,8 @@ class WatchStateUpdater:
         if self.username_filter and not self.plex.has_sessions():
             self.logger.warning('No permission to access sessions, disabling username filter')
             self.username_filter = None
+        if self.username_filter:
+            self.logger.info(f"Filtering for user: {self.username_filter}")
         self.sessions = SessionCollection(plex)
 
     @cached_property
