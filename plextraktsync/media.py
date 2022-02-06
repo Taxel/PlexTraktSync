@@ -50,7 +50,7 @@ class Media:
     @property
     def show_trakt_id(self):
         if not self.show:
-            raise RuntimeError(f"Unexpected call: episode without show property")
+            raise RuntimeError("Unexpected call: episode without show property")
         return self.show.trakt_id
 
     @cached_property
