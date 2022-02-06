@@ -143,9 +143,7 @@ class WatchStateUpdater:
         movie = m.plex.item
         percent = m.plex.watch_progress(event.view_offset)
 
-        self.logger.info(
-            f"on_play: {movie}: {percent:.6F}% Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}"
-        )
+        self.logger.info(f"on_play: {event.state} {percent:.6F}% {movie}: Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}")
         scrobbled = self.scrobble(m, percent, event)
         self.logger.debug(f"Scrobbled: {scrobbled}")
 
