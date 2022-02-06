@@ -112,7 +112,7 @@ class WalkPlanner:
             elif mediatype == "movie":
                 movies.extend(items)
             else:
-                raise RuntimeError(f"Unsupported type: {m.type}")
+                raise RuntimeError(f"Unsupported type: {mediatype}")
 
         return [movies, shows, episodes]
 
