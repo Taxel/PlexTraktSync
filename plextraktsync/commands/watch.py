@@ -67,7 +67,8 @@ class WatchStateUpdater:
         self.trakt = trakt
         self.mf = mf
         self.logger = logging.getLogger("PlexTraktSync.WatchStateUpdater")
-        self.threshold = config["watch"]["scrobble_threshold"]
+        self.scrobble_movie_threshold = config["watch"]["scrobble_movie_threshold"]
+        self.scrobble_episode_threshold = config["watch"]["scrobble_episode_threshold"]
         self.remove_collection = config["watch"]["remove_collection"]
         self.add_collection = config["watch"]["add_collection"]
         if config["watch"]["username_filter"]:
@@ -84,7 +85,7 @@ class WatchStateUpdater:
 
     @cached_property
     def scrobblers(self):
-        return ScrobblerCollection(self.trakt, self.threshold)
+        return ScrobblerCollection(self.trakt, self.scrobble_movie_threshold, self.scrobble_episode_threshold)
 
     def find_by_key(self, key: str, reload=False):
         pm = self.plex.fetch_item(key)
