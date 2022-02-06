@@ -112,7 +112,7 @@ class WalkPlanner:
             elif mediatype == "movie":
                 movies.extend(items)
             else:
-                raise RuntimeError(f"Unsupported type: {m.type}")
+                raise RuntimeError(f"Unsupported type: {mediatype}")
 
         return [movies, shows, episodes]
 
@@ -252,7 +252,7 @@ class Walker:
         yield from self.progressbar(shows, desc=title)
 
     def get_plex_episodes(self, episodes):
-        it = self.progressbar(episodes, desc=f"Processing episodes")
+        it = self.progressbar(episodes, desc="Processing episodes")
         for pe in it:
             guid = PlexGuid(pe.grandparentGuid, "show")
             show = self.mf.resolve_guid(guid)
