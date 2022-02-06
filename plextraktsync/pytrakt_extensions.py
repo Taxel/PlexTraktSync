@@ -141,8 +141,8 @@ class AllWatchedShows():
         return self.shows[trakt_id].seasons[season].get_completed(episode)
 
     def add(self, trakt_id, season, episode):
-        episode_prog = {"number":episode, "completed":True}
-        season_prog = {"number":season, "episodes":[episode_prog]}
+        episode_prog = {"number": episode, "completed": True}
+        season_prog = {"number": season, "episodes": [episode_prog]}
         if trakt_id in self.shows:
             if season in self.shows[trakt_id].seasons:
                 self.shows[trakt_id].seasons[season].episodes[episode] = EpisodeProgress(**episode_prog)
