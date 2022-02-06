@@ -20,32 +20,6 @@ from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.factory import factory
 from plextraktsync.logging import logger
 
-AUDIO_CODECS = {
-    'lpcm':                 'pcm',
-    'mp3':                  None,
-    'aac':                  None,
-    'ogg':                  'vorbis',
-    'wma':                  None,
-
-    'dts':                  '(dca|dta)',
-    'dts_ma':               'dtsma',
-
-    'dolby_prologic':       'dolby.?pro',
-    'dolby_digital':        'ac.?3',
-    'dolby_digital_plus':   'eac.?3',
-    'dolby_truehd':         'truehd'
-}
-
-# compile patterns in `AUDIO_CODECS`
-for k, v in AUDIO_CODECS.items():
-    if v is None:
-        continue
-
-    try:
-        AUDIO_CODECS[k] = re.compile(v, re.IGNORECASE)
-    except Exception:
-        logger.warn('Unable to compile regex pattern: %r', v, exc_info=True)
-
 
 class PlexGuid:
     def __init__(self, guid: str, type: str, pm: Optional[PlexLibraryItem] = None):
