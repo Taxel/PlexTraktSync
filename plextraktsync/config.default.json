@@ -23,7 +23,6 @@
     "watch": {
         "scrobble_episode_threshold": 90,
         "scrobble_movie_threshold": 85,
-        "scrobble_threshold": 80,
         "add_collection": false,
         "remove_collection": false,
         "username_filter": true
