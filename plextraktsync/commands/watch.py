@@ -59,6 +59,47 @@ class SessionCollection(dict):
             self[str(session.sessionKey)] = session.usernames[0]
 
 
+class WatchConfig:
+    def __init__(self, config: Config):
+        self.config = dict(config["watch"])
+        self.plex_username = config["PLEX_USERNAME"]
+
+    def __getitem__(self, key):
+        return self.config[key]
+
+    def __contains__(self, key):
+        return key in self.config
+
+    @cached_property
+    def username_filter(self):
+        if self.config["username_filter"]:
+            return self.plex_username
+
+        return None
+
+    @cached_property
+    def movie_threshold(self):
+        return self.threshold("scrobble_movie_threshold")
+
+    @cached_property
+    def episode_threshold(self):
+        return self.threshold("scrobble_episode_threshold")
+
+    @cached_property
+    def remove_collection(self):
+        return self.config["remove_collection"]
+
+    @cached_property
+    def add_collection(self):
+        return self.config["add_collection"]
+
+    def threshold(self, key: str):
+        if "scrobble_threshold" in self.config:
+            return self.config["scrobble_threshold"]
+
+        return self.config[key]
+
+
 class WatchStateUpdater:
     def __init__(
         self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory, config: Config
