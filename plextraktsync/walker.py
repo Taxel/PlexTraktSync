@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import List, NamedTuple
+from typing import List, NamedTuple, Set
 
 from plexapi.video import Episode, Movie, Show
 
@@ -246,7 +246,7 @@ class Walker:
                 continue
             yield from self.episode_from_show(show)
 
-    def walk_shows(self, shows: set[Media], title="Processing Shows"):
+    def walk_shows(self, shows: Set[Media], title="Processing Shows"):
         if not shows:
             return
         yield from self.progressbar(shows, desc=title)
