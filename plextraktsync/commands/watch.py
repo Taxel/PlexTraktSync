@@ -67,8 +67,9 @@ class WatchStateUpdater:
         self.trakt = trakt
         self.mf = mf
         self.logger = logging.getLogger("PlexTraktSync.WatchStateUpdater")
-        self.scrobble_movie_threshold = config["watch"]["scrobble_movie_threshold"]
-        self.scrobble_episode_threshold = config["watch"]["scrobble_episode_threshold"]
+        threshold = config["watch"]["scrobble_threshold"] if "scrobble_threshold" in config["watch"] else None
+        self.scrobble_movie_threshold = threshold if threshold is not None else config["watch"]["scrobble_movie_threshold"]
+        self.scrobble_episode_threshold = threshold if threshold is not None else config["watch"]["scrobble_episode_threshold"]
         self.remove_collection = config["watch"]["remove_collection"]
         self.add_collection = config["watch"]["add_collection"]
         if config["watch"]["username_filter"]:
