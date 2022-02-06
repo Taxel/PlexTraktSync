@@ -99,6 +99,12 @@ class Factory:
         return wc
 
     @memoize
+    def plex_audio_codec(self):
+        from plextraktsync.plex_api import PlexAudioCodec
+
+        return PlexAudioCodec()
+
+    @memoize
     def walker(self):
         from plextraktsync.walker import Walker
 
