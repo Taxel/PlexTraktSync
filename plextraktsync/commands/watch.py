@@ -108,26 +108,16 @@ class WatchStateUpdater:
         self.trakt = trakt
         self.mf = mf
         self.logger = logging.getLogger("PlexTraktSync.WatchStateUpdater")
-        threshold = config["watch"]["scrobble_threshold"] if "scrobble_threshold" in config["watch"] else None
-        self.scrobble_movie_threshold = threshold if threshold is not None else config["watch"]["scrobble_movie_threshold"]
-        self.scrobble_episode_threshold = threshold if threshold is not None else config["watch"]["scrobble_episode_threshold"]
-        self.remove_collection = config["watch"]["remove_collection"]
-        self.add_collection = config["watch"]["add_collection"]
-        if config["watch"]["username_filter"]:
-            if not self.plex.has_sessions():
-                self.logger.warning(
-                    "No permission to access sessions, disabling username filter"
-                )
-                self.username_filter = None
-            else:
-                self.username_filter = config["PLEX_USERNAME"]
-        else:
+        self.config = WatchConfig(config)
+        self.username_filter = self.config.username_filter
+        if self.username_filter and not self.plex.has_sessions():
+            self.logger.warning('No permission to access sessions, disabling username filter')
             self.username_filter = None
         self.sessions = SessionCollection(plex)
 
     @cached_property
     def scrobblers(self):
-        return ScrobblerCollection(self.trakt, self.scrobble_movie_threshold, self.scrobble_episode_threshold)
+        return ScrobblerCollection(self.trakt, self.config.movie_threshold, self.config.episode_threshold)
 
     def find_by_key(self, key: str, reload=False):
         pm = self.plex.fetch_item(key)
@@ -167,7 +157,7 @@ class WatchStateUpdater:
             )
             m.mark_watched_trakt()
 
-        if self.add_collection and not m.is_collected:
+        if self.config.add_collection and not m.is_collected:
             self.logger.info(f"on_activity: Add {activity.key} to collection: {m}")
             m.add_to_collection()
 
@@ -179,7 +169,7 @@ class WatchStateUpdater:
             self.logger.error(f"on_delete: Not found: {event.item_id}")
             return
 
-        if self.remove_collection:
+        if self.config.remove_collection:
             m.remove_from_collection()
             self.logger.info(f"on_delete: Removed {event.item_id} from Collection: {m}")
 
