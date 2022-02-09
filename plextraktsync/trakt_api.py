@@ -83,7 +83,7 @@ class TraktRatingCollection(dict):
     @flatten_dict
     def ratings(self, media_type: str):
         index = media_type.rstrip('s')
-        for r in self.trakt.me.get_ratings(media_type):
+        for r in self.trakt.get_ratings(media_type):
             yield r[index]['ids']['trakt'], r['rating']
 
 
@@ -172,6 +172,12 @@ class TraktApi:
     @cached_property
     def ratings(self):
         return TraktRatingCollection(self)
+
+    @nocache
+    @rate_limit()
+    @time_limit()
+    def get_ratings(self, media_type: str):
+        return self.me.get_ratings(media_type)
 
     @nocache
     @rate_limit()
