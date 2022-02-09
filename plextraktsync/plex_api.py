@@ -414,6 +414,7 @@ class PlexLibrarySection:
         except NotFound:
             return None
 
+    @nocache
     def find_with_rating(self):
         filters = {
             'and': [
