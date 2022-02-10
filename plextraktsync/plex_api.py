@@ -123,19 +123,17 @@ class PlexAudioCodec:
     @cached_property
     def audio_codecs(self):
         codecs = {
-            'lpcm': 'pcm',
-            'mp3': None,
-            'aac': None,
-            'ogg': 'vorbis',
-            'wma': None,
-
-            'dts': '(dca|dta)',
-            'dts_ma': 'dtsma',
-
-            'dolby_prologic': 'dolby.?pro',
-            'dolby_digital': 'ac.?3',
-            'dolby_digital_plus': 'eac.?3',
-            'dolby_truehd': 'truehd'
+            "lpcm": "pcm",
+            "mp3": None,
+            "aac": None,
+            "ogg": "vorbis",
+            "wma": None,
+            "dts": "(dca|dta)",
+            "dts_ma": "dtsma",
+            "dolby_prologic": "dolby.?pro",
+            "dolby_digital": "ac.?3",
+            "dolby_digital_plus": "eac.?3",
+            "dolby_truehd": "truehd",
         }
 
         # compile patterns
@@ -146,7 +144,9 @@ class PlexAudioCodec:
             try:
                 codecs[k] = re.compile(v, re.IGNORECASE)
             except Exception:
-                raise RuntimeError('Unable to compile regex pattern: %r', v, exc_info=True)
+                raise RuntimeError(
+                    "Unable to compile regex pattern: %r", v, exc_info=True
+                )
         return codecs
 
 
@@ -157,7 +157,7 @@ class PlexLibraryItem:
 
     @property
     def is_legacy_agent(self):
-        return not self.item.guid.startswith('plex://')
+        return not self.item.guid.startswith("plex://")
 
     @nocache
     @rate_limit()
@@ -201,7 +201,9 @@ class PlexLibraryItem:
     def rating(self):
         if self.plex is not None:
             ratings = self.plex.ratings[self.item.librarySectionID]
-            user_rating = ratings[self.item.ratingKey] if self.item.ratingKey in ratings else None
+            user_rating = (
+                ratings[self.item.ratingKey] if self.item.ratingKey in ratings else None
+            )
         else:
             user_rating = self.item.userRating
 
@@ -257,9 +259,9 @@ class PlexLibraryItem:
             return None
 
         if channels < 3:
-            return '%.01f' % channels
+            return "%.01f" % channels
 
-        return '%.01f' % (channels - 0.9)
+        return "%.01f" % (channels - 0.9)
 
     @property
     def audio_codec(self):
@@ -279,13 +281,13 @@ class PlexLibraryItem:
         """
         try:
             stream = self.video_streams[0]
-            title = stream.displayTitle.split(' ')[0]
+            title = stream.displayTitle.split(" ")[0]
         except IndexError:
             title = None
 
         variants = {
-            '1080p': 'hd_1080p',
-            '720p': 'hd_720p',
+            "1080p": "hd_1080p",
+            "720p": "hd_720p",
         }
 
         if title in variants:
@@ -299,22 +301,22 @@ class PlexLibraryItem:
             return None
         # 4k
         if width >= 3840:
-            return 'uhd_4k'
+            return "uhd_4k"
 
         # 1080
         if width >= 1920:
-            return 'hd_1080p'
+            return "hd_1080p"
 
         # 720
         if width >= 1280:
-            return 'hd_720p'
+            return "hd_720p"
 
         # 576
         if width >= 768:
-            return 'sd_576p'
+            return "sd_576p"
 
         # 480
-        return 'sd_480p'
+        return "sd_480p"
 
     @property
     def hdr(self):
@@ -327,10 +329,10 @@ class PlexLibraryItem:
         except (AttributeError, IndexError, TypeError):
             return None
 
-        if colorTrc == 'smpte2084':
-            return 'hdr10'
-        elif colorTrc == 'arib-std-b67':
-            return 'hlg'
+        if colorTrc == "smpte2084":
+            return "hdr10"
+        elif colorTrc == "arib-std-b67":
+            return "hlg"
 
         try:
             dovi = stream.DOVIPresent
@@ -338,7 +340,7 @@ class PlexLibraryItem:
             return None
 
         if dovi:
-            return 'dolby_vision'
+            return "dolby_vision"
 
         return None
 
@@ -417,8 +419,8 @@ class PlexLibrarySection:
     @nocache
     def find_with_rating(self):
         filters = {
-            'and': [
-                {'userRating>>': -1},
+            "and": [
+                {"userRating>>": -1},
             ]
         }
 

@@ -13,11 +13,13 @@ class EventDispatcher:
         self.logger = logging.getLogger("PlexTraktSync.EventDispatcher")
 
     def on(self, event_type, listener, **kwargs):
-        self.event_listeners.append({
-            "listener": listener,
-            "event_type": event_type,
-            "filters": kwargs,
-        })
+        self.event_listeners.append(
+            {
+                "listener": listener,
+                "event_type": event_type,
+                "filters": kwargs,
+            }
+        )
         return self
 
     def event_handler(self, data):
@@ -74,10 +76,14 @@ class WebSocketListener:
 
     def listen(self):
         while True:
-            notifier = self.plex.startAlertListener(callback=self.dispatcher.event_handler)
+            notifier = self.plex.startAlertListener(
+                callback=self.dispatcher.event_handler
+            )
             while notifier.is_alive():
                 sleep(self.poll_interval)
 
-            self.dispatcher.event_handler(Error(msg='Server closed connection'))
-            self.logger.error(f"Listener finished. Restarting in {self.restart_interval} seconds")
+            self.dispatcher.event_handler(Error(msg="Server closed connection"))
+            self.logger.error(
+                f"Listener finished. Restarting in {self.restart_interval} seconds"
+            )
             sleep(self.restart_interval)

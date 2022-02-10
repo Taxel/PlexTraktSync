@@ -11,7 +11,9 @@ def print_watched_shows():
 
     trakt = factory.trakt_api()
 
-    table = Table(show_header=True, header_style="bold magenta", title="Watched shows on Trakt")
+    table = Table(
+        show_header=True, header_style="bold magenta", title="Watched shows on Trakt"
+    )
     table.add_column("Id", style="dim", width=6)
     table.add_column("Slug")
     table.add_column("Seasons", justify="right")
@@ -79,7 +81,9 @@ def inspect_media(id):
 
     print("Plex play history:")
     for h in m.plex_history(device=True, account=True):
-        print(f"- {h.viewedAt} by {h.account.name} on {h.device.name} with {h.device.platform}")
+        print(
+            f"- {h.viewedAt} by {h.account.name} on {h.device.name} with {h.device.platform}"
+        )
 
 
 def id_from_url(url: str):
@@ -88,11 +92,11 @@ def id_from_url(url: str):
       https://app.plex.tv/desktop/#!/server/abcdefg/details?key=%2Flibrary%2Fmetadata%2F13202
     """
     result = urlparse(url)
-    if result.fragment[0] == '!':
+    if result.fragment[0] == "!":
         parsed = parse_qs(urlparse(result.fragment).query)
-        key = ','.join(parsed['key'])
-        if key.startswith('/library/metadata/'):
-            return int(key[len('/library/metadata/'):])
+        key = ",".join(parsed["key"])
+        if key.startswith("/library/metadata/"):
+            return int(key[len("/library/metadata/") :])
 
     return url
 
@@ -107,6 +111,6 @@ def inspect(input, watched_shows: bool):
     for id in input:
         if id.isnumeric():
             id = int(id)
-        elif id.startswith('https:') or id.startswith('http:'):
+        elif id.startswith("https:") or id.startswith("http:"):
             id = id_from_url(id)
         inspect_media(id)

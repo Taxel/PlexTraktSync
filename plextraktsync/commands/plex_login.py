@@ -13,13 +13,24 @@ from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
 from plexapi.server import PlexServer
 
 from plextraktsync.factory import factory
-from plextraktsync.style import (comment, disabled, error, highlight, prompt,
-                                 success, title)
+from plextraktsync.style import (
+    comment,
+    disabled,
+    error,
+    highlight,
+    prompt,
+    success,
+    title,
+)
 
 PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
 PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username or e-mail")
-PROMPT_PLEX_RELOGIN = prompt("You already have Plex Access Token, do you want to log in again?")
-SUCCESS_MESSAGE = success("Plex Media Server Authentication Token and base URL have been added to .env file")
+PROMPT_PLEX_RELOGIN = prompt(
+    "You already have Plex Access Token, do you want to log in again?"
+)
+SUCCESS_MESSAGE = success(
+    "Plex Media Server Authentication Token and base URL have been added to .env file"
+)
 NOTICE_2FA_PASSWORD = comment(
     "If you have 2 Factor Authentication enabled on Plex "
     "you can append the code to your password below (eg. passwordCODE)"
@@ -27,14 +38,26 @@ NOTICE_2FA_PASSWORD = comment(
 CONFIG = factory.config()
 
 
-style = get_style({"questionmark": "hidden", "question": "ansiyellow", "pointer": "fg:ansiblack bg:ansiyellow", })
+style = get_style(
+    {
+        "questionmark": "hidden",
+        "question": "ansiyellow",
+        "pointer": "fg:ansiblack bg:ansiyellow",
+    }
+)
 
 
 def myplex_login(username, password):
     while True:
         username = click.prompt(PROMPT_PLEX_USERNAME, type=str, default=username)
         click.echo(NOTICE_2FA_PASSWORD)
-        password = click.prompt(PROMPT_PLEX_PASSWORD, type=str, default=password, hide_input=True, show_default=False)
+        password = click.prompt(
+            PROMPT_PLEX_PASSWORD,
+            type=str,
+            default=password,
+            hide_input=True,
+            show_default=False,
+        )
         try:
             return MyPlexAccount(username, password)
         except Unauthorized as e:
@@ -49,8 +72,14 @@ def choose_managed_user(account: MyPlexAccount):
     click.echo(success("Managed user(s) found:"))
     users = sorted(users)
     users.insert(0, account.username)
-    user = inquirer.select(message="Select the user you would like to use:", choices=users, default=None, style=style,
-                           qmark="", pointer=">", ).execute()
+    user = inquirer.select(
+        message="Select the user you would like to use:",
+        choices=users,
+        default=None,
+        style=style,
+        qmark="",
+        pointer=">",
+    ).execute()
 
     if user == account.username:
         return None
@@ -75,7 +104,8 @@ def prompt_server(servers: List[MyPlexResource]):
         product = decorator(f"{s.product}/{s.productVersion}")
         platform = decorator(f"{s.device}: {s.platform}/{s.platformVersion}")
         click.echo(
-            f"- {highlight(s.name)}: [Last seen: {decorator(str(s.lastSeenAt))}, Server: {product} on {platform}]")
+            f"- {highlight(s.name)}: [Last seen: {decorator(str(s.lastSeenAt))}, Server: {product} on {platform}]"
+        )
         c: ResourceConnection
         for c in s.connections:
             click.echo(f"    {c.uri}")
@@ -96,8 +126,14 @@ def prompt_server(servers: List[MyPlexResource]):
             fmt_server(s)
             server_names.append(s.name)
 
-    return inquirer.select(message="Select default server:", choices=sorted(server_names), default=None, style=style,
-                           qmark="", pointer=">", ).execute()
+    return inquirer.select(
+        message="Select default server:",
+        choices=sorted(server_names),
+        default=None,
+        style=style,
+        qmark="",
+        pointer=">",
+    ).execute()
 
 
 def pick_server(account: MyPlexAccount):
@@ -126,7 +162,11 @@ def choose_server(account: MyPlexAccount):
                 raise ClickException("Unable to find server from Plex account")
 
             # Connect to obtain baseUrl
-            click.echo(title(f"Attempting to connect to {server.name}. This may take time and print some errors."))
+            click.echo(
+                title(
+                    f"Attempting to connect to {server.name}. This may take time and print some errors."
+                )
+            )
             click.echo(title("Server connections:"))
             for c in server.connections:
                 click.echo(f"    {c.uri}")
@@ -179,7 +219,13 @@ def login(username: str, password: str):
             host_ip = socket.gethostbyname("host.docker.internal")
         except socket.gaierror:
             try:
-                host_ip = check_output("ip -4 route show default | awk '{ print $3 }'", shell=True).decode().rstrip()
+                host_ip = (
+                    check_output(
+                        "ip -4 route show default | awk '{ print $3 }'", shell=True
+                    )
+                    .decode()
+                    .rstrip()
+                )
             except Exception:
                 host_ip = "172.17.0.1"
         CONFIG["PLEX_FALLBACKURL"] = f"http://{host_ip}:32400"

@@ -6,8 +6,12 @@ from plexapi.video import Episode, Movie, Show
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.media import Media, MediaFactory
-from plextraktsync.plex_api import (PlexApi, PlexGuid, PlexLibraryItem,
-                                    PlexLibrarySection)
+from plextraktsync.plex_api import (
+    PlexApi,
+    PlexGuid,
+    PlexLibraryItem,
+    PlexLibrarySection,
+)
 from plextraktsync.trakt_api import TraktApi
 
 
@@ -72,7 +76,9 @@ class WalkPlanner:
         movie_sections, show_sections = self.find_sections()
         movies, shows, episodes = self.find_by_id(movie_sections, show_sections)
         shows = self.find_from_sections_by_title(show_sections, self.config.show, shows)
-        movies = self.find_from_sections_by_title(movie_sections, self.config.movie, movies)
+        movies = self.find_from_sections_by_title(
+            movie_sections, self.config.movie, movies
+        )
 
         # reset sections if movie/shows have been picked
         if movies or shows or episodes:
@@ -93,10 +99,18 @@ class WalkPlanner:
 
         results = defaultdict(list)
         for id in self.config.id:
-            found = self.find_from_sections_by_id(show_sections, id, results) if self.config.walk_shows else None
+            found = (
+                self.find_from_sections_by_id(show_sections, id, results)
+                if self.config.walk_shows
+                else None
+            )
             if found:
                 continue
-            found = self.find_from_sections_by_id(movie_sections, id, results) if self.config.walk_movies else None
+            found = (
+                self.find_from_sections_by_id(movie_sections, id, results)
+                if self.config.walk_movies
+                else None
+            )
             if found:
                 continue
             raise RuntimeError(f"Id '{id}' not found")
@@ -154,18 +168,24 @@ class WalkPlanner:
         :return: [movie_sections, show_sections]
         """
         if not self.config.library:
-            movie_sections = self.plex.movie_sections() if self.config.walk_movies else []
+            movie_sections = (
+                self.plex.movie_sections() if self.config.walk_movies else []
+            )
             show_sections = self.plex.show_sections() if self.config.walk_shows else []
             return [movie_sections, show_sections]
 
         movie_sections = []
         show_sections = []
         for library in self.config.library:
-            movie_section = self.plex.movie_sections(library) if self.config.walk_movies else []
+            movie_section = (
+                self.plex.movie_sections(library) if self.config.walk_movies else []
+            )
             if movie_section:
                 movie_sections.extend(movie_section)
                 continue
-            show_section = self.plex.show_sections(library) if self.config.walk_shows else []
+            show_section = (
+                self.plex.show_sections(library) if self.config.walk_shows else []
+            )
             if show_section:
                 show_sections.extend(show_section)
                 continue
@@ -179,7 +199,14 @@ class Walker:
     Class dealing with finding and walking library, movies/shows, episodes
     """
 
-    def __init__(self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory, config: WalkConfig, progressbar=None):
+    def __init__(
+        self,
+        plex: PlexApi,
+        trakt: TraktApi,
+        mf: MediaFactory,
+        config: WalkConfig,
+        progressbar=None,
+    ):
         self._progressbar = progressbar
         self.plex = plex
         self.trakt = trakt
@@ -269,7 +296,11 @@ class Walker:
         for section in sections:
             with measure_time(f"{section.title} processed"):
                 total = len(section)
-                it = self.progressbar(section.items(total), total=total, desc=f"Processing {section.title}")
+                it = self.progressbar(
+                    section.items(total),
+                    total=total,
+                    desc=f"Processing {section.title}",
+                )
                 yield from it
 
     def media_from_items(self, libtype: str, items: List):

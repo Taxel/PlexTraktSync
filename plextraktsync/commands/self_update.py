@@ -9,15 +9,17 @@ import click
 
 def execx(command: Union[str, List[str]]):
     if isinstance(command, str):
-        command = command.split(' ')
+        command = command.split(" ")
 
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    process = subprocess.Popen(
+        command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL
+    )
     return process.communicate()[0]
 
 
 def pipx_installed(package: str):
     try:
-        output = execx('pipx list --json')
+        output = execx("pipx list --json")
     except FileNotFoundError:
         return None
     if not output:
@@ -31,7 +33,7 @@ def pipx_installed(package: str):
         return None
 
     try:
-        package = install_data['venvs'][package]['metadata']['main_package']
+        package = install_data["venvs"][package]["metadata"]["main_package"]
     except KeyError:
         return None
 
@@ -39,7 +41,7 @@ def pipx_installed(package: str):
 
 
 def enable_self_update():
-    package = pipx_installed('plextraktsync')
+    package = pipx_installed("plextraktsync")
 
     return package is not None
 
@@ -55,5 +57,5 @@ def self_update():
     upgraded package plextraktsync from 0.15.3 to 0.18.5 (location: /Users/glen/.local/pipx/venvs/plextraktsync)
     """
 
-    click.echo('Updating PlexTraktSync to latest using pipx')
-    system('pipx upgrade PlexTraktSync')
+    click.echo("Updating PlexTraktSync to latest using pipx")
+    system("pipx upgrade PlexTraktSync")

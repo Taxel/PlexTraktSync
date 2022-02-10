@@ -2,8 +2,11 @@ from functools import wraps
 from time import sleep
 
 from requests import RequestException
-from trakt.errors import (LockedUserAccountException, RateLimitException,
-                          TraktInternalException)
+from trakt.errors import (
+    LockedUserAccountException,
+    RateLimitException,
+    TraktInternalException,
+)
 
 from plextraktsync.logging import logger
 
@@ -22,11 +25,20 @@ def rate_limit(retries=5):
             while True:
                 try:
                     return fn(*args, **kwargs)
-                except (RateLimitException, RequestException, TraktInternalException, LockedUserAccountException) as e:
+                except (
+                    RateLimitException,
+                    RequestException,
+                    TraktInternalException,
+                    LockedUserAccountException,
+                ) as e:
                     if retry == retries:
                         logger.error(f"Error: {e}")
-                        logger.error("API didn't respond properly, script will abort now. Please try again later.")
-                        logger.error(f"Last call: {fn.__module__}.{fn.__name__}({args[1:]}, {kwargs})")
+                        logger.error(
+                            "API didn't respond properly, script will abort now. Please try again later."
+                        )
+                        logger.error(
+                            f"Last call: {fn.__module__}.{fn.__name__}({args[1:]}, {kwargs})"
+                        )
                         exit(1)
 
                     if isinstance(e, RateLimitException):

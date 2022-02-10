@@ -21,7 +21,7 @@ def command():
             import importlib
 
             name = fn.__name__
-            module = importlib.import_module(f'.commands.{name}', package=__package__)
+            module = importlib.import_module(f".commands.{name}", package=__package__)
             cmd = getattr(module, name)
 
             try:
@@ -51,20 +51,17 @@ def cli(ctx):
     "--sort",
     type=click.Choice(["size", "date", "url"], case_sensitive=False),
     default="size",
-    show_default=True, help="Sort mode"
+    show_default=True,
+    help="Sort mode",
 )
 @click.option(
     "--limit",
     type=int,
     default=20,
-    show_default=True, help="Limit entries to be printed"
+    show_default=True,
+    help="Limit entries to be printed",
 )
-@click.option(
-    "--reverse",
-    is_flag=True,
-    default=False,
-    help="Sort reverse"
-)
+@click.option("--reverse", is_flag=True, default=False, help="Sort reverse")
 @click.argument("url", required=False)
 def cache():
     """
@@ -74,8 +71,8 @@ def cache():
 
 
 @command()
-@click.option('--confirm', is_flag=True, help='Confirm the dangerous action')
-@click.option('--dry-run', is_flag=True, help='Do not perform delete actions')
+@click.option("--confirm", is_flag=True, help="Confirm the dangerous action")
+@click.option("--dry-run", is_flag=True, help="Do not perform delete actions")
 def clear_collections():
     """
     Clear Movies and Shows collections in Trakt
@@ -94,13 +91,13 @@ def info():
 
 
 @command()
-@click.argument('input', nargs=-1)
+@click.argument("input", nargs=-1)
 @click.option(
     "--watched-shows",
     type=bool,
     default=False,
     is_flag=True,
-    help="Print Trakt watched_shows and exit"
+    help="Print Trakt watched_shows and exit",
 )
 def inspect():
     """
@@ -119,8 +116,16 @@ def login():
 
 
 @command()
-@click.option("--username", help="Plex login", default=lambda: environ.get("PLEX_USERNAME", CONFIG["PLEX_USERNAME"]))
-@click.option("--password", help="Plex password", default=lambda: environ.get("PLEX_PASSWORD", None))
+@click.option(
+    "--username",
+    help="Plex login",
+    default=lambda: environ.get("PLEX_USERNAME", CONFIG["PLEX_USERNAME"]),
+)
+@click.option(
+    "--password",
+    help="Plex password",
+    default=lambda: environ.get("PLEX_PASSWORD", None),
+)
 def plex_login():
     """
     Log in to Plex Account to obtain Access Token. Optionally can use managed user on servers that you own.
@@ -129,51 +134,52 @@ def plex_login():
 
 
 @command()
+@click.option("--library", help="Specify Library to use")
 @click.option(
-    "--library",
-    help="Specify Library to use"
+    "--show", "show", type=str, show_default=True, help="Sync specific show only"
 )
 @click.option(
-    "--show", "show",
-    type=str,
-    show_default=True, help="Sync specific show only"
+    "--movie", "movie", type=str, show_default=True, help="Sync specific movie only"
 )
 @click.option(
-    "--movie", "movie",
-    type=str,
-    show_default=True, help="Sync specific movie only"
-)
-@click.option(
-    "--id", "ids",
+    "--id",
+    "ids",
     type=str,
     multiple=True,
-    show_default=True, help="Sync specific item only"
+    show_default=True,
+    help="Sync specific item only",
 )
 @click.option(
-    "--sync", "sync_option",
+    "--sync",
+    "sync_option",
     type=click.Choice(["all", "movies", "tv", "shows"], case_sensitive=False),
     default="all",
-    show_default=True, help="Specify what to sync"
+    show_default=True,
+    help="Specify what to sync",
 )
 @click.option(
-    "--batch-size", "batch_size",
+    "--batch-size",
+    "batch_size",
     type=int,
-    default=1, show_default=True,
-    help="Batch size for collection submit queue"
+    default=1,
+    show_default=True,
+    help="Batch size for collection submit queue",
 )
 @click.option(
-    "--dry-run", "dry_run",
+    "--dry-run",
+    "dry_run",
     type=bool,
     default=False,
     is_flag=True,
-    help="Dry run: Do not make changes"
+    help="Dry run: Do not make changes",
 )
 @click.option(
-    "--no-progress-bar", "no_progress_bar",
+    "--no-progress-bar",
+    "no_progress_bar",
     type=bool,
     default=False,
     is_flag=True,
-    help="Don't output progress bars"
+    help="Don't output progress bars",
 )
 def sync():
     """
@@ -192,18 +198,19 @@ def trakt_login():
 
 @command()
 @click.option(
-    "--no-progress-bar", "no_progress_bar",
+    "--no-progress-bar",
+    "no_progress_bar",
     type=bool,
     default=False,
     is_flag=True,
-    help="Don't output progress bars"
+    help="Don't output progress bars",
 )
 @click.option(
     "--local",
     type=bool,
     default=False,
     is_flag=True,
-    help="Show only local files (no match in Plex)"
+    help="Show only local files (no match in Plex)",
 )
 def unmatched():
     """

@@ -14,9 +14,12 @@ class Media:
     """
     Class containing Plex and Trakt media items (Movie, Episode)
     """
-    show: Optional['Media']
 
-    def __init__(self, plex, trakt, plex_api: PlexApi = None, trakt_api: TraktApi = None):
+    show: Optional["Media"]
+
+    def __init__(
+        self, plex, trakt, plex_api: PlexApi = None, trakt_api: TraktApi = None
+    ):
         self.plex_api = plex_api
         self.trakt_api = trakt_api
         self.plex = plex
@@ -66,7 +69,9 @@ class Media:
         if self.is_movie:
             return self.trakt_id in self.trakt_api.movie_collection_set
         elif not self.is_episode:
-            raise RuntimeError(f"is_collected: Unsupported media type: {self.media_type}")
+            raise RuntimeError(
+                f"is_collected: Unsupported media type: {self.media_type}"
+            )
 
         collected = self.show.collected
         return collected.get_completed(self.season_number, self.episode_number)
@@ -74,7 +79,9 @@ class Media:
     @cached_property
     def collected(self):
         if self.media_type != "shows":
-            raise RuntimeError(f"show_collected: Unsupported media type: {self.media_type}")
+            raise RuntimeError(
+                f"show_collected: Unsupported media type: {self.media_type}"
+            )
 
         return self.trakt_api.collected(self.trakt)
 
@@ -100,18 +107,26 @@ class Media:
         if self.is_movie:
             return self.trakt_id in self.trakt_api.watched_movies
         elif not self.is_episode:
-            raise RuntimeError(f"watched_on_trakt: Unsupported media type: {self.media_type}")
+            raise RuntimeError(
+                f"watched_on_trakt: Unsupported media type: {self.media_type}"
+            )
 
         watched = self.trakt_api.watched_shows
-        return watched.get_completed(self.show_trakt_id, self.season_number, self.episode_number)
+        return watched.get_completed(
+            self.show_trakt_id, self.season_number, self.episode_number
+        )
 
     def mark_watched_trakt(self):
         if self.is_movie:
             self.trakt_api.mark_watched(self.trakt, self.plex.seen_date)
         elif self.is_episode:
-            self.trakt_api.mark_watched(self.trakt, self.plex.seen_date, self.show_trakt_id)
+            self.trakt_api.mark_watched(
+                self.trakt, self.plex.seen_date, self.show_trakt_id
+            )
         else:
-            raise RuntimeError(f"mark_watched_trakt: Unsupported media type: {self.media_type}")
+            raise RuntimeError(
+                f"mark_watched_trakt: Unsupported media type: {self.media_type}"
+            )
 
     def mark_watched_plex(self):
         self.plex_api.mark_watched(self.plex.item)
@@ -165,7 +180,9 @@ class MediaFactory:
 
     def resolve_guid(self, guid: PlexGuid, show: Media = None):
         if guid.provider in ["local", "none", "agents.none"]:
-            logger.warning(f"{guid.pm.item}: Skipping guid {guid} because provider {guid.provider} has no external Id")
+            logger.warning(
+                f"{guid.pm.item}: Skipping guid {guid} because provider {guid.provider} has no external Id"
+            )
 
             return None
 

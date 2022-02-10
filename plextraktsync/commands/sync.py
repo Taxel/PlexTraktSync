@@ -11,14 +11,14 @@ from plextraktsync.version import version
 
 
 def sync(
-        sync_option: str,
-        library: str,
-        show: str,
-        movie: str,
-        ids: List[str],
-        batch_size: int,
-        dry_run: bool,
-        no_progress_bar: bool,
+    sync_option: str,
+    library: str,
+    show: str,
+    movie: str,
+    ids: List[str],
+    batch_size: int,
+    dry_run: bool,
+    no_progress_bar: bool,
 ):
     """
     Perform sync between Plex and Trakt
@@ -30,7 +30,9 @@ def sync(
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]
 
-    config = factory.run_config().update(batch_size=batch_size, dry_run=dry_run, progressbar=not no_progress_bar)
+    config = factory.run_config().update(
+        batch_size=batch_size, dry_run=dry_run, progressbar=not no_progress_bar
+    )
     wc = factory.walk_config().update(movies=movies, shows=shows)
     w = factory.walker()
 

@@ -6,8 +6,7 @@ from os.path import exists
 
 from dotenv import load_dotenv
 
-from plextraktsync.path import (cache_dir, config_file, default_config_file,
-                                env_file)
+from plextraktsync.path import cache_dir, config_file, default_config_file, env_file
 
 """
 Platform name to identify our application
@@ -25,6 +24,7 @@ class RunConfig:
     """
     Class to hold runtime config parameters
     """
+
     dry_run: bool = False
     batch_size: int = 1
     progressbar: bool = True
@@ -79,7 +79,9 @@ class Config(dict):
 
         self.initialized = True
 
-        self["cache"]["path"] = self["cache"]["path"].replace("$PTS_CACHE_DIR", cache_dir)
+        self["cache"]["path"] = self["cache"]["path"].replace(
+            "$PTS_CACHE_DIR", cache_dir
+        )
 
     # https://stackoverflow.com/a/20666342/2314626
     def merge(self, source, destination):

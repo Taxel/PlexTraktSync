@@ -41,7 +41,7 @@ def render_xml(data):
 
     root = ElementTree.fromstring(data)
 
-    return ElementTree.tostring(root, encoding='utf8').decode('utf8')
+    return ElementTree.tostring(root, encoding="utf8").decode("utf8")
 
 
 def render_json(data):
@@ -53,16 +53,14 @@ def render_json(data):
 
 def inspect_url(session: CachedSession, url: str):
     matches = [
-        response
-        for response in session.cache.responses.values()
-        if response.url == url
+        response for response in session.cache.responses.values() if response.url == url
     ]
     for m in matches:
-        content_type = m.headers['Content-Type']
-        if content_type.startswith('text/xml'):
+        content_type = m.headers["Content-Type"]
+        if content_type.startswith("text/xml"):
             print(f"<!-- {m.url} -->")
             print(render_xml(m.content))
-        elif content_type.startswith('application/json'):
+        elif content_type.startswith("application/json"):
             print(f"// {m.url}")
             print(render_json(m.content))
         else:
@@ -73,7 +71,7 @@ def inspect_url(session: CachedSession, url: str):
 def cache(sort: str, limit: int, reverse: bool, url: str):
     config = factory.config()
     trakt_cache = config["cache"]["path"]
-    session = CachedSession(cache_name=trakt_cache, backend='sqlite')
+    session = CachedSession(cache_name=trakt_cache, backend="sqlite")
 
     if url:
         inspect_url(session, url)

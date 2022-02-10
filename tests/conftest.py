@@ -27,7 +27,7 @@ for key in config.env_keys:
 
 def load_mock(name: str):
     filename = join_path(MOCK_DATA_DIR, name)
-    with open(filename, encoding='utf-8') as f:
+    with open(filename, encoding="utf-8") as f:
         return json.load(f)
 
 

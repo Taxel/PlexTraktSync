@@ -37,14 +37,24 @@ class PlexMock(PlexApi):
 
 
 def test_walker():
-    plex = PlexMock([
-        {"type": "movie", "title": "Movies", "items": [
-            {"title": "Batman Begins"},
-        ]},
-        {"type": "show", "title": "TV Shows", "items": [
-            {"title": "Breaking Bad"},
-        ]},
-    ])
+    plex = PlexMock(
+        [
+            {
+                "type": "movie",
+                "title": "Movies",
+                "items": [
+                    {"title": "Batman Begins"},
+                ],
+            },
+            {
+                "type": "show",
+                "title": "TV Shows",
+                "items": [
+                    {"title": "Breaking Bad"},
+                ],
+            },
+        ]
+    )
 
     wc = WalkConfig()
     wc.add_library("Movies")

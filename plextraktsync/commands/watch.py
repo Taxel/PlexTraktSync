@@ -5,8 +5,12 @@ from trakt.tv import TVEpisode
 
 from plextraktsync.config import Config
 from plextraktsync.decorators.cached_property import cached_property
-from plextraktsync.events import (ActivityNotification, Error,
-                                  PlaySessionStateNotification, TimelineEntry)
+from plextraktsync.events import (
+    ActivityNotification,
+    Error,
+    PlaySessionStateNotification,
+    TimelineEntry,
+)
 from plextraktsync.factory import factory
 from plextraktsync.listener import WebSocketListener
 from plextraktsync.logging import logging
@@ -47,7 +51,9 @@ class SessionCollection(dict):
 
 
 class WatchStateUpdater:
-    def __init__(self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory, config: Config):
+    def __init__(
+        self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory, config: Config
+    ):
         self.plex = plex
         self.trakt = trakt
         self.mf = mf
@@ -57,7 +63,9 @@ class WatchStateUpdater:
         self.add_collection = config["watch"]["add_collection"]
         if config["watch"]["username_filter"]:
             if not self.plex.has_sessions():
-                self.logger.warning('No permission to access sessions, disabling username filter')
+                self.logger.warning(
+                    "No permission to access sessions, disabling username filter"
+                )
                 self.username_filter = None
             else:
                 self.username_filter = config["PLEX_USERNAME"]
@@ -97,10 +105,14 @@ class WatchStateUpdater:
         m = self.find_by_key(activity.key, reload=True)
         if not m:
             return
-        self.logger.info(f"on_activity: {m}: Collected: {m.is_collected}, Watched: [Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}]")
+        self.logger.info(
+            f"on_activity: {m}: Collected: {m.is_collected}, Watched: [Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}]"
+        )
 
         if m.watched_on_plex and not m.watched_on_trakt:
-            self.logger.info(f"on_activity: Marking {activity.key} as watched in Trakt: {m}")
+            self.logger.info(
+                f"on_activity: Marking {activity.key} as watched in Trakt: {m}"
+            )
             m.mark_watched_trakt()
 
         if self.add_collection and not m.is_collected:
@@ -131,7 +143,9 @@ class WatchStateUpdater:
         movie = m.plex.item
         percent = m.plex.watch_progress(event.view_offset)
 
-        self.logger.info(f"on_play: {movie}: {percent:.6F}% Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}")
+        self.logger.info(
+            f"on_play: {movie}: {percent:.6F}% Watched: {movie.isWatched}, LastViewed: {movie.lastViewedAt}"
+        )
         scrobbled = self.scrobble(m, percent, event)
         self.logger.debug(f"Scrobbled: {scrobbled}")
 
@@ -167,8 +181,18 @@ def watch():
     ws = WebSocketListener(server)
     updater = WatchStateUpdater(plex, trakt, mf, config)
 
-    ws.on(PlaySessionStateNotification, updater.on_play, state=["playing", "stopped", "paused"])
-    ws.on(ActivityNotification, updater.on_activity, type="library.refresh.items", event="ended", progress=100)
+    ws.on(
+        PlaySessionStateNotification,
+        updater.on_play,
+        state=["playing", "stopped", "paused"],
+    )
+    ws.on(
+        ActivityNotification,
+        updater.on_activity,
+        type="library.refresh.items",
+        event="ended",
+        progress=100,
+    )
     ws.on(TimelineEntry, updater.on_delete, state=9, metadata_state="deleted")
     ws.on(Error, updater.on_error)
 

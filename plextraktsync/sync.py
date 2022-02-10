@@ -40,7 +40,9 @@ class SyncConfig:
 
     @cached_property
     def sync_watched_status(self):
-        return self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
+        return (
+            self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
+        )
 
     def get(self, section, key):
         return self[key] if key in self else self[section][key]
@@ -59,7 +61,7 @@ class Sync:
 
         if self.config.trakt_to_plex["liked_lists"]:
             for lst in trakt.liked_lists:
-                listutil.addList(lst['username'], lst['listname'])
+                listutil.addList(lst["username"], lst["listname"])
 
         for movie in walker.find_movies():
             self.sync_collection(movie, dry_run=dry_run)

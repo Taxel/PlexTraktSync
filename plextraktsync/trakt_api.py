@@ -35,20 +35,20 @@ class ScrobblerProxy:
         self.logger = logging.getLogger("PlexTraktSync.ScrobblerProxy")
 
     def update(self, progress: float):
-        self.logger.debug(f'update({self.scrobbler.media}): {progress}')
-        return self._post('start', progress)
+        self.logger.debug(f"update({self.scrobbler.media}): {progress}")
+        return self._post("start", progress)
 
     def pause(self, progress: float):
-        self.logger.debug(f'pause({self.scrobbler.media}): {progress}')
-        return self._post('pause', progress)
+        self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
+        return self._post("pause", progress)
 
     def stop(self, progress: float):
         if progress >= self.threshold:
-            self.logger.debug(f'stop({self.scrobbler.media}): {progress}')
-            return self._post('stop', progress)
+            self.logger.debug(f"stop({self.scrobbler.media}): {progress}")
+            return self._post("stop", progress)
         else:
-            self.logger.debug(f'pause({self.scrobbler.media}): {progress}')
-            return self._post('pause', progress)
+            self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
+            return self._post("pause", progress)
 
     # Copied method, until upstream is merged
     # https://github.com/moogar0880/PyTrakt/pull/196
@@ -58,11 +58,11 @@ class ScrobblerProxy:
     @post
     def _post(self, method: str, progress: float):
         self.scrobbler.progress = progress
-        uri = f'scrobble/{method}'
+        uri = f"scrobble/{method}"
         payload = dict(
             progress=self.scrobbler.progress,
             app_version=self.scrobbler.version,
-            date=self.scrobbler.date
+            date=self.scrobbler.date,
         )
         payload.update(self.scrobbler.media.to_json_singular())
         response = yield uri, payload
@@ -82,9 +82,9 @@ class TraktRatingCollection(dict):
 
     @flatten_dict
     def ratings(self, media_type: str):
-        index = media_type.rstrip('s')
+        index = media_type.rstrip("s")
         for r in self.trakt.get_ratings(media_type):
-            yield r[index]['ids']['trakt'], r['rating']
+            yield r[index]["ids"]["trakt"], r["rating"]
 
 
 class TraktApi:
@@ -112,7 +112,7 @@ class TraktApi:
     @rate_limit()
     def me(self):
         try:
-            return trakt.users.User('me')
+            return trakt.users.User("me")
         except (OAuthException, ForbiddenException) as e:
             logger.fatal("Trakt authentication error: {}".format(str(e)))
             raise e
@@ -127,9 +127,7 @@ class TraktApi:
     @nocache
     @rate_limit()
     def watched_movies(self):
-        return set(
-            map(lambda m: m.trakt, self.me.watched_movies)
-        )
+        return set(map(lambda m: m.trakt, self.me.watched_movies))
 
     @cached_property
     @nocache
@@ -153,9 +151,7 @@ class TraktApi:
 
     @cached_property
     def movie_collection_set(self):
-        return set(
-            map(lambda m: m.trakt, self.movie_collection)
-        )
+        return set(map(lambda m: m.trakt, self.movie_collection))
 
     @cached_property
     @nocache
@@ -211,10 +207,7 @@ class TraktApi:
                 **pm.to_json(),
             )
         elif m.media_type == "episodes":
-            item = dict(
-                **m.ids,
-                **pm.to_json()
-            )
+            item = dict(**m.ids, **pm.to_json())
         else:
             raise ValueError(f"Unsupported media type: {m.media_type}")
 
@@ -238,7 +231,9 @@ class TraktApi:
 
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
-            ts = self.search_by_id(guid.show_id, id_type=guid.provider, media_type="show")
+            ts = self.search_by_id(
+                guid.show_id, id_type=guid.provider, media_type="show"
+            )
             lookup = self.lookup(ts)
 
             return self.find_episode_guid(guid, lookup)
@@ -259,7 +254,9 @@ class TraktApi:
 
             return None
 
-        search = trakt.sync.search_by_id(media_id, id_type=id_type, media_type=media_type)
+        search = trakt.sync.search_by_id(
+            media_id, id_type=id_type, media_type=media_type
+        )
         # look for the first wanted type in the results
         # NOTE: this is not needed, kept around for caution
         for m in search:
@@ -279,7 +276,7 @@ class TraktApi:
         validate that the id is valid for trakt
         """
         # imdb: tt + numbers
-        if media_id[0:2] == 'tt' and media_id[2:].isnumeric():
+        if media_id[0:2] == "tt" and media_id[2:].isnumeric():
             return True
 
         # must be numeric

@@ -8,7 +8,7 @@ def git_version_info():
     if not commit:
         return None
 
-    message = commit['message'].split("\n")[0]
+    message = commit["message"].split("\n")[0]
 
     return f"{commit['commit'][0:8]}: {message} @{commit['author_date']}"
 
@@ -16,7 +16,7 @@ def git_version_info():
 def version():
     from plextraktsync import __version__
 
-    if __version__[-1] != 'x':
+    if __version__[-1] != "x":
         return __version__
 
     gv = git_version_info()

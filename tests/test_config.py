@@ -10,17 +10,9 @@ from plextraktsync.sync import SyncConfig
 def test_config_merge():
     config = factory.config()
 
-    override = {
-        "root": {
-            "key1": "value1"
-        }
-    }
+    override = {"root": {"key1": "value1"}}
     config.merge(override, config)
-    override = {
-        "root": {
-            "key2": "value2"
-        }
-    }
+    override = {"root": {"key2": "value2"}}
     config.merge(override, config)
     assert config["root"]["key1"] == "value1"
     assert config["root"]["key2"] == "value2"
@@ -29,6 +21,7 @@ def test_config_merge():
 def test_config_merge_real():
     config = Config()
     from tests.conftest import MOCK_DATA_DIR
+
     config.config_file = join(MOCK_DATA_DIR, "673-config.json")
 
     assert config["sync"]["plex_to_trakt"]["collection"] is False
@@ -37,6 +30,7 @@ def test_config_merge_real():
 def test_sync_config():
     config = Config()
     from tests.conftest import MOCK_DATA_DIR
+
     config.config_file = join(MOCK_DATA_DIR, "673-config.json")
 
     sync_config = SyncConfig(config)
