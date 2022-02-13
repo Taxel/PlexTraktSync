@@ -96,7 +96,7 @@ def id_from_url(url: str):
         parsed = parse_qs(urlparse(result.fragment).query)
         key = ",".join(parsed["key"])
         if key.startswith("/library/metadata/"):
-            return int(key[len("/library/metadata/") :])
+            return int(key[len("/library/metadata/"):])
 
     return url
 
