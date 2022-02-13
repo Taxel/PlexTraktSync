@@ -10,6 +10,7 @@ from plexapi.library import LibrarySection
 from plexapi.media import AudioStream, MediaPart, VideoStream
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plexapi.video import Episode, Movie, Show
+from requests import ReadTimeout
 from trakt.utils import timestamp
 
 from plextraktsync.decorators.cached_property import cached_property
@@ -85,6 +86,18 @@ class PlexGuid:
 
         # old item, like imdb 'tt0112253'
         return guid[0:2] == "tt" and guid[2:].isnumeric()
+
+    @cached_property
+    def title(self):
+        """
+        Resolving str(pm.item) may result network errors. Guard on that.
+        """
+        try:
+            return str(self.pm.item)
+        except ReadTimeout as e:
+            logger.error(f"Unable to resolve {str(self)} title: {e}")
+
+            return str(self)
 
     def __str__(self):
         return self.guid
