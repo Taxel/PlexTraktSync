@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "60ce7397191f035be72e08343e64e4431ba9d09e7466d5bb5255fcb164a76480"
+            "sha256": "d17d468ec04ae2bd30f2ccfd74fbbd9cd44d5c69efd5eb3f525327c80c3efbf4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -49,19 +49,19 @@
         },
         "charset-normalizer": {
             "hashes": [
-                "sha256:2842d8f5e82a1f6aa437380934d5e1cd4fcf2003b06fed6940769c164a480a45",
-                "sha256:98398a9d69ee80548c762ba991a4728bfc3836768ed226b3945908d1a688371c"
+                "sha256:2857e29ff0d34db842cd7ca3230549d1a697f96ee6d3fb071cfa6c7393832597",
+                "sha256:6881edbebdb17b39b4eaaa821b438bf6eddffb4468cf344f09f89def34a8b1df"
             ],
             "markers": "python_version >= '3'",
-            "version": "==2.0.11"
+            "version": "==2.0.12"
         },
         "click": {
             "hashes": [
-                "sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3",
-                "sha256:410e932b050f5eed773c4cda94de75971c89cdb3155a72a0831139a79e5ecb5b"
+                "sha256:6a7a62563bbfabfda3a38f3023a1db4a35978c0abd76f6c9605ecd6554d6d9b1",
+                "sha256:8458d7b1287c5fb128c90e23381cf99dcde74beaf6c7ff6384ce84d6fe090adb"
             ],
             "index": "pypi",
-            "version": "==8.0.3"
+            "version": "==8.0.4"
         },
         "colorama": {
             "hashes": [
@@ -128,11 +128,11 @@
         },
         "prompt-toolkit": {
             "hashes": [
-                "sha256:cb7dae7d2c59188c85a1d6c944fad19aded6a26bd9c8ae115a4e1c20eb90b713",
-                "sha256:f2b6a8067a4fb959d3677d1ed764cc4e63e0f6f565b9a4fc7edc2b18bf80217b"
+                "sha256:30129d870dcb0b3b6a53efdc9d0a83ea96162ffd28ffe077e94215b233dc670c",
+                "sha256:9f1cd16b1e86c2968f2519d7fb31dd9d669916f515612c269d14e9ed52b51650"
             ],
             "markers": "python_full_version >= '3.6.2'",
-            "version": "==3.0.27"
+            "version": "==3.0.28"
         },
         "pygments": {
             "hashes": [

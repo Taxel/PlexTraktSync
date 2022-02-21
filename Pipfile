@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 appdirs = "==1.4.4"
-click = "==8.0.3"
+click = "==8.0.4"
 deprecated = "==1.2.13"
 inquirerpy = "==0.3.3"
 plexapi = "==4.9.2"
