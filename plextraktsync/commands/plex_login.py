@@ -228,9 +228,9 @@ def login(username: str, password: str):
                 )
             except Exception:
                 host_ip = "172.17.0.1"
-        CONFIG["PLEX_FALLBACKURL"] = f"http://{host_ip}:32400"
+        CONFIG["PLEX_LOCALURL"] = f"http://{host_ip}:32400"
     else:
-        CONFIG["PLEX_FALLBACKURL"] = "http://localhost:32400"
+        CONFIG["PLEX_LOCALURL"] = "http://localhost:32400"
     CONFIG.save()
 
     click.echo(SUCCESS_MESSAGE)
