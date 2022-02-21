@@ -23,7 +23,7 @@ def _get_plex_server():
     CONFIG = factory.config()
     plex_token = CONFIG["PLEX_TOKEN"]
     plex_baseurl = CONFIG["PLEX_BASEURL"]
-    plex_fallbackurl = CONFIG["PLEX_FALLBACKURL"]
+    plex_localurl = CONFIG["PLEX_LOCALURL"]
     if plex_token == "-":
         plex_token = ""
     server = None
@@ -37,13 +37,13 @@ def _get_plex_server():
     # if connection fails, it will try :
     # 1. url expected by new ssl certificate
     # 2. url without ssl
-    # 3. fallback url (localhost)
+    # 3. local url (localhost)
 
     try:
         server = PlexServer(token=plex_token, baseurl=plex_baseurl)
     except plexapi.server.requests.exceptions.SSLError as e:
-        m = "Plex connection error: {}, fallback url {} didn't respond either.".format(
-            str(e), plex_fallbackurl
+        m = "Plex connection error: {}, local url {} didn't respond either.".format(
+            str(e), plex_localurl
         )
         excep_msg = str(e.__context__)
         if "doesn't match '*." in excep_msg:
@@ -58,7 +58,7 @@ def _get_plex_server():
                 # save new url to .env
                 CONFIG["PLEX_TOKEN"] = plex_token
                 CONFIG["PLEX_BASEURL"] = new_plex_baseurl
-                CONFIG["PLEX_FALLBACKURL"] = plex_fallbackurl
+                CONFIG["PLEX_LOCALURL"] = plex_localurl
                 CONFIG.save()
                 logger.info("Plex server url changed to {}".format(new_plex_baseurl))
             except Exception:
@@ -73,15 +73,15 @@ def _get_plex_server():
             except Exception:
                 pass
     except Exception as e:
-        m = "Plex connection error: {}, fallback url {} didn't respond either.".format(
-            str(e), plex_fallbackurl
+        m = "Plex connection error: {}, local url {} didn't respond either. Check PLEX_LOCALURL in .env file.".format(
+            str(e), plex_localurl
         )
     if server is None:
         try:  # 3
-            server = PlexServer(token=plex_token, baseurl=plex_fallbackurl)
+            server = PlexServer(token=plex_token, baseurl=plex_localurl)
             logger.warning(
-                "No response from {}, fallback to {}".format(
-                    plex_baseurl, plex_fallbackurl
+                "No response from {}, connection using local url {}".format(
+                    plex_baseurl, plex_localurl
                 )
             )
         except Exception:

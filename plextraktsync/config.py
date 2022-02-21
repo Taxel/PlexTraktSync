@@ -39,7 +39,8 @@ class RunConfig:
 class Config(dict):
     env_keys = [
         "PLEX_BASEURL",
-        "PLEX_FALLBACKURL",
+        "PLEX_FALLBACKURL",  # legacy, used before 0.18.21
+        "PLEX_LOCALURL",
         "PLEX_TOKEN",
         "PLEX_USERNAME",
         "TRAKT_USERNAME",
@@ -78,6 +79,10 @@ class Config(dict):
             self[key] = value
 
         self.initialized = True
+
+        if self["PLEX_LOCALURL"] is None:  # old .env file used before 0.18.21
+            self["PLEX_LOCALURL"] = self["PLEX_FALLBACKURL"]
+            self["PLEX_FALLBACKURL"] = None
 
         self["cache"]["path"] = self["cache"]["path"].replace(
             "$PTS_CACHE_DIR", cache_dir
