@@ -136,7 +136,8 @@ services:
 
 ### Unraid setup
 
-Create a Unraid container of PlexTraktSync:
+Option 1 for container creation:
+Create a manual Unraid container of PlexTraktSync:
 
 - Go to the Docker section, under "Docker Containers" and click "Add Container".
   - Click the advanced view to see all of the available parameters.
@@ -148,6 +149,26 @@ Create a Unraid container of PlexTraktSync:
 - The container should start automatically. If not, start it.
 - Enter the console for the container.
 - Enter `plextraktsync` to start the credential process described above.
+
+Option 2 for container creation: 
+Utilize the "Community Apps" Unraid Plugin. 
+- Go to the Plugins tab, paste the Community Apps URL in the URL area, and click "Install". 
+Once installed (or if already installed):
+- Go to the (newly created) Apps tab and search "plextraktsync", and click on the App, and click "Install" (https://forums.unraid.net/topic/38582-plug-in-community-applications/)
+- Take all the default settings (the -it switch as outlined elsewhere in the README is already present), and click "Apply". 
+- The container then installs, and will start. 
+
+
+Schedule (cron) the container to start at given intervals to process the sync
+- Go to the Plugins tab, past the User Scripts URL in the URL area, and click "Install" (https://forums.unraid.net/topic/48286-plugin-ca-user-scripts/)
+Once installed (or if already installed):
+- Go to the Plugins tab, click on "User Scripts", and click the "Add New Script" button
+- Name your script accordingly
+- Click the "gear" icon next to the script name, and click "Edit Script"
+- Below the "#!/bin/bash" line add: `docker start PlexTraktSync`
+- Click "Save Changes"
+- Set the schedule accordingly using the dropdown menu next to the "Run in Background" button
+
 
 ### GitHub
 
