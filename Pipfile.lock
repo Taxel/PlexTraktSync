@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d17d468ec04ae2bd30f2ccfd74fbbd9cd44d5c69efd5eb3f525327c80c3efbf4"
+            "sha256": "f25d6484d0b1c416f7b0364e40ae77345dca99e6fc070108e92f1f7764fd5ff0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -238,11 +238,11 @@
         },
         "websocket-client": {
             "hashes": [
-                "sha256:1315816c0acc508997eb3ae03b9d3ff619c9d12d544c9a9b553704b1cc4f6af5",
-                "sha256:2eed4cc58e4d65613ed6114af2f380f7910ff416fc8c46947f6e76b6815f56c0"
+                "sha256:074e2ed575e7c822fc0940d31c3ac9bb2b1142c303eafcf3e304e6ce035522e8",
+                "sha256:6278a75065395418283f887de7c3beafb3aa68dada5cacbe4b214e8d26da499b"
             ],
             "index": "pypi",
-            "version": "==1.2.3"
+            "version": "==1.3.1"
         },
         "wrapt": {
             "hashes": [
