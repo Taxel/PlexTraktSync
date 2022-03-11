@@ -12,7 +12,6 @@ cattrs==1.10.0; python_version >= '3.7' and python_version < '4.0'
 certifi==2021.10.8
 charset-normalizer==2.0.12; python_version >= '3'
 click==8.0.4
-colorama==0.4.4; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
 commonmark==0.9.1
 deprecated==1.2.13
 idna==3.3; python_version >= '3'
@@ -27,7 +26,7 @@ python-git-info==0.7.1
 requests-cache==0.9.1
 requests-oauthlib==1.3.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 requests==2.27.1
-rich==11.2.0
+rich==12.0.0
 six==1.16.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 tqdm==4.63.0
 trakt==3.4.0
@@ -35,4 +34,4 @@ url-normalize==1.4.3; python_version >= '2.7' and python_version not in '3.0, 3.
 urllib3==1.26.8
 wcwidth==0.2.5
 websocket-client==1.3.1
-wrapt==1.13.3; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
+wrapt==1.14.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
