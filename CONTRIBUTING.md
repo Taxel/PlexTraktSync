@@ -41,6 +41,18 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 [issues]: https://github.com/Taxel/PlexTraktSync/issues
 [opening a new issue]: https://github.com/Taxel/PlexTraktSync/issues/new
 
+## Install code from Pull request
+
+Replace `838` with a pull request you intend to install
+
+```
+$ pipx install --suffix=@838 'git+https://github.com/Taxel/PlexTraktSync@refs/pull/838/head'
+  installed package PlexTraktSync 0.18.0.dev0 (PlexTraktSync838), installed using Python 3.10.2
+  These apps are now globally available
+    - plextraktsync@838
+done! ✨ 🌟 ✨
+```
+
 ## Checking out code
 
 If you checkout a specific version, this can be done in one of two ways:
