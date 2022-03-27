@@ -73,13 +73,16 @@ class Factory:
     def progressbar(self, enabled=True):
         if enabled:
             import warnings
+            from functools import partial
 
             from tqdm import TqdmExperimentalWarning
             from tqdm.rich import tqdm
 
+            from plextraktsync.console import console
+
             warnings.filterwarnings("ignore", category=TqdmExperimentalWarning)
 
-            return tqdm
+            return partial(tqdm, options={'console': console})
 
         return None
 
