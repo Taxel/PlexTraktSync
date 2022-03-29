@@ -48,9 +48,24 @@ class ConfigLoader:
         return config
 
     @staticmethod
+    def load_yaml(path: str):
+        import yaml
+
+        with open(path, "r", encoding="utf-8") as fp:
+            config = yaml.safe_load(fp)
+        return config
+
+    @staticmethod
     def write_json(path: str, config):
         with open(path, "w", encoding="utf-8") as fp:
             fp.write(json.dumps(config, indent=4))
+
+    @staticmethod
+    def write_yaml(path: str, config):
+        import yaml
+
+        with open(path, "w", encoding="utf-8") as fp:
+            yaml.dump(config, fp)
 
 
 class Config(dict):
