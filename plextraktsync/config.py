@@ -37,6 +37,22 @@ class RunConfig:
         return self
 
 
+class ConfigLoader:
+    @staticmethod
+    def load_json(path):
+        with open(path, "r") as fp:
+            try:
+                config = json.load(fp)
+            except JSONDecodeError as e:
+                raise RuntimeError(f"Unable to parse {path}: {e}")
+        return config
+
+    @staticmethod
+    def write_json(path: str, config):
+        with open(path, "w") as fp:
+            fp.write(json.dumps(config, indent=4))
+
+
 class Config(dict):
     env_keys = [
         "PLEX_BASEURL",
