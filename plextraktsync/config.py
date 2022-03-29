@@ -127,14 +127,5 @@ class Config(dict):
                 else:
                     txt.write("{}=\n".format(key))
 
-    @staticmethod
-    def load_json(path):
-        with open(path, "r") as fp:
-            try:
-                config = json.load(fp)
-            except JSONDecodeError as e:
-                raise RuntimeError(f"Unable to parse {path}: {e}")
-        return config
-
 
 CONFIG = Config()
