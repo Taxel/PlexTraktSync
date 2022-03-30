@@ -61,6 +61,8 @@ class Config(dict):
         return dict.__contains__(self, item)
 
     def initialize(self):
+        self.initialized = True
+
         defaults = self.load_json(default_config_file)
         self.update(defaults)
 
@@ -78,8 +80,6 @@ class Config(dict):
             if value == "-" or value == "None" or value == "":
                 value = None
             self[key] = value
-
-        self.initialized = True
 
         if self["PLEX_LOCALURL"] is None:  # old .env file used before 0.18.21
             self["PLEX_LOCALURL"] = self["PLEX_FALLBACKURL"]
