@@ -1,4 +1,4 @@
-name: flake8 Lint
+name: Test
 
 on:
   - pull_request
@@ -7,9 +7,9 @@ env:
   DEFAULT_PYTHON: 3.7
 
 jobs:
-  flake8-lint:
+  test:
     runs-on: ubuntu-latest
-    name: Lint
+    name: Test
     steps:
       - name: Check out source repository
         uses: actions/checkout@v3
@@ -17,7 +17,11 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
-      - name: flake8 Lint
-        uses: py-actions/flake8@v2
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: "Test: Info"
+        run: ./plextraktsync.sh info
 
 # vim:ts=2:sw=2:et
