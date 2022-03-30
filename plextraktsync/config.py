@@ -70,8 +70,9 @@ class Config(dict):
 
         config = self.load_json(self.config_file)
         self.merge(config, self)
+        override = self["config"]["dotenv_override"]
 
-        load_dotenv(self.env_file)
+        load_dotenv(self.env_file, override=override)
         for key in self.env_keys:
             value = getenv(key)
             if value == "-" or value == "None" or value == "":

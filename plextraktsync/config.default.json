@@ -4,6 +4,9 @@
         "filename": "plextraktsync.log",
         "append": true
     },
+    "config": {
+        "dotenv_override": true
+    },
     "cache": {
         "path": "$PTS_CACHE_DIR/trakt_cache"
     },
