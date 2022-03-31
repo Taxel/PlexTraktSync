@@ -24,9 +24,9 @@ body:
     id: traceback
     attributes:
       render: text
-      label: Error trace
+      label: Error trace / logs
       description: >
-        A complete traceback of the error.
+        A complete traceback of the error or content of log file.
 
         This will be automatically formatted into code, so no need for backticks.
 
@@ -42,7 +42,10 @@ body:
     id: steps
     attributes:
       label: Steps to reproduce the behavior
-      description: With a complete code example, if possible
+      description: Write the command you used to run it, what you did before and after
+    validations:
+      required: true
+
 
   - type: textarea
     id: inspect
