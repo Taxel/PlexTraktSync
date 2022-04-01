@@ -112,6 +112,7 @@ To run sync:
 ```
 docker-compose run --rm plextraktsync
 ```
+The container will stop after the sync is completed. Read Setup section to run it automatically at set intervals.
 
 ### Windows Setup (optional alternative)
 
