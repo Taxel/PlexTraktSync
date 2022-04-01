@@ -15,8 +15,11 @@ body:
   - type: checkboxes
     id: readme
     attributes:
+      label: Agreement
       options:
         - label: I have read the README.md on the project homepage.
+          required: true
+        - label: I have checked if identical issue already exists.
           required: true
       
   - type: textarea
