@@ -14,9 +14,10 @@ body:
 
   - type: checkboxes
     id: readme
-    options:
-      - label: I have read the README.md on the project homepage.
-        required: true
+    attributes:
+      options:
+        - label: I have read the README.md on the project homepage.
+          required: true
       
   - type: textarea
     id: description
