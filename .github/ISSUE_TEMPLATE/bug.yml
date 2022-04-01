@@ -12,6 +12,12 @@ body:
         You can find latest version from here:
         - https://github.com/Taxel/PlexTraktSync/tags
 
+  - type: checkboxes
+    id: readme
+    options:
+      - label: I have read the README.md on the project homepage.
+        required: true
+      
   - type: textarea
     id: description
     attributes:
