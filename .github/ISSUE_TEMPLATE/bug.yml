@@ -22,7 +22,7 @@ body:
         - label: I have checked if identical issue already exists
           required: true
 
-- type: textarea
+  - type: textarea
     id: description
     attributes:
       label: The problem
