@@ -15,14 +15,14 @@ body:
   - type: checkboxes
     id: readme
     attributes:
-      label: Agreement
+      label: Confirmation
       options:
-        - label: I have read the README.md on the project homepage.
+        - label: I have read the [README.md](https://github.com/Taxel/PlexTraktSync#readme) on the project homepage
           required: true
-        - label: I have checked if identical issue already exists.
+        - label: I have checked if identical issue already exists
           required: true
-      
-  - type: textarea
+
+- type: textarea
     id: description
     attributes:
       label: The problem
@@ -53,9 +53,13 @@ body:
     attributes:
       label: Steps to reproduce the behavior
       description: Write the command you used to run it, what you did before and after
+      placeholder: |
+        1.
+        2.
+        3.
+        ...
     validations:
       required: true
-
 
   - type: textarea
     id: inspect
@@ -89,7 +93,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: Run plextraktsync info
+      description: Run `plextraktsync info`
       placeholder: eg. 0.15.0
     validations:
       required: true
