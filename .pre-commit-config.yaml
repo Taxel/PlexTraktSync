@@ -25,4 +25,9 @@ repos:
       - id: isort
         name: isort (Python)
 
+  - repo: https://github.com/dannysepler/rm_unneeded_f_str
+    rev: v0.1.0
+    hooks:
+      - id: rm-unneeded-f-str
+
 # vim:ts=2:sw=2:et
