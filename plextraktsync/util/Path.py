@@ -39,9 +39,9 @@ class Path:
 
     @cached_property
     def app_dir(self):
-        from appdirs import AppDirs
+        from platformdirs import PlatformDirs
 
-        return AppDirs(self.app_name)
+        return PlatformDirs(self.app_name)
 
     @cached_property
     def installed(self):
