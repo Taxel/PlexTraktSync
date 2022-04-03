@@ -69,9 +69,7 @@ def inspect_url(session: CachedSession, url: str):
 
 
 def cache(sort: str, limit: int, reverse: bool, url: str):
-    config = factory.config()
-    trakt_cache = config["cache"]["path"]
-    session = CachedSession(cache_name=trakt_cache, backend="sqlite")
+    session = factory.session()
 
     if url:
         inspect_url(session, url)
