@@ -36,7 +36,13 @@ class EventDispatcher:
             if not self.match_event(listener, event):
                 continue
 
-            listener["listener"](event)
+            try:
+                listener["listener"](event)
+            except Exception as e:
+                self.logger.error(e)
+
+                import traceback
+                self.logger.debug(traceback.format_tb(e.__traceback__))
 
     @staticmethod
     def match_filter(event, key, match):
