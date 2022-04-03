@@ -5,12 +5,8 @@ from trakt.tv import TVEpisode
 
 from plextraktsync.config import Config
 from plextraktsync.decorators.cached_property import cached_property
-from plextraktsync.events import (
-    ActivityNotification,
-    Error,
-    PlaySessionStateNotification,
-    TimelineEntry,
-)
+from plextraktsync.events import (ActivityNotification, Error,
+                                  PlaySessionStateNotification, TimelineEntry)
 from plextraktsync.factory import factory
 from plextraktsync.listener import WebSocketListener
 from plextraktsync.logging import logging

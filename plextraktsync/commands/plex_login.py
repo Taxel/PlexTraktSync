@@ -13,15 +13,8 @@ from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
 from plexapi.server import PlexServer
 
 from plextraktsync.factory import factory
-from plextraktsync.style import (
-    comment,
-    disabled,
-    error,
-    highlight,
-    prompt,
-    success,
-    title,
-)
+from plextraktsync.style import (comment, disabled, error, highlight, prompt,
+                                 success, title)
 
 PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
 PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username or e-mail")
