@@ -158,12 +158,12 @@ def plex_login():
     help="Specify what to sync",
 )
 @click.option(
-    "--batch-size",
-    "batch_size",
+    "--batch-delay",
+    "batch_delay",
     type=int,
-    default=1,
+    default=5,
     show_default=True,
-    help="Batch size for collection submit queue",
+    help="Time in seconds between each collection batch submit to trakt",
 )
 @click.option(
     "--dry-run",

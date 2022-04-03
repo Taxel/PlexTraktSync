@@ -10,7 +10,7 @@ class Factory:
         from plextraktsync.trakt_api import TraktApi
 
         config = self.run_config()
-        trakt = TraktApi(batch_size=config.batch_size)
+        trakt = TraktApi(batch_delay=config.batch_delay)
 
         return trakt
 

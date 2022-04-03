@@ -16,7 +16,7 @@ def sync(
     show: str,
     movie: str,
     ids: List[str],
-    batch_size: int,
+    batch_delay: int,
     dry_run: bool,
     no_progress_bar: bool,
 ):
@@ -31,7 +31,7 @@ def sync(
     shows = sync_option in ["all", "tv", "shows"]
 
     config = factory.run_config().update(
-        batch_size=batch_size, dry_run=dry_run, progressbar=not no_progress_bar
+        batch_delay=batch_delay, dry_run=dry_run, progressbar=not no_progress_bar
     )
     wc = factory.walk_config().update(movies=movies, shows=shows)
     w = factory.walker()
