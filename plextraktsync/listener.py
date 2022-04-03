@@ -8,7 +8,7 @@ from plextraktsync.logging import logging
 
 class EventDispatcher:
     def __init__(self):
-        self.event_listeners = list()
+        self.event_listeners = []
         self.event_factory = EventFactory()
         self.logger = logging.getLogger("PlexTraktSync.EventDispatcher")
 
