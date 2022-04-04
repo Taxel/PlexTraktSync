@@ -328,6 +328,7 @@ class TraktBatch:
                 logger.info(f"Updated Trakt collection: {result}")
         finally:
             self.collection.clear()
+            self.last_sent_time = time()
 
     def queue_size(self):
         size = 0
@@ -345,7 +346,6 @@ class TraktBatch:
         elapsed = time() - self.last_sent_time
         if elapsed >= self.batch_delay or force is True:
             self.submit_collection()
-            self.last_sent_time = time()
 
     def add_to_collection(self, media_type: str, item):
         """
