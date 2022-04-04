@@ -1,13 +1,12 @@
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, quote_plus, urlparse
 
+from plextraktsync.console import print
 from plextraktsync.factory import factory
 from plextraktsync.version import version
 
 
 def print_watched_shows():
     from rich.table import Table
-
-    from plextraktsync.console import console
 
     trakt = factory.trakt_api()
 
@@ -22,7 +21,7 @@ def print_watched_shows():
         slug = f"[link=https://trakt.tv/shows/{progress.slug}]{progress.slug}[/]"
         table.add_row(id, slug, str(len(progress.seasons)))
 
-    console.print(table)
+    print(table)
 
 
 def inspect_media(id):
@@ -41,7 +40,7 @@ def inspect_media(id):
     print(f"URL: {url}")
 
     media = pm.item
-    print(f"Media.Type: {media.type}")
+    print(f"Media.Type: '{media.type}'")
     print(f"Media.Guid: '{media.guid}'")
     if not pm.is_legacy_agent:
         print(f"Media.Guids: {media.guids}")
@@ -55,11 +54,11 @@ def inspect_media(id):
 
         print("Parts:")
         for index, part in enumerate(pm.parts, start=1):
-            print(f"  Part {index}: {part.file}")
+            print(f"  Part {index}: [link=file://{quote_plus(part.file)}]{part.file}[/link]")
 
     print("Guids:")
     for guid in pm.guids:
-        print(f"  Guid: {guid}, Id: {guid.id}, Provider: {guid.provider}")
+        print(f"  Guid: {guid}, Id: {guid.id}, Provider: '{guid.provider}'")
 
     print(f"Metadata: {pm.to_json()}")
 

@@ -1,6 +1,7 @@
 from deprecated import deprecated
 
 from plextraktsync.decorators.memoize import memoize
+from plextraktsync.rich_addons import RichHighlighter
 
 
 class Factory:
@@ -72,13 +73,16 @@ class Factory:
     def progressbar(self, enabled=True):
         if enabled:
             import warnings
+            from functools import partial
 
             from tqdm import TqdmExperimentalWarning
             from tqdm.rich import tqdm
 
+            from plextraktsync.console import console
+
             warnings.filterwarnings("ignore", category=TqdmExperimentalWarning)
 
-            return tqdm
+            return partial(tqdm, options={'console': console})
 
         return None
 
@@ -117,6 +121,16 @@ class Factory:
         w = Walker(plex=plex, trakt=trakt, mf=mf, config=walk_config, progressbar=pb)
 
         return w
+
+    @memoize
+    def console_logger(self):
+        from rich.logging import RichHandler
+
+        from plextraktsync.console import console
+
+        handler = RichHandler(console=console, show_time=False, show_path=False, highlighter=RichHighlighter())
+
+        return handler
 
     @memoize
     def config(self):

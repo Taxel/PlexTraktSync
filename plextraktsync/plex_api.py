@@ -87,7 +87,7 @@ class PlexGuid:
         return guid[0:2] == "tt" and guid[2:].isnumeric()
 
     def __str__(self):
-        return self.guid
+        return f"<PlexGuid:{self.guid}>"
 
 
 class PlexRatingCollection(dict):
@@ -375,7 +375,7 @@ class PlexLibraryItem:
     def __repr__(self):
         try:
             guid = self.guids[0]
-            return f"<{guid.provider}:{guid.id}:{self.item}>"
+            return f"<{guid.provider}:{guid.id}:{str(self.item).strip('<>')}>"
         except IndexError:
             return f"<{self.item}>"
 

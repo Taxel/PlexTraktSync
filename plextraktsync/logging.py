@@ -13,12 +13,11 @@ def initialize():
     else:
         log_level = logging.INFO
     log_file = join(log_dir, CONFIG["logging"]["filename"])
-    log_format = "%(asctime)s %(levelname)s:%(message)s"
 
     # messages with info and above are printed to stdout
-    console_handler = logging.StreamHandler(factory.progressbar())
+    console_handler = factory.console_logger()
     console_handler.terminator = ""
-    console_handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
+    console_handler.setFormatter(logging.Formatter("%(message)s"))
     console_handler.setLevel(logging.INFO)
 
     # file handler can log down to debug messages
@@ -33,7 +32,7 @@ def initialize():
         file_handler,
         console_handler,
     ]
-    logging.basicConfig(format=log_format, handlers=handlers, level=log_level)
+    logging.basicConfig(handlers=handlers, level=log_level)
 
     # Set debug for other components as well
     if log_level == logging.DEBUG:
