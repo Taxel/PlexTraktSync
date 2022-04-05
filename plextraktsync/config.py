@@ -40,7 +40,7 @@ class RunConfig:
 class ConfigLoader:
     @staticmethod
     def load_json(path):
-        with open(path, "r") as fp:
+        with open(path, "r", encoding="utf-8") as fp:
             try:
                 config = json.load(fp)
             except JSONDecodeError as e:
