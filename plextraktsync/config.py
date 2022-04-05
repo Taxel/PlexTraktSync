@@ -37,6 +37,22 @@ class RunConfig:
         return self
 
 
+class ConfigLoader:
+    @staticmethod
+    def load_json(path):
+        with open(path, "r") as fp:
+            try:
+                config = json.load(fp)
+            except JSONDecodeError as e:
+                raise RuntimeError(f"Unable to parse {path}: {e}")
+        return config
+
+    @staticmethod
+    def write_json(path: str, config):
+        with open(path, "w") as fp:
+            fp.write(json.dumps(config, indent=4))
+
+
 class Config(dict):
     env_keys = [
         "PLEX_BASEURL",
@@ -64,14 +80,14 @@ class Config(dict):
     def initialize(self):
         self.initialized = True
 
-        defaults = self.load_json(default_config_file)
+        loader = ConfigLoader()
+        defaults = loader.load_json(default_config_file)
         self.update(defaults)
 
         if not exists(self.config_file):
-            with open(self.config_file, "w") as fp:
-                fp.write(json.dumps(defaults, indent=4))
+            loader.write_json(self.config_file, defaults)
 
-        config = self.load_json(self.config_file)
+        config = loader.load_json(self.config_file)
         self.merge(config, self)
         override = self["config"]["dotenv_override"]
 
@@ -110,15 +126,6 @@ class Config(dict):
                     txt.write("{}={}\n".format(key, self[key]))
                 else:
                     txt.write("{}=\n".format(key))
-
-    @staticmethod
-    def load_json(path):
-        with open(path, "r") as fp:
-            try:
-                config = json.load(fp)
-            except JSONDecodeError as e:
-                raise RuntimeError(f"Unable to parse {path}: {e}")
-        return config
 
 
 CONFIG = Config()
