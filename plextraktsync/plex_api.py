@@ -227,7 +227,8 @@ class PlexLibraryItem:
 
     @property
     def parts(self) -> List[MediaPart]:
-        for media in self.item.media:
+        item = self.plex.fetch_item(self.item.ratingKey)
+        for media in item.item.media:
             yield from media.parts
 
     @flatten_list
