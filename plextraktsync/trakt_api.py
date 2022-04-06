@@ -325,7 +325,7 @@ class TraktBatch:
             result = self.trakt_sync_collection(self.collection)
             result = self.remove_empty_values(result.copy())
             if result:
-                logger.info(f"Updated Trakt collection: {result}")
+                logger.debug(f"Updated Trakt collection: {result}")
         finally:
             self.collection.clear()
             self.last_sent_time = time()

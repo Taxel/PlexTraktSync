@@ -98,7 +98,7 @@ class Sync:
         if m.is_collected:
             return
 
-        logger.info(f"To be added to collection: {m}")
+        logger.info(f"Adding to collection: {m}")
         if not dry_run:
             m.add_to_collection(batch=True)
 
