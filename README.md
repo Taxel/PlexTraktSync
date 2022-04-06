@@ -112,22 +112,7 @@ To run sync:
 ```
 docker-compose run --rm plextraktsync
 ```
-
-To run `watch` command:
-
-```
-docker-compose run --rm plextraktsync watch
-```
-or add `command: watch` to docker compose file, and `docker-compose up -d plextraktsync` to start the container detached:
-
-```yaml
-services:
-  plextraktsync:
-    image: ghcr.io/taxel/plextraktsync
-    volumes:
-      - ./config:/app/config
-    command: watch
-```
+The container will stop after the sync is completed. Read Setup section to run it automatically at set intervals.
 
 ### Windows Setup (optional alternative)
 
@@ -283,9 +268,7 @@ Server has 2 libraries: ['Movies', 'TV Shows']
 ### Watch
 
 You can use the `watch` command to listen to events from Plex Media Server
-and scrobble plays.
-
-`plextraktsync watch`
+and scrobble plays. It does NOT run a sync between Plex and Trakt.
 
 > What is scrobbling?
 >
@@ -305,6 +288,26 @@ To restrict scrobbling to your user **only** (recommended), set the following in
     }
 }
 ```
+
+To run `watch` command:
+
+`plextraktsync watch`
+
+or
+```
+docker-compose run --rm plextraktsync watch
+```
+or add `command: watch` to docker compose file, and `docker-compose up -d plextraktsync` to start the container detached:
+
+```yaml
+services:
+  plextraktsync:
+    image: ghcr.io/taxel/plextraktsync
+    volumes:
+      - ./config:/app/config
+    command: watch
+```
+
 
 #### Systemd setup
 
