@@ -102,10 +102,15 @@ class Config(dict):
         return dict.__contains__(self, item)
 
     def initialize(self):
+        """
+        Config load order:
+        - load config.defaults.yml
+        - if config.yml present, load and merge it
+        """
         self.initialized = True
 
         loader = ConfigLoader()
-        defaults = loader.load_json(default_config_file)
+        defaults = loader.load(default_config_file)
         self.update(defaults)
 
         if not exists(self.config_file):
