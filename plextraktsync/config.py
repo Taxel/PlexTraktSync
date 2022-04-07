@@ -1,6 +1,4 @@
-import json
 from dataclasses import dataclass
-from json import JSONDecodeError
 from os import getenv
 from os.path import exists
 
@@ -62,9 +60,11 @@ class ConfigLoader:
 
     @staticmethod
     def load_json(path: str):
+        from json import JSONDecodeError, load
+
         with open(path, "r", encoding="utf-8") as fp:
             try:
-                config = json.load(fp)
+                config = load(fp)
             except JSONDecodeError as e:
                 raise RuntimeError(f"Unable to parse {path}: {e}")
         return config
@@ -82,6 +82,8 @@ class ConfigLoader:
 
     @staticmethod
     def write_json(path: str, config):
+        import json
+
         with open(path, "w", encoding="utf-8") as fp:
             fp.write(json.dumps(config, indent=4))
 
