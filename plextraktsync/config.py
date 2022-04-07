@@ -119,12 +119,11 @@ class Config(dict):
         """
         Config load order:
         - load config.defaults.yml
-        - if config.yml missing, write defaults to it
         - if config.json present and config.yml is not:
             - load config.json
             - write config.yml with config.json contents
-            - merge loaded config
-        - else config.yml present, load and merge it
+        - if config.yml is missing, copy config.defaults.yml to it
+        - load config.yml, load and merge it
         """
         self.initialized = True
 
@@ -137,9 +136,9 @@ class Config(dict):
             loader.write(self.config_yml, config)
         else:
             if not exists(self.config_yml):
-                loader.write(self.config_yml, defaults)
-            config = loader.load(self.config_yml)
+                loader.copy(default_config_file, self.config_yml)
 
+        config = loader.load(self.config_yml)
         self.merge(config, self)
         override = self["config"]["dotenv_override"]
 
