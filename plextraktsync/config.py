@@ -87,7 +87,7 @@ class ConfigLoader:
         import yaml
 
         with open(path, "w", encoding="utf-8") as fp:
-            yaml.dump(config, fp, allow_unicode=True)
+            yaml.dump(config, fp, allow_unicode=True, indent=2)
 
 
 class Config(dict):
