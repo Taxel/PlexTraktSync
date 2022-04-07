@@ -55,6 +55,12 @@ class ConfigLoader:
         raise RuntimeError(f'Unknown file type: {path}')
 
     @staticmethod
+    def copy(src: str, dst: str):
+        import shutil
+
+        shutil.copyfile(src, dst)
+
+    @staticmethod
     def load_json(path: str):
         with open(path, "r", encoding="utf-8") as fp:
             try:
