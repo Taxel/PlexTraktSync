@@ -47,7 +47,7 @@ or to improve documentation [docs-needed], thank you.**
 - Watched status are synced (dates are not reported from Trakt to Plex)
 - Liked lists in Trakt are downloaded and all movies in Plex belonging to that
   list are added
-- You can edit the [config file](https://github.com/Taxel/PlexTraktSync/blob/HEAD/plextraktsync/config.default.json) to choose what to sync
+- You can edit the config file to choose what to sync
 - None of the above requires a Plex Pass or Trakt VIP membership.
   Downside: Needs to be executed manually or via cronjob,
   can not use live data via webhooks.
@@ -193,7 +193,7 @@ To disable parts of the functionality of this software, look no further than
 `config.json`. Here, in the sync section, you can disable the following things
 by setting them from `true` to `false` in a text editor:
 
-At first run, the script will create `config.json` based on `config.default.json`.
+At first run, the script will create `config.json` based on `config.default.yml`.
 If you want to customize settings before first run (eg. you don't want full
 sync) you can copy and edit `config.json` before launching the script.
 
