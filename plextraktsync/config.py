@@ -39,7 +39,7 @@ class RunConfig:
 
 class ConfigLoader:
     @staticmethod
-    def load_json(path):
+    def load_json(path: str):
         with open(path, "r", encoding="utf-8") as fp:
             try:
                 config = json.load(fp)
@@ -49,7 +49,7 @@ class ConfigLoader:
 
     @staticmethod
     def write_json(path: str, config):
-        with open(path, "w") as fp:
+        with open(path, "w", encoding="utf-8") as fp:
             fp.write(json.dumps(config, indent=4))
 
 
