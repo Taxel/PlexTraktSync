@@ -452,6 +452,7 @@ class PlexLibrarySection:
                 break
 
     @nocache
+    @rate_limit()
     def fetch_items(self, key: str, size: int, start: int):
         return self.section.fetchItems(key, container_start=start, container_size=size)
 
