@@ -39,6 +39,14 @@ class RunConfig:
 
 class ConfigLoader:
     @staticmethod
+    def load(path: str):
+        if path.endswith('.yml'):
+            return ConfigLoader.load_yaml(path)
+        if path.endswith('.json'):
+            return ConfigLoader.load_json(path)
+        raise RuntimeError(f'Unknown file type: {path}')
+
+    @staticmethod
     def load_json(path: str):
         with open(path, "r", encoding="utf-8") as fp:
             try:
