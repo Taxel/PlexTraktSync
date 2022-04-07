@@ -190,12 +190,12 @@ Installing from GitHub is considered developer mode and it's documented in
 ## Sync settings
 
 To disable parts of the functionality of this software, look no further than
-`config.json`. Here, in the sync section, you can disable the following things
+`config.yml`. Here, in the sync section, you can disable the following things
 by setting them from `true` to `false` in a text editor:
 
-At first run, the script will create `config.json` based on `config.default.yml`.
+At first run, the script will create `config.yml` based on `config.default.yml`.
 If you want to customize settings before first run (eg. you don't want full
-sync) you can copy and edit `config.json` before launching the script.
+sync) you can copy and edit `config.yml` before launching the script.
 
 - Downloading liked lists from Trakt and adding them to Plex
 - Downloading your watchlist from Trakt and adding it to Plex
@@ -214,9 +214,9 @@ You can view sync progress in the `plextraktsync.log` file which will be created
 
 ### Logging
 
-The logging level by default is `INFO`. This can be changed to DEBUG by editing the "debug" variable in `config.json` to `true`.
+The logging level by default is `INFO`. This can be changed to DEBUG by editing the "debug" variable in `config.yml` to `true`.
 
-By default the logs will append, if you wish to maintain the log of only your last run then edit the "append" variable in `config.json` to `false`.
+By default the logs will append, if you wish to maintain the log of only your last run then edit the "append" variable in `config.yml` to `false`.
 
 ## Commands
 
@@ -279,7 +279,7 @@ and scrobble plays. It does NOT run a sync between Plex and Trakt.
 
 [plex-scrobbler]: https://blog.trakt.tv/plex-scrobbler-52db9b016ead
 
-To restrict scrobbling to your user **only** (recommended), set the following in your `config.json`:
+To restrict scrobbling to your user **only** (recommended), set the following in your `config.yml`:
 
 ```json
 {
