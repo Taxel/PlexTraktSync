@@ -1,6 +1,7 @@
 from functools import wraps
 from time import sleep
 
+from plexapi.exceptions import BadRequest
 from requests import RequestException
 from trakt.errors import (LockedUserAccountException, RateLimitException,
                           TraktInternalException)
@@ -23,6 +24,7 @@ def rate_limit(retries=5):
                 try:
                     return fn(*args, **kwargs)
                 except (
+                    BadRequest,
                     RateLimitException,
                     RequestException,
                     TraktInternalException,
