@@ -6,8 +6,8 @@ from os.path import exists
 
 from dotenv import load_dotenv
 
-from plextraktsync.path import (cache_dir, config_file, default_config_file,
-                                env_file)
+from plextraktsync.path import (cache_dir, config_file, config_yml,
+                                default_config_file, env_file)
 
 """
 Platform name to identify our application
@@ -80,6 +80,7 @@ class Config(dict):
 
     initialized = False
     config_file = config_file
+    config_yml = config_yml
     env_file = env_file
 
     def __getitem__(self, item):
