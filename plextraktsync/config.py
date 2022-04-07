@@ -74,7 +74,10 @@ class ConfigLoader:
         import yaml
 
         with open(path, "r", encoding="utf-8") as fp:
-            config = yaml.safe_load(fp)
+            try:
+                config = yaml.safe_load(fp)
+            except yaml.YAMLError as e:
+                raise RuntimeError(f"Unable to parse {path}: {e}")
         return config
 
     @staticmethod
