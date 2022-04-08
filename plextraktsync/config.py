@@ -59,6 +59,12 @@ class ConfigLoader:
         shutil.copyfile(src, dst)
 
     @staticmethod
+    def rename(src: str, dst: str):
+        from os import rename
+
+        rename(src, dst)
+
+    @staticmethod
     def load_json(path: str):
         from json import JSONDecodeError, load
 
