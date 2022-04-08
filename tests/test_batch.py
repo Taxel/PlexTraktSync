@@ -27,7 +27,7 @@ def test_batch_size_none():
 
 def test_batch_size_1():
     response = load_mock("trakt_sync_collection_response.json")
-    b = TraktBatch(trakt, batch_size=1)
+    b = TraktBatch(trakt, batch_delay=1)
     b.trakt_sync_collection = Mock(return_value=response)
 
     assert b.queue_size() == 0

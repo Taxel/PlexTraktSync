@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Union
+from time import time
 
 import trakt
 import trakt.movies
@@ -92,8 +93,8 @@ class TraktApi:
     Trakt API class abstracting common data access and dealing with requests cache.
     """
 
-    def __init__(self, batch_size=None):
-        self.batch_size = batch_size
+    def __init__(self, batch_delay=None):
+        self.batch_delay = batch_delay
         trakt.core.CONFIG_PATH = pytrakt_file
         trakt.core.session = factory.session()
 
@@ -105,7 +106,7 @@ class TraktApi:
 
     @cached_property
     def batch(self):
-        return TraktBatch(self, batch_size=self.batch_size)
+        return TraktBatch(self, batch_delay=self.batch_delay)
 
     @cached_property
     @nocache
@@ -307,10 +308,11 @@ class TraktApi:
 
 
 class TraktBatch:
-    def __init__(self, trakt: TraktApi, batch_size=None):
+    def __init__(self, trakt: TraktApi, batch_delay=None):
         self.trakt = trakt
-        self.batch_size = batch_size
+        self.batch_delay = batch_delay
         self.collection = {}
+        self.last_sent_time = 0
 
     @nocache
     @rate_limit()
@@ -323,9 +325,10 @@ class TraktBatch:
             result = self.trakt_sync_collection(self.collection)
             result = self.remove_empty_values(result.copy())
             if result:
-                logger.info(f"Updated Trakt collection: {result}")
+                logger.debug(f"Updated Trakt collection: {result}")
         finally:
             self.collection.clear()
+            self.last_sent_time = time()
 
     def queue_size(self):
         size = 0
@@ -334,14 +337,14 @@ class TraktBatch:
 
         return size
 
-    def flush(self):
+    def flush(self, force=False):
         """
-        Flush the queue if it's bigger than batch_size
+        Flush the queue every batch_delay seconds
         """
-        if not self.batch_size:
+        if not self.batch_delay and force is False:
             return
-
-        if self.queue_size() >= self.batch_size:
+        elapsed = time() - self.last_sent_time
+        if elapsed >= self.batch_delay or force is True:
             self.submit_collection()
 
     def add_to_collection(self, media_type: str, item):
