@@ -145,6 +145,12 @@ class Config(dict):
         if exists(self.config_file) and not exists(self.config_yml):
             config = loader.load(self.config_file)
             loader.write(self.config_yml, config)
+
+            # Rename, so users would not mistakenly edit outdated file
+            config_bak = f"{self.config_file}.old"
+            from plextraktsync.logging import logger
+            logger.warning(f"Renaming {self.config_file} to {config_bak}")
+            loader.rename(self.config_file, config_bak)
         else:
             if not exists(self.config_yml):
                 loader.copy(default_config_file, self.config_yml)
