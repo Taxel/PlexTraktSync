@@ -52,6 +52,10 @@ def inspect_media(id):
         video = pm.video_streams[0]
         print(f"Video: '{video.codec}'")
 
+        print("Subtitles:")
+        for index, subtitle in enumerate(pm.subtitle_streams, start=1):
+            print(f"  Subtitle {index}: ({subtitle.language}) {subtitle.title} (format: {subtitle.format}, selected: {subtitle.selected}, transient: {subtitle.transient})")
+
         print("Parts:")
         for index, part in enumerate(pm.parts, start=1):
             print(f"  Part {index}: [link=file://{quote_plus(part.file)}]{part.file}[/link]")
