@@ -15,8 +15,9 @@ class Path:
         self.ensure_dir(self.log_dir)
         self.ensure_dir(self.cache_dir)
 
-        self.default_config_file = join(self.module_path, "config.default.json")
+        self.default_config_file = join(self.module_path, "config.default.yml")
         self.config_file = join(self.config_dir, "config.json")
+        self.config_yml = join(self.config_dir, "config.yml")
         self.pytrakt_file = join(self.config_dir, ".pytrakt.json")
         self.env_file = join(self.config_dir, ".env")
         self.log_file = join(self.log_dir, "last_update.log")
@@ -66,6 +67,7 @@ log_dir = p.log_dir
 
 default_config_file = p.default_config_file
 config_file = p.config_file
+config_yml = p.config_yml
 pytrakt_file = p.pytrakt_file
 env_file = p.env_file
 log_file = p.log_file

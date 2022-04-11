@@ -1,0 +1,37 @@
+cache:
+  path: $PTS_CACHE_DIR/trakt_cache
+
+excluded-libraries:
+  - Private
+  - Family Holidays
+
+config:
+  dotenv_override: true
+
+logging:
+  append: true
+  debug: false
+  filename: plextraktsync.log
+
+sync:
+  plex_to_trakt:
+    collection: true
+    ratings: true
+    watched_status: true
+  trakt_to_plex:
+    liked_lists: true
+    ratings: true
+    watched_status: true
+    watchlist: true
+
+watch:
+  add_collection: false
+  remove_collection: false
+  scrobble_threshold: 80
+  username_filter: true
+
+xbmc-providers:
+  movies: imdb
+  shows: tvdb
+
+# vim:ts=2:sw=2:et

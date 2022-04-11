@@ -5,6 +5,7 @@
 /.pytrakt.json
 /.vscode/
 /config.json
+/config.yml
 /config/
 /dist/
 /docker-compose.override.yml

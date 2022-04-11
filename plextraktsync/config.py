@@ -1,13 +1,11 @@
-import json
 from dataclasses import dataclass
-from json import JSONDecodeError
 from os import getenv
 from os.path import exists
 
 from dotenv import load_dotenv
 
-from plextraktsync.path import (cache_dir, config_file, default_config_file,
-                                env_file)
+from plextraktsync.path import (cache_dir, config_file, config_yml,
+                                default_config_file, env_file)
 
 """
 Platform name to identify our application
@@ -39,18 +37,68 @@ class RunConfig:
 
 class ConfigLoader:
     @staticmethod
-    def load_json(path):
+    def load(path: str):
+        if path.endswith('.yml'):
+            return ConfigLoader.load_yaml(path)
+        if path.endswith('.json'):
+            return ConfigLoader.load_json(path)
+        raise RuntimeError(f'Unknown file type: {path}')
+
+    @staticmethod
+    def write(path: str, config):
+        if path.endswith('.yml'):
+            return ConfigLoader.write_yaml(path, config)
+        if path.endswith('.json'):
+            return ConfigLoader.write_json(path, config)
+        raise RuntimeError(f'Unknown file type: {path}')
+
+    @staticmethod
+    def copy(src: str, dst: str):
+        import shutil
+
+        shutil.copyfile(src, dst)
+
+    @staticmethod
+    def rename(src: str, dst: str):
+        from os import rename
+
+        rename(src, dst)
+
+    @staticmethod
+    def load_json(path: str):
+        from json import JSONDecodeError, load
+
         with open(path, "r", encoding="utf-8") as fp:
             try:
-                config = json.load(fp)
+                config = load(fp)
             except JSONDecodeError as e:
                 raise RuntimeError(f"Unable to parse {path}: {e}")
         return config
 
     @staticmethod
+    def load_yaml(path: str):
+        import yaml
+
+        with open(path, "r", encoding="utf-8") as fp:
+            try:
+                config = yaml.safe_load(fp)
+            except yaml.YAMLError as e:
+                raise RuntimeError(f"Unable to parse {path}: {e}")
+        return config
+
+    @staticmethod
     def write_json(path: str, config):
-        with open(path, "w") as fp:
+        import json
+
+        with open(path, "w", encoding="utf-8") as fp:
             fp.write(json.dumps(config, indent=4))
+
+    @staticmethod
+    def write_yaml(path: str, config):
+        import yaml
+
+        with open(path, "w", encoding="utf-8") as fp:
+            yaml.dump(config, fp, allow_unicode=True, indent=2)
 
 
 class Config(dict):
@@ -65,6 +113,7 @@ class Config(dict):
 
     initialized = False
     config_file = config_file
+    config_yml = config_yml
     env_file = env_file
 
     def __getitem__(self, item):
@@ -78,16 +127,35 @@ class Config(dict):
         return dict.__contains__(self, item)
 
     def initialize(self):
+        """
+        Config load order:
+        - load config.defaults.yml
+        - if config.json present and config.yml is not:
+            - load config.json
+            - write config.yml with config.json contents
+        - if config.yml is missing, copy config.defaults.yml to it
+        - load config.yml, load and merge it
+        """
         self.initialized = True
 
         loader = ConfigLoader()
-        defaults = loader.load_json(default_config_file)
+        defaults = loader.load(default_config_file)
         self.update(defaults)
 
-        if not exists(self.config_file):
-            loader.write_json(self.config_file, defaults)
+        if exists(self.config_file) and not exists(self.config_yml):
+            config = loader.load(self.config_file)
+            loader.write(self.config_yml, config)
 
-        config = loader.load_json(self.config_file)
+            # Rename, so users would not mistakenly edit outdated file
+            config_bak = f"{self.config_file}.old"
+            from plextraktsync.logging import logger
+            logger.warning(f"Renaming {self.config_file} to {config_bak}")
+            loader.rename(self.config_file, config_bak)
+        else:
+            if not exists(self.config_yml):
+                loader.copy(default_config_file, self.config_yml)
+
+        config = loader.load(self.config_yml)
         self.merge(config, self)
         override = self["config"]["dotenv_override"]
 
