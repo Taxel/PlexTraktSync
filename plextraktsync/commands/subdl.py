@@ -1,2 +1,23 @@
+from plextraktsync.factory import factory
+from plextraktsync.plex_api import PlexApi, PlexLibraryItem
+from plextraktsync.util.expand_id import expand_id
+
+
+def download(plex: PlexApi, pm: PlexLibraryItem):
+    print(f"Subtitles for {pm}:")
+    for index, sub in enumerate(pm.subtitle_streams, start=1):
+        print(
+            f"  Subtitle {index}: ({sub.language}) {sub.title} (codec: {sub.codec}, selected: {sub.selected}, transient: {sub.transient})"
+        )
+        filename = f"{sub.id}. {sub.title}.{sub.languageCode}.{sub.codec}"
+        plex.download(sub, filename=filename, showstatus=True)
+
+
 def subdl(input):
-    pass
+    plex = factory.plex_api()
+
+    for id in expand_id(input):
+        pm = plex.fetch_item(id)
+        if not pm:
+            continue
+        download(plex, pm)
