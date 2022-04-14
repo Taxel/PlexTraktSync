@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from typing import Union
 from time import time
+from typing import Union
 
 import trakt
 import trakt.movies
