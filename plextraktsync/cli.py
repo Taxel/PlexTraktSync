@@ -245,6 +245,14 @@ def subdl():
 
 
 @command()
+def launchctl():
+    """
+    Installs launchctl wrapper
+    """
+    pass
+
+
+@command()
 @click.option(
     "--pr",
     type=int,
@@ -286,12 +294,20 @@ def imdb_import():
     pass
 
 
+def launchctl_available():
+    import shutil
+
+    return shutil.which("launchctl") is not None
+
+
 cli.add_command(bug_report)
 cli.add_command(cache)
 cli.add_command(clear_collections)
 cli.add_command(imdb_import)
 cli.add_command(info)
 cli.add_command(inspect)
+if launchctl_available():
+    cli.add_command(launchctl)
 cli.add_command(login)
 cli.add_command(plex_login)
 if enable_self_update():
