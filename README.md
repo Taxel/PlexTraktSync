@@ -343,6 +343,6 @@ Following that you will need to enable the service:
 
 ```
 sudo systemctl daemon-reload
-sudo systemctl start PlexTrackSync.service
-sudo systemctl enable PlexTrackSync.service
+sudo systemctl start PlexTraktSync.service
+sudo systemctl enable PlexTraktSync.service
 ```
