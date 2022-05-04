@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, Union
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.library import LibrarySection
-from plexapi.media import AudioStream, MediaPart, VideoStream
+from plexapi.media import AudioStream, MediaPart, SubtitleStream, VideoStream
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plexapi.video import Episode, Movie, Show
 from trakt.utils import timestamp
@@ -245,6 +245,10 @@ class PlexLibraryItem:
     @property
     def video_streams(self):
         return self.streams(VideoStream)
+
+    @property
+    def subtitle_streams(self):
+        return self.streams(SubtitleStream)
 
     @property
     def audio_channels(self):
