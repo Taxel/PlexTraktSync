@@ -1,3 +1,5 @@
+from os.path import exists
+
 from plextraktsync.factory import factory
 from plextraktsync.plex_api import PlexApi, PlexLibraryItem
 from plextraktsync.util.expand_id import expand_id
@@ -10,7 +12,8 @@ def download(plex: PlexApi, pm: PlexLibraryItem):
             f"  Subtitle {index}: ({sub.language}) {sub.title} (codec: {sub.codec}, selected: {sub.selected}, transient: {sub.transient})"
         )
         filename = f"{sub.id}. {f'{sub.language}.' if sub.language else ''}{sub.languageCode}.{sub.codec}"
-        plex.download(sub, filename=filename, showstatus=True)
+        if not exists(filename):
+            plex.download(sub, filename=filename, showstatus=True)
 
 
 def subdl(input):
