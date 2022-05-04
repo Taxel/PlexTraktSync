@@ -9,7 +9,7 @@ def download(plex: PlexApi, pm: PlexLibraryItem):
         print(
             f"  Subtitle {index}: ({sub.language}) {sub.title} (codec: {sub.codec}, selected: {sub.selected}, transient: {sub.transient})"
         )
-        filename = f"{sub.id}. {sub.title}.{sub.languageCode}.{sub.codec}"
+        filename = f"{sub.id}. {f'{sub.language}.' if sub.language else ''}{sub.languageCode}.{sub.codec}"
         plex.download(sub, filename=filename, showstatus=True)
 
 
