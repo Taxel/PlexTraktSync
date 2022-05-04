@@ -54,7 +54,7 @@ def inspect_media(id):
 
         print("Subtitles:")
         for index, subtitle in enumerate(pm.subtitle_streams, start=1):
-            print(f"  Subtitle {index}: ({subtitle.language}) {subtitle.title} (format: {subtitle.format}, selected: {subtitle.selected}, transient: {subtitle.transient})")
+            print(f"  Subtitle {index}: ({subtitle.language}) {subtitle.title} (codec: {subtitle.codec}, selected: {subtitle.selected}, transient: {subtitle.transient})")
 
         print("Parts:")
         for index, part in enumerate(pm.parts, start=1):
