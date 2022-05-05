@@ -191,7 +191,14 @@ Installing from GitHub is considered developer mode and it's documented in
   $ crontab -e
   0 */2 * * * plextraktsync
   ```
+  Docker-Compose
 
+  Please change (container name) to your docker container name
+  
+  ```
+  $ crontab -e
+  0 */2 * * * sudo docker exec (container name) plextraktsync sync --sync all >/dev/null 2>&1
+  ```
 ## Sync settings
 
 To disable parts of the functionality of this software, look no further than
