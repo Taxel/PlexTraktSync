@@ -46,7 +46,7 @@ jobs:
           echo ::set-output name=version::$APP_VERSION
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
