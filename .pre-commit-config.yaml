@@ -30,4 +30,9 @@ repos:
     hooks:
       - id: rm-unneeded-f-str
 
+  - repo: https://github.com/asottile/setup-cfg-fmt
+    rev: v1.20.1
+    hooks:
+      - id: setup-cfg-fmt
+
 # vim:ts=2:sw=2:et
