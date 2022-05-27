@@ -196,7 +196,7 @@ Installing from GitHub is considered developer mode and it's documented in
 
   A docker-compose example with a 6h interval:
   
-  ```
+  ```yaml
   services:
     scheduler:
       image: mcuadros/ofelia:latest
