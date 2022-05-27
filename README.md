@@ -192,6 +192,30 @@ Installing from GitHub is considered developer mode and it's documented in
   0 */2 * * * plextraktsync
   ```
 
+* Instead of cron, a docker scheduler like [Ofelia](https://github.com/mcuadros/ofelia/) can also be used to run the script at set intervals.
+
+  A docker-compose example with a 6h interval:
+  
+  ```
+  services:
+    scheduler:
+      image: mcuadros/ofelia:latest
+      container_name: scheduler
+      depends_on:
+        - plextraktsync
+      command: daemon --docker
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+      labels:
+        ofelia.job-run.plextraktsync.schedule="@every 6h"
+        ofelia.job-run.plextraktsync.container="plextraktsync"
+    plextraktsync:
+      image: ghcr.io/taxel/plextraktsync:latest
+      container_name: plextraktsync
+      volumes:
+        - ./config:/app/config
+  ```
+
 ## Sync settings
 
 To disable parts of the functionality of this software, look no further than
