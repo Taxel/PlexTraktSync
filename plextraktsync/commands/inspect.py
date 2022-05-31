@@ -1,4 +1,4 @@
-from urllib.parse import parse_qs, quote_plus, urlparse
+from urllib.parse import quote_plus
 
 from plextraktsync.console import print
 from plextraktsync.factory import factory
@@ -54,7 +54,7 @@ def inspect_media(id):
 
         print("Subtitles:")
         for index, subtitle in enumerate(pm.subtitle_streams, start=1):
-            print(f"  Subtitle {index}: ({subtitle.language}) {subtitle.title} (format: {subtitle.format}, selected: {subtitle.selected}, transient: {subtitle.transient})")
+            print(f"  Subtitle {index}: ({subtitle.language}) {subtitle.title} (codec: {subtitle.codec}, selected: {subtitle.selected}, transient: {subtitle.transient})")
 
         print("Parts:")
         for index, part in enumerate(pm.parts, start=1):
@@ -89,27 +89,6 @@ def inspect_media(id):
         )
 
 
-def id_from_url(url: str):
-    """
-    Extracts id from urls like:
-      https://app.plex.tv/desktop/#!/server/abcdefg/details?key=%2Flibrary%2Fmetadata%2F13202
-      https://app.plex.tv/desktop/#!/server/abcdefg/playHistory?filters=metadataItemID%3D6041&filterTitle=&isParentType=false
-    """
-    result = urlparse(url)
-    if result.fragment[0] == "!":
-        parsed = parse_qs(urlparse(result.fragment).query)
-        if "key" in parsed:
-            key = ",".join(parsed["key"])
-            if key.startswith("/library/metadata/"):
-                return int(key[len("/library/metadata/"):])
-        if "filters" in parsed:
-            filters = parse_qs(parsed["filters"][0])
-            if "metadataItemID" in filters:
-                return int(filters["metadataItemID"][0])
-
-    return url
-
-
 def inspect(input, watched_shows: bool):
     print(f"PlexTraktSync [{version()}]")
 
@@ -117,9 +96,6 @@ def inspect(input, watched_shows: bool):
         print_watched_shows()
         return
 
-    for id in input:
-        if id.isnumeric():
-            id = int(id)
-        elif id.startswith("https:") or id.startswith("http:"):
-            id = id_from_url(id)
+    from plextraktsync.util.expand_id import expand_id
+    for id in expand_id(input):
         inspect_media(id)

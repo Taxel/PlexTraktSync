@@ -4,6 +4,7 @@ import datetime
 import re
 from typing import Dict, List, Optional, Union
 
+import plexapi
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.library import LibrarySection
@@ -514,6 +515,12 @@ class PlexApi:
 
     def media_url(self, m: PlexLibraryItem):
         return f"{self.plex_base_url}/details?key={m.item.key}"
+
+    def download(self, m: Union[SubtitleStream], **kwargs):
+        url = self.plex.url(m.key)
+        token = self.plex._token
+
+        return plexapi.utils.download(url, token, **kwargs)
 
     def search(self, title: str, **kwargs):
         result = self.plex.library.search(title, **kwargs)
