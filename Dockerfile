@@ -1,4 +1,5 @@
-FROM python:3.10-alpine3.13 AS base
+FROM python:3.10-alpine3.15 AS base
+
 WORKDIR /app
 
 # Install app depedencies
