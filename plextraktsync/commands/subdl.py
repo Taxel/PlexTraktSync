@@ -13,6 +13,10 @@ def download(plex: PlexApi, pm: PlexLibraryItem):
         )
         filename = f"{sub.id}. {f'{sub.language}.' if sub.language else ''}{sub.languageCode}.{sub.codec}"
         if not exists(filename):
+            if not sub.key:
+                print(f"  ERROR: Subtitle {index}: has no key: Not downloadable")
+                continue
+
             plex.download(sub, filename=filename, showstatus=True)
 
 
