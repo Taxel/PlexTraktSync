@@ -80,6 +80,10 @@ class WatchStateUpdater:
         if not pm:
             return None
 
+        # raise exception if item in excluded library section
+        if pm.item.librarySectionTitle not in self.plex.library_section_names:
+            raise ValueError(f"{key} is in excluded library section {pm.item.librarySectionTitle}")
+
         m = self.mf.resolve_any(pm)
         if not m:
             return None
@@ -98,7 +102,12 @@ class WatchStateUpdater:
         self.sessions.clear()
 
     def on_activity(self, activity: ActivityNotification):
-        m = self.find_by_key(activity.key, reload=True)
+        try:
+            m = self.find_by_key(activity.key, reload=True)
+        except ValueError as e:
+            # item in excluded library section
+            self.logger.debug(e)
+            return
         if not m:
             return
         self.logger.info(
@@ -118,7 +127,12 @@ class WatchStateUpdater:
     def on_delete(self, event: TimelineEntry):
         self.logger.info(f"on_delete: Deleted on Plex: {event.item_id}: {event.title}")
 
-        m = self.find_by_key(event.item_id)
+        try:
+            m = self.find_by_key(event.item_id)
+        except ValueError as e:
+            self.logger.debug(e)
+            return
+
         if not m:
             self.logger.error(f"on_delete: Not found: {event.item_id}")
             return
@@ -130,8 +144,12 @@ class WatchStateUpdater:
     def on_play(self, event: PlaySessionStateNotification):
         if not self.can_scrobble(event):
             return
+        try:
+            m = self.find_by_key(event.key)
+        except ValueError as e:
+            self.logger.debug(e)
+            return
 
-        m = self.find_by_key(event.key)
         if not m:
             self.logger.error(f"on_play: Not found: {event.key}")
             return
