@@ -195,7 +195,7 @@ Installing from GitHub is considered developer mode and it's documented in
 * Instead of cron, a docker scheduler like [Ofelia](https://github.com/mcuadros/ofelia/) can also be used to run the script at set intervals.
 
   A docker-compose example with a 6h interval:
-  
+
   ```yaml
   services:
     scheduler:
