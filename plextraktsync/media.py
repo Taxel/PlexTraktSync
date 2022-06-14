@@ -73,8 +73,9 @@ class Media:
                 f"is_collected: Unsupported media type: {self.media_type}"
             )
 
-        collected = self.show.collected
-        return collected.get_completed(self.season_number, self.episode_number)
+        collected = self.trakt_api.collected_shows
+        return collected.is_collected(
+            self.show_trakt_id, self.season_number, self.episode_number)
 
     @cached_property
     def collected(self):
