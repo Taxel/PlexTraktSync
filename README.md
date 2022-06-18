@@ -189,8 +189,10 @@ Installing from GitHub is considered developer mode and it's documented in
 
   ```
   $ crontab -e
-  0 */2 * * * plextraktsync
+  0 */2 * * * $HOME/.local/bin/plextraktsync
   ```
+  - Note the command in the example above may not immediately work. Use the `which plextraktsync` command to locate your system's plextraktsync executable file and update it accordingly.
+
 
 * Instead of cron, a docker scheduler like [Ofelia](https://github.com/mcuadros/ofelia/) can also be used to run the script at set intervals.
 
