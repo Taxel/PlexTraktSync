@@ -7,3 +7,4 @@
 !/plextraktsync/commands/*.py
 !/plextraktsync/config.default.yml
 !/plextraktsync/decorators/*.py
+!/plextraktsync/util/*.py
