@@ -20,7 +20,7 @@ rich = "==12.4.4"
 tqdm = "==4.64.0"
 trakt = "==3.4.0"
 urllib3 = ">=1.26.6"
-websocket-client = "==1.3.2"
+websocket-client = "==1.3.3"
 
 [requires]
 python_version = "3"
