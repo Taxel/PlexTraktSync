@@ -49,9 +49,16 @@ class LazyEpisode:
 
 @get
 def allwatched():
-    # returns a ShowProgress object containing all watched episodes
+    # returns a AllShowProgress object containing all watched shows
     data = yield "sync/watched/shows"
-    yield AllWatchedShows(data)
+    yield AllShowsProgress(data)
+
+
+@get
+def allcollected():
+    # returns a AllShowProgress object containing all collected shows
+    data = yield "sync/collection/shows"
+    yield AllShowsProgress(data)
 
 
 @get
@@ -63,7 +70,7 @@ def watched(show_id):
 
 @get
 def collected(show_id):
-    # returns a ShowProgress object containing the watched states of the passed show
+    # returns a ShowProgress object containing the collected states of the passed show
     data = yield "shows/{}/progress/collection?specials=true".format(show_id)
     yield ShowProgress(**data)
 
@@ -152,7 +159,7 @@ class ShowProgress:
         return self.seasons[season].get_completed(episode)
 
 
-class AllWatchedShows:
+class AllShowsProgress:
     def __init__(self, shows=None):
         self.shows = {}
         for show in shows:
@@ -165,6 +172,13 @@ class AllWatchedShows:
         elif season not in self.shows[trakt_id].seasons.keys():
             return False
         return self.shows[trakt_id].seasons[season].get_completed(episode)
+
+    def is_collected(self, trakt_id, season, episode):
+        if trakt_id not in self.shows.keys():
+            return False
+        elif season not in self.shows[trakt_id].seasons.keys():
+            return False
+        return episode in self.shows[trakt_id].seasons[season].episodes.keys()
 
     def add(self, trakt_id, season, episode):
         episode_prog = {"number": episode, "completed": True}

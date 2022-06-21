@@ -163,6 +163,12 @@ class TraktApi:
     @cached_property
     @nocache
     @rate_limit()
+    def collected_shows(self):
+        return pytrakt_extensions.allcollected()
+
+    @cached_property
+    @nocache
+    @rate_limit()
     def watchlist_movies(self):
         return self.me.watchlist_movies
 
