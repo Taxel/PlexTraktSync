@@ -312,12 +312,9 @@ and scrobble plays. It does NOT run a sync between Plex and Trakt.
 
 To restrict scrobbling to your user **only** (recommended), set the following in your `config.yml`:
 
-```json
-{
-    "watch": {
-        "username_filter": true
-    }
-}
+```yaml
+watch:
+  username_filter: true
 ```
 
 To run `watch` command:
