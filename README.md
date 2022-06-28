@@ -209,8 +209,8 @@ Installing from GitHub is considered developer mode and it's documented in
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock:ro
       labels:
-        ofelia.job-run.plextraktsync.schedule="@every 6h"
-        ofelia.job-run.plextraktsync.container="plextraktsync"
+        ofelia.job-run.plextraktsync.schedule: "@every 6h"
+        ofelia.job-run.plextraktsync.container: "plextraktsync"
     plextraktsync:
       image: ghcr.io/taxel/plextraktsync:latest
       container_name: plextraktsync
