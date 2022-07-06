@@ -189,7 +189,6 @@ class TraktApi:
 
     @nocache
     @rate_limit()
-    @time_limit()
     @retry()
     def get_ratings(self, media_type: str):
         return self.me.get_ratings(media_type)
