@@ -501,6 +501,7 @@ class PlexApi:
 
     @memoize
     @nocache
+    @retry()
     def fetch_item(self, key: Union[int, str]) -> Optional[PlexLibraryItem]:
         try:
             media = self.plex.library.fetchItem(key)
