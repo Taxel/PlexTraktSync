@@ -18,6 +18,7 @@ from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
+from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import factory
 from plextraktsync.logging import logger, logging
@@ -56,6 +57,7 @@ class ScrobblerProxy:
     @nocache
     @rate_limit()
     @time_limit()
+    @retry()
     @post
     def _post(self, method: str, progress: float):
         self.scrobbler.progress = progress
@@ -111,6 +113,7 @@ class TraktApi:
     @cached_property
     @nocache
     @rate_limit()
+    @retry()
     def me(self):
         try:
             return trakt.users.User("me")
@@ -121,30 +124,35 @@ class TraktApi:
     @cached_property
     @nocache
     @rate_limit()
+    @retry()
     def liked_lists(self):
         return pytrakt_extensions.get_liked_lists()
 
     @cached_property
     @nocache
     @rate_limit()
+    @retry()
     def watched_movies(self):
         return set(map(lambda m: m.trakt, self.me.watched_movies))
 
     @cached_property
     @nocache
     @rate_limit()
+    @retry()
     def movie_collection(self):
         return self.me.movie_collection
 
     @cached_property
     @nocache
     @rate_limit()
+    @retry()
     def show_collection(self):
         return self.me.show_collection
 
     @nocache
     @rate_limit()
     @time_limit()
+    @retry()
     def remove_from_library(self, media: Union[Movie, TVShow, TVSeason, TVEpisode]):
         if not isinstance(media, (Movie, TVShow, TVSeason, TVEpisode)):
             raise ValueError("Must be valid media type")
@@ -157,18 +165,21 @@ class TraktApi:
     @cached_property
     @nocache
     @rate_limit()
+    @retry()
     def watched_shows(self):
         return pytrakt_extensions.allwatched()
 
     @cached_property
     @nocache
     @rate_limit()
+    @retry()
     def collected_shows(self):
         return pytrakt_extensions.allcollected()
 
     @cached_property
     @nocache
     @rate_limit()
+    @retry()
     def watchlist_movies(self):
         return self.me.watchlist_movies
 
@@ -179,12 +190,14 @@ class TraktApi:
     @nocache
     @rate_limit()
     @time_limit()
+    @retry()
     def get_ratings(self, media_type: str):
         return self.me.get_ratings(media_type)
 
     @nocache
     @rate_limit()
     @time_limit()
+    @retry()
     def rate(self, m, rating):
         m.rate(rating)
 
@@ -196,6 +209,7 @@ class TraktApi:
     @nocache
     @rate_limit()
     @time_limit()
+    @retry()
     def mark_watched(self, m, time, show_trakt_id=None):
         m.mark_as_seen(time)
         if m.media_type == "movies":
@@ -225,11 +239,13 @@ class TraktApi:
 
     @nocache
     @rate_limit()
+    @retry()
     def collected(self, tm: TVShow):
         return pytrakt_extensions.collected(tm.trakt)
 
     @nocache
     @rate_limit()
+    @retry()
     def lookup(self, tm: TVShow):
         """
         This lookup-table is accessible via lookup[season][episode]
@@ -248,6 +264,7 @@ class TraktApi:
         return self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
 
     @rate_limit()
+    @retry()
     def search_by_id(self, media_id: str, id_type: str, media_type: str):
         if id_type == "tvdb" and media_type == "movie":
             # Skip invalid search.
@@ -323,6 +340,7 @@ class TraktBatch:
     @nocache
     @rate_limit()
     @time_limit()
+    @retry()
     def submit_collection(self):
         if self.queue_size() == 0:
             return
