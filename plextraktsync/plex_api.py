@@ -17,7 +17,7 @@ from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_dict, flatten_list
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.nocache import nocache
-from plextraktsync.decorators.rate_limit import rate_limit
+from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory
 from plextraktsync.logging import logger
 
@@ -161,7 +161,7 @@ class PlexLibraryItem:
         return not self.item.guid.startswith("plex://")
 
     @nocache
-    @rate_limit()
+    @retry()
     def get_guids(self):
         return self.item.guids
 
@@ -198,7 +198,7 @@ class PlexLibraryItem:
 
     @cached_property
     @nocache
-    @rate_limit(retries=1)
+    @retry(retries=1)
     def rating(self):
         if self.plex is not None:
             ratings = self.plex.ratings[self.item.librarySectionID]
@@ -359,7 +359,7 @@ class PlexLibraryItem:
             yield PlexLibraryItem(ep, plex=self.plex)
 
     @nocache
-    @rate_limit()
+    @retry()
     def _get_episodes(self):
         return self.item.episodes()
 
@@ -457,7 +457,7 @@ class PlexLibrarySection:
                 break
 
     @nocache
-    @rate_limit()
+    @retry()
     def fetch_items(self, key: str, size: int, start: int):
         return self.section.fetchItems(key, container_start=start, container_size=size)
 
@@ -566,7 +566,7 @@ class PlexApi:
         return PlexRatingCollection(self)
 
     @nocache
-    @rate_limit()
+    @retry()
     def rate(self, m, rating):
         m.rate(rating)
 
@@ -599,7 +599,7 @@ class PlexApi:
             yield h
 
     @nocache
-    @rate_limit()
+    @retry()
     def mark_watched(self, m):
         m.markWatched()
 
