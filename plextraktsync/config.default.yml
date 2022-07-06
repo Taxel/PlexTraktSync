@@ -8,6 +8,9 @@ excluded-libraries:
 config:
   dotenv_override: true
 
+plex:
+  timeout: 30
+
 logging:
   append: true
   debug: false

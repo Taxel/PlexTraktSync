@@ -29,6 +29,7 @@ def _get_plex_server():
     server = None
 
     plexapi.X_PLEX_PLATFORM = PLEX_PLATFORM
+    plexapi.TIMEOUT = CONFIG["plex"]["timeout"]
     plexapi.BASE_HEADERS["X-Plex-Platform"] = plexapi.X_PLEX_PLATFORM
 
     session = factory.session()
