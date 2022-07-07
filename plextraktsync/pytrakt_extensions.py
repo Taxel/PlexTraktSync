@@ -1,4 +1,5 @@
 from trakt.core import get
+from trakt.utils import airs_date
 
 
 @get
@@ -48,10 +49,13 @@ class SeasonProgress:
 
         self.completed = completed == len(episodes)
 
-    def get_completed(self, episode):
+    def get_completed(self, episode, reset_at):
         if self.completed:
             return True
         elif episode not in self.episodes.keys():
+            return False
+        last_watched_at = airs_date(self.episodes[episode].last_watched_at)
+        if reset_at and reset_at > last_watched_at:
             return False
         return self.episodes[episode].get_completed()
 
@@ -96,7 +100,8 @@ class ShowProgress:
             return True
         elif season not in self.seasons.keys():
             return False
-        return self.seasons[season].get_completed(episode)
+        reset_at = airs_date(self.reset_at)
+        return self.seasons[season].get_completed(episode, reset_at)
 
 
 class AllShowsProgress:
@@ -109,9 +114,8 @@ class AllShowsProgress:
     def get_completed(self, trakt_id, season, episode):
         if trakt_id not in self.shows.keys():
             return False
-        elif season not in self.shows[trakt_id].seasons.keys():
-            return False
-        return self.shows[trakt_id].seasons[season].get_completed(episode)
+        else:
+            return self.shows[trakt_id].get_completed(season, episode)
 
     def is_collected(self, trakt_id, season, episode):
         if trakt_id not in self.shows.keys():
