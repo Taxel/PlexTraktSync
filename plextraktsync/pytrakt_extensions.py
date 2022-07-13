@@ -124,6 +124,12 @@ class AllShowsProgress:
             return False
         return episode in self.shows[trakt_id].seasons[season].episodes.keys()
 
+    def reset_at(self, trakt_id):
+        if trakt_id not in self.shows.keys():
+            return False
+        else:
+            return airs_date(self.shows[trakt_id].reset_at)
+
     def add(self, trakt_id, season, episode):
         episode_prog = {"number": episode, "completed": True}
         season_prog = {"number": season, "episodes": [episode_prog]}

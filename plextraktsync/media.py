@@ -75,6 +75,11 @@ class Media:
             raise RuntimeError("Unexpected call: episode without show property")
         return self.show.trakt_id
 
+    @property
+    def show_reset_at(self):
+        watched = self.trakt_api.watched_shows
+        return watched.reset_at(self.show_trakt_id)
+
     @cached_property
     def is_movie(self):
         return self.plex.type == "movie"
@@ -148,13 +153,19 @@ class Media:
             self.show_trakt_id, self.season_number, self.episode_number
         )
 
-    def mark_watched_trakt(self):
+    def mark_watched_trakt(self, dry_run):
         if self.is_movie:
-            self.trakt_api.mark_watched(self.trakt, self.plex.seen_date)
+            if not dry_run:
+                logger.info(f"Marking as watched in Trakt: {self}")
+                self.trakt_api.mark_watched(self.trakt, self.plex.seen_date)
         elif self.is_episode:
-            self.trakt_api.mark_watched(
-                self.trakt, self.plex.seen_date, self.show_trakt_id
-            )
+            if self.show_reset_at and self.plex.seen_date < self.show_reset_at:
+                return
+            if not dry_run:
+                logger.info(f"Marking as watched in Trakt: {self}")
+                self.trakt_api.mark_watched(
+                    self.trakt, self.plex.seen_date, self.show_trakt_id
+                )
         else:
             raise RuntimeError(
                 f"mark_watched_trakt: Unsupported media type: {self.media_type}"
