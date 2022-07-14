@@ -37,7 +37,7 @@ jobs:
         echo ::set-output name=version::$APP_VERSION
 
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ env.DEFAULT_PYTHON }}
 
