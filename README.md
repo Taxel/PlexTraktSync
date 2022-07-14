@@ -100,19 +100,9 @@ or check output of [info command](#info-command).
 [appdirs]: https://pypi.org/project/appdirs
 [install-pipx]: https://github.com/pypa/pipx#install-pipx
 
-### Docker
+### Docker Compose
 
-#### Initial setup of the Docker container
-
-Before running the container with Docker compose, you need to set it up with credentials (see #setup). To do so run the following command to create and start the container with an interactive console, then answer the question as described in [the setup section](#setup)
-
-```
-docker run --rm --name plextraktsync -it -v .config:/app/config ghcr.io/taxel/plextraktsync
-```
-
-#### Docker Compose
-
-Once your initial container is configured, you can setup docker compose file like this:
+You can setup docker compose file like this:
 
 ```yaml
 services:
@@ -124,8 +114,7 @@ services:
       - ./config:/app/config
 ```
 
-> **Note**  
-> The `container_name` should match the value you set for `--name` in the previous step 
+#### Run the Docker Container
 
 To run sync:
 
@@ -191,7 +180,7 @@ Installing from GitHub is considered developer mode and it's documented in
 
 - Run `plextraktsync`, the script will ask for missing credentials  
 > **Note**  
-> To setup the credentials in the Docker Container, refer to the [Initial setup of the Docker container](#initial-setup-of-the-docker-container) section
+> To setup the credentials in the Docker Container, refer to the [Run the Docker Container](#run-the-docker-container) section
 
 
 - At first run you will be asked to setup Trakt and Plex access.
