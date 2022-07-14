@@ -108,9 +108,13 @@ You can setup docker compose file like this:
 services:
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
+    container_name: plextraktsync
+    restart: on-failure:2
     volumes:
       - ./config:/app/config
 ```
+
+#### Run the Docker Container
 
 To run sync:
 
@@ -174,7 +178,10 @@ Installing from GitHub is considered developer mode and it's documented in
   - Enter `urn:ietf:wg:oauth:2.0:oob` as the redirect url
   - You can leave Javascript origins and the Permissions checkboxes blank
 
-- Run `plextraktsync`, the script will ask for missing credentials
+- Run `plextraktsync`, the script will ask for missing credentials  
+> **Note**  
+> To setup the credentials in the Docker Container, refer to the [Run the Docker Container](#run-the-docker-container) section
+
 
 - At first run you will be asked to setup Trakt and Plex access.
 
