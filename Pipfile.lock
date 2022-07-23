@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0db3457f8af6d05dda5515e43fb1f715b4bbda008f068aa8c085477ef67e7eb8"
+            "sha256": "fcb075b2517afb0196bd8dae72905c7f8aec06d05d2321cb472a19064f49bfb8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -254,12 +254,12 @@
             "version": "==4.64.1"
         },
         "trakt": {
+            "git": "https://github.com/glensc/python-trakt",
             "hashes": [
                 "sha256:1efd909378a09dd0abc3f056e12b2c18cad20cc699bfd211d1807414ba77d90d",
                 "sha256:a5f54258102c747ff50f3ffecc8ed52f20706938f620da4dd016d47ee4fd75ae"
             ],
-            "index": "pypi",
-            "version": "==3.4.0"
+            "ref": "8a6d4f168a858447014fb4c2c0efceb47b30ebb7"
         },
         "url-normalize": {
             "hashes": [
