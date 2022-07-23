@@ -17,4 +17,7 @@ def bug_url():
 
 
 def bug_report():
-    pass
+    url = bug_url()
+    print('Click this link to create a GitHub issue populated with your configuration:')
+    print('')
+    print(f"{url}")
