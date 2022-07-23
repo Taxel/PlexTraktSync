@@ -237,6 +237,15 @@ def subdl():
     pass
 
 
+@command()
+def bug_report():
+    """
+    Create a pre-populated GitHub issue with information about your configuration
+    """
+    pass
+
+
+cli.add_command(bug_report)
 cli.add_command(cache)
 cli.add_command(clear_collections)
 cli.add_command(info)
