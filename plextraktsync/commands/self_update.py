@@ -1,20 +1,10 @@
 import json
-import subprocess
 from json import JSONDecodeError
 from os import system
-from typing import List, Union
 
 import click
 
-
-def execx(command: Union[str, List[str]]):
-    if isinstance(command, str):
-        command = command.split(" ")
-
-    process = subprocess.Popen(
-        command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL
-    )
-    return process.communicate()[0]
+from plextraktsync.util.execx import execx
 
 
 def pipx_installed(package: str):
