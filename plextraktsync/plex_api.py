@@ -511,8 +511,15 @@ class PlexApi:
         return PlexLibraryItem(media, plex=self)
 
     def reload_item(self, pm: PlexLibraryItem):
+        try:
+            key = pm.item.ratingKey
+        except AttributeError as e:
+            logger.debug(f"Invalid object: {e}")
+            return None
+
         self.fetch_item.cache_clear()
-        return self.fetch_item(pm.item.ratingKey)
+
+        return self.fetch_item(key)
 
     def media_url(self, m: PlexLibraryItem):
         return f"{self.plex_base_url}/details?key={m.item.key}"
