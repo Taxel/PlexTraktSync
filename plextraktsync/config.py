@@ -107,6 +107,7 @@ class Config(dict):
         "PLEX_FALLBACKURL",  # legacy, used before 0.18.21
         "PLEX_LOCALURL",
         "PLEX_TOKEN",
+        "PLEX_OWNER_TOKEN",
         "PLEX_USERNAME",
         "TRAKT_USERNAME",
     ]

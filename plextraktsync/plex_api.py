@@ -11,6 +11,7 @@ from plexapi.library import LibrarySection
 from plexapi.media import AudioStream, MediaPart, SubtitleStream, VideoStream
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plexapi.video import Episode, Movie, Show
+from plexapi.myplex import MyPlexAccount
 from trakt.utils import timestamp
 
 from plextraktsync.decorators.cached_property import cached_property
@@ -476,6 +477,7 @@ class PlexApi:
 
     def __init__(self, plex: PlexServer):
         self.plex = plex
+        self.account = self._plex_account()
 
     @cached_property
     def plex_base_url(self):
@@ -622,3 +624,57 @@ class PlexApi:
     @nocache
     def get_sessions(self):
         return self.plex.sessions()
+
+    @nocache
+    def _plex_account(self):
+        CONFIG = factory.config()
+        plex_owner_token = CONFIG.get("PLEX_OWNER_TOKEN")
+        plex_username = CONFIG.get("PLEX_USERNAME")
+        if plex_owner_token:
+            try:
+                plex_owner_account = MyPlexAccount(token=plex_owner_token)
+                return plex_owner_account.switchHomeUser(plex_username)
+            except BadRequest as e:
+                logger.error(f"Error during {plex_username} account access: {e}")
+        else:
+            try:
+                return self.plex.myPlexAccount()
+            except BadRequest as e:
+                logger.error(f"Error during {plex_username} account access: {e}")
+        return None
+
+    @nocache
+    def watchlist(self):
+        if self.account:
+            try:
+                return self.account.watchlist()
+            except BadRequest as e:
+                logger.error(f"Error during {self.account.username} watchlist access: {e}")
+        return None
+
+    @nocache
+    def add_to_watchlist(self, item):
+        try:
+            self.account.addToWatchlist(item)
+        except BadRequest as e:
+            logger.error(f"Error when adding {item.title} to Plex watchlist: {e}")
+
+    @nocache
+    def remove_from_watchlist(self, item):
+        try:
+            self.account.removeFromWatchlist(item)
+        except BadRequest as e:
+            logger.error(f"Error when removing {item.title} from Plex watchlist: {e}")
+
+    @retry()
+    def search_online(self, title: str, media_type: str):
+        if not self.account:
+            return None
+        try:
+            result = self.account.searchDiscover(title, libtype=media_type)
+        except (BadRequest, Unauthorized) as e:
+            logger.error(f"{title}: Searching Plex Discover error: {e}")
+            return None
+        except NotFound:
+            return None
+        return map(PlexLibraryItem, result)
