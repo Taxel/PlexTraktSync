@@ -8,7 +8,7 @@ from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.media import Media, MediaFactory
 from plextraktsync.plex_api import (PlexApi, PlexGuid, PlexLibraryItem,
                                     PlexLibrarySection)
-from plextraktsync.trakt_api import TraktApi
+from plextraktsync.trakt_api import TraktApi, TraktItem
 
 
 class WalkConfig:
@@ -320,3 +320,21 @@ class Walker:
                 yield from it
         else:
             yield from iterable
+
+    def media_from_traktlist(self, items: List):
+        it = self.progressbar(items, desc="Processing Trakt watchlist")
+        for media in it:
+            tm = TraktItem(media, trakt=self.trakt)
+            m = self.mf.resolve_trakt(tm)
+            if not m:
+                continue
+            yield m
+
+    def media_from_plexlist(self, items: List):
+        it = self.progressbar(items, desc="Processing Plex watchlist")
+        for media in it:
+            pm = PlexLibraryItem(media, plex=self.plex)
+            m = self.mf.resolve_any(pm)
+            if not m:
+                continue
+            yield m
