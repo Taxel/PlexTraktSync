@@ -90,6 +90,12 @@ class TraktRatingCollection(dict):
             yield r[index]["ids"]["trakt"], r["rating"]
 
 
+class TraktItem:
+    def __init__(self, item: Union[Movie, TVShow, TVSeason, TVEpisode], trakt: TraktApi = None):
+        self.item = item
+        self.trakt = trakt
+
+
 class TraktApi:
     """
     Trakt API class abstracting common data access and dealing with requests cache.
@@ -107,8 +113,20 @@ class TraktApi:
         return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
 
     @cached_property
-    def batch(self):
-        return TraktBatch(self, batch_delay=self.batch_delay)
+    def batch_collection_add(self):
+        return TraktBatch(self, "collection", add=True, batch_delay=self.batch_delay)
+
+    @cached_property
+    def batch_collection_del(self):
+        return TraktBatch(self, "collection", add=False, batch_delay=self.batch_delay)
+
+    @cached_property
+    def batch_watchlist_add(self):
+        return TraktBatch(self, "watchlist", add=True, batch_delay=self.batch_delay)
+
+    @cached_property
+    def batch_watchlist_del(self):
+        return TraktBatch(self, "watchlist", add=False, batch_delay=self.batch_delay)
 
     @cached_property
     @nocache
@@ -184,6 +202,13 @@ class TraktApi:
         return self.me.watchlist_movies
 
     @cached_property
+    @nocache
+    @rate_limit()
+    @retry()
+    def watchlist_shows(self):
+        return self.me.watchlist_shows
+
+    @cached_property
     def ratings(self):
         return TraktRatingCollection(self)
 
@@ -232,9 +257,38 @@ class TraktApi:
             raise ValueError(f"Unsupported media type: {m.media_type}")
 
         if batch:
-            self.batch.add_to_collection(m.media_type, item)
+            self.batch_collection_add.add_to_items(m.media_type, item)
         else:
             trakt.sync.add_to_collection(item)
+
+    def add_to_watchlist(self, m, batch=False):
+        if m.media_type in ["movies", "shows"]:
+            item = dict(
+                title=m.title,
+                year=m.year,
+                **m.ids,
+            )
+        else:
+            raise ValueError(f"Unsupported media type for watchlist: {m.media_type}")
+        if batch:
+            self.batch_watchlist_add.add_to_items(m.media_type, item)
+        else:
+            trakt.sync.add_to_watchlist(item)
+
+    def remove_from_watchlist(self, m, batch=False):
+        if m.media_type in ["movies", "shows"]:
+            item = dict(
+                title=m.title,
+                year=m.year,
+                **m.ids,
+            )
+        else:
+            raise ValueError(f"Unsupported media type for watchlist: {m.media_type}")
+
+        if batch:
+            self.batch_watchlist_del.add_to_items(m.media_type, item)
+        else:
+            trakt.sync.remove_from_watchlist(item)
 
     @nocache
     @rate_limit()
@@ -320,37 +374,44 @@ class TraktApi:
         """
         Submit all pending data
         """
-        self.batch.submit_collection()
+        self.batch_collection_add.flush(force=True)
+        self.batch_collection_del.flush(force=True)
+        self.batch_watchlist_add.flush(force=True)
+        self.batch_watchlist_del.flush(force=True)
 
 
 class TraktBatch:
-    def __init__(self, trakt: TraktApi, batch_delay=None):
+    def __init__(self, trakt: TraktApi, name: str, add: bool, batch_delay=None):
+        if name not in ["collection", "watchlist"]:
+            raise ValueError(f"TraktBatch name not allowed: {name}")
+        self.name = name
+        self.add = add
         self.trakt = trakt
         self.batch_delay = batch_delay
-        self.collection = {}
+        self.items = {}
         self.last_sent_time = 0
 
     @nocache
     @rate_limit()
     @time_limit()
     @retry()
-    def submit_collection(self):
+    def submit(self):
         if self.queue_size() == 0:
             return
 
         try:
-            result = self.trakt_sync_collection(self.collection)
+            result = self.trakt_sync(self.items)
             result = self.remove_empty_values(result.copy())
             if result:
-                logger.debug(f"Updated Trakt collection: {result}")
+                logger.debug(f"Updated Trakt {self.name}: {result}")
         finally:
-            self.collection.clear()
+            self.items.clear()
             self.last_sent_time = time()
 
     def queue_size(self):
         size = 0
-        for media_type in self.collection:
-            size += len(self.collection[media_type])
+        for media_type in self.items:
+            size += len(self.items[media_type])
 
         return size
 
@@ -361,22 +422,32 @@ class TraktBatch:
         if not self.batch_delay and force is False:
             return
         elapsed = time() - self.last_sent_time
-        if elapsed >= self.batch_delay or force is True:
-            self.submit_collection()
+        if elapsed >= self.batch_delay:
+            self.submit()
+        elif force is True:
+            self.submit()
 
-    def add_to_collection(self, media_type: str, item):
+    def add_to_items(self, media_type: str, item):
         """
-        Add item of media_type to collection
+        Add item of media_type to list of items
         """
-        if media_type not in self.collection:
-            self.collection[media_type] = []
+        if media_type not in self.items:
+            self.items[media_type] = []
 
-        self.collection[media_type].append(item)
+        self.items[media_type].append(item)
         self.flush()
 
-    @staticmethod
-    def trakt_sync_collection(media_object):
-        return trakt.sync.add_to_collection(media_object)
+    def trakt_sync(self, media_object):
+        if self.name == "collection":
+            if self.add:
+                return trakt.sync.add_to_collection(media_object)
+            else:
+                return trakt.sync.remove_from_collection(media_object)
+        if self.name == "watchlist":
+            if self.add:
+                return trakt.sync.add_to_watchlist(media_object)
+            else:
+                return trakt.sync.remove_from_watchlist(media_object)
 
     @staticmethod
     def remove_empty_values(result):
@@ -385,11 +456,12 @@ class TraktBatch:
         This makes diagnostic printing cleaner if we don't print "changed: 0"
         """
         for change_type in ["added", "existing", "updated"]:
-            for media_type, value in result[change_type].copy().items():
-                if value == 0:
-                    del result[change_type][media_type]
-            if len(result[change_type]) == 0:
-                del result[change_type]
+            if change_type in result:
+                for media_type, value in result[change_type].copy().items():
+                    if value == 0:
+                        del result[change_type][media_type]
+                if len(result[change_type]) == 0:
+                    del result[change_type]
 
         for media_type, items in result["not_found"].copy().items():
             if len(items) == 0:
