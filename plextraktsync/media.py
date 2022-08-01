@@ -32,11 +32,11 @@ class Media:
 
     @property
     def season_number(self):
-        return self.plex.season_number
+        return self.trakt.season
 
     @property
     def episode_number(self):
-        return self.plex.episode_number
+        return self.trakt.number
 
     @cached_property
     def trakt_id(self):
