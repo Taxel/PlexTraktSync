@@ -105,12 +105,6 @@ class WatchStateUpdater:
             f"on_activity: {m}: Collected: {m.is_collected}, Watched: [Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}]"
         )
 
-        if m.watched_on_plex and not m.watched_on_trakt:
-            self.logger.info(
-                f"on_activity: Marking {activity.key} as watched in Trakt: {m}"
-            )
-            m.mark_watched_trakt()
-
         if self.add_collection and not m.is_collected:
             self.logger.info(f"on_activity: Add {activity.key} to collection: {m}")
             m.add_to_collection()
