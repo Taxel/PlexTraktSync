@@ -3,7 +3,7 @@ from os import environ
 
 import click
 
-from plextraktsync.commands.self_update import enable_self_update, self_update
+from plextraktsync.commands.self_update import enable_self_update
 from plextraktsync.factory import factory
 
 CONFIG = factory.config()
@@ -233,6 +233,19 @@ def watch():
 def subdl():
     """
     Downloads subtitles to a local directory
+    """
+    pass
+
+
+@command()
+def self_update():
+    """
+    Update PlexTraktSync to the latest version using pipx
+
+    \b
+    $ plextraktsync self-update
+    Updating PlexTraktSync to latest using pipx
+    upgraded package plextraktsync from 0.15.3 to 0.18.5 (location: /Users/glen/.local/pipx/venvs/plextraktsync)
     """
     pass
 
