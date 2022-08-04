@@ -238,6 +238,12 @@ def subdl():
 
 
 @command()
+@click.option(
+    "--pr",
+    type=int,
+    default=False,
+    help="Update to Pull Request Id",
+)
 def self_update():
     """
     Update PlexTraktSync to the latest version using pipx
