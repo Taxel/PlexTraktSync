@@ -53,6 +53,11 @@ $ pipx install --suffix=@838 'git+https://github.com/Taxel/PlexTraktSync@refs/pu
 done! ✨ 🌟 ✨
 ```
 
+You can also use a convenience wrapper (this requires you install `plextraktsync` with `pipx` first):
+```
+$ plextraktsync self-update --pr 838
+```
+
 ## Checking out code
 
 If you checkout a specific version, this can be done in one of two ways:
