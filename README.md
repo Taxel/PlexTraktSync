@@ -37,6 +37,8 @@ or to improve documentation [docs-needed], thank you.**
     - [Info command](#info-command)
     - [Watch](#watch)
       - [Systemd setup](#systemd-setup)
+  - [Good practices](#good-practices)
+  - [Troubleshooting](#troubleshooting)
 
 [python-versions-badge]: https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue
 
@@ -376,3 +378,43 @@ sudo systemctl daemon-reload
 sudo systemctl start PlexTraktSync.service
 sudo systemctl enable PlexTraktSync.service
 ```
+
+## Good practices
+
+- Using default `Plex Movie` and `Plex TV Series` [metadata agents](https://support.plex.tv/articles/200241558-agents/) improves script compatibility (for matching or for watchlist).
+  It is recommended to [migrate to the new Plex TV Series agent](https://support.plex.tv/articles/migrating-a-tv-library-to-use-the-new-plex-tv-series-agent-scanner/).
+  
+- Organize your shows folders and naming according to [Plex standard](https://support.plex.tv/articles/naming-and-organizing-your-tv-show-files/) and [theMovieDatabase](https://themoviedb.org/) (tmdb) order.
+- Use tmdb as source for TV Shows if possible, because it's the Trakt [primary data source](https://blog.trakt.tv/tmdb-transition-ef3d19a5cf24).
+
+## Troubleshooting
+
+### I have duplicate watched episodes sent to Trakt at every sync
+
+Check your Plex episodes ordering compared to Trakt ordering.
+If episodes are in a different order, it should not be a problem because they are identified with ids. But if a season or an episode is missing on Trakt (and tmdb) it can't be synced.
+You can fix it by adding the missing episodes on tmdb. Trakt uses tmdb as source and will update accordingly.
+
+### I have many matching errors in logs
+
+Make sure you use [good practices](#good-practices) about Plex agent and files organisation as stated above.
+Check episodes ordering as explained in previous answer.
+
+### I have season 0 matching errors
+
+Season 0 folder must only contains episodes being officially in season 0.
+Trailers, deleted scenes, featurettes, interviews,... must be stored in a separate [Extra folder](https://support.plex.tv/articles/local-files-for-tv-show-trailers-and-extras/) according to Plex rules
+Keep in mind that seasons 0 are not really official so datasources (tmdb, imdb and tvdb) seasons 0 sometimes don't correspond.
+Use tmdb as Plex source as much as you can.
+
+### How to sync multiple users ?
+
+The easiest way is to use containers with custom config folder for each user: [Multi-User docker-compose](https://github.com/Taxel/PlexTraktSync/discussions/997).
+
+### Can this run on Synology, HomeAssistant, Portainer,... ?
+
+Yes using docker, check [Discussions](https://github.com/Taxel/PlexTraktSync/discussions) page.
+
+### I have another question
+
+Check [Discussions](https://github.com/Taxel/PlexTraktSync/discussions), maybe someone already asked and found the answer.
