@@ -242,21 +242,12 @@ class TraktApi:
     def collected(self, tm: TVShow):
         return pytrakt_extensions.collected(tm.trakt)
 
-    @nocache
-    @rate_limit()
-    @retry()
-    def lookup(self, tm: TVShow):
-        """
-        This lookup-table is accessible via lookup[season][episode]
-        """
-        return pytrakt_extensions.lookup_table(tm)
-
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
             ts = self.search_by_id(
                 guid.show_id, id_type=guid.provider, media_type="show"
             )
-            lookup = self.lookup(ts)
+            lookup = TraktLookup(ts)
 
             return self.find_episode_guid(guid, lookup)
 
@@ -309,13 +300,16 @@ class TraktApi:
         # must be shorter than 12 numbers
         return len(media_id) < 12
 
-    def find_episode_guid(self, guid: PlexGuid, lookup):
+    def find_episode_guid(self, guid: PlexGuid, lookup: TraktLookup):
         """
         Find Trakt Episode from Guid of Plex Episode
         """
-        try:
-            return lookup[guid.pm.season_number][guid.pm.episode_number].instance
-        except KeyError:
+        te = lookup.from_number(guid.pm.season_number, guid.pm.episode_number)
+        if not te or (str(te.ids.get(guid.provider)) != guid.id and not guid.pm.is_legacy_agent):
+            te = lookup.from_id(guid.provider, guid.id)
+        if te:
+            return te.instance
+        else:
             # Retry using search for specific Plex Episode
             logger.warning("Retry using search for specific Plex Episode")
             if not guid.is_episode:
@@ -408,3 +402,56 @@ class TraktBatch:
             return None
 
         return result
+
+
+class TraktLookup:
+    """
+    Trakt lookup table to find all Trakt episodes of a TVShow
+    """
+    def __init__(self, tm: TVShow):
+        self.table = {}
+        self.provider_table = {}
+        self.tm = tm
+        self.same_order = True
+
+    @nocache
+    @rate_limit()
+    @retry()
+    def _lookup(self, tm: TVShow):
+        """
+        Build a lookup-table accessible via table[season][episode]
+        """
+        self.table = pytrakt_extensions.lookup_table(tm)
+
+    def _reverse_lookup(self, provider):
+        """
+        Build a lookup-table accessible via table[provider][id]
+        only if episodes ordering is different between Plex and Trakt
+        """
+        table = {}
+        for season in self.table.keys():
+            for te in self.table[season].values():
+                table[str(te.ids.get(provider))] = te
+        self.provider_table[provider] = table
+        logger.debug(f"{self.tm.title}: lookup table build with '{provider}' ids")
+
+    def from_number(self, season, number):
+        if not self.table:
+            self._lookup(self.tm)
+        try:
+            ep = self.table[season][number]
+        except KeyError:
+            return None
+        return ep
+
+    def from_id(self, provider, id):
+        if self.same_order:
+            logger.debug(f"{self.tm.title} episodes ordering is different in Plex and Trakt. Check your Plex media source, TMDB is recommended.")
+            self.same_order = False
+        if provider not in self.provider_table:
+            self._reverse_lookup(provider)
+        try:
+            ep = self.provider_table[provider][id]
+        except KeyError:
+            return None
+        return ep

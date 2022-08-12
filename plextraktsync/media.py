@@ -7,7 +7,7 @@ from trakt.errors import TraktException
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.logging import logger
 from plextraktsync.plex_api import PlexApi, PlexGuid, PlexLibraryItem
-from plextraktsync.trakt_api import TraktApi
+from plextraktsync.trakt_api import TraktApi, TraktLookup
 
 
 class Media:
@@ -32,11 +32,11 @@ class Media:
 
     @property
     def season_number(self):
-        return self.plex.season_number
+        return self.trakt.season
 
     @property
     def episode_number(self):
-        return self.plex.episode_number
+        return self.trakt.number
 
     @cached_property
     def trakt_id(self):
@@ -97,7 +97,7 @@ class Media:
         if self.media_type != "shows":
             raise RuntimeError(f"seasons: Unsupported media type: {self.media_type}")
 
-        return self.trakt_api.lookup(self.trakt)
+        return TraktLookup(self.trakt)
 
     @property
     def watched_on_plex(self):
