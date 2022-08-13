@@ -384,7 +384,7 @@ sudo systemctl enable PlexTraktSync.service
 - Using default `Plex Movie` and `Plex TV Series` [metadata agents](https://support.plex.tv/articles/200241558-agents/) improves script compatibility (for matching or for watchlist).
   It is recommended to [migrate to the new Plex TV Series agent](https://support.plex.tv/articles/migrating-a-tv-library-to-use-the-new-plex-tv-series-agent-scanner/).
 - Organize your shows folders and naming according to [Plex standard](https://support.plex.tv/articles/naming-and-organizing-your-tv-show-files/) and [theMovieDatabase](https://themoviedb.org/) (tmdb) order. If Plex doesn't properly identify your medias, you can use the [Fix Match](https://support.plex.tv/articles/201018497-fix-match-match/) and the [Match Hinting](https://support.plex.tv/articles/plexmatch/).
-- Use tmdb as source for TV Shows if possible, because it's the Trakt [primary data source](https://blog.trakt.tv/tmdb-transition-ef3d19a5cf24).
+- Use tmdb as source for TV Shows if possible, because it's the Trakt [primary data source](https://blog.trakt.tv/tv-show-metadata-e6e64ed4e6ef) ([switched from tvdb in Jan-2021](https://blog.trakt.tv/tmdb-transition-ef3d19a5cf24)).
 
 ## Troubleshooting
 
@@ -392,18 +392,18 @@ sudo systemctl enable PlexTraktSync.service
 
 Check your Plex episodes ordering compared to Trakt ordering.
 If episodes are in a different order, it should not be a problem because they are identified with ids. But if a season or an episode is missing on Trakt (and tmdb) it can't be synced.
-You can fix it by [adding the missing episodes](https://support.trakt.tv/support/solutions/articles/70000264977) on tmdb. Trakt [uses tmdb as source](https://support.trakt.tv/support/solutions/articles/70000260936-how-does-movie-tv-show-information-metadata-get-updated-how-can-i-refresh-or-sync-trakt-to-tmdb-) and will update accordingly.
+You can fix it by [adding the missing episodes](https://support.trakt.tv/support/solutions/articles/70000264977) or edit metadata on [tmdb](https://themoviedb.org/) or [report a metadata issue on Trakt](https://support.trakt.tv/support/solutions/articles/70000627644-how-to-report-metadata-issues) ([answers](https://trakt.tv/settings/reports)).  It's free for anyone to sign up and edit info at tmdb. Trakt will [update from tmdb](https://support.trakt.tv/support/solutions/articles/70000260936-how-does-movie-tv-show-information-metadata-get-updated-how-can-i-refresh-or-sync-trakt-to-tmdb-) data.
 
 ### I have many matching errors in logs
 
 Make sure you use [good practices](#good-practices) about Plex agent and files organization as stated above.
-Check episodes ordering as explained in previous answer.
+Check if episodes are not missing on Trakt as explained in previous answer.
 
 ### I have season 0 matching errors
 
 Season 0 folder must only contains episodes being officially in season 0.
-Trailers, deleted scenes, featurettes, interviews,... must be stored in a separate [Extra folder](https://support.plex.tv/articles/local-files-for-tv-show-trailers-and-extras/) according to Plex rules
-Keep in mind that seasons 0 are not really official so datasources (tmdb, imdb and tvdb) seasons 0 sometimes don't correspond.
+Trailers, deleted scenes, featurettes, interviews,... must be stored in a separate [Extra folder](https://support.plex.tv/articles/local-files-for-tv-show-trailers-and-extras/) according to Plex rules. 
+Keep in mind that seasons 0 are not really official so datasources (tmdb, imdb and tvdb) sometimes don't correspond.
 Use tmdb as Plex source as much as you can.
 
 ### How to sync multiple users ?
