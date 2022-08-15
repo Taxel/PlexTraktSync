@@ -6,6 +6,8 @@ This project adds a two-way-sync between trakt.tv and Plex Media Server. It
 requires a trakt.tv account but no Plex premium and no Trakt VIP subscriptions,
 unlike the Plex app provided by Trakt.
 
+![image](https://raw.githubusercontent.com/twolaw/PlexTraktSync/img/plextraktsync_banner.png)
+
 Originally created by [@Taxel], but now maintained by [contributors].
 
 [@Taxel]: https://github.com/Taxel
