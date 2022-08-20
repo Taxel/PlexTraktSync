@@ -189,9 +189,7 @@ class Sync:
 
     def sync_watchlist(self, walker: Walker, dry_run=False):
         """After plex library processing, sync watchlist items not in the plex library"""
-        if self.update_trakt_wl:
-            for m in walker.media_from_plexlist(list(self.plex_wl.values())):
-                self.watchlist_sync_item(m, dry_run)
-        if self.update_plex_wl:
-            for m in walker.media_from_traktlist(list(self.trakt_wl_movies.values()) + list(self.trakt_wl_shows.values())):
-                self.watchlist_sync_item(m, dry_run)
+        for m in walker.media_from_plexlist(list(self.plex_wl.values())):
+            self.watchlist_sync_item(m, dry_run)
+        for m in walker.media_from_traktlist(list(self.trakt_wl_movies.values()) + list(self.trakt_wl_shows.values())):
+            self.watchlist_sync_item(m, dry_run)
