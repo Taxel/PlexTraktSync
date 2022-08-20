@@ -169,24 +169,26 @@ class Sync:
             if m.plex.item.guid in self.plex_wl:
                 if m.trakt.trakt not in trakt_wl:
                     if self.update_trakt_wl:
+                        logger.info(f"Adding {m.plex.item.title} to Trakt watchlist")
                         if not dry_run:
-                            logger.info(f"Adding {m.plex.item.title} to Trakt watchlist")
                             m.add_to_trakt_watchlist(batch=True)
                     else:
                         logger.info(f"Removing {m.trakt.title} from Plex watchlist")
-                        m.remove_from_plex_watchlist()
+                        if not dry_run:
+                            m.remove_from_plex_watchlist()
                 else:
                     trakt_wl.pop(m.trakt.trakt)
                 self.plex_wl.pop(m.plex.item.guid)
             else:
                 if m.trakt.trakt in trakt_wl:
                     if self.update_plex_wl:
+                        logger.info(f"Adding {m.trakt.title} to Plex watchlist")
                         if not dry_run:
-                            logger.info(f"Adding {m.trakt.title} to Plex watchlist")
                             m.add_to_plex_watchlist()
                     else:
                         logger.info(f"Removing {m.trakt.title} from Trakt watchlist")
-                        m.remove_from_trakt_watchlist()
+                        if not dry_run:
+                            m.remove_from_trakt_watchlist()
                     trakt_wl.pop(m.trakt.trakt)
 
     def sync_watchlist(self, walker: Walker, dry_run=False):
