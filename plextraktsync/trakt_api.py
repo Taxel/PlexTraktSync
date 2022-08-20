@@ -311,7 +311,7 @@ class TraktApi:
             return te.instance
         else:
             # Retry using search for specific Plex Episode
-            logger.warning("Retry using search for specific Plex Episode")
+            logger.warning(f"Retry using search for specific Plex Episode {guid.guid}")
             if not guid.is_episode:
                 return self.find_by_guid(guid)
             return None
