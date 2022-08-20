@@ -79,7 +79,6 @@ class Sync:
             self.sync_ratings(movie, dry_run=dry_run)
             self.sync_watched(movie, dry_run=dry_run)
             listutil.addPlexItemToLists(movie)
-            self.watchlist_sync_item(movie, dry_run=dry_run)
         trakt.flush()
 
         shows = set()
@@ -88,22 +87,21 @@ class Sync:
             self.sync_ratings(episode, dry_run=dry_run)
             self.sync_watched(episode, dry_run=dry_run)
             listutil.addPlexItemToLists(episode)
-            if self.config.sync_ratings or self.sync_wl:
-                # collect shows for later ratings and watchlists sync
+            if self.config.sync_ratings:
+                # collect shows for later ratings sync
                 shows.add(episode.show)
-        walker.trakt.flush()
+        trakt.flush()
 
         for show in walker.walk_shows(shows, title="Syncing show ratings"):
             self.sync_ratings(show, dry_run=dry_run)
 
-        if not dry_run and self.sync_wl:
+        if self.sync_wl:
             with measure_time("Updated watchlist"):
                 if self.update_plex_wl_as_pl:
-                    listutil.updatePlexLists(walker.plex)
+                    if not dry_run:
+                        listutil.updatePlexLists(walker.plex)
                 else:
-                    for show in walker.walk_shows(shows, title="Syncing watchlist shows"):
-                        self.watchlist_sync_item(show, dry_run=dry_run)
-                    self.sync_watchlist(walker)
+                    self.sync_watchlist(walker, dry_run=dry_run)
 
         if not dry_run:
             trakt.flush()
@@ -178,7 +176,6 @@ class Sync:
                             m.remove_from_plex_watchlist()
                 else:
                     trakt_wl.pop(m.trakt.trakt)
-                self.plex_wl.pop(m.plex.item.guid)
             else:
                 if m.trakt.trakt in trakt_wl:
                     if self.update_plex_wl:
@@ -189,7 +186,6 @@ class Sync:
                         logger.info(f"Removing {m.trakt.title} from Trakt watchlist")
                         if not dry_run:
                             m.remove_from_trakt_watchlist()
-                    trakt_wl.pop(m.trakt.trakt)
 
     def sync_watchlist(self, walker: Walker, dry_run=False):
         """After plex library processing, sync watchlist items not in the plex library"""
