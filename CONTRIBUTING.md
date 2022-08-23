@@ -58,6 +58,26 @@ You can also use a convenience wrapper (this requires you install `plextraktsync
 $ plextraktsync self-update --pr 838
 ```
 
+To remove the versions:
+
+```
+$ pipx list
+venvs are in /Users/glen/.local/pipx/venvs
+apps are exposed on your $PATH at /Users/glen/.local/bin
+   package plextraktsync 0.20.9, installed using Python 3.10.5
+    - plextraktsync
+   package PlexTraktSync 0.20.0.dev0 (PlexTraktSync@838), installed using Python 3.10.5
+    - plextraktsync@838
+   package PlexTraktSync 0.20.0.dev0 (PlexTraktSync@984), installed using Python 3.10.5
+    - plextraktsync@984
+
+$ pipx uninstall plextraktsync@838
+uninstalled PlexTraktSync@838! ✨ 🌟 ✨
+$ pipx uninstall plextraktsync@984
+uninstalled PlexTraktSync@984! ✨ 🌟 ✨
+$
+```
+
 ## Checking out code
 
 If you checkout a specific version, this can be done in one of two ways:
