@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b6fb55e6c26dec48484480419f73ab569108286db8d682dc8104792dc82419e5"
+            "sha256": "833bc28cc43306f32824b048056d71aa10522e7d6c03063096f9fa4bfce33061"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -37,7 +37,7 @@
                 "sha256:211800f725cdecedcbcf4c753bbd22d248312b37d130f06045434acb7d9b34e1",
                 "sha256:35dd9063244263e63bd0bd24ea61e3015b00272cead084b2c40d788b0f857c46"
             ],
-            "markers": "python_version >= '3.7' and python_full_version < '4.0.0'",
+            "markers": "python_version >= '3.7' and python_version < '4'",
             "version": "==1.10.0"
         },
         "certifi": {
@@ -108,7 +108,7 @@
                 "sha256:5f50d5b2b3207fa72e7ec0ef08372ef652685470974a107d0d4999fc5a903a96",
                 "sha256:717ea765dd10b63618e7298b2d98efd819e0b30cd5905c9707223dceeb94b3f1"
             ],
-            "markers": "python_version >= '3.7' and python_full_version < '4.0.0'",
+            "markers": "python_version >= '3.7' and python_version < '4'",
             "version": "==0.3.4"
         },
         "plexapi": {
@@ -271,11 +271,11 @@
         },
         "websocket-client": {
             "hashes": [
-                "sha256:5d55652dc1d0b3c734f044337d929aaf83f4f9138816ec680c1aefefb4dc4877",
-                "sha256:d58c5f284d6a9bf8379dab423259fe8f85b70d5fa5d2916d5791a84594b122b1"
+                "sha256:33ad3cf0aef4270b95d10a5a66b670a66be1f5ccf10ce390b3644f9eddfdca9d",
+                "sha256:79d730c9776f4f112f33b10b78c8d209f23b5806d9a783e296b3813fc5add2f1"
             ],
             "index": "pypi",
-            "version": "==1.3.3"
+            "version": "==1.4.0"
         },
         "wrapt": {
             "hashes": [
