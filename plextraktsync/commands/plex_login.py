@@ -202,6 +202,7 @@ def login(username: str, password: str):
         managed_user = choose_managed_user(account)
         if managed_user:
             user = managed_user
+            CONFIG["PLEX_OWNER_TOKEN"] = token
             token = account.user(managed_user).get_token(plex.machineIdentifier)
 
     CONFIG["PLEX_USERNAME"] = user

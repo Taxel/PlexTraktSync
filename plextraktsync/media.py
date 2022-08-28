@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from plexapi.exceptions import PlexApiException
 from requests import RequestException
@@ -7,7 +7,7 @@ from trakt.errors import TraktException
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.logging import logger
 from plextraktsync.plex_api import PlexApi, PlexGuid, PlexLibraryItem
-from plextraktsync.trakt_api import TraktApi, TraktLookup
+from plextraktsync.trakt_api import TraktApi, TraktLookup, TraktItem
 
 
 class Media:
@@ -92,6 +92,18 @@ class Media:
     def remove_from_collection(self):
         self.trakt_api.remove_from_library(self.trakt)
 
+    def add_to_trakt_watchlist(self, batch=False):
+        self.trakt_api.add_to_watchlist(self.trakt, batch=batch)
+
+    def add_to_plex_watchlist(self):
+        self.plex_api.add_to_watchlist(self.plex.item)
+
+    def remove_from_trakt_watchlist(self, batch=False):
+        self.trakt_api.remove_from_watchlist(self.trakt, batch=batch)
+
+    def remove_from_plex_watchlist(self):
+        self.plex_api.remove_from_watchlist(self.plex.item)
+
     @cached_property
     def seasons(self):
         if self.media_type != "shows":
@@ -158,7 +170,7 @@ class Media:
 
 class MediaFactory:
     """
-    Class that is able to resolve Trakt media item from Plex media item and return generic Media class
+    Class that is able to resolve Trakt media item from Plex media item and vice versa and return generic Media class
     """
 
     def __init__(self, plex: PlexApi, trakt: TraktApi):
@@ -205,3 +217,20 @@ class MediaFactory:
             return None
 
         return Media(guid.pm, tm, plex_api=self.plex, trakt_api=self.trakt)
+
+    def resolve_trakt(self, tm: TraktItem) -> Media:
+        """Find Plex media from Trakt id using Plex Search and Discover"""
+        result = self.plex.search_online(tm.item.title, tm.item.media_type[:-1])
+        pm = self._guid_match(result, tm)
+        if pm is not None:
+            return Media(pm, tm.item, plex_api=self.plex, trakt_api=self.trakt)
+
+    def _guid_match(self, candidates: List[PlexLibraryItem], tm: TraktItem) -> PlexLibraryItem:
+        if candidates:
+            for pm in candidates:
+                for guid in pm.guids:
+                    for provider in ["tmdb", "imdb", "tvdb"]:
+                        if guid.provider == provider and hasattr(tm.item, provider) and guid.id == str(getattr(tm.item, provider)):
+                            return pm
+        logger.info(f"Skipping {tm.item.title} from Trakt watchlist because not found in Plex Discover")
+        return None

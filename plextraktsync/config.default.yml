@@ -21,11 +21,13 @@ sync:
     collection: true
     ratings: true
     watched_status: true
+    watchlist: true
   trakt_to_plex:
     liked_lists: true
     ratings: true
     watched_status: true
     watchlist: true
+    watchlist_as_playlist: false
 
 watch:
   add_collection: false
