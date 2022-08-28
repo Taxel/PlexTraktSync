@@ -221,7 +221,7 @@ class PlexLibraryItem:
     @property
     @nocache
     def is_watched(self):
-        return self.item.isWatched
+        return self.item.isPlayed
 
     @property
     def collected_at(self):
@@ -611,7 +611,7 @@ class PlexApi:
     @nocache
     @retry()
     def mark_watched(self, m):
-        m.markWatched()
+        m.markPlayed()
 
     @nocache
     def has_sessions(self):
