@@ -185,7 +185,7 @@ class Sync:
                     else:
                         logger.info(f"Removing {m.trakt.title} from Trakt watchlist")
                         if not dry_run:
-                            m.remove_from_trakt_watchlist()
+                            m.remove_from_trakt_watchlist(batch=True)
 
     def sync_watchlist(self, walker: Walker, dry_run=False):
         """After plex library processing, sync watchlist items not in the plex library"""
