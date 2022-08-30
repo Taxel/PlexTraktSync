@@ -52,7 +52,7 @@ def sync(
     w.print_plan(print=logger.info)
 
     if dry_run:
-        print("Enabled dry-run mode: not making actual changes")
+        logger.info("Enabled dry-run mode: not making actual changes")
 
     with measure_time("Completed full sync"):
         runner = factory.sync()
