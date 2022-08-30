@@ -2,7 +2,7 @@ FROM python:3.10-alpine3.15 AS base
 
 WORKDIR /app
 
-# Install app depedencies
+# Install app dependencies
 FROM base AS build
 RUN pip install pipenv
 COPY Pipfile* ./
