@@ -143,6 +143,10 @@ class Config(dict):
     def log_append(self):
         return self["logging"]["append"]
 
+    @property
+    def cache_path(self):
+        return self["cache"]["path"]
+
     def initialize(self):
         """
         Config load order:
