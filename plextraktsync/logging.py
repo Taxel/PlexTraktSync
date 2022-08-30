@@ -6,10 +6,7 @@ from .factory import factory
 def initialize():
     CONFIG = factory.config()
     # global log level for all messages
-    if ("log_debug_messages" in CONFIG and CONFIG["log_debug_messages"]) or CONFIG["logging"]["debug"]:
-        log_level = logging.DEBUG
-    else:
-        log_level = logging.INFO
+    log_level = logging.DEBUG if CONFIG.log_debug else logging.INFO
 
     # messages with info and above are printed to stdout
     console_handler = factory.console_logger()
