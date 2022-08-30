@@ -35,4 +35,9 @@ repos:
     hooks:
       - id: setup-cfg-fmt
 
+  - repo: https://github.com/pycqa/flake8
+    rev: 5.0.4
+    hooks:
+      - id: flake8
+
 # vim:ts=2:sw=2:et
