@@ -127,6 +127,14 @@ class Config(dict):
             self.initialize()
         return dict.__contains__(self, item)
 
+    @property
+    def log_file(self):
+        from os.path import join
+
+        from .path import log_dir
+
+        return join(log_dir, self["logging"]["filename"])
+
     def initialize(self):
         """
         Config load order:
