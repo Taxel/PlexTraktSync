@@ -22,6 +22,7 @@ def info():
 
     config = factory.config()
     print(f"Log File: {config.log_file}")
+    print(f"Cache File: {config.cache_path}.sqlite")
 
     print(f"Plex username: {config['PLEX_USERNAME']}")
     print(f"Trakt username: {config['TRAKT_USERNAME']}")
