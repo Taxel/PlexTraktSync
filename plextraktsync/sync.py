@@ -65,7 +65,11 @@ class Sync:
         if self.sync_wl:
             self.trakt_wl_movies = {tm.trakt: tm for tm in trakt.watchlist_movies} or {}
             self.trakt_wl_shows = {tm.trakt: tm for tm in trakt.watchlist_shows} or {}
-            self.plex_wl = {pm.guid: pm for pm in plex.watchlist()} or {}
+            plex_wl = plex.watchlist()
+            if plex_wl is None:
+                self.sync_wl = False
+            else:
+                self.plex_wl = {pm.guid: pm for pm in plex_wl}
 
         if self.update_plex_wl_as_pl:
             listutil.addList(None, "Trakt Watchlist", trakt_list=trakt.watchlist_movies)
