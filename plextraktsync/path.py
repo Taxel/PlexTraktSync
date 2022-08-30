@@ -20,7 +20,6 @@ class Path:
         self.config_yml = join(self.config_dir, "config.yml")
         self.pytrakt_file = join(self.config_dir, ".pytrakt.json")
         self.env_file = join(self.config_dir, ".env")
-        self.log_file = join(self.log_dir, "last_update.log")
 
     @cached_property
     def config_dir(self):
@@ -70,4 +69,3 @@ config_file = p.config_file
 config_yml = p.config_yml
 pytrakt_file = p.pytrakt_file
 env_file = p.env_file
-log_file = p.log_file
