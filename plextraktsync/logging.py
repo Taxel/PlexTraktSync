@@ -15,7 +15,7 @@ def initialize():
     console_handler.setLevel(logging.INFO)
 
     # file handler can log down to debug messages
-    mode = "a" if CONFIG["logging"]["append"] else "w"
+    mode = "a" if CONFIG.log_append else "w"
     file_handler = logging.FileHandler(CONFIG.log_file, mode, "utf-8")
     file_handler.setFormatter(
         logging.Formatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s")
