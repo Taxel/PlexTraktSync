@@ -4,9 +4,9 @@ from .factory import factory
 
 
 def initialize():
-    CONFIG = factory.config()
+    config = factory.config()
     # global log level for all messages
-    log_level = logging.DEBUG if CONFIG.log_debug else logging.INFO
+    log_level = logging.DEBUG if config.log_debug else logging.INFO
 
     # messages with info and above are printed to stdout
     console_handler = factory.console_logger()
@@ -15,8 +15,8 @@ def initialize():
     console_handler.setLevel(logging.INFO)
 
     # file handler can log down to debug messages
-    mode = "a" if CONFIG.log_append else "w"
-    file_handler = logging.FileHandler(CONFIG.log_file, mode, "utf-8")
+    mode = "a" if config.log_append else "w"
+    file_handler = logging.FileHandler(config.log_file, mode, "utf-8")
     file_handler.setFormatter(
         logging.Formatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s")
     )
