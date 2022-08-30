@@ -1,5 +1,3 @@
-from deprecated import deprecated
-
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.rich_addons import RichHighlighter
 
@@ -44,22 +42,9 @@ class Factory:
         from requests_cache import CachedSession
 
         config = self.config()
-        trakt_cache = config["cache"]["path"]
-        session = CachedSession(trakt_cache)
+        session = CachedSession(config.cache_path)
 
         return session
-
-    @memoize
-    @deprecated("Use session instead")
-    def requests_cache(self):
-        import requests_cache
-
-        config = self.config()
-        trakt_cache = config["cache"]["path"]
-
-        requests_cache.install_cache(trakt_cache)
-
-        return requests_cache
 
     @memoize
     def sync(self):

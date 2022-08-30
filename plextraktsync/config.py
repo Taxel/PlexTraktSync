@@ -127,6 +127,26 @@ class Config(dict):
             self.initialize()
         return dict.__contains__(self, item)
 
+    @property
+    def log_file(self):
+        from os.path import join
+
+        from .path import log_dir
+
+        return join(log_dir, self["logging"]["filename"])
+
+    @property
+    def log_debug(self):
+        return ("log_debug_messages" in self and self["log_debug_messages"]) or self["logging"]["debug"]
+
+    @property
+    def log_append(self):
+        return self["logging"]["append"]
+
+    @property
+    def cache_path(self):
+        return self["cache"]["path"]
+
     def initialize(self):
         """
         Config load order:

@@ -1,18 +1,12 @@
 import logging
-from os.path import join
 
 from .factory import factory
-from .path import log_dir
 
 
 def initialize():
-    CONFIG = factory.config()
+    config = factory.config()
     # global log level for all messages
-    if ("log_debug_messages" in CONFIG and CONFIG["log_debug_messages"]) or CONFIG["logging"]["debug"]:
-        log_level = logging.DEBUG
-    else:
-        log_level = logging.INFO
-    log_file = join(log_dir, CONFIG["logging"]["filename"])
+    log_level = logging.DEBUG if config.log_debug else logging.INFO
 
     # messages with info and above are printed to stdout
     console_handler = factory.console_logger()
@@ -21,8 +15,8 @@ def initialize():
     console_handler.setLevel(logging.INFO)
 
     # file handler can log down to debug messages
-    mode = "a" if CONFIG["logging"]["append"] else "w"
-    file_handler = logging.FileHandler(log_file, mode, "utf-8")
+    mode = "a" if config.log_append else "w"
+    file_handler = logging.FileHandler(config.log_file, mode, "utf-8")
     file_handler.setFormatter(
         logging.Formatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s")
     )
