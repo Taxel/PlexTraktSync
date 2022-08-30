@@ -139,6 +139,10 @@ class Config(dict):
     def log_debug(self):
         return ("log_debug_messages" in self and self["log_debug_messages"]) or self["logging"]["debug"]
 
+    @property
+    def log_append(self):
+        return self["logging"]["append"]
+
     def initialize(self):
         """
         Config load order:
