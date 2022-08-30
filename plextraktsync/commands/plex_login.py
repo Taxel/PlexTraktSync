@@ -8,7 +8,7 @@ from typing import List
 import click
 from click import ClickException
 from InquirerPy import get_style, inquirer
-from plexapi.exceptions import NotFound, Unauthorized
+from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
 from plexapi.server import PlexServer
 
@@ -55,6 +55,9 @@ def myplex_login(username, password):
             return MyPlexAccount(username, password)
         except Unauthorized as e:
             click.echo(error(f"Log in to Plex failed: {e}, Try again."))
+        except BadRequest as e:
+            click.echo(error(f"Log in to Plex failed: {e}"))
+            exit(1)
 
 
 def choose_managed_user(account: MyPlexAccount):
