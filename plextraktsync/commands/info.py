@@ -5,11 +5,12 @@ from trakt import __version__ as TRAKT_API_VERSION
 
 from plextraktsync.commands.plex_login import has_plex_token
 from plextraktsync.factory import factory
+from plextraktsync.logging import logger
 from plextraktsync.path import cache_dir, config_dir, log_dir
 from plextraktsync.version import version as get_version
 
 
-def info():
+def info(print=logger.info):
     print(f"PlexTraktSync Version: {get_version()}")
 
     py_version = sys.version.replace("\n", "")
