@@ -135,6 +135,10 @@ class Config(dict):
 
         return join(log_dir, self["logging"]["filename"])
 
+    @property
+    def log_debug(self):
+        return ("log_debug_messages" in self and self["log_debug_messages"]) or self["logging"]["debug"]
+
     def initialize(self):
         """
         Config load order:
