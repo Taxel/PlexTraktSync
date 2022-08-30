@@ -42,8 +42,7 @@ class Factory:
         from requests_cache import CachedSession
 
         config = self.config()
-        trakt_cache = config["cache"]["path"]
-        session = CachedSession(trakt_cache)
+        session = CachedSession(config.cache_path)
 
         return session
 
