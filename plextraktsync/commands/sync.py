@@ -1,7 +1,6 @@
 from typing import List
 
 import click
-from tqdm import tqdm
 
 from plextraktsync.commands.login import ensure_login
 from plextraktsync.decorators.measure_time import measure_time
@@ -50,10 +49,10 @@ def sync(
         click.echo("Nothing to sync, this is likely due conflicting options given.")
         return
 
-    w.print_plan(print=tqdm.write)
+    w.print_plan(print=logger.info)
 
     if dry_run:
-        print("Enabled dry-run mode: not making actual changes")
+        logger.info("Enabled dry-run mode: not making actual changes")
 
     with measure_time("Completed full sync"):
         runner = factory.sync()
