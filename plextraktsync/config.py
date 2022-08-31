@@ -144,6 +144,10 @@ class Config(dict):
         return self["logging"]["append"]
 
     @property
+    def log_console_time(self):
+        return self["logging"]["console_time"]
+
+    @property
     def cache_path(self):
         return self["cache"]["path"]
 

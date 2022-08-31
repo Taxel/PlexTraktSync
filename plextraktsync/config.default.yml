@@ -13,6 +13,8 @@ plex:
 
 logging:
   append: true
+  # Whether to show timestamps in console messages
+  console_time: false
   debug: false
   filename: plextraktsync.log
 
