@@ -629,11 +629,17 @@ class PlexApi:
     def _plex_account(self):
         CONFIG = factory.config()
         plex_owner_token = CONFIG.get("PLEX_OWNER_TOKEN")
+        plex_account_token = CONFIG.get("PLEX_ACCOUNT_TOKEN")
         plex_username = CONFIG.get("PLEX_USERNAME")
         if plex_owner_token:
             try:
                 plex_owner_account = MyPlexAccount(token=plex_owner_token)
                 return plex_owner_account.switchHomeUser(plex_username)
+            except BadRequest as e:
+                logger.error(f"Error during {plex_username} account access: {e}")
+        elif plex_account_token:
+            try:
+                return MyPlexAccount(token=plex_account_token)
             except BadRequest as e:
                 logger.error(f"Error during {plex_username} account access: {e}")
         else:
