@@ -63,9 +63,13 @@ class Sync:
         self.update_trakt_wl = self.config.plex_to_trakt["watchlist"]
         self.sync_wl = self.config.trakt_to_plex["watchlist"] or self.config.plex_to_trakt["watchlist"]
         if self.sync_wl:
-            self.trakt_wl_movies = {tm.trakt: tm for tm in trakt.watchlist_movies} or {}
-            self.trakt_wl_shows = {tm.trakt: tm for tm in trakt.watchlist_shows} or {}
-            self.plex_wl = {pm.guid: pm for pm in plex.watchlist()} or {}
+            plex_wl = plex.watchlist()
+            if plex_wl is None:
+                self.sync_wl = False
+            else:
+                self.plex_wl = {pm.guid: pm for pm in plex_wl}
+                self.trakt_wl_movies = {tm.trakt: tm for tm in trakt.watchlist_movies} or {}
+                self.trakt_wl_shows = {tm.trakt: tm for tm in trakt.watchlist_shows} or {}
 
         if self.update_plex_wl_as_pl:
             listutil.addList(None, "Trakt Watchlist", trakt_list=trakt.watchlist_movies)
@@ -188,7 +192,6 @@ class Sync:
                             m.remove_from_trakt_watchlist(batch=True)
 
     def sync_watchlist(self, walker: Walker, dry_run=False):
-        """After plex library processing, sync watchlist items not in the plex library"""
         for m in walker.media_from_plexlist(list(self.plex_wl.values())):
             self.watchlist_sync_item(m, dry_run)
         for m in walker.media_from_traktlist(list(self.trakt_wl_movies.values()) + list(self.trakt_wl_shows.values())):
