@@ -49,11 +49,10 @@ def sync(
         click.echo("Nothing to sync, this is likely due conflicting options given.")
         return
 
-    w.print_plan(print=logger.info)
-
-    if dry_run:
-        logger.info("Enabled dry-run mode: not making actual changes")
-
     with measure_time("Completed full sync"):
         runner = factory.sync()
+        if runner.need_library_walk:
+            w.print_plan(print=logger.info)
+        if dry_run:
+            logger.info("Enabled dry-run mode: not making actual changes")
         runner.sync(walker=w, dry_run=config.dry_run)
