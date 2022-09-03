@@ -53,19 +53,19 @@ class SyncConfig:
 class Sync:
     def __init__(self, config: Config):
         self.config = SyncConfig(config)
+        self.update_plex_wl = self.config.trakt_to_plex["watchlist"] and not self.config.trakt_to_plex["watchlist_as_playlist"]
+        self.update_plex_wl_as_pl = self.config.trakt_to_plex["watchlist"] and self.config.trakt_to_plex["watchlist_as_playlist"]
+        self.update_trakt_wl = self.config.plex_to_trakt["watchlist"]
+        self.sync_wl = self.config.trakt_to_plex["watchlist"] or self.config.plex_to_trakt["watchlist"]
+        self.need_library_walk = self.config.plex_to_trakt["collection"] or self.config.plex_to_trakt["ratings"] or \
+            self.config.plex_to_trakt["watched_status"] or self.config.trakt_to_plex["liked_lists"] or \
+            self.config.trakt_to_plex["ratings"] or self.config.trakt_to_plex["liked_lists"] or \
+            self.config.trakt_to_plex["watched_status"] or self.update_plex_wl_as_pl
 
     def sync(self, walker: Walker, dry_run=False):
         listutil = TraktListUtil()
         trakt = walker.trakt
         plex = walker.plex
-        self.update_plex_wl = self.config.trakt_to_plex["watchlist"] and not self.config.trakt_to_plex["watchlist_as_playlist"]
-        self.update_plex_wl_as_pl = self.config.trakt_to_plex["watchlist"] and self.config.trakt_to_plex["watchlist_as_playlist"]
-        self.update_trakt_wl = self.config.plex_to_trakt["watchlist"]
-        self.sync_wl = self.config.trakt_to_plex["watchlist"] or self.config.plex_to_trakt["watchlist"]
-        need_library_walk = self.config.plex_to_trakt["collection"] or self.config.plex_to_trakt["ratings"] or \
-            self.config.plex_to_trakt["watched_status"] or self.config.trakt_to_plex["liked_lists"] or \
-            self.config.trakt_to_plex["ratings"] or self.config.trakt_to_plex["liked_lists"] or \
-            self.config.trakt_to_plex["watched_status"] or self.update_plex_wl_as_pl
         if self.sync_wl:
             plex_wl = plex.watchlist()
             if plex_wl is None:
@@ -82,7 +82,7 @@ class Sync:
             for lst in trakt.liked_lists:
                 listutil.addList(lst["username"], lst["listname"])
 
-        if need_library_walk:
+        if self.need_library_walk:
             for movie in walker.find_movies():
                 self.sync_collection(movie, dry_run=dry_run)
                 self.sync_ratings(movie, dry_run=dry_run)
