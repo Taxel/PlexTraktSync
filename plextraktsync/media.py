@@ -222,8 +222,7 @@ class MediaFactory:
         """Find Plex media from Trakt id using Plex Search and Discover"""
         result = self.plex.search_online(tm.item.title, tm.item.media_type[:-1])
         pm = self._guid_match(result, tm)
-        if pm is not None:
-            return Media(pm, tm.item, plex_api=self.plex, trakt_api=self.trakt)
+        return Media(pm, tm.item, plex_api=self.plex, trakt_api=self.trakt)
 
     def _guid_match(self, candidates: List[PlexLibraryItem], tm: TraktItem) -> PlexLibraryItem:
         if candidates:
@@ -232,5 +231,4 @@ class MediaFactory:
                     for provider in ["tmdb", "imdb", "tvdb"]:
                         if guid.provider == provider and hasattr(tm.item, provider) and guid.id == str(getattr(tm.item, provider)):
                             return pm
-        logger.info(f"Skipping {tm.item.title} from Trakt watchlist because not found in Plex Discover")
         return None
