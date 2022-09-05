@@ -201,6 +201,8 @@ def login(username: str, password: str):
 
     token = server.accessToken
     user = account.username
+    CONFIG["PLEX_OWNER_TOKEN"] = ""
+    CONFIG["PLEX_ACCOUNT_TOKEN"] = ""
     if server.owned:
         managed_user = choose_managed_user(account)
         if managed_user:
