@@ -326,8 +326,6 @@ class Walker:
         for media in it:
             tm = TraktItem(media, trakt=self.trakt)
             m = self.mf.resolve_trakt(tm)
-            if not m:
-                continue
             yield m
 
     def media_from_plexlist(self, items: List):

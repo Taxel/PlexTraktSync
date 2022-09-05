@@ -164,11 +164,18 @@ class Sync:
 
     def watchlist_sync_item(self, m: Media, dry_run=False):
         if self.sync_wl:
-            if m.is_movie:
+            if m.media_type == "movies":
                 trakt_wl = self.trakt_wl_movies
             else:
                 trakt_wl = self.trakt_wl_shows
-            if m.plex.item.guid in self.plex_wl:
+            if m.plex is None:
+                if self.update_plex_wl:
+                    logger.info(f"Skipping {m.trakt.title} from Trakt watchlist because not found in Plex Discover")
+                elif self.update_trakt_wl:
+                    logger.info(f"Removing {m.trakt.title} from Trakt watchlist")
+                    if not dry_run:
+                        m.remove_from_trakt_watchlist(batch=True)
+            elif m.plex.item.guid in self.plex_wl:
                 if m.trakt.trakt not in trakt_wl:
                     if self.update_trakt_wl:
                         logger.info(f"Adding {m.plex.item.title} to Trakt watchlist")
