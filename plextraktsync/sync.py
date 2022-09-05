@@ -53,15 +53,19 @@ class SyncConfig:
 class Sync:
     def __init__(self, config: Config):
         self.config = SyncConfig(config)
+        self.update_plex_wl = self.config.trakt_to_plex["watchlist"] and not self.config.trakt_to_plex["watchlist_as_playlist"]
+        self.update_plex_wl_as_pl = self.config.trakt_to_plex["watchlist"] and self.config.trakt_to_plex["watchlist_as_playlist"]
+        self.update_trakt_wl = self.config.plex_to_trakt["watchlist"]
+        self.sync_wl = self.config.trakt_to_plex["watchlist"] or self.config.plex_to_trakt["watchlist"]
+        self.need_library_walk = self.config.plex_to_trakt["collection"] or self.config.plex_to_trakt["ratings"] or \
+            self.config.plex_to_trakt["watched_status"] or self.config.trakt_to_plex["liked_lists"] or \
+            self.config.trakt_to_plex["ratings"] or self.config.trakt_to_plex["liked_lists"] or \
+            self.config.trakt_to_plex["watched_status"] or self.update_plex_wl_as_pl
 
     def sync(self, walker: Walker, dry_run=False):
         listutil = TraktListUtil()
         trakt = walker.trakt
         plex = walker.plex
-        self.update_plex_wl = self.config.trakt_to_plex["watchlist"] and not self.config.trakt_to_plex["watchlist_as_playlist"]
-        self.update_plex_wl_as_pl = self.config.trakt_to_plex["watchlist"] and self.config.trakt_to_plex["watchlist_as_playlist"]
-        self.update_trakt_wl = self.config.plex_to_trakt["watchlist"]
-        self.sync_wl = self.config.trakt_to_plex["watchlist"] or self.config.plex_to_trakt["watchlist"]
         if self.sync_wl:
             plex_wl = plex.watchlist()
             if plex_wl is None:
@@ -78,26 +82,27 @@ class Sync:
             for lst in trakt.liked_lists:
                 listutil.addList(lst["username"], lst["listname"])
 
-        for movie in walker.find_movies():
-            self.sync_collection(movie, dry_run=dry_run)
-            self.sync_ratings(movie, dry_run=dry_run)
-            self.sync_watched(movie, dry_run=dry_run)
-            listutil.addPlexItemToLists(movie)
-        trakt.flush()
+        if self.need_library_walk:
+            for movie in walker.find_movies():
+                self.sync_collection(movie, dry_run=dry_run)
+                self.sync_ratings(movie, dry_run=dry_run)
+                self.sync_watched(movie, dry_run=dry_run)
+                listutil.addPlexItemToLists(movie)
+            trakt.flush()
 
-        shows = set()
-        for episode in walker.find_episodes():
-            self.sync_collection(episode, dry_run=dry_run)
-            self.sync_ratings(episode, dry_run=dry_run)
-            self.sync_watched(episode, dry_run=dry_run)
-            listutil.addPlexItemToLists(episode)
-            if self.config.sync_ratings:
-                # collect shows for later ratings sync
-                shows.add(episode.show)
-        trakt.flush()
+            shows = set()
+            for episode in walker.find_episodes():
+                self.sync_collection(episode, dry_run=dry_run)
+                self.sync_ratings(episode, dry_run=dry_run)
+                self.sync_watched(episode, dry_run=dry_run)
+                listutil.addPlexItemToLists(episode)
+                if self.config.sync_ratings:
+                    # collect shows for later ratings sync
+                    shows.add(episode.show)
+            trakt.flush()
 
-        for show in walker.walk_shows(shows, title="Syncing show ratings"):
-            self.sync_ratings(show, dry_run=dry_run)
+            for show in walker.walk_shows(shows, title="Syncing show ratings"):
+                self.sync_ratings(show, dry_run=dry_run)
 
         if self.sync_wl:
             with measure_time("Updated watchlist"):
