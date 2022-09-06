@@ -78,6 +78,17 @@ uninstalled PlexTraktSync@984! ✨ 🌟 ✨
 $
 ```
 
+If you need to do the same in docker container, you should first prepare the container with:
+
+```
+$ docker-compose run --rm --entrypoint sh plextraktsync
+/app # pip install pipx
+/app # pipx install plextraktsync
+/app # apk add git
+/app # /root/.local/bin/plextraktsync self-update --pr 969
+/app # /root/.local/bin/plextraktsync@969 info
+```
+
 ## Checking out code
 
 If you checkout a specific version, this can be done in one of two ways:
