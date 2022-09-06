@@ -108,6 +108,7 @@ class Config(dict):
         "PLEX_LOCALURL",
         "PLEX_TOKEN",
         "PLEX_OWNER_TOKEN",
+        "PLEX_ACCOUNT_TOKEN",
         "PLEX_USERNAME",
         "TRAKT_USERNAME",
     ]

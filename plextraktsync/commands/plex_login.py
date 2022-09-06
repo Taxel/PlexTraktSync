@@ -61,7 +61,7 @@ def myplex_login(username, password):
 
 
 def choose_managed_user(account: MyPlexAccount):
-    users = [u.title for u in account.users()]
+    users = [u.title for u in account.users() if u.home]
     if not users:
         return None
 
@@ -201,12 +201,16 @@ def login(username: str, password: str):
 
     token = server.accessToken
     user = account.username
+    CONFIG["PLEX_OWNER_TOKEN"] = ""
+    CONFIG["PLEX_ACCOUNT_TOKEN"] = ""
     if server.owned:
         managed_user = choose_managed_user(account)
         if managed_user:
             user = managed_user
             CONFIG["PLEX_OWNER_TOKEN"] = token
             token = account.user(managed_user).get_token(plex.machineIdentifier)
+    else:
+        CONFIG["PLEX_ACCOUNT_TOKEN"] = account._token
 
     CONFIG["PLEX_USERNAME"] = user
     CONFIG["PLEX_TOKEN"] = token
