@@ -128,13 +128,12 @@ class WalkPlanner:
 
     @staticmethod
     def find_from_sections_by_id(sections, id, results):
-        found = False
         for section in sections:
             m = section.find_by_id(id)
             if m:
                 results[m.type].append(m)
-                found = True
-        return found
+                return True
+        return False
 
     @staticmethod
     def find_from_sections_by_title(sections, names, items):
