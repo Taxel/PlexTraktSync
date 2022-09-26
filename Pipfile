@@ -21,6 +21,7 @@ tqdm = "==4.64.1"
 trakt = "==3.4.0"
 urllib3 = ">=1.26.6"
 websocket-client = "==1.4.1"
+certifi = "==2022.9.24"
 
 [requires]
 python_version = "3"
