@@ -40,6 +40,9 @@ def inspect_media(id):
     print(f"URL: {url}")
 
     media = pm.item
+    print(f"Title: {media.title}")
+    if media.editionTitle:
+        print(f"Edition Title: {media.editionTitle}")
     print(f"Media.Type: '{media.type}'")
     print(f"Media.Guid: '{media.guid}'")
     if not pm.is_legacy_agent:
