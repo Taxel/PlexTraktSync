@@ -4,11 +4,12 @@ from os.path import exists
 from dotenv import load_dotenv
 
 from plextraktsync.config.ConfigLoader import ConfigLoader
+from plextraktsync.config.ConfigMergeMixin import ConfigMergeMixin
 from plextraktsync.path import (cache_dir, config_file, config_yml,
                                 default_config_file, env_file)
 
 
-class Config(dict):
+class Config(dict, ConfigMergeMixin):
     env_keys = [
         "PLEX_BASEURL",
         "PLEX_FALLBACKURL",  # legacy, used before 0.18.21
@@ -107,18 +108,6 @@ class Config(dict):
         self["cache"]["path"] = self["cache"]["path"].replace(
             "$PTS_CACHE_DIR", cache_dir
         )
-
-    # https://stackoverflow.com/a/20666342/2314626
-    def merge(self, source, destination):
-        for key, value in source.items():
-            if isinstance(value, dict):
-                # get node or create one
-                node = destination.setdefault(key, {})
-                self.merge(value, node)
-            else:
-                destination[key] = value
-
-        return destination
 
     def dump(self, print=None):
         """
