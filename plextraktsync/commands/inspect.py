@@ -41,7 +41,7 @@ def inspect_media(id):
 
     media = pm.item
     print(f"Title: {media.title}")
-    if media.editionTitle:
+    if media.type == 'movie' and media.editionTitle:
         print(f"Edition Title: {media.editionTitle}")
     print(f"Media.Type: '{media.type}'")
     print(f"Media.Guid: '{media.guid}'")
