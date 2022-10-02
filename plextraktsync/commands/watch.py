@@ -244,5 +244,4 @@ def watch():
     ws.on(TimelineEntry, updater.on_delete, state=9, metadata_state="deleted")
     ws.on(Error, updater.on_error)
 
-    print("Listening for events!")
     ws.listen()

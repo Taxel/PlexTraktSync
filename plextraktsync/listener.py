@@ -81,6 +81,7 @@ class WebSocketListener:
         self.dispatcher.on(event_type, listener, **kwargs)
 
     def listen(self):
+        self.logger.info("Listening for events!")
         while True:
             notifier = self.plex.startAlertListener(
                 callback=self.dispatcher.event_handler
