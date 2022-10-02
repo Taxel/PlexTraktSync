@@ -2,7 +2,7 @@ from typing import List
 
 import plexapi
 from plexapi.server import PlexServer
-from requests.exceptions import SSLError
+from requests.exceptions import ConnectionError, SSLError
 
 from plextraktsync.config import PLEX_PLATFORM
 from plextraktsync.decorators.nocache import nocache
@@ -61,7 +61,7 @@ class PlexServerConnection:
 
                 logger.error(e)
 
-            except Exception as e:
+            except ConnectionError as e:
                 logger.error(e)
                 # 2.
                 if url[:5] == "https":
