@@ -15,8 +15,10 @@ class Path:
         self.ensure_dir(self.cache_dir)
 
         self.default_config_file = join(self.module_path, "config.default.yml")
+        self.default_servers_file = join(self.module_path, "servers.default.yml")
         self.config_file = join(self.config_dir, "config.json")
         self.config_yml = join(self.config_dir, "config.yml")
+        self.servers_config = join(self.config_dir, "servers.yml")
         self.pytrakt_file = join(self.config_dir, ".pytrakt.json")
         self.env_file = join(self.config_dir, ".env")
 
@@ -60,7 +62,9 @@ config_dir = p.config_dir
 log_dir = p.log_dir
 
 default_config_file = p.default_config_file
+default_servers_file = p.default_servers_file
 config_file = p.config_file
 config_yml = p.config_yml
+servers_config = p.servers_config
 pytrakt_file = p.pytrakt_file
 env_file = p.env_file
