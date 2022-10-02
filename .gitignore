@@ -12,6 +12,7 @@
 /docker-compose.override.yml
 /last_update.log
 /plextraktsync.log
+/servers.yml
 /tests/.env
 /tests/config.json
 /trakt_cache.sqlite
