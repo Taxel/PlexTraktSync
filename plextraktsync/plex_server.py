@@ -1,92 +1,94 @@
 from functools import partial
+from typing import List
 
 import plexapi.server
 
 from plextraktsync.config import PLEX_PLATFORM
 from plextraktsync.decorators.nocache import nocache
-from plextraktsync.factory import factory
+from plextraktsync.factory import Factory
 from plextraktsync.logging import logger
 
 
 class PlexServerConnection:
-    @staticmethod
+    def __init__(self, factory: Factory):
+        self.factory = factory
+
+    @property
+    def timeout(self):
+        return self.factory.config()["plex"]["timeout"]
+
+    @property
+    def session(self):
+        return self.factory.session()
+
     @nocache
-    def connect():
-        return _get_plex_server()
+    def connect(self, urls: List[str], token: str):
+        plexapi.X_PLEX_PLATFORM = PLEX_PLATFORM
+        plexapi.TIMEOUT = self.timeout
+        plexapi.BASE_HEADERS["X-Plex-Platform"] = plexapi.X_PLEX_PLATFORM
+
+        PlexServer = partial(plexapi.server.PlexServer, session=self.session)
+
+        # if connection fails, it will try:
+        # 1. url expected by new ssl certificate
+        # 2. url without ssl
+        # 3. local url (localhost)
+        for url in urls:
+            try:
+                return PlexServer(token=token, baseurl=url)
+            except plexapi.server.requests.exceptions.SSLError as e:
+                logger.error(e)
+                message = str(e.__context__)
+
+                # 1.
+                # HTTPSConnectionPool(host='127.0.0.1', port=32400):
+                # Max retries exceeded with url: / (
+                #  Caused by SSLError(
+                #   CertificateError(
+                #     "hostname '127.0.0.1' doesn't match '*.5125cc430e5f1919c27226507eab90df.plex.direct'"
+                #    )
+                #  )
+                # )
+                if "doesn't match '*." in message and ".plex.direct" in url:
+                    url = self.extract_plex_direct(url, message)
+                    logger.warning(f"Trying with url: {url}")
+                    urls.append(url)
+                    continue
+                logger.error(e)
+
+            except Exception as e:
+                logger.error(e)
+                # 2.
+                if url[:5] == "https":
+                    url = url.replace("https", "http")
+                    logger.warning(f"Trying with url: {url}")
+                    urls.append(url)
+                    continue
+
+        logger.error("No more methods to connect. Giving up.")
+        exit(1)
+
+    @staticmethod
+    def extract_plex_direct(url: str, message: str):
+        """
+        Extract .plex.direct url from message.
+        The url must be with .plex.direct domain.
+        """
+        hash_pos = message.find("*.") + 2
+        hash_value = message[hash_pos:hash_pos + 32]
+        end_pos = url.find(".plex.direct")
+
+        return url[: end_pos - 32] + hash_value + url[end_pos:]
 
 
 def get_plex_server():
-    return PlexServerConnection().connect()
+    from plextraktsync.factory import factory
+    config = factory.config()
 
-
-def _get_plex_server():
-    CONFIG = factory.config()
-    plex_token = CONFIG["PLEX_TOKEN"]
-    plex_baseurl = CONFIG["PLEX_BASEURL"]
-    plex_localurl = CONFIG["PLEX_LOCALURL"]
-    if plex_token == "-":
-        plex_token = ""
-    server = None
-
-    plexapi.X_PLEX_PLATFORM = PLEX_PLATFORM
-    plexapi.TIMEOUT = CONFIG["plex"]["timeout"]
-    plexapi.BASE_HEADERS["X-Plex-Platform"] = plexapi.X_PLEX_PLATFORM
-
-    session = factory.session()
-    PlexServer = partial(plexapi.server.PlexServer, session=session)
-
-    # if connection fails, it will try :
-    # 1. url expected by new ssl certificate
-    # 2. url without ssl
-    # 3. local url (localhost)
-
-    try:
-        server = PlexServer(token=plex_token, baseurl=plex_baseurl)
-    except plexapi.server.requests.exceptions.SSLError as e:
-        m = "Plex connection error: {}, local url {} didn't respond either.".format(
-            str(e), plex_localurl
-        )
-        excep_msg = str(e.__context__)
-        if "doesn't match '*." in excep_msg and ".plex.direct" in plex_baseurl:
-            hash_pos = excep_msg.find("*.") + 2
-            new_hash = excep_msg[hash_pos:hash_pos + 32]
-            end_pos = plex_baseurl.find(".plex.direct")
-            new_plex_baseurl = (
-                plex_baseurl[: end_pos - 32] + new_hash + plex_baseurl[end_pos:]
-            )
-            try:  # 1
-                server = PlexServer(token=plex_token, baseurl=new_plex_baseurl)
-                # save new url to .env
-                CONFIG["PLEX_TOKEN"] = plex_token
-                CONFIG["PLEX_BASEURL"] = new_plex_baseurl
-                CONFIG["PLEX_LOCALURL"] = plex_localurl
-                CONFIG.save()
-                logger.info("Plex server url changed to {}".format(new_plex_baseurl))
-            except Exception:
-                pass
-        if server is None and plex_baseurl[:5] == "https":
-            new_plex_baseurl = plex_baseurl.replace("https", "http")
-            try:  # 2
-                server = PlexServer(token=plex_token, baseurl=new_plex_baseurl)
-                logger.warning(
-                    "Switched to Plex unsecure connection because of SSLError."
-                )
-            except Exception:
-                pass
-    except Exception as e:
-        m = "Plex connection error: {}, local url {} didn't respond either. Check PLEX_LOCALURL in .env file.".format(
-            str(e), plex_localurl
-        )
-    if server is None:
-        try:  # 3
-            server = PlexServer(token=plex_token, baseurl=plex_localurl)
-            logger.warning(
-                "No response from {}, connection using local url {}".format(
-                    plex_baseurl, plex_localurl
-                )
-            )
-        except Exception:
-            logger.error(m)
-            print(m)
-            exit(1)
-    return server
+    return PlexServerConnection(factory).connect(
+        urls=[
+            config["PLEX_BASEURL"],
+            config["PLEX_LOCALURL"],
+        ],
+        token=config["PLEX_TOKEN"]
+    )
