@@ -18,6 +18,7 @@ class Config(dict, ConfigMergeMixin):
         "PLEX_OWNER_TOKEN",
         "PLEX_ACCOUNT_TOKEN",
         "PLEX_USERNAME",
+        "PLEX_SERVER",  # new in 0.24.0
         "TRAKT_USERNAME",
     ]
 

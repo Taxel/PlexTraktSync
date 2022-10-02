@@ -10,6 +10,8 @@ from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
 from plexapi.server import PlexServer
 
+from plextraktsync.config.PlexServerConfig import PlexServerConfig
+from plextraktsync.config.ServerConfig import ServerConfig
 from plextraktsync.factory import factory
 from plextraktsync.style import (comment, disabled, error, highlight, prompt,
                                  success, title)
@@ -213,9 +215,19 @@ def login(username: str, password: str):
     CONFIG["PLEX_OWNER_TOKEN"] = plex_owner_token
     CONFIG["PLEX_ACCOUNT_TOKEN"] = plex_account_token
     CONFIG["PLEX_USERNAME"] = user
-    CONFIG["PLEX_TOKEN"] = token
-    CONFIG["PLEX_BASEURL"] = plex._baseurl
-    CONFIG["PLEX_LOCALURL"] = local_url()
+    CONFIG["PLEX_SERVER"] = server.name
     CONFIG.save()
+
+    psc = PlexServerConfig(
+        name=server.name,
+        token=token,
+        urls=[
+            plex._baseurl,
+            local_url(),
+        ],
+    )
+    sc = ServerConfig()
+    sc.add_server(psc)
+    sc.save()
 
     click.echo(SUCCESS_MESSAGE)
