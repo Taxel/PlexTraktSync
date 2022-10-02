@@ -1,7 +1,7 @@
-from functools import partial
 from typing import List
 
-import plexapi.server
+import plexapi
+from plexapi.server import PlexServer
 
 from plextraktsync.config import PLEX_PLATFORM
 from plextraktsync.decorators.nocache import nocache
@@ -31,15 +31,13 @@ class PlexServerConnection:
         plexapi.TIMEOUT = self.timeout
         plexapi.BASE_HEADERS["X-Plex-Platform"] = plexapi.X_PLEX_PLATFORM
 
-        PlexServer = partial(plexapi.server.PlexServer, session=self.session)
-
         # if connection fails, it will try:
         # 1. url expected by new ssl certificate
         # 2. url without ssl
         # 3. local url (localhost)
         for url in urls:
             try:
-                return PlexServer(token=token, baseurl=url)
+                return PlexServer(baseurl=url, token=token, session=self.session)
             except plexapi.server.requests.exceptions.SSLError as e:
                 logger.error(e)
                 message = str(e.__context__)
