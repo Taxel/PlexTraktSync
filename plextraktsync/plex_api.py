@@ -205,6 +205,18 @@ class PlexLibraryItem:
         return self.item.type
 
     @cached_property
+    def title(self):
+        value = self.item.title
+        if self.type == "movie" and self.item.editionTitle:
+            value = f"{value} ({self.item.editionTitle})"
+
+        if self.type == "episode":
+            value = f"{self.item.grandparentTitle}/{self.item.seasonEpisode}/{value}"
+
+        value = f"{value} ({self.item.year})"
+
+        return value
+
     @nocache
     @retry(retries=1)
     def rating(self):
