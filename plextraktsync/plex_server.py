@@ -47,7 +47,7 @@ def _get_plex_server():
             str(e), plex_localurl
         )
         excep_msg = str(e.__context__)
-        if "doesn't match '*." in excep_msg:
+        if "doesn't match '*." in excep_msg and ".plex.direct" in plex_baseurl:
             hash_pos = excep_msg.find("*.") + 2
             new_hash = excep_msg[hash_pos:hash_pos + 32]
             end_pos = plex_baseurl.find(".plex.direct")
