@@ -67,7 +67,7 @@ class WatchStateUpdater:
                 self.username_filter = config["PLEX_USERNAME"]
         else:
             self.username_filter = None
-        self.sessions = SessionCollection(plex)
+        self.sessions = SessionCollection(plex) if self.username_filter else None
 
     @cached_property
     def scrobblers(self):
@@ -95,7 +95,8 @@ class WatchStateUpdater:
     def on_error(self, error: Error):
         self.logger.error(error.msg)
         self.scrobblers.clear()
-        self.sessions.clear()
+        if self.sessions:
+            self.sessions.clear()
 
     def on_activity(self, activity: ActivityNotification):
         m = self.find_by_key(activity.key, reload=True)
@@ -158,7 +159,8 @@ class WatchStateUpdater:
         if state == "stopped":
             value = self.scrobblers[tm].stop(percent)
             del self.scrobblers[tm]
-            del self.sessions[event.session_key]
+            if self.sessions:
+                del self.sessions[event.session_key]
             return value
 
 

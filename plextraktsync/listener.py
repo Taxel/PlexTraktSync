@@ -39,7 +39,7 @@ class EventDispatcher:
             try:
                 listener["listener"](event)
             except Exception as e:
-                self.logger.error(e)
+                self.logger.error(f"{type(e).__name__} was raised: {e}")
 
                 import traceback
                 self.logger.debug(traceback.format_tb(e.__traceback__))
