@@ -11,7 +11,7 @@ from plextraktsync.factory import factory
 from plextraktsync.listener import WebSocketListener
 from plextraktsync.logging import logging
 from plextraktsync.media import Media, MediaFactory
-from plextraktsync.plex_api import PlexApi
+from plextraktsync.plex_api import PlexApi, PlexLibraryItem
 from plextraktsync.trakt_api import TraktApi
 
 
@@ -46,6 +46,52 @@ class SessionCollection(dict):
             self[str(session.sessionKey)] = session.usernames[0]
 
 
+ICONS = {
+    "playing": "▶️",
+    "paused": "⏸️",
+}
+
+
+class ProgressBar(dict):
+    @cached_property
+    def progress(self):
+        from rich.progress import (BarColumn, Progress, TextColumn,
+                                   TimeRemainingColumn)
+
+        from plextraktsync.console import console
+
+        progress = Progress(
+            TextColumn("{task.fields[play_state]}  [bold blue]{task.description}", justify="left"),
+            BarColumn(bar_width=None),
+            "[progress.percentage]{task.percentage:>3.1f}%",
+            "•",
+            TimeRemainingColumn(),
+            console=console,
+        )
+        progress.start()
+
+        return progress
+
+    def __missing__(self, m: PlexLibraryItem):
+        task = self.progress.add_task(m.title, play_state="")
+        self[m] = task
+
+        return task
+
+    def play(self, m: PlexLibraryItem, progress: float):
+        task_id = self[m]
+        self.progress.update(task_id, completed=progress, play_state=ICONS["playing"])
+
+    def pause(self, m: PlexLibraryItem, progress: float):
+        task_id = self[m]
+        self.progress.update(task_id, completed=progress, play_state=ICONS["paused"])
+
+    def stop(self, m: PlexLibraryItem):
+        task_id = self[m]
+        self.progress.remove_task(task_id)
+        del self[m]
+
+
 class WatchStateUpdater:
     def __init__(
         self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory, config: Config
@@ -72,6 +118,10 @@ class WatchStateUpdater:
     @cached_property
     def scrobblers(self):
         return ScrobblerCollection(self.trakt, self.threshold)
+
+    @cached_property
+    def progressbar(self):
+        return ProgressBar()
 
     def find_by_key(self, key: str, reload=False):
         pm = self.plex.fetch_item(key)
@@ -151,12 +201,18 @@ class WatchStateUpdater:
         state = event.state
 
         if state == "playing":
+            self.progressbar.play(m.plex, percent)
+
             return self.scrobblers[tm].update(percent)
 
         if state == "paused":
+            self.progressbar.pause(m.plex, percent)
+
             return self.scrobblers[tm].pause(percent)
 
         if state == "stopped":
+            self.progressbar.stop(m.plex)
+
             value = self.scrobblers[tm].stop(percent)
             del self.scrobblers[tm]
             if self.sessions:
