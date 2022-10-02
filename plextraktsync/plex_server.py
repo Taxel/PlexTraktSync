@@ -2,6 +2,7 @@ from typing import List
 
 import plexapi
 from plexapi.server import PlexServer
+from requests.exceptions import SSLError
 
 from plextraktsync.config import PLEX_PLATFORM
 from plextraktsync.decorators.nocache import nocache
@@ -38,7 +39,7 @@ class PlexServerConnection:
         for url in urls:
             try:
                 return PlexServer(baseurl=url, token=token, session=self.session)
-            except plexapi.server.requests.exceptions.SSLError as e:
+            except SSLError as e:
                 logger.error(e)
                 message = str(e.__context__)
 
