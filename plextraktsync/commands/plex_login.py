@@ -200,17 +200,18 @@ def login(username: str, password: str):
 
     token = server.accessToken
     user = account.username
-    CONFIG["PLEX_OWNER_TOKEN"] = ""
-    CONFIG["PLEX_ACCOUNT_TOKEN"] = ""
+    plex_owner_token = plex_account_token = ""
     if server.owned:
         managed_user = choose_managed_user(account)
         if managed_user:
             user = managed_user
-            CONFIG["PLEX_OWNER_TOKEN"] = token
+            plex_owner_token = token
             token = account.user(managed_user).get_token(plex.machineIdentifier)
     else:
-        CONFIG["PLEX_ACCOUNT_TOKEN"] = account._token
+        plex_account_token = account._token
 
+    CONFIG["PLEX_OWNER_TOKEN"] = plex_owner_token
+    CONFIG["PLEX_ACCOUNT_TOKEN"] = plex_account_token
     CONFIG["PLEX_USERNAME"] = user
     CONFIG["PLEX_TOKEN"] = token
     CONFIG["PLEX_BASEURL"] = plex._baseurl
