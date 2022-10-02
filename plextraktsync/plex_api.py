@@ -477,7 +477,10 @@ class PlexApi:
 
     def __init__(self, plex: PlexServer):
         self.plex = plex
-        self.account = self._plex_account()
+
+    @cached_property
+    def account(self):
+        return self._plex_account()
 
     @cached_property
     def plex_base_url(self):
