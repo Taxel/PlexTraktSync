@@ -35,13 +35,16 @@ class Factory:
     def plex_server(self):
         config = self.config()
 
+        from plextraktsync.config.ServerConfig import ServerConfig
         from plextraktsync.plex_server import PlexServerConnection
+
+        server_name = config["PLEX_SERVER"]
+        sc = ServerConfig()
+        sn = sc.get_server(server_name)
+
         return PlexServerConnection(factory).connect(
-            urls=[
-                config["PLEX_BASEURL"],
-                config["PLEX_LOCALURL"],
-            ],
-            token=config["PLEX_TOKEN"]
+            urls=sn.urls,
+            token=sn.token,
         )
 
     @memoize
