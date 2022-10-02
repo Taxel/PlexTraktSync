@@ -93,16 +93,3 @@ class PlexServerConnection:
         config["PLEX_LOCALURL"] = local_url
         config.save()
         logger.info("Plex server url changed to {}".format(base_url))
-
-
-def get_plex_server():
-    from plextraktsync.factory import factory
-    config = factory.config()
-
-    return PlexServerConnection(factory).connect(
-        urls=[
-            config["PLEX_BASEURL"],
-            config["PLEX_LOCALURL"],
-        ],
-        token=config["PLEX_TOKEN"]
-    )

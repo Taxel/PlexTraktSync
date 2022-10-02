@@ -33,9 +33,16 @@ class Factory:
 
     @memoize
     def plex_server(self):
-        from plextraktsync.plex_server import get_plex_server
+        config = self.config()
 
-        return get_plex_server()
+        from plextraktsync.plex_server import PlexServerConnection
+        return PlexServerConnection(factory).connect(
+            urls=[
+                config["PLEX_BASEURL"],
+                config["PLEX_LOCALURL"],
+            ],
+            token=config["PLEX_TOKEN"]
+        )
 
     @memoize
     def session(self):
