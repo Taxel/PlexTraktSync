@@ -190,6 +190,13 @@ class PlexLibraryItem:
         return ordered
 
     @cached_property
+    def duration(self):
+        hours, remainder = divmod(self.item.duration / 1000, 3600)
+        minutes, seconds = divmod(remainder, 60)
+
+        return '{:02}:{:02}:{:02}'.format(int(hours), int(minutes), int(seconds))
+
+    @cached_property
     def media_type(self):
         return f"{self.type}s"
 
