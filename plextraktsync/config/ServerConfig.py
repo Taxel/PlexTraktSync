@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from os.path import exists
 
 from plextraktsync.config.ConfigLoader import ConfigLoader
