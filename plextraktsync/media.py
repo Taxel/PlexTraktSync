@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import List, Optional
 
 from plexapi.exceptions import PlexApiException
 from requests import RequestException
@@ -7,7 +7,7 @@ from trakt.errors import TraktException
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.logging import logger
 from plextraktsync.plex_api import PlexApi, PlexGuid, PlexLibraryItem
-from plextraktsync.trakt_api import TraktApi, TraktLookup, TraktItem
+from plextraktsync.trakt_api import TraktApi, TraktItem, TraktLookup
 
 
 class Media:

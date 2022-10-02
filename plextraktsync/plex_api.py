@@ -9,9 +9,9 @@ from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.library import LibrarySection
 from plexapi.media import AudioStream, MediaPart, SubtitleStream, VideoStream
+from plexapi.myplex import MyPlexAccount
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plexapi.video import Episode, Movie, Show
-from plexapi.myplex import MyPlexAccount
 from trakt.utils import timestamp
 
 from plextraktsync.decorators.cached_property import cached_property
