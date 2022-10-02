@@ -8,12 +8,13 @@ from requests.exceptions import ConnectionError, SSLError
 from plextraktsync.config import PLEX_PLATFORM
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.factory import Factory
-from plextraktsync.logging import logger
+from plextraktsync.logging import logging
 
 
 class PlexServerConnection:
     def __init__(self, factory: Factory):
         self.factory = factory
+        self.logger = logging.getLogger("PlexTraktSync.PlexServerConnection")
 
     @property
     def timeout(self):
@@ -41,7 +42,7 @@ class PlexServerConnection:
             try:
                 return PlexServer(baseurl=url, token=token, session=self.session)
             except SSLError as e:
-                logger.error(e)
+                self.logger.error(e)
                 message = str(e.__context__)
 
                 # 1.
@@ -55,25 +56,25 @@ class PlexServerConnection:
                 # )
                 if "doesn't match '*." in message and ".plex.direct" in url:
                     url = self.extract_plex_direct(url, message)
-                    logger.warning(f"Trying with url: {url}")
+                    self.logger.warning(f"Trying with url: {url}")
                     self.save_new_url(url, urls[-1])
                     urls.append(url)
                     continue
 
-                logger.error(e)
+                self.logger.error(e)
 
             except ConnectionError as e:
-                logger.error(e)
+                self.logger.error(e)
                 # 2.
                 if url[:5] == "https":
                     url = url.replace("https", "http")
-                    logger.warning(f"Trying with url: {url}")
+                    self.logger.warning(f"Trying with url: {url}")
                     urls.append(url)
                     continue
             except Unauthorized as e:
-                logger.error(e)
+                self.logger.error(e)
 
-        logger.error("No more methods to connect. Giving up.")
+        self.logger.error("No more methods to connect. Giving up.")
         exit(1)
 
     @staticmethod
@@ -95,4 +96,4 @@ class PlexServerConnection:
         config["PLEX_BASEURL"] = base_url
         config["PLEX_LOCALURL"] = local_url
         config.save()
-        logger.info("Plex server url changed to {}".format(base_url))
+        self.logger.info("Plex server url changed to {}".format(base_url))
