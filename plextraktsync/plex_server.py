@@ -1,6 +1,7 @@
 from typing import List
 
 import plexapi
+from plexapi.exceptions import Unauthorized
 from plexapi.server import PlexServer
 from requests.exceptions import ConnectionError, SSLError
 
@@ -69,6 +70,8 @@ class PlexServerConnection:
                     logger.warning(f"Trying with url: {url}")
                     urls.append(url)
                     continue
+            except Unauthorized as e:
+                logger.error(e)
 
         logger.error("No more methods to connect. Giving up.")
         exit(1)
