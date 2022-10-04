@@ -217,6 +217,7 @@ class PlexLibraryItem:
 
         return value
 
+    @cached_property
     @nocache
     @retry(retries=1)
     def rating(self):
