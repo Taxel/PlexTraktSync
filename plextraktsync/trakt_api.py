@@ -212,19 +212,16 @@ class TraktApi:
     def ratings(self):
         return TraktRatingCollection(self)
 
-    def rating(self, m):
+    def rating(self, m) -> Optional[int]:
         """
         The trakt api (Python module) is inconsistent:
         - Movie has "rating" property, while TVShow does not
+        However, the Movie property is always None.
+        So fetch for both types.
         """
-        if m.media_type == "movies":
-            return m.rating
-        elif m.media_type == "shows":
-            r = self.ratings["shows"]
-            try:
-                return r[m.trakt]
-            except KeyError:
-                return None
+        if m.media_type in ["movies", "shows"]:
+            r = self.ratings[m.media_type]
+            return r.get(m.trakt, None)
         else:
             raise ValueError(f"Unsupported type: {m.media_type}")
 
