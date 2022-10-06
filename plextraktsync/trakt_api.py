@@ -212,6 +212,22 @@ class TraktApi:
     def ratings(self):
         return TraktRatingCollection(self)
 
+    def rating(self, m):
+        """
+        The trakt api (Python module) is inconsistent:
+        - Movie has "rating" property, while TVShow does not
+        """
+        if m.media_type == "movies":
+            return m.rating
+        elif m.media_type == "shows":
+            r = self.ratings["shows"]
+            try:
+                return r[m.trakt]
+            except KeyError:
+                return None
+        else:
+            raise ValueError(f"Unsupported type: {m.media_type}")
+
     @nocache
     @rate_limit()
     @retry()
