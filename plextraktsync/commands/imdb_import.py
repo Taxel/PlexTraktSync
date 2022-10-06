@@ -29,6 +29,13 @@ class Ratings:
         'Title': 'title',
         'Year': 'year',
         'Title Type': 'type',
+        # 'URL': 'url',
+        # 'IMDb Rating': 'imdb_rating',
+        # 'Runtime (mins)': 'runtime',
+        # 'Genres': 'genres',
+        # 'Num Votes': 'votes',
+        # 'Release Date': 'release_date',
+        # 'Directors': 'directors',
     }
 
     @staticmethod
