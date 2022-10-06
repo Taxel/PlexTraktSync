@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from os import PathLike
 
 from plextraktsync.console import print
+from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.factory import factory
 
 
@@ -37,6 +38,13 @@ class Ratings:
         # 'Release Date': 'release_date',
         # 'Directors': 'directors',
     }
+
+    @cached_property
+    def media_type(self):
+        if self.type == "tvSeries":
+            return "show"
+
+        return self.type
 
     @staticmethod
     def from_csv(row):
