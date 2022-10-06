@@ -62,7 +62,8 @@ def imdb_import(input: PathLike):
     trakt = factory.trakt_api()
 
     for r in read_csv(input):
-        print(f"Importing [blue]{r.type} {r.imdb}[/]: {r.title} ({r.year}), rated at {r.rate_date}")
-        m = trakt.search_by_id(r.imdb, "imdb", r.type)
-        print(f"Rating {m} with {r.rating}")
+        print(f"Importing [blue]{r.media_type} {r.imdb}[/]: {r.title} ({r.year}), rated at {r.rate_date}")
+        m = trakt.search_by_id(r.imdb, "imdb", r.media_type)
+        rating = trakt.rating(m)
+        print(f"Rating {m} with {r.rating} (was {rating})")
         trakt.rate(m, r.rating)
