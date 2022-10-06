@@ -266,6 +266,7 @@ def bug_report():
 
 @command()
 @click.argument("input")
+@click.option("--dry-run", is_flag=True, help="Do not perform actions that change data")
 def imdb_import():
     """
     Import IMDB ratings from CSV file.

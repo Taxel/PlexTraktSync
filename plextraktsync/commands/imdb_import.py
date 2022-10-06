@@ -58,12 +58,13 @@ class Ratings:
         return Ratings(**data)
 
 
-def imdb_import(input: PathLike):
+def imdb_import(input: PathLike, dry_run: bool):
     trakt = factory.trakt_api()
 
     for r in read_csv(input):
         print(f"Importing [blue]{r.media_type} {r.imdb}[/]: {r.title} ({r.year}), rated at {r.rate_date}")
         m = trakt.search_by_id(r.imdb, "imdb", r.media_type)
         rating = trakt.rating(m)
-        print(f"Rating {m} with {r.rating} (was {rating})")
-        trakt.rate(m, r.rating)
+        print(f"{'Would rate' if dry_run else 'Rating'} {m} with {r.rating} (was {rating})")
+        if not dry_run:
+            trakt.rate(m, r.rating)
