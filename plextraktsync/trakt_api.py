@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from time import time
-from typing import Union
+from typing import List, Optional, Union
 
 import trakt
 import trakt.movies
@@ -212,6 +212,19 @@ class TraktApi:
     def ratings(self):
         return TraktRatingCollection(self)
 
+    def rating(self, m) -> Optional[int]:
+        """
+        The trakt api (Python module) is inconsistent:
+        - Movie has "rating" property, while TVShow does not
+        However, the Movie property is always None.
+        So fetch for both types.
+        """
+        if m.media_type in ["movies", "shows"]:
+            r = self.ratings[m.media_type]
+            return r.get(m.trakt, None)
+        else:
+            raise ValueError(f"Unsupported type: {m.media_type}")
+
     @nocache
     @rate_limit()
     @retry()
@@ -309,7 +322,7 @@ class TraktApi:
 
     @rate_limit()
     @retry()
-    def search_by_id(self, media_id: str, id_type: str, media_type: str):
+    def search_by_id(self, media_id: str, id_type: str, media_type: str) -> Optional[List[TVShow, Movie]]:
         if id_type == "tvdb" and media_type == "movie":
             # Skip invalid search.
             # The Trakt API states that tvdb is only for shows and episodes:

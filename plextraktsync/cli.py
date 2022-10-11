@@ -264,9 +264,25 @@ def bug_report():
     pass
 
 
+@command()
+@click.argument("input")
+@click.option("--dry-run", is_flag=True, help="Do not perform actions that change data")
+def imdb_import():
+    """
+    Import IMDB ratings from CSV file.
+
+    See IMDB help how to export:
+
+    \b
+    - https://help.imdb.com/article/imdb/track-movies-tv/ratings-faq/G67Y87TFYYP6TWAV
+    """
+    pass
+
+
 cli.add_command(bug_report)
 cli.add_command(cache)
 cli.add_command(clear_collections)
+cli.add_command(imdb_import)
 cli.add_command(info)
 cli.add_command(inspect)
 cli.add_command(login)

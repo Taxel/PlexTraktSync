@@ -146,10 +146,7 @@ class Media:
 
     @property
     def trakt_rating(self):
-        rating = self.trakt_api.ratings[self.media_type].get(self.trakt_id, None)
-        if rating:
-            return int(rating)
-        return None
+        return self.trakt_api.rating(self.trakt)
 
     @property
     def plex_rating(self):
