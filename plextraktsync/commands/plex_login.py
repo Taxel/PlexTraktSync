@@ -1,8 +1,6 @@
-import socket
 from datetime import datetime, timedelta
 from functools import partial
 from os import environ
-from subprocess import check_output
 from typing import List
 
 import click
@@ -15,6 +13,7 @@ from plexapi.server import PlexServer
 from plextraktsync.factory import factory
 from plextraktsync.style import (comment, disabled, error, highlight, prompt,
                                  success, title)
+from plextraktsync.util.local_url import local_url
 
 PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
 PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username or e-mail")
@@ -215,23 +214,7 @@ def login(username: str, password: str):
     CONFIG["PLEX_USERNAME"] = user
     CONFIG["PLEX_TOKEN"] = token
     CONFIG["PLEX_BASEURL"] = plex._baseurl
-    if environ.get("PTS_IN_DOCKER"):
-        try:
-            host_ip = socket.gethostbyname("host.docker.internal")
-        except socket.gaierror:
-            try:
-                host_ip = (
-                    check_output(
-                        "ip -4 route show default | awk '{ print $3 }'", shell=True
-                    )
-                    .decode()
-                    .rstrip()
-                )
-            except Exception:
-                host_ip = "172.17.0.1"
-        CONFIG["PLEX_LOCALURL"] = f"http://{host_ip}:32400"
-    else:
-        CONFIG["PLEX_LOCALURL"] = "http://localhost:32400"
+    CONFIG["PLEX_LOCALURL"] = local_url()
     CONFIG.save()
 
     click.echo(SUCCESS_MESSAGE)
