@@ -7,6 +7,8 @@ class Factory:
     def trakt_api(self):
         from plextraktsync.trakt_api import TraktApi
 
+        self.monkey_patch_trakt()
+
         config = self.run_config()
         trakt = TraktApi(batch_delay=config.batch_delay)
 
@@ -158,6 +160,24 @@ class Factory:
         from plextraktsync.config import Config
 
         return Config()
+
+    @staticmethod
+    def monkey_patch_trakt():
+        from collections import namedtuple
+
+        import trakt.users
+
+        # Add `type` to UserList named tuple:
+        # - https://github.com/moogar0880/PyTrakt/pull/206
+        # Monkey patch the class:
+        # - https://stackoverflow.com/a/28500620/2314626
+        # - https://stackoverflow.com/a/62160225/2314626
+        UserListTuple = namedtuple('UserList', trakt.users.UserList._fields + ('type',))
+
+        class UserList(UserListTuple, trakt.users.UserList):
+            pass
+
+        trakt.users.UserList = UserList
 
 
 factory = Factory()
