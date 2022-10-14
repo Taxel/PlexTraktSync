@@ -17,6 +17,15 @@ logging:
   console_time: false
   debug: false
   filename: plextraktsync.log
+  filter:
+#    # Filter out all messages with level WARNING
+#    - level: WARNING
+#    # Filter out message with level WARNING and containing a text
+#    - level: WARNING
+#      message: "not found on Trakt"
+#    - message: "because provider local has no external Id"
+#    - message: "because provider none has no external Id"
+#    - message: "Retry using search for specific Plex Episode"
 
 sync:
   plex_to_trakt:
