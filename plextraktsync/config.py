@@ -220,6 +220,3 @@ class Config(dict):
                     txt.write("{}={}\n".format(key, self[key]))
                 else:
                     txt.write("{}=\n".format(key))
-
-
-CONFIG = Config()
