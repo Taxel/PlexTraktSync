@@ -118,9 +118,9 @@ class Factory:
     def console_logger(self):
         from rich.logging import RichHandler
 
-        from plextraktsync.config import CONFIG as config
         from plextraktsync.console import console
 
+        config = self.config()
         handler = RichHandler(
             console=console,
             show_time=config.log_console_time,
