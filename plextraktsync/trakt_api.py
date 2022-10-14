@@ -20,8 +20,8 @@ from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
-from plextraktsync.factory import factory
-from plextraktsync.logging import logger, logging
+from plextraktsync.factory import factory, logger
+from plextraktsync.logging import logging
 from plextraktsync.path import pytrakt_file
 from plextraktsync.plex_api import PlexGuid, PlexLibraryItem
 

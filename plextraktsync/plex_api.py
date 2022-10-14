@@ -19,8 +19,7 @@ from plextraktsync.decorators.flatten import flatten_dict, flatten_list
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.retry import retry
-from plextraktsync.factory import factory
-from plextraktsync.logging import logger
+from plextraktsync.factory import factory, logger
 
 
 class PlexGuid:
