@@ -133,9 +133,9 @@ class Factory:
 
     @memoize
     def config(self):
-        from plextraktsync.config import CONFIG
+        from plextraktsync.config import Config
 
-        return CONFIG
+        return Config()
 
 
 factory = Factory()
