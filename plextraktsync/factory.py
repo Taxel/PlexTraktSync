@@ -1,3 +1,4 @@
+from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.memoize import memoize
 
 
@@ -113,6 +114,12 @@ class Factory:
 
         return w
 
+    @cached_property
+    def logger(self):
+        from plextraktsync.logging import logger
+
+        return logger
+
     @memoize
     def console_logger(self):
         from rich.logging import RichHandler
@@ -139,3 +146,4 @@ class Factory:
 
 
 factory = Factory()
+logger = factory.logger
