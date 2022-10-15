@@ -124,7 +124,7 @@ class Factory:
         config = self.config()
         initialize(config)
         logger = logging.getLogger("PlexTraktSync")
-        logger.addFilter(LoggerFilter(config["logging"]["filter"]))
+        logger.addFilter(LoggerFilter(config["logging"]["filter"], logger))
 
         return logger
 

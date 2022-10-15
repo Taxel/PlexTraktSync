@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from logging import Filter, LogRecord
+from logging import Filter, Logger, LogRecord
 from typing import Dict, List
 
 
@@ -17,15 +17,20 @@ class FilterRule:
 
 # https://stackoverflow.com/a/879937/2314626
 class LoggerFilter(Filter):
-    def __init__(self, rules: List[Dict]):
+    def __init__(self, rules: List[Dict], logger: Logger):
         super().__init__()
+        self.logger = logger
         self.rules = self.load_rules(rules or [])
         self.nrules = len(self.rules)
 
     def load_rules(self, rules: List[Dict]):
         filters = []
         for rule in rules:
-            f = FilterRule(**rule)
+            try:
+                f = FilterRule(**rule)
+            except TypeError as e:
+                self.logger.error(f"Skip rule: {type(e).__name__}: {e}")
+                continue
             filters.append(f)
         return filters
 
