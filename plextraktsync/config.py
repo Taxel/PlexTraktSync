@@ -174,7 +174,8 @@ class Config(dict):
 
             # Rename, so users would not mistakenly edit outdated file
             config_bak = f"{self.config_file}.old"
-            from plextraktsync.logging import logger
+            from plextraktsync.factory import factory
+            logger = factory.logger
             logger.warning(f"Renaming {self.config_file} to {config_bak}")
             loader.rename(self.config_file, config_bak)
         else:
