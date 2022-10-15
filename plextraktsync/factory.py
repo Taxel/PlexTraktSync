@@ -1,5 +1,4 @@
 from plextraktsync.decorators.memoize import memoize
-from plextraktsync.rich_addons import RichHighlighter
 
 
 class Factory:
@@ -119,6 +118,7 @@ class Factory:
         from rich.logging import RichHandler
 
         from plextraktsync.console import console
+        from plextraktsync.rich_addons import RichHighlighter
 
         config = self.config()
         handler = RichHandler(
