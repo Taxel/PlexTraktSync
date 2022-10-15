@@ -3,8 +3,7 @@ import logging
 from .factory import factory
 
 
-def initialize():
-    config = factory.config()
+def initialize(config):
     # global log level for all messages
     log_level = logging.DEBUG if config.log_debug else logging.INFO
 
@@ -35,7 +34,3 @@ def initialize():
 
         logger.removeHandler(loghandler)
         logger.setLevel(logging.DEBUG)
-
-
-initialize()
-logger = logging.getLogger("PlexTraktSync")

@@ -116,7 +116,13 @@ class Factory:
 
     @cached_property
     def logger(self):
-        from plextraktsync.logging import logger
+        import logging
+
+        from plextraktsync.logging import initialize
+
+        config = self.config()
+        initialize(config)
+        logger = logging.getLogger("PlexTraktSync")
 
         return logger
 
