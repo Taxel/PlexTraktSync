@@ -118,11 +118,13 @@ class Factory:
     def logger(self):
         import logging
 
+        from plextraktsync.logger.filter import LoggerFilter
         from plextraktsync.logging import initialize
 
         config = self.config()
         initialize(config)
         logger = logging.getLogger("PlexTraktSync")
+        logger.addFilter(LoggerFilter(config["logging"]["filter"]))
 
         return logger
 
