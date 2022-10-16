@@ -1,4 +1,3 @@
-import site
 from os import getenv, makedirs
 from os.path import abspath, dirname, exists, join
 
@@ -44,13 +43,9 @@ class Path:
 
     @cached_property
     def installed(self):
-        """
-        Return true if this package is installed to site-packages
-        """
-        absdir = dirname(dirname(__file__))
-        paths = site.getsitepackages()
+        from plextraktsync.util.packaging import installed
 
-        return absdir in paths
+        return installed()
 
     @staticmethod
     def ensure_dir(directory):
