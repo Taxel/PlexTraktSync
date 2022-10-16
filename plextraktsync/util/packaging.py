@@ -16,6 +16,26 @@ def installed():
     return absdir in paths
 
 
+def pip_installed(name: str):
+    import sys
+    try:
+        output = execx(f"{sys.executable} -m pip inspect")
+    except FileNotFoundError:
+        return None
+
+    try:
+        inspect = json.loads(output)
+    except JSONDecodeError:
+        return None
+
+    for package in inspect["installed"]:
+        if package["metadata"]["name"] != name:
+            continue
+        return package
+
+    return None
+
+
 def pipx_installed(package: str):
     try:
         output = execx("pipx list --json")
