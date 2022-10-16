@@ -57,3 +57,21 @@ def pipx_installed(package: str):
         return None
 
     return package
+
+
+def vcs_info(package: str):
+    """
+    Return vcs_info from direct_url.json of a .dist-info for the package
+    """
+    data = pip_installed(package)
+    if not data:
+        return None
+    try:
+        v = data["direct_url"]["vcs_info"]
+    except KeyError:
+        return None
+
+    v["pr"] = v["requested_revision"][10:-5]
+    v["short_commit_id"] = v["commit_id"][:8]
+
+    return v
