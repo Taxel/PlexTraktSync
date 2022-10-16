@@ -23,7 +23,7 @@ PROMPT_PLEX_RELOGIN = prompt(
     "You already have Plex Access Token, do you want to log in again?"
 )
 SUCCESS_MESSAGE = success(
-    "Plex Media Server Authentication Token and base URL have been added to .env file"
+    "Plex Media Server Authentication Token and base URL have been added to servers.yml"
 )
 NOTICE_2FA_PASSWORD = comment(
     "If you have 2 Factor Authentication enabled on Plex "
