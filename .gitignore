@@ -5,6 +5,7 @@
 /.pytrakt.json
 /.vscode/
 /config.json
+/config.json.old
 /config.yml
 /config/
 /dist/
