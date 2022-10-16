@@ -1,7 +1,6 @@
 import click
 
-from plextraktsync.factory import factory
-from plextraktsync.logging import logger
+from plextraktsync.factory import factory, logger
 
 
 def clear_collections(confirm, dry_run):
