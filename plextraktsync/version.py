@@ -16,7 +16,8 @@ def git_version_info():
 def version():
     from plextraktsync import __version__
 
-    if __version__[-1] != "x":
+    # Released in PyPI
+    if not __version__.endswith(".0dev0"):
         return __version__
 
     gv = git_version_info()
