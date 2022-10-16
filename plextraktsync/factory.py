@@ -172,9 +172,10 @@ class Factory:
         # Monkey patch the class:
         # - https://stackoverflow.com/a/28500620/2314626
         # - https://stackoverflow.com/a/62160225/2314626
-        UserListTuple = namedtuple('UserList', trakt.users.UserList._fields + ('type',))
+        UserListOriginal = trakt.users.UserList
+        UserListTuple = namedtuple('UserList', UserListOriginal._fields + ('type',))
 
-        class UserList(UserListTuple, trakt.users.UserList):
+        class UserList(UserListTuple, UserListOriginal):
             pass
 
         trakt.users.UserList = UserList
