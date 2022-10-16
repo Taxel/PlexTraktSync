@@ -115,15 +115,22 @@ class Factory:
         return w
 
     @cached_property
-    def logger(self):
+    def logging(self):
         import logging
 
-        from plextraktsync.logger.filter import LoggerFilter
         from plextraktsync.logging import initialize
 
         config = self.config()
         initialize(config)
-        logger = logging.getLogger("PlexTraktSync")
+
+        return logging
+
+    @cached_property
+    def logger(self):
+        logger = self.logging.getLogger("PlexTraktSync")
+        config = self.config()
+
+        from plextraktsync.logger.filter import LoggerFilter
         logger.addFilter(LoggerFilter(config["logging"]["filter"], logger))
 
         return logger
@@ -155,3 +162,4 @@ class Factory:
 
 factory = Factory()
 logger = factory.logger
+logging = factory.logging
