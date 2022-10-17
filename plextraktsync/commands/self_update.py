@@ -13,13 +13,11 @@ def enable_self_update():
 
 
 def has_previous_pr(pr: int):
-    try:
-        from plextraktsync.util.execx import execx
-        execx(f"plextraktsync@{pr} --help")
-    except FileNotFoundError:
-        return False
+    from plextraktsync.util.packaging import pipx_installed
 
-    return True
+    package = pipx_installed(f"plextraktsync@{pr}")
+
+    return package is not None
 
 
 def pr_number() -> Optional[int]:
