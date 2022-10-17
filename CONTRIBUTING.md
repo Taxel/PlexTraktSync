@@ -58,6 +58,12 @@ You can also use a convenience wrapper (this requires you install `plextraktsync
 $ plextraktsync self-update --pr 838
 ```
 
+You can also use the PR version of the program to pull in the latest changes with:
+
+```
+plextraktsync@1110 self-update
+```
+
 To remove the versions:
 
 ```
