@@ -39,6 +39,11 @@ def pr_number() -> Optional[int]:
 
 
 def self_update(pr: int):
+    if not pr:
+        pr = pr_number()
+        if pr:
+            click.echo(f"Installed as pr #{pr}, enabling pr mode")
+
     if pr:
         if has_previous_pr(pr):
             # Uninstall because pipx doesn't update otherwise:
