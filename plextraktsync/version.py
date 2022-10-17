@@ -33,9 +33,9 @@ class Version:
         if not self.installed:
             return False
 
-        from plextraktsync.util.packaging import pipx_installed
+        from plextraktsync.util.packaging import pipx_installed, program_name
 
-        package = pipx_installed("plextraktsync")
+        package = pipx_installed(program_name())
 
         return package is not None
 
