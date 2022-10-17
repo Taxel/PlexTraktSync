@@ -217,9 +217,9 @@ class TraktApi:
         The trakt api (Python module) is inconsistent:
         - Movie has "rating" property, while TVShow does not
         However, the Movie property is always None.
-        So fetch for both types.
+        So fetch for all types.
         """
-        if m.media_type in ["movies", "shows"]:
+        if m.media_type in ["movies", "shows", "episodes"]:
             r = self.ratings[m.media_type]
             return r.get(m.trakt, None)
         else:
