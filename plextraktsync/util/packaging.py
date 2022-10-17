@@ -59,6 +59,19 @@ def pipx_installed(package: str):
     return package
 
 
+def program_name():
+    """
+    Return current program name:
+    - pipx: plextraktsync
+    - pipx for pr 1000: plextraktsync@1000
+    """
+
+    import sys
+    from os.path import basename
+
+    return basename(sys.argv[0])
+
+
 def vcs_info(package: str):
     """
     Return vcs_info from direct_url.json of a .dist-info for the package
