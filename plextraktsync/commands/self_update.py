@@ -1,4 +1,5 @@
 from os import system
+from typing import Optional
 
 import click
 
@@ -19,6 +20,22 @@ def has_previous_pr(pr: int):
         return False
 
     return True
+
+
+def pr_number() -> Optional[int]:
+    """
+    Check if current executable is named plextraktsync@<pr>
+    """
+
+    import sys
+    try:
+        pr = sys.argv[0].split('@')[1]
+    except IndexError:
+        return None
+
+    if pr.isnumeric():
+        return int(pr)
+    return None
 
 
 def self_update(pr: int):
