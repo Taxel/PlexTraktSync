@@ -386,7 +386,7 @@ sudo systemctl enable PlexTraktSync.service
 
 - Using default `Plex Movie` and `Plex TV Series` [metadata agents](https://support.plex.tv/articles/200241558-agents/) improves script compatibility (for matching or for watchlist).
   It is recommended to [migrate to the new Plex TV Series agent](https://support.plex.tv/articles/migrating-a-tv-library-to-use-the-new-plex-tv-series-agent-scanner/).
-- Organize your shows folders and naming according to [Plex standard](https://support.plex.tv/articles/naming-and-organizing-your-tv-show-files/) and [theMovieDatabase](https://themoviedb.org/) (tmdb) order. If Plex doesn't properly identify your medias, you can use the [Fix Match](https://support.plex.tv/articles/201018497-fix-match-match/) and the [Match Hinting](https://support.plex.tv/articles/plexmatch/).
+- Organize your shows folders and naming according to [Plex standard](https://support.plex.tv/articles/naming-and-organizing-your-tv-show-files/) and [theMovieDatabase](https://themoviedb.org/) (tmdb) order. If Plex doesn't properly identify your medias, you can use the [Fix Match](https://support.plex.tv/articles/201018497-fix-match-match/) and the [Match Hinting](https://support.plex.tv/articles/plexmatch/). Also check the Episode Ordering preference (under Advanced) to correspond with your files.
 - Use tmdb as source for TV Shows if possible, because it's the Trakt [primary data source](https://blog.trakt.tv/tv-show-metadata-e6e64ed4e6ef) ([switched from tvdb in Jan-2021](https://blog.trakt.tv/tmdb-transition-ef3d19a5cf24)).
 
 ## Troubleshooting
