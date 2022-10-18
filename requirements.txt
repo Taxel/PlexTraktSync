@@ -17,7 +17,7 @@ deprecated==1.2.13
 exceptiongroup==1.0.0rc9; python_version < '3.11'
 idna==3.4; python_version >= '3.5'
 inquirerpy==0.3.4
-oauthlib==3.2.1; python_version >= '3.6'
+oauthlib==3.2.2; python_version >= '3.6'
 pfzy==0.3.4; python_version >= '3.7' and python_version < '4'
 plexapi==4.13.0
 prompt-toolkit==3.0.31; python_full_version >= '3.6.2'
