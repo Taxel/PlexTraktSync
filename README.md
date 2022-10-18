@@ -395,12 +395,12 @@ sudo systemctl enable PlexTraktSync.service
 
 Check your Plex episodes ordering compared to Trakt ordering.
 If episodes are in a different order, it should not be a problem because they are identified with ids. But if a season or an episode is missing on Trakt (and tmdb) it can't be synced.
-You can fix it by [adding the missing episodes](https://support.trakt.tv/support/solutions/articles/70000264977) or edit metadata on [tmdb](https://themoviedb.org/) or [report a metadata issue on Trakt](https://support.trakt.tv/support/solutions/articles/70000627644-how-to-report-metadata-issues) ([answers](https://trakt.tv/settings/reports)).  It's free for anyone to sign up and edit info at tmdb. Trakt will [update from tmdb](https://support.trakt.tv/support/solutions/articles/70000260936-how-does-movie-tv-show-information-metadata-get-updated-how-can-i-refresh-or-sync-trakt-to-tmdb-) data.
+You can fix it by [adding the missing episodes](https://support.trakt.tv/support/solutions/articles/70000264977) or edit metadata (eg. missing tvdb or imdb ids) on [tmdb](https://themoviedb.org/) or [report a metadata issue on Trakt](https://support.trakt.tv/support/solutions/articles/70000627644-how-to-report-metadata-issues) ([answers](https://trakt.tv/settings/reports)).  It's free for anyone to sign up and edit info at tmdb. Trakt will [update from tmdb](https://support.trakt.tv/support/solutions/articles/70000260936-how-does-movie-tv-show-information-metadata-get-updated-how-can-i-refresh-or-sync-trakt-to-tmdb-) data.
 
 ### I have many matching errors in logs
 
 Make sure you use [good practices](#good-practices) about Plex agent and files organization as stated above.
-Check if episodes are not missing on Trakt as explained in previous answer.
+Check if episodes are not missing on Trakt as explained in previous answer, and check if [external ids](https://www.themoviedb.org/tv/94997-house-of-the-dragon/season/1/episode/1/edit?active_nav_item=external_ids) are populated on tmdb.
 
 ### I have season 0 matching errors
 
