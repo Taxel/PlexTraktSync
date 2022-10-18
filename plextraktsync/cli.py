@@ -37,11 +37,18 @@ def command():
 
 
 @click.group(invoke_without_command=True)
+@click.option("--version", is_flag=True, help="Print version and exit")
 @click.pass_context
-def cli(ctx):
+def cli(ctx, version: bool):
     """
     Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
     """
+
+    if version:
+        from .version import version
+        print(f"PlexTraktSync {version()}")
+        return
+
     if not ctx.invoked_subcommand:
         sync()
 
