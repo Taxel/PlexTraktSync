@@ -183,8 +183,8 @@ Installing from GitHub is considered developer mode and it's documented in
   - Enter `urn:ietf:wg:oauth:2.0:oob` as the redirect url
   - You can leave Javascript origins and the Permissions checkboxes blank
 
-- Run `plextraktsync`, the script will ask for missing credentials  
-> **Note**  
+- Run `plextraktsync`, the script will ask for missing credentials
+> **Note**
 > To setup the credentials in the Docker Container, refer to the [Run the Docker Container](#run-the-docker-container) section
 
 
@@ -193,7 +193,9 @@ Installing from GitHub is considered developer mode and it's documented in
   Follow the instructions, your credentials and API keys will be stored in
   `.env` and `.pytrakt.json` files.
 
-  If you have [2 Factor Authentication enabled on Plex](https://support.plex.tv/articles/two-factor-authentication/#toc-1:~:text=Old%20Third%2DParty%20Apps%20%26%20Tools) you can append the code to your password.
+  If you have [2 Factor Authentication enabled on Plex][two-factor-authentication] you can append the code to your password.
+
+[two-factor-authentication]: https://support.plex.tv/articles/two-factor-authentication/#toc-1:~:text=Old%20Third%2DParty%20Apps%20%26%20Tools
 
 * Cronjobs can be optionally used on Linux or macOS to run the script at set intervals.
 
@@ -206,7 +208,9 @@ Installing from GitHub is considered developer mode and it's documented in
   - Note the command in the example above may not immediately work. Use the `which plextraktsync` command to locate your system's plextraktsync executable file and update it accordingly.
 
 
-* Instead of cron, a docker scheduler like [Ofelia](https://github.com/mcuadros/ofelia/) can also be used to run the script at set intervals.
+* Instead of cron, a docker scheduler like [Ofelia] can also be used to run the script at set intervals.
+
+[Ofelia]: https://github.com/mcuadros/ofelia/
 
   A docker-compose example with a 6h interval:
 
@@ -384,10 +388,19 @@ sudo systemctl enable PlexTraktSync.service
 
 ## Good practices
 
-- Using default `Plex Movie` and `Plex TV Series` [metadata agents](https://support.plex.tv/articles/200241558-agents/) improves script compatibility (for matching or for watchlist).
-  It is recommended to [migrate to the new Plex TV Series agent](https://support.plex.tv/articles/migrating-a-tv-library-to-use-the-new-plex-tv-series-agent-scanner/).
-- Organize your shows folders and naming according to [Plex standard](https://support.plex.tv/articles/naming-and-organizing-your-tv-show-files/) and [theMovieDatabase](https://themoviedb.org/) (tmdb) order. If Plex doesn't properly identify your medias, you can use the [Fix Match](https://support.plex.tv/articles/201018497-fix-match-match/) and the [Match Hinting](https://support.plex.tv/articles/plexmatch/). Also check the Episode Ordering preference (under Advanced) to correspond with your files.
-- Use tmdb as source for TV Shows if possible, because it's the Trakt [primary data source](https://blog.trakt.tv/tv-show-metadata-e6e64ed4e6ef) ([switched from tvdb in Jan-2021](https://blog.trakt.tv/tmdb-transition-ef3d19a5cf24)).
+- Using default `Plex Movie` and `Plex TV Series` [metadata agents] improves script compatibility (for matching or for watchlist).
+  It is recommended to [migrate to the new Plex TV Series agent][[migrating-agent-scanner].
+- Organize your shows folders and naming according to [Plex standard][naming-tv-show-files] and [theMovieDatabase][tmdb] (tmdb) order. If Plex doesn't properly identify your medias, you can use the [Fix Match][fix-match] and the [Match Hinting][plexmatch]. Also check the Episode Ordering preference (under Advanced) to correspond with your files.
+- Use tmdb as source for TV Shows if possible, because it's the Trakt [primary data source][tv-show-metadata] ([switched from tvdb in Jan-2021][tmdb-transition]).
+
+[metadata agents]: https://support.plex.tv/articles/200241558-agents/
+[migrating-agent-scanner]: https://support.plex.tv/articles/migrating-a-tv-library-to-use-the-new-plex-tv-series-agent-scanner/
+[tmdb]: https://themoviedb.org/
+[tmdb-transition]: https://blog.trakt.tv/tmdb-transition-ef3d19a5cf24
+[fix-match]: https://support.plex.tv/articles/201018497-fix-match-match/
+[tv-show-metadata]: https://blog.trakt.tv/tv-show-metadata-e6e64ed4e6ef
+[naming-tv-show-files]: https://support.plex.tv/articles/naming-and-organizing-your-tv-show-files/
+[plexmatch]: https://support.plex.tv/articles/plexmatch/
 
 ## Troubleshooting
 
@@ -395,23 +408,35 @@ sudo systemctl enable PlexTraktSync.service
 
 Check your Plex episodes ordering compared to Trakt ordering.
 If episodes are in a different order, it should not be a problem because they are identified with ids. But if a season or an episode is missing on Trakt (and tmdb) it can't be synced.
-You can fix it by [adding the missing episodes](https://support.trakt.tv/support/solutions/articles/70000264977) or edit metadata (eg. missing tvdb or imdb ids) on [tmdb](https://themoviedb.org/) or [report a metadata issue on Trakt](https://support.trakt.tv/support/solutions/articles/70000627644-how-to-report-metadata-issues) ([answers](https://trakt.tv/settings/reports)).  It's free for anyone to sign up and edit info at tmdb. Trakt will [update from tmdb](https://support.trakt.tv/support/solutions/articles/70000260936-how-does-movie-tv-show-information-metadata-get-updated-how-can-i-refresh-or-sync-trakt-to-tmdb-) data.
+You can fix it by [adding the missing episodes] or edit metadata (eg. missing tvdb or imdb ids) on [tmdb] or [report a metadata issue on Trakt][how-to-report-metadata-issues] ([answers][reports].  It's free for anyone to sign up and edit info at tmdb. Trakt will [update from tmdb][trakt-tvshow-update] data.
+
+[adding the missing episodes]: https://support.trakt.tv/support/solutions/articles/70000264977
+[tmdb]: https://themoviedb.org/
+[trakt-tvshow-update]: https://support.trakt.tv/support/solutions/articles/70000260936-how-does-movie-tv-show-information-metadata-get-updated-how-can-i-refresh-or-sync-trakt-to-tmdb-
+[how-to-report-metadata-issues]: https://support.trakt.tv/support/solutions/articles/70000627644-how-to-report-metadata-issues
+[reports]: https://trakt.tv/settings/reports
 
 ### I have many matching errors in logs
 
 Make sure you use [good practices](#good-practices) about Plex agent and files organization as stated above.
-Check if episodes are not missing on Trakt as explained in previous answer, and check if [external ids](https://www.themoviedb.org/tv/94997-house-of-the-dragon/season/1/episode/1/edit?active_nav_item=external_ids) are populated on tmdb.
+Check if episodes are not missing on Trakt as explained in previous answer, and check if [external ids][house-of-the-dragon] are populated on tmdb.
+
+[house-of-the-dragon]: https://www.themoviedb.org/tv/94997-house-of-the-dragon/season/1/episode/1/edit?active_nav_item=external_ids
 
 ### I have season 0 matching errors
 
 Season 0 folder must only contains episodes being officially in season 0.
-Trailers, deleted scenes, featurettes, interviews,... must be stored in a separate [Extra folder](https://support.plex.tv/articles/local-files-for-tv-show-trailers-and-extras/) according to Plex rules. 
+Trailers, deleted scenes, featurettes, interviews,... must be stored in a separate [Extra folder][extra-folder] according to Plex rules.
 Keep in mind that seasons 0 are not really official so datasources (tmdb, imdb and tvdb) sometimes don't correspond.
 Use tmdb as Plex source as much as you can.
 
+[extra-folder]: https://support.plex.tv/articles/local-files-for-tv-show-trailers-and-extras/
+
 ### How to sync multiple users ?
 
-The easiest way is to use containers with custom config folder for each user: [Multi-User docker-compose](https://github.com/Taxel/PlexTraktSync/discussions/997).
+The easiest way is to use containers with custom config folder for each user: [Multi-User docker-compose][discussions/997].
+
+[discussions/997]: https://github.com/Taxel/PlexTraktSync/discussions/997
 
 ### Can this run on Synology, HomeAssistant, Portainer,... ?
 
@@ -419,4 +444,6 @@ Yes using docker, check [Discussions](https://github.com/Taxel/PlexTraktSync/dis
 
 ### I have another question
 
-Check [Discussions](https://github.com/Taxel/PlexTraktSync/discussions), maybe someone already asked and found the answer.
+Check [Discussions][discussions], maybe someone already asked and found the answer.
+
+[discussions]: https://github.com/Taxel/PlexTraktSync/discussions
