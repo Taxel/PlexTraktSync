@@ -13,10 +13,11 @@ Originally created by [@Taxel][@taxel], but now maintained by [contributors].
 [@taxel]: https://github.com/Taxel
 [contributors]: https://github.com/Taxel/PlexTraktSync/graphs/contributors
 
-Note: The PyTrakt API keys are not stored securely, so if you do not want to have a file containing those on your harddrive, you can not use this project.
+Note: The PyTrakt API keys are not stored securely, so if you do not want to
+have a file containing those on your harddrive, you can not use this project.
 
-**Looking for a way to contribute? Please find issues with the [help-wanted] label
-or to improve documentation [docs-needed], thank you.**
+**Looking for a way to contribute? Please find issues with the [help-wanted]
+label or to improve documentation [docs-needed], thank you.**
 
 [help-wanted]: https://github.com/Taxel/PlexTraktSync/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22
 [docs-needed]: https://github.com/Taxel/PlexTraktSync/issues?q=label%3A%22docs+needed%22+sort%3Aupdated-desc
@@ -100,8 +101,8 @@ to run:
 plextraktsync
 ```
 
-NOTE: `pipx` install will use OS specific paths for Config, Logs, Cache, see [appdirs] documentation for details
-or check output of [info command](#info-command).
+NOTE: `pipx` install will use OS specific paths for Config, Logs, Cache, see
+[appdirs] documentation for details or check output of [info command](#info-command).
 
 [appdirs]: https://pypi.org/project/appdirs
 [install-pipx]: https://github.com/pypa/pipx#install-pipx
@@ -128,12 +129,14 @@ To run sync:
 docker-compose run --rm plextraktsync
 ```
 
-The container will stop after the sync is completed. Read Setup section to run it automatically at set intervals.
+The container will stop after the sync is completed. Read Setup section to run
+it automatically at set intervals.
 
 ### Windows Setup (optional alternative)
 
 - Download the latest `.zip` release from https://github.com/Taxel/PlexTraktSync/tags
-- Run `setup.bat` to install requirements and create optional shortcuts and routines _(requires Windows 7sp1 - 11)_.
+- Run `setup.bat` to install requirements and create optional shortcuts and
+  routines _(requires Windows 7sp1 - 11)_.
 
 ### Unraid setup
 
@@ -157,8 +160,10 @@ Utilize the "Community Apps" Unraid Plugin.
 - Go to the Plugins tab, paste the Community Apps URL in the URL area, and click "Install".
 
 Once installed (or if already installed):
-- Go to the (newly created) Apps tab and search "plextraktsync", and click on the App, and click "Install" (https://forums.unraid.net/topic/38582-plug-in-community-applications/)
-- Take all the default settings (the -it switch as outlined elsewhere in the README is already present), and click "Apply".
+- Go to the (newly created) Apps tab and search "plextraktsync", and click on
+  the App, and click "Install" (https://forums.unraid.net/topic/38582-plug-in-community-applications/)
+- Take all the default settings (the -it switch as outlined elsewhere in the
+  README is already present), and click "Apply".
 - The container then installs, and will start.
 
 Schedule (cron) the container to start at given intervals to process the sync
@@ -212,7 +217,8 @@ Installing from GitHub is considered developer mode and it's documented in
 
   - Note the command in the example above may not immediately work. Use the `which plextraktsync` command to locate your system's plextraktsync executable file and update it accordingly.
 
-- Instead of cron, a docker scheduler like [Ofelia][ofelia] can also be used to run the script at set intervals.
+- Instead of cron, a docker scheduler like [Ofelia][ofelia] can also be used to
+  run the script at set intervals.
 
 [ofelia]: https://github.com/mcuadros/ofelia/
 
@@ -244,9 +250,10 @@ To disable parts of the functionality of this software, look no further than
 `config.yml`. Here, in the sync section, you can disable the following things
 by setting them from `true` to `false` in a text editor:
 
-At first run, the script will create `config.yml` based on `config.default.yml`.
-If you want to customize settings before first run (eg. you don't want full
-sync) you can copy and edit `config.yml` before launching the script.
+At first run, the script will create `config.yml` based on
+`config.default.yml`. If you want to customize settings before first run (eg.
+you don't want full sync) you can copy and edit `config.yml` before launching
+the script.
 
 - Downloading liked lists from Trakt and adding them to Plex
 - Downloading your watchlist from Trakt and adding it to Plex
@@ -261,13 +268,16 @@ Academy Award Nominees" but might not be ideal for lists that are updated
 often). Here are the execution times on my Plex server: First run - 1228
 seconds, second run - 111 seconds
 
-You can view sync progress in the `plextraktsync.log` file which will be created.
+You can view sync progress in the `plextraktsync.log` file which will be
+created.
 
 ### Logging
 
-The logging level by default is `INFO`. This can be changed to DEBUG by editing the "debug" variable in `config.yml` to `true`.
+The logging level by default is `INFO`. This can be changed to DEBUG by editing
+the "debug" variable in `config.yml` to `true`.
 
-By default the logs will append, if you wish to maintain the log of only your last run then edit the "append" variable in `config.yml` to `false`.
+By default the logs will append, if you wish to maintain the log of only your
+last run then edit the "append" variable in `config.yml` to `false`.
 
 ## Commands
 
@@ -289,7 +299,8 @@ Options:
 
 ### Unmatched
 
-You can use `unmatched` command to scan your library and display unmatched movies.
+You can use `unmatched` command to scan your library and display unmatched
+movies.
 
 Support for unmatched shows is not yet implemented.
 
@@ -330,7 +341,8 @@ and scrobble plays. It does NOT run a sync between Plex and Trakt.
 
 [plex-scrobbler]: https://blog.trakt.tv/plex-scrobbler-52db9b016ead
 
-To restrict scrobbling to your user **only** (recommended), set the following in your `config.yml`:
+To restrict scrobbling to your user **only** (recommended), set the following
+in your `config.yml`:
 
 ```yaml
 watch:
@@ -347,7 +359,8 @@ or
 docker-compose run --rm plextraktsync watch
 ```
 
-or add `command: watch` to docker compose file, and `docker-compose up -d plextraktsync` to start the container detached:
+or add `command: watch` to docker compose file, and `docker-compose up -d
+plextraktsync` to start the container detached:
 
 ```yaml
 services:
@@ -378,7 +391,8 @@ Group=user
 WantedBy=multi-user.target
 ```
 
-Note, depending on your install method you may need to set your ExecStart command as follows:
+Note, depending on your install method you may need to set your ExecStart
+command as follows:
 
 ```
 ExecStart=/path/to/plextraktsync/plextraktsync.sh watch
@@ -394,27 +408,37 @@ sudo systemctl enable PlexTraktSync.service
 
 ## Good practices
 
-- Using default `Plex Movie` and `Plex TV Series` [metadata agents] improves script compatibility (for matching or for watchlist).
+- Using default `Plex Movie` and `Plex TV Series` [metadata agents] improves
+  script compatibility (for matching or for watchlist).
   It is recommended to [migrate to the new Plex TV Series agent][migrating-agent-scanner].
-- Organize your shows folders and naming according to [Plex standard][naming-tv-show-files] and [theMovieDatabase][tmdb] (tmdb) order. If Plex doesn't properly identify your medias, you can use the [Fix Match][fix-match] and the [Match Hinting][plexmatch]. Also check the Episode Ordering preference (under Advanced) to correspond with your files.
-- Use tmdb as source for TV Shows if possible, because it's the Trakt [primary data source][tv-show-metadata] ([switched from tvdb in Jan-2021][tmdb-transition]).
+- Organize your shows folders and naming according to [Plex standard][naming-tv-show-files]
+  and [theMovieDatabase][tmdb] (tmdb) order. If Plex doesn't properly identify your media,
+  you can use the [Fix Match][fix-match] and the [Match Hinting][plexmatch].
+  Also check the Episode Ordering preference (under Advanced) to correspond with your files.
+- Use tmdb as source for TV Shows if possible,
+  because it's the Trakt [primary data source][tv-show-metadata]
+  ([switched from tvdb in Jan-2021][tmdb-transition]).
 
+[fix-match]: https://support.plex.tv/articles/201018497-fix-match-match/
 [metadata agents]: https://support.plex.tv/articles/200241558-agents/
 [migrating-agent-scanner]: https://support.plex.tv/articles/migrating-a-tv-library-to-use-the-new-plex-tv-series-agent-scanner/
-[tmdb]: https://themoviedb.org/
-[tmdb-transition]: https://blog.trakt.tv/tmdb-transition-ef3d19a5cf24
-[fix-match]: https://support.plex.tv/articles/201018497-fix-match-match/
-[tv-show-metadata]: https://blog.trakt.tv/tv-show-metadata-e6e64ed4e6ef
 [naming-tv-show-files]: https://support.plex.tv/articles/naming-and-organizing-your-tv-show-files/
 [plexmatch]: https://support.plex.tv/articles/plexmatch/
+[tmdb-transition]: https://blog.trakt.tv/tmdb-transition-ef3d19a5cf24
+[tmdb]: https://themoviedb.org/
+[tv-show-metadata]: https://blog.trakt.tv/tv-show-metadata-e6e64ed4e6ef
 
 ## Troubleshooting
 
 ### I have duplicate watched episodes sent to Trakt at every sync
 
 Check your Plex episodes ordering compared to Trakt ordering.
-If episodes are in a different order, it should not be a problem because they are identified with ids. But if a season or an episode is missing on Trakt (and tmdb) it can't be synced.
-You can fix it by [adding the missing episodes] or edit metadata (eg. missing tvdb or imdb ids) on [tmdb] or [report a metadata issue on Trakt][how-to-report-metadata-issues] ([answers][reports]. It's free for anyone to sign up and edit info at tmdb. Trakt will [update from tmdb][trakt-tvshow-update] data.
+If episodes are in a different order, it should not be a problem because they
+are identified with ids.
+But if a season or an episode is missing on Trakt (and tmdb) it can't be synced.
+You can fix it by [adding the missing episodes] or edit metadata (eg. missing
+tvdb or imdb ids) on [tmdb] or [report a metadata issue on Trakt][how-to-report-metadata-issues] ([answers][reports]. It's free for anyone
+to sign up and edit info at tmdb. Trakt will [update from tmdb][trakt-tvshow-update] data.
 
 [adding the missing episodes]: https://support.trakt.tv/support/solutions/articles/70000264977
 [tmdb]: https://themoviedb.org/
@@ -424,29 +448,34 @@ You can fix it by [adding the missing episodes] or edit metadata (eg. missing tv
 
 ### I have many matching errors in logs
 
-Make sure you use [good practices](#good-practices) about Plex agent and files organization as stated above.
-Check if episodes are not missing on Trakt as explained in previous answer, and check if [external ids][house-of-the-dragon] are populated on tmdb.
+Make sure you use [good practices](#good-practices) about Plex agent and files
+organization as stated above.
+Check if episodes are not missing on Trakt as explained in previous answer, and
+check if [external ids][house-of-the-dragon] are populated on tmdb.
 
 [house-of-the-dragon]: https://www.themoviedb.org/tv/94997-house-of-the-dragon/season/1/episode/1/edit?active_nav_item=external_ids
 
 ### I have season 0 matching errors
 
 Season 0 folder must only contains episodes being officially in season 0.
-Trailers, deleted scenes, featurettes, interviews,... must be stored in a separate [Extra folder][extra-folder] according to Plex rules.
-Keep in mind that seasons 0 are not really official so datasources (tmdb, imdb and tvdb) sometimes don't correspond.
+Trailers, deleted scenes, featurettes, interviews,... must be stored in a
+separate [Extra folder][extra-folder] according to Plex rules.
+Keep in mind that seasons 0 are not really official so datasources (tmdb, imdb
+and tvdb) sometimes don't correspond.
 Use tmdb as Plex source as much as you can.
 
 [extra-folder]: https://support.plex.tv/articles/local-files-for-tv-show-trailers-and-extras/
 
 ### How to sync multiple users ?
 
-The easiest way is to use containers with custom config folder for each user: [Multi-User docker-compose][discussions/997].
+The easiest way is to use containers with custom config folder for each user:
+[Multi-User docker-compose][discussions/997].
 
 [discussions/997]: https://github.com/Taxel/PlexTraktSync/discussions/997
 
 ### Can this run on Synology, HomeAssistant, Portainer,... ?
 
-Yes using docker, check [Discussions](https://github.com/Taxel/PlexTraktSync/discussions) page.
+Yes using docker, check [Discussions][discussions] page.
 
 ### I have another question
 
