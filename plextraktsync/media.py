@@ -5,7 +5,7 @@ from requests import RequestException
 from trakt.errors import TraktException
 
 from plextraktsync.decorators.cached_property import cached_property
-from plextraktsync.logging import logger
+from plextraktsync.factory import logger
 from plextraktsync.plex_api import PlexApi, PlexGuid, PlexLibraryItem
 from plextraktsync.trakt_api import TraktApi, TraktItem, TraktLookup
 

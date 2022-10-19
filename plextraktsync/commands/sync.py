@@ -4,8 +4,7 @@ import click
 
 from plextraktsync.commands.login import ensure_login
 from plextraktsync.decorators.measure_time import measure_time
-from plextraktsync.factory import factory
-from plextraktsync.logging import logger
+from plextraktsync.factory import factory, logger
 from plextraktsync.version import version
 
 

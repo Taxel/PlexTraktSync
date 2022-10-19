@@ -6,7 +6,7 @@ from trakt.errors import NotFoundException, OAuthException
 from trakt.users import UserList
 from trakt.utils import extract_ids, slugify
 
-from plextraktsync.logging import logger
+from plextraktsync.factory import logger
 from plextraktsync.plex_api import PlexApi
 
 

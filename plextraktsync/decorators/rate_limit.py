@@ -3,7 +3,7 @@ from time import sleep
 
 from trakt.errors import RateLimitException
 
-from plextraktsync.logging import logger
+from plextraktsync.factory import logger
 
 
 # https://trakt.docs.apiary.io/#introduction/rate-limiting

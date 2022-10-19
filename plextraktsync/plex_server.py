@@ -7,8 +7,7 @@ from requests.exceptions import ConnectionError, SSLError
 
 from plextraktsync.config import PLEX_PLATFORM
 from plextraktsync.decorators.nocache import nocache
-from plextraktsync.factory import Factory
-from plextraktsync.logging import logging
+from plextraktsync.factory import Factory, logging
 
 
 class PlexServerConnection:

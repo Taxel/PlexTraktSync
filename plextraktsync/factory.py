@@ -1,5 +1,5 @@
+from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.memoize import memoize
-from plextraktsync.rich_addons import RichHighlighter
 
 
 class Factory:
@@ -114,13 +114,35 @@ class Factory:
 
         return w
 
+    @cached_property
+    def logging(self):
+        import logging
+
+        from plextraktsync.logging import initialize
+
+        config = self.config()
+        initialize(config)
+
+        return logging
+
+    @cached_property
+    def logger(self):
+        logger = self.logging.getLogger("PlexTraktSync")
+        config = self.config()
+
+        from plextraktsync.logger.filter import LoggerFilter
+        logger.addFilter(LoggerFilter(config["logging"]["filter"], logger))
+
+        return logger
+
     @memoize
     def console_logger(self):
         from rich.logging import RichHandler
 
-        from plextraktsync.config import CONFIG as config
         from plextraktsync.console import console
+        from plextraktsync.rich_addons import RichHighlighter
 
+        config = self.config()
         handler = RichHandler(
             console=console,
             show_time=config.log_console_time,
@@ -133,9 +155,11 @@ class Factory:
 
     @memoize
     def config(self):
-        from plextraktsync.config import CONFIG
+        from plextraktsync.config import Config
 
-        return CONFIG
+        return Config()
 
 
 factory = Factory()
+logger = factory.logger
+logging = factory.logging

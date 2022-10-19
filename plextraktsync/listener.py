@@ -3,7 +3,7 @@ from time import sleep
 from plexapi.server import PlexServer
 
 from plextraktsync.events import Error, EventFactory
-from plextraktsync.logging import logging
+from plextraktsync.factory import logging
 
 
 class EventDispatcher:

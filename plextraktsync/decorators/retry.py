@@ -5,7 +5,7 @@ from plexapi.exceptions import BadRequest
 from requests import ReadTimeout, RequestException
 from trakt.errors import TraktInternalException
 
-from plextraktsync.logging import logger
+from plextraktsync.factory import logger
 
 
 def retry(retries=5):

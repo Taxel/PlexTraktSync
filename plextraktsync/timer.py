@@ -1,6 +1,6 @@
 from time import monotonic, sleep
 
-from plextraktsync.logging import logger
+from plextraktsync.factory import logger
 
 
 class Timer:
