@@ -8,9 +8,9 @@ unlike the Plex app provided by Trakt.
 
 ![image](https://raw.githubusercontent.com/twolaw/PlexTraktSync/img/plextraktsync_banner.png)
 
-Originally created by [@Taxel], but now maintained by [contributors].
+Originally created by [@Taxel][@taxel], but now maintained by [contributors].
 
-[@Taxel]: https://github.com/Taxel
+[@taxel]: https://github.com/Taxel
 [contributors]: https://github.com/Taxel/PlexTraktSync/graphs/contributors
 
 Note: The PyTrakt API keys are not stored securely, so if you do not want to have a file containing those on your harddrive, you can not use this project.
@@ -89,6 +89,7 @@ plextraktsync self-update
 ```
 
 which just calls `pipx` with:
+
 ```
 pipx upgrade PlexTraktSync
 ```
@@ -126,6 +127,7 @@ To run sync:
 ```
 docker-compose run --rm plextraktsync
 ```
+
 The container will stop after the sync is completed. Read Setup section to run it automatically at set intervals.
 
 ### Windows Setup (optional alternative)
@@ -151,15 +153,18 @@ Create a manual Unraid container of PlexTraktSync:
 
 Option 2 for container creation:
 Utilize the "Community Apps" Unraid Plugin.
+
 - Go to the Plugins tab, paste the Community Apps URL in the URL area, and click "Install".
+
 Once installed (or if already installed):
 - Go to the (newly created) Apps tab and search "plextraktsync", and click on the App, and click "Install" (https://forums.unraid.net/topic/38582-plug-in-community-applications/)
 - Take all the default settings (the -it switch as outlined elsewhere in the README is already present), and click "Apply".
 - The container then installs, and will start.
 
-
 Schedule (cron) the container to start at given intervals to process the sync
+
 - Go to the Plugins tab, past the User Scripts URL in the URL area, and click "Install" (https://forums.unraid.net/topic/48286-plugin-ca-user-scripts/)
+
 Once installed (or if already installed):
 - Go to the Plugins tab, click on "User Scripts", and click the "Add New Script" button
 - Name your script accordingly
@@ -167,7 +172,6 @@ Once installed (or if already installed):
 - Below the "#!/bin/bash" line add: `docker start PlexTraktSync`
 - Click "Save Changes"
 - Set the schedule accordingly using the dropdown menu next to the "Run in Background" button
-
 
 ### GitHub
 
@@ -184,9 +188,9 @@ Installing from GitHub is considered developer mode and it's documented in
   - You can leave Javascript origins and the Permissions checkboxes blank
 
 - Run `plextraktsync`, the script will ask for missing credentials
-> **Note**
-> To setup the credentials in the Docker Container, refer to the [Run the Docker Container](#run-the-docker-container) section
 
+  > **Note**
+  > To setup the credentials in the Docker Container, refer to the [Run the Docker Container](#run-the-docker-container) section
 
 - At first run you will be asked to setup Trakt and Plex access.
 
@@ -197,7 +201,7 @@ Installing from GitHub is considered developer mode and it's documented in
 
 [two-factor-authentication]: https://support.plex.tv/articles/two-factor-authentication/#toc-1:~:text=Old%20Third%2DParty%20Apps%20%26%20Tools
 
-* Cronjobs can be optionally used on Linux or macOS to run the script at set intervals.
+- Cronjobs can be optionally used on Linux or macOS to run the script at set intervals.
 
   For example, to run this script in a cronjob every two hours:
 
@@ -205,34 +209,34 @@ Installing from GitHub is considered developer mode and it's documented in
   $ crontab -e
   0 */2 * * * $HOME/.local/bin/plextraktsync
   ```
+
   - Note the command in the example above may not immediately work. Use the `which plextraktsync` command to locate your system's plextraktsync executable file and update it accordingly.
 
+- Instead of cron, a docker scheduler like [Ofelia][ofelia] can also be used to run the script at set intervals.
 
-* Instead of cron, a docker scheduler like [Ofelia] can also be used to run the script at set intervals.
+[ofelia]: https://github.com/mcuadros/ofelia/
 
-[Ofelia]: https://github.com/mcuadros/ofelia/
+A docker-compose example with a 6h interval:
 
-  A docker-compose example with a 6h interval:
-
-  ```yaml
-  services:
-    scheduler:
-      image: mcuadros/ofelia:latest
-      container_name: scheduler
-      depends_on:
-        - plextraktsync
-      command: daemon --docker
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock:ro
-      labels:
-        ofelia.job-run.plextraktsync.schedule: "@every 6h"
-        ofelia.job-run.plextraktsync.container: "plextraktsync"
-    plextraktsync:
-      image: ghcr.io/taxel/plextraktsync:latest
-      container_name: plextraktsync
-      volumes:
-        - ./config:/app/config
-  ```
+```yaml
+services:
+  scheduler:
+    image: mcuadros/ofelia:latest
+    container_name: scheduler
+    depends_on:
+      - plextraktsync
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      ofelia.job-run.plextraktsync.schedule: "@every 6h"
+      ofelia.job-run.plextraktsync.container: "plextraktsync"
+  plextraktsync:
+    image: ghcr.io/taxel/plextraktsync:latest
+    container_name: plextraktsync
+    volumes:
+      - ./config:/app/config
+```
 
 ## Sync settings
 
@@ -338,9 +342,11 @@ To run `watch` command:
 `plextraktsync watch`
 
 or
+
 ```
 docker-compose run --rm plextraktsync watch
 ```
+
 or add `command: watch` to docker compose file, and `docker-compose up -d plextraktsync` to start the container detached:
 
 ```yaml
@@ -351,7 +357,6 @@ services:
       - ./config:/app/config
     command: watch
 ```
-
 
 #### Systemd setup
 
@@ -372,6 +377,7 @@ Group=user
 [Install]
 WantedBy=multi-user.target
 ```
+
 Note, depending on your install method you may need to set your ExecStart command as follows:
 
 ```
@@ -389,7 +395,7 @@ sudo systemctl enable PlexTraktSync.service
 ## Good practices
 
 - Using default `Plex Movie` and `Plex TV Series` [metadata agents] improves script compatibility (for matching or for watchlist).
-  It is recommended to [migrate to the new Plex TV Series agent][[migrating-agent-scanner].
+  It is recommended to [migrate to the new Plex TV Series agent][migrating-agent-scanner].
 - Organize your shows folders and naming according to [Plex standard][naming-tv-show-files] and [theMovieDatabase][tmdb] (tmdb) order. If Plex doesn't properly identify your medias, you can use the [Fix Match][fix-match] and the [Match Hinting][plexmatch]. Also check the Episode Ordering preference (under Advanced) to correspond with your files.
 - Use tmdb as source for TV Shows if possible, because it's the Trakt [primary data source][tv-show-metadata] ([switched from tvdb in Jan-2021][tmdb-transition]).
 
@@ -408,7 +414,7 @@ sudo systemctl enable PlexTraktSync.service
 
 Check your Plex episodes ordering compared to Trakt ordering.
 If episodes are in a different order, it should not be a problem because they are identified with ids. But if a season or an episode is missing on Trakt (and tmdb) it can't be synced.
-You can fix it by [adding the missing episodes] or edit metadata (eg. missing tvdb or imdb ids) on [tmdb] or [report a metadata issue on Trakt][how-to-report-metadata-issues] ([answers][reports].  It's free for anyone to sign up and edit info at tmdb. Trakt will [update from tmdb][trakt-tvshow-update] data.
+You can fix it by [adding the missing episodes] or edit metadata (eg. missing tvdb or imdb ids) on [tmdb] or [report a metadata issue on Trakt][how-to-report-metadata-issues] ([answers][reports]. It's free for anyone to sign up and edit info at tmdb. Trakt will [update from tmdb][trakt-tvshow-update] data.
 
 [adding the missing episodes]: https://support.trakt.tv/support/solutions/articles/70000264977
 [tmdb]: https://themoviedb.org/
