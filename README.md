@@ -394,7 +394,7 @@ WantedBy=multi-user.target
 Note, depending on your install method you may need to set your ExecStart
 command as follows:
 
-```
+```ini
 ExecStart=/path/to/plextraktsync/plextraktsync.sh watch
 ```
 
