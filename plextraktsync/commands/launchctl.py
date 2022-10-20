@@ -13,7 +13,11 @@ class Plist:
 
     def unload(self, plist_path: str):
         from os import system
+        from os.path import exists
 
+        # Skip if file does not exist.
+        if not exists(plist_path):
+            return
         system(f"launchctl unload {plist_path}")
 
     def create(self, plist_path: str):
@@ -22,6 +26,11 @@ class Plist:
 
     def remove(self, plist_path: str):
         from os import unlink
+        from os.path import exists
+
+        # Skip if file does not exist.
+        if not exists(plist_path):
+            return
         unlink(plist_path)
 
     @cached_property
