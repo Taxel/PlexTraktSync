@@ -47,6 +47,8 @@ def load():
     p = Plist()
     p.create(p.plist_path)
     click.echo(f"Created: {p.plist_path}")
+    p.load(p.plist_path)
+    click.echo(f"Loaded: {p.plist_path}")
 
 
 @click.command()
@@ -55,5 +57,7 @@ def unload():
     Unload the service.
     """
     p = Plist()
+    p.unload(p.plist_path)
+    click.echo(f"Unloaded: {p.plist_path}")
     p.remove(p.plist_path)
     click.echo(f"Removed: {p.plist_path}")
