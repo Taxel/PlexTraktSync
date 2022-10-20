@@ -84,7 +84,8 @@ def inspect_media(id):
     print(f"Plex Rating: {m.plex_rating}")
     print(f"Trakt Rating: {m.trakt_rating}")
     print(f"Watched on Plex: {m.watched_on_plex}")
-    print(f"Watched on Trakt: {m.watched_on_trakt}")
+    if m.is_movie or m.is_episode:
+        print(f"Watched on Trakt: {m.watched_on_trakt}")
 
     print("Plex play history:")
     for h in m.plex_history(device=True, account=True):
