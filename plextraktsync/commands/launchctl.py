@@ -26,8 +26,11 @@ class Plist:
         with open(self.plist_default_path, encoding='utf-8') as f:
             contents = "".join(f.readlines())
 
-        # Use absolute path
-        contents = contents.replace('<string>plextraktsync</string>', f'<string>{program_path()}</string>')
+        def encode(f):
+            return f'<string>{f}</string>'
+
+        program = "\n".join(map(encode, program_path().split(' ')))
+        contents = contents.replace('<string>plextraktsync</string>', program)
         with open(plist_path, "w+") as fw:
             fw.writelines(contents)
 
