@@ -20,10 +20,16 @@ class Media:
     show: Optional["Media"]
 
     def __init__(
-        self, plex, trakt, plex_api: PlexApi = None, trakt_api: TraktApi = None
+            self,
+            plex,
+            trakt,
+            plex_api: PlexApi = None,
+            trakt_api: TraktApi = None,
+            mf: MediaFactory = None,
     ):
         self.plex_api = plex_api
         self.trakt_api = trakt_api
+        self.mf = mf
         self.plex = plex
         self.trakt = trakt
         self.show = None
@@ -224,7 +230,7 @@ class MediaFactory:
         return self.make_media(pm, tm.item)
 
     def make_media(self, plex, trakt):
-        return Media(plex, trakt, plex_api=self.plex, trakt_api=self.trakt)
+        return Media(plex, trakt, plex_api=self.plex, trakt_api=self.trakt, mf=self)
 
     def _guid_match(self, candidates: List[PlexLibraryItem], tm: TraktItem) -> Optional[PlexLibraryItem]:
         if candidates:
