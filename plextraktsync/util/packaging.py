@@ -65,7 +65,9 @@ def program_path():
     """
     import sys
 
-    return sys.argv[0]
+    absdir = dirname(dirname(dirname(__file__)))
+
+    return f"env PYTHONPATH={absdir} {sys.executable} -m plextraktsync"
 
 
 def program_name():
