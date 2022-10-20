@@ -21,8 +21,15 @@ class Plist:
         system(f"launchctl unload {plist_path}")
 
     def create(self, plist_path: str):
-        from shutil import copy
-        copy(self.plist_default_path, plist_path)
+        from plextraktsync.util.packaging import program_path
+
+        with open(self.plist_default_path, encoding='utf-8') as f:
+            contents = "".join(f.readlines())
+
+        # Use absolute path
+        contents = contents.replace('<string>plextraktsync</string>', f'<string>{program_path()}</string>')
+        with open(plist_path, "w+") as fw:
+            fw.writelines(contents)
 
     def remove(self, plist_path: str):
         from os import unlink
