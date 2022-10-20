@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List, Optional
 
 from plexapi.exceptions import PlexApiException
@@ -213,13 +215,16 @@ class MediaFactory:
             logger.warning(f"{guid.pm.item}: Skipping guid {guid} not found on Trakt")
             return None
 
-        return Media(guid.pm, tm, plex_api=self.plex, trakt_api=self.trakt)
+        return self.make_media(guid.pm, tm)
 
     def resolve_trakt(self, tm: TraktItem) -> Media:
         """Find Plex media from Trakt id using Plex Search and Discover"""
         result = self.plex.search_online(tm.item.title, tm.item.media_type[:-1])
         pm = self._guid_match(result, tm)
-        return Media(pm, tm.item, plex_api=self.plex, trakt_api=self.trakt)
+        return self.make_media(pm, tm.item)
+
+    def make_media(self, plex, trakt):
+        return Media(plex, trakt, plex_api=self.plex, trakt_api=self.trakt)
 
     def _guid_match(self, candidates: List[PlexLibraryItem], tm: TraktItem) -> Optional[PlexLibraryItem]:
         if candidates:
