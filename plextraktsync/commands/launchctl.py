@@ -6,6 +6,16 @@ from plextraktsync.decorators.cached_property import cached_property
 class Plist:
     plist_file = "com.github.plextraktsync.watch.plist"
 
+    def load(self, plist_path: str):
+        from os import system
+
+        system(f"launchctl load {plist_path}")
+
+    def unload(self, plist_path: str):
+        from os import system
+
+        system(f"launchctl unload {plist_path}")
+
     def create(self, plist_path: str):
         from shutil import copy
         copy(self.plist_default_path, plist_path)
