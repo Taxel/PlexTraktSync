@@ -308,7 +308,7 @@ class PlexLibraryItem:
         try:
             stream = self.video_streams[0]
             title = stream.displayTitle.split(" ")[0]
-        except IndexError:
+        except (IndexError, AttributeError):
             title = None
 
         variants = {
