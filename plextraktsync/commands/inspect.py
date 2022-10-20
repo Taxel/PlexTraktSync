@@ -2,6 +2,7 @@ from urllib.parse import quote_plus
 
 from plextraktsync.console import print
 from plextraktsync.factory import factory
+from plextraktsync.media import Media
 from plextraktsync.plex_api import PlexLibraryItem
 from plextraktsync.version import version
 
@@ -72,7 +73,7 @@ def inspect_media(id):
 
     print(f"Metadata: {pm.to_json()}")
 
-    m = mf.resolve_any(pm)
+    m: Media = mf.resolve_any(pm)
     if not m:
         return
 
