@@ -244,7 +244,7 @@ def subdl():
     pass
 
 
-@command()
+@click.group()
 def launchctl():
     """
     Installs launchctl wrapper
@@ -308,6 +308,10 @@ cli.add_command(info)
 cli.add_command(inspect)
 if launchctl_available():
     cli.add_command(launchctl)
+    from .commands.launchctl import load, unload
+
+    launchctl.add_command(load)
+    launchctl.add_command(unload)
 cli.add_command(login)
 cli.add_command(plex_login)
 if enable_self_update():
