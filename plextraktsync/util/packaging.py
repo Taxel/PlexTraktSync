@@ -59,6 +59,15 @@ def pipx_installed(package: str):
     return package
 
 
+def program_path():
+    """
+    Return path to currently executed script
+    """
+    import sys
+
+    return sys.argv[0]
+
+
 def program_name():
     """
     Return current program name:
