@@ -44,7 +44,8 @@ def inspect_media(id):
     print(f"Title: {media.title}")
     if media.type == 'movie' and media.editionTitle:
         print(f"Edition Title: {media.editionTitle}")
-    print(f"Media.Duration: {pm.duration}")
+    if pm.has_media:
+        print(f"Media.Duration: {pm.duration}")
     print(f"Media.Type: '{media.type}'")
     print(f"Media.Guid: '{media.guid}'")
     if not pm.is_legacy_agent:
