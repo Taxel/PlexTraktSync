@@ -196,6 +196,10 @@ class PlexLibraryItem:
         return '{:02}:{:02}:{:02}'.format(int(hours), int(minutes), int(seconds))
 
     @cached_property
+    def has_media(self):
+        return self.type in ["movie", "episode"]
+
+    @cached_property
     def media_type(self):
         return f"{self.type}s"
 
