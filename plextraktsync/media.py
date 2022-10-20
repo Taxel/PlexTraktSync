@@ -17,8 +17,6 @@ class Media:
     Class containing Plex and Trakt media items (Movie, Episode)
     """
 
-    show: Optional["Media"]
-
     def __init__(
             self,
             plex,
@@ -32,7 +30,7 @@ class Media:
         self.mf = mf
         self.plex = plex
         self.trakt = trakt
-        self.show = None
+        self._show = None
 
     @cached_property
     def media_type(self):
@@ -57,6 +55,19 @@ class Media:
     @property
     def trakt_url(self):
         return f"https://trakt.tv/{self.media_type}/{self.trakt_id}"
+
+    @property
+    def show(self) -> Optional[Media]:
+        if self._show is None and self.mf:
+            ps = self.plex_api.fetch_item(self.plex.item.grandparentRatingKey)
+            ms = self.mf.resolve_any(ps)
+            self._show = ms
+
+        return self._show
+
+    @show.setter
+    def show(self, show):
+        self._show = show
 
     @property
     def show_trakt_id(self):
