@@ -9,6 +9,8 @@
 		<string>plextraktsync</string>
 		<string>watch</string>
 	</array>
+	<key>WorkingDirectory</key>
+	<string>/</string>
 	<key>LimitLoadToSessionType</key>
 	<string>Aqua</string>
 	<key>RunAtLoad</key>
