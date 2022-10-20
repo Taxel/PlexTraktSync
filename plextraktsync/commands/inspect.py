@@ -2,6 +2,7 @@ from urllib.parse import quote_plus
 
 from plextraktsync.console import print
 from plextraktsync.factory import factory
+from plextraktsync.plex_api import PlexLibraryItem
 from plextraktsync.version import version
 
 
@@ -29,7 +30,7 @@ def inspect_media(id):
     mf = factory.media_factory()
 
     print("")
-    pm = plex.fetch_item(id)
+    pm: PlexLibraryItem = plex.fetch_item(id)
     if not pm:
         print(f"Inspecting {id}: Not found")
         return
