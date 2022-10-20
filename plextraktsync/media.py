@@ -221,7 +221,7 @@ class MediaFactory:
         pm = self._guid_match(result, tm)
         return Media(pm, tm.item, plex_api=self.plex, trakt_api=self.trakt)
 
-    def _guid_match(self, candidates: List[PlexLibraryItem], tm: TraktItem) -> PlexLibraryItem:
+    def _guid_match(self, candidates: List[PlexLibraryItem], tm: TraktItem) -> Optional[PlexLibraryItem]:
         if candidates:
             for pm in candidates:
                 for guid in pm.guids:
