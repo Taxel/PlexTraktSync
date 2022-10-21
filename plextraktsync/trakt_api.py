@@ -328,6 +328,11 @@ class TraktApi:
             # https://trakt.docs.apiary.io/#reference/search/id-lookup/get-id-lookup-results
             logger.debug("tvdb does not support movie provider")
             return None
+        if media_type == "season":
+            # Search by season is missing
+            # https://github.com/Taxel/PlexTraktSync/issues/1117#issuecomment-1286884897
+            logger.debug("trakt does not support search by season")
+            return None
 
         if not self.valid_trakt_id(media_id):
             logger.error(f"Ignoring invalid id: '{media_id}'")
