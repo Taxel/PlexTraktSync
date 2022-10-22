@@ -640,6 +640,11 @@ class PlexApi:
         m.markPlayed()
 
     @nocache
+    @retry()
+    def mark_unwatched(self, m):
+        m.markUnplayed()
+
+    @nocache
     def has_sessions(self):
         try:
             self.plex.sessions()
@@ -710,3 +715,14 @@ class PlexApi:
         except NotFound:
             return None
         return map(PlexLibraryItem, result)
+
+    @nocache
+    def reset_show(self, show, reset_date):
+        reset_count = 0
+        for ep in show.watched():
+            if ep.lastViewedAt < reset_date:
+                self.mark_unwatched(ep)
+                reset_count += 1
+            else:
+                logger.debug(f"{show.title} {ep.seasonEpisode} watched at {ep.lastViewedAt} after reset date {reset_date}")
+        logger.debug(f"{show.title}: {reset_count} Plex episode(s) marked as unwatched.")
