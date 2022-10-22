@@ -160,10 +160,11 @@ class Media:
                 self.trakt_api.mark_watched(self.trakt, self.plex.seen_date)
         elif self.is_episode:
             if self.show_reset_at and self.plex.seen_date.replace(tzinfo=None) < self.show_reset_at:
-                logger.info(f"Show {self.plex.item.show().title} has been reset in trakt at {self.show_reset_at}.")
-                logger.info(f"Marking {self.plex.item.show().title} as unwatched in Plex.")
-                self.plex_api.reset_show(show=self.plex.item.show(), reset_date=self.show_reset_at)
-            if not dry_run:
+                if not dry_run:
+                    logger.info(f"Show {self.plex.item.show().title} has been reset in trakt at {self.show_reset_at}.")
+                    logger.info(f"Marking {self.plex.item.show().title} as unwatched in Plex.")
+                    self.plex_api.reset_show(show=self.plex.item.show(), reset_date=self.show_reset_at)
+            elif not dry_run:
                 logger.info(f"Marking as watched in Trakt: {self}")
                 self.trakt_api.mark_watched(
                     self.trakt, self.plex.seen_date, self.show_trakt_id
