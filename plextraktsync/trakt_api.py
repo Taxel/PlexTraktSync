@@ -497,6 +497,10 @@ class TraktBatch:
         return result
 
 
+EPISODES_ORDERING_WARNING = "episodes ordering is different in Plex and Trakt. " \
+                            "Check your Plex media source, TMDB is recommended."
+
+
 class TraktLookup:
     """
     Trakt lookup table to find all Trakt episodes of a TVShow
@@ -560,7 +564,7 @@ class TraktLookup:
     def from_id(self, provider, id):
         # NB: the code assumes from_id is called only if from_number fails
         if self.same_order:
-            logger.warning(f"{self.tm.title} episodes ordering is different in Plex and Trakt. Check your Plex media source, TMDB is recommended.")
+            logger.warning(f'"{self.tm.title}" {EPISODES_ORDERING_WARNING}')
             self.same_order = False
         if provider not in self.provider_table:
             self._reverse_lookup(provider)
