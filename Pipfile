@@ -22,7 +22,7 @@ rich = "==12.6.0"
 tqdm = "==4.64.1"
 urllib3 = ">=1.26.6"
 websocket-client = "==1.4.1"
-trakt = {file = "https://github.com/glensc/python-trakt/archive/refs/tags/3.4.0.zip"}
+trakt = {file = "https://github.com/glensc/python-trakt/archive/refs/tags/3.4.1.zip"}
 
 [requires]
 python_version = "3"
