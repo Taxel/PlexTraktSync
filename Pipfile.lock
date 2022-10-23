@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "65209004aad91c1f9817dcfe9f2f79836b10798294eb6ddf2dbeb7815073b78c"
+            "sha256": "537bfeedecd372c0905883a18a81968b5fe7697fe76465ad831603e169bebefa"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -53,7 +53,7 @@
                 "sha256:5a3d016c7c547f69d6f81fb0db9449ce888b418b5b9952cc5e6e66843e9dd845",
                 "sha256:83e9a75d1911279afd89352c68b45348559d1fc0506b054b346651b5e7fee29f"
             ],
-            "markers": "python_version >= '3.6'",
+            "markers": "python_full_version >= '3.6.0'",
             "version": "==2.1.1"
         },
         "click": {
@@ -116,7 +116,7 @@
                 "sha256:5f50d5b2b3207fa72e7ec0ef08372ef652685470974a107d0d4999fc5a903a96",
                 "sha256:717ea765dd10b63618e7298b2d98efd819e0b30cd5905c9707223dceeb94b3f1"
             ],
-            "markers": "python_version >= '3.7' and python_version < '4'",
+            "markers": "python_version >= '3.7' and python_version < '4.0'",
             "version": "==0.3.4"
         },
         "plexapi": {
@@ -254,8 +254,11 @@
             "version": "==4.64.1"
         },
         "trakt": {
-            "file": "https://github.com/glensc/python-trakt/archive/refs/tags/3.4.1.zip",
-            "version": "==3.4.1"
+            "file": "https://github.com/glensc/python-trakt/archive/refs/tags/3.4.2.zip",
+            "hashes": [
+                "sha256:00e6566d0ef52bbad297f57b9758d64f552e98d7d8de627438b679f9c55c8fa0"
+            ],
+            "version": "==3.4.2"
         },
         "url-normalize": {
             "hashes": [
