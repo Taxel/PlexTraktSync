@@ -1,7 +1,8 @@
-from os import system
 from typing import Optional
 
 import click
+
+from plextraktsync.util.execp import execp
 
 
 def enable_self_update():
@@ -47,11 +48,11 @@ def self_update(pr: int):
             # Uninstall because pipx doesn't update otherwise:
             # - https://github.com/pypa/pipx/issues/902
             click.echo(f"Uninstalling previous plextraktsync@{pr}")
-            system(f"pipx uninstall plextraktsync@{pr}")
+            execp(f"pipx uninstall plextraktsync@{pr}")
 
         click.echo(f"Updating PlexTraktSync to the pull request #{pr} version using pipx")
-        system(f"pipx install --suffix=@{pr} --force git+https://github.com/Taxel/PlexTraktSync@refs/pull/{pr}/head")
+        execp(f"pipx install --suffix=@{pr} --force git+https://github.com/Taxel/PlexTraktSync@refs/pull/{pr}/head")
         return
 
     click.echo("Updating PlexTraktSync to the latest version using pipx")
-    system("pipx upgrade PlexTraktSync")
+    execp("pipx upgrade PlexTraktSync")
