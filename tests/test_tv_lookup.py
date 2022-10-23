@@ -10,7 +10,7 @@ def test_tv_lookup():
         make(cls="plexapi.video.Show", guid="imdb://tt10584350", type="show")
     )
     guid = m.guids[0]
-    tm = trakt.find_by_guid(guid)
+    tm: TVShow = trakt.find_by_guid(guid)
     lookup = trakt.lookup(tm)
     te = lookup[1][2].instance
 
