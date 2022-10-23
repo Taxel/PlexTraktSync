@@ -49,20 +49,6 @@ def allcollected():
     yield AllShowsProgress(data)
 
 
-@get
-def watched(show_id):
-    # returns a ShowProgress object containing the watched states of the passed show
-    data = yield "shows/{}/progress/watched?specials=true".format(show_id)
-    yield ShowProgress(**data)
-
-
-@get
-def collected(show_id):
-    # returns a ShowProgress object containing the collected states of the passed show
-    data = yield "shows/{}/progress/collection?specials=true".format(show_id)
-    yield ShowProgress(**data)
-
-
 class EpisodeProgress:
     def __init__(
         self,
