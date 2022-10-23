@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from time import time
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import trakt
 import trakt.movies
@@ -326,7 +326,7 @@ class TraktApi:
 
     @rate_limit()
     @retry()
-    def search_by_id(self, media_id: str, id_type: str, media_type: str) -> Optional[List[TVShow, Movie]]:
+    def search_by_id(self, media_id: str, id_type: str, media_type: str) -> Optional[Union[TVShow, Movie]]:
         if id_type == "tvdb" and media_type == "movie":
             # Skip invalid search.
             # The Trakt API states that tvdb is only for shows and episodes:
