@@ -512,7 +512,6 @@ class TraktLookup:
 
     @cached_property
     @nocache
-    @rate_limit()
     @retry()
     def table(self):
         """
