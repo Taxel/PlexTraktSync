@@ -551,6 +551,7 @@ class TraktLookup:
         return ep
 
     def from_id(self, provider, id):
+        # NB: the code assumes from_id is called only if from_number fails
         if self.same_order:
             logger.debug(f"{self.tm.title} episodes ordering is different in Plex and Trakt. Check your Plex media source, TMDB is recommended.")
             self.same_order = False
