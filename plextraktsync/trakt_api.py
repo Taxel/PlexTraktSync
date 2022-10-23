@@ -382,17 +382,14 @@ class TraktApi:
         """
         Find Trakt Episode from Guid of Plex Episode
         """
-        te = lookup.from_number(guid.pm.season_number, guid.pm.episode_number)
-        if not te or (str(te.ids.get(guid.provider)) != guid.id and not guid.pm.is_legacy_agent):
-            te = lookup.from_id(guid.provider, guid.id)
+        te = lookup.from_guid(guid)
         if te:
             return te
-        else:
-            # Retry using search for specific Plex Episode
-            logger.warning(f"Retry using search for specific Plex Episode {guid.guid}")
-            if not guid.is_episode:
-                return self.find_by_guid(guid)
-            return None
+
+        logger.warning(f"Retry using search for specific Plex Episode {guid.guid}")
+        if not guid.is_episode:
+            return self.find_by_guid(guid)
+        return None
 
     def flush(self):
         """
@@ -540,6 +537,16 @@ class TraktLookup:
                 table[str(te.ids.get(provider))] = te
         self.provider_table[provider] = table
         logger.debug(f"{self.tm.title}: lookup table build with '{provider}' ids")
+
+    def from_guid(self, guid: PlexGuid):
+        """
+        Find Trakt Episode from Guid of Plex Episode
+        """
+        te = self.from_number(guid.pm.season_number, guid.pm.episode_number)
+        if not te or (str(te.ids.get(guid.provider)) != guid.id and not guid.pm.is_legacy_agent):
+            te = self.from_id(guid.provider, guid.id)
+
+        return te
 
     def from_number(self, season, number):
         if not self.table:
