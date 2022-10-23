@@ -1,6 +1,6 @@
-from os import system
+from subprocess import call
 
 
 def execp(command: str):
     print(command)
-    system(command)
+    call(command, shell=True)
