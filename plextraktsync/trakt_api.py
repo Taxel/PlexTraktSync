@@ -524,6 +524,7 @@ class TraktLookup:
         Build a lookup-table accessible via table[provider][id]
         only if episodes ordering is different between Plex and Trakt
         """
+        # NB: side effect, assumes that from_number() is called first to populate self.table
         table = {}
         for season in self.table.keys():
             for te in self.table[season].values():
