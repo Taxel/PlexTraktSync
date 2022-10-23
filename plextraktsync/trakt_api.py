@@ -386,7 +386,7 @@ class TraktApi:
         if not te or (str(te.ids.get(guid.provider)) != guid.id and not guid.pm.is_legacy_agent):
             te = lookup.from_id(guid.provider, guid.id)
         if te:
-            return te.instance
+            return te
         else:
             # Retry using search for specific Plex Episode
             logger.warning(f"Retry using search for specific Plex Episode {guid.guid}")
@@ -513,11 +513,20 @@ class TraktLookup:
     @nocache
     @rate_limit()
     @retry()
-    def _lookup(self, tm: TVShow):
+    def _lookup(self, show: TVShow):
         """
         Build a lookup-table accessible via table[season][episode]
+
+        - https://github.com/moogar0880/PyTrakt/pull/185
         """
-        self.table = pytrakt_extensions.lookup_table(tm)
+
+        seasons = {}
+        for season in show.seasons:
+            episodes = {}
+            for episode in season.episodes:
+                episodes[episode.number] = episode
+            seasons[season.season] = episodes
+        return seasons
 
     def _reverse_lookup(self, provider):
         """
@@ -534,7 +543,7 @@ class TraktLookup:
 
     def from_number(self, season, number):
         if not self.table:
-            self._lookup(self.tm)
+            self.table = self._lookup(self.tm)
         try:
             ep = self.table[season][number]
         except KeyError:
