@@ -2,6 +2,7 @@
 from trakt.tv import TVShow
 
 from plextraktsync.plex_api import PlexLibraryItem
+from plextraktsync.trakt_api import TraktLookup
 from tests.conftest import factory, make
 
 trakt = factory.trakt_api()
@@ -13,10 +14,34 @@ def test_tv_lookup():
     )
     guid = m.guids[0]
     tm: TVShow = trakt.find_by_guid(guid)
-    lookup = trakt.lookup(tm)
-    te = lookup[1][2].instance
+    lookup = TraktLookup(tm)
+    te = lookup.from_number(1, 2)
 
     assert te.imdb == "tt12057922", f"Unexpected! {te}"
+
+
+def test_show_episodes_plex():
+    m = PlexLibraryItem(make(cls="plexapi.video.Show", guid="imdb://tt10584350", type="show"))
+    guid = m.guids[0]
+    show = trakt.find_by_guid(guid)
+
+    assert len(show.seasons) == 1
+    episode = show.seasons[0].episodes[1]
+    assert episode.title == "A Murderer's Beef – Part 2"
+    assert episode.imdb == "tt12057922", f"Unexpected! {episode}"
+
+
+def test_show_episodes():
+    show = TVShow("Game of Thrones")
+
+    assert len(show.seasons) == 9
+    seasons = show.seasons
+    episodes = seasons[1].episodes
+    assert episodes[0].title == "Winter Is Coming"
+
+    seasons = show.seasons
+    assert len(seasons) == 9
+    assert seasons[1].episodes[0].title == "Winter Is Coming"
 
 
 def test_tv_lookup_by_episode_id():
@@ -59,3 +84,7 @@ def test_find_episode():
     assert te.season == 1
     assert te.episode == 1
     assert te.imdb == "tt11909222"
+
+
+if __name__ == '__main__':
+    test_show_episodes()

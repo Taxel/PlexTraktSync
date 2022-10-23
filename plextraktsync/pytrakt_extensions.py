@@ -1,38 +1,4 @@
 from trakt.core import get
-from trakt.tv import TVEpisode
-
-
-@get
-def lookup_table(show):
-    # returns all seasons and episodes with one single call
-    data = yield "shows/{}/seasons?extended=episodes".format(show.trakt)
-    retVal = {}
-    for season in data:
-        eps = {}
-        if "episodes" in season.keys():
-            for episode in season["episodes"]:
-                eps[episode["number"]] = LazyEpisode(
-                    show, season["number"], episode["number"], episode["ids"]
-                )
-        retVal[season["number"]] = eps
-    yield retVal
-
-
-class LazyEpisode:
-    def __init__(self, show, season, number, ids):
-        self.show = show
-        self.season = season
-        self.number = number
-        self.ids = ids
-        self._instance = None
-
-    @property
-    def instance(self):
-        if self._instance is None:
-            self._instance = TVEpisode(
-                self.show.title, self.season, number=self.number, **self.ids
-            )
-        return self._instance
 
 
 @get
