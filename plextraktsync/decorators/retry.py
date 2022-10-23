@@ -1,7 +1,7 @@
 from functools import wraps
 from time import sleep
 
-from plexapi.exceptions import BadRequest
+from plexapi.exceptions import BadRequest, BadResponseException
 from requests import ReadTimeout, RequestException
 from trakt.errors import TraktInternalException
 
@@ -25,12 +25,17 @@ def retry(retries=5):
                     return fn(*args, **kwargs)
                 except (
                         BadRequest,
+                        BadResponseException,
                         ReadTimeout,
                         RequestException,
                         TraktInternalException,
                 ) as e:
                     if count == retries:
                         logger.error(f"Error: {e}")
+
+                        if isinstance(e, BadResponseException):
+                            logger.error(f"Details: {e.details}")
+
                         logger.error(
                             "API didn't respond properly, script will abort now. Please try again later."
                         )
