@@ -1,11 +1,12 @@
 from functools import wraps
 from time import sleep
 
-from plexapi.exceptions import BadRequest, BadResponseException
+from plexapi.exceptions import BadRequest
 from requests import ReadTimeout, RequestException
 from trakt.errors import TraktInternalException
 
 from plextraktsync.factory import logger
+from pytrakt.trakt.errors import BadResponseException
 
 
 def retry(retries=5):
