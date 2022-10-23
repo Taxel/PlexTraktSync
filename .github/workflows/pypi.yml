@@ -34,7 +34,7 @@ jobs:
           subver=${{ github.run_number }}
           APP_VERSION=$version.post$subver
         fi
-        echo ::set-output name=version::$APP_VERSION
+        echo "version=$APP_VERSION" >> $GITHUB_OUTPUT
 
     - name: Set up Python
       uses: actions/setup-python@v4
