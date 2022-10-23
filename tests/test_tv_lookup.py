@@ -1,4 +1,6 @@
 #!/usr/bin/env python3 -m pytest
+from trakt.tv import TVShow
+
 from plextraktsync.plex_api import PlexLibraryItem
 from tests.conftest import factory, make
 
