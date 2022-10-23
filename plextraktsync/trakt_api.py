@@ -506,15 +506,15 @@ class TraktLookup:
     Trakt lookup table to find all Trakt episodes of a TVShow
     """
     def __init__(self, tm: TVShow):
-        self.table = {}
         self.provider_table = {}
         self.tm = tm
         self.same_order = True
 
+    @cached_property
     @nocache
     @rate_limit()
     @retry()
-    def _lookup(self, show: TVShow):
+    def table(self):
         """
         Build a lookup-table accessible via table[season][episode]
 
@@ -522,7 +522,7 @@ class TraktLookup:
         """
 
         seasons = {}
-        for season in show.seasons:
+        for season in self.tm.seasons:
             episodes = {}
             for episode in season.episodes:
                 episodes[episode.number] = episode
@@ -553,8 +553,6 @@ class TraktLookup:
         return te
 
     def from_number(self, season, number):
-        if not self.table:
-            self.table = self._lookup(self.tm)
         try:
             ep = self.table[season][number]
         except KeyError:
