@@ -20,9 +20,9 @@ requests = ">=2.25.1"
 requests-cache = "==0.9.6"
 rich = "==12.6.0"
 tqdm = "==4.64.1"
-trakt = "==3.4.0"
 urllib3 = ">=1.26.6"
 websocket-client = "==1.4.1"
+trakt = {file = "https://github.com/glensc/python-trakt/archive/refs/tags/3.4.0.zip"}
 
 [requires]
 python_version = "3"
