@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List, Optional
 
 from plexapi.exceptions import PlexApiException
@@ -15,16 +17,20 @@ class Media:
     Class containing Plex and Trakt media items (Movie, Episode)
     """
 
-    show: Optional["Media"]
-
     def __init__(
-        self, plex, trakt, plex_api: PlexApi = None, trakt_api: TraktApi = None
+            self,
+            plex,
+            trakt,
+            plex_api: PlexApi = None,
+            trakt_api: TraktApi = None,
+            mf: MediaFactory = None,
     ):
         self.plex_api = plex_api
         self.trakt_api = trakt_api
+        self.mf = mf
         self.plex = plex
         self.trakt = trakt
-        self.show = None
+        self._show = None
 
     @cached_property
     def media_type(self):
@@ -49,6 +55,19 @@ class Media:
     @property
     def trakt_url(self):
         return f"https://trakt.tv/{self.media_type}/{self.trakt_id}"
+
+    @property
+    def show(self) -> Optional[Media]:
+        if self._show is None and self.mf:
+            ps = self.plex_api.fetch_item(self.plex.item.grandparentRatingKey)
+            ms = self.mf.resolve_any(ps)
+            self._show = ms
+
+        return self._show
+
+    @show.setter
+    def show(self, show):
+        self._show = show
 
     @property
     def show_trakt_id(self):
@@ -174,7 +193,7 @@ class MediaFactory:
         self.plex = plex
         self.trakt = trakt
 
-    def resolve_any(self, pm: PlexLibraryItem, show: Media = None):
+    def resolve_any(self, pm: PlexLibraryItem, show: Media = None) -> Optional[Media]:
         try:
             guids = pm.guids
         except (PlexApiException, RequestException) as e:
@@ -213,15 +232,18 @@ class MediaFactory:
             logger.warning(f"{guid.pm.item}: Skipping guid {guid} not found on Trakt")
             return None
 
-        return Media(guid.pm, tm, plex_api=self.plex, trakt_api=self.trakt)
+        return self.make_media(guid.pm, tm)
 
     def resolve_trakt(self, tm: TraktItem) -> Media:
         """Find Plex media from Trakt id using Plex Search and Discover"""
         result = self.plex.search_online(tm.item.title, tm.item.media_type[:-1])
         pm = self._guid_match(result, tm)
-        return Media(pm, tm.item, plex_api=self.plex, trakt_api=self.trakt)
+        return self.make_media(pm, tm.item)
 
-    def _guid_match(self, candidates: List[PlexLibraryItem], tm: TraktItem) -> PlexLibraryItem:
+    def make_media(self, plex, trakt):
+        return Media(plex, trakt, plex_api=self.plex, trakt_api=self.trakt, mf=self)
+
+    def _guid_match(self, candidates: List[PlexLibraryItem], tm: TraktItem) -> Optional[PlexLibraryItem]:
         if candidates:
             for pm in candidates:
                 for guid in pm.guids:

@@ -2,6 +2,8 @@ from urllib.parse import quote_plus
 
 from plextraktsync.console import print
 from plextraktsync.factory import factory
+from plextraktsync.media import Media
+from plextraktsync.plex_api import PlexLibraryItem
 from plextraktsync.version import version
 
 
@@ -29,7 +31,7 @@ def inspect_media(id):
     mf = factory.media_factory()
 
     print("")
-    pm = plex.fetch_item(id)
+    pm: PlexLibraryItem = plex.fetch_item(id)
     if not pm:
         print(f"Inspecting {id}: Not found")
         return
@@ -43,7 +45,8 @@ def inspect_media(id):
     print(f"Title: {media.title}")
     if media.type == 'movie' and media.editionTitle:
         print(f"Edition Title: {media.editionTitle}")
-    print(f"Media.Duration: {pm.duration}")
+    if pm.has_media:
+        print(f"Media.Duration: {pm.duration}")
     print(f"Media.Type: '{media.type}'")
     print(f"Media.Guid: '{media.guid}'")
     if not pm.is_legacy_agent:
@@ -70,26 +73,21 @@ def inspect_media(id):
 
     print(f"Metadata: {pm.to_json()}")
 
-    m = mf.resolve_any(pm)
+    m: Media = mf.resolve_any(pm)
     if not m:
         return
-
-    # fetch show property for watched_on_trakt
-    if m.is_episode:
-        ps = plex.fetch_item(m.plex.item.grandparentRatingKey)
-        ms = mf.resolve_any(ps)
-        m.show = ms
 
     print(f"Trakt: {m.trakt_url}")
     print(f"Plex Rating: {m.plex_rating}")
     print(f"Trakt Rating: {m.trakt_rating}")
     print(f"Watched on Plex: {m.watched_on_plex}")
-    print(f"Watched on Trakt: {m.watched_on_trakt}")
+    if pm.has_media:
+        print(f"Watched on Trakt: {m.watched_on_trakt}")
 
     print("Plex play history:")
     for h in m.plex_history(device=True, account=True):
         print(
-            f"- {h.viewedAt} by {h.account.name} on {h.device.name} with {h.device.platform}"
+            f"- {h.viewedAt} {h}: by {h.account.name} on {h.device.name} with {h.device.platform}"
         )
 
 
