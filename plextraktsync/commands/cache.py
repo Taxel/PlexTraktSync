@@ -68,6 +68,11 @@ def inspect_url(session: CachedSession, url: str):
             print(m.content)
 
 
+def cache_status(cache):
+    # https://github.com/requests-cache/requests-cache/commit/35b48cf3486e546a5e4090e8e410b698e8a6b7be#r87356998
+    return f'Total rows: {len(cache.responses)} responses, {len(cache.redirects)} redirects'
+
+
 def cache(sort: str, limit: int, reverse: bool, url: str):
     session = factory.session()
 
@@ -75,7 +80,7 @@ def cache(sort: str, limit: int, reverse: bool, url: str):
         inspect_url(session, url)
         return
 
-    click.echo(f"Cache status:\n{session.cache}\n")
+    click.echo(f"Cache status:\n{cache_status(session.cache)}\n")
 
     click.echo("URLs:")
     sorted = get_sorted_cache(session, sort, reverse)
