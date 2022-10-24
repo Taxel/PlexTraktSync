@@ -95,11 +95,7 @@ def test_tv_lookup_by_episode_id():
 
 
 def test_find_episode():
-    tm = make(
-        cls="TVShow",
-        # trakt=4965066,
-        trakt=176447,
-    )
+    show = TVShow("Frank of Ireland")
 
     pe = PlexLibraryItem(
         make(
@@ -112,7 +108,7 @@ def test_find_episode():
     )
 
     guid = pe.guids[0]
-    lookup = trakt.lookup(tm)
+    lookup = TraktLookup(show)
     te = trakt.find_episode_guid(guid, lookup)
     assert te.season == 1
     assert te.episode == 1
