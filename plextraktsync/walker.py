@@ -314,7 +314,7 @@ class Walker(SetWindowTitle):
             show = self.mf.resolve_guid(guid)
             if not show:
                 continue
-            me = self.mf.resolve_any(PlexLibraryItem(pe), show)
+            me = self.mf.resolve_any(PlexLibraryItem(pe, plex=self.plex), show)
             if not me:
                 continue
 
