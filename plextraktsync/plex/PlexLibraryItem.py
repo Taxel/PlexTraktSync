@@ -13,15 +13,23 @@ from rich.markup import escape
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
+    from plexapi.video import Episode, Movie, Show
 
     from plextraktsync.plex.PlexApi import PlexApi
-    from plextraktsync.plex.types import PlexMedia
 
 
 class PlexLibraryItem:
-    def __init__(self, item: PlexMedia, plex: PlexApi = None):
+    def __init__(self,
+                 item: Movie | Show | Episode,
+                 show: Show | None = None,
+                 plex: PlexApi = None,
+                 ):
         self.item = item
         self.plex = plex
+        if show and self.is_episode:
+            self._show = show
+        else:
+            self._show = None
 
     @property
     def is_legacy_agent(self):
@@ -30,6 +38,16 @@ class PlexLibraryItem:
     @cached_property
     def is_episode(self):
         return self.type == "episode"
+
+    @property
+    def show(self):
+        return self._show
+
+    @show.setter
+    def show(self, show: Show):
+        if not self.is_episode:
+            raise RuntimeError("show property can only be set to episodes")
+        self._show = show
 
     @cached_property
     def is_discover(self):
