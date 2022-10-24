@@ -93,7 +93,7 @@ class PlexGuid:
 
 class PlexRatingCollection(dict):
     def __init__(self, plex: PlexApi):
-        super(dict, self).__init__()
+        super().__init__()
         self.plex = plex
 
     def __missing__(self, section_id: int):

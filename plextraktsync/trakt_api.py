@@ -74,7 +74,7 @@ class ScrobblerProxy:
 
 class TraktRatingCollection(dict):
     def __init__(self, trakt: TraktApi):
-        super(dict, self).__init__()
+        super().__init__()
         self.trakt = trakt
 
     def __missing__(self, media_type: str):
