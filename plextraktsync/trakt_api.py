@@ -38,19 +38,19 @@ class ScrobblerProxy:
 
     def update(self, progress: float):
         self.logger.debug(f"update({self.scrobbler.media}): {progress}")
-        return self._post("start", progress)
+        return self.scrobbler.update(progress)
 
     def pause(self, progress: float):
         self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
-        return self._post("pause", progress)
+        return self.scrobbler.pause(progress)
 
     def stop(self, progress: float):
         if progress >= self.threshold:
             self.logger.debug(f"stop({self.scrobbler.media}): {progress}")
-            return self._post("stop", progress)
+            return self.scrobbler.stop(progress)
         else:
             self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
-            return self._post("pause", progress)
+            return self.scrobbler.pause(progress)
 
     # Copied method, until upstream is merged
     # https://github.com/moogar0880/PyTrakt/pull/196
