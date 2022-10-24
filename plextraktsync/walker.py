@@ -5,9 +5,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING, NamedTuple
 
 from plextraktsync.decorators.measure_time import measure_time
-# <<<<<<< HEAD
 from plextraktsync.mixin.SetWindowTitle import SetWindowTitle
-from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from plextraktsync.trakt.TraktApi import TraktApi
 from plextraktsync.trakt.TraktItem import TraktItem
@@ -20,11 +18,6 @@ if TYPE_CHECKING:
     from plextraktsync.media import Media, MediaFactory
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
-# =======
-# from plextraktsync.media import Media, MediaFactory
-# from plextraktsync.plex_api import PlexApi, PlexLibraryItem, PlexLibrarySection
-# from plextraktsync.trakt_api import TraktApi, TraktItem
-# >>>>>>> f10d7a3e (Pass show property when creating PlexLibraryItem)
 
 
 class WalkConfig:
