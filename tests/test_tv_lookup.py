@@ -1,7 +1,7 @@
 #!/usr/bin/env python3 -m pytest
 from trakt.tv import TVShow
 
-from plextraktsync.plex_api import PlexLibraryItem
+from plextraktsync.plex_api import PlexGuid, PlexLibraryItem
 from plextraktsync.trakt_api import TraktLookup
 from tests.conftest import factory, make
 
@@ -42,6 +42,39 @@ def test_show_episodes():
     seasons = show.seasons
     assert len(seasons) == 9
     assert seasons[1].episodes[0].title == "Winter Is Coming"
+
+
+def test_show_episodes_attack_on_titan_new_agent():
+    show = TVShow("Attack on Titan")
+
+    assert len(show.seasons) > 0
+    seasons = show.seasons
+    episodes = seasons[1].episodes
+    assert episodes[0].title == "To You, in 2000 Years: The Fall of Shiganshina (1)"
+
+    guid = PlexGuid(
+        "imdb://tt2825724",
+        "episode",
+    )
+    pe = PlexLibraryItem(
+        make(
+            cls="Episode",
+            guid="plex://foo",
+            guids=[
+                guid,
+            ],
+            type="episode",
+            seasonNumber=1,
+            index=1,
+        )
+    )
+
+    lookup = TraktLookup(show)
+    guid = pe.guids[0]
+    te = trakt.find_episode_guid(guid, lookup)
+    assert te.season == 1
+    assert te.episode == 1
+    assert te.imdb == "tt2825724"
 
 
 def test_tv_lookup_by_episode_id():
