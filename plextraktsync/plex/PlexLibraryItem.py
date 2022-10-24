@@ -28,6 +28,10 @@ class PlexLibraryItem:
         return not self.item.guid.startswith("plex://")
 
     @cached_property
+    def is_episode(self):
+        return self.type == "episode"
+
+    @cached_property
     def is_discover(self):
         # Use __dict__ access to prevent reloads:
         # https://github.com/pkkid/python-plexapi/pull/1093
