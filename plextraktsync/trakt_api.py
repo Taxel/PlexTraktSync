@@ -563,7 +563,7 @@ class TraktLookup:
         if guid.pm.is_legacy_agent:
             # check can not be performed
             return False
-        id_from_trakt = episode.ids.get(guid.provider)
+        id_from_trakt = getattr(episode, guid.provider, None)
         if str(id_from_trakt) != guid.id:
             return True
         return False
