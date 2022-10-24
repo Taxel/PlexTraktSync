@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "24b4bb6781e36bfd57112a2bda9f7b423a3aa9754e2cbba05f61792f675235fc"
+            "sha256": "136c446ab64e11d1461bdff31a763962718375c45db5ce33480acf5581c9cf98"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -53,7 +53,7 @@
                 "sha256:5a3d016c7c547f69d6f81fb0db9449ce888b418b5b9952cc5e6e66843e9dd845",
                 "sha256:83e9a75d1911279afd89352c68b45348559d1fc0506b054b346651b5e7fee29f"
             ],
-            "markers": "python_full_version >= '3.6.0'",
+            "markers": "python_version >= '3.6'",
             "version": "==2.1.1"
         },
         "click": {
@@ -116,7 +116,7 @@
                 "sha256:5f50d5b2b3207fa72e7ec0ef08372ef652685470974a107d0d4999fc5a903a96",
                 "sha256:717ea765dd10b63618e7298b2d98efd819e0b30cd5905c9707223dceeb94b3f1"
             ],
-            "markers": "python_version >= '3.7' and python_version < '4.0'",
+            "markers": "python_version >= '3.7' and python_version < '4'",
             "version": "==0.3.4"
         },
         "plexapi": {
@@ -161,11 +161,11 @@
         },
         "pytrakt": {
             "hashes": [
-                "sha256:3c05d0d58f5da8558eaf938ee32260706d1c2a42a1092ae9bf5edca6deb916ea",
-                "sha256:7dddc2f6f9ac2737792e5a1d3624881d64b106b805480ce3f39d73fa77afa99c"
+                "sha256:82f16ec4aa0c4bd203ca2164f5b223bad48d2ec86b44114cde2c21c1ffd66f19",
+                "sha256:a9ea4f4259ac027098ebd3c3c54f992551166c3b8be7153fd015bdd03573fb9c"
             ],
             "index": "pypi",
-            "version": "==3.4.7"
+            "version": "==3.4.8"
         },
         "pyyaml": {
             "hashes": [
