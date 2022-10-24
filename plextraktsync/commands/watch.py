@@ -16,7 +16,7 @@ from plextraktsync.trakt_api import TraktApi
 
 class ScrobblerCollection(dict):
     def __init__(self, trakt: TraktApi, threshold=80):
-        super(dict, self).__init__()
+        super().__init__()
         self.trakt = trakt
         self.threshold = threshold
 
@@ -27,7 +27,7 @@ class ScrobblerCollection(dict):
 
 class SessionCollection(dict):
     def __init__(self, plex: PlexApi):
-        super(dict, self).__init__()
+        super().__init__()
         self.plex = plex
 
     def __missing__(self, key: str):
