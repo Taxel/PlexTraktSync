@@ -302,7 +302,7 @@ class PlexLibraryItem:
 
     def episodes(self):
         for ep in self._get_episodes():
-            yield PlexLibraryItem(ep, plex=self.plex)
+            yield PlexLibraryItem(ep, show=self.item, plex=self.plex)
 
     @retry()
     def _get_episodes(self):
