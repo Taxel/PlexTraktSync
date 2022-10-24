@@ -546,10 +546,27 @@ class TraktLookup:
         Find Trakt Episode from Guid of Plex Episode
         """
         te = self.from_number(guid.pm.season_number, guid.pm.episode_number)
-        if not te or (str(te.ids.get(guid.provider)) != guid.id and not guid.pm.is_legacy_agent):
+        if self.invalid_match(guid, te):
             te = self.from_id(guid.provider, guid.id)
 
         return te
+
+    @staticmethod
+    def invalid_match(guid: PlexGuid, episode: Optional[TVEpisode]) -> bool:
+        """
+        Checks if guid and episode don't match by comparing trakt provided id
+        """
+
+        if not episode:
+            # nothing to compare with
+            return True
+        if guid.pm.is_legacy_agent:
+            # check can not be performed
+            return False
+        id_from_trakt = episode.ids.get(guid.provider)
+        if str(id_from_trakt) != guid.id:
+            return True
+        return False
 
     def from_number(self, season, number):
         try:
