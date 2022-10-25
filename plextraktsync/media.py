@@ -23,14 +23,11 @@ class Media:
             trakt,
             plex_api: PlexApi = None,
             trakt_api: TraktApi = None,
-            mf: MediaFactory = None,
     ):
         self.plex_api = plex_api
         self.trakt_api = trakt_api
-        self.mf = mf
         self.plex = plex
         self.trakt = trakt
-        self._show = None
 
     @cached_property
     def media_type(self):
@@ -57,23 +54,8 @@ class Media:
         return f"https://trakt.tv/{self.media_type}/{self.trakt_id}"
 
     @property
-    def show(self) -> Optional[Media]:
-        if self._show is None and self.mf:
-            ps = self.plex_api.fetch_item(self.plex.item.grandparentRatingKey)
-            ms = self.mf.resolve_any(ps)
-            self._show = ms
-
-        return self._show
-
-    @show.setter
-    def show(self, show):
-        self._show = show
-
-    @property
     def show_trakt_id(self):
-        if not self.show:
-            raise RuntimeError("Unexpected call: episode without show property")
-        return self.show.trakt_id
+        return getattr(self.trakt, "show_id", None)
 
     @cached_property
     def is_movie(self):
@@ -241,7 +223,7 @@ class MediaFactory:
         return self.make_media(pm, tm.item)
 
     def make_media(self, plex, trakt):
-        return Media(plex, trakt, plex_api=self.plex, trakt_api=self.trakt, mf=self)
+        return Media(plex, trakt, plex_api=self.plex, trakt_api=self.trakt)
 
     def _guid_match(self, candidates: List[PlexLibraryItem], tm: TraktItem) -> Optional[PlexLibraryItem]:
         if candidates:
