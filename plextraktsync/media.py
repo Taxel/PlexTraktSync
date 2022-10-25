@@ -145,6 +145,12 @@ class Media:
 
         return self.show_reset_at and self.plex.seen_date.replace(tzinfo=None) < self.show_reset_at
 
+    def reset_show(self):
+        """
+        Mark unwatched all Plex episodes played before the show reset date.
+        """
+        self.plex_api.reset_show(show=self.plex.item.show(), reset_date=self.show_reset_at)
+
     def mark_watched_trakt(self, dry_run):
         if self.is_movie:
             if not dry_run:
