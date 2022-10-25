@@ -8,8 +8,6 @@ from click.exceptions import ClickException, Exit
 
 from plextraktsync.factory import factory
 
-CONFIG = factory.config
-
 
 def command():
     """
@@ -120,11 +118,18 @@ def login():
     pass
 
 
+def env_plex_username():
+    from plextraktsync.factory import factory
+    config = factory.config()
+
+    return environ.get("PLEX_USERNAME", config["PLEX_USERNAME"])
+
+
 @command()
 @click.option(
     "--username",
     help="Plex login",
-    default=lambda: environ.get("PLEX_USERNAME", CONFIG["PLEX_USERNAME"]),
+    default=env_plex_username,
 )
 @click.option(
     "--password",
