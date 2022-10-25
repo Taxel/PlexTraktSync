@@ -151,22 +151,11 @@ class Media:
         """
         self.plex_api.reset_show(show=self.plex.item.show(), reset_date=self.show_reset_at)
 
-    def mark_watched_trakt(self, dry_run):
+    def mark_watched_trakt(self):
         if self.is_movie:
-            if not dry_run:
-                logger.info(f"Marking as watched in Trakt: {self}")
-                self.trakt_api.mark_watched(self.trakt, self.plex.seen_date)
+            self.trakt_api.mark_watched(self.trakt, self.plex.seen_date)
         elif self.is_episode:
-            if self.watched_before_reset:
-                if not dry_run:
-                    logger.info(f"Show {self.plex.item.show().title} has been reset in trakt at {self.show_reset_at}.")
-                    logger.info(f"Marking {self.plex.item.show().title} as unwatched in Plex.")
-                    self.reset_show()
-            elif not dry_run:
-                logger.info(f"Marking as watched in Trakt: {self}")
-                self.trakt_api.mark_watched(
-                    self.trakt, self.plex.seen_date, self.show_trakt_id
-                )
+            self.trakt_api.mark_watched(self.trakt, self.plex.seen_date, self.show_trakt_id)
         else:
             raise RuntimeError(
                 f"mark_watched_trakt: Unsupported media type: {self.media_type}"
