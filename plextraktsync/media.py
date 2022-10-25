@@ -57,7 +57,7 @@ class Media:
     def show_trakt_id(self):
         return getattr(self.trakt, "show_id", None)
 
-    @property
+    @cached_property
     def show_reset_at(self):
         watched = self.trakt_api.watched_shows
         return watched.reset_at(self.show_trakt_id)
