@@ -11,6 +11,7 @@ class RunConfig:
     dry_run: bool = False
     batch_delay: int = 5
     progressbar: bool = True
+    cache: bool = True
     server: Optional[str] = None
 
     def update(self, **kwargs):
