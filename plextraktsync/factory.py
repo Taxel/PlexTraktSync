@@ -46,8 +46,12 @@ class Factory:
 
     @memoize
     def session(self):
-        from requests_cache import CachedSession
+        no_cache = self.run_config().no_cache
+        if no_cache:
+            import requests
+            return requests.Session()
 
+        from requests_cache import CachedSession
         config = self.config()
         session = CachedSession(config.cache_path)
 
