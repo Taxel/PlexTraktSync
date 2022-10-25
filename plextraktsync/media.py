@@ -135,6 +135,16 @@ class Media:
             self.show_trakt_id, self.season_number, self.episode_number
         )
 
+    @property
+    def watched_before_reset(self):
+        """
+        Return True if episode was watched before show reset (if there is a reset).
+        """
+        if not self.is_episode:
+            raise RuntimeError("watched_before_reset is valid for episodes only")
+
+        return self.show_reset_at and self.plex.seen_date.replace(tzinfo=None) < self.show_reset_at
+
     def mark_watched_trakt(self, dry_run):
         if self.is_movie:
             if not dry_run:
