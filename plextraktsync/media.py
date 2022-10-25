@@ -161,7 +161,7 @@ class Media:
                 if not dry_run:
                     logger.info(f"Show {self.plex.item.show().title} has been reset in trakt at {self.show_reset_at}.")
                     logger.info(f"Marking {self.plex.item.show().title} as unwatched in Plex.")
-                    self.plex_api.reset_show(show=self.plex.item.show(), reset_date=self.show_reset_at)
+                    self.reset_show()
             elif not dry_run:
                 logger.info(f"Marking as watched in Trakt: {self}")
                 self.trakt_api.mark_watched(
