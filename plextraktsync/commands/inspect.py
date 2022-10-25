@@ -91,8 +91,12 @@ def inspect_media(id):
         )
 
 
-def inspect(input, watched_shows: bool):
+def inspect(input, no_cache: bool, watched_shows: bool):
     print(f"PlexTraktSync [{version()}]")
+
+    factory.run_config().update(
+        no_cache=no_cache,
+    )
 
     if watched_shows:
         print_watched_shows()

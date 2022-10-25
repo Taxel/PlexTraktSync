@@ -103,6 +103,14 @@ def info():
     is_flag=True,
     help="Print Trakt watched_shows and exit",
 )
+@click.option(
+    "--no-cache",
+    "no_cache",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Disable request-cache",
+)
 def inspect():
     """
     Inspect details of an object
