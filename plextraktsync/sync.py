@@ -157,9 +157,7 @@ class Sync:
         if m.watched_on_plex:
             if not self.config.plex_to_trakt["watched_status"]:
                 return
-            logger.info(f"Marking as watched in Trakt: {m}")
-            if not dry_run:
-                m.mark_watched_trakt()
+            m.mark_watched_trakt(dry_run)
         elif m.watched_on_trakt:
             if not self.config.trakt_to_plex["watched_status"]:
                 return
