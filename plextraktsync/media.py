@@ -57,7 +57,7 @@ class Media:
     def show_trakt_id(self):
         return getattr(self.trakt, "show_id", None)
 
-    @property
+    @cached_property
     def show_reset_at(self):
         watched = self.trakt_api.watched_shows
         return watched.reset_at(self.show_trakt_id)
@@ -135,22 +135,27 @@ class Media:
             self.show_trakt_id, self.season_number, self.episode_number
         )
 
-    def mark_watched_trakt(self, dry_run):
+    @property
+    def watched_before_reset(self):
+        """
+        Return True if episode was watched before show reset (if there is a reset).
+        """
+        if not self.is_episode:
+            raise RuntimeError("watched_before_reset is valid for episodes only")
+
+        return self.show_reset_at and self.plex.seen_date.replace(tzinfo=None) < self.show_reset_at
+
+    def reset_show(self):
+        """
+        Mark unwatched all Plex episodes played before the show reset date.
+        """
+        self.plex_api.reset_show(show=self.plex.item.show(), reset_date=self.show_reset_at)
+
+    def mark_watched_trakt(self):
         if self.is_movie:
-            if not dry_run:
-                logger.info(f"Marking as watched in Trakt: {self}")
-                self.trakt_api.mark_watched(self.trakt, self.plex.seen_date)
+            self.trakt_api.mark_watched(self.trakt, self.plex.seen_date)
         elif self.is_episode:
-            if self.show_reset_at and self.plex.seen_date.replace(tzinfo=None) < self.show_reset_at:
-                if not dry_run:
-                    logger.info(f"Show {self.plex.item.show().title} has been reset in trakt at {self.show_reset_at}.")
-                    logger.info(f"Marking {self.plex.item.show().title} as unwatched in Plex.")
-                    self.plex_api.reset_show(show=self.plex.item.show(), reset_date=self.show_reset_at)
-            elif not dry_run:
-                logger.info(f"Marking as watched in Trakt: {self}")
-                self.trakt_api.mark_watched(
-                    self.trakt, self.plex.seen_date, self.show_trakt_id
-                )
+            self.trakt_api.mark_watched(self.trakt, self.plex.seen_date, self.show_trakt_id)
         else:
             raise RuntimeError(
                 f"mark_watched_trakt: Unsupported media type: {self.media_type}"

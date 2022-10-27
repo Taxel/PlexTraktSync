@@ -157,7 +157,17 @@ class Sync:
         if m.watched_on_plex:
             if not self.config.plex_to_trakt["watched_status"]:
                 return
-            m.mark_watched_trakt(dry_run)
+
+            if m.is_episode and m.watched_before_reset:
+                show = m.plex.item.show()
+                logger.info(f"Show {show.title} has been reset in trakt at {m.show_reset_at}.")
+                logger.info(f"Marking {show.title} as unwatched in Plex.")
+                if not dry_run:
+                    m.reset_show()
+            else:
+                logger.info(f"Marking as watched in Trakt: {m}")
+                if not dry_run:
+                    m.mark_watched_trakt()
         elif m.watched_on_trakt:
             if not self.config.trakt_to_plex["watched_status"]:
                 return
