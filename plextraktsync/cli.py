@@ -249,7 +249,7 @@ def subdl():
     "--pr",
     type=int,
     default=False,
-    help="Update to Pull Request Id",
+    help="Install plextraktsync for specific Pull Request",
 )
 def self_update():
     """
