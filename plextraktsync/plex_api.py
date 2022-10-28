@@ -720,7 +720,8 @@ class PlexApi:
     def reset_show(self, show, reset_date):
         reset_count = 0
         for ep in show.watched():
-            if ep.lastViewedAt < reset_date:
+            ep_seen_date = PlexLibraryItem(ep).seen_date.replace(tzinfo=None)
+            if ep_seen_date < reset_date:
                 self.mark_unwatched(ep)
                 reset_count += 1
             else:
