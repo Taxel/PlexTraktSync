@@ -23,11 +23,14 @@ class Media:
             trakt,
             plex_api: PlexApi = None,
             trakt_api: TraktApi = None,
+            mf: MediaFactory = None,
     ):
         self.plex_api = plex_api
         self.trakt_api = trakt_api
+        self.mf = mf
         self.plex = plex
         self.trakt = trakt
+        self._show = None
 
     @cached_property
     def media_type(self):
@@ -54,8 +57,24 @@ class Media:
         return f"https://trakt.tv/{self.media_type}/{self.trakt_id}"
 
     @property
+    def show(self) -> Optional[Media]:
+        if self._show is None and self.mf:
+            ps = self.plex_api.fetch_item(self.plex.item.grandparentRatingKey)
+            ms = self.mf.resolve_any(ps)
+            self._show = ms
+
+        return self._show
+
+    @show.setter
+    def show(self, show):
+        self._show = show
+
+    @property
     def show_trakt_id(self):
-        return getattr(self.trakt, "show_id", None)
+        show_id = getattr(self.trakt, "show_id", None)
+        if show_id:
+            return show_id
+        return self.show.trakt_id
 
     @cached_property
     def show_reset_at(self):
@@ -242,7 +261,7 @@ class MediaFactory:
         return self.make_media(pm, tm.item)
 
     def make_media(self, plex, trakt):
-        return Media(plex, trakt, plex_api=self.plex, trakt_api=self.trakt)
+        return Media(plex, trakt, plex_api=self.plex, trakt_api=self.trakt, mf=self)
 
     def _guid_match(self, candidates: List[PlexLibraryItem], tm: TraktItem) -> Optional[PlexLibraryItem]:
         if candidates:
