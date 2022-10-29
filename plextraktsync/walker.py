@@ -284,6 +284,7 @@ class Walker:
             if not me:
                 continue
 
+            me.show = show
             yield me
 
     def media_from_sections(self, sections: List[PlexLibrarySection]):
@@ -308,6 +309,7 @@ class Walker:
             if not me:
                 continue
 
+            me.show = show
             yield me
 
     def progressbar(self, iterable, **kwargs):

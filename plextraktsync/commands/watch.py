@@ -133,6 +133,12 @@ class WatchStateUpdater:
         if not m:
             return None
 
+        # setup show property for trakt watched status
+        if m.is_episode:
+            ps = self.plex.fetch_item(m.plex.item.grandparentRatingKey)
+            ms = self.mf.resolve_any(ps)
+            m.show = ms
+
         return m
 
     def on_error(self, error: Error):
