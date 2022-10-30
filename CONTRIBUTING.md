@@ -180,13 +180,6 @@ pipenv run plextraktsync
 
 [pipenv]: https://pipenv.pypa.io/
 
-## Updating trakt dependency
-
-1. Update version in `trakt/__init__py`, commit, push it
-1. Add git tag, push it
-1. Run `pipenv install "trakt@https://github.com/glensc/python-trakt/archive/refs/tags/3.4.1.zip#egg=trakt"`
-1. Update trakt version manually in `requirements.txt`, `pipenv lock --requirements` loses the `trakt@` prefix
-
 ## Testing
 
 We use [pytest] for testing.
