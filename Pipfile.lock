@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ccf79ef19a32cf801d80f49a58b28eee5af6439eede9c074ea476615a36f3da9"
+            "sha256": "9a063a05b5e63755e9da95b092cbdbcb4cd7e7a0230f03a6a7a5b28f4c2f59f8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -81,11 +81,11 @@
         },
         "exceptiongroup": {
             "hashes": [
-                "sha256:2e3c3fc1538a094aab74fad52d6c33fc94de3dfee3ee01f187c0e0c72aec5337",
-                "sha256:9086a4a21ef9b31c72181c77c040a074ba0889ee56a7b289ff0afb0d97655f96"
+                "sha256:2ac84b496be68464a2da60da518af3785fff8b7ec0d090a581604bc870bdee41",
+                "sha256:affbabf13fb6e98988c38d9c5650e701569fe3c1de3233cfb61c5f33774690ad"
             ],
             "markers": "python_version < '3.11'",
-            "version": "==1.0.0rc9"
+            "version": "==1.0.0"
         },
         "idna": {
             "hashes": [
@@ -161,11 +161,11 @@
         },
         "pytrakt": {
             "hashes": [
-                "sha256:3887f3360b7f4c1aceb61ffb2ff55c6a189ea1da5a588cd75e637f94d656b2d4",
-                "sha256:c932750344203ad0e9221d4d6cc2e09e0cba2f3db2a96ec888dde9011645217d"
+                "sha256:880ca45ac98497ca3ed9d0fe61c55b773d21ca2ef0b8ba09d8eeeeb32b923f7a",
+                "sha256:f8bd8972ebc08c88522b4e3ed31d1a351b9f7bd59425a244b81adced60c8815a"
             ],
             "index": "pypi",
-            "version": "==3.4.9"
+            "version": "==3.4.10"
         },
         "pyyaml": {
             "hashes": [

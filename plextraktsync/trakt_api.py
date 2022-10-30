@@ -7,7 +7,6 @@ import trakt
 import trakt.movies
 import trakt.sync
 import trakt.users
-from trakt import post
 from trakt.errors import ForbiddenException, OAuthException
 from trakt.movies import Movie
 from trakt.sync import Scrobbler
@@ -38,38 +37,19 @@ class ScrobblerProxy:
 
     def update(self, progress: float):
         self.logger.debug(f"update({self.scrobbler.media}): {progress}")
-        return self._post("start", progress)
+        return self.scrobbler.update(progress)
 
     def pause(self, progress: float):
         self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
-        return self._post("pause", progress)
+        return self.scrobbler.pause(progress)
 
     def stop(self, progress: float):
         if progress >= self.threshold:
             self.logger.debug(f"stop({self.scrobbler.media}): {progress}")
-            return self._post("stop", progress)
+            return self.scrobbler.stop(progress)
         else:
             self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
-            return self._post("pause", progress)
-
-    # Copied method, until upstream is merged
-    # https://github.com/moogar0880/PyTrakt/pull/196
-    @nocache
-    @rate_limit()
-    @time_limit()
-    @retry()
-    @post
-    def _post(self, method: str, progress: float):
-        self.scrobbler.progress = progress
-        uri = f"scrobble/{method}"
-        payload = dict(
-            progress=self.scrobbler.progress,
-            app_version=self.scrobbler.version,
-            date=self.scrobbler.date,
-        )
-        payload.update(self.scrobbler.media.to_json_singular())
-        response = yield uri, payload
-        yield response
+            return self.scrobbler.pause(progress)
 
 
 class TraktRatingCollection(dict):
