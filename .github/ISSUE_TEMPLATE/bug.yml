@@ -93,7 +93,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: Run `plextraktsync info`
+      description: Run `plextraktsync --version`
       placeholder: eg. 0.15.0
     validations:
       required: true
