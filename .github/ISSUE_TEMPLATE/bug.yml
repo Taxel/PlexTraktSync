@@ -81,11 +81,11 @@ body:
       label: Install method
       description: How did you install PlexTraktSync
       options:
-        - pipx (Recommended)
-        - pip
+        - pipx
         - docker-compose
-        - git clone
-        - zip download
+        - pip (not supported)
+        - git clone (not supported)
+        - zip download (not supported)
     validations:
       required: true
 

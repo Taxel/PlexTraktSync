@@ -28,9 +28,9 @@ label or to improve documentation [docs-needed], thank you.**
   - [Installation](#installation)
     - [pipx](#pipx)
     - [Docker Compose](#docker-compose)
-    - [Windows Setup (optional alternative)](#windows-setup-optional-alternative)
-    - [Unraid setup](#unraid-setup)
-    - [GitHub](#github)
+    - [Windows Setup (optional alternative)](#windows-setup-optional-alternative), unsupported
+    - [Unraid setup](#unraid-setup), unsupported
+    - [GitHub](#github), unsupported
   - [Setup](#setup)
   - [Sync settings](#sync-settings)
     - [Logging](#logging)
@@ -63,11 +63,6 @@ label or to improve documentation [docs-needed], thank you.**
 The script is known to work with Python 3.7-3.10 versions.
 
 ## Installation
-
-- [pipx](#pipx) - _This is the recommended installation method_
-- [Docker Compose](#docker-compose)
-- [Windows Setup (optional alternative)](#windows-setup-optional-alternative)
-- [GitHub](#github)
 
 ### pipx
 
@@ -134,11 +129,15 @@ it automatically at set intervals.
 
 ### Windows Setup (optional alternative)
 
+NOTE: _This installation method is not supported. It's documented solely by user contribution._
+
 - Download the latest `.zip` release from https://github.com/Taxel/PlexTraktSync/tags
 - Run `setup.bat` to install requirements and create optional shortcuts and
   routines _(requires Windows 7sp1 - 11)_.
 
 ### Unraid setup
+
+NOTE: _This installation method is not supported. It's documented solely by user contribution._
 
 Option 1 for container creation:
 Create a manual Unraid container of PlexTraktSync:
@@ -180,7 +179,9 @@ Once installed (or if already installed):
 
 ### GitHub
 
-Installing from GitHub is considered developer mode and it's documented in
+NOTE: _This installation method is not supported._ You will not get support if you use this installation method.
+
+Installing from GitHub is considered developer mode, and it's documented in
 [CONTRIBUTING.md](CONTRIBUTING.md#checking-out-code).
 
 ## Setup
