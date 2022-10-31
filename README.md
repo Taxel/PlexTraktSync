@@ -175,7 +175,7 @@ Once installed (or if already installed):
 
 ### GitHub
 
-Installing from GitHub is considered developer mode and it's documented in
+Installing from GitHub is considered developer mode, and it's documented in
 [CONTRIBUTING.md](CONTRIBUTING.md#checking-out-code).
 
 ## Setup
