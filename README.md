@@ -64,11 +64,6 @@ The script is known to work with Python 3.7-3.10 versions.
 
 ## Installation
 
-- [pipx](#pipx) - _This is the recommended installation method_
-- [Docker Compose](#docker-compose)
-- [Windows Setup (optional alternative)](#windows-setup-optional-alternative)
-- [GitHub](#github)
-
 ### pipx
 
 Installation with [pipx][install-pipx].
