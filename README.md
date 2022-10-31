@@ -129,11 +129,15 @@ it automatically at set intervals.
 
 ### Windows Setup (optional alternative)
 
+NOTE: _This installation method is not supported. It's documented solely by user contribution._
+
 - Download the latest `.zip` release from https://github.com/Taxel/PlexTraktSync/tags
 - Run `setup.bat` to install requirements and create optional shortcuts and
   routines _(requires Windows 7sp1 - 11)_.
 
 ### Unraid setup
+
+NOTE: _This installation method is not supported. It's documented solely by user contribution._
 
 Option 1 for container creation:
 Create a manual Unraid container of PlexTraktSync:
@@ -174,6 +178,8 @@ Once installed (or if already installed):
 - Set the schedule accordingly using the dropdown menu next to the "Run in Background" button
 
 ### GitHub
+
+NOTE: _This installation method is not supported._ You will not get support if you use this installation method.
 
 Installing from GitHub is considered developer mode, and it's documented in
 [CONTRIBUTING.md](CONTRIBUTING.md#checking-out-code).
