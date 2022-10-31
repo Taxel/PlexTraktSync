@@ -28,9 +28,9 @@ label or to improve documentation [docs-needed], thank you.**
   - [Installation](#installation)
     - [pipx](#pipx)
     - [Docker Compose](#docker-compose)
-    - [Windows Setup (optional alternative)](#windows-setup-optional-alternative)
-    - [Unraid setup](#unraid-setup)
-    - [GitHub](#github)
+    - [Windows Setup (optional alternative)](#windows-setup-optional-alternative), unsupported
+    - [Unraid setup](#unraid-setup), unsupported
+    - [GitHub](#github), unsupported
   - [Setup](#setup)
   - [Sync settings](#sync-settings)
     - [Logging](#logging)
