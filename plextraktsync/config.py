@@ -217,6 +217,19 @@ class Config(dict):
 
         return destination
 
+    def dump(self, print=None):
+        """
+        Print config serialized as yaml.
+        If print is None, return the produced string instead.
+        """
+        data = dict(self)
+        for key in self.env_keys:
+            del data[key]
+        dump = ConfigLoader.dump_yaml(None, data)
+        if print is None:
+            return dump
+        print(dump)
+
     def save(self):
         with open(self.env_file, "w") as txt:
             txt.write("# This is .env file for PlexTraktSync\n")
