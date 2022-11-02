@@ -3,6 +3,8 @@ from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logger
 from plextraktsync.media import Media
+from plextraktsync.plex_api import PlexApi
+from plextraktsync.trakt_api import TraktApi
 from plextraktsync.trakt_list_util import TraktListUtil
 from plextraktsync.walker import Walker
 
@@ -51,8 +53,10 @@ class SyncConfig:
 
 
 class Sync:
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, plex: PlexApi, trakt: TraktApi):
         self.config = SyncConfig(config)
+        self.plex = plex
+        self.trakt = trakt
         self.update_plex_wl = self.config.trakt_to_plex["watchlist"] and not self.config.trakt_to_plex["watchlist_as_playlist"]
         self.update_plex_wl_as_pl = self.config.trakt_to_plex["watchlist"] and self.config.trakt_to_plex["watchlist_as_playlist"]
         self.update_trakt_wl = self.config.plex_to_trakt["watchlist"]
