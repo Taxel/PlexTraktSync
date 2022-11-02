@@ -256,7 +256,7 @@ class MediaFactory:
 
     def resolve_trakt(self, tm: TraktItem) -> Media:
         """Find Plex media from Trakt id using Plex Search and Discover"""
-        result = self.plex.search_online(tm.item.title, tm.item.media_type[:-1])
+        result = self.plex.search_online(tm.item.title, tm.type)
         pm = self._guid_match(result, tm)
         return self.make_media(pm, tm.item)
 
