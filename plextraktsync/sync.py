@@ -1,5 +1,10 @@
+from typing import Dict, Union
+
+from plexapi.video import Movie, Show
+
 from plextraktsync.config import Config
 from plextraktsync.decorators.cached_property import cached_property
+from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logger
 from plextraktsync.media import Media
@@ -87,36 +92,44 @@ class Sync:
         self.config = SyncConfig(config)
         self.plex = plex
         self.trakt = trakt
-        self.update_plex_wl = self.config.trakt_to_plex["watchlist"] and not self.config.trakt_to_plex["watchlist_as_playlist"]
-        self.update_plex_wl_as_pl = self.config.trakt_to_plex["watchlist"] and self.config.trakt_to_plex["watchlist_as_playlist"]
-        self.update_trakt_wl = self.config.plex_to_trakt["watchlist"]
-        self.sync_wl = self.config.trakt_to_plex["watchlist"] or self.config.plex_to_trakt["watchlist"]
-        self.need_library_walk = self.config.plex_to_trakt["collection"] or self.config.plex_to_trakt["ratings"] or \
-            self.config.plex_to_trakt["watched_status"] or self.config.trakt_to_plex["liked_lists"] or \
-            self.config.trakt_to_plex["ratings"] or self.config.trakt_to_plex["liked_lists"] or \
-            self.config.trakt_to_plex["watched_status"] or self.update_plex_wl_as_pl
+
+    @cached_property
+    @flatten_dict
+    def plex_wl(self) -> Dict[str, Union[Movie, Show]]:
+        """
+        Return map of [Guid, Plex] of Plex Watchlist
+        """
+        for pm in self.plex.watchlist():
+            yield pm.guid, pm
+
+    @cached_property
+    def sync_wl(self):
+        return self.config.sync_wl and len(self.plex_wl) > 0
+
+    @cached_property
+    @flatten_dict
+    def trakt_wl_movies(self):
+        for tm in self.trakt.watchlist_movies:
+            yield tm.trakt, tm
+
+    @cached_property
+    @flatten_dict
+    def trakt_wl_shows(self):
+        for tm in self.trakt.watchlist_shows:
+            yield tm.trakt, tm
 
     def sync(self, walker: Walker, dry_run=False):
         listutil = TraktListUtil()
         trakt = walker.trakt
-        plex = walker.plex
-        if self.sync_wl:
-            plex_wl = plex.watchlist()
-            if plex_wl is None:
-                self.sync_wl = False
-            else:
-                self.plex_wl = {pm.guid: pm for pm in plex_wl}
-                self.trakt_wl_movies = {tm.trakt: tm for tm in trakt.watchlist_movies} or {}
-                self.trakt_wl_shows = {tm.trakt: tm for tm in trakt.watchlist_shows} or {}
 
-        if self.update_plex_wl_as_pl:
+        if self.config.update_plex_wl_as_pl:
             listutil.addList(None, "Trakt Watchlist", trakt_list=trakt.watchlist_movies)
 
         if self.config.trakt_to_plex["liked_lists"]:
             for lst in trakt.liked_lists:
                 listutil.addList(lst["username"], lst["listname"])
 
-        if self.need_library_walk:
+        if self.config.need_library_walk:
             for movie in walker.find_movies():
                 self.sync_collection(movie, dry_run=dry_run)
                 self.sync_ratings(movie, dry_run=dry_run)
@@ -140,7 +153,7 @@ class Sync:
 
         if self.sync_wl:
             with measure_time("Updated watchlist"):
-                if self.update_plex_wl_as_pl:
+                if self.config.update_plex_wl_as_pl:
                     if not dry_run:
                         listutil.updatePlexLists(walker.plex)
                 else:
@@ -216,15 +229,15 @@ class Sync:
             else:
                 trakt_wl = self.trakt_wl_shows
             if m.plex is None:
-                if self.update_plex_wl:
+                if self.config.update_plex_wl:
                     logger.info(f"Skipping {m.trakt.title} from Trakt watchlist because not found in Plex Discover")
-                elif self.update_trakt_wl:
+                elif self.config.update_trakt_wl:
                     logger.info(f"Removing {m.trakt.title} from Trakt watchlist")
                     if not dry_run:
                         m.remove_from_trakt_watchlist(batch=True)
             elif m.plex.item.guid in self.plex_wl:
                 if m.trakt.trakt not in trakt_wl:
-                    if self.update_trakt_wl:
+                    if self.config.update_trakt_wl:
                         logger.info(f"Adding {m.plex.item.title} to Trakt watchlist")
                         if not dry_run:
                             m.add_to_trakt_watchlist(batch=True)
@@ -236,7 +249,7 @@ class Sync:
                     trakt_wl.pop(m.trakt.trakt)
             else:
                 if m.trakt.trakt in trakt_wl:
-                    if self.update_plex_wl:
+                    if self.config.update_plex_wl:
                         logger.info(f"Adding {m.trakt.title} to Plex watchlist")
                         if not dry_run:
                             m.add_to_plex_watchlist()
