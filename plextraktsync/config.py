@@ -36,20 +36,20 @@ class RunConfig:
 
 
 class ConfigLoader:
-    @staticmethod
-    def load(path: str):
+    @classmethod
+    def load(cls, path: str):
         if path.endswith('.yml'):
-            return ConfigLoader.load_yaml(path)
+            return cls.load_yaml(path)
         if path.endswith('.json'):
-            return ConfigLoader.load_json(path)
+            return cls.load_json(path)
         raise RuntimeError(f'Unknown file type: {path}')
 
-    @staticmethod
-    def write(path: str, config):
+    @classmethod
+    def write(cls, path: str, config):
         if path.endswith('.yml'):
-            return ConfigLoader.write_yaml(path, config)
+            return cls.write_yaml(path, config)
         if path.endswith('.json'):
-            return ConfigLoader.write_json(path, config)
+            return cls.write_json(path, config)
         raise RuntimeError(f'Unknown file type: {path}')
 
     @staticmethod
