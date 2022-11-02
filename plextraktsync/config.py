@@ -93,12 +93,10 @@ class ConfigLoader:
         with open(path, "w", encoding="utf-8") as fp:
             fp.write(json.dumps(config, indent=4))
 
-    @staticmethod
-    def write_yaml(path: str, config):
-        import yaml
-
+    @classmethod
+    def write_yaml(cls, path: str, config):
         with open(path, "w", encoding="utf-8") as fp:
-            yaml.dump(config, fp, allow_unicode=True, indent=2)
+            cls.dump_yaml(fp, config)
 
     @staticmethod
     def dump_yaml(fp, config):
