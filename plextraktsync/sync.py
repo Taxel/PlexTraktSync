@@ -17,6 +17,9 @@ class SyncConfig:
     def __contains__(self, key):
         return key in self.config
 
+    def get(self, section, key):
+        return self[key] if key in self else self[section][key]
+
     @cached_property
     def trakt_to_plex(self):
         return {
@@ -45,9 +48,6 @@ class SyncConfig:
         return (
             self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
         )
-
-    def get(self, section, key):
-        return self[key] if key in self else self[section][key]
 
 
 class Sync:
