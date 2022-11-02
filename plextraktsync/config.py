@@ -100,6 +100,12 @@ class ConfigLoader:
         with open(path, "w", encoding="utf-8") as fp:
             yaml.dump(config, fp, allow_unicode=True, indent=2)
 
+    @staticmethod
+    def dump_yaml(fp, config):
+        import yaml
+
+        return yaml.dump(config, fp, allow_unicode=True, indent=2)
+
 
 class Config(dict):
     env_keys = [
