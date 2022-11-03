@@ -97,29 +97,6 @@ If you checkout a specific version, this can be done in one of two ways:
 
 Note: Development should be done against the `main` branch and not a specific tag.
 
-## Git: setup pre-commit
-
-For convence this project uses [pre-commit] hooks:
-
-```
-brew install pre-commit
-pre-commit install
-```
-
-It's usually a good idea to run the hooks against all of the files when adding
-new hooks (usually pre-commit will only run on the changed files during git
-hooks):
-
-```
-pre-commit run --all-files
-```
-
-You can update your hooks to the latest version automatically by running
-`pre-commit autoupdate`. By default, this will bring the hooks to the latest
-tag on the default branch.
-
-[pre-commit]: https://pre-commit.com/
-
 ### GitHub download
 
 - Find the latest release from https://github.com/Taxel/PlexTraktSync/tags
@@ -173,6 +150,29 @@ pipenv run plextraktsync
 ```
 
 [pipenv]: https://pipenv.pypa.io/
+
+## Git: setup pre-commit
+
+For convence this project uses [pre-commit] hooks:
+
+```
+brew install pre-commit
+pre-commit install
+```
+
+It's usually a good idea to run the hooks against all of the files when adding
+new hooks (usually pre-commit will only run on the changed files during git
+hooks):
+
+```
+pre-commit run --all-files
+```
+
+You can update your hooks to the latest version automatically by running
+`pre-commit autoupdate`. By default, this will bring the hooks to the latest
+tag on the default branch.
+
+[pre-commit]: https://pre-commit.com/
 
 ## Testing
 
