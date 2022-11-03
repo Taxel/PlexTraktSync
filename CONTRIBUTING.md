@@ -43,25 +43,19 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 
 ## Install code from Pull request
 
-Replace `838` with a pull request you intend to install
+Replace `838` with a pull request you intend to install.
+This requires prior installation with `pipx`.
 
 ```
-$ pipx install --suffix=@838 "git+https://github.com/Taxel/PlexTraktSync@refs/pull/838/head"
-  installed package PlexTraktSync 0.20.0.dev0 (PlexTraktSync@838), installed using Python 3.10.5
-  These apps are now globally available
-    - plextraktsync@838
-done! ✨ 🌟 ✨
+plextraktsync self-update --pr 838
 ```
 
-You can also use a convenience wrapper (this requires you install `plextraktsync` with `pipx` first):
-```
-$ plextraktsync self-update --pr 838
-```
+It will create new binary `plextraktsync@838` for that pull request.
 
-You can also use the PR version of the program to pull in the latest changes with:
+To pull new changes for the same pull request:
 
 ```
-plextraktsync@1110 self-update
+plextraktsync@838 self-update
 ```
 
 To remove the versions:
