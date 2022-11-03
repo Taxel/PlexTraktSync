@@ -89,6 +89,17 @@ body:
     validations:
       required: true
 
+  - type: textarea
+    id: config
+    attributes:
+      render: yaml
+      label: Config file contents
+      description: >
+        Contents of your config file.
+
+        See "Config File" for location of it from `plextraktsync info`.
+        This will be automatically formatted as yaml text.
+
   - type: input
     id: version
     attributes:
