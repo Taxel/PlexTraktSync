@@ -121,13 +121,12 @@ class Sync:
 
     def sync(self, walker: Walker, dry_run=False):
         listutil = TraktListUtil()
-        trakt = walker.trakt
 
         if self.config.update_plex_wl_as_pl:
-            listutil.addList(None, "Trakt Watchlist", trakt_list=trakt.watchlist_movies)
+            listutil.addList(None, "Trakt Watchlist", trakt_list=self.trakt.watchlist_movies)
 
         if self.config.trakt_to_plex["liked_lists"]:
-            for lst in trakt.liked_lists:
+            for lst in self.trakt.liked_lists:
                 listutil.addList(lst["username"], lst["listname"])
 
         if self.config.need_library_walk:
@@ -136,7 +135,7 @@ class Sync:
                 self.sync_ratings(movie, dry_run=dry_run)
                 self.sync_watched(movie, dry_run=dry_run)
                 listutil.addPlexItemToLists(movie)
-            trakt.flush()
+            self.trakt.flush()
 
             shows = set()
             for episode in walker.find_episodes():
@@ -147,7 +146,7 @@ class Sync:
                 if self.config.sync_ratings:
                     # collect shows for later ratings sync
                     shows.add(episode.show)
-            trakt.flush()
+            self.trakt.flush()
 
             for show in walker.walk_shows(shows, title="Syncing show ratings"):
                 self.sync_ratings(show, dry_run=dry_run)
@@ -161,7 +160,7 @@ class Sync:
                     self.sync_watchlist(walker, dry_run=dry_run)
 
         if not dry_run:
-            trakt.flush()
+            self.trakt.flush()
 
     def sync_collection(self, m: Media, dry_run=False):
         if not self.config.plex_to_trakt["collection"]:
