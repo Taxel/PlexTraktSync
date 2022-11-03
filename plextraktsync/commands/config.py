@@ -1,3 +1,6 @@
+from plextraktsync.console import print
+
+
 def config(print=print):
     from plextraktsync.factory import factory
     config = factory.config()
