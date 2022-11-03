@@ -28,6 +28,7 @@ label or to improve documentation [docs-needed], thank you.**
   - [Installation](#installation)
     - [pipx](#pipx)
     - [Docker Compose](#docker-compose)
+    - [Install code from Pull request](#install-code-from-pull-request), development
     - [Windows Setup (optional alternative)](#windows-setup-optional-alternative), unsupported
     - [Unraid setup](#unraid-setup), unsupported
     - [GitHub](#github), unsupported
@@ -126,6 +127,14 @@ docker-compose run --rm plextraktsync
 
 The container will stop after the sync is completed. Read Setup section to run
 it automatically at set intervals.
+
+### Install code from Pull request
+
+This is to install development version to test if pull request would fix some problem.
+
+See contributing guide how to [install code from pull request].
+
+[install code from pull request]: CONTRIBUTING.md#install-code-from-pull-request
 
 ### Windows Setup (optional alternative)
 
