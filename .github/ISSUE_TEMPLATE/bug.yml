@@ -97,8 +97,8 @@ body:
       description: >
         Contents of your config file.
 
-        See "Config File" for location of it from `plextraktsync info`.
-        This will be automatically formatted as yaml text.
+        You can copy this from `plextraktsync config` output.
+        This textarea will be automatically formatted as yaml text.
 
   - type: input
     id: version
