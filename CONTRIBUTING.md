@@ -154,7 +154,7 @@ $ docker-compose run --rm --entrypoint sh plextraktsync
 
 ## Git: setup pre-commit
 
-For convence this project uses [pre-commit] hooks:
+For convenience this project uses [pre-commit] hooks:
 
 ```
 brew install pre-commit
