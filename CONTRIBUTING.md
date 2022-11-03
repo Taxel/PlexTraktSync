@@ -106,8 +106,8 @@ pipenv run plextraktsync
 
 ### Install code from Pull request
 
-Replace `838` with a pull request you intend to install.
 This requires prior installation with `pipx`.
+Replace `838` with a pull request you intend to install.
 
 ```
 plextraktsync self-update --pr 838
