@@ -1,6 +1,7 @@
 from typing import Dict, Union
 
 from plexapi.video import Movie, Show
+from trakt.tv import TVShow
 
 from plextraktsync.config import Config
 from plextraktsync.decorators.cached_property import cached_property
@@ -108,13 +109,13 @@ class Sync:
 
     @cached_property
     @flatten_dict
-    def trakt_wl_movies(self):
+    def trakt_wl_movies(self) -> Dict[int, Movie]:
         for tm in self.trakt.watchlist_movies:
             yield tm.trakt, tm
 
     @cached_property
     @flatten_dict
-    def trakt_wl_shows(self):
+    def trakt_wl_shows(self) -> Dict[int, TVShow]:
         for tm in self.trakt.watchlist_shows:
             yield tm.trakt, tm
 
