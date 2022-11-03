@@ -1,4 +1,4 @@
-def local_url():
+def local_url(port=32400):
     """
     Find url for local plex access.
     """
@@ -6,7 +6,7 @@ def local_url():
     from os import environ
 
     if not environ.get("PTS_IN_DOCKER"):
-        return "http://localhost:32400"
+        return f"http://localhost:{port}"
 
     import socket
     try:
@@ -20,4 +20,4 @@ def local_url():
         except Exception:
             host_ip = "172.17.0.1"
 
-    return f"http://{host_ip}:32400"
+    return f"http://{host_ip}:{port}"

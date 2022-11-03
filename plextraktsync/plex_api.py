@@ -681,7 +681,7 @@ class PlexApi:
         return None
 
     @nocache
-    def watchlist(self):
+    def watchlist(self) -> Optional[List[Union[Movie, Show]]]:
         if self.account:
             try:
                 return self.account.watchlist()

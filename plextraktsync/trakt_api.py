@@ -75,6 +75,14 @@ class TraktItem:
         self.item = item
         self.trakt = trakt
 
+    @cached_property
+    def type(self):
+        """
+        Return "movie", "show", "season", "episode"
+        """
+        # NB: TVSeason does not have "media_type" property
+        return self.item.media_type[:-1]
+
 
 class TraktApi:
     """
