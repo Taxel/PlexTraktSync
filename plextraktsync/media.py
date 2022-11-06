@@ -102,15 +102,6 @@ class Media:
         return collected.is_collected(
             self.show_trakt_id, self.season_number, self.episode_number)
 
-    @cached_property
-    def collected(self):
-        if self.media_type != "shows":
-            raise RuntimeError(
-                f"show_collected: Unsupported media type: {self.media_type}"
-            )
-
-        return self.trakt_api.collected(self.trakt)
-
     def add_to_collection(self, batch=False):
         self.trakt_api.add_to_collection(self.trakt, self.plex, batch=batch)
 
