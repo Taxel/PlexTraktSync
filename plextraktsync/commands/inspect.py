@@ -83,6 +83,7 @@ def inspect_media(id):
     print(f"Watched on Plex: {m.watched_on_plex}")
     if pm.has_media:
         print(f"Watched on Trakt: {m.watched_on_trakt}")
+        print(f"Collected on Trakt: {m.is_collected}")
 
     print("Plex play history:")
     for h in m.plex_history(device=True, account=True):
