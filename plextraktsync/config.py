@@ -36,20 +36,20 @@ class RunConfig:
 
 
 class ConfigLoader:
-    @staticmethod
-    def load(path: str):
+    @classmethod
+    def load(cls, path: str):
         if path.endswith('.yml'):
-            return ConfigLoader.load_yaml(path)
+            return cls.load_yaml(path)
         if path.endswith('.json'):
-            return ConfigLoader.load_json(path)
+            return cls.load_json(path)
         raise RuntimeError(f'Unknown file type: {path}')
 
-    @staticmethod
-    def write(path: str, config):
+    @classmethod
+    def write(cls, path: str, config):
         if path.endswith('.yml'):
-            return ConfigLoader.write_yaml(path, config)
+            return cls.write_yaml(path, config)
         if path.endswith('.json'):
-            return ConfigLoader.write_json(path, config)
+            return cls.write_json(path, config)
         raise RuntimeError(f'Unknown file type: {path}')
 
     @staticmethod
@@ -93,12 +93,16 @@ class ConfigLoader:
         with open(path, "w", encoding="utf-8") as fp:
             fp.write(json.dumps(config, indent=4))
 
+    @classmethod
+    def write_yaml(cls, path: str, config):
+        with open(path, "w", encoding="utf-8") as fp:
+            cls.dump_yaml(fp, config)
+
     @staticmethod
-    def write_yaml(path: str, config):
+    def dump_yaml(fp, config):
         import yaml
 
-        with open(path, "w", encoding="utf-8") as fp:
-            yaml.dump(config, fp, allow_unicode=True, indent=2)
+        return yaml.dump(config, fp, allow_unicode=True, indent=2)
 
 
 class Config(dict):
@@ -212,6 +216,19 @@ class Config(dict):
                 destination[key] = value
 
         return destination
+
+    def dump(self, print=None):
+        """
+        Print config serialized as yaml.
+        If print is None, return the produced string instead.
+        """
+        data = dict(self)
+        for key in self.env_keys:
+            del data[key]
+        dump = ConfigLoader.dump_yaml(None, data)
+        if print is None:
+            return dump
+        print(dump)
 
     def save(self):
         with open(self.env_file, "w") as txt:
