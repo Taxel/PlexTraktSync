@@ -99,13 +99,6 @@ def info():
 
 @command()
 @click.argument("input", nargs=-1)
-@click.option(
-    "--watched-shows",
-    type=bool,
-    default=False,
-    is_flag=True,
-    help="Print Trakt watched_shows and exit",
-)
 def inspect():
     """
     Inspect details of an object
@@ -286,6 +279,14 @@ def imdb_import():
     pass
 
 
+@command()
+def watched_shows():
+    """
+    Print a table of watched shows
+    """
+    pass
+
+
 cli.add_command(bug_report)
 cli.add_command(cache)
 cli.add_command(clear_collections)
@@ -301,3 +302,4 @@ cli.add_command(sync)
 cli.add_command(trakt_login)
 cli.add_command(unmatched)
 cli.add_command(watch)
+cli.add_command(watched_shows)
