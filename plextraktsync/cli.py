@@ -99,13 +99,6 @@ def info():
 
 @command()
 @click.argument("input", nargs=-1)
-@click.option(
-    "--watched-shows",
-    type=bool,
-    default=False,
-    is_flag=True,
-    help="Print Trakt watched_shows and exit",
-)
 def inspect():
     """
     Inspect details of an object
