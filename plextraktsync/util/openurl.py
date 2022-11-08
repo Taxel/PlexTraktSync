@@ -11,7 +11,7 @@ def openurl(url: str):
             'darwin': 'open',
             'win32': 'start',
         }[sys.platform]
-    except IndexError:
+    except KeyError:
         opener = 'xdg-open'
 
     try:
