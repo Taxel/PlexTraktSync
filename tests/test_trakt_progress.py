@@ -8,14 +8,6 @@ from tests.conftest import factory
 trakt: TraktApi = factory.trakt_api()
 
 
-def test_trakt_collection_progress():
-    show = TVShow('Game of Thrones')
-    collected = trakt.collected(show)
-    assert isinstance(collected, ShowProgress)
-    s01e01 = collected.get_completed(1, 1)
-    assert isinstance(s01e01, bool)
-
-
 def test_trakt_watched_progress():
     show = TVShow('Game of Thrones')
     data = show.watched_progress()
@@ -27,5 +19,4 @@ def test_trakt_watched_progress():
 
 
 if __name__ == '__main__':
-    test_trakt_collection_progress()
     test_trakt_watched_progress()

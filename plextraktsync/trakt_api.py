@@ -22,7 +22,6 @@ from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import factory, logger, logging
 from plextraktsync.path import pytrakt_file
 from plextraktsync.plex_api import PlexGuid, PlexLibraryItem
-from plextraktsync.pytrakt_extensions import ShowProgress
 
 
 class ScrobblerProxy:
@@ -295,13 +294,6 @@ class TraktApi:
             self.batch_watchlist_del.add_to_items(m.media_type, item)
         else:
             trakt.sync.remove_from_watchlist(item)
-
-    @nocache
-    @rate_limit()
-    @retry()
-    def collected(self, tm: TVShow):
-        data = tm.collection_progress(specials=True)
-        return ShowProgress(**data)
 
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
