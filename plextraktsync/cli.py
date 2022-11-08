@@ -287,9 +287,18 @@ def watched_shows():
     pass
 
 
+@command()
+def config():
+    """
+    Print user config for debugging and bug reports.
+    """
+    pass
+
+
 cli.add_command(bug_report)
 cli.add_command(cache)
 cli.add_command(clear_collections)
+cli.add_command(config)
 cli.add_command(imdb_import)
 cli.add_command(info)
 cli.add_command(inspect)
