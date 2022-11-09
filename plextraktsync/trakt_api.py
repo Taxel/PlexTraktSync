@@ -123,7 +123,7 @@ class TraktApi:
         try:
             return trakt.users.User("me")
         except (OAuthException, ForbiddenException) as e:
-            logger.fatal("Trakt authentication error: {}".format(str(e)))
+            logger.fatal(f"Trakt authentication error: {str(e)}")
             raise e
 
     @cached_property

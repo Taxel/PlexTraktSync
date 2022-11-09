@@ -193,7 +193,7 @@ class PlexLibraryItem:
         hours, remainder = divmod(self.item.duration / 1000, 3600)
         minutes, seconds = divmod(remainder, 60)
 
-        return '{:02}:{:02}:{:02}'.format(int(hours), int(minutes), int(seconds))
+        return f'{int(hours):02}:{int(minutes):02}:{int(seconds):02}'
 
     @cached_property
     def has_media(self):
@@ -289,9 +289,9 @@ class PlexLibraryItem:
             return None
 
         if channels < 3:
-            return "%.01f" % channels
+            return f"{channels:.01f}"
 
-        return "%.01f" % (channels - 0.9)
+        return f"{channels - 0.9:.01f}"
 
     @property
     def audio_codec(self):
