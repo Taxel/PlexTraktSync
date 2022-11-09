@@ -10,6 +10,7 @@ from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.library import LibrarySection
 from plexapi.media import AudioStream, MediaPart, SubtitleStream, VideoStream
 from plexapi.myplex import MyPlexAccount
+from plexapi.playlist import Playlist
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plexapi.video import Episode, Movie, Show
 from trakt.utils import timestamp
@@ -607,12 +608,12 @@ class PlexApi:
         m.rate(rating)
 
     @nocache
-    def update_playlist(self, name: str, items: List):
+    def update_playlist(self, name: str, items: List[Union[Movie, Show, Episode]]) -> None:
         """
         Updates playlist (creates if name missing) replacing contents with items[]
         """
         try:
-            playlist = self.plex.playlist(name)
+            playlist: Playlist = self.plex.playlist(name)
         except NotFound:
             playlist = self.plex.createPlaylist(name)
 
