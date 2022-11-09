@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from time import time
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import trakt
 import trakt.movies
@@ -190,14 +190,14 @@ class TraktApi:
     @nocache
     @rate_limit()
     @retry()
-    def watchlist_movies(self):
+    def watchlist_movies(self) -> List[Movie]:
         return self.me.watchlist_movies
 
     @cached_property
     @nocache
     @rate_limit()
     @retry()
-    def watchlist_shows(self):
+    def watchlist_shows(self) -> List[TVShow]:
         return self.me.watchlist_shows
 
     @cached_property

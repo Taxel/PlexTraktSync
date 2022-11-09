@@ -50,7 +50,7 @@ def sync(
 
     with measure_time("Completed full sync"):
         runner = factory.sync()
-        if runner.need_library_walk:
+        if runner.config.need_library_walk:
             w.print_plan(print=logger.info)
         if dry_run:
             logger.info("Enabled dry-run mode: not making actual changes")

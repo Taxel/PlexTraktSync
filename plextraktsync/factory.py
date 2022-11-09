@@ -58,8 +58,10 @@ class Factory:
         from plextraktsync.sync import Sync
 
         config = self.config()
+        plex = self.plex_api()
+        trakt = self.trakt_api()
 
-        return Sync(config)
+        return Sync(config, plex, trakt)
 
     @memoize
     def progressbar(self, enabled=True):
