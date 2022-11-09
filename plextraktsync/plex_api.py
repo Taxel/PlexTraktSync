@@ -607,6 +607,23 @@ class PlexApi:
     def rate(self, m, rating):
         m.rate(rating)
 
+    @staticmethod
+    def same_list(list_a: List[Movie | Show | Episode], list_b: List[Movie | Show | Episode]) -> bool:
+        """
+        Return true if two list contain same Plex items.
+        The comparison is made on ratingKey property,
+        the items don't have to actually be identical.
+        """
+
+        # Quick way out of lists with different length
+        if len(list_a) != len(list_b):
+            return False
+
+        a = [m.ratingKey for m in list_a]
+        b = [m.ratingKey for m in list_b]
+
+        return a == b
+
     @nocache
     def update_playlist(self, name: str, items: List[Union[Movie, Show, Episode]]) -> None:
         """
