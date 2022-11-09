@@ -10,6 +10,7 @@ from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.library import LibrarySection
 from plexapi.media import AudioStream, MediaPart, SubtitleStream, VideoStream
 from plexapi.myplex import MyPlexAccount
+from plexapi.playlist import Playlist
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plexapi.video import Episode, Movie, Show
 from trakt.utils import timestamp
@@ -607,16 +608,17 @@ class PlexApi:
         m.rate(rating)
 
     @nocache
-    def create_playlist(self, name: str, items):
-        _, plex_items_sorted = zip(*sorted(dict(reversed(items)).items()))
-        self.plex.createPlaylist(name, items=plex_items_sorted)
-
-    @nocache
-    def delete_playlist(self, name: str):
+    def update_playlist(self, name: str, items: List[Union[Movie, Show, Episode]]) -> None:
+        """
+        Updates playlist (creates if name missing) replacing contents with items[]
+        """
         try:
-            self.plex.playlist(name).delete()
-        except (NotFound, BadRequest):
-            logger.debug(f"Playlist '{name}' not found, so it could not be deleted")
+            playlist: Playlist = self.plex.playlist(name)
+        except NotFound:
+            playlist = self.plex.createPlaylist(name)
+
+        playlist.removeItems(playlist.items())
+        playlist.addItems(items)
 
     @nocache
     @flatten_list

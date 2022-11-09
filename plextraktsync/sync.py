@@ -154,13 +154,21 @@ class Sync:
         if self.sync_wl:
             with measure_time("Updated watchlist"):
                 if self.config.update_plex_wl_as_pl:
-                    if not dry_run:
-                        listutil.updatePlexLists(walker.plex)
+                    self.update_playlists(listutil, dry_run=dry_run)
                 else:
                     self.sync_watchlist(walker, dry_run=dry_run)
 
         if not dry_run:
             self.trakt.flush()
+
+    def update_playlists(self, listutil: TraktListUtil, dry_run=False):
+        if dry_run:
+            return
+
+        for tl in listutil.lists:
+            logger.info(f"Updating Plex List: {tl.name} ({len(tl.plex_items)} items)")
+            _, plex_items_sorted = zip(*sorted(dict(reversed(tl.plex_items)).items()))
+            self.plex.update_playlist(tl.name, plex_items_sorted)
 
     def sync_collection(self, m: Media, dry_run=False):
         if not self.config.plex_to_trakt["collection"]:
