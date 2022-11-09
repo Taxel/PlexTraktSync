@@ -620,18 +620,6 @@ class PlexApi:
         playlist.addItems(items)
 
     @nocache
-    def create_playlist(self, name: str, items):
-        _, plex_items_sorted = zip(*sorted(dict(reversed(items)).items()))
-        self.plex.createPlaylist(name, items=plex_items_sorted)
-
-    @nocache
-    def delete_playlist(self, name: str):
-        try:
-            self.plex.playlist(name).delete()
-        except (NotFound, BadRequest):
-            logger.debug(f"Playlist '{name}' not found, so it could not be deleted")
-
-    @nocache
     @flatten_list
     def history(self, m, device=False, account=False):
         try:
