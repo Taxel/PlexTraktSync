@@ -40,4 +40,9 @@ repos:
     hooks:
       - id: flake8
 
+  - repo: https://github.com/ikamensh/flynt/
+    rev: "0.76"
+    hooks:
+      - id: flynt
+
 # vim:ts=2:sw=2:et
