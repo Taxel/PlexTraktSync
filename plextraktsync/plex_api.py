@@ -607,6 +607,19 @@ class PlexApi:
         m.rate(rating)
 
     @nocache
+    def update_playlist(self, name: str, items: List):
+        """
+        Updates playlist (creates if name missing) replacing contents with items[]
+        """
+        try:
+            playlist = self.plex.playlist(name)
+        except NotFound:
+            playlist = self.plex.createPlaylist(name)
+
+        playlist.removeItems(playlist.items())
+        playlist.addItems(items)
+
+    @nocache
     def create_playlist(self, name: str, items):
         _, plex_items_sorted = zip(*sorted(dict(reversed(items)).items()))
         self.plex.createPlaylist(name, items=plex_items_sorted)
