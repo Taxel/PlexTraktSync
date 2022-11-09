@@ -625,7 +625,7 @@ class PlexApi:
         return a == b
 
     @nocache
-    def update_playlist(self, name: str, items: List[Union[Movie, Show, Episode]]) -> None:
+    def update_playlist(self, name: str, items: List[Union[Movie, Show, Episode]]) -> bool:
         """
         Updates playlist (creates if name missing) replacing contents with items[]
         """
@@ -634,8 +634,13 @@ class PlexApi:
         except NotFound:
             playlist = self.plex.createPlaylist(name)
 
+        # Skip if nothing to update
+        if self.same_list(items, playlist.items()):
+            return False
+
         playlist.removeItems(playlist.items())
         playlist.addItems(items)
+        return True
 
     @nocache
     @flatten_list
