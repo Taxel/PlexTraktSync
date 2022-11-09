@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "cbd61a89b5809b27ff9bfd233e28f6f31fecb7561035d7f09bf311f59a7abba7"
+            "sha256": "8795673238fe3a0c0b682e664a918375a381def55b807e5845522c2577ca7f3a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -53,7 +53,7 @@
                 "sha256:5a3d016c7c547f69d6f81fb0db9449ce888b418b5b9952cc5e6e66843e9dd845",
                 "sha256:83e9a75d1911279afd89352c68b45348559d1fc0506b054b346651b5e7fee29f"
             ],
-            "markers": "python_full_version >= '3.6.0'",
+            "markers": "python_version >= '3.6'",
             "version": "==2.1.1"
         },
         "click": {
@@ -108,16 +108,16 @@
                 "sha256:5f50d5b2b3207fa72e7ec0ef08372ef652685470974a107d0d4999fc5a903a96",
                 "sha256:717ea765dd10b63618e7298b2d98efd819e0b30cd5905c9707223dceeb94b3f1"
             ],
-            "markers": "python_version >= '3.7' and python_version < '4.0'",
+            "markers": "python_version >= '3.7' and python_full_version < '4.0.0'",
             "version": "==0.3.4"
         },
         "plexapi": {
             "hashes": [
-                "sha256:4d442caaecf58fe6abd962b6ca24627387b031c17b84e9d063a75f05abf5684b",
-                "sha256:86e92cdb2fa6f38f7c518ef42144cd5276a69b083d0df95e9a9fede881e1fa83"
+                "sha256:d3b811624cd3fba45e5d993c44f81168be44d8d3a795f9a6ca0dc47f35267c77",
+                "sha256:e047dcb07d2dccb863ff9bace1999e1113119097be1517460f2b1f50cfcf7c74"
             ],
             "index": "pypi",
-            "version": "==4.13.0"
+            "version": "==4.13.1"
         },
         "prompt-toolkit": {
             "hashes": [
@@ -132,7 +132,7 @@
                 "sha256:56a8508ae95f98e2b9bdf93a6be5ae3f7d8af858b43e02c5a2ff083726be40c1",
                 "sha256:f643f331ab57ba3c9d89212ee4a2dabc6e94f117cf4eefde99a0574720d14c42"
             ],
-            "markers": "python_full_version >= '3.6.0'",
+            "markers": "python_version >= '3.6'",
             "version": "==2.13.0"
         },
         "python-dotenv": {
