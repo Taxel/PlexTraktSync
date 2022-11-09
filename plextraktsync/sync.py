@@ -88,7 +88,7 @@ class SyncConfig:
             self.sync_watched_status,
             self.sync_ratings,
             self.plex_to_trakt["collection"],
-            self.trakt_to_plex["liked_lists"],
+            self.sync_liked_lists,
         ])
 
 
@@ -129,7 +129,7 @@ class Sync:
         if self.config.update_plex_wl_as_pl:
             listutil.addList(None, "Trakt Watchlist", trakt_list=self.trakt.watchlist_movies)
 
-        if self.config.trakt_to_plex["liked_lists"]:
+        if self.config.sync_liked_lists:
             for lst in self.trakt.liked_lists:
                 listutil.addList(lst["username"], lst["listname"])
 
