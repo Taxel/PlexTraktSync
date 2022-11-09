@@ -95,4 +95,4 @@ class PlexServerConnection:
         config["PLEX_BASEURL"] = base_url
         config["PLEX_LOCALURL"] = local_url
         config.save()
-        self.logger.info("Plex server url changed to {}".format(base_url))
+        self.logger.info(f"Plex server url changed to {base_url}")

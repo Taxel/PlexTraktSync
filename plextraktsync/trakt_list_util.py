@@ -13,9 +13,7 @@ from plextraktsync.plex_api import PlexApi
 class LazyUserList(UserList):
     @get
     def get_items(self):
-        data = yield "users/{user}/lists/{id}/items".format(
-            user=slugify(self.creator), id=self.slug
-        )
+        data = yield f"users/{slugify(self.creator)}/lists/{self.slug}/items"
         for item in data:
             if "type" not in item:
                 continue
@@ -28,9 +26,7 @@ class LazyUserList(UserList):
     @classmethod
     @get
     def _get(cls, title, creator):
-        data = yield "users/{user}/lists/{id}".format(
-            user=slugify(creator), id=slugify(title)
-        )
+        data = yield f"users/{slugify(creator)}/lists/{slugify(title)}"
         extract_ids(data)
         ulist = LazyUserList(creator=creator, **data)
         ulist.get_items()
@@ -82,14 +78,14 @@ class TraktListUtil:
     def addList(self, username, listname, trakt_list=None):
         if trakt_list is not None:
             self.lists.append(TraktList.from_trakt_list(listname, trakt_list))
-            logger.info("Downloaded List {}".format(listname))
+            logger.info(f"Downloaded List {listname}")
             return
         try:
             self.lists.append(TraktList(username, listname))
-            logger.info("Downloaded List {}".format(listname))
+            logger.info(f"Downloaded List {listname}")
         except (NotFoundException, OAuthException):
             logger.warning(
-                "Failed to get list {} by user {}".format(listname, username)
+                f"Failed to get list {listname} by user {username}"
             )
 
     def addPlexItemToLists(self, m):
