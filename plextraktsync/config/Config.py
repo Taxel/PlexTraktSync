@@ -3,7 +3,7 @@ from os.path import exists
 
 from dotenv import load_dotenv
 
-from plextraktsync._config import ConfigLoader
+from plextraktsync.config.ConfigLoader import ConfigLoader
 from plextraktsync.path import (cache_dir, config_file, config_yml,
                                 default_config_file, env_file)
 

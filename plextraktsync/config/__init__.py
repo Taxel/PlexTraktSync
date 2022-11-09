@@ -1,4 +1,3 @@
-from .._config import *  # noqa
 from .Config import Config  # noqa
 
 """
