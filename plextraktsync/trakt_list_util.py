@@ -91,7 +91,3 @@ class TraktListUtil:
     def addPlexItemToLists(self, m):
         for tl in self.lists:
             tl.addPlexItem(m.trakt, m.plex.item)
-
-    def updatePlexLists(self, plex: PlexApi):
-        for tl in self.lists:
-            tl.updatePlexList(plex)
