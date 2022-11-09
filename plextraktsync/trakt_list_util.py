@@ -7,7 +7,6 @@ from trakt.users import UserList
 from trakt.utils import extract_ids, slugify
 
 from plextraktsync.factory import logger
-from plextraktsync.plex_api import PlexApi
 
 
 class LazyUserList(UserList):
@@ -63,12 +62,6 @@ class TraktList:
                 )
             else:
                 logger.info(f"Added to list {self.name}: {plex_item}")
-
-    def updatePlexList(self, plex: PlexApi):
-        plex.delete_playlist(self.name)
-
-        if len(self.plex_items) > 0:
-            plex.create_playlist(self.name, self.plex_items)
 
 
 class TraktListUtil:
