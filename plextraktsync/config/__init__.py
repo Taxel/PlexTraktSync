@@ -1,4 +1,5 @@
 from .._config import *  # noqa
+from .Config import Config  # noqa
 
 """
 Platform name to identify our application
