@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from os import getenv
 from os.path import exists
 
@@ -6,23 +5,6 @@ from dotenv import load_dotenv
 
 from plextraktsync.path import (cache_dir, config_file, config_yml,
                                 default_config_file, env_file)
-
-
-@dataclass
-class RunConfig:
-    """
-    Class to hold runtime config parameters
-    """
-
-    dry_run: bool = False
-    batch_delay: int = 5
-    progressbar: bool = True
-
-    def update(self, **kwargs):
-        for name, value in kwargs.items():
-            self.__setattr__(name, value)
-
-        return self
 
 
 class ConfigLoader:

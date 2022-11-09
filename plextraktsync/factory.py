@@ -80,7 +80,7 @@ class Factory:
 
     @memoize
     def run_config(self):
-        from plextraktsync.config import RunConfig
+        from plextraktsync.config.RunConfig import RunConfig
 
         config = RunConfig()
 
