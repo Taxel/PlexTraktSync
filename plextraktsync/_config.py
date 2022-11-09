@@ -7,16 +7,6 @@ from dotenv import load_dotenv
 from plextraktsync.path import (cache_dir, config_file, config_yml,
                                 default_config_file, env_file)
 
-"""
-Platform name to identify our application
-"""
-PLEX_PLATFORM = "PlexTraktSync"
-
-"""
-Constant in seconds for how much to wait between Trakt POST API calls.
-"""
-TRAKT_POST_DELAY = 1.1
-
 
 @dataclass
 class RunConfig:
