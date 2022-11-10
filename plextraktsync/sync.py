@@ -155,9 +155,9 @@ class Sync:
             for show in walker.walk_shows(shows, title="Syncing show ratings"):
                 self.sync_ratings(show, dry_run=dry_run)
 
-        if self.sync_wl:
-            with measure_time("Updated watchlist"):
-                if self.config.update_plex_wl_as_pl:
+        if self.sync_wl or self.config.sync_liked_lists:
+            with measure_time("Updated watchlist and/or liked list"):
+                if self.config.update_plex_wl_as_pl or self.config.sync_liked_lists:
                     self.update_playlists(listutil, dry_run=dry_run)
                 else:
                     self.sync_watchlist(walker, dry_run=dry_run)
