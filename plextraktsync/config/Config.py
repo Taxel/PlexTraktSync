@@ -1,108 +1,11 @@
-from dataclasses import dataclass
 from os import getenv
 from os.path import exists
 
 from dotenv import load_dotenv
 
+from plextraktsync.config.ConfigLoader import ConfigLoader
 from plextraktsync.path import (cache_dir, config_file, config_yml,
                                 default_config_file, env_file)
-
-"""
-Platform name to identify our application
-"""
-PLEX_PLATFORM = "PlexTraktSync"
-
-"""
-Constant in seconds for how much to wait between Trakt POST API calls.
-"""
-TRAKT_POST_DELAY = 1.1
-
-
-@dataclass
-class RunConfig:
-    """
-    Class to hold runtime config parameters
-    """
-
-    dry_run: bool = False
-    batch_delay: int = 5
-    progressbar: bool = True
-
-    def update(self, **kwargs):
-        for name, value in kwargs.items():
-            self.__setattr__(name, value)
-
-        return self
-
-
-class ConfigLoader:
-    @classmethod
-    def load(cls, path: str):
-        if path.endswith('.yml'):
-            return cls.load_yaml(path)
-        if path.endswith('.json'):
-            return cls.load_json(path)
-        raise RuntimeError(f'Unknown file type: {path}')
-
-    @classmethod
-    def write(cls, path: str, config):
-        if path.endswith('.yml'):
-            return cls.write_yaml(path, config)
-        if path.endswith('.json'):
-            return cls.write_json(path, config)
-        raise RuntimeError(f'Unknown file type: {path}')
-
-    @staticmethod
-    def copy(src: str, dst: str):
-        import shutil
-
-        shutil.copyfile(src, dst)
-
-    @staticmethod
-    def rename(src: str, dst: str):
-        from os import rename
-
-        rename(src, dst)
-
-    @staticmethod
-    def load_json(path: str):
-        from json import JSONDecodeError, load
-
-        with open(path, "r", encoding="utf-8") as fp:
-            try:
-                config = load(fp)
-            except JSONDecodeError as e:
-                raise RuntimeError(f"Unable to parse {path}: {e}")
-        return config
-
-    @staticmethod
-    def load_yaml(path: str):
-        import yaml
-
-        with open(path, "r", encoding="utf-8") as fp:
-            try:
-                config = yaml.safe_load(fp)
-            except yaml.YAMLError as e:
-                raise RuntimeError(f"Unable to parse {path}: {e}")
-        return config
-
-    @staticmethod
-    def write_json(path: str, config):
-        import json
-
-        with open(path, "w", encoding="utf-8") as fp:
-            fp.write(json.dumps(config, indent=4))
-
-    @classmethod
-    def write_yaml(cls, path: str, config):
-        with open(path, "w", encoding="utf-8") as fp:
-            cls.dump_yaml(fp, config)
-
-    @staticmethod
-    def dump_yaml(fp, config):
-        import yaml
-
-        return yaml.dump(config, fp, allow_unicode=True, indent=2)
 
 
 class Config(dict):
@@ -136,7 +39,7 @@ class Config(dict):
     def log_file(self):
         from os.path import join
 
-        from .path import log_dir
+        from ..path import log_dir
 
         return join(log_dir, self["logging"]["filename"])
 
