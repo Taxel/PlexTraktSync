@@ -30,11 +30,6 @@ repos:
     hooks:
       - id: rm-unneeded-f-str
 
-  - repo: https://github.com/asottile/setup-cfg-fmt
-    rev: v2.2.0
-    hooks:
-      - id: setup-cfg-fmt
-
   - repo: https://github.com/pycqa/flake8
     rev: 5.0.4
     hooks:
