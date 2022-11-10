@@ -44,6 +44,16 @@ class TraktList:
             ]
             self.trakt_items = dict(zip(prelist, count(1)))
 
+    @property
+    def plex_items_sorted(self):
+        """
+        Returns items sorted by trakt rank
+
+        https://github.com/Taxel/PlexTraktSync/pull/58
+        """
+        _, items = zip(*sorted(dict(reversed(self.plex_items)).items()))
+        return items
+
     @staticmethod
     def from_trakt_list(listname, trakt_list):
         tl = TraktList(None, listname)
