@@ -78,13 +78,17 @@ class SyncConfig:
         return self.trakt_to_plex["watchlist"] or self.plex_to_trakt["watchlist"]
 
     @cached_property
+    def sync_liked_lists(self):
+        return self.trakt_to_plex["liked_lists"]
+
+    @cached_property
     def need_library_walk(self):
         return any([
             self.update_plex_wl_as_pl,
             self.sync_watched_status,
             self.sync_ratings,
             self.plex_to_trakt["collection"],
-            self.trakt_to_plex["liked_lists"],
+            self.sync_liked_lists,
         ])
 
 
@@ -125,7 +129,7 @@ class Sync:
         if self.config.update_plex_wl_as_pl:
             listutil.addList(None, "Trakt Watchlist", trakt_list=self.trakt.watchlist_movies)
 
-        if self.config.trakt_to_plex["liked_lists"]:
+        if self.config.sync_liked_lists:
             for lst in self.trakt.liked_lists:
                 listutil.addList(lst["username"], lst["listname"])
 
@@ -151,9 +155,9 @@ class Sync:
             for show in walker.walk_shows(shows, title="Syncing show ratings"):
                 self.sync_ratings(show, dry_run=dry_run)
 
-        if self.sync_wl:
-            with measure_time("Updated watchlist"):
-                if self.config.update_plex_wl_as_pl:
+        if self.sync_wl or self.config.sync_liked_lists:
+            with measure_time("Updated watchlist and/or liked list"):
+                if self.config.update_plex_wl_as_pl or self.config.sync_liked_lists:
                     self.update_playlists(listutil, dry_run=dry_run)
                 else:
                     self.sync_watchlist(walker, dry_run=dry_run)
