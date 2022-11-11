@@ -399,7 +399,7 @@ class PlexLibraryItem:
     @staticmethod
     def date_value(date):
         if not date:
-            raise ValueError("Value can't be None")
+            return None
 
         return date.astimezone(datetime.timezone.utc)
 
