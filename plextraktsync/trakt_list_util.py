@@ -51,6 +51,9 @@ class TraktList:
 
         https://github.com/Taxel/PlexTraktSync/pull/58
         """
+        if len(self.plex_items) == 0:
+            return []
+
         _, items = zip(*sorted(dict(reversed(self.plex_items)).items()))
         return items
 
