@@ -113,7 +113,7 @@ Replace `838` with a pull request you intend to install.
 plextraktsync self-update --pr 838
 ```
 
-It will create new binary `plextraktsync@838` for that pull request.
+It will create new binary `plextraktsync@838` for that pull request. You need to run this binary instead of `plextraktsync`.
 
 To pull new changes for the same pull request:
 
@@ -141,7 +141,9 @@ uninstalled PlexTraktSync@984! ✨ 🌟 ✨
 $
 ```
 
-If you need to do the same in docker container, you should first prepare the container with:
+If you need to do the same in docker container, you should:
+
+͏ ͏ ͏ 1. first prepare the container with:
 
 ```
 $ docker-compose run --rm --entrypoint sh plextraktsync
@@ -150,6 +152,10 @@ $ docker-compose run --rm --entrypoint sh plextraktsync
 /app # apk add git
 /app # /root/.local/bin/plextraktsync self-update --pr 969
 /app # /root/.local/bin/plextraktsync@969 info
+```
+͏͏͏͏ ͏ ͏ 2. then run the script with:
+```
+/app # /root/.local/bin/plextraktsync@969
 ```
 
 ## Git: setup pre-commit
