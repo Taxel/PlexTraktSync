@@ -131,7 +131,7 @@ class Sync:
 
         if self.config.sync_liked_lists:
             for lst in self.trakt.liked_lists:
-                listutil.addList(lst["username"], lst["listname"])
+                listutil.addList(lst["listid"], lst["listname"])
 
         if self.config.need_library_walk:
             for movie in walker.find_movies():

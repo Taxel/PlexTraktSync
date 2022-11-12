@@ -4,7 +4,7 @@ from plexapi.video import Episode
 from trakt.core import get
 from trakt.errors import NotFoundException, OAuthException
 from trakt.users import UserList
-from trakt.utils import extract_ids, slugify
+from trakt.utils import extract_ids
 
 from plextraktsync.factory import logger
 
@@ -12,7 +12,7 @@ from plextraktsync.factory import logger
 class LazyUserList(UserList):
     @get
     def get_items(self):
-        data = yield f"users/{slugify(self.creator)}/lists/{self.slug}/items"
+        data = yield f"lists/{self.trakt}/items"
         for item in data:
             if "type" not in item:
                 continue
@@ -24,22 +24,23 @@ class LazyUserList(UserList):
 
     @classmethod
     @get
-    def _get(cls, title, creator):
-        data = yield f"users/{slugify(creator)}/lists/{slugify(title)}"
+    def _get(cls, title, id):
+        data = yield f"lists/{id}"
         extract_ids(data)
-        ulist = LazyUserList(creator=creator, **data)
+        ulist = LazyUserList(creator=data['user']['username'], **data)
         ulist.get_items()
         yield ulist
 
 
 class TraktList:
-    def __init__(self, username, listname):
+    def __init__(self, listid, listname):
         self.name = listname
         self.plex_items = []
-        if username is not None:
+        if listid is not None:
+            list_items = LazyUserList._get(listname, listid)._items
             prelist = [
                 (elem[0], elem[1])
-                for elem in LazyUserList._get(listname, username)._items
+                for elem in list_items
                 if elem[0] in ["movies", "episodes"]
             ]
             self.trakt_items = dict(zip(prelist, count(1)))
@@ -81,17 +82,17 @@ class TraktListUtil:
     def __init__(self):
         self.lists = []
 
-    def addList(self, username, listname, trakt_list=None):
+    def addList(self, listid, listname, trakt_list=None):
         if trakt_list is not None:
             self.lists.append(TraktList.from_trakt_list(listname, trakt_list))
             logger.info(f"Downloaded List {listname}")
             return
         try:
-            self.lists.append(TraktList(username, listname))
+            self.lists.append(TraktList(listid, listname))
             logger.info(f"Downloaded List {listname}")
         except (NotFoundException, OAuthException):
             logger.warning(
-                f"Failed to get list {listname} by user {username}"
+                f"Failed to get list {listname} with id {listid}"
             )
 
     def addPlexItemToLists(self, m):
