@@ -399,7 +399,7 @@ class PlexLibraryItem:
     @staticmethod
     def date_value(date):
         if not date:
-            raise ValueError("Value can't be None")
+            return None
 
         return date.astimezone(datetime.timezone.utc)
 
@@ -411,8 +411,10 @@ class PlexLibraryItem:
             return f"<{self.item}>"
 
     def to_json(self):
+        collected_at = None if not self.collected_at else timestamp(
+            self.collected_at)
         metadata = {
-            "collected_at": timestamp(self.collected_at),
+            "collected_at": collected_at,
             "media_type": "digital",
             "resolution": self.resolution,
             "hdr": self.hdr,
