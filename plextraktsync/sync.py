@@ -170,9 +170,9 @@ class Sync:
             return
 
         for tl in listutil.lists:
-            logger.info(f"Updating Plex List: {tl.name} ({len(tl.plex_items)} items)")
+            logger.debug(f"Updating Plex list '{tl.name}' ({len(tl.plex_items)} items)")
             updated = self.plex.update_playlist(tl.name, tl.plex_items_sorted)
-            logger.info(f"Updating Plex List: {tl.name}: {'Updated' if updated else 'No update'}")
+            logger.info(f"Plex list '{tl.name}' ({len(tl.plex_items)} items) {'updated' if updated else 'nothing to update'}")
 
     def sync_collection(self, m: Media, dry_run=False):
         if not self.config.plex_to_trakt["collection"]:
