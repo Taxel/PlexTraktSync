@@ -135,7 +135,7 @@ class TraktApi:
         for item in self.me.get_liked_lists("lists", limit=1000):
             yield {
                 'listname': item['list']['name'],
-                'username': item['list']['user']['ids']['slug'],
+                'listid': item['list']['ids']['trakt'],
             }
 
     @cached_property
