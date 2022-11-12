@@ -75,7 +75,7 @@ class SyncConfig:
 
     @cached_property
     def sync_wl(self):
-        return self.trakt_to_plex["watchlist"] or self.plex_to_trakt["watchlist"]
+        return self.update_plex_wl or self.update_trakt_wl
 
     @cached_property
     def sync_liked_lists(self):
@@ -159,7 +159,7 @@ class Sync:
             with measure_time("Updated watchlist and/or liked list"):
                 if self.config.update_plex_wl_as_pl or self.config.sync_liked_lists:
                     self.update_playlists(listutil, dry_run=dry_run)
-                else:
+                if self.sync_wl:
                     self.sync_watchlist(walker, dry_run=dry_run)
 
         if not dry_run:
@@ -170,9 +170,9 @@ class Sync:
             return
 
         for tl in listutil.lists:
-            logger.info(f"Updating Plex List: {tl.name} ({len(tl.plex_items)} items)")
+            logger.debug(f"Updating Plex list '{tl.name}' ({len(tl.plex_items)} items)")
             updated = self.plex.update_playlist(tl.name, tl.plex_items_sorted)
-            logger.info(f"Updating Plex List: {tl.name}: {'Updated' if updated else 'No update'}")
+            logger.info(f"Plex list '{tl.name}' ({len(tl.plex_items)} items) {'updated' if updated else 'nothing to update'}")
 
     def sync_collection(self, m: Media, dry_run=False):
         if not self.config.plex_to_trakt["collection"]:
