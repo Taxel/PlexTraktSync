@@ -558,7 +558,7 @@ class TraktLookup:
     def from_id(self, provider, id):
         # NB: the code assumes from_id is called only if from_number fails
         if self.same_order:
-            logger.warning(f'"{self.tm.title}" {EPISODES_ORDERING_WARNING}')
+            logger.warning(f"'{self.tm.title}' {EPISODES_ORDERING_WARNING}")
             self.same_order = False
         if provider not in self.provider_table:
             self._reverse_lookup(provider)

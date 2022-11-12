@@ -219,8 +219,8 @@ class Sync:
 
             if m.is_episode and m.watched_before_reset:
                 show = m.plex.item.show()
-                logger.info(f"Show {show.title} has been reset in trakt at {m.show_reset_at}.")
-                logger.info(f"Marking {show.title} as unwatched in Plex.")
+                logger.info(f"Show '{show.title}' has been reset in trakt at {m.show_reset_at}.")
+                logger.info(f"Marking '{show.title}' as unwatched in Plex.")
                 if not dry_run:
                     m.reset_show()
             else:
@@ -242,19 +242,19 @@ class Sync:
                 trakt_wl = self.trakt_wl_shows
             if m.plex is None:
                 if self.config.update_plex_wl:
-                    logger.info(f"Skipping {m.trakt.title} from Trakt watchlist because not found in Plex Discover")
+                    logger.info(f"Skipping '{m.trakt.title}' from Trakt watchlist because not found in Plex Discover")
                 elif self.config.update_trakt_wl:
-                    logger.info(f"Removing {m.trakt.title} from Trakt watchlist")
+                    logger.info(f"Removing '{m.trakt.title}' from Trakt watchlist")
                     if not dry_run:
                         m.remove_from_trakt_watchlist(batch=True)
             elif m.plex.item.guid in self.plex_wl:
                 if m.trakt.trakt not in trakt_wl:
                     if self.config.update_trakt_wl:
-                        logger.info(f"Adding {m.plex.item.title} to Trakt watchlist")
+                        logger.info(f"Adding '{m.plex.item.title}' to Trakt watchlist")
                         if not dry_run:
                             m.add_to_trakt_watchlist(batch=True)
                     else:
-                        logger.info(f"Removing {m.trakt.title} from Plex watchlist")
+                        logger.info(f"Removing '{m.trakt.title}' from Plex watchlist")
                         if not dry_run:
                             m.remove_from_plex_watchlist()
                 else:
@@ -262,11 +262,11 @@ class Sync:
             else:
                 if m.trakt.trakt in trakt_wl:
                     if self.config.update_plex_wl:
-                        logger.info(f"Adding {m.trakt.title} to Plex watchlist")
+                        logger.info(f"Adding '{m.trakt.title}' to Plex watchlist")
                         if not dry_run:
                             m.add_to_plex_watchlist()
                     else:
-                        logger.info(f"Removing {m.trakt.title} from Trakt watchlist")
+                        logger.info(f"Removing '{m.trakt.title}' from Trakt watchlist")
                         if not dry_run:
                             m.remove_from_trakt_watchlist(batch=True)
 
