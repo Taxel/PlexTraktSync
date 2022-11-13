@@ -27,6 +27,7 @@ FROM base
 ENTRYPOINT ["python", "-m", "plextraktsync"]
 
 ENV \
+	PATH=/root/.local/bin:$PATH \
 	PTS_CONFIG_DIR=/app/config \
 	PTS_CACHE_DIR=/app/config \
 	PTS_LOG_DIR=/app/config \

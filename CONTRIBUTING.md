@@ -150,12 +150,12 @@ $ docker-compose run --rm --entrypoint sh plextraktsync
 /app # pip install pipx
 /app # pipx install plextraktsync
 /app # apk add git
-/app # /root/.local/bin/plextraktsync self-update --pr 969
-/app # /root/.local/bin/plextraktsync@969 info
+/app # plextraktsync self-update --pr 969
+/app # plextraktsync@969 info
 ```
 ͏͏͏͏ ͏ ͏ 2. then run the script with:
 ```
-/app # /root/.local/bin/plextraktsync@969
+/app # plextraktsync@969
 ```
 
 ## Git: setup pre-commit
