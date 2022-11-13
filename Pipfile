@@ -22,7 +22,7 @@ requests-cache = "==0.9.6"
 rich = "==12.6.0"
 tqdm = "==4.64.1"
 urllib3 = ">=1.26.6"
-websocket-client = "==1.4.1"
+websocket-client = "==1.4.2"
 
 [requires]
 python_version = "3"
