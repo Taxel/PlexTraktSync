@@ -642,7 +642,7 @@ class PlexApi:
         if playlist is None:
             return False
 
-        if description is not None:
+        if description is not None and description != playlist.summary:
             playlist.edit(summary=description)
 
         # Skip if nothing to update
