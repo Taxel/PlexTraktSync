@@ -91,11 +91,11 @@ class TraktListUtil:
     def addList(self, listid, listname, trakt_list=None):
         if trakt_list is not None:
             self.lists.append(TraktList.from_trakt_list(listname, trakt_list))
-            logger.info(f"Downloaded List {listname}")
+            logger.info(f"Created {listname} from {len(trakt_list)} items")
             return
         try:
             self.lists.append(TraktList(listid, listname))
-            logger.info(f"Downloaded List {listname}")
+            logger.info(f"Downloaded List: {listname}")
         except (NotFoundException, OAuthException):
             logger.warning(
                 f"Failed to get list {listname} with id {listid}"
