@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from os.path import exists
 
 from plextraktsync.config.ConfigLoader import ConfigLoader
@@ -40,14 +39,14 @@ class ServerConfig(ConfigMergeMixin):
     def migrate(self):
         from plextraktsync.factory import factory
         config = factory.config()
-        self.add_server(PlexServerConfig(
+        self.add_server(
             name="default",
             urls=[
                 config["PLEX_BASEURL"],
                 config["PLEX_LOCALURL"],
             ],
             token=config["PLEX_TOKEN"],
-        ))
+        )
         self.save()
         config["PLEX_SERVER"] = "default"
         config.save()
@@ -60,11 +59,10 @@ class ServerConfig(ConfigMergeMixin):
             "servers": self.servers,
         })
 
-    def add_server(self, config: PlexServerConfig):
+    def add_server(self, **kwargs):
         self.load()
-        data = asdict(config)
-        del data["name"]
+        config = PlexServerConfig(**kwargs)
         servers = {
-            config.name: data,
+            config.name: config.asdict(),
         }
         self.merge(servers, self.servers)
