@@ -631,7 +631,7 @@ class PlexApi:
         """
         Updates playlist (creates if name missing) replacing contents with items[]
         """
-        playlist: Playlist = None
+        playlist: Optional[Playlist] = None
         try:
             playlist = self.plex.playlist(name)
         except NotFound:
