@@ -27,23 +27,33 @@ logging:
 #    - message: "because provider none has no external Id"
 #    - message: "Retry using search for specific Plex Episode"
 
+# settings for 'sync' command (default)
 sync:
   plex_to_trakt:
     collection: true
     ratings: true
     watched_status: true
+    # If plex_to_trakt watchlist=false and trakt_to_plex watchlist=true
+    # the Plex watchlist will be overwritten by Trakt watchlist
     watchlist: true
   trakt_to_plex:
     liked_lists: true
     ratings: true
     watched_status: true
+    # If trakt_to_plex watchlist=false and plex_to_trakt watchlist=true
+    # the Trakt watchlist will be overwritten by Plex watchlist
     watchlist: true
+    # If you prefer to fetch trakt watchlist as a playlist instead of
+    # plex watchlist, toggle this to true (is read only if watchlist=true)
     watchlist_as_playlist: false
 
+# settings for 'watch' command
 watch:
   add_collection: false
   remove_collection: false
+  # what video watched percentage (0 to 100) triggers the watched status
   scrobble_threshold: 80
+  # true to scrobble only what's watched by you, false for all your PMS users
   username_filter: true
 
 xbmc-providers:
