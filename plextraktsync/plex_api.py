@@ -642,12 +642,14 @@ class PlexApi:
         if playlist is None:
             return False
 
+        updated = False
         if description is not None and description != playlist.summary:
             playlist.edit(summary=description)
+            updated = True
 
         # Skip if nothing to update
         if self.same_list(items, playlist.items()):
-            return False
+            return updated
 
         playlist.removeItems(playlist.items())
         playlist.addItems(items)
