@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import List
 
 
@@ -11,3 +11,9 @@ class PlexServerConfig:
     name: str = ""
     token: str = ""
     urls: List[str] = None
+
+    def asdict(self):
+        data = asdict(self)
+        del data["name"]
+
+        return data
