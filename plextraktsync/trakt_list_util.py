@@ -1,4 +1,5 @@
 from itertools import count
+from typing import List
 
 from plexapi.video import Episode
 from trakt.core import get
@@ -79,6 +80,8 @@ class TraktList:
 
 
 class TraktListUtil:
+    lists: List[TraktList]
+
     def __init__(self):
         self.lists = []
 
