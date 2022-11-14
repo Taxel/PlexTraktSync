@@ -37,8 +37,11 @@ class TraktList:
     def __init__(self, listid, listname):
         self.name = listname
         self.plex_items = []
+        self.description = None
         if listid is not None:
-            list_items = LazyUserList._get(listname, listid)._items
+            userlist = LazyUserList._get(listname, listid)
+            self.description = userlist.description
+            list_items = userlist._items
             prelist = [
                 (elem[0], elem[1])
                 for elem in list_items
