@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import defaultdict
 from time import time
 from typing import List, Optional, Union
 
@@ -389,7 +390,7 @@ class TraktBatch:
         self.add = add
         self.trakt = trakt
         self.batch_delay = batch_delay
-        self.items = {}
+        self.items = defaultdict(list)
         self.last_sent_time = 0
 
     @nocache
@@ -430,9 +431,6 @@ class TraktBatch:
         """
         Add item of media_type to list of items
         """
-        if media_type not in self.items:
-            self.items[media_type] = []
-
         self.items[media_type].append(item)
         self.flush()
 
