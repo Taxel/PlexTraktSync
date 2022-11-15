@@ -117,6 +117,23 @@ class Factory:
         return w
 
     @cached_property
+    def web_socket_listener(self):
+        from plextraktsync.listener import WebSocketListener
+
+        return WebSocketListener(plex=self.plex_server())
+
+    @cached_property
+    def watch_state_updater(self):
+        from plextraktsync.commands.watch import WatchStateUpdater
+
+        return WatchStateUpdater(
+            plex=self.plex_api(),
+            trakt=self.trakt_api(),
+            mf=self.media_factory(),
+            config=self.config(),
+        )
+
+    @cached_property
     def logging(self):
         import logging
 
