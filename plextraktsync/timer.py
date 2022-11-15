@@ -1,6 +1,6 @@
 from time import monotonic, sleep
 
-from plextraktsync.factory import logger
+from plextraktsync.factory import logging
 
 
 class Timer:
@@ -13,6 +13,7 @@ class Timer:
             raise ValueError(f"Delay must be a positive number: {delay}")
         self.delay = delay
         self.last_time = None
+        self.logger = logging.getLogger("PlexTraktSync.Timer")
 
     @property
     def time_remaining(self):
@@ -34,6 +35,6 @@ class Timer:
 
         wait = self.time_remaining
         if wait:
-            logger.debug(f"Sleeping for {wait:.3f} seconds")
+            self.logger.debug(f"Sleeping for {wait:.3f} seconds")
             sleep(wait)
         self.update()

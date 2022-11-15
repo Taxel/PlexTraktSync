@@ -397,9 +397,6 @@ class TraktBatch:
     @time_limit()
     @retry()
     def submit(self):
-        if self.queue_size() == 0:
-            return
-
         try:
             result = self.trakt_sync(self.items)
             result = self.remove_empty_values(result.copy())
@@ -422,10 +419,11 @@ class TraktBatch:
         """
         if not self.batch_delay and force is False:
             return
+        if self.queue_size() == 0:
+            return
+
         elapsed = time() - self.last_sent_time
-        if elapsed >= self.batch_delay:
-            self.submit()
-        elif force is True:
+        if elapsed >= self.batch_delay or force is True:
             self.submit()
 
     def add_to_items(self, media_type: str, item):
