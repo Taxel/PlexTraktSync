@@ -8,7 +8,6 @@ from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.events import (ActivityNotification, Error,
                                   PlaySessionStateNotification, TimelineEntry)
 from plextraktsync.factory import factory, logging
-from plextraktsync.listener import WebSocketListener
 from plextraktsync.media import Media, MediaFactory
 from plextraktsync.plex_api import PlexApi, PlexLibraryItem
 from plextraktsync.trakt_api import TraktApi
@@ -220,13 +219,8 @@ class WatchStateUpdater:
 
 
 def watch():
-    server = factory.plex_server()
-    trakt = factory.trakt_api()
-    plex = factory.plex_api()
-    mf = factory.media_factory()
-    config = factory.config()
-    ws = WebSocketListener(server)
-    updater = WatchStateUpdater(plex, trakt, mf, config)
+    ws = factory.web_socket_listener
+    updater = factory.watch_state_updater
 
     ws.on(
         PlaySessionStateNotification,
