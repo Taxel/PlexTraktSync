@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import defaultdict
 from time import time
 from typing import List, Optional, Union
 
@@ -389,7 +390,7 @@ class TraktBatch:
         self.add = add
         self.trakt = trakt
         self.batch_delay = batch_delay
-        self.items = {}
+        self.items = defaultdict(list)
         self.last_sent_time = 0
 
     @nocache
@@ -397,9 +398,6 @@ class TraktBatch:
     @time_limit()
     @retry()
     def submit(self):
-        if self.queue_size() == 0:
-            return
-
         try:
             result = self.trakt_sync(self.items)
             result = self.remove_empty_values(result.copy())
@@ -422,19 +420,17 @@ class TraktBatch:
         """
         if not self.batch_delay and force is False:
             return
+        if self.queue_size() == 0:
+            return
+
         elapsed = time() - self.last_sent_time
-        if elapsed >= self.batch_delay:
-            self.submit()
-        elif force is True:
+        if elapsed >= self.batch_delay or force is True:
             self.submit()
 
     def add_to_items(self, media_type: str, item):
         """
         Add item of media_type to list of items
         """
-        if media_type not in self.items:
-            self.items[media_type] = []
-
         self.items[media_type].append(item)
         self.flush()
 

@@ -171,7 +171,7 @@ class Sync:
 
         for tl in listutil.lists:
             logger.debug(f"Updating Plex list '{tl.name}' ({len(tl.plex_items)} items)")
-            updated = self.plex.update_playlist(tl.name, tl.plex_items_sorted)
+            updated = self.plex.update_playlist(tl.name, tl.plex_items_sorted, description=tl.description)
             logger.info(f"Plex list '{tl.name}' ({len(tl.plex_items)} items) {'updated' if updated else 'nothing to update'}")
 
     def sync_collection(self, m: Media, dry_run=False):

@@ -1,4 +1,5 @@
 from itertools import count
+from typing import List
 
 from plexapi.video import Episode
 from trakt.core import get
@@ -36,8 +37,11 @@ class TraktList:
     def __init__(self, listid, listname):
         self.name = listname
         self.plex_items = []
+        self.description = None
         if listid is not None:
-            list_items = LazyUserList._get(listname, listid)._items
+            userlist = LazyUserList._get(listname, listid)
+            self.description = userlist.description
+            list_items = userlist._items
             prelist = [
                 (elem[0], elem[1])
                 for elem in list_items
@@ -79,13 +83,15 @@ class TraktList:
 
 
 class TraktListUtil:
+    lists: List[TraktList]
+
     def __init__(self):
         self.lists = []
 
     def addList(self, listid, listname, trakt_list=None):
         if trakt_list is not None:
             self.lists.append(TraktList.from_trakt_list(listname, trakt_list))
-            logger.info(f"Downloaded list '{listname}'")
+            logger.info(f"Created list '{listname}' from {len(trakt_list)} items")
             return
         try:
             self.lists.append(TraktList(listid, listname))
