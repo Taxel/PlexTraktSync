@@ -10,6 +10,7 @@ from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
 from plexapi.server import PlexServer
 
+from plextraktsync.config.ServerConfig import ServerConfig
 from plextraktsync.factory import factory
 from plextraktsync.style import (comment, disabled, error, highlight, prompt,
                                  success, title)
@@ -21,7 +22,7 @@ PROMPT_PLEX_RELOGIN = prompt(
     "You already have Plex Access Token, do you want to log in again?"
 )
 SUCCESS_MESSAGE = success(
-    "Plex Media Server Authentication Token and base URL have been added to .env file"
+    "Plex Media Server Authentication Token and base URL have been added to servers.yml"
 )
 NOTICE_2FA_PASSWORD = comment(
     "If you have 2 Factor Authentication enabled on Plex "
@@ -213,9 +214,18 @@ def login(username: str, password: str):
     CONFIG["PLEX_OWNER_TOKEN"] = plex_owner_token
     CONFIG["PLEX_ACCOUNT_TOKEN"] = plex_account_token
     CONFIG["PLEX_USERNAME"] = user
-    CONFIG["PLEX_TOKEN"] = token
-    CONFIG["PLEX_BASEURL"] = plex._baseurl
-    CONFIG["PLEX_LOCALURL"] = local_url()
+    CONFIG["PLEX_SERVER"] = server.name
     CONFIG.save()
+
+    sc = ServerConfig()
+    sc.add_server(
+        name=server.name,
+        token=token,
+        urls=[
+            plex._baseurl,
+            local_url(),
+        ],
+    )
+    sc.save()
 
     click.echo(SUCCESS_MESSAGE)

@@ -33,16 +33,23 @@ class Factory:
 
     @memoize
     def plex_server(self):
+        from plextraktsync.plex_server import PlexServerConnection
+
+        server = self.server_config()
+
+        return PlexServerConnection(factory).connect(
+            urls=server.urls,
+            token=server.token,
+        )
+
+    @memoize
+    def server_config(self):
         config = self.config()
 
-        from plextraktsync.plex_server import PlexServerConnection
-        return PlexServerConnection(factory).connect(
-            urls=[
-                config["PLEX_BASEURL"],
-                config["PLEX_LOCALURL"],
-            ],
-            token=config["PLEX_TOKEN"]
-        )
+        from plextraktsync.config.ServerConfig import ServerConfig
+
+        # NOTE: the load() is needed because config["PLEX_SERVER"] may change during migrate() there.
+        return ServerConfig().load().get_server(config["PLEX_SERVER"])
 
     @memoize
     def session(self):

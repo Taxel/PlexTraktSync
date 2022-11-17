@@ -56,7 +56,6 @@ class PlexServerConnection:
                 if "doesn't match '*." in message and ".plex.direct" in url:
                     url = self.extract_plex_direct(url, message)
                     self.logger.warning(f"Trying with url: {url}")
-                    self.save_new_url(url, urls[-1])
                     urls.append(url)
                     continue
 
@@ -87,12 +86,3 @@ class PlexServerConnection:
         end_pos = url.find(".plex.direct")
 
         return url[: end_pos - 32] + hash_value + url[end_pos:]
-
-    def save_new_url(self, base_url: str, local_url: str):
-        config = self.config
-
-        # save new url to .env
-        config["PLEX_BASEURL"] = base_url
-        config["PLEX_LOCALURL"] = local_url
-        config.save()
-        self.logger.info(f"Plex server url changed to {base_url}")
