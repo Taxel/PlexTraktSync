@@ -66,7 +66,7 @@ class PlexServerConnection:
             except ConnectionError as e:
                 self.logger.error(e)
                 # 2.
-                if url[:5] == "https":
+                if url and url[:5] == "https":
                     url = url.replace("https", "http")
                     self.logger.warning(f"Trying with url: {url}")
                     urls.append(url)
