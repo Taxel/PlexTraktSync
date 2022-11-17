@@ -76,10 +76,10 @@ class TraktList:
             self.plex_items.append((rank, plex_item))
             if isinstance(plex_item, Episode):
                 logger.info(
-                    f"Added to list {self.name}: {plex_item.show()}: {plex_item.seasonEpisode}"
+                    f"Added to list '{self.name}': {plex_item.show()}: {plex_item.seasonEpisode}"
                 )
             else:
-                logger.info(f"Added to list {self.name}: {plex_item}")
+                logger.info(f"Added to list '{self.name}': {plex_item}")
 
 
 class TraktListUtil:
@@ -91,14 +91,14 @@ class TraktListUtil:
     def addList(self, listid, listname, trakt_list=None):
         if trakt_list is not None:
             self.lists.append(TraktList.from_trakt_list(listname, trakt_list))
-            logger.info(f"Created {listname} from {len(trakt_list)} items")
+            logger.info(f"Created list '{listname}' from {len(trakt_list)} items")
             return
         try:
             self.lists.append(TraktList(listid, listname))
-            logger.info(f"Downloaded List: {listname}")
+            logger.info(f"Downloaded list '{listname}'")
         except (NotFoundException, OAuthException):
             logger.warning(
-                f"Failed to get list {listname} with id {listid}"
+                f"Failed to get list '{listname}' with id {listid}"
             )
 
     def addPlexItemToLists(self, m):
