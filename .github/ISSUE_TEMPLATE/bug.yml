@@ -86,6 +86,7 @@ body:
         - pip (not supported)
         - git clone (not supported)
         - zip download (not supported)
+        - Unraid installation (not supported)
     validations:
       required: true
 
