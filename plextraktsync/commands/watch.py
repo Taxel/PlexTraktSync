@@ -218,7 +218,10 @@ class WatchStateUpdater:
             return value
 
 
-def watch():
+def watch(server: str):
+    factory.run_config().update(
+        server=server,
+    )
     ws = factory.web_socket_listener
     updater = factory.watch_state_updater
 

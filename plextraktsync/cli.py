@@ -226,6 +226,11 @@ def unmatched():
 
 
 @command()
+@click.option(
+    "--server",
+    type=str,
+    help="Plex Server name from servers.yml",
+)
 def watch():
     """
     Listen to events from Plex
