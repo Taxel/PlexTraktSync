@@ -8,9 +8,9 @@ class PlexServerConfig:
     Class to hold single server config
     """
 
-    name: str = ""
-    token: str = ""
-    urls: List[str] = None
+    name: str
+    token: str
+    urls: List[str]
 
     def asdict(self):
         data = asdict(self)
