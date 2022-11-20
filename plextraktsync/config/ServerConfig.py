@@ -16,7 +16,7 @@ class ServerConfig(ConfigMergeMixin):
     def get_server(self, name: str):
         self.load()
         try:
-            return PlexServerConfig(**self.servers[name])
+            return PlexServerConfig(name=name, **self.servers[name])
         except KeyError:
             raise RuntimeError(f"Server with name {name} is not defined")
 
