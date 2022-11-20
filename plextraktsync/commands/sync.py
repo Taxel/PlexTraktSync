@@ -14,6 +14,7 @@ def sync(
     show: str,
     movie: str,
     ids: List[str],
+    server: str,
     batch_delay: int,
     dry_run: bool,
     no_progress_bar: bool,

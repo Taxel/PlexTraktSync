@@ -158,6 +158,11 @@ def plex_login():
     help="Specify what to sync",
 )
 @click.option(
+    "--server",
+    type=str,
+    help="Plex Server name from servers.yml",
+)
+@click.option(
     "--batch-delay",
     "batch_delay",
     type=int,
