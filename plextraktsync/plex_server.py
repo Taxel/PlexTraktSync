@@ -38,6 +38,7 @@ class PlexServerConnection:
         # 2. url without ssl
         # 3. local url (localhost)
         for url in urls:
+            self.logger.debug(f"Trying url: {url}")
             try:
                 return PlexServer(baseurl=url, token=token, session=self.session)
             except SSLError as e:
@@ -64,7 +65,7 @@ class PlexServerConnection:
             except ConnectionError as e:
                 self.logger.error(e)
                 # 2.
-                if url[:5] == "https":
+                if url and url[:5] == "https":
                     url = url.replace("https", "http")
                     self.logger.warning(f"Trying with url: {url}")
                     urls.append(url)
