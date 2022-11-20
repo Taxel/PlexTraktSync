@@ -24,14 +24,17 @@ def sync(
     """
 
     logger.info(f"PlexTraktSync [{version()}]")
-    ensure_login()
 
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]
 
     config = factory.run_config().update(
-        batch_delay=batch_delay, dry_run=dry_run, progressbar=not no_progress_bar
+        server=server,
+        batch_delay=batch_delay,
+        dry_run=dry_run,
+        progressbar=not no_progress_bar,
     )
+    ensure_login()
     wc = factory.walk_config().update(movies=movies, shows=shows)
     w = factory.walker()
 
