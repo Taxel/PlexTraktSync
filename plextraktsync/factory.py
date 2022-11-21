@@ -44,12 +44,19 @@ class Factory:
 
     @memoize
     def server_config(self):
-        config = self.config()
-
         from plextraktsync.config.ServerConfig import ServerConfig
 
-        # NOTE: the load() is needed because config["PLEX_SERVER"] may change during migrate() there.
-        return ServerConfig().load().get_server(config["PLEX_SERVER"])
+        config = self.config()
+        run_config = self.run_config()
+        server_config = ServerConfig()
+        server_name = run_config.server
+
+        if server_name is None:
+            # NOTE: the load() is needed because config["PLEX_SERVER"] may change during migrate() there.
+            server_config.load()
+            server_name = config["PLEX_SERVER"]
+
+        return server_config.get_server(server_name)
 
     @memoize
     def session(self):
