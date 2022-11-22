@@ -1,5 +1,4 @@
 from plextraktsync.decorators.cached_property import cached_property
-from plextraktsync.decorators.memoize import memoize
 
 
 class Factory:
@@ -77,8 +76,8 @@ class Factory:
 
         return Sync(config, plex, trakt)
 
-    @memoize
-    def progressbar(self, **kwargs):
+    @cached_property
+    def progressbar(self):
         enabled = self.run_config.progressbar
 
         if enabled:
@@ -126,7 +125,7 @@ class Factory:
         plex = self.plex_api
         trakt = self.trakt_api
         mf = self.media_factory
-        pb = self.progressbar()
+        pb = self.progressbar
         w = Walker(plex=plex, trakt=trakt, mf=mf, config=walk_config, progressbar=pb)
 
         return w
