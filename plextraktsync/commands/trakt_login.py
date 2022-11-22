@@ -60,7 +60,7 @@ def trakt_login():
 
 
 def login():
-    api = factory.trakt_api()
+    api = factory.trakt_api
     trakt_authenticate(api)
     user = api.me.username
 

@@ -4,7 +4,7 @@ from unittest.mock import Mock
 from plextraktsync.trakt_api import TraktBatch
 from tests.conftest import factory, load_mock
 
-trakt = factory.trakt_api()
+trakt = factory.trakt_api
 
 
 def test_batch_size_none():

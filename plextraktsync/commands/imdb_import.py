@@ -59,7 +59,7 @@ class Ratings:
 
 
 def imdb_import(input: PathLike, dry_run: bool):
-    trakt = factory.trakt_api()
+    trakt = factory.trakt_api
 
     for r in read_csv(input):
         print(f"Importing [blue]{r.media_type} {r.imdb}[/]: {r.title} ({r.year}), rated at {r.rate_date}")

@@ -3,7 +3,7 @@ from plextraktsync.decorators.memoize import memoize
 
 
 class Factory:
-    @memoize
+    @cached_property
     def trakt_api(self):
         from plextraktsync.trakt_api import TraktApi
 
@@ -25,7 +25,7 @@ class Factory:
     def media_factory(self):
         from plextraktsync.media import MediaFactory
 
-        trakt = self.trakt_api()
+        trakt = self.trakt_api
         plex = self.plex_api()
         mf = MediaFactory(plex, trakt)
 
@@ -73,7 +73,7 @@ class Factory:
 
         config = self.config()
         plex = self.plex_api()
-        trakt = self.trakt_api()
+        trakt = self.trakt_api
 
         return Sync(config, plex, trakt)
 
@@ -123,7 +123,7 @@ class Factory:
         config = self.run_config()
         walk_config = self.walk_config()
         plex = self.plex_api()
-        trakt = self.trakt_api()
+        trakt = self.trakt_api
         mf = self.media_factory()
         pb = self.progressbar(config.progressbar)
         w = Walker(plex=plex, trakt=trakt, mf=mf, config=walk_config, progressbar=pb)
@@ -142,7 +142,7 @@ class Factory:
 
         return WatchStateUpdater(
             plex=self.plex_api(),
-            trakt=self.trakt_api(),
+            trakt=self.trakt_api,
             mf=self.media_factory(),
             config=self.config(),
         )

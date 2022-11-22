@@ -5,7 +5,7 @@ from plextraktsync.pytrakt_extensions import ShowProgress
 from plextraktsync.trakt_api import TraktApi
 from tests.conftest import factory
 
-trakt: TraktApi = factory.trakt_api()
+trakt: TraktApi = factory.trakt_api
 
 
 def test_trakt_watched_progress():

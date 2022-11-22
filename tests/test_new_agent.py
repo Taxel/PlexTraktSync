@@ -2,7 +2,7 @@
 from plextraktsync.plex_api import PlexLibraryItem
 from tests.conftest import factory, make
 
-trakt = factory.trakt_api()
+trakt = factory.trakt_api
 
 
 def test_tv_lookup():

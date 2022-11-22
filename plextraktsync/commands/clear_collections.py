@@ -8,7 +8,7 @@ def clear_collections(confirm, dry_run):
         click.echo("You need to pass --confirm or --dry-run option to proceed")
         return
 
-    trakt = factory.trakt_api()
+    trakt = factory.trakt_api
 
     for movie in trakt.movie_collection:
         logger.info(f"Deleting: {movie}")
