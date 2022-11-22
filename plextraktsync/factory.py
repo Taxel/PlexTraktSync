@@ -110,7 +110,7 @@ class Factory:
 
         return wc
 
-    @memoize
+    @cached_property
     def plex_audio_codec(self):
         from plextraktsync.plex_api import PlexAudioCodec
 

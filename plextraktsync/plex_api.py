@@ -303,7 +303,7 @@ class PlexLibraryItem:
         except (AttributeError, IndexError, TypeError, AssertionError):
             return None
 
-        return factory.plex_audio_codec().match(codec)
+        return factory.plex_audio_codec.match(codec)
 
     @property
     def resolution(self):
