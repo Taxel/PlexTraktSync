@@ -10,7 +10,7 @@ def unmatched(no_progress_bar: bool, local: bool):
     ensure_login()
     plex = factory.plex_api
     trakt = factory.trakt_api
-    mf = factory.media_factory()
+    mf = factory.media_factory
     pb = factory.progressbar(config.progressbar)
     wc = WalkConfig()
     walker = Walker(plex, trakt, mf, wc, progressbar=pb)

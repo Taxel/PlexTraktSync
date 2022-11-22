@@ -10,7 +10,7 @@ from plextraktsync.version import version
 
 def inspect_media(id):
     plex = factory.plex_api
-    mf = factory.media_factory()
+    mf = factory.media_factory
 
     print("")
     pm: PlexLibraryItem = plex.fetch_item(id)

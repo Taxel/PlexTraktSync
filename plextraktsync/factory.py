@@ -21,7 +21,7 @@ class Factory:
 
         return plex
 
-    @memoize
+    @cached_property
     def media_factory(self):
         from plextraktsync.media import MediaFactory
 
@@ -124,7 +124,7 @@ class Factory:
         walk_config = self.walk_config()
         plex = self.plex_api
         trakt = self.trakt_api
-        mf = self.media_factory()
+        mf = self.media_factory
         pb = self.progressbar(config.progressbar)
         w = Walker(plex=plex, trakt=trakt, mf=mf, config=walk_config, progressbar=pb)
 
@@ -143,7 +143,7 @@ class Factory:
         return WatchStateUpdater(
             plex=self.plex_api,
             trakt=self.trakt_api,
-            mf=self.media_factory(),
+            mf=self.media_factory,
             config=self.config(),
         )
 
