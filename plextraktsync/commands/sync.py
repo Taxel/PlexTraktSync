@@ -36,7 +36,7 @@ def sync(
     )
     ensure_login()
     wc = factory.walk_config.update(movies=movies, shows=shows)
-    w = factory.walker()
+    w = factory.walker
 
     if ids:
         for id in ids:

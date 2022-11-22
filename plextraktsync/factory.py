@@ -116,7 +116,7 @@ class Factory:
 
         return PlexAudioCodec()
 
-    @memoize
+    @cached_property
     def walker(self):
         from plextraktsync.walker import Walker
 
