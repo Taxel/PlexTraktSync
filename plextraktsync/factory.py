@@ -78,7 +78,9 @@ class Factory:
         return Sync(config, plex, trakt)
 
     @memoize
-    def progressbar(self, enabled=True):
+    def progressbar(self, **kwargs):
+        enabled = self.run_config.progressbar
+
         if enabled:
             import warnings
             from functools import partial
