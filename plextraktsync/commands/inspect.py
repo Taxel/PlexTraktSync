@@ -9,7 +9,7 @@ from plextraktsync.version import version
 
 
 def inspect_media(id):
-    plex = factory.plex_api()
+    plex = factory.plex_api
     mf = factory.media_factory()
 
     print("")

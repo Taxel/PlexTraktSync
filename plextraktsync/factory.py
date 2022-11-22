@@ -12,7 +12,7 @@ class Factory:
 
         return trakt
 
-    @memoize
+    @cached_property
     def plex_api(self):
         from plextraktsync.plex_api import PlexApi
 
@@ -26,7 +26,7 @@ class Factory:
         from plextraktsync.media import MediaFactory
 
         trakt = self.trakt_api
-        plex = self.plex_api()
+        plex = self.plex_api
         mf = MediaFactory(plex, trakt)
 
         return mf
@@ -72,7 +72,7 @@ class Factory:
         from plextraktsync.sync import Sync
 
         config = self.config()
-        plex = self.plex_api()
+        plex = self.plex_api
         trakt = self.trakt_api
 
         return Sync(config, plex, trakt)
@@ -122,7 +122,7 @@ class Factory:
 
         config = self.run_config()
         walk_config = self.walk_config()
-        plex = self.plex_api()
+        plex = self.plex_api
         trakt = self.trakt_api
         mf = self.media_factory()
         pb = self.progressbar(config.progressbar)
@@ -141,7 +141,7 @@ class Factory:
         from plextraktsync.commands.watch import WatchStateUpdater
 
         return WatchStateUpdater(
-            plex=self.plex_api(),
+            plex=self.plex_api,
             trakt=self.trakt_api,
             mf=self.media_factory(),
             config=self.config(),

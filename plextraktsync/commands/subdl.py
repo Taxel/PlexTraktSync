@@ -21,7 +21,7 @@ def download(plex: PlexApi, pm: PlexLibraryItem):
 
 
 def subdl(input):
-    plex = factory.plex_api()
+    plex = factory.plex_api
 
     for id in expand_id(input):
         pm = plex.fetch_item(id)
