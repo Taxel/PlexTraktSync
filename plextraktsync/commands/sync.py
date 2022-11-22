@@ -35,7 +35,7 @@ def sync(
         progressbar=not no_progress_bar,
     )
     ensure_login()
-    wc = factory.walk_config().update(movies=movies, shows=shows)
+    wc = factory.walk_config.update(movies=movies, shows=shows)
     w = factory.walker()
 
     if ids:

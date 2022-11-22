@@ -102,7 +102,7 @@ class Factory:
 
         return config
 
-    @memoize
+    @cached_property
     def walk_config(self):
         from plextraktsync.walker import WalkConfig
 
@@ -121,7 +121,7 @@ class Factory:
         from plextraktsync.walker import Walker
 
         config = self.run_config
-        walk_config = self.walk_config()
+        walk_config = self.walk_config
         plex = self.plex_api
         trakt = self.trakt_api
         mf = self.media_factory
