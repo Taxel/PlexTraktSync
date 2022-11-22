@@ -67,7 +67,7 @@ class Factory:
 
         return session
 
-    @memoize
+    @cached_property
     def sync(self):
         from plextraktsync.sync import Sync
 

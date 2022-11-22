@@ -53,7 +53,7 @@ def sync(
         return
 
     with measure_time("Completed full sync"):
-        runner = factory.sync()
+        runner = factory.sync
         if runner.config.need_library_walk:
             w.print_plan(print=logger.info)
         if dry_run:
