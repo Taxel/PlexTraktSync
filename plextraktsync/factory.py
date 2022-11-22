@@ -78,22 +78,20 @@ class Factory:
 
     @cached_property
     def progressbar(self):
-        enabled = self.run_config.progressbar
+        if not self.run_config.progressbar:
+            return None
 
-        if enabled:
-            import warnings
-            from functools import partial
+        import warnings
+        from functools import partial
 
-            from tqdm import TqdmExperimentalWarning
-            from tqdm.rich import tqdm
+        from tqdm import TqdmExperimentalWarning
+        from tqdm.rich import tqdm
 
-            from plextraktsync.console import console
+        from plextraktsync.console import console
 
-            warnings.filterwarnings("ignore", category=TqdmExperimentalWarning)
+        warnings.filterwarnings("ignore", category=TqdmExperimentalWarning)
 
-            return partial(tqdm, options={'console': console})
-
-        return None
+        return partial(tqdm, options={'console': console})
 
     @cached_property
     def run_config(self):
