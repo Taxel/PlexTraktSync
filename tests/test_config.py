@@ -8,7 +8,7 @@ from plextraktsync.sync import SyncConfig
 
 
 def test_config_merge():
-    config = factory.config()
+    config = factory.config
 
     override = {"root": {"key1": "value1"}}
     config.merge(override, config)
@@ -38,7 +38,7 @@ def test_sync_config():
 
 
 def test_config():
-    config = factory.config()
+    config = factory.config
 
     config.save()
     config.initialized = False

@@ -46,7 +46,7 @@ class Factory:
     def server_config(self):
         from plextraktsync.config.ServerConfig import ServerConfig
 
-        config = self.config()
+        config = self.config
         run_config = self.run_config
         server_config = ServerConfig()
         server_name = run_config.server
@@ -62,7 +62,7 @@ class Factory:
     def session(self):
         from requests_cache import CachedSession
 
-        config = self.config()
+        config = self.config
         session = CachedSession(config.cache_path)
 
         return session
@@ -71,7 +71,7 @@ class Factory:
     def sync(self):
         from plextraktsync.sync import Sync
 
-        config = self.config()
+        config = self.config
         plex = self.plex_api
         trakt = self.trakt_api
 
@@ -144,7 +144,7 @@ class Factory:
             plex=self.plex_api,
             trakt=self.trakt_api,
             mf=self.media_factory,
-            config=self.config(),
+            config=self.config,
         )
 
     @cached_property
@@ -153,7 +153,7 @@ class Factory:
 
         from plextraktsync.logging import initialize
 
-        config = self.config()
+        config = self.config
         initialize(config)
 
         return logging
@@ -161,7 +161,7 @@ class Factory:
     @cached_property
     def logger(self):
         logger = self.logging.getLogger("PlexTraktSync")
-        config = self.config()
+        config = self.config
 
         from plextraktsync.logger.filter import LoggerFilter
         logger.addFilter(LoggerFilter(config["logging"]["filter"], logger))
@@ -175,7 +175,7 @@ class Factory:
         from plextraktsync.console import console
         from plextraktsync.rich_addons import RichHighlighter
 
-        config = self.config()
+        config = self.config
         handler = RichHandler(
             console=console,
             show_time=config.log_console_time,
@@ -186,7 +186,7 @@ class Factory:
 
         return handler
 
-    @memoize
+    @cached_property
     def config(self):
         from plextraktsync.config import Config
 

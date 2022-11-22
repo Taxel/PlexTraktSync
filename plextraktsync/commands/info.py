@@ -20,7 +20,7 @@ def info(print=logger.info):
     print(f"Config Dir: {config_dir}")
     print(f"Log Dir: {log_dir}")
 
-    config = factory.config()
+    config = factory.config
     print(f"Log File: {config.log_file}")
     print(f"Cache File: {config.cache_path}.sqlite")
     print(f"Config File: {config.config_yml}")

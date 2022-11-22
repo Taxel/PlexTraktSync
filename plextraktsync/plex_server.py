@@ -21,7 +21,7 @@ class PlexServerConnection:
 
     @property
     def config(self):
-        return self.factory.config()
+        return self.factory.config
 
     @property
     def session(self):

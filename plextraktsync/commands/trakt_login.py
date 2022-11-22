@@ -44,7 +44,7 @@ def has_trakt_token():
     if not exists(pytrakt_file):
         return False
 
-    CONFIG = factory.config()
+    CONFIG = factory.config
     return CONFIG["TRAKT_USERNAME"] is not None
 
 
@@ -64,7 +64,7 @@ def login():
     trakt_authenticate(api)
     user = api.me.username
 
-    CONFIG = factory.config()
+    CONFIG = factory.config
     CONFIG["TRAKT_USERNAME"] = user
     CONFIG.save()
 
