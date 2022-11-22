@@ -28,7 +28,7 @@ def sync(
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]
 
-    config = factory.run_config().update(
+    config = factory.run_config.update(
         server=server,
         batch_delay=batch_delay,
         dry_run=dry_run,

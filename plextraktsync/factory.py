@@ -7,7 +7,7 @@ class Factory:
     def trakt_api(self):
         from plextraktsync.trakt_api import TraktApi
 
-        config = self.run_config()
+        config = self.run_config
         trakt = TraktApi(batch_delay=config.batch_delay)
 
         return trakt
@@ -47,7 +47,7 @@ class Factory:
         from plextraktsync.config.ServerConfig import ServerConfig
 
         config = self.config()
-        run_config = self.run_config()
+        run_config = self.run_config
         server_config = ServerConfig()
         server_name = run_config.server
 
@@ -94,7 +94,7 @@ class Factory:
 
         return None
 
-    @memoize
+    @cached_property
     def run_config(self):
         from plextraktsync.config.RunConfig import RunConfig
 
@@ -120,7 +120,7 @@ class Factory:
     def walker(self):
         from plextraktsync.walker import Walker
 
-        config = self.run_config()
+        config = self.run_config
         walk_config = self.walk_config()
         plex = self.plex_api
         trakt = self.trakt_api
