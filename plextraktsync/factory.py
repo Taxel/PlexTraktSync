@@ -58,7 +58,7 @@ class Factory:
 
         return server_config.get_server(server_name)
 
-    @memoize
+    @cached_property
     def session(self):
         from requests_cache import CachedSession
 

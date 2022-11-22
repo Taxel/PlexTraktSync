@@ -25,7 +25,7 @@ class PlexServerConnection:
 
     @property
     def session(self):
-        return self.factory.session()
+        return self.factory.session
 
     @nocache
     def connect(self, urls: List[str], token: str):
