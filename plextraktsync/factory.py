@@ -35,14 +35,14 @@ class Factory:
     def plex_server(self):
         from plextraktsync.plex_server import PlexServerConnection
 
-        server = self.server_config()
+        server = self.server_config
 
         return PlexServerConnection(factory).connect(
             urls=server.urls,
             token=server.token,
         )
 
-    @memoize
+    @cached_property
     def server_config(self):
         from plextraktsync.config.ServerConfig import ServerConfig
 
