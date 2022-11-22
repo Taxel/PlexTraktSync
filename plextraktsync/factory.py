@@ -122,12 +122,11 @@ class Factory:
     def walker(self):
         from plextraktsync.walker import Walker
 
-        config = self.run_config
         walk_config = self.walk_config
         plex = self.plex_api
         trakt = self.trakt_api
         mf = self.media_factory
-        pb = self.progressbar(config.progressbar)
+        pb = self.progressbar()
         w = Walker(plex=plex, trakt=trakt, mf=mf, config=walk_config, progressbar=pb)
 
         return w
