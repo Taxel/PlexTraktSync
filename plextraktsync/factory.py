@@ -16,7 +16,7 @@ class Factory:
     def plex_api(self):
         from plextraktsync.plex_api import PlexApi
 
-        server = self.plex_server()
+        server = self.plex_server
         plex = PlexApi(server)
 
         return plex
@@ -31,7 +31,7 @@ class Factory:
 
         return mf
 
-    @memoize
+    @cached_property
     def plex_server(self):
         from plextraktsync.plex_server import PlexServerConnection
 
@@ -134,7 +134,7 @@ class Factory:
     def web_socket_listener(self):
         from plextraktsync.listener import WebSocketListener
 
-        return WebSocketListener(plex=self.plex_server())
+        return WebSocketListener(plex=self.plex_server)
 
     @cached_property
     def watch_state_updater(self):
