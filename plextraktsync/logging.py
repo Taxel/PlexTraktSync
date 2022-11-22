@@ -8,7 +8,7 @@ def initialize(config):
     log_level = logging.DEBUG if config.log_debug else logging.INFO
 
     # messages with info and above are printed to stdout
-    console_handler = factory.console_logger()
+    console_handler = factory.console_logger
     console_handler.terminator = ""
     console_handler.setFormatter(logging.Formatter("%(message)s"))
     console_handler.setLevel(logging.INFO)

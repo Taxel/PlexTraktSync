@@ -168,7 +168,7 @@ class Factory:
 
         return logger
 
-    @memoize
+    @cached_property
     def console_logger(self):
         from rich.logging import RichHandler
 
