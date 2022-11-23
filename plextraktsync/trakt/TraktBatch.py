@@ -8,7 +8,6 @@ import trakt.movies
 import trakt.sync
 import trakt.users
 
-from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
@@ -31,7 +30,6 @@ class TraktBatch:
         if cleanup:
             cleanup.add(self.flush)
 
-    @nocache
     @rate_limit()
     @time_limit()
     @retry()

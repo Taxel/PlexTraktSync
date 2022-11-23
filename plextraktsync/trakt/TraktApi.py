@@ -12,7 +12,6 @@ from trakt.errors import ForbiddenException, OAuthException
 from plextraktsync import pytrakt_extensions
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_list
-from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
@@ -66,7 +65,6 @@ class TraktApi:
         return self.trakt_batch("watchlist", add=False)
 
     @cached_property
-    @nocache
     @rate_limit()
     @retry()
     def me(self):
@@ -77,7 +75,6 @@ class TraktApi:
             raise e
 
     @cached_property
-    @nocache
     @rate_limit()
     @retry()
     @flatten_list
@@ -89,27 +86,23 @@ class TraktApi:
             }
 
     @cached_property
-    @nocache
     @rate_limit()
     @retry()
     def watched_movies(self):
         return set(map(lambda m: m.trakt, self.me.watched_movies))
 
     @cached_property
-    @nocache
     @rate_limit()
     @retry()
     def movie_collection(self):
         return self.me.movie_collection
 
     @cached_property
-    @nocache
     @rate_limit()
     @retry()
     def show_collection(self):
         return self.me.show_collection
 
-    @nocache
     @rate_limit()
     @time_limit()
     @retry()
@@ -121,28 +114,24 @@ class TraktApi:
         return set(map(lambda m: m.trakt, self.movie_collection))
 
     @cached_property
-    @nocache
     @rate_limit()
     @retry()
     def watched_shows(self):
         return pytrakt_extensions.allwatched()
 
     @cached_property
-    @nocache
     @rate_limit()
     @retry()
     def collected_shows(self):
         return pytrakt_extensions.allcollected()
 
     @cached_property
-    @nocache
     @rate_limit()
     @retry()
     def watchlist_movies(self) -> List[Movie]:
         return self.me.watchlist_movies
 
     @cached_property
-    @nocache
     @rate_limit()
     @retry()
     def watchlist_shows(self) -> List[TVShow]:
@@ -165,13 +154,11 @@ class TraktApi:
         else:
             raise ValueError(f"Unsupported type: {m.media_type}")
 
-    @nocache
     @rate_limit()
     @retry()
     def get_ratings(self, media_type: str):
         return self.me.get_ratings(media_type)
 
-    @nocache
     @rate_limit()
     @time_limit()
     @retry()
@@ -183,7 +170,6 @@ class TraktApi:
         scrobbler = media.scrobble(0, None, None)
         return ScrobblerProxy(scrobbler, threshold)
 
-    @nocache
     @rate_limit()
     @time_limit()
     @retry()
