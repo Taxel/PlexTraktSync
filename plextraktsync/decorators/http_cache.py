@@ -1,16 +1,23 @@
 from functools import wraps
 
-from requests_cache import CachedSession
+from requests_cache import CachedSession, ExpirationTime
 
 from plextraktsync.factory import factory
 
 session: CachedSession = factory.session
 
 
-def http_cache(method, expire_after=None):
-    @wraps(method)
-    def inner(self, *args, **kwargs):
-        with session.request_expire_after(expire_after):
-            return method(self, *args, **kwargs)
+def http_cache(expire_after: ExpirationTime = None):
+    def decorator(fn):
+        @wraps(fn)
+        def inner(self, *args, **kwargs):
+            previous = session.expire_after
+            session.expire_after = expire_after
+            try:
+                return fn(self, *args, **kwargs)
+            finally:
+                session.expire_after = previous
 
-    return inner
+        return inner
+
+    return decorator
