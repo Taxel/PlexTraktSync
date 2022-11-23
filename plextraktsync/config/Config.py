@@ -62,6 +62,12 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
     def cache_path(self):
         return self["cache"]["path"]
 
+    @property
+    def http_cache(self):
+        from plextraktsync.config.HttpCacheConfig import HttpCacheConfig
+
+        return HttpCacheConfig(**self["http_cache"])
+
     def initialize(self):
         """
         Config load order:
