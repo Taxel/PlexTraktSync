@@ -16,6 +16,15 @@ class PlexServerConfig:
     id: str = None
     config: dict = None
 
+    @property
+    def base_urls(self):
+        """
+        Returns unique host:port of all urls
+        """
+        from urllib.parse import urlparse
+
+        return {urlparse(url).netloc for url in self.urls}
+
     def asdict(self):
         data = asdict(self)
         del data["name"]
