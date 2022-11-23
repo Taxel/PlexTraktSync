@@ -225,10 +225,7 @@ def login(username: str, password: str):
     sc.add_server(
         name=server.name,
         token=token,
-        urls=[
-            plex._baseurl,
-            local_url(),
-        ],
+        urls=server_urls(server),
     )
     sc.save()
 
