@@ -1,7 +1,7 @@
 #!/usr/bin/env python3 -m pytest
 from tests.conftest import factory
 
-plex = factory.plex_api()
+plex = factory.plex_api
 
 
 def test_plex_search():

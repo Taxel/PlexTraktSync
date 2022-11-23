@@ -28,7 +28,7 @@ NOTICE_2FA_PASSWORD = comment(
     "If you have 2 Factor Authentication enabled on Plex "
     "you can append the code to your password below (eg. passwordCODE)"
 )
-CONFIG = factory.config()
+CONFIG = factory.config
 
 
 style = get_style(

@@ -5,7 +5,7 @@ from plextraktsync.factory import factory
 
 
 def watched_shows():
-    trakt = factory.trakt_api()
+    trakt = factory.trakt_api
 
     table = Table(
         show_header=True, header_style="bold magenta", title="Watched shows on Trakt"

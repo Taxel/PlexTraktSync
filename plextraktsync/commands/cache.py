@@ -74,7 +74,7 @@ def cache_status(cache):
 
 
 def cache(sort: str, limit: int, reverse: bool, url: str):
-    session = factory.session()
+    session = factory.session
 
     if url:
         inspect_url(session, url)

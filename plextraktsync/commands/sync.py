@@ -28,15 +28,15 @@ def sync(
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]
 
-    config = factory.run_config().update(
+    config = factory.run_config.update(
         server=server,
         batch_delay=batch_delay,
         dry_run=dry_run,
         progressbar=not no_progress_bar,
     )
     ensure_login()
-    wc = factory.walk_config().update(movies=movies, shows=shows)
-    w = factory.walker()
+    wc = factory.walk_config.update(movies=movies, shows=shows)
+    w = factory.walker
 
     if ids:
         for id in ids:
@@ -53,7 +53,7 @@ def sync(
         return
 
     with measure_time("Completed full sync"):
-        runner = factory.sync()
+        runner = factory.sync
         if runner.config.need_library_walk:
             w.print_plan(print=logger.info)
         if dry_run:

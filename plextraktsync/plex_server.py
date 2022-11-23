@@ -21,11 +21,11 @@ class PlexServerConnection:
 
     @property
     def config(self):
-        return self.factory.config()
+        return self.factory.config
 
     @property
     def session(self):
-        return self.factory.session()
+        return self.factory.session
 
     @nocache
     def connect(self, urls: List[str], token: str):

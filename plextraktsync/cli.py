@@ -6,7 +6,7 @@ import click
 from plextraktsync.commands.self_update import enable_self_update
 from plextraktsync.factory import factory
 
-CONFIG = factory.config()
+CONFIG = factory.config
 
 
 def command():

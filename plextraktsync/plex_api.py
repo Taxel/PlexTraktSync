@@ -43,10 +43,10 @@ class PlexGuid:
         x = x.replace("themoviedb", "tmdb")
         x = x.replace("thetvdb", "tvdb")
         if x == "xbmcnfo":
-            CONFIG = factory.config()
+            CONFIG = factory.config
             x = CONFIG["xbmc-providers"][self.media_type]
         if x == "xbmcnfotv":
-            CONFIG = factory.config()
+            CONFIG = factory.config
             x = CONFIG["xbmc-providers"]["shows"]
 
         return x
@@ -303,7 +303,7 @@ class PlexLibraryItem:
         except (AttributeError, IndexError, TypeError, AssertionError):
             return None
 
-        return factory.plex_audio_codec().match(codec)
+        return factory.plex_audio_codec.match(codec)
 
     @property
     def resolution(self):
@@ -580,7 +580,7 @@ class PlexApi:
     @nocache
     @flatten_dict
     def library_sections(self) -> Dict[int, PlexLibrarySection]:
-        CONFIG = factory.config()
+        CONFIG = factory.config
         for section in self.plex.library.sections():
             if section.title in CONFIG["excluded-libraries"]:
                 continue
@@ -693,7 +693,7 @@ class PlexApi:
 
     @nocache
     def _plex_account(self):
-        CONFIG = factory.config()
+        CONFIG = factory.config
         plex_owner_token = CONFIG.get("PLEX_OWNER_TOKEN")
         plex_account_token = CONFIG.get("PLEX_ACCOUNT_TOKEN")
         plex_username = CONFIG.get("PLEX_USERNAME")

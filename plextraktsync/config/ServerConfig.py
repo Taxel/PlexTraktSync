@@ -38,7 +38,7 @@ class ServerConfig(ConfigMergeMixin):
 
     def migrate(self):
         from plextraktsync.factory import factory
-        config = factory.config()
+        config = factory.config
         self.add_server(
             name="default",
             urls=[

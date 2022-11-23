@@ -2,7 +2,7 @@ from functools import wraps
 
 from plextraktsync.factory import factory
 
-session = factory.session()
+session = factory.session
 
 
 def http_cache(method, expire_after=None):

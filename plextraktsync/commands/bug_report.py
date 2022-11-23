@@ -9,7 +9,7 @@ def bug_url():
     from plextraktsync.factory import factory
     from plextraktsync.util.versions import (pts_version, py_platform,
                                              py_version)
-    config = factory.config()
+    config = factory.config
 
     q = urlencode({
         'os': py_platform(),

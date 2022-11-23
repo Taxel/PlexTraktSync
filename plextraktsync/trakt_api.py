@@ -92,7 +92,7 @@ class TraktApi:
     def __init__(self, batch_delay=None):
         self.batch_delay = batch_delay
         trakt.core.CONFIG_PATH = pytrakt_file
-        trakt.core.session = factory.session()
+        trakt.core.session = factory.session
 
     @staticmethod
     def device_auth(client_id: str, client_secret: str):
