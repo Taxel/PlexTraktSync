@@ -46,6 +46,7 @@ def server_urls(server: MyPlexResource):
     """
 
     yield from [c.uri for c in server.connections]
+    yield from [c.httpuri for c in server.connections]
     yield local_url()
 
 
