@@ -11,6 +11,7 @@ on:
       - main
     tags:
       - '*.*.*'
+  pull_request:
 
 env:
   REGISTRY: ghcr.io
@@ -82,6 +83,8 @@ jobs:
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
+        # Run this only on tags and main branch
+        if: ${{ github.event_name != 'pull_request' }}
         env:
           APP_VERSION: ${{ steps.vars.outputs.version }}
         with:

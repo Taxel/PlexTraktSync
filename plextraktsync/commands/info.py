@@ -5,7 +5,7 @@ from trakt import __version__ as TRAKT_API_VERSION
 
 from plextraktsync.commands.plex_login import has_plex_token
 from plextraktsync.factory import factory, logger
-from plextraktsync.path import cache_dir, config_dir, log_dir
+from plextraktsync.path import cache_dir, config_dir, log_dir, servers_config
 from plextraktsync.version import version as get_version
 
 
@@ -24,9 +24,12 @@ def info(print=logger.info):
     print(f"Log File: {config.log_file}")
     print(f"Cache File: {config.cache_path}.sqlite")
     print(f"Config File: {config.config_yml}")
+    print(f"Servers Config File: {servers_config}")
 
     print(f"Plex username: {config['PLEX_USERNAME']}")
     print(f"Trakt username: {config['TRAKT_USERNAME']}")
+
+    print(f"Plex Server Name: {factory.server_config().name}")
 
     if has_plex_token():
         plex = factory.plex_api()
