@@ -45,8 +45,13 @@ def server_urls(server: MyPlexResource):
     Return urls to connect to specific server
     """
 
-    yield from [c.uri for c in server.connections]
-    yield from [c.httpuri for c in server.connections]
+    # https://github.com/pkkid/python-plexapi/blob/3d3f9da5012428f5d703cf9f8e95f6aa10673ea6/plexapi/myplex.py#L1309-L1314
+    connections = server.preferred_connections(
+        None,
+        locations=server.DEFAULT_LOCATION_ORDER,
+        schemes=server.DEFAULT_SCHEME_ORDER
+    )
+    yield from connections
     yield local_url()
 
 
