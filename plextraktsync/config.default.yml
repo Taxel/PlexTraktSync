@@ -1,6 +1,21 @@
 cache:
   path: $PTS_CACHE_DIR/trakt_cache
 
+http_cache:
+  never_cache:
+    # Requests matching these patterns will not be cached
+    - "*.trakt.tv/shows/*/seasons"
+    - "*.trakt.tv/sync/collection/shows"
+    - "*.trakt.tv/sync/watched/shows"
+    - "*.trakt.tv/users/*/collection/movies"
+    - "*.trakt.tv/users/*/collection/shows"
+    - "*.trakt.tv/users/*/ratings/*"
+    - "*.trakt.tv/users/*/watched/movies"
+    - "*.trakt.tv/users/*/watchlist/movies"
+    - "*.trakt.tv/users/*/watchlist/shows"
+    - "*.trakt.tv/users/likes/lists"
+    - "*.trakt.tv/users/me"
+
 excluded-libraries:
   - Private
   - Family Holidays
