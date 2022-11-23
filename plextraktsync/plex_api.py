@@ -532,8 +532,8 @@ class PlexApi:
             yield section
 
     @memoize
-    @nocache
     @retry()
+    @http_cache(expire_after=datetime.timedelta(days=1))
     def fetch_item(self, key: Union[int, str]) -> Optional[PlexLibraryItem]:
         try:
             media = self.plex.library.fetchItem(key)
