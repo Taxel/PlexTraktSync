@@ -29,6 +29,8 @@ def info(print=logger.info):
     print(f"Plex username: {config['PLEX_USERNAME']}")
     print(f"Trakt username: {config['TRAKT_USERNAME']}")
 
+    print(f"Plex Server Name: {factory.server_config().name}")
+
     if has_plex_token():
         plex = factory.plex_api()
         print(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
