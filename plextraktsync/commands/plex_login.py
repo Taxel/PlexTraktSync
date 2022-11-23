@@ -8,7 +8,6 @@ from click import ClickException
 from InquirerPy import get_style, inquirer
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
-from plexapi.server import PlexServer
 
 from plextraktsync.config.ServerConfig import ServerConfig
 from plextraktsync.decorators.flatten import flatten_list
@@ -177,8 +176,6 @@ def choose_server(account: MyPlexAccount):
             for c in server.connections:
                 click.echo(f"    {c.uri}")
             plex = server.connect()
-            # Validate connection again, the way we connect
-            plex = PlexServer(token=server.accessToken, baseurl=plex._baseurl)
             return [server, plex]
         except NotFound as e:
             click.secho(f"{e}, Try another server, {type(e)}")
