@@ -16,11 +16,11 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    # Set dependency-type: "indirect"
+    # Set dependency-type
     # https://github.com/dependabot/dependabot-core/issues/6200#issuecomment-1325144662
     # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#allow
     allow:
-      - dependency-type: "indirect"
+      - dependency-type: "all"
 
   - package-ecosystem: "docker"
     directory: "/"
