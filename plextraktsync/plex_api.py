@@ -17,6 +17,7 @@ from trakt.utils import timestamp
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_dict, flatten_list
+from plextraktsync.decorators.http_cache import http_cache
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.retry import retry
@@ -561,6 +562,7 @@ class PlexApi:
 
         return plexapi.utils.download(url, token, **kwargs)
 
+    @http_cache(expire_after=datetime.timedelta(days=1))
     def search(self, title: str, **kwargs):
         result = self.plex.library.search(title, **kwargs)
         for media in result:
