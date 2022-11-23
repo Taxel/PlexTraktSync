@@ -11,6 +11,7 @@ from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
 from plexapi.server import PlexServer
 
 from plextraktsync.config.ServerConfig import ServerConfig
+from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.factory import factory
 from plextraktsync.style import (comment, disabled, error, highlight, prompt,
                                  success, title)
@@ -37,6 +38,16 @@ style = get_style(
         "pointer": "fg:ansiblack bg:ansiyellow",
     }
 )
+
+
+@flatten_list
+def server_urls(server: MyPlexResource):
+    """
+    Return urls to connect to specific server
+    """
+
+    yield from [c.uri for c in server.connections]
+    yield local_url()
 
 
 def myplex_login(username, password):
