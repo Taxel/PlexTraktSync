@@ -40,3 +40,5 @@ VOLUME /app/config
 COPY --from=build /root/.local/share/virtualenvs/app-*/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=compile /app ./
 RUN ln -s /app/plextraktsync.sh /usr/bin/plextraktsync
+# https://github.com/python/cpython/issues/69667
+RUN chmod a+x /root
