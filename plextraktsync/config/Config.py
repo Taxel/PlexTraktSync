@@ -11,14 +11,14 @@ from plextraktsync.path import (cache_dir, config_file, config_yml,
 
 class Config(dict, ConfigMergeMixin):
     env_keys = [
-        "PLEX_BASEURL",
+        "PLEX_BASEURL",      # unused after 0.24.0
         "PLEX_FALLBACKURL",  # legacy, used before 0.18.21
-        "PLEX_LOCALURL",
-        "PLEX_TOKEN",
+        "PLEX_LOCALURL",     # unused after 0.24.0
+        "PLEX_TOKEN",        # unused after 0.24.0
         "PLEX_OWNER_TOKEN",
         "PLEX_ACCOUNT_TOKEN",
         "PLEX_USERNAME",
-        "PLEX_SERVER",  # new in 0.24.0
+        "PLEX_SERVER",       # new in 0.24.0
         "TRAKT_USERNAME",
     ]
 
