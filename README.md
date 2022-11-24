@@ -115,6 +115,8 @@ services:
     restart: on-failure:2
     volumes:
       - ./config:/app/config
+    environment:
+      - TZ=Europe/Tallinn
 ```
 
 #### Run the Docker Container
