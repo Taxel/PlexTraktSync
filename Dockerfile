@@ -37,6 +37,23 @@ ENV \
 
 VOLUME /app/config
 
+# Add user/group
+ENV PUID=1000
+ENV PGID=1000
+
+RUN <<eot
+	set -x
+	addgroup --gid $PGID --system plextraktsync
+	adduser \
+		--disabled-password \
+		--gecos "Plex Trakt Sync" \
+		--home "$(pwd)" \
+		--ingroup plextraktsync \
+		--no-create-home \
+		--uid "$PUID" \
+		plextraktsync
+eot
+
 # Copy things together
 COPY --from=build /root/.local/share/virtualenvs/app-*/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=compile /app ./
