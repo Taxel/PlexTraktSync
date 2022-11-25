@@ -36,7 +36,7 @@ RUN python -m compileall .
 RUN chmod -R a+rX,g-w .
 
 FROM base
-ENTRYPOINT ["python", "-m", "plextraktsync"]
+ENTRYPOINT ["/init"]
 
 ENV \
 	PATH=/root/.local/bin:$PATH \
@@ -69,6 +69,7 @@ eot
 COPY --from=tools /dist /
 COPY --from=build /root/.local/share/virtualenvs/app-*/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=compile /app ./
+COPY entrypoint.sh /init
 RUN ln -s /app/plextraktsync.sh /usr/bin/plextraktsync
 # https://github.com/python/cpython/issues/69667
 RUN chmod a+x /root
