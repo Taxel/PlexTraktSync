@@ -3,6 +3,17 @@ FROM python:3.11-alpine3.16 AS base
 
 WORKDIR /app
 
+# Create minimal layer with extra tools
+FROM base AS tools
+RUN apk add util-linux shadow
+WORKDIR /dist
+RUN <<eot
+install -d ./usr/bin ./usr/lib
+install -p /usr/bin/setpriv ./usr/bin
+install -p /usr/lib/libcap-ng.so.0 ./usr/lib
+install -p /usr/sbin/usermod /usr/sbin/groupmod ./usr/bin
+eot
+
 # Install app dependencies
 FROM base AS build
 RUN pip install pipenv
@@ -55,6 +66,7 @@ RUN <<eot
 eot
 
 # Copy things together
+COPY --from=tools /dist /
 COPY --from=build /root/.local/share/virtualenvs/app-*/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=compile /app ./
 RUN ln -s /app/plextraktsync.sh /usr/bin/plextraktsync
