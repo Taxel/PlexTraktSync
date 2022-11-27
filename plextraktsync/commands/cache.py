@@ -7,10 +7,6 @@ from plextraktsync.factory import factory
 
 
 def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
-    get_responses = getattr(session.cache, "values", None)
-    if not callable(get_responses):
-        raise RuntimeError("This command requires requests_cache 0.7.x")
-
     sorters = {
         "size": lambda r: r.size,
         "date": lambda r: r.created_at,
@@ -18,7 +14,7 @@ def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
     }
     sorter = partial(sorted, reverse=reverse, key=sorters[sorting])
 
-    yield from sorter(get_responses())
+    yield from sorter(session.cache.responses.values)
 
 
 # https://stackoverflow.com/questions/36106712/how-can-i-limit-iterations-of-a-loop-in-python
