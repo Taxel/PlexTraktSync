@@ -3,7 +3,8 @@ from time import sleep
 
 from plexapi.exceptions import BadRequest
 from requests import ReadTimeout, RequestException
-from trakt.errors import BadResponseException, TraktInternalException
+from trakt.errors import (BadResponseException, TraktBadGateway,
+                          TraktInternalException)
 
 from plextraktsync.factory import logger
 
@@ -28,6 +29,7 @@ def retry(retries=5):
                         BadResponseException,
                         ReadTimeout,
                         RequestException,
+                        TraktBadGateway,
                         TraktInternalException,
                 ) as e:
                     if count == retries:
