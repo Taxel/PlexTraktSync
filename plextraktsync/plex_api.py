@@ -92,25 +92,6 @@ class PlexGuid:
         return f"<PlexGuid:{self.guid}>"
 
 
-class PlexRatingCollection(dict):
-    def __init__(self, plex: PlexApi):
-        super().__init__()
-        self.plex = plex
-
-    def __missing__(self, section_id: int):
-        section = self.plex.library_sections[section_id]
-        ratings = self.ratings(section)
-        self[section_id] = ratings
-
-        return ratings
-
-    @flatten_dict
-    def ratings(self, section: PlexLibrarySection):
-        ratings = section.find_with_rating()
-        for item in ratings:
-            yield item.ratingKey, item.userRating
-
-
 class PlexAudioCodec:
     def match(self, codec):
         for key, regex in self.audio_codecs.items():
@@ -225,19 +206,7 @@ class PlexLibraryItem:
     @retry(retries=1)
     def rating(self, show_id: int = None):
         if self.plex is not None:
-            ratings = self.plex.ratings[self.item.librarySectionID]
-            if self.type in ["movie", "show"]:
-                user_rating = (
-                    ratings[self.item.ratingKey] if self.item.ratingKey in ratings else None
-                )
-            elif self.type == "episode":
-                # For episodes the ratings is just (show_id, show_rating) tuples
-                # if show id is not listed, return none, otherwise fetch from item itself
-                if show_id not in ratings:
-                    return None
-                user_rating = self.item.userRating
-            else:
-                raise RuntimeError(f"Unsupported media type: {self.media_type}")
+            return self.plex.ratings.get(self, show_id)
         else:
             user_rating = self.item.userRating
 
@@ -458,15 +427,8 @@ class PlexLibrarySection:
             return None
 
     @nocache
-    def find_with_rating(self):
-        key = "episode.userRating" if self.type == "show" else "userRating"
-        filters = {
-            "and": [
-                {f"{key}>>": -1},
-            ]
-        }
-
-        return self.section.search(filters=filters)
+    def search(self, **kwargs):
+        return self.section.search(**kwargs)
 
     @nocache
     def find_by_id(self, id: Union[str, int]) -> Optional[Union[Movie, Show, Episode]]:
@@ -611,7 +573,9 @@ class PlexApi:
 
     @cached_property
     def ratings(self):
-        return PlexRatingCollection(self)
+        from plextraktsync.plex.PlexRatings import PlexRatings
+
+        return PlexRatings(self)
 
     @nocache
     @retry()
