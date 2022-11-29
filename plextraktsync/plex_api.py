@@ -221,15 +221,23 @@ class PlexLibraryItem:
 
         return value
 
-    @cached_property
     @nocache
     @retry(retries=1)
-    def rating(self):
-        if self.plex is not None and self.media_type == "movies":
+    def rating(self, show_id: int = None):
+        if self.plex is not None:
             ratings = self.plex.ratings[self.item.librarySectionID]
-            user_rating = (
-                ratings[self.item.ratingKey] if self.item.ratingKey in ratings else None
-            )
+            if self.type in ["movie", "show"]:
+                user_rating = (
+                    ratings[self.item.ratingKey] if self.item.ratingKey in ratings else None
+                )
+            elif self.type == "episode":
+                # For episodes the ratings is just (show_id, show_rating) tuples
+                # if show id is not listed, return none, otherwise fetch from item itself
+                if show_id not in ratings:
+                    return None
+                user_rating = self.item.userRating
+            else:
+                raise RuntimeError(f"Unsupported media type: {self.media_type}")
         else:
             user_rating = self.item.userRating
 
@@ -451,9 +459,10 @@ class PlexLibrarySection:
 
     @nocache
     def find_with_rating(self):
+        key = "episode.userRating" if self.type == "show" else "userRating"
         filters = {
             "and": [
-                {"userRating>>": -1},
+                {f"{key}>>": -1},
             ]
         }
 

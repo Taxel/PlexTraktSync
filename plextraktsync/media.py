@@ -178,9 +178,10 @@ class Media:
     def trakt_rating(self):
         return self.trakt_api.rating(self.trakt)
 
-    @property
+    @cached_property
     def plex_rating(self):
-        return self.plex.rating
+        show_id = self.show.plex.item.ratingKey if self.media_type == "episodes" else None
+        return self.plex.rating(show_id)
 
     def trakt_rate(self):
         self.trakt_api.rate(self.trakt, self.plex_rating)
