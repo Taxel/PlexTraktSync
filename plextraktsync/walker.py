@@ -53,12 +53,8 @@ class WalkConfig:
         if self.library or self.movie or self.show or self.id:
             return True
 
-        # Full sync of movies or shows
-        if self.walk_movies or self.walk_shows:
-            return False
-
-        # what is remaining?
-        return True
+        # Must sync both movies and shows to be full sync
+        return not self.walk_movies or not self.walk_shows
 
     def is_valid(self):
         # Single item provided
