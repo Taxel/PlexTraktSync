@@ -178,9 +178,9 @@ class Media:
     def trakt_rating(self):
         return self.trakt_api.rating(self.trakt)
 
-    @property
+    @cached_property
     def plex_rating(self):
-        return self.plex.rating
+        return self.plex.rating()
 
     def trakt_rate(self):
         self.trakt_api.rate(self.trakt, self.plex_rating)
