@@ -229,6 +229,10 @@ class Walker:
     def plan(self):
         return WalkPlanner(self.plex, self.config).plan()
 
+    @property
+    def is_partial(self):
+        return self.config.is_partial
+
     def print_plan(self, print=print):
         if self.plan.movie_sections:
             print(f"Sync Movie sections: {self.plan.movie_sections}")
