@@ -92,25 +92,6 @@ class PlexGuid:
         return f"<PlexGuid:{self.guid}>"
 
 
-class PlexRatingCollection(dict):
-    def __init__(self, plex: PlexApi):
-        super().__init__()
-        self.plex = plex
-
-    def __missing__(self, section_id: int):
-        section = self.plex.library_sections[section_id]
-        ratings = self.ratings(section)
-        self[section_id] = ratings
-
-        return ratings
-
-    @flatten_dict
-    def ratings(self, section: PlexLibrarySection):
-        ratings = section.find_with_rating()
-        for item in ratings:
-            yield item.ratingKey, item.userRating
-
-
 class PlexAudioCodec:
     def match(self, codec):
         for key, regex in self.audio_codecs.items():
