@@ -427,17 +427,6 @@ class PlexLibrarySection:
             return None
 
     @nocache
-    def find_with_rating(self):
-        key = "episode.userRating" if self.type == "show" else "userRating"
-        filters = {
-            "and": [
-                {f"{key}>>": -1},
-            ]
-        }
-
-        return self.section.search(filters=filters)
-
-    @nocache
     def search(self, **kwargs):
         return self.section.search(**kwargs)
 
