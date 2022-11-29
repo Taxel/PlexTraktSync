@@ -49,19 +49,16 @@ ENV \
 VOLUME /app/config
 
 # Add user/group
-ENV PUID=1000
-ENV PGID=1000
-
 RUN <<eot
 	set -x
-	addgroup --gid $PGID --system plextraktsync
+	addgroup --gid 1000 --system plextraktsync
 	adduser \
 		--disabled-password \
 		--gecos "Plex Trakt Sync" \
 		--home "$(pwd)" \
 		--ingroup plextraktsync \
 		--no-create-home \
-		--uid "$PUID" \
+		--uid 1000 \
 		plextraktsync
 eot
 
