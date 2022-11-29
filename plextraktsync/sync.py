@@ -126,11 +126,14 @@ class Sync:
 
     def sync(self, walker: Walker, dry_run=False):
         listutil = TraktListUtil()
+        is_partial = walker.is_partial
+        if is_partial:
+            logger.warning("Partial walk, disabling lists updating")
 
-        if self.config.update_plex_wl_as_pl:
+        if not is_partial and self.config.update_plex_wl_as_pl:
             listutil.addList(None, "Trakt Watchlist", trakt_list=self.trakt.watchlist_movies)
 
-        if self.config.sync_liked_lists:
+        if not is_partial and self.config.sync_liked_lists:
             for lst in self.trakt.liked_lists:
                 listutil.addList(lst["listid"], lst["listname"])
 
@@ -139,7 +142,8 @@ class Sync:
                 self.sync_collection(movie, dry_run=dry_run)
                 self.sync_ratings(movie, dry_run=dry_run)
                 self.sync_watched(movie, dry_run=dry_run)
-                listutil.addPlexItemToLists(movie)
+                if not is_partial:
+                    listutil.addPlexItemToLists(movie)
             self.trakt.flush()
 
             shows = set()
@@ -147,7 +151,8 @@ class Sync:
                 self.sync_collection(episode, dry_run=dry_run)
                 self.sync_ratings(episode, dry_run=dry_run)
                 self.sync_watched(episode, dry_run=dry_run)
-                listutil.addPlexItemToLists(episode)
+                if not is_partial:
+                    listutil.addPlexItemToLists(episode)
                 if self.config.sync_ratings:
                     # collect shows for later ratings sync
                     shows.add(episode.show)
@@ -156,7 +161,7 @@ class Sync:
             for show in walker.walk_shows(shows, title="Syncing show ratings"):
                 self.sync_ratings(show, dry_run=dry_run)
 
-        if self.sync_wl or self.config.sync_liked_lists:
+        if not is_partial and self.sync_wl or self.config.sync_liked_lists:
             with measure_time("Updated watchlist and/or liked list"):
                 if self.config.update_plex_wl_as_pl or self.config.sync_liked_lists:
                     self.update_playlists(listutil, dry_run=dry_run)
