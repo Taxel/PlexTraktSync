@@ -14,7 +14,7 @@ def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
     }
     sorter = partial(sorted, reverse=reverse, key=sorters[sorting])
 
-    yield from sorter(session.cache.responses.values)
+    yield from sorter(session.cache.responses.values())
 
 
 # https://stackoverflow.com/questions/36106712/how-can-i-limit-iterations-of-a-loop-in-python
