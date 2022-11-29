@@ -224,7 +224,7 @@ class PlexLibraryItem:
     @nocache
     @retry(retries=1)
     def rating(self):
-        if self.plex is not None and self.media_type == "movies":
+        if self.plex is not None:
             ratings = self.plex.ratings[self.item.librarySectionID]
             user_rating = (
                 ratings[self.item.ratingKey] if self.item.ratingKey in ratings else None
