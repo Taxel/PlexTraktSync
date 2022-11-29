@@ -38,13 +38,27 @@ fix_permissions() {
 	ensure_owner /app/config -R
 }
 
+needs_switch_user() {
+	local uid=${PUID:-0}
+	local gid=${PGID:-0}
+
+	# configured to run as non-root
+	if [ "$uid" -eq 0 ] && [ "$gid" -eq 0 ]; then
+		return 1
+	fi
+
+	# must be root to be able to switch user
+	[ "$(id -u)" -eq 0 ]
+}
+
 set -eu
 test -n "$TRACE" && set -x
 
 # prepend default command
 set -- python -m plextraktsync "$@"
 
-if [ "$(id -u)" = "0" ]; then
+# fix permissions and switch user if configured
+if needs_switch_user; then
 	setup_user
 	fix_permissions
 	switch_user "$@"
