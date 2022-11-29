@@ -9,5 +9,6 @@
 !/plextraktsync/config/*.py
 !/plextraktsync/decorators/*.py
 !/plextraktsync/logger/*.py
+!/plextraktsync/plex/*.py
 !/plextraktsync/servers.default.yml
 !/plextraktsync/util/*.py
