@@ -469,6 +469,10 @@ class PlexLibrarySection:
         return self.section.search(filters=filters)
 
     @nocache
+    def search(self, **kwargs):
+        return self.section.search(**kwargs)
+
+    @nocache
     def find_by_id(self, id: Union[str, int]) -> Optional[Union[Movie, Show, Episode]]:
         try:
             return self.section.fetchItem(int(id))
