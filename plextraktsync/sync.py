@@ -1,6 +1,7 @@
 from typing import Dict, Union
 
 from plexapi.video import Movie, Show
+from trakt.movies import Movie as TraktMovie
 from trakt.tv import TVShow
 
 from plextraktsync.config import Config
@@ -113,7 +114,7 @@ class Sync:
 
     @cached_property
     @flatten_dict
-    def trakt_wl_movies(self) -> Dict[int, Movie]:
+    def trakt_wl_movies(self) -> Dict[int, TraktMovie]:
         for tm in self.trakt.watchlist_movies:
             yield tm.trakt, tm
 
