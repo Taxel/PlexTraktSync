@@ -2,6 +2,7 @@
 /*
 !/Pipfile
 !/Pipfile.lock
+!/entrypoint.sh
 !/plextraktsync.sh
 !/plextraktsync/*.py
 !/plextraktsync/commands/*.py

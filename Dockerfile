@@ -1,6 +1,18 @@
+# syntax = docker/dockerfile:1.3-labs
 FROM python:3.11-alpine3.16 AS base
 
 WORKDIR /app
+
+# Create minimal layer with extra tools
+FROM base AS tools
+RUN apk add util-linux shadow
+WORKDIR /dist
+RUN <<eot
+install -d ./usr/bin ./usr/lib
+install -p /usr/bin/setpriv ./usr/bin
+install -p /usr/lib/libcap-ng.so.0 ./usr/lib
+install -p /usr/sbin/usermod /usr/sbin/groupmod ./usr/bin
+eot
 
 # Install app dependencies
 FROM base AS build
@@ -24,7 +36,7 @@ RUN python -m compileall .
 RUN chmod -R a+rX,g-w .
 
 FROM base
-ENTRYPOINT ["python", "-m", "plextraktsync"]
+ENTRYPOINT ["/init"]
 
 ENV \
 	PATH=/root/.local/bin:$PATH \
@@ -36,9 +48,25 @@ ENV \
 
 VOLUME /app/config
 
+# Add user/group
+RUN <<eot
+	set -x
+	addgroup --gid 1000 --system plextraktsync
+	adduser \
+		--disabled-password \
+		--gecos "Plex Trakt Sync" \
+		--home "$(pwd)" \
+		--ingroup plextraktsync \
+		--no-create-home \
+		--uid 1000 \
+		plextraktsync
+eot
+
 # Copy things together
+COPY --from=tools /dist /
 COPY --from=build /root/.local/share/virtualenvs/app-*/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=compile /app ./
+COPY entrypoint.sh /init
 RUN ln -s /app/plextraktsync.sh /usr/bin/plextraktsync
 # https://github.com/python/cpython/issues/69667
 RUN chmod a+x /root
