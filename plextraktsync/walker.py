@@ -43,6 +43,19 @@ class WalkConfig:
     def add_movie(self, movie):
         self.movie.append(movie)
 
+    @property
+    def is_partial(self):
+        """
+        Returns true if partial library walk is performed.
+        Due the way watchlist is filled, watchlists should only be updated on full walk.
+        """
+        # Single item provided
+        if self.library or self.movie or self.show or self.id:
+            return True
+
+        # Must sync both movies and shows to be full sync
+        return not self.walk_movies or not self.walk_shows
+
     def is_valid(self):
         # Single item provided
         if self.library or self.movie or self.show or self.id:
@@ -211,6 +224,10 @@ class Walker:
     @cached_property
     def plan(self):
         return WalkPlanner(self.plex, self.config).plan()
+
+    @property
+    def is_partial(self):
+        return self.config.is_partial
 
     def print_plan(self, print=print):
         if self.plan.movie_sections:

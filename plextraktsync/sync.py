@@ -126,20 +126,28 @@ class Sync:
 
     def sync(self, walker: Walker, dry_run=False):
         listutil = TraktListUtil()
+        is_partial = walker.is_partial
 
         if self.config.update_plex_wl_as_pl:
-            listutil.addList(None, "Trakt Watchlist", trakt_list=self.trakt.watchlist_movies)
+            if is_partial:
+                logger.warning("Running partial library sync. Watchlist as playlist won't update because it needs full library sync.")
+            else:
+                listutil.addList(None, "Trakt Watchlist", trakt_list=self.trakt.watchlist_movies)
 
         if self.config.sync_liked_lists:
-            for lst in self.trakt.liked_lists:
-                listutil.addList(lst["listid"], lst["listname"])
+            if is_partial:
+                logger.warning("Partial walk, disabling liked lists updating. Liked lists won't update because it needs full library sync.")
+            else:
+                for lst in self.trakt.liked_lists:
+                    listutil.addList(lst["listid"], lst["listname"])
 
         if self.config.need_library_walk:
             for movie in walker.find_movies():
                 self.sync_collection(movie, dry_run=dry_run)
                 self.sync_ratings(movie, dry_run=dry_run)
                 self.sync_watched(movie, dry_run=dry_run)
-                listutil.addPlexItemToLists(movie)
+                if not is_partial:
+                    listutil.addPlexItemToLists(movie)
             self.trakt.flush()
 
             shows = set()
@@ -147,7 +155,8 @@ class Sync:
                 self.sync_collection(episode, dry_run=dry_run)
                 self.sync_ratings(episode, dry_run=dry_run)
                 self.sync_watched(episode, dry_run=dry_run)
-                listutil.addPlexItemToLists(episode)
+                if not is_partial:
+                    listutil.addPlexItemToLists(episode)
                 if self.config.sync_ratings:
                     # collect shows for later ratings sync
                     shows.add(episode.show)
@@ -157,11 +166,14 @@ class Sync:
                 self.sync_ratings(show, dry_run=dry_run)
 
         if self.sync_wl or self.config.sync_liked_lists:
-            with measure_time("Updated watchlist and/or liked list"):
-                if self.config.update_plex_wl_as_pl or self.config.sync_liked_lists:
-                    self.update_playlists(listutil, dry_run=dry_run)
-                if self.sync_wl:
-                    self.sync_watchlist(walker, dry_run=dry_run)
+            if is_partial:
+                logger.warning("Partial walk, watchlist and/or liked list updating was skipped")
+            else:
+                with measure_time("Updated watchlist and/or liked list"):
+                    if self.config.update_plex_wl_as_pl or self.config.sync_liked_lists:
+                        self.update_playlists(listutil, dry_run=dry_run)
+                    if self.sync_wl:
+                        self.sync_watchlist(walker, dry_run=dry_run)
 
         if not dry_run:
             self.trakt.flush()
