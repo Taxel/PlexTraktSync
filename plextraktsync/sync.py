@@ -130,13 +130,13 @@ class Sync:
 
         if self.config.update_plex_wl_as_pl:
             if is_partial:
-                logger.warning("Partial walk, disabling watchlist as playlist updating")
+                logger.warning("Running partial library sync. Watchlist as playlist won't update because it needs full library sync.")
             else:
                 listutil.addList(None, "Trakt Watchlist", trakt_list=self.trakt.watchlist_movies)
 
         if self.config.sync_liked_lists:
             if is_partial:
-                logger.warning("Partial walk, disabling liked lists updating")
+                logger.warning("Partial walk, disabling liked lists updating. Liked lists won't update because it needs full library sync.")
             else:
                 for lst in self.trakt.liked_lists:
                     listutil.addList(lst["listid"], lst["listname"])
