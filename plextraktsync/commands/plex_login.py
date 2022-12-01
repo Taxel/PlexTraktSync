@@ -30,7 +30,6 @@ NOTICE_2FA_PASSWORD = comment(
 )
 CONFIG = factory.config
 
-
 style = get_style(
     {
         "questionmark": "hidden",
@@ -175,7 +174,7 @@ def choose_server(account: MyPlexAccount):
 
 
 def has_plex_token():
-    return CONFIG["PLEX_TOKEN"] is not None
+    return factory.has_plex_token
 
 
 def plex_login_autoconfig():
