@@ -108,6 +108,7 @@ NOTE: `pipx` install will use OS specific paths for Config, Logs, Cache, see
 You can setup docker compose file like this:
 
 ```yaml
+version: '2'
 services:
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
@@ -239,6 +240,7 @@ Installing from GitHub is considered developer mode, and it's documented in
 A docker-compose example with a 6h interval:
 
 ```yaml
+version: '2'
 services:
   scheduler:
     image: mcuadros/ofelia:latest
@@ -377,6 +379,7 @@ or add `command: watch` to docker compose file, and `docker-compose up -d
 plextraktsync` to start the container detached:
 
 ```yaml
+version: '2'
 services:
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
