@@ -1,7 +1,21 @@
+from typing import List
+
 from plextraktsync.decorators.cached_property import cached_property
 
 
 class Factory:
+    def invalidate(self, keys: List[str] = None):
+        """
+        Invalidate set of cached properties
+
+        https://stackoverflow.com/a/63617398
+        """
+        for key in keys or []:
+            try:
+                del self.__dict__[key]
+            except KeyError:
+                pass
+
     @cached_property
     def trakt_api(self):
         from plextraktsync.trakt_api import TraktApi
