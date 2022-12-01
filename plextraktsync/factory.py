@@ -209,7 +209,13 @@ class Factory:
     def config(self):
         from plextraktsync.config import Config
 
-        return Config()
+        def invalidate_plex_cache(key, value):
+            self.invalidate(["has_plex_token", "server_config"])
+
+        config = Config()
+        config.add_listener(invalidate_plex_cache, ["PLEX_SERVER"])
+
+        return config
 
 
 factory = Factory()
