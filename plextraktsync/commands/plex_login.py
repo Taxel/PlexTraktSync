@@ -210,12 +210,6 @@ def login(username: str, password: str):
     else:
         plex_account_token = account._token
 
-    CONFIG["PLEX_OWNER_TOKEN"] = plex_owner_token
-    CONFIG["PLEX_ACCOUNT_TOKEN"] = plex_account_token
-    CONFIG["PLEX_USERNAME"] = user
-    CONFIG["PLEX_SERVER"] = server.name
-    CONFIG.save()
-
     sc = ServerConfig()
     sc.add_server(
         name=server.name,
@@ -226,5 +220,11 @@ def login(username: str, password: str):
         ],
     )
     sc.save()
+
+    CONFIG["PLEX_OWNER_TOKEN"] = plex_owner_token
+    CONFIG["PLEX_ACCOUNT_TOKEN"] = plex_account_token
+    CONFIG["PLEX_USERNAME"] = user
+    CONFIG["PLEX_SERVER"] = server.name
+    CONFIG.save()
 
     click.echo(SUCCESS_MESSAGE)
