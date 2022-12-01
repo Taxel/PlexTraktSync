@@ -42,6 +42,13 @@ class Factory:
         )
 
     @cached_property
+    def has_plex_token(self):
+        try:
+            return self.server_config.token is not None
+        except RuntimeError:
+            return False
+
+    @cached_property
     def server_config(self):
         from plextraktsync.config.ServerConfig import ServerConfig
 
