@@ -1,3 +1,4 @@
+version: '2'
 services:
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
