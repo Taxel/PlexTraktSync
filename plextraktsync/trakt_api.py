@@ -301,11 +301,12 @@ class TraktApi:
             ts: TVShow = self.search_by_id(
                 guid.show_id, id_type=guid.provider, media_type="show"
             )
-            lookup = TraktLookup(ts)
+            if ts:
+                lookup = TraktLookup(ts)
 
-            return self.find_episode_guid(guid, lookup)
-
-        return self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
+                return self.find_episode_guid(guid, lookup)
+        else:
+            return self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
 
     @rate_limit()
     @retry()
