@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Union
+from typing import TYPE_CHECKING
 
 import plexapi
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
@@ -8,7 +8,6 @@ from plexapi.media import SubtitleStream
 from plexapi.myplex import MyPlexAccount
 from plexapi.playlist import Playlist
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
-from plexapi.video import Episode, Movie, Show
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_dict, flatten_list
@@ -18,6 +17,11 @@ from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory, logger
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
+
+if TYPE_CHECKING:
+    from typing import Dict, List, Optional, Union
+
+    from plexapi.video import Episode, Movie, Show
 
 
 class PlexApi:
