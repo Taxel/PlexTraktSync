@@ -1,19 +1,25 @@
 from __future__ import annotations
 
-from typing import Optional, Union
+from typing import TYPE_CHECKING
 
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import NotFound
-from plexapi.library import LibrarySection
-from plexapi.video import Episode, Movie, Show
 
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.retry import retry
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
+if TYPE_CHECKING:
+    from typing import Optional, Union
+
+    from plexapi.library import LibrarySection
+    from plexapi.video import Episode, Movie, Show
+
+    from plextraktsync.plex.PlexApi import PlexApi
+
 
 class PlexLibrarySection:
-    def __init__(self, section: LibrarySection, plex=None):
+    def __init__(self, section: LibrarySection, plex: PlexApi = None):
         self.section = section
         self.plex = plex
 
