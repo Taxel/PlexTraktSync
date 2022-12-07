@@ -454,12 +454,13 @@ class TraktBatch:
         This makes diagnostic printing cleaner if we don't print "changed: 0"
         """
         for change_type in ["added", "existing", "updated"]:
-            if change_type in result:
-                for media_type, value in result[change_type].copy().items():
-                    if value == 0:
-                        del result[change_type][media_type]
-                if len(result[change_type]) == 0:
-                    del result[change_type]
+            if change_type not in result:
+                continue
+            for media_type, value in result[change_type].copy().items():
+                if value == 0:
+                    del result[change_type][media_type]
+            if len(result[change_type]) == 0:
+                del result[change_type]
 
         for media_type, items in result["not_found"].copy().items():
             if len(items) == 0:
