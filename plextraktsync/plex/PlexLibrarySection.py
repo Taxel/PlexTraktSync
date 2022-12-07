@@ -13,9 +13,9 @@ if TYPE_CHECKING:
     from typing import Optional, Union
 
     from plexapi.library import LibrarySection
-    from plexapi.video import Episode, Movie, Show
 
     from plextraktsync.plex.PlexApi import PlexApi
+    from plextraktsync.plex.types import PlexMedia
 
 
 class PlexLibrarySection:
@@ -47,7 +47,7 @@ class PlexLibrarySection:
         return self.section.search(**kwargs)
 
     @nocache
-    def find_by_id(self, id: Union[str, int]) -> Optional[Union[Movie, Show, Episode]]:
+    def find_by_id(self, id: Union[str, int]) -> Optional[PlexMedia]:
         try:
             return self.section.fetchItem(int(id))
         except NotFound:

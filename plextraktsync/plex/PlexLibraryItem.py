@@ -14,14 +14,15 @@ from plextraktsync.factory import factory
 from plextraktsync.plex.PlexGuid import PlexGuid
 
 if TYPE_CHECKING:
-    from typing import List, Union
+    from typing import List
 
     from plexapi.media import MediaPart
-    from plexapi.video import Episode, Movie, Show
+
+    from plextraktsync.plex.types import PlexMedia
 
 
 class PlexLibraryItem:
-    def __init__(self, item: Union[Movie, Show, Episode], plex=None):
+    def __init__(self, item: PlexMedia, plex=None):
         self.item = item
         self.plex = plex
 

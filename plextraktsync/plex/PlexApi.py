@@ -21,7 +21,9 @@ from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Union
 
-    from plexapi.video import Episode, Movie, Show
+    from plexapi.video import Movie, Show
+
+    from plextraktsync.plex.types import PlexMedia
 
 
 class PlexApi:
@@ -140,7 +142,7 @@ class PlexApi:
         m.rate(rating)
 
     @staticmethod
-    def same_list(list_a: List[Movie | Show | Episode], list_b: List[Movie | Show | Episode]) -> bool:
+    def same_list(list_a: List[PlexMedia], list_b: List[PlexMedia]) -> bool:
         """
         Return true if two list contain same Plex items.
         The comparison is made on ratingKey property,
@@ -157,7 +159,7 @@ class PlexApi:
         return a == b
 
     @nocache
-    def update_playlist(self, name: str, items: List[Union[Movie, Show, Episode]], description=None) -> bool:
+    def update_playlist(self, name: str, items: List[PlexMedia], description=None) -> bool:
         """
         Updates playlist (creates if name missing) replacing contents with items[]
         """
