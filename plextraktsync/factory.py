@@ -20,10 +20,7 @@ class Factory:
     def trakt_api(self):
         from plextraktsync.trakt_api import TraktApi
 
-        config = self.run_config
-        trakt = TraktApi(batch_delay=config.batch_delay)
-
-        return trakt
+        return TraktApi()
 
     @cached_property
     def plex_api(self):

@@ -89,8 +89,7 @@ class TraktApi:
     Trakt API class abstracting common data access and dealing with requests cache.
     """
 
-    def __init__(self, batch_delay=None):
-        self.batch_delay = batch_delay
+    def __init__(self):
         trakt.core.CONFIG_PATH = pytrakt_file
         trakt.core.session = factory.session
 
