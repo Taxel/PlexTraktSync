@@ -424,6 +424,9 @@ class TraktBatch:
         if self.queue_size() == 0:
             return
 
+        if not self.last_sent_time:
+            self.last_sent_time = time()
+
         elapsed = time() - self.last_sent_time
         if elapsed >= self.batch_delay or force is True:
             self.submit()
