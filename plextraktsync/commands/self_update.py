@@ -5,14 +5,6 @@ import click
 from plextraktsync.util.execp import execp
 
 
-def enable_self_update():
-    from plextraktsync.util.packaging import pipx_installed, program_name
-
-    package = pipx_installed(program_name())
-
-    return package is not None
-
-
 def has_previous_pr(pr: int):
     from plextraktsync.util.packaging import pipx_installed
 
