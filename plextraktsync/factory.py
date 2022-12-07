@@ -217,6 +217,18 @@ class Factory:
 
         return config
 
+    @cached_property
+    def trakt_batch(self):
+        from functools import partial
+
+        from plextraktsync.trakt_api import TraktBatch
+
+        return partial(
+            TraktBatch,
+            trakt=self.trakt_api,
+            batch_delay=self.run_config.batch_delay,
+        )
+
 
 factory = Factory()
 logger = factory.logger
