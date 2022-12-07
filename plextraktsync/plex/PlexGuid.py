@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.factory import factory
-from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
+
+if TYPE_CHECKING:
+    from typing import Optional
+
+    from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 
 class PlexGuid:
