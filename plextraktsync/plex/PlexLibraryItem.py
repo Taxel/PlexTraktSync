@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 import datetime
-from typing import List, Union
+from typing import TYPE_CHECKING
 
-from plexapi.media import AudioStream, MediaPart, SubtitleStream, VideoStream
-from plexapi.video import Episode, Movie, Show
+from plexapi.media import AudioStream, SubtitleStream, VideoStream
 from trakt.utils import timestamp
 
 from plextraktsync.decorators.cached_property import cached_property
@@ -12,6 +11,12 @@ from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory
+
+if TYPE_CHECKING:
+    from typing import List, Union
+
+    from plexapi.media import MediaPart
+    from plexapi.video import Episode, Movie, Show
 
 
 class PlexLibraryItem:
