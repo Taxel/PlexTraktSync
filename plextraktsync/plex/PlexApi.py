@@ -110,9 +110,9 @@ class PlexApi:
     @nocache
     @flatten_dict
     def library_sections(self) -> Dict[int, PlexLibrarySection]:
-        CONFIG = factory.config
+        excluded_libraries = factory.config["excluded-libraries"]
         for section in self.plex.library.sections():
-            if section.title in CONFIG["excluded-libraries"]:
+            if section.title in excluded_libraries:
                 continue
             yield section.key, PlexLibrarySection(section, plex=self)
 
