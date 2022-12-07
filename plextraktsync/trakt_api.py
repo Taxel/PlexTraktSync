@@ -22,7 +22,6 @@ from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import factory, logger, logging
 from plextraktsync.path import pytrakt_file
 from plextraktsync.plex_api import PlexGuid, PlexLibraryItem
-from plextraktsync.timer import Timer
 
 
 class ScrobblerProxy:
@@ -387,14 +386,14 @@ class TraktApi:
 
 
 class TraktBatch:
-    def __init__(self, name: str, add: bool, trakt: TraktApi, batch_delay=None):
+    def __init__(self, name: str, add: bool, trakt: TraktApi, timer=None):
         if name not in ["collection", "watchlist"]:
             raise ValueError(f"TraktBatch name not allowed: {name}")
         self.name = name
         self.add = add
         self.trakt = trakt
         self.items = defaultdict(list)
-        self.timer = Timer(batch_delay) if batch_delay else None
+        self.timer = timer
 
     @nocache
     @rate_limit()

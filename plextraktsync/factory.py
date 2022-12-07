@@ -237,7 +237,7 @@ class Factory:
         return partial(
             TraktBatch,
             trakt=self.trakt_api,
-            batch_delay=self.run_config.batch_delay,
+            timer=self.batch_delay_timer,
         )
 
 
