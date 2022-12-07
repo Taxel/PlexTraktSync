@@ -22,7 +22,8 @@ from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import factory, logger, logging
 from plextraktsync.path import pytrakt_file
-from plextraktsync.plex_api import PlexGuid, PlexLibraryItem
+from plextraktsync.plex.PlexGuid import PlexGuid
+from plextraktsync.plex_api import PlexLibraryItem
 
 
 class ScrobblerProxy:
