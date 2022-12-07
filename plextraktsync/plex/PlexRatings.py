@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.decorators.memoize import memoize
-from plextraktsync.plex_api import PlexApi, PlexLibraryItem, PlexLibrarySection
+from plextraktsync.plex.PlexApi import PlexApi
+from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
+from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
 
 
 class PlexRatings:
