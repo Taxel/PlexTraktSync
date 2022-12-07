@@ -150,6 +150,14 @@ class Factory:
         return w
 
     @cached_property
+    def enable_self_update(self):
+        from plextraktsync.util.packaging import pipx_installed, program_name
+
+        package = pipx_installed(program_name())
+
+        return package is not None
+
+    @cached_property
     def web_socket_listener(self):
         from plextraktsync.listener import WebSocketListener
 

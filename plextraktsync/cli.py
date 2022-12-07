@@ -3,7 +3,6 @@ from os import environ
 
 import click
 
-from plextraktsync.commands.self_update import enable_self_update
 from plextraktsync.factory import factory
 
 CONFIG = factory.config
@@ -314,7 +313,7 @@ cli.add_command(info)
 cli.add_command(inspect)
 cli.add_command(login)
 cli.add_command(plex_login)
-if enable_self_update():
+if factory.enable_self_update:
     cli.add_command(self_update)
 cli.add_command(subdl)
 cli.add_command(sync)
