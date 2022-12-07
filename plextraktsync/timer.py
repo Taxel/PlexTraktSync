@@ -28,6 +28,13 @@ class Timer:
     def update(self):
         self.last_time = monotonic()
 
+    def start(self):
+        """
+        Start the timer only if not yet started
+        """
+        if not self.last_time:
+            self.update()
+
     def wait_if_needed(self):
         if not self.last_time:
             self.update()
