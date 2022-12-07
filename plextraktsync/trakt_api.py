@@ -102,19 +102,19 @@ class TraktApi:
 
     @cached_property
     def batch_collection_add(self):
-        return TraktBatch(self, "collection", add=True, batch_delay=self.batch_delay)
+        return self.trakt_batch("collection", add=True)
 
     @cached_property
     def batch_collection_del(self):
-        return TraktBatch(self, "collection", add=False, batch_delay=self.batch_delay)
+        return self.trakt_batch("collection", add=False)
 
     @cached_property
     def batch_watchlist_add(self):
-        return TraktBatch(self, "watchlist", add=True, batch_delay=self.batch_delay)
+        return self.trakt_batch("watchlist", add=True)
 
     @cached_property
     def batch_watchlist_del(self):
-        return TraktBatch(self, "watchlist", add=False, batch_delay=self.batch_delay)
+        return self.trakt_batch("watchlist", add=False)
 
     @cached_property
     @nocache
@@ -382,9 +382,13 @@ class TraktApi:
         self.batch_watchlist_add.flush(force=True)
         self.batch_watchlist_del.flush(force=True)
 
+    @staticmethod
+    def trakt_batch(*args, **kwargs) -> TraktBatch:
+        return factory.trakt_batch(*args, **kwargs)
+
 
 class TraktBatch:
-    def __init__(self, trakt: TraktApi, name: str, add: bool, batch_delay=None):
+    def __init__(self, name: str, add: bool, trakt: TraktApi, batch_delay=None):
         if name not in ["collection", "watchlist"]:
             raise ValueError(f"TraktBatch name not allowed: {name}")
         self.name = name
