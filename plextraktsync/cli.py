@@ -332,9 +332,11 @@ def main():
     try:
         exit_code = cli(standalone_mode=False)
     except ClickException as e:
+        factory.cleanup.run()
         e.show()
         sys.exit(e.exit_code)
     except Abort:
+        factory.cleanup.run()
         print("Aborted!")
         sys.exit(1)
     except Exit as e:
