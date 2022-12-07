@@ -11,6 +11,7 @@ from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory
+from plextraktsync.plex.PlexGuid import PlexGuid
 
 if TYPE_CHECKING:
     from typing import List, Union
@@ -35,8 +36,6 @@ class PlexLibraryItem:
 
     @cached_property
     def guids(self):
-        from plextraktsync.plex.PlexGuid import PlexGuid
-
         # return early if legacy agent
         # accessing .guids for legacy agent
         # will make another round-trip to plex server
