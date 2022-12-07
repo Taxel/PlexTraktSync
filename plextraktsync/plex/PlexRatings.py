@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.decorators.memoize import memoize
-from plextraktsync.plex.PlexApi import PlexApi
-from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
-from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
+
+if TYPE_CHECKING:
+    from plextraktsync.plex.PlexApi import PlexApi
+    from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
+    from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
 
 
 class PlexRatings:
