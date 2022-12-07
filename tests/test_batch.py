@@ -9,7 +9,7 @@ trakt = factory.trakt_api
 
 def test_batch_delay_none():
     response = load_mock("trakt_sync_collection_response.json")
-    b = TraktBatch(trakt, "collection", add=True)
+    b = TraktBatch("collection", add=True, trakt=trakt)
     b.trakt_sync = Mock(return_value=response)
 
     assert b.queue_size() == 0
@@ -27,7 +27,7 @@ def test_batch_delay_none():
 
 def test_batch_delay_1():
     response = load_mock("trakt_sync_collection_response.json")
-    b = TraktBatch(trakt, "collection", add=True, batch_delay=1)
+    b = TraktBatch("collection", add=True, trakt=trakt, batch_delay=1)
     b.trakt_sync = Mock(return_value=response)
 
     assert b.queue_size() == 0
