@@ -4,7 +4,7 @@ from typing import Optional
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.factory import factory
-from plextraktsync.plex_api import PlexLibraryItem
+from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 
 class PlexGuid:
