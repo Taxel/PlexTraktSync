@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from time import time
 from typing import List, Optional, Union
 
 import trakt
@@ -23,6 +22,7 @@ from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import factory, logger, logging
 from plextraktsync.path import pytrakt_file
 from plextraktsync.plex_api import PlexGuid, PlexLibraryItem
+from plextraktsync.timer import Timer
 
 
 class ScrobblerProxy:
@@ -89,8 +89,7 @@ class TraktApi:
     Trakt API class abstracting common data access and dealing with requests cache.
     """
 
-    def __init__(self, batch_delay=None):
-        self.batch_delay = batch_delay
+    def __init__(self):
         trakt.core.CONFIG_PATH = pytrakt_file
         trakt.core.session = factory.session
 
@@ -394,9 +393,8 @@ class TraktBatch:
         self.name = name
         self.add = add
         self.trakt = trakt
-        self.batch_delay = batch_delay
         self.items = defaultdict(list)
-        self.last_sent_time = 0
+        self.timer = Timer(batch_delay) if batch_delay else None
 
     @nocache
     @rate_limit()
@@ -410,7 +408,6 @@ class TraktBatch:
                 logger.debug(f"Updated Trakt {self.name}: {result}")
         finally:
             self.items.clear()
-            self.last_sent_time = time()
 
     def queue_size(self):
         size = 0
@@ -421,19 +418,20 @@ class TraktBatch:
 
     def flush(self, force=False):
         """
-        Flush the queue every batch_delay seconds
+        Flush the queue not sooner than seconds specified in timer
         """
-        if not self.batch_delay and force is False:
+        if not self.timer and force is False:
             return
         if self.queue_size() == 0:
             return
 
-        if not self.last_sent_time:
-            self.last_sent_time = time()
+        self.timer.start()
 
-        elapsed = time() - self.last_sent_time
-        if elapsed >= self.batch_delay or force is True:
-            self.submit()
+        if not force and self.timer.time_remaining:
+            return
+
+        self.submit()
+        self.timer.update()
 
     def add_to_items(self, media_type: str, item):
         """

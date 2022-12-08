@@ -1,6 +1,6 @@
 #!/usr/bin/env python3 -m pytest
 from contextlib import contextmanager
-from time import perf_counter
+from time import perf_counter, sleep
 
 from plextraktsync.timer import Timer
 
@@ -29,3 +29,20 @@ def test_timer():
         timer.wait_if_needed()
         timer.wait_if_needed()
     assert t() > 3 * time_limit, "Wait three times"
+
+
+def test_timer_remaining():
+    time_limit = 1.1
+    timer = Timer(time_limit)
+    timer.start()
+
+    loops = 0
+    with timeit() as t:
+        print(f"remaining: {timer.time_remaining}")
+        timer.update()
+        while timer.time_remaining > 0.0:
+            print(f"remaining: {timer.time_remaining}")
+            sleep(0.1)
+            loops += 1
+    assert t() >= time_limit
+    assert loops > 0
