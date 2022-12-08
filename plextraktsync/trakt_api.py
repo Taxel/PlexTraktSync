@@ -416,7 +416,7 @@ class TraktBatch:
 
         return size
 
-    def flush(self, force=False):
+    def flush(self, force=True):
         """
         Flush the queue not sooner than seconds specified in timer
         """
@@ -438,7 +438,7 @@ class TraktBatch:
         Add item of media_type to list of items
         """
         self.items[media_type].append(item)
-        self.flush()
+        self.flush(force=False)
 
     def trakt_sync(self, media_object):
         if self.name == "collection":
