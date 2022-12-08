@@ -23,6 +23,7 @@ from plextraktsync.factory import factory, logger, logging
 from plextraktsync.path import pytrakt_file
 from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex_api import PlexLibraryItem
+from plextraktsync.util.Cleanup import Cleanup
 
 
 class ScrobblerProxy:
@@ -387,7 +388,7 @@ class TraktApi:
 
 
 class TraktBatch:
-    def __init__(self, name: str, add: bool, trakt: TraktApi, timer=None):
+    def __init__(self, name: str, add: bool, trakt: TraktApi, timer=None, cleanup: Cleanup = None):
         if name not in ["collection", "watchlist"]:
             raise ValueError(f"TraktBatch name not allowed: {name}")
         self.name = name
@@ -395,6 +396,8 @@ class TraktBatch:
         self.trakt = trakt
         self.items = defaultdict(list)
         self.timer = timer
+        if cleanup:
+            cleanup.add(self.flush)
 
     @nocache
     @rate_limit()
