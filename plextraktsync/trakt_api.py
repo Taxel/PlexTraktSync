@@ -10,7 +10,6 @@ import trakt.users
 from deprecated import deprecated
 from trakt.errors import ForbiddenException, OAuthException
 from trakt.movies import Movie
-from trakt.sync import Scrobbler
 from trakt.tv import TVEpisode, TVSeason, TVShow
 
 from plextraktsync import pytrakt_extensions
@@ -20,38 +19,12 @@ from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
-from plextraktsync.factory import factory, logger, logging
+from plextraktsync.factory import factory, logger
 from plextraktsync.path import pytrakt_file
 from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex_api import PlexLibraryItem
+from plextraktsync.trakt.ScrobblerProxy import ScrobblerProxy
 from plextraktsync.util.Cleanup import Cleanup
-
-
-class ScrobblerProxy:
-    """
-    Proxy to Scrobbler that handles requsts cache and rate limiting
-    """
-
-    def __init__(self, scrobbler: Scrobbler, threshold=80):
-        self.scrobbler = scrobbler
-        self.threshold = threshold
-        self.logger = logging.getLogger("PlexTraktSync.ScrobblerProxy")
-
-    def update(self, progress: float):
-        self.logger.debug(f"update({self.scrobbler.media}): {progress}")
-        return self.scrobbler.update(progress)
-
-    def pause(self, progress: float):
-        self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
-        return self.scrobbler.pause(progress)
-
-    def stop(self, progress: float):
-        if progress >= self.threshold:
-            self.logger.debug(f"stop({self.scrobbler.media}): {progress}")
-            return self.scrobbler.stop(progress)
-        else:
-            self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
-            return self.scrobbler.pause(progress)
 
 
 class TraktRatingCollection(dict):
