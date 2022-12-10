@@ -6,7 +6,7 @@ from trakt.movies import Movie
 from trakt.tv import TVEpisode, TVSeason, TVShow
 
 from plextraktsync.decorators.cached_property import cached_property
-from plextraktsync.trakt_api import TraktApi
+from plextraktsync.trakt.TraktApi import TraktApi
 
 
 class TraktItem:

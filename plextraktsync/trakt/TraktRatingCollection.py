@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from plextraktsync.decorators.flatten import flatten_dict
-from plextraktsync.trakt_api import TraktApi
+from plextraktsync.trakt.TraktApi import TraktApi
 
 
 class TraktRatingCollection(dict):

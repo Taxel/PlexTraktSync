@@ -23,8 +23,9 @@ from plextraktsync.path import pytrakt_file
 from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex_api import PlexLibraryItem
 from plextraktsync.trakt.ScrobblerProxy import ScrobblerProxy
+from plextraktsync.trakt.TraktBatch import TraktBatch
+from plextraktsync.trakt.TraktLookup import TraktLookup
 from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
-from plextraktsync.trakt_api import TraktBatch, TraktLookup
 
 
 class TraktApi:
