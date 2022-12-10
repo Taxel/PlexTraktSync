@@ -13,4 +13,5 @@
 !/plextraktsync/mixin/*.py
 !/plextraktsync/plex/*.py
 !/plextraktsync/servers.default.yml
+!/plextraktsync/trakt/*.py
 !/plextraktsync/util/*.py
