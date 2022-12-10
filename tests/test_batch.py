@@ -1,6 +1,7 @@
 #!/usr/bin/env python3 -m pytest
 from unittest.mock import Mock
 
+from plextraktsync.timer import Timer
 from plextraktsync.trakt_api import TraktBatch
 from tests.conftest import factory, load_mock
 
@@ -27,7 +28,8 @@ def test_batch_delay_none():
 
 def test_batch_delay_1():
     response = load_mock("trakt_sync_collection_response.json")
-    b = TraktBatch("collection", add=True, trakt=trakt, batch_delay=1)
+    timer = Timer(1)
+    b = TraktBatch("collection", add=True, trakt=trakt, timer=timer)
     b.trakt_sync = Mock(return_value=response)
 
     assert b.queue_size() == 0

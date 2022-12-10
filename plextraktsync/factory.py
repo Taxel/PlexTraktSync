@@ -223,6 +223,12 @@ class Factory:
         return config
 
     @cached_property
+    def batch_delay_timer(self):
+        from plextraktsync.timer import Timer
+
+        return Timer(self.run_config.batch_delay) if self.run_config.batch_delay else None
+
+    @cached_property
     def trakt_batch(self):
         from functools import partial
 
@@ -231,7 +237,7 @@ class Factory:
         return partial(
             TraktBatch,
             trakt=self.trakt_api,
-            batch_delay=self.run_config.batch_delay,
+            timer=self.batch_delay_timer,
         )
 
 
