@@ -265,16 +265,14 @@ services:
 ## Sync settings
 
 To disable parts of the functionality of this software, look no further than
-`config.yml`. Here, in the sync section, you can disable the following things
-by setting them from `true` to `false` in a text editor:
-
-At first run, the script will create `config.yml` based on
+`config.yml`. At first run, the script will create `config.yml` based on
 `config.default.yml`. If you want to customize settings before first run (eg.
 you don't want full sync) you can copy and edit `config.yml` before launching
-the script.
+the script. Here, in the sync section, you can disable the following things
+by setting them from `true` to `false` in a text editor:
 
 - Downloading liked lists from Trakt and adding them to Plex
-- Downloading your watchlist from Trakt and adding it to Plex
+- Syncing the watchlists between Plex and Trakt
 - Syncing the watched status between Plex and Trakt
 - Syncing the collected status between Plex and Trakt
 
