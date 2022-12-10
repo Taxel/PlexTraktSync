@@ -49,6 +49,8 @@ def cli(ctx, version: bool):
         return
 
     if not ctx.invoked_subcommand:
+        logger = factory.logger
+        logger.warning('plextraktsync without command is deprecated. Executing "plextraktsync sync"')
         sync()
 
 

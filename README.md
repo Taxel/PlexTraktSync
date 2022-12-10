@@ -94,7 +94,7 @@ pipx upgrade PlexTraktSync
 to run:
 
 ```
-plextraktsync
+plextraktsync sync
 ```
 
 NOTE: `pipx` install will use OS specific paths for Config, Logs, Cache, see
@@ -112,6 +112,7 @@ version: '2'
 services:
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
+    command: sync
     container_name: plextraktsync
     restart: on-failure:2
     volumes:
@@ -127,7 +128,7 @@ services:
 To run sync:
 
 ```
-docker-compose run --rm plextraktsync
+docker-compose run --rm plextraktsync sync
 ```
 
 The container will stop after the sync is completed. Read Setup section to run
@@ -207,7 +208,7 @@ Installing from GitHub is considered developer mode, and it's documented in
   - Enter `urn:ietf:wg:oauth:2.0:oob` as the redirect url
   - You can leave Javascript origins and the Permissions checkboxes blank
 
-- Run `plextraktsync`, the script will ask for missing credentials
+- Run `plextraktsync login`, the script will ask for missing credentials
 
   > **Note**
   > To setup the credentials in the Docker Container, refer to the [Run the Docker Container](#run-the-docker-container) section
@@ -227,7 +228,7 @@ Installing from GitHub is considered developer mode, and it's documented in
 
   ```
   $ crontab -e
-  0 */2 * * * $HOME/.local/bin/plextraktsync
+  0 */2 * * * $HOME/.local/bin/plextraktsync sync
   ```
 
   - Note the command in the example above may not immediately work. Use the `which plextraktsync` command to locate your system's plextraktsync executable file and update it accordingly.
@@ -256,6 +257,7 @@ services:
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync:latest
     container_name: plextraktsync
+    command: sync
     volumes:
       - ./config:/app/config
 ```
