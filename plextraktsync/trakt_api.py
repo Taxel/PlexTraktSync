@@ -7,6 +7,7 @@ import trakt
 import trakt.movies
 import trakt.sync
 import trakt.users
+from deprecated import deprecated
 from trakt.errors import ForbiddenException, OAuthException
 from trakt.movies import Movie
 from trakt.sync import Scrobbler
@@ -373,6 +374,7 @@ class TraktApi:
             return self.find_by_guid(guid)
         return None
 
+    @deprecated("No longer in use")
     def flush(self):
         """
         Submit all pending data
