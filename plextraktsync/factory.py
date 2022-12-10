@@ -129,7 +129,7 @@ class Factory:
 
     @cached_property
     def plex_audio_codec(self):
-        from plextraktsync.plex_api import PlexAudioCodec
+        from plextraktsync.plex.PlexAudioCodec import PlexAudioCodec
 
         return PlexAudioCodec()
 
