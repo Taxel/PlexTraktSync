@@ -24,22 +24,9 @@ from plextraktsync.path import pytrakt_file
 from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex_api import PlexLibraryItem
 from plextraktsync.trakt.ScrobblerProxy import ScrobblerProxy
+from plextraktsync.trakt.TraktItem import TraktItem  # noqa
 from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
 from plextraktsync.util.Cleanup import Cleanup
-
-
-class TraktItem:
-    def __init__(self, item: Union[Movie, TVShow, TVSeason, TVEpisode], trakt: TraktApi = None):
-        self.item = item
-        self.trakt = trakt
-
-    @cached_property
-    def type(self):
-        """
-        Return "movie", "show", "season", "episode"
-        """
-        # NB: TVSeason does not have "media_type" property
-        return self.item.media_type[:-1]
 
 
 class TraktApi:
