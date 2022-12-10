@@ -14,7 +14,7 @@ from trakt.tv import TVEpisode, TVSeason, TVShow
 
 from plextraktsync import pytrakt_extensions
 from plextraktsync.decorators.cached_property import cached_property
-from plextraktsync.decorators.flatten import flatten_dict, flatten_list
+from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
@@ -24,25 +24,8 @@ from plextraktsync.path import pytrakt_file
 from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex_api import PlexLibraryItem
 from plextraktsync.trakt.ScrobblerProxy import ScrobblerProxy
+from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
 from plextraktsync.util.Cleanup import Cleanup
-
-
-class TraktRatingCollection(dict):
-    def __init__(self, trakt: TraktApi):
-        super().__init__()
-        self.trakt = trakt
-
-    def __missing__(self, media_type: str):
-        ratings = self.ratings(media_type)
-        self[media_type] = ratings
-
-        return ratings
-
-    @flatten_dict
-    def ratings(self, media_type: str):
-        index = media_type.rstrip("s")
-        for r in self.trakt.get_ratings(media_type):
-            yield r[index]["ids"]["trakt"], r["rating"]
 
 
 class TraktItem:
