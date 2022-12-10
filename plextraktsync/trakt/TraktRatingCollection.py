@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from plextraktsync.decorators.flatten import flatten_dict
-from plextraktsync.trakt.TraktApi import TraktApi
+
+if TYPE_CHECKING:
+    from plextraktsync.trakt.TraktApi import TraktApi
 
 
 class TraktRatingCollection(dict):

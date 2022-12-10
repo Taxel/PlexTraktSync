@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from trakt.sync import Scrobbler
+from typing import TYPE_CHECKING
 
 from plextraktsync.factory import logging
+
+if TYPE_CHECKING:
+    from trakt.sync import Scrobbler
 
 
 class ScrobblerProxy:

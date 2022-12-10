@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from typing import TYPE_CHECKING
 
 import trakt
 import trakt.movies
@@ -12,8 +13,10 @@ from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import logger
-from plextraktsync.trakt.TraktApi import TraktApi
-from plextraktsync.util.Cleanup import Cleanup
+
+if TYPE_CHECKING:
+    from plextraktsync.trakt.TraktApi import TraktApi
+    from plextraktsync.util.Cleanup import Cleanup
 
 
 class TraktBatch:

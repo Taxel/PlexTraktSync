@@ -1,23 +1,28 @@
 from __future__ import annotations
 
-from typing import Optional
-
-from trakt.tv import TVEpisode, TVShow
+from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import logger
-from plextraktsync.plex.PlexGuid import PlexGuid
 
 EPISODES_ORDERING_WARNING = "episodes ordering is different in Plex and Trakt. " \
                             "Check your Plex media source, TMDB is recommended."
+
+if TYPE_CHECKING:
+    from typing import Optional
+
+    from trakt.tv import TVEpisode, TVShow
+
+    from plextraktsync.plex.PlexGuid import PlexGuid
 
 
 class TraktLookup:
     """
     Trakt lookup table to find all Trakt episodes of a TVShow
     """
+
     def __init__(self, tm: TVShow):
         self.provider_table = {}
         self.tm = tm

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Optional, Union
+from typing import TYPE_CHECKING
 
 import trakt
 import trakt.movies
@@ -8,8 +8,6 @@ import trakt.sync
 import trakt.users
 from deprecated import deprecated
 from trakt.errors import ForbiddenException, OAuthException
-from trakt.movies import Movie
-from trakt.tv import TVEpisode, TVSeason, TVShow
 
 from plextraktsync import pytrakt_extensions
 from plextraktsync.decorators.cached_property import cached_property
@@ -20,12 +18,19 @@ from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import factory, logger
 from plextraktsync.path import pytrakt_file
-from plextraktsync.plex.PlexGuid import PlexGuid
-from plextraktsync.plex_api import PlexLibraryItem
 from plextraktsync.trakt.ScrobblerProxy import ScrobblerProxy
-from plextraktsync.trakt.TraktBatch import TraktBatch
 from plextraktsync.trakt.TraktLookup import TraktLookup
 from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
+
+if TYPE_CHECKING:
+    from typing import List, Optional, Union
+
+    from trakt.movies import Movie
+    from trakt.tv import TVEpisode, TVSeason, TVShow
+
+    from plextraktsync.plex.PlexGuid import PlexGuid
+    from plextraktsync.plex_api import PlexLibraryItem
+    from plextraktsync.trakt.TraktBatch import TraktBatch
 
 
 class TraktApi:
