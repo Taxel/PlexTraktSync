@@ -27,10 +27,10 @@ def unmatched(no_progress_bar: bool, local: bool):
             if not movie:
                 failed.append(pm)
 
-    for pm in failed:
+    for i, pm in enumerate(failed):
         p = pm.item
         url = plex.media_url(pm)
-        print("=" * 80)
+        print("=", i, "=" * 80)
         print(f"No match: {pm}")
         print(f"URL: {url}")
         print(f"Title: {p.title}")
