@@ -65,18 +65,11 @@ http_cache:
   # Value "0" means never cache, value "-1" means never expires
   # anything else means how long to cache
   #
+  # https://requests-cache.readthedocs.io/en/stable/user_guide/expiration.html#url-patterns
+  #
   # NOTE: If there is more than one match, the first match will be used in the order they are defined
   policy:
-    "*.trakt.tv/shows/*/seasons": 0
-    "*.trakt.tv/sync/collection/shows": 0
-    "*.trakt.tv/sync/watched/shows": 0
-    "*.trakt.tv/users/*/collection/movies": 0
-    "*.trakt.tv/users/*/collection/shows": 0
-    "*.trakt.tv/users/*/ratings/*": 0
-    "*.trakt.tv/users/*/watched/movies": 0
-    "*.trakt.tv/users/*/watchlist/movies": 0
-    "*.trakt.tv/users/*/watchlist/shows": 0
-    "*.trakt.tv/users/likes/lists": 0
-    "*.trakt.tv/users/me": 0
+#    "*.trakt.tv/users/me": 1 day
+#    "*.trakt.tv/users/likes/lists": 0
 
 # vim:ts=2:sw=2:et
