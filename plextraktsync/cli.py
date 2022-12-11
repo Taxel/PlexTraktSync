@@ -1,7 +1,10 @@
+import sys
 from functools import wraps
 from os import environ
 
 import click
+from click import Abort
+from click.exceptions import ClickException, Exit
 
 from plextraktsync.factory import factory
 
@@ -323,3 +326,20 @@ cli.add_command(trakt_login)
 cli.add_command(unmatched)
 cli.add_command(watch)
 cli.add_command(watched_shows)
+
+
+def main():
+    try:
+        exit_code = cli(standalone_mode=False)
+    except ClickException as e:
+        factory.cleanup.run()
+        e.show()
+        sys.exit(e.exit_code)
+    except Abort:
+        factory.cleanup.run()
+        print("Aborted!")
+        sys.exit(1)
+    except Exit as e:
+        raise ClickException(f"Exited with {e.exit_code}.")
+
+    sys.exit(exit_code)

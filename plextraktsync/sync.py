@@ -148,7 +148,6 @@ class Sync:
                 self.sync_watched(movie, dry_run=dry_run)
                 if not is_partial:
                     listutil.addPlexItemToLists(movie)
-            self.trakt.flush()
 
             shows = set()
             for episode in walker.find_episodes():
@@ -160,7 +159,6 @@ class Sync:
                 if self.config.sync_ratings:
                     # collect shows for later ratings sync
                     shows.add(episode.show)
-            self.trakt.flush()
 
             for show in walker.walk_shows(shows, title="Syncing show ratings"):
                 self.sync_ratings(show, dry_run=dry_run)
@@ -174,9 +172,6 @@ class Sync:
                         self.update_playlists(listutil, dry_run=dry_run)
                     if self.sync_wl:
                         self.sync_watchlist(walker, dry_run=dry_run)
-
-        if not dry_run:
-            self.trakt.flush()
 
     def update_playlists(self, listutil: TraktListUtil, dry_run=False):
         if dry_run:

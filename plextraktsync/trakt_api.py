@@ -7,6 +7,7 @@ import trakt
 import trakt.movies
 import trakt.sync
 import trakt.users
+from deprecated import deprecated
 from trakt.errors import ForbiddenException, OAuthException
 from trakt.movies import Movie
 from trakt.sync import Scrobbler
@@ -23,6 +24,7 @@ from plextraktsync.factory import factory, logger, logging
 from plextraktsync.path import pytrakt_file
 from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex_api import PlexLibraryItem
+from plextraktsync.util.Cleanup import Cleanup
 
 
 class ScrobblerProxy:
@@ -372,6 +374,7 @@ class TraktApi:
             return self.find_by_guid(guid)
         return None
 
+    @deprecated("No longer in use")
     def flush(self):
         """
         Submit all pending data
@@ -387,7 +390,7 @@ class TraktApi:
 
 
 class TraktBatch:
-    def __init__(self, name: str, add: bool, trakt: TraktApi, timer=None):
+    def __init__(self, name: str, add: bool, trakt: TraktApi, timer=None, cleanup: Cleanup = None):
         if name not in ["collection", "watchlist"]:
             raise ValueError(f"TraktBatch name not allowed: {name}")
         self.name = name
@@ -395,6 +398,8 @@ class TraktBatch:
         self.trakt = trakt
         self.items = defaultdict(list)
         self.timer = timer
+        if cleanup:
+            cleanup.add(self.flush)
 
     @nocache
     @rate_limit()
@@ -416,7 +421,7 @@ class TraktBatch:
 
         return size
 
-    def flush(self, force=False):
+    def flush(self, force=True):
         """
         Flush the queue not sooner than seconds specified in timer
         """
@@ -438,7 +443,7 @@ class TraktBatch:
         Add item of media_type to list of items
         """
         self.items[media_type].append(item)
-        self.flush()
+        self.flush(force=False)
 
     def trakt_sync(self, media_object):
         if self.name == "collection":
