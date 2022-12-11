@@ -4,8 +4,6 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Dict
-
     from requests_cache import ExpirationPatterns
 
 
@@ -15,7 +13,7 @@ class HttpCacheConfig:
     Main config dataclass
     """
 
-    policy: Dict[str]
+    policy: ExpirationPatterns
 
     default_policy = {
         # Requests matching these patterns will not be cached
