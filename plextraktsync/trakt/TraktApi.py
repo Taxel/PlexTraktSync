@@ -21,12 +21,13 @@ from plextraktsync.path import pytrakt_file
 from plextraktsync.trakt.ScrobblerProxy import ScrobblerProxy
 from plextraktsync.trakt.TraktLookup import TraktLookup
 from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
+from plextraktsync.trakt.types import TraktMedia
 
 if TYPE_CHECKING:
     from typing import List, Optional, Union
 
     from trakt.movies import Movie
-    from trakt.tv import TVEpisode, TVSeason, TVShow
+    from trakt.tv import TVEpisode, TVShow
 
     from plextraktsync.plex.PlexGuid import PlexGuid
     from plextraktsync.plex_api import PlexLibraryItem
@@ -112,7 +113,7 @@ class TraktApi:
     @rate_limit()
     @time_limit()
     @retry()
-    def remove_from_library(self, media: Union[Movie, TVShow, TVSeason, TVEpisode]):
+    def remove_from_library(self, media: TraktMedia):
         media.remove_from_library()
 
     @cached_property
