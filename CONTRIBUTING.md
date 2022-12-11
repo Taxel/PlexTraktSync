@@ -158,6 +158,14 @@ $ docker-compose run --rm --entrypoint sh plextraktsync
 /app # plextraktsync@969
 ```
 
+## Building docker image
+
+You can build docker image from `main` branch:
+
+```sh
+docker build https://github.com/Taxel/PlexTraktSync.git#main -t plextraktsync
+```
+
 ## Git: setup pre-commit
 
 For convenience this project uses [pre-commit] hooks:
