@@ -90,8 +90,12 @@ def cache_status(cache):
     return f'Total rows: {len(cache.responses)} responses, {len(cache.redirects)} redirects'
 
 
-def cache(sort: str, limit: int, reverse: bool, url: str):
+def cache(sort: str, limit: int, reverse: bool, expire: bool, url: str):
     session = factory.session
+
+    if expire:
+        expire_url(session, url)
+        return
 
     if url:
         inspect_url(session, url)

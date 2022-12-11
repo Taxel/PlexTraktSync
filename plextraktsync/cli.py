@@ -73,6 +73,7 @@ def cli(ctx, version: bool):
     help="Limit entries to be printed",
 )
 @click.option("--reverse", is_flag=True, default=False, help="Sort reverse")
+@click.option("--expire", is_flag=True, default=False, help="Expire given url")
 @click.argument("url", required=False)
 def cache():
     """
