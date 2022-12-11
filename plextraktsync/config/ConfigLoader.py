@@ -65,4 +65,4 @@ class ConfigLoader:
     def dump_yaml(fp, config):
         import yaml
 
-        return yaml.dump(config, fp, allow_unicode=True, indent=2)
+        return yaml.dump(config, fp, allow_unicode=True, indent=2, sort_keys=False)
