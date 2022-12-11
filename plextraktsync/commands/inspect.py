@@ -57,6 +57,7 @@ def inspect_media(id):
 
     m: Media = mf.resolve_any(pm)
     if not m:
+        print("Trakt: No match found")
         return
 
     print(f"Trakt: {m.trakt_url}")
