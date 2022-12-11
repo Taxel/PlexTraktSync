@@ -42,9 +42,15 @@ class HttpCacheConfig:
         NOTE: If there is more than one match, the first match will be used in the order they are defined
         """
 
-        policy = dict(self.default_policy)
-        if self.policy:
-            policy.update(self.policy)
+        # We need to build the dict manually, so users can have overrides for builtin patterns
+        policy = {}
+        for k, v in self.default_policy.items():
+            # Use user value if present
+            if k in self.policy:
+                v = self.policy[k]
+            policy[k] = v
+
+        policy.update(self.policy)
 
         return policy
 
