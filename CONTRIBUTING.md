@@ -158,6 +158,8 @@ $ docker-compose run --rm --entrypoint sh plextraktsync
 /app # plextraktsync@969
 ```
 
+Alternatively you can [build image](#building-docker-image) yourself.
+
 ## Building docker image
 
 You can build docker image from default branch:
