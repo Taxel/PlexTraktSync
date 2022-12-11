@@ -43,7 +43,8 @@ class Factory:
 
     @cached_property
     def plex_server(self):
-        from plextraktsync.plex_server import PlexServerConnection
+        from plextraktsync.plex.PlexServerConnection import \
+            PlexServerConnection
 
         server = self.server_config
 
