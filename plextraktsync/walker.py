@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import List, NamedTuple, Set
+from typing import Any, Generator, List, NamedTuple, Set
 
 from plexapi.video import Episode, Movie, Show
 
@@ -245,7 +245,7 @@ class Walker:
         if self.plan.episodes:
             print(f"Sync Episodes: {self.plan.episodes}")
 
-    def get_plex_movies(self):
+    def get_plex_movies(self) -> Generator[PlexLibraryItem, Any, None]:
         """
         Iterate over movie sections unless specific movie is requested
         """
@@ -258,14 +258,14 @@ class Walker:
 
         yield from movies
 
-    def find_movies(self):
+    def find_movies(self) -> Generator[Media, Any, None]:
         for plex in self.get_plex_movies():
             movie = self.mf.resolve_any(plex)
             if not movie:
                 continue
             yield movie
 
-    def get_plex_shows(self):
+    def get_plex_shows(self) -> Generator[PlexLibraryItem, Any, None]:
         if self.plan.shows:
             shows = self.media_from_items("show", self.plan.shows)
         elif self.plan.show_sections:
@@ -290,7 +290,7 @@ class Walker:
             return
         yield from self.progressbar(shows, desc=title)
 
-    def get_plex_episodes(self, episodes):
+    def get_plex_episodes(self, episodes) -> Generator[Media, Any, None]:
         it = self.progressbar(episodes, desc="Processing episodes")
         for pe in it:
             guid = PlexGuid(pe.grandparentGuid, "show")
@@ -304,7 +304,7 @@ class Walker:
             me.show = show
             yield me
 
-    def media_from_sections(self, sections: List[PlexLibrarySection]):
+    def media_from_sections(self, sections: List[PlexLibrarySection]) -> Generator[PlexLibraryItem, Any, None]:
         for section in sections:
             with measure_time(f"{section.title} processed"):
                 total = len(section)
@@ -315,12 +315,12 @@ class Walker:
                 )
                 yield from it
 
-    def media_from_items(self, libtype: str, items: List):
+    def media_from_items(self, libtype: str, items: List) -> Generator[PlexLibraryItem, Any, None]:
         it = self.progressbar(items, desc=f"Processing {libtype}s")
         for m in it:
             yield PlexLibraryItem(m, self.plex)
 
-    def episode_from_show(self, show: Media):
+    def episode_from_show(self, show: Media) -> Generator[Media, Any, None]:
         for pe in show.plex.episodes():
             me = self.mf.resolve_any(pe, show)
             if not me:
@@ -337,14 +337,14 @@ class Walker:
         else:
             yield from iterable
 
-    def media_from_traktlist(self, items: List):
+    def media_from_traktlist(self, items: List) -> Generator[Media, Any, None]:
         it = self.progressbar(items, desc="Processing Trakt watchlist")
         for media in it:
             tm = TraktItem(media, trakt=self.trakt)
             m = self.mf.resolve_trakt(tm)
             yield m
 
-    def media_from_plexlist(self, items: List):
+    def media_from_plexlist(self, items: List) -> Generator[Media, Any, None]:
         it = self.progressbar(items, desc="Processing Plex watchlist")
         for media in it:
             pm = PlexLibraryItem(media, plex=self.plex)

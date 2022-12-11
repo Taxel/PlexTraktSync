@@ -16,10 +16,11 @@ class Media:
     """
     Class containing Plex and Trakt media items (Movie, Episode)
     """
+    plex: PlexLibraryItem
 
     def __init__(
             self,
-            plex,
+            plex: PlexLibraryItem,
             trakt,
             plex_api: PlexApi = None,
             trakt_api: TraktApi = None,
@@ -252,7 +253,7 @@ class MediaFactory:
         pm = self._guid_match(result, tm)
         return self.make_media(pm, tm.item)
 
-    def make_media(self, plex, trakt):
+    def make_media(self, plex: PlexLibraryItem, trakt):
         return Media(plex, trakt, plex_api=self.plex, trakt_api=self.trakt, mf=self)
 
     def _guid_match(self, candidates: List[PlexLibraryItem], tm: TraktItem) -> Optional[PlexLibraryItem]:
