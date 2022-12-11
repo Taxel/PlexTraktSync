@@ -2,18 +2,15 @@ import click
 
 from plextraktsync.commands.login import ensure_login
 from plextraktsync.factory import factory
-from plextraktsync.walker import WalkConfig, Walker
 
 
 def unmatched(no_progress_bar: bool, local: bool):
     factory.run_config.update(progressbar=not no_progress_bar)
     ensure_login()
     plex = factory.plex_api
-    trakt = factory.trakt_api
     mf = factory.media_factory
-    pb = factory.progressbar
-    wc = WalkConfig()
-    walker = Walker(plex, trakt, mf, wc, progressbar=pb)
+    wc = factory.walk_config
+    walker = factory.walker
 
     if not wc.is_valid():
         click.echo("Nothing to scan, this is likely due conflicting options given.")
