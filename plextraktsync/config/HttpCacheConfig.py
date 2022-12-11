@@ -47,3 +47,19 @@ class HttpCacheConfig:
             policy.update(self.policy)
 
         return policy
+
+    def dump(self, print=None):
+        """
+        Print config serialized as yaml.
+        If print is None, return the produced string instead.
+        """
+        from plextraktsync.config.ConfigLoader import ConfigLoader
+        data = {
+            "http_cache": {
+                "policy": self.urls_expire_after,
+            },
+        }
+        dump = ConfigLoader.dump_yaml(None, data)
+        if print is None:
+            return dump
+        print(dump)
