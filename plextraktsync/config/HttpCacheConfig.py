@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class HttpCacheConfig:
     """
-    Main config dataclass
+    Http Cache config dataclass
     """
 
     policy: ExpirationPatterns
