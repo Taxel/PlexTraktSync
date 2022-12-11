@@ -42,4 +42,8 @@ class HttpCacheConfig:
         NOTE: If there is more than one match, the first match will be used in the order they are defined
         """
 
-        return {**self.default_policy, **self.policy}
+        policy = dict(self.default_policy)
+        if self.policy:
+            policy.update(self.policy)
+
+        return policy
