@@ -109,7 +109,15 @@ class Factory:
 
         warnings.filterwarnings("ignore", category=TqdmExperimentalWarning)
 
-        return partial(tqdm, options={'console': console})
+        # Monkeypatch https://github.com/tqdm/tqdm/pull/1395
+        class Tqdm(tqdm):
+            def close(self):
+                if self.disable:
+                    return
+                self.display()
+                super().close()
+
+        return partial(Tqdm, options={'console': console})
 
     @cached_property
     def run_config(self):
