@@ -1,7 +1,14 @@
-from dataclasses import dataclass
-from typing import List
+from __future__ import annotations
 
-from requests_cache import DO_NOT_CACHE, ExpirationPatterns
+from dataclasses import dataclass
+from typing import TYPE_CHECKING
+
+from requests_cache import DO_NOT_CACHE
+
+if TYPE_CHECKING:
+    from typing import List
+
+    from requests_cache import ExpirationPatterns
 
 
 @dataclass(frozen=True)
