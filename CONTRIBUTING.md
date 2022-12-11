@@ -160,10 +160,10 @@ $ docker-compose run --rm --entrypoint sh plextraktsync
 
 ## Building docker image
 
-You can build docker image from `main` branch:
+You can build docker image from default branch:
 
 ```sh
-docker build https://github.com/Taxel/PlexTraktSync.git#main -t plextraktsync
+docker build https://github.com/Taxel/PlexTraktSync.git#HEAD -t plextraktsync
 ```
 
 ## Git: setup pre-commit
