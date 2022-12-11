@@ -155,7 +155,7 @@ $ docker-compose run --rm --entrypoint sh plextraktsync
 ```
 ͏͏͏͏ ͏ ͏ 2. then run the script with:
 ```
-/app # plextraktsync@969
+/app # plextraktsync@969 sync
 ```
 
 ## Git: setup pre-commit
