@@ -47,6 +47,7 @@ If you checkout a specific version, this can be done in one of different ways:
 - [GitHub download](#github-download)
 - [Git clone](#git-clone)
 - [Install code from Pull request](#install-code-from-pull-request)
+- [Build Docker image](#building-docker-image)
 
 Note: Development should be done against the `main` branch and not a specific tag.
 
