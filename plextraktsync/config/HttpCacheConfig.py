@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from requests_cache import DO_NOT_CACHE
+
 if TYPE_CHECKING:
     from requests_cache import ExpirationPatterns
 
@@ -17,17 +19,17 @@ class HttpCacheConfig:
 
     default_policy = {
         # Requests matching these patterns will not be cached
-        "*.trakt.tv/shows/*/seasons": 0,
-        "*.trakt.tv/sync/collection/shows": 0,
-        "*.trakt.tv/sync/watched/shows": 0,
-        "*.trakt.tv/users/*/collection/movies": 0,
-        "*.trakt.tv/users/*/collection/shows": 0,
-        "*.trakt.tv/users/*/ratings/*": 0,
-        "*.trakt.tv/users/*/watched/movies": 0,
-        "*.trakt.tv/users/*/watchlist/movies": 0,
-        "*.trakt.tv/users/*/watchlist/shows": 0,
-        "*.trakt.tv/users/likes/lists": 0,
-        "*.trakt.tv/users/me": 0,
+        "*.trakt.tv/shows/*/seasons": DO_NOT_CACHE,
+        "*.trakt.tv/sync/collection/shows": DO_NOT_CACHE,
+        "*.trakt.tv/sync/watched/shows": DO_NOT_CACHE,
+        "*.trakt.tv/users/*/collection/movies": DO_NOT_CACHE,
+        "*.trakt.tv/users/*/collection/shows": DO_NOT_CACHE,
+        "*.trakt.tv/users/*/ratings/*": DO_NOT_CACHE,
+        "*.trakt.tv/users/*/watched/movies": DO_NOT_CACHE,
+        "*.trakt.tv/users/*/watchlist/movies": DO_NOT_CACHE,
+        "*.trakt.tv/users/*/watchlist/shows": DO_NOT_CACHE,
+        "*.trakt.tv/users/likes/lists": DO_NOT_CACHE,
+        "*.trakt.tv/users/me": DO_NOT_CACHE,
     }
 
     @property
