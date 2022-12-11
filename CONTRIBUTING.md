@@ -166,6 +166,12 @@ You can build docker image from default branch:
 docker build https://github.com/Taxel/PlexTraktSync.git#HEAD -t plextraktsync
 ```
 
+To build for a pull request:
+
+```sh
+docker build https://github.com/Taxel/PlexTraktSync.git#refs/pull/1281/head -t plextraktsync/1281
+```
+
 ## Git: setup pre-commit
 
 For convenience this project uses [pre-commit] hooks:
