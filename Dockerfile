@@ -16,6 +16,7 @@ eot
 
 # Install app dependencies
 FROM base AS build
+RUN apk add git
 RUN pip install pipenv
 COPY Pipfile* ./
 RUN pipenv install --deploy
