@@ -113,8 +113,6 @@ class TraktApi:
     @time_limit()
     @retry()
     def remove_from_library(self, media: Union[Movie, TVShow, TVSeason, TVEpisode]):
-        if not isinstance(media, (Movie, TVShow, TVSeason, TVEpisode)):
-            raise ValueError("Must be valid media type")
         media.remove_from_library()
 
     @cached_property
