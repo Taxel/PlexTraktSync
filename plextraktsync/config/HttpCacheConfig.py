@@ -3,10 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from requests_cache import DO_NOT_CACHE
-
 if TYPE_CHECKING:
-    from typing import List
+    from typing import Dict
 
     from requests_cache import ExpirationPatterns
 
@@ -17,7 +15,7 @@ class HttpCacheConfig:
     Main config dataclass
     """
 
-    never_cache: List[str]
+    policy: Dict[str]
 
     @property
     def urls_expire_after(self) -> ExpirationPatterns:
@@ -28,7 +26,4 @@ class HttpCacheConfig:
 
         NOTE: If there is more than one match, the first match will be used in the order they are defined
         """
-        result = {}
-        result.update({url: DO_NOT_CACHE for url in self.never_cache})
-
-        return result
+        return self.policy
