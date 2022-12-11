@@ -1,9 +1,15 @@
+from __future__ import annotations
+
 from functools import partial
+from typing import TYPE_CHECKING
 
 import click
 from requests_cache import CachedSession
 
 from plextraktsync.factory import factory
+
+if TYPE_CHECKING:
+    from typing import List
 
 
 def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
@@ -51,6 +57,17 @@ def render_json(data):
 
     decoded = loads(data)
     return dumps(decoded, indent=2)
+
+
+def expire_url(session: CachedSession, url: str):
+    from requests import Request
+    delete_keys: List[str] = []
+    for response in responses_by_url(session, url):
+        cache_key = response.cache_key if response.cache_key else session.cache.create_key(Request('GET', response.url))
+        delete_keys.append(cache_key)
+
+    print(f"Deleting: {delete_keys}")
+    session.cache.delete(*delete_keys)
 
 
 def inspect_url(session: CachedSession, url: str):
