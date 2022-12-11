@@ -7,3 +7,6 @@ def config(print=print):
 
     print(f"# Config File: {config.config_yml}")
     config.dump(print=print)
+
+    print("# HTTP Cache")
+    config.http_cache.dump(print=print)

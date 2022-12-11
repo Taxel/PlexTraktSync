@@ -79,10 +79,10 @@ class Factory:
     def session(self):
         from requests_cache import CachedSession
 
-        config = self.config
-        session = CachedSession(config.cache_path)
-
-        return session
+        return CachedSession(
+            cache_name=self.config.cache_path,
+            urls_expire_after=self.config.http_cache.urls_expire_after,
+        )
 
     @cached_property
     def sync(self):
