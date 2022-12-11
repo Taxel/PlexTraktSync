@@ -1,21 +1,6 @@
 cache:
   path: $PTS_CACHE_DIR/trakt_cache
 
-http_cache:
-  never_cache:
-    # Requests matching these patterns will not be cached
-    - "*.trakt.tv/shows/*/seasons"
-    - "*.trakt.tv/sync/collection/shows"
-    - "*.trakt.tv/sync/watched/shows"
-    - "*.trakt.tv/users/*/collection/movies"
-    - "*.trakt.tv/users/*/collection/shows"
-    - "*.trakt.tv/users/*/ratings/*"
-    - "*.trakt.tv/users/*/watched/movies"
-    - "*.trakt.tv/users/*/watchlist/movies"
-    - "*.trakt.tv/users/*/watchlist/shows"
-    - "*.trakt.tv/users/likes/lists"
-    - "*.trakt.tv/users/me"
-
 excluded-libraries:
   - Private
   - Family Holidays
@@ -74,5 +59,24 @@ watch:
 xbmc-providers:
   movies: imdb
   shows: tvdb
+
+##### Advanced settings below this line, don't edit unless you know what you're doing #####
+http_cache:
+  # Value "0" means never cache, value "-1" means never expires
+  # anything else means how long to cache
+  #
+  # NOTE: If there is more than one match, the first match will be used in the order they are defined
+  policy:
+    "*.trakt.tv/shows/*/seasons": 0
+    "*.trakt.tv/sync/collection/shows": 0
+    "*.trakt.tv/sync/watched/shows": 0
+    "*.trakt.tv/users/*/collection/movies": 0
+    "*.trakt.tv/users/*/collection/shows": 0
+    "*.trakt.tv/users/*/ratings/*": 0
+    "*.trakt.tv/users/*/watched/movies": 0
+    "*.trakt.tv/users/*/watchlist/movies": 0
+    "*.trakt.tv/users/*/watchlist/shows": 0
+    "*.trakt.tv/users/likes/lists": 0
+    "*.trakt.tv/users/me": 0
 
 # vim:ts=2:sw=2:et
