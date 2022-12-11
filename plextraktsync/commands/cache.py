@@ -17,6 +17,12 @@ def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
     yield from sorter(session.cache.responses.values())
 
 
+def responses_by_url(session, url):
+    return (
+        response for response in session.cache.responses.values() if response.url == url
+    )
+
+
 # https://stackoverflow.com/questions/36106712/how-can-i-limit-iterations-of-a-loop-in-python
 def limit_iterator(items, limit: int):
     if not limit or limit <= 0:
@@ -48,9 +54,7 @@ def render_json(data):
 
 
 def inspect_url(session: CachedSession, url: str):
-    matches = [
-        response for response in session.cache.responses.values() if response.url == url
-    ]
+    matches = responses_by_url(session, url)
     for m in matches:
         content_type = m.headers["Content-Type"]
         if content_type.startswith("text/xml"):
