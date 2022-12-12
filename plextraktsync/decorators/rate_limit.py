@@ -32,7 +32,7 @@ def rate_limit(retries=5):
                         exit(1)
 
                     if isinstance(e, RateLimitException):
-                        seconds = int(e.response.headers.get("Retry-After", 1))
+                        seconds = e.retry_after
                     else:
                         seconds = 1 + retry
                     retry += 1

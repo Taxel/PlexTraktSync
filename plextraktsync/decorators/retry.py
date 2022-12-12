@@ -4,7 +4,7 @@ from time import sleep
 from plexapi.exceptions import BadRequest
 from requests import ReadTimeout, RequestException
 from trakt.errors import (BadResponseException, TraktBadGateway,
-                          TraktInternalException)
+                          TraktInternalException, TraktUnavailable)
 
 from plextraktsync.factory import logger
 
@@ -30,6 +30,7 @@ def retry(retries=5):
                         ReadTimeout,
                         RequestException,
                         TraktBadGateway,
+                        TraktUnavailable,
                         TraktInternalException,
                 ) as e:
                     if count == retries:
@@ -37,6 +38,8 @@ def retry(retries=5):
 
                         if isinstance(e, BadResponseException):
                             logger.error(f"Details: {e.details}")
+                        if isinstance(e, TraktInternalException):
+                            logger.error(f"Error message: {e.error_message}")
 
                         logger.error(
                             "API didn't respond properly, script will abort now. Please try again later."
