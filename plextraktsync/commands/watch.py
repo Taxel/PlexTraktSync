@@ -122,7 +122,12 @@ class WatchStateUpdater:
         return ProgressBar()
 
     def find_by_key(self, key: str, reload=False):
-        pm = self.plex.fetch_item(key)
+        pm: PlexLibraryItem = self.plex.fetch_item(key)
+
+        # Skip excluded libraries
+        if pm.library is None:
+            return None
+
         if reload:
             pm = self.plex.reload_item(pm)
         if not pm:
