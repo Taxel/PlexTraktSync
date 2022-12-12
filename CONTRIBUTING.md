@@ -47,6 +47,7 @@ If you checkout a specific version, this can be done in one of different ways:
 - [GitHub download](#github-download)
 - [Git clone](#git-clone)
 - [Install code from Pull request](#install-code-from-pull-request)
+- [Build Docker image](#building-docker-image)
 
 Note: Development should be done against the `main` branch and not a specific tag.
 
@@ -156,6 +157,22 @@ $ docker-compose run --rm --entrypoint sh plextraktsync
 ͏͏͏͏ ͏ ͏ 2. then run the script with:
 ```
 /app # plextraktsync@969 sync
+```
+
+Alternatively you can [build image](#building-docker-image) yourself.
+
+## Building docker image
+
+You can build docker image from default branch:
+
+```sh
+docker build https://github.com/Taxel/PlexTraktSync.git#HEAD -t plextraktsync
+```
+
+To build for a pull request:
+
+```sh
+docker build https://github.com/Taxel/PlexTraktSync.git#refs/pull/1281/head -t plextraktsync/1281
 ```
 
 ## Git: setup pre-commit
