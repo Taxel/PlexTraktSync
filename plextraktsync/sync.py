@@ -95,7 +95,7 @@ class SyncConfig:
 
 class Sync:
     def __init__(self, config: Config, plex: PlexApi, trakt: TraktApi):
-        self.config = SyncConfig(config)
+        self.config = config.sync
         self.plex = plex
         self.trakt = trakt
 

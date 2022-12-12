@@ -28,6 +28,11 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
     config_yml = config_yml
     env_file = env_file
 
+    def __init__(self, config_file=None):
+        super().__init__()
+        if config_file:
+            self.config_yml = config_file
+
     def __getitem__(self, item):
         if not self.initialized:
             self.initialize()
@@ -69,6 +74,12 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         cache = self["http_cache"] if "http_cache" in self and self["http_cache"] else {"policy": {}}
 
         return HttpCacheConfig(**cache)
+
+    @property
+    def sync(self):
+        from plextraktsync.sync import SyncConfig
+
+        return SyncConfig(self)
 
     def initialize(self):
         """
