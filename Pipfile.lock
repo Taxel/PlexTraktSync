@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "07f79c0b54ccb5c0237f219753441dc4aeacc83335b9c35ddd8747602eceef32"
+            "sha256": "1f56a50aa3829a9070b0e3b56f6850cec2a29d77d9c30d6ff5f1b72d867fc829"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -53,7 +53,7 @@
                 "sha256:5a3d016c7c547f69d6f81fb0db9449ce888b418b5b9952cc5e6e66843e9dd845",
                 "sha256:83e9a75d1911279afd89352c68b45348559d1fc0506b054b346651b5e7fee29f"
             ],
-            "markers": "python_full_version >= '3.6.0'",
+            "markers": "python_version >= '3.6'",
             "version": "==2.1.1"
         },
         "click": {
@@ -78,14 +78,6 @@
             ],
             "index": "pypi",
             "version": "==1.2.13"
-        },
-        "exceptiongroup": {
-            "hashes": [
-                "sha256:542adf9dea4055530d6e1279602fa5cb11dab2395fa650b8674eaec35fc4a828",
-                "sha256:bd14967b79cd9bdb54d97323216f8fdf533e278df937aa2a90089e7d6e06e5ec"
-            ],
-            "markers": "python_version < '3.11'",
-            "version": "==1.0.4"
         },
         "idna": {
             "hashes": [
@@ -116,7 +108,7 @@
                 "sha256:5f50d5b2b3207fa72e7ec0ef08372ef652685470974a107d0d4999fc5a903a96",
                 "sha256:717ea765dd10b63618e7298b2d98efd819e0b30cd5905c9707223dceeb94b3f1"
             ],
-            "markers": "python_version >= '3.7' and python_version < '4.0'",
+            "markers": "python_version >= '3.7' and python_version < '4'",
             "version": "==0.3.4"
         },
         "plexapi": {
@@ -161,11 +153,11 @@
         },
         "pytrakt": {
             "hashes": [
-                "sha256:31b1186de8fea11ee8e84cf61231cb1daf9ef49be3ffbbcfe5464b582a660a78",
-                "sha256:e98759333f3932f09d4a962515f366aff336b6b380bffa70e744e51f283774af"
+                "sha256:eba25073761e323261480ee220a1c3ec8d047c35b8f3a15b65ea21ba5357d17b",
+                "sha256:f18853d16286e3bca7e1ca00781784bc7f574ff5cb77cb6f9bba25c3fd8e0136"
             ],
             "index": "pypi",
-            "version": "==3.4.15"
+            "version": "==3.4.16"
         },
         "pyyaml": {
             "hashes": [
