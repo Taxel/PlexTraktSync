@@ -79,6 +79,16 @@ class PlexLibraryItem:
         return self.item.type
 
     @cached_property
+    def library(self):
+        if not self.plex:
+            raise RuntimeError("Need plex property to retrieve library")
+
+        if self.item.librarySectionID not in self.plex.library_sections:
+            return None
+
+        return self.plex.library_sections[self.item.librarySectionID]
+
+    @cached_property
     def title(self):
         value = self.item.title
         if self.type == "movie" and self.item.editionTitle:
