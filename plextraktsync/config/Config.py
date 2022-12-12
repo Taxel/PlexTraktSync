@@ -66,7 +66,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
     def http_cache(self):
         from plextraktsync.config.HttpCacheConfig import HttpCacheConfig
 
-        cache = self["http_cache"] if "http_cache" in self else {"policy": {}}
+        cache = self["http_cache"] if "http_cache" in self and self["http_cache"] else {"policy": {}}
 
         return HttpCacheConfig(**cache)
 

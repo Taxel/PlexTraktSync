@@ -1,0 +1,5 @@
+http_cache:
+  policy:
+    a: b
+
+# vim:ts=2:sw=2:et
