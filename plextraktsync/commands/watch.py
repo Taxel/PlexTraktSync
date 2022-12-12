@@ -181,7 +181,7 @@ class WatchStateUpdater:
 
         m = self.find_by_key(event.key)
         if not m:
-            self.logger.error(f"on_play: Not found: {event.key}")
+            self.logger.debug(f"on_play: Not found: {event.key}")
             return
 
         movie = m.plex.item
