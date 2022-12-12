@@ -10,25 +10,24 @@ appdirs==1.4.4
 attrs==22.1.0; python_version >= '3.5'
 cattrs==22.2.0; python_version >= '3.7'
 certifi==2022.9.24
-charset-normalizer==2.1.1; python_full_version >= '3.6.0'
+charset-normalizer==2.1.1; python_version >= '3.6'
 click==8.1.3
 commonmark==0.9.1
 deprecated==1.2.13
-exceptiongroup==1.0.4; python_version < '3.11'
 idna==3.4; python_version >= '3.5'
 inquirerpy==0.3.4
 oauthlib==3.2.2
-pfzy==0.3.4; python_version >= '3.7' and python_version < '4.0'
+pfzy==0.3.4; python_version >= '3.7' and python_version < '4'
 plexapi==4.13.1
-prompt-toolkit==3.0.33; python_full_version >= '3.6.2'
+prompt-toolkit==3.0.33
 pygments==2.13.0; python_version >= '3.6'
 python-dotenv==0.21.0
 python-git-info==0.8.2
-pytrakt==3.4.15
+pytrakt==3.4.16
 pyyaml==6.0
-requests==2.28.1
 requests-cache==0.9.7
 requests-oauthlib==1.3.1; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
+requests==2.28.1
 rich==12.6.0
 six==1.16.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 tqdm==4.64.1
