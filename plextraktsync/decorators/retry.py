@@ -37,6 +37,8 @@ def retry(retries=5):
 
                         if isinstance(e, BadResponseException):
                             logger.error(f"Details: {e.details}")
+                        if isinstance(e, TraktInternalException):
+                            logger.error(f"Error message: {e.error_message}")
 
                         logger.error(
                             "API didn't respond properly, script will abort now. Please try again later."
