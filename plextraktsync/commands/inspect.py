@@ -19,6 +19,8 @@ def inspect_media(id):
         return
 
     print(f"Inspecting {id}: {pm}")
+    if pm.library:
+        print(f"Library: {pm.library.title}")
 
     url = plex.media_url(pm)
     print(f"URL: {url}")
