@@ -28,6 +28,11 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
     config_yml = config_yml
     env_file = env_file
 
+    def __init__(self, config_file=None):
+        super().__init__()
+        if config_file:
+            self.config_yml = config_file
+
     def __getitem__(self, item):
         if not self.initialized:
             self.initialize()
