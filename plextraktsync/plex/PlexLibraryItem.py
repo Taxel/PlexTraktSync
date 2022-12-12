@@ -18,11 +18,12 @@ if TYPE_CHECKING:
 
     from plexapi.media import MediaPart
 
+    from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.types import PlexMedia
 
 
 class PlexLibraryItem:
-    def __init__(self, item: PlexMedia, plex=None):
+    def __init__(self, item: PlexMedia, plex: PlexApi = None):
         self.item = item
         self.plex = plex
 
