@@ -18,10 +18,10 @@ def test_config_merge():
 
 
 def test_config_merge_real():
-    config = Config()
     from tests.conftest import MOCK_DATA_DIR
 
-    config.config_file = join(MOCK_DATA_DIR, "673-config.json")
+    config_file = join(MOCK_DATA_DIR, "673-config.yml")
+    config = Config(config_file)
 
     assert config["sync"]["plex_to_trakt"]["collection"] is False
 
