@@ -37,6 +37,24 @@ def test_sync_config():
     assert sync_config.plex_to_trakt["collection"] is False
 
 
+def test_http_config():
+    from tests.conftest import MOCK_DATA_DIR
+
+    config = Config()
+    config.config_yml = join(MOCK_DATA_DIR, "http_cache-blank.yml")
+    assert config.http_cache is not None
+
+    config = Config()
+    config.config_yml = join(MOCK_DATA_DIR, "http_cache-empty.yml")
+    assert config.http_cache is not None
+
+    config = Config()
+    config.config_yml = join(MOCK_DATA_DIR, "http_cache-1-entry.yml")
+    cache = config.http_cache
+    assert cache is not None
+    assert cache.policy["a"] == "b"
+
+
 def test_config():
     config = factory.config
 
