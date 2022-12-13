@@ -8,9 +8,9 @@ from click import ClickException
 from InquirerPy import get_style, inquirer
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
-from plexapi.server import PlexServer
 
 from plextraktsync.config.ServerConfig import ServerConfig
+from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.factory import factory
 from plextraktsync.style import (comment, disabled, error, highlight, prompt,
                                  success, title)
@@ -37,6 +37,22 @@ style = get_style(
         "pointer": "fg:ansiblack bg:ansiyellow",
     }
 )
+
+
+@flatten_list
+def server_urls(server: MyPlexResource):
+    """
+    Return urls to connect to specific server
+    """
+
+    # https://github.com/pkkid/python-plexapi/blob/3d3f9da5012428f5d703cf9f8e95f6aa10673ea6/plexapi/myplex.py#L1309-L1314
+    connections = server.preferred_connections(
+        None,
+        locations=server.DEFAULT_LOCATION_ORDER,
+        schemes=server.DEFAULT_SCHEME_ORDER
+    )
+    yield from connections
+    yield local_url()
 
 
 def myplex_login(username, password):
@@ -166,8 +182,6 @@ def choose_server(account: MyPlexAccount):
             for c in server.connections:
                 click.echo(f"    {c.uri}")
             plex = server.connect()
-            # Validate connection again, the way we connect
-            plex = PlexServer(token=server.accessToken, baseurl=plex._baseurl)
             return [server, plex]
         except NotFound as e:
             click.secho(f"{e}, Try another server, {type(e)}")
@@ -214,10 +228,7 @@ def login(username: str, password: str):
     sc.add_server(
         name=server.name,
         token=token,
-        urls=[
-            plex._baseurl,
-            local_url(),
-        ],
+        urls=server_urls(server),
     )
     sc.save()
 
