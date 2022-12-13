@@ -18,11 +18,12 @@ if TYPE_CHECKING:
 
     from plexapi.media import MediaPart
 
+    from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.types import PlexMedia
 
 
 class PlexLibraryItem:
-    def __init__(self, item: PlexMedia, plex=None):
+    def __init__(self, item: PlexMedia, plex: PlexApi = None):
         self.item = item
         self.plex = plex
 
@@ -76,6 +77,16 @@ class PlexLibraryItem:
     @cached_property
     def type(self):
         return self.item.type
+
+    @cached_property
+    def library(self):
+        if not self.plex:
+            raise RuntimeError("Need plex property to retrieve library")
+
+        if self.item.librarySectionID not in self.plex.library_sections:
+            return None
+
+        return self.plex.library_sections[self.item.librarySectionID]
 
     @cached_property
     def title(self):

@@ -122,7 +122,12 @@ class WatchStateUpdater:
         return ProgressBar()
 
     def find_by_key(self, key: str, reload=False):
-        pm = self.plex.fetch_item(key)
+        pm: PlexLibraryItem = self.plex.fetch_item(key)
+
+        # Skip excluded libraries
+        if pm.library is None:
+            return None
+
         if reload:
             pm = self.plex.reload_item(pm)
         if not pm:
@@ -176,7 +181,7 @@ class WatchStateUpdater:
 
         m = self.find_by_key(event.key)
         if not m:
-            self.logger.error(f"on_play: Not found: {event.key}")
+            self.logger.debug(f"on_play: Not found: {event.key}")
             return
 
         movie = m.plex.item
