@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 from functools import partial
+from typing import TYPE_CHECKING
 
 import click
-from requests_cache import CachedSession
 
 from plextraktsync.factory import factory
+
+if TYPE_CHECKING:
+    from requests_cache import CachedSession
 
 
 def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
@@ -15,6 +20,12 @@ def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
     sorter = partial(sorted, reverse=reverse, key=sorters[sorting])
 
     yield from sorter(session.cache.responses.values())
+
+
+def responses_by_url(session, url):
+    return (
+        response for response in session.cache.responses.values() if response.url == url
+    )
 
 
 # https://stackoverflow.com/questions/36106712/how-can-i-limit-iterations-of-a-loop-in-python
@@ -47,10 +58,13 @@ def render_json(data):
     return dumps(decoded, indent=2)
 
 
+def expire_url(session: CachedSession, url: str):
+    print(f"Expiring: {url}")
+    session.cache.delete(urls=[url])
+
+
 def inspect_url(session: CachedSession, url: str):
-    matches = [
-        response for response in session.cache.responses.values() if response.url == url
-    ]
+    matches = responses_by_url(session, url)
     for m in matches:
         content_type = m.headers["Content-Type"]
         if content_type.startswith("text/xml"):
@@ -69,8 +83,12 @@ def cache_status(cache):
     return f'Total rows: {len(cache.responses)} responses, {len(cache.redirects)} redirects'
 
 
-def cache(sort: str, limit: int, reverse: bool, url: str):
+def cache(sort: str, limit: int, reverse: bool, expire: bool, url: str):
     session = factory.session
+
+    if expire:
+        expire_url(session, url)
+        return
 
     if url:
         inspect_url(session, url)
