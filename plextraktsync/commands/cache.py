@@ -8,8 +8,6 @@ import click
 from plextraktsync.factory import factory
 
 if TYPE_CHECKING:
-    from typing import List
-
     from requests_cache import CachedSession
 
 
@@ -61,14 +59,8 @@ def render_json(data):
 
 
 def expire_url(session: CachedSession, url: str):
-    from requests import Request
-    delete_keys: List[str] = []
-    for response in responses_by_url(session, url):
-        cache_key = response.cache_key if response.cache_key else session.cache.create_key(Request('GET', response.url))
-        delete_keys.append(cache_key)
-
-    print(f"Deleting: {delete_keys}")
-    session.cache.delete(*delete_keys)
+    print(f"Expiring: {url}")
+    session.cache.delete(urls=[url])
 
 
 def inspect_url(session: CachedSession, url: str):
