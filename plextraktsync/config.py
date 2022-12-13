@@ -27,7 +27,7 @@ class RunConfig:
     dry_run: bool = False
     batch_delay: int = 5
     progressbar: bool = True
-    no_cache: bool = False
+    cache: bool = True
 
     def update(self, **kwargs):
         for name, value in kwargs.items():
