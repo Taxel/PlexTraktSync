@@ -38,8 +38,9 @@ def command():
 
 @click.group(invoke_without_command=True)
 @click.option("--version", is_flag=True, help="Print version and exit")
+@click.option("--no-cache", is_flag=True, help="Disable cache in for Trakt HTTP requests")
 @click.pass_context
-def cli(ctx, version: bool):
+def cli(ctx, version: bool, no_cache: bool):
     """
     Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
     """
@@ -48,6 +49,10 @@ def cli(ctx, version: bool):
         from .version import version
         print(f"PlexTraktSync {version()}")
         return
+
+    factory.run_config.update(
+        cache=not no_cache,
+    )
 
     if not ctx.invoked_subcommand:
         logger = factory.logger
