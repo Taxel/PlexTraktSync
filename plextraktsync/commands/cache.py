@@ -4,12 +4,13 @@ from functools import partial
 from typing import TYPE_CHECKING
 
 import click
-from requests_cache import CachedSession
 
 from plextraktsync.factory import factory
 
 if TYPE_CHECKING:
     from typing import List
+
+    from requests_cache import CachedSession
 
 
 def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
