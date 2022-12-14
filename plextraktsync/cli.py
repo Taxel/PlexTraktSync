@@ -39,8 +39,18 @@ def command():
 @click.group(invoke_without_command=True)
 @click.option("--version", is_flag=True, help="Print version and exit")
 @click.option("--no-cache", is_flag=True, help="Disable cache in for Trakt HTTP requests")
+@click.option("--no-progressbar", is_flag=True, help="Disable progressbar")
+@click.option("--batch-delay", default=5, show_default=True,
+              help="Time in seconds between each collection batch submit to Trakt")
+@click.option("--server", help="Plex Server name from servers.yml")
 @click.pass_context
-def cli(ctx, version: bool, no_cache: bool):
+def cli(ctx,
+        version: bool,
+        no_cache: bool,
+        no_progressbar: bool,
+        batch_delay: int,
+        server: str,
+        ):
     """
     Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
     """
@@ -52,6 +62,9 @@ def cli(ctx, version: bool, no_cache: bool):
 
     factory.run_config.update(
         cache=not no_cache,
+        progressbar=not no_progressbar,
+        batch_delay=batch_delay,
+        server=server,
     )
 
     if not ctx.invoked_subcommand:
@@ -181,8 +194,6 @@ def plex_login():
     "--batch-delay",
     "batch_delay",
     type=int,
-    default=5,
-    show_default=True,
     help="Time in seconds between each collection batch submit to trakt",
 )
 @click.option(
