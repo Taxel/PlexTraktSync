@@ -8,8 +8,6 @@ from click.exceptions import ClickException, Exit
 
 from plextraktsync.factory import factory
 
-CONFIG = factory.config
-
 
 def command():
     """
@@ -40,8 +38,9 @@ def command():
 
 @click.group(invoke_without_command=True)
 @click.option("--version", is_flag=True, help="Print version and exit")
+@click.option("--no-cache", is_flag=True, help="Disable cache in for Trakt HTTP requests")
 @click.pass_context
-def cli(ctx, version: bool):
+def cli(ctx, version: bool, no_cache: bool):
     """
     Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
     """
@@ -50,6 +49,10 @@ def cli(ctx, version: bool):
         from .version import version
         print(f"PlexTraktSync {version()}")
         return
+
+    factory.run_config.update(
+        cache=not no_cache,
+    )
 
     if not ctx.invoked_subcommand:
         logger = factory.logger
@@ -120,11 +123,18 @@ def login():
     pass
 
 
+def env_plex_username():
+    from plextraktsync.factory import factory
+    config = factory.config()
+
+    return environ.get("PLEX_USERNAME", config["PLEX_USERNAME"])
+
+
 @command()
 @click.option(
     "--username",
     help="Plex login",
-    default=lambda: environ.get("PLEX_USERNAME", CONFIG["PLEX_USERNAME"]),
+    default=env_plex_username,
 )
 @click.option(
     "--password",

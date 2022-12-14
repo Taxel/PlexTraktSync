@@ -80,9 +80,17 @@ class Factory:
     def session(self):
         from requests_cache import CachedSession
 
+        if self.run_config.cache:
+            urls_expire_after = self.config.http_cache.urls_expire_after
+        else:
+            from requests_cache import DO_NOT_CACHE
+            urls_expire_after = {
+                "*": DO_NOT_CACHE,
+            }
+
         return CachedSession(
             cache_name=self.config.cache_path,
-            urls_expire_after=self.config.http_cache.urls_expire_after,
+            urls_expire_after=urls_expire_after,
         )
 
     @cached_property
