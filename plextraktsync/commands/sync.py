@@ -32,8 +32,11 @@ def sync(
         server=server,
         batch_delay=batch_delay,
         dry_run=dry_run,
-        progressbar=not no_progress_bar,
     )
+    if no_progress_bar:
+        logger.warning('"plextraktsync sync --no-progress-bar" is deprecated use "plextraktsync --no-progressbar sync"')
+        config.update(progress=False)
+
     ensure_login()
     wc = factory.walk_config.update(movies=movies, shows=shows)
     w = factory.walker
