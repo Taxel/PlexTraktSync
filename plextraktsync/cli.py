@@ -194,8 +194,6 @@ def plex_login():
     "--batch-delay",
     "batch_delay",
     type=int,
-    default=5,
-    show_default=True,
     help="Time in seconds between each collection batch submit to trakt",
 )
 @click.option(
