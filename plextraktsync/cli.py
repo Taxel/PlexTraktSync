@@ -40,8 +40,14 @@ def command():
 @click.option("--version", is_flag=True, help="Print version and exit")
 @click.option("--no-cache", is_flag=True, help="Disable cache in for Trakt HTTP requests")
 @click.option("--no-progressbar", is_flag=True, help="Disable progressbar")
+@click.option("--server", help="Plex Server name from servers.yml")
 @click.pass_context
-def cli(ctx, version: bool, no_cache: bool, no_progressbar: bool):
+def cli(ctx,
+        version: bool,
+        no_cache: bool,
+        no_progressbar: bool,
+        server: str,
+        ):
     """
     Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
     """
@@ -54,6 +60,7 @@ def cli(ctx, version: bool, no_cache: bool, no_progressbar: bool):
     factory.run_config.update(
         cache=not no_cache,
         progressbar=not no_progressbar,
+        server=server,
     )
 
     if not ctx.invoked_subcommand:
