@@ -40,12 +40,15 @@ def command():
 @click.option("--version", is_flag=True, help="Print version and exit")
 @click.option("--no-cache", is_flag=True, help="Disable cache in for Trakt HTTP requests")
 @click.option("--no-progressbar", is_flag=True, help="Disable progressbar")
+@click.option("--batch-delay", default=5, show_default=True,
+              help="Time in seconds between each collection batch submit to Trakt")
 @click.option("--server", help="Plex Server name from servers.yml")
 @click.pass_context
 def cli(ctx,
         version: bool,
         no_cache: bool,
         no_progressbar: bool,
+        batch_delay: int,
         server: str,
         ):
     """
@@ -60,6 +63,7 @@ def cli(ctx,
     factory.run_config.update(
         cache=not no_cache,
         progressbar=not no_progressbar,
+        batch_delay=batch_delay,
         server=server,
     )
 
