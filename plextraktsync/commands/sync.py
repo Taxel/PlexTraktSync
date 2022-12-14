@@ -29,10 +29,12 @@ def sync(
     shows = sync_option in ["all", "tv", "shows"]
 
     config = factory.run_config.update(
-        server=server,
         batch_delay=batch_delay,
         dry_run=dry_run,
     )
+    if server:
+        logger.warning('"plextraktsync sync --server=<name>" is deprecated use "plextraktsync --server=<name> sync"')
+        config.update(server=server)
     if no_progress_bar:
         logger.warning('"plextraktsync sync --no-progress-bar" is deprecated use "plextraktsync --no-progressbar sync"')
         config.update(progress=False)
