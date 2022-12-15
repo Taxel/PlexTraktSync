@@ -137,7 +137,6 @@ class PlexApi:
 
         return PlexRatings(self)
 
-    @nocache
     @retry()
     def rate(self, m, rating):
         m.rate(rating)
@@ -259,14 +258,12 @@ class PlexApi:
                 logger.error(f"Error during {self.account.username} watchlist access: {e}")
         return None
 
-    @nocache
     def add_to_watchlist(self, item):
         try:
             self.account.addToWatchlist(item)
         except BadRequest as e:
             logger.error(f"Error when adding {item.title} to Plex watchlist: {e}")
 
-    @nocache
     def remove_from_watchlist(self, item):
         try:
             self.account.removeFromWatchlist(item)
