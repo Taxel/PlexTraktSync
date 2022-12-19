@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b5eb8214d9e8bcfc141eafaca45d904cb25f38d55d41b7663409b3123a783943"
+            "sha256": "1f61a3e8eee6279553eb027e182577c3d4ccf6340e10b5006b6d312508ff37ed"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,6 +31,14 @@
             ],
             "markers": "python_version >= '3.5'",
             "version": "==22.1.0"
+        },
+        "backports.cached-property": {
+            "hashes": [
+                "sha256:9306f9eed6ec55fd156ace6bc1094e2c86fae5fb2bf07b6a9c00745c656e75dd",
+                "sha256:baeb28e1cd619a3c9ab8941431fe34e8490861fb998c6c4590693d50171db0cc"
+            ],
+            "markers": "python_version <= '3.7'",
+            "version": "==1.0.2"
         },
         "cattrs": {
             "hashes": [
