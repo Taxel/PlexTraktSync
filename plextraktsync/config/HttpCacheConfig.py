@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import timedelta
 from typing import TYPE_CHECKING
 
 from requests_cache import DO_NOT_CACHE
 
 if TYPE_CHECKING:
     from requests_cache import ExpirationPatterns
+
+# 3 Months
+LONG_EXPIRY = timedelta(weeks=4 * 3)
 
 
 @dataclass(frozen=True)
