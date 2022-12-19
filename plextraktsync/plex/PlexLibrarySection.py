@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import NotFound
 
-from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.retry import retry
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
@@ -23,7 +22,6 @@ class PlexLibrarySection:
         self.section = section
         self.plex = plex
 
-    @nocache
     def __len__(self):
         return self.section.totalSize
 
@@ -38,18 +36,15 @@ class PlexLibrarySection:
     def title(self):
         return self.section.title
 
-    @nocache
     def find_by_title(self, name: str):
         try:
             return self.section.get(name)
         except NotFound:
             return None
 
-    @nocache
     def search(self, **kwargs):
         return self.section.search(**kwargs)
 
-    @nocache
     def find_by_id(self, id: Union[str, int]) -> Optional[PlexMedia]:
         try:
             return self.section.fetchItem(int(id))
@@ -73,7 +68,6 @@ class PlexLibrarySection:
             if start > max_items:
                 break
 
-    @nocache
     @retry()
     def fetch_items(self, key: str, size: int, start: int):
         return self.section.fetchItems(key, container_start=start, container_size=size)
