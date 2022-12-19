@@ -234,13 +234,13 @@ class PlexApi:
         plex_username = CONFIG.get("PLEX_USERNAME")
         if plex_owner_token:
             try:
-                plex_owner_account = MyPlexAccount(token=plex_owner_token)
+                plex_owner_account = MyPlexAccount(token=plex_owner_token, session=factory.session)
                 return plex_owner_account.switchHomeUser(plex_username)
             except BadRequest as e:
                 logger.error(f"Error during {plex_username} account access: {e}")
         elif plex_account_token:
             try:
-                return MyPlexAccount(token=plex_account_token)
+                return MyPlexAccount(token=plex_account_token, session=factory.session)
             except BadRequest as e:
                 logger.error(f"Error during {plex_username} account access: {e}")
         else:
