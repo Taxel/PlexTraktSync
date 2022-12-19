@@ -17,10 +17,10 @@ setup_user() {
 	local gid=${PGID:-}
 
 	if [ -n "$uid" ] && [ "$(id -u $APP_USER)" != "$uid" ]; then
-		usermod -u "$uid" "$APP_USER"
+		usermod -o -u "$uid" "$APP_USER"
 	fi
 	if [ -n "$gid" ] && [ "$(id -g $APP_GROUP)" != "$gid" ]; then
-		groupmod -g "$gid" "$APP_GROUP"
+		groupmod -o -g "$gid" "$APP_GROUP"
 	fi
 }
 
