@@ -47,6 +47,12 @@ def render_xml(data):
         return None
 
     root = ElementTree.fromstring(data)
+    try:
+        # requires python 3.9
+        # https://stackoverflow.com/a/39482716/2314626
+        ElementTree.indent(root)
+    except AttributeError:
+        pass
 
     return ElementTree.tostring(root, encoding="utf8").decode("utf8")
 
@@ -67,7 +73,7 @@ def inspect_url(session: CachedSession, url: str):
     matches = responses_by_url(session, url)
     for m in matches:
         content_type = m.headers["Content-Type"]
-        if content_type.startswith("text/xml"):
+        if content_type.startswith("text/xml") or content_type.startswith("application/xml"):
             print(f"<!-- {m} -->")
             print(render_xml(m.content))
         elif content_type.startswith("application/json"):
