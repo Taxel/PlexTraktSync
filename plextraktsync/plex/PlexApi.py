@@ -286,7 +286,7 @@ class PlexApi:
         return map(PlexLibraryItem, result)
 
     @nocache
-    def reset_show(self, show, reset_date):
+    def reset_show(self, show: Show, reset_date):
         reset_count = 0
         for ep in show.watched():
             ep_seen_date = PlexLibraryItem(ep).seen_date.replace(tzinfo=None)
