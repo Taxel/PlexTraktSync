@@ -27,6 +27,9 @@ class PlexLibrarySection:
     def __len__(self):
         return self.section.totalSize
 
+    def __iter__(self):
+        return self.items(len(self))
+
     @property
     def type(self):
         return self.section.type
