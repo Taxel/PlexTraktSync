@@ -126,7 +126,7 @@ class AllShowsProgress:
 
     def reset_at(self, trakt_id):
         if trakt_id not in self.shows.keys():
-            return False
+            return None
         else:
             return airs_date(self.shows[trakt_id].reset_at)
 

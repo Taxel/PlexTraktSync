@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 import plexapi
@@ -286,7 +287,7 @@ class PlexApi:
         return map(PlexLibraryItem, result)
 
     @nocache
-    def reset_show(self, show, reset_date):
+    def reset_show(self, show: Show, reset_date: datetime):
         reset_count = 0
         for ep in show.watched():
             ep_seen_date = PlexLibraryItem(ep).seen_date.replace(tzinfo=None)
