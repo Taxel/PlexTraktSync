@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import atexit
 from collections import defaultdict
 from typing import TYPE_CHECKING
 
@@ -27,8 +28,7 @@ class TraktBatch:
         self.trakt = trakt
         self.items = defaultdict(list)
         self.timer = timer
-        if cleanup:
-            cleanup.add(self.flush)
+        atexit.register(self.flush)
 
     @rate_limit()
     @time_limit()
