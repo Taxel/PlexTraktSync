@@ -47,6 +47,12 @@ def render_xml(data):
         return None
 
     root = ElementTree.fromstring(data)
+    try:
+        # requires python 3.9
+        # https://stackoverflow.com/a/39482716/2314626
+        ElementTree.indent(root)
+    except AttributeError:
+        pass
 
     return ElementTree.tostring(root, encoding="utf8").decode("utf8")
 
