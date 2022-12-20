@@ -13,6 +13,6 @@ Usage: {sys.executable} -m plextraktsync {' '.join(sys.argv[1:])}
     )
     sys.exit(2)
 
-from plextraktsync.cli import main
+from plextraktsync.cli import cli
 
-main()
+cli()
