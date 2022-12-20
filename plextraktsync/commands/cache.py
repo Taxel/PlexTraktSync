@@ -67,7 +67,7 @@ def inspect_url(session: CachedSession, url: str):
     matches = responses_by_url(session, url)
     for m in matches:
         content_type = m.headers["Content-Type"]
-        if content_type.startswith("text/xml"):
+        if content_type.startswith("text/xml") or content_type.startswith("application/xml"):
             print(f"<!-- {m} -->")
             print(render_xml(m.content))
         elif content_type.startswith("application/json"):
