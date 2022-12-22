@@ -20,8 +20,8 @@ def config(urls_expire_after: bool, print=print):
 
     if urls_expire_after:
         print("# HTTP Cache")
-        config.http_cache.dump(print=print)
+        dump(config.http_cache.serialize(), print=print)
         return
 
     print(f"# Config File: {config.config_yml}")
-    config.dump(print=print)
+    dump(config.serialize(), print=print)
