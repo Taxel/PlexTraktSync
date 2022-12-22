@@ -105,17 +105,20 @@ class HttpCacheConfig:
 
         return policy
 
+    def serialize(self):
+        return {
+            "http_cache": {
+                "policy": self.urls_expire_after,
+            },
+        }
+
     def dump(self, print=None):
         """
         Print config serialized as yaml.
         If print is None, return the produced string instead.
         """
         from plextraktsync.config.ConfigLoader import ConfigLoader
-        data = {
-            "http_cache": {
-                "policy": self.urls_expire_after,
-            },
-        }
+        data = self.serialize()
         dump = ConfigLoader.dump_yaml(None, data)
         if print is None:
             return dump
