@@ -277,9 +277,19 @@ class PlexLibraryItem:
     def __repr__(self):
         try:
             guid = self.guids[0]
-            return f"<{guid.provider}:{guid.id}:{str(self.item).strip('<>')}>"
         except IndexError:
             return f"<{self.item}>"
+
+        plex = str(self.item).strip('<>')
+
+        # assemble ourselves to handle online sources nan issue
+        # https://github.com/pkkid/python-plexapi/issues/1072
+        if not isinstance(self.item.ratingKey, int):
+            parts = plex.split(":")
+            parts[1] = self.item._data.attrib.get("ratingKey")
+            plex = ":".join(parts)
+
+        return f"<{guid.provider}:{guid.id}:{plex}>"
 
     def to_json(self):
         collected_at = None if not self.collected_at else timestamp(
