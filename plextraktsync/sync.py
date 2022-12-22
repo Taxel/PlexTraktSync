@@ -258,11 +258,11 @@ class Sync:
             elif m.plex.item.guid in self.plex_wl:
                 if m.trakt.trakt not in trakt_wl:
                     if self.config.update_trakt_wl:
-                        logger.info(f"Adding '{m.plex.item.title}' to Trakt watchlist")
+                        logger.info(f"Adding '{m.plex.item.title}' ({m.plex.item.year}) to Trakt watchlist")
                         if not dry_run:
                             m.add_to_trakt_watchlist(batch=True)
                     else:
-                        logger.info(f"Removing '{m.trakt.title}' from Plex watchlist")
+                        logger.info(f"Removing '{m.trakt.title}' ({m.plex.item.year}) from Plex watchlist")
                         if not dry_run:
                             m.remove_from_plex_watchlist()
                 else:
