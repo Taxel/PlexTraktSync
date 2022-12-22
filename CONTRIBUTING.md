@@ -122,6 +122,25 @@ To pull new changes for the same pull request:
 plextraktsync@838 self-update
 ```
 
+If you need to do the same in docker container, you should:
+
+͏ ͏ ͏ 1. first prepare the container with:
+
+```
+$ docker-compose run --rm --entrypoint sh plextraktsync
+/app # pip install pipx
+/app # pipx install plextraktsync
+/app # apk add git
+/app # plextraktsync self-update --pr 969
+/app # plextraktsync@969 info
+```
+͏͏͏͏ ͏ ͏ 2. then run the script with:
+```
+/app # plextraktsync@969 sync
+```
+
+Alternatively you can [build image](#building-docker-image) yourself.
+
 To remove the versions:
 
 ```
@@ -141,25 +160,6 @@ $ pipx uninstall plextraktsync@984
 uninstalled PlexTraktSync@984! ✨ 🌟 ✨
 $
 ```
-
-If you need to do the same in docker container, you should:
-
-͏ ͏ ͏ 1. first prepare the container with:
-
-```
-$ docker-compose run --rm --entrypoint sh plextraktsync
-/app # pip install pipx
-/app # pipx install plextraktsync
-/app # apk add git
-/app # plextraktsync self-update --pr 969
-/app # plextraktsync@969 info
-```
-͏͏͏͏ ͏ ͏ 2. then run the script with:
-```
-/app # plextraktsync@969 sync
-```
-
-Alternatively you can [build image](#building-docker-image) yourself.
 
 ## Building docker image
 
