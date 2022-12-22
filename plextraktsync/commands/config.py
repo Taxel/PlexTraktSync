@@ -18,8 +18,10 @@ def config(urls_expire_after: bool, print=print):
     from plextraktsync.factory import factory
     config = factory.config
 
+    if urls_expire_after:
+        print("# HTTP Cache")
+        config.http_cache.dump(print=print)
+        return
+
     print(f"# Config File: {config.config_yml}")
     config.dump(print=print)
-
-    print("# HTTP Cache")
-    config.http_cache.dump(print=print)
