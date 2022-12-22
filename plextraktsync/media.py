@@ -47,6 +47,14 @@ class Media:
     def media_type(self):
         return self.trakt.media_type
 
+    @cached_property
+    def type(self):
+        """
+        Return "movie", "show", "season", "episode"
+        """
+        # NB: TVSeason does not have "media_type" property
+        return self.trakt.media_type[:-1]
+
     @property
     def season_number(self):
         return self.trakt.season
