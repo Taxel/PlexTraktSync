@@ -228,12 +228,6 @@ class Factory:
         return handler
 
     @cached_property
-    def cleanup(self):
-        from plextraktsync.util.Cleanup import Cleanup
-
-        return Cleanup()
-
-    @cached_property
     def config(self):
         from plextraktsync.config import Config
 
