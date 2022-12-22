@@ -18,12 +18,14 @@ if TYPE_CHECKING:
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
     from plextraktsync.trakt.TraktApi import TraktApi
     from plextraktsync.trakt.TraktItem import TraktItem
+    from plextraktsync.trakt.types import TraktMedia
 
 
 class Media:
     """
     Class containing Plex and Trakt media items (Movie, Episode)
     """
+    trakt: TraktMedia
     plex: PlexLibraryItem
 
     def __init__(
@@ -202,7 +204,10 @@ class Media:
         return self.plex_api.history(self.plex.item, **kwargs)
 
     def __str__(self):
-        return str(self.plex)
+        if self.plex:
+            return str(self.plex)
+
+        return str(self.trakt)
 
 
 class MediaFactory:
