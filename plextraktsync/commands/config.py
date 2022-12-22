@@ -14,7 +14,7 @@ def dump(data, print=None):
     print(dump)
 
 
-def config(print=print):
+def config(urls_expire_after: bool, print=print):
     from plextraktsync.factory import factory
     config = factory.config
 

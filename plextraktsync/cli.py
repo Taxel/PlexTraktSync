@@ -324,6 +324,7 @@ def watched_shows():
 
 
 @command()
+@click.option("--urls-expire-after", is_flag=True, help="Print urls_expire_after configuration")
 def config():
     """
     Print user config for debugging and bug reports.
