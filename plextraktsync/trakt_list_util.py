@@ -5,7 +5,6 @@ from plexapi.video import Episode
 from trakt.core import get
 from trakt.errors import NotFoundException, OAuthException
 from trakt.users import UserList
-from trakt.utils import extract_ids
 
 from plextraktsync.factory import logger
 
@@ -19,8 +18,7 @@ class LazyUserList(UserList):
                 continue
             item_type = item["type"]
             item_data = item.pop(item_type)
-            extract_ids(item_data)
-            self._items.append((item_type + "s", item_data["trakt"]))
+            self._items.append((item_type + "s", item_data["ids"]["trakt"]))
         yield self._items
 
     @classmethod
