@@ -261,7 +261,6 @@ class Factory:
             TraktBatch,
             trakt=self.trakt_api,
             timer=self.batch_delay_timer,
-            cleanup=self.cleanup,
         )
 
 
