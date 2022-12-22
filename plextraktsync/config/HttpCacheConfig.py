@@ -104,7 +104,7 @@ class HttpCacheConfig:
         # system_account
         "*/accounts": DO_NOT_CACHE,
         # version, updated_at
-        # "*/": DO_NOT_CACHE,
+        "*.plex.direct:*/": DO_NOT_CACHE,
     }
 
     @property
