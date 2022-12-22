@@ -77,4 +77,4 @@ class PlexLibrarySection:
             yield PlexLibraryItem(item, plex=self.plex)
 
     def __repr__(self):
-        return f"<PlexLibrarySection:{self.type}:{self.title}>"
+        return f"<{self.__class__.__name__}:{self.type}:{self.title}>"
