@@ -204,8 +204,10 @@ class Sync:
         if m.plex is None:
             if self.config.update_plex_wl:
                 logger.info(f"Skipping {m.title_link} from Trakt watchlist because not found in Plex Discover", extra={"markup": True})
+                # logger.info(f"Skipping '{m.trakt.title}' ({m.trakt.year}) {m} from Trakt watchlist because not found in Plex Discover")
             elif self.config.update_trakt_wl:
                 logger.info(f"Removing {m.title_link} from Trakt watchlist", extra={"markup": True})
+                # logger.info(f"Removing '{m.trakt.title}' ({m.trakt.year}) {m} from Trakt watchlist")
                 if not dry_run:
                     m.remove_from_trakt_watchlist()
             return
@@ -214,10 +216,12 @@ class Sync:
             if m not in self.trakt_wl:
                 if self.config.update_trakt_wl:
                     logger.info(f"Adding {m.title_link} to Trakt watchlist", extra={"markup": True})
+                    # logger.info(f"Adding '{m.plex.item.title}' ({m.plex.item.year}) {m} to Trakt watchlist")
                     if not dry_run:
                         m.add_to_trakt_watchlist()
                 else:
                     logger.info(f"Removing {m.title_link} from Plex watchlist", extra={"markup": True})
+                    # logger.info(f"Removing '{m.trakt.title}' ({m.plex.item.year}) {m} from Plex watchlist")
                     if not dry_run:
                         m.remove_from_plex_watchlist()
             else:
