@@ -130,7 +130,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
             "$PTS_CACHE_DIR", cache_dir
         )
 
-    def dump(self, print=None):
+    def serialize(self):
         """
         Print config serialized as yaml.
         If print is None, return the produced string instead.
@@ -138,6 +138,10 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         data = dict(self)
         for key in self.env_keys:
             del data[key]
+        return data
+
+    def dump(self, print=None):
+        data = self.serialize()
         dump = ConfigLoader.dump_yaml(None, data)
         if print is None:
             return dump
