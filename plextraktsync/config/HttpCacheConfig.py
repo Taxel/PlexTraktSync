@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import timedelta
 from typing import TYPE_CHECKING
 
 from requests_cache import DO_NOT_CACHE
 
 if TYPE_CHECKING:
     from requests_cache import ExpirationPatterns
+
+# 3 Months
+LONG_EXPIRY = timedelta(weeks=4 * 3)
 
 
 @dataclass(frozen=True)
@@ -30,6 +34,53 @@ class HttpCacheConfig:
         "*.trakt.tv/users/*/watchlist/shows": DO_NOT_CACHE,
         "*.trakt.tv/users/likes/lists": DO_NOT_CACHE,
         "*.trakt.tv/users/me": DO_NOT_CACHE,
+
+        # Online Plex patterns
+        "metadata.provider.plex.tv/library/metadata/*/userState": DO_NOT_CACHE,
+        "metadata.provider.plex.tv/library/metadata/*?*includeUserState=1": DO_NOT_CACHE,
+        "metadata.provider.plex.tv/library/metadata/*": LONG_EXPIRY,
+        "metadata.provider.plex.tv/library/sections/watchlist/all": DO_NOT_CACHE,
+        # plex account
+        "plex.tv/users/account": DO_NOT_CACHE,
+
+        # Plex patterns
+        # Ratings search
+        "*/library/sections/*/all?*userRating%3E%3E=-1*": DO_NOT_CACHE,
+        # len(PlexLibrarySection)
+        "*/library/sections/*/all?includeCollections=0&X-Plex-Container-Size=0&X-Plex-Container-Start=0": DO_NOT_CACHE,
+        # __iter__(PlexLibrarySection)
+        "*/library/sections/*/all?includeGuids=1": DO_NOT_CACHE,
+        # find_by_title
+        "*/library/sections/*/all?includeGuids=1&title=*": DO_NOT_CACHE,
+        # fetch_item, fetch_items
+        "*/library/sections/*/all?*": DO_NOT_CACHE,
+        "*/library/sections/*/collections": DO_NOT_CACHE,
+        # library_sections
+        "*/library/sections": DO_NOT_CACHE,
+
+        # reloads
+        "*/library/metadata/*?*include*": DO_NOT_CACHE,
+        # episodes
+        "*/library/metadata/*/allLeaves": DO_NOT_CACHE,
+        # find_by_id
+        "*/library/metadata/*": DO_NOT_CACHE,
+        # mark played, mark unplayed
+        "*/:/scrobble?key=*&identifier=com.plexapp.plugins.library": DO_NOT_CACHE,
+        "*/:/unscrobble?key=&&identifier=com.plexapp.plugins.library": DO_NOT_CACHE,
+        # playlists
+        "*/playlists?title=": DO_NOT_CACHE,
+        "*/playlists/*/items": DO_NOT_CACHE,
+        "*/library": DO_NOT_CACHE,
+        # history
+        "*/status/sessions/history/all": DO_NOT_CACHE,
+        # has_sessions
+        "*/status/sessions": DO_NOT_CACHE,
+        # system_device
+        "*/devices": DO_NOT_CACHE,
+        # system_account
+        "*/accounts": DO_NOT_CACHE,
+        # version, updated_at
+        # "*/": DO_NOT_CACHE,
     }
 
     @property

@@ -8,7 +8,6 @@ from trakt.utils import timestamp
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_list
-from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory
 from plextraktsync.plex.PlexGuid import PlexGuid
@@ -31,7 +30,6 @@ class PlexLibraryItem:
     def is_legacy_agent(self):
         return not self.item.guid.startswith("plex://")
 
-    @nocache
     @retry()
     def get_guids(self):
         return self.item.guids
@@ -101,7 +99,6 @@ class PlexLibraryItem:
 
         return value
 
-    @nocache
     @retry(retries=1)
     def rating(self, show_id: int = None):
         if self.plex is not None:
@@ -119,7 +116,6 @@ class PlexLibraryItem:
         return self.date_value(self.item.lastViewedAt)
 
     @property
-    @nocache
     def is_watched(self):
         return self.item.isPlayed
 
@@ -259,7 +255,6 @@ class PlexLibraryItem:
         for ep in self._get_episodes():
             yield PlexLibraryItem(ep, plex=self.plex)
 
-    @nocache
     @retry()
     def _get_episodes(self):
         return self.item.episodes()

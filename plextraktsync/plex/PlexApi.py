@@ -13,7 +13,6 @@ from plexapi.server import PlexServer, SystemAccount, SystemDevice
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_dict, flatten_list
 from plextraktsync.decorators.memoize import memoize
-from plextraktsync.decorators.nocache import nocache
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory, logger
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
@@ -62,7 +61,6 @@ class PlexApi:
             yield section
 
     @memoize
-    @nocache
     @retry()
     def fetch_item(self, key: Union[int, str]) -> Optional[PlexLibraryItem]:
         try:
@@ -98,17 +96,14 @@ class PlexApi:
             yield PlexLibraryItem(media, plex=self)
 
     @cached_property
-    @nocache
     def version(self):
         return self.plex.version
 
     @cached_property
-    @nocache
     def updated_at(self):
         return self.plex.updatedAt
 
     @cached_property
-    @nocache
     @flatten_dict
     def library_sections(self) -> Dict[int, PlexLibrarySection]:
         excluded_libraries = factory.config["excluded-libraries"]
@@ -122,12 +117,10 @@ class PlexApi:
         return [s.title for s in self.library_sections.values()]
 
     @memoize
-    @nocache
     def system_device(self, device_id: int) -> SystemDevice:
         return self.plex.systemDevice(device_id)
 
     @memoize
-    @nocache
     def system_account(self, account_id: int) -> SystemAccount:
         return self.plex.systemAccount(account_id)
 
@@ -137,7 +130,6 @@ class PlexApi:
 
         return PlexRatings(self)
 
-    @nocache
     @retry()
     def rate(self, m, rating):
         m.rate(rating)
@@ -159,7 +151,6 @@ class PlexApi:
 
         return a == b
 
-    @nocache
     def update_playlist(self, name: str, items: List[PlexMedia], description=None) -> bool:
         """
         Updates playlist (creates if name missing) replacing contents with items[]
@@ -188,7 +179,6 @@ class PlexApi:
         playlist.addItems(items)
         return True
 
-    @nocache
     @flatten_list
     def history(self, m, device=False, account=False):
         try:
@@ -204,17 +194,14 @@ class PlexApi:
                 h.account = self.system_account(h.accountID)
             yield h
 
-    @nocache
     @retry()
     def mark_watched(self, m):
         m.markPlayed()
 
-    @nocache
     @retry()
     def mark_unwatched(self, m):
         m.markUnplayed()
 
-    @nocache
     def has_sessions(self):
         try:
             self.plex.sessions()
@@ -222,11 +209,9 @@ class PlexApi:
         except Unauthorized:
             return False
 
-    @nocache
     def get_sessions(self):
         return self.plex.sessions()
 
-    @nocache
     def _plex_account(self):
         CONFIG = factory.config
         plex_owner_token = CONFIG.get("PLEX_OWNER_TOKEN")
@@ -234,13 +219,13 @@ class PlexApi:
         plex_username = CONFIG.get("PLEX_USERNAME")
         if plex_owner_token:
             try:
-                plex_owner_account = MyPlexAccount(token=plex_owner_token)
+                plex_owner_account = MyPlexAccount(token=plex_owner_token, session=factory.session)
                 return plex_owner_account.switchHomeUser(plex_username)
             except BadRequest as e:
                 logger.error(f"Error during {plex_username} account access: {e}")
         elif plex_account_token:
             try:
-                return MyPlexAccount(token=plex_account_token)
+                return MyPlexAccount(token=plex_account_token, session=factory.session)
             except BadRequest as e:
                 logger.error(f"Error during {plex_username} account access: {e}")
         else:
@@ -250,7 +235,6 @@ class PlexApi:
                 logger.error(f"Error during {plex_username} account access: {e}")
         return None
 
-    @nocache
     def watchlist(self) -> Optional[List[Union[Movie, Show]]]:
         if self.account:
             try:
@@ -259,14 +243,12 @@ class PlexApi:
                 logger.error(f"Error during {self.account.username} watchlist access: {e}")
         return None
 
-    @nocache
     def add_to_watchlist(self, item):
         try:
             self.account.addToWatchlist(item)
         except BadRequest as e:
             logger.error(f"Error when adding {item.title} to Plex watchlist: {e}")
 
-    @nocache
     def remove_from_watchlist(self, item):
         try:
             self.account.removeFromWatchlist(item)
@@ -286,7 +268,6 @@ class PlexApi:
             return None
         return map(PlexLibraryItem, result)
 
-    @nocache
     def reset_show(self, show: Show, reset_date: datetime):
         reset_count = 0
         for ep in show.watched():
