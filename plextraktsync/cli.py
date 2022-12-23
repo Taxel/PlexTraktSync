@@ -138,7 +138,7 @@ def login():
 
 def env_plex_username():
     from plextraktsync.factory import factory
-    config = factory.config()
+    config = factory.config
 
     return environ.get("PLEX_USERNAME", config["PLEX_USERNAME"])
 
