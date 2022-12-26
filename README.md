@@ -454,7 +454,7 @@ If episodes are in a different order, it should not be a problem because they
 are identified with ids.
 But if a season or an episode is missing on Trakt (and tmdb) it can't be synced.
 You can fix it by [adding the missing episodes] or edit metadata (eg. missing
-tvdb or imdb ids) on [tmdb] or [report a metadata issue on Trakt][how-to-report-metadata-issues] ([answers][reports]. It's free for anyone
+tvdb or imdb ids) on [tmdb] or [report a metadata issue on Trakt][how-to-report-metadata-issues] ([answers][reports]). It's free for anyone
 to sign up and edit info at tmdb. Trakt will [update from tmdb][trakt-tvshow-update] data.
 
 [adding the missing episodes]: https://support.trakt.tv/support/solutions/articles/70000264977
@@ -474,11 +474,11 @@ check if [external ids][house-of-the-dragon] are populated on tmdb.
 
 ### I have season 0 matching errors
 
-Season 0 folder must only contains episodes being officially in season 0.
+Season 0 folder must only contains episodes belonging to season 0, also named specials.
 Trailers, deleted scenes, featurettes, interviews,... must be stored in a
-separate [Extra folder][extra-folder] according to Plex rules.
-Keep in mind that seasons 0 are not really official so datasources (tmdb, imdb
-and tvdb) sometimes don't correspond.
+separate [Extra folder][extra-folder] (not in season 0) according to Plex rules.
+Keep in mind that seasons 0 aren't really official so datasources (tmdb, imdb
+and tvdb) sometimes don't correspond. Check season 0 of shows on trakt.tv to identify those special episodes.
 Use tmdb as Plex source as much as you can.
 
 [extra-folder]: https://support.plex.tv/articles/local-files-for-tv-show-trailers-and-extras/
