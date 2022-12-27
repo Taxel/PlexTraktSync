@@ -71,6 +71,8 @@ watch:
   scrobble_threshold: 80
   # true to scrobble only what's watched by you, false for all your PMS users
   username_filter: true
+  # Show the progress bar of played media in terminal
+  media_progressbar: true
 
 xbmc-providers:
   movies: imdb
