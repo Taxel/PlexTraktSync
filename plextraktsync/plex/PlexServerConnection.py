@@ -1,4 +1,6 @@
-from typing import List
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import plexapi
 from plexapi.exceptions import Unauthorized
@@ -8,6 +10,9 @@ from requests.exceptions import ConnectionError, SSLError
 from plextraktsync.config import PLEX_PLATFORM
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.factory import Factory, logging
+
+if TYPE_CHECKING:
+    from typing import List
 
 
 class PlexServerConnection:
