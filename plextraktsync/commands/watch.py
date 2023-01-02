@@ -214,17 +214,20 @@ class WatchStateUpdater:
         state = event.state
 
         if state == "playing":
-            self.progressbar.play(m.plex, percent)
+            if self.progressbar:
+                self.progressbar.play(m.plex, percent)
 
             return self.scrobblers[tm].update(percent)
 
         if state == "paused":
-            self.progressbar.pause(m.plex, percent)
+            if self.progressbar:
+                self.progressbar.pause(m.plex, percent)
 
             return self.scrobblers[tm].pause(percent)
 
         if state == "stopped":
-            self.progressbar.stop(m.plex)
+            if self.progressbar:
+                self.progressbar.stop(m.plex)
 
             value = self.scrobblers[tm].stop(percent)
             del self.scrobblers[tm]
