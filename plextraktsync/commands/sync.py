@@ -1,4 +1,6 @@
-from typing import List
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import click
 
@@ -6,6 +8,9 @@ from plextraktsync.commands.login import ensure_login
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import factory, logger
 from plextraktsync.version import version
+
+if TYPE_CHECKING:
+    from typing import List
 
 
 def sync(
