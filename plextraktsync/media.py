@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import TYPE_CHECKING
 
 from plexapi.exceptions import PlexApiException
 from requests import RequestException
@@ -8,8 +8,16 @@ from trakt.errors import TraktException
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.factory import logger
-from plextraktsync.plex_api import PlexApi, PlexGuid, PlexLibraryItem
-from plextraktsync.trakt_api import TraktApi, TraktItem, TraktLookup
+from plextraktsync.trakt_api import TraktLookup
+
+if TYPE_CHECKING:
+    from typing import List, Optional
+
+    from plextraktsync.plex.PlexApi import PlexApi
+    from plextraktsync.plex.PlexGuid import PlexGuid
+    from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
+    from plextraktsync.trakt.TraktApi import TraktApi
+    from plextraktsync.trakt.TraktItem import TraktItem
 
 
 class Media:
