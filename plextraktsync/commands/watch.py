@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import UserDict
 from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.cached_property import cached_property
@@ -21,7 +22,7 @@ if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
 
 
-class ScrobblerCollection(dict):
+class ScrobblerCollection(UserDict):
     def __init__(self, trakt: TraktApi, threshold=80):
         super().__init__()
         self.trakt = trakt
