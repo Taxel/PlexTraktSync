@@ -1,8 +1,14 @@
+from __future__ import annotations
+
 from os.path import exists
+from typing import TYPE_CHECKING
 
 from plextraktsync.factory import factory
-from plextraktsync.plex_api import PlexApi, PlexLibraryItem
 from plextraktsync.util.expand_id import expand_id
+
+if TYPE_CHECKING:
+    from plextraktsync.plex.PlexApi import PlexApi
+    from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 
 def download(plex: PlexApi, pm: PlexLibraryItem):
