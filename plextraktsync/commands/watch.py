@@ -125,14 +125,11 @@ class WatchStateUpdater:
         else:
             self.username_filter = None
         self.sessions = SessionCollection(plex) if self.username_filter else None
+        self.progressbar = ProgressBar() if config["watch"]["media_progressbar"] else None
 
     @cached_property
     def scrobblers(self):
         return ScrobblerCollection(self.trakt, self.threshold)
-
-    @cached_property
-    def progressbar(self):
-        return ProgressBar()
 
     def find_by_key(self, key: str, reload=False):
         pm: PlexLibraryItem = self.plex.fetch_item(key)
