@@ -8,7 +8,7 @@ from trakt.errors import TraktException
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.factory import logger
-from plextraktsync.trakt_api import TraktLookup
+from plextraktsync.trakt.TraktLookup import TraktLookup
 
 if TYPE_CHECKING:
     from typing import List, Optional

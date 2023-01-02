@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from plextraktsync.config import Config
     from plextraktsync.media import Media
     from plextraktsync.plex.PlexApi import PlexApi
-    from plextraktsync.trakt_api import TraktApi
+    from plextraktsync.trakt.TraktApi import TraktApi
     from plextraktsync.walker import Walker
 
 

@@ -7,7 +7,8 @@ from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
-from plextraktsync.trakt_api import TraktApi, TraktItem
+from plextraktsync.trakt.TraktApi import TraktApi
+from plextraktsync.trakt.TraktItem import TraktItem
 
 if TYPE_CHECKING:
     from typing import Any, Generator, List, Set

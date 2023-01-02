@@ -23,7 +23,7 @@ class Factory:
 
     @cached_property
     def trakt_api(self):
-        from plextraktsync.trakt_api import TraktApi
+        from plextraktsync.trakt.TraktApi import TraktApi
 
         return TraktApi()
 
@@ -260,7 +260,7 @@ class Factory:
     def trakt_batch(self):
         from functools import partial
 
-        from plextraktsync.trakt_api import TraktBatch
+        from plextraktsync.trakt.TraktBatch import TraktBatch
 
         return partial(
             TraktBatch,
