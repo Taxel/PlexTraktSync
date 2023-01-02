@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 class ScrobblerProxy:
     """
-    Proxy to Scrobbler that handles requsts cache and rate limiting
+    Proxy to Scrobbler that handles requests cache and rate limiting
     """
 
     def __init__(self, scrobbler: Scrobbler, threshold=80):
