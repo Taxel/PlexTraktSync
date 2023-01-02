@@ -1,14 +1,21 @@
-from collections import defaultdict
-from typing import Any, Generator, List, NamedTuple, Set
+from __future__ import annotations
 
-from plexapi.video import Episode, Movie, Show
+from collections import defaultdict
+from typing import TYPE_CHECKING, NamedTuple
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.measure_time import measure_time
-from plextraktsync.media import Media, MediaFactory
-from plextraktsync.plex_api import (PlexApi, PlexGuid, PlexLibraryItem,
-                                    PlexLibrarySection)
+from plextraktsync.plex_api import PlexGuid, PlexLibraryItem
 from plextraktsync.trakt_api import TraktApi, TraktItem
+
+if TYPE_CHECKING:
+    from typing import Any, Generator, List, Set
+
+    from plexapi.video import Episode, Movie, Show
+
+    from plextraktsync.media import Media, MediaFactory
+    from plextraktsync.plex.PlexApi import PlexApi
+    from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
 
 
 class WalkConfig:
