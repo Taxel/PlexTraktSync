@@ -1,19 +1,26 @@
-from typing import Dict, Union
 
-from plexapi.video import Movie, Show
-from trakt.movies import Movie as TraktMovie
-from trakt.tv import TVShow
+from __future__ import annotations
 
-from plextraktsync.config import Config
+from typing import TYPE_CHECKING
+
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logger
-from plextraktsync.media import Media
-from plextraktsync.plex_api import PlexApi
-from plextraktsync.trakt_api import TraktApi
 from plextraktsync.trakt_list_util import TraktListUtil
-from plextraktsync.walker import Walker
+
+if TYPE_CHECKING:
+    from typing import Dict, Union
+
+    from plexapi.video import Movie, Show
+    from trakt.movies import Movie as TraktMovie
+    from trakt.tv import TVShow
+
+    from plextraktsync.config import Config
+    from plextraktsync.media import Media
+    from plextraktsync.plex.PlexApi import PlexApi
+    from plextraktsync.trakt_api import TraktApi
+    from plextraktsync.walker import Walker
 
 
 class SyncConfig:
