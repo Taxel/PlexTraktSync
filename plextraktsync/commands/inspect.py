@@ -1,11 +1,16 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 from urllib.parse import quote_plus
 
 from plextraktsync.console import print
 from plextraktsync.factory import factory
-from plextraktsync.media import Media
-from plextraktsync.plex_api import PlexLibraryItem
 from plextraktsync.util.expand_id import expand_id
 from plextraktsync.version import version
+
+if TYPE_CHECKING:
+    from plextraktsync.media import Media
+    from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 
 def inspect_media(id):
