@@ -16,7 +16,6 @@ from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import factory, logger
 from plextraktsync.path import pytrakt_file
-from plextraktsync.trakt.ScrobblerProxy import ScrobblerProxy
 from plextraktsync.trakt.TraktLookup import TraktLookup
 from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
 from plextraktsync.trakt.types import TraktMedia
@@ -25,7 +24,7 @@ if TYPE_CHECKING:
     from typing import Optional, Union
 
     from trakt.movies import Movie
-    from trakt.tv import TVEpisode, TVShow
+    from trakt.tv import TVShow
 
     from plextraktsync.plex.PlexGuid import PlexGuid
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
@@ -162,11 +161,6 @@ class TraktApi:
     @retry()
     def rate(self, m, rating):
         m.rate(rating)
-
-    @staticmethod
-    def scrobbler(media: Union[Movie, TVEpisode], threshold=80) -> ScrobblerProxy:
-        scrobbler = media.scrobble(0, None, None)
-        return ScrobblerProxy(scrobbler, threshold)
 
     @rate_limit()
     @time_limit()
