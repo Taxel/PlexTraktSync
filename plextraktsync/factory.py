@@ -29,7 +29,7 @@ class Factory:
 
     @cached_property
     def plex_api(self):
-        from plextraktsync.plex_api import PlexApi
+        from plextraktsync.plex.PlexApi import PlexApi
 
         server = self.plex_server
         plex = PlexApi(server)

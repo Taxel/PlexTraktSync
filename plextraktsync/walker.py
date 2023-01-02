@@ -5,7 +5,8 @@ from typing import TYPE_CHECKING, NamedTuple
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.measure_time import measure_time
-from plextraktsync.plex_api import PlexGuid, PlexLibraryItem
+from plextraktsync.plex.PlexGuid import PlexGuid
+from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from plextraktsync.trakt_api import TraktApi, TraktItem
 
 if TYPE_CHECKING:

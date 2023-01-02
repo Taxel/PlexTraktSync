@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from trakt.tv import TVEpisode, TVShow
 
     from plextraktsync.plex.PlexGuid import PlexGuid
-    from plextraktsync.plex_api import PlexLibraryItem
+    from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
     from plextraktsync.trakt.TraktBatch import TraktBatch
 
 
