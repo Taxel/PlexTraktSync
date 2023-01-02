@@ -235,10 +235,10 @@ class PlexApi:
                 logger.error(f"Error during {plex_username} account access: {e}")
         return None
 
-    def watchlist(self) -> Optional[List[Union[Movie, Show]]]:
+    def watchlist(self, libtype=None) -> Optional[List[Union[Movie, Show]]]:
         if self.account:
             try:
-                return self.account.watchlist()
+                return self.account.watchlist(libtype=libtype)
             except BadRequest as e:
                 logger.error(f"Error during {self.account.username} watchlist access: {e}")
         return None
