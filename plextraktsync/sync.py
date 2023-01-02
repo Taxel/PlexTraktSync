@@ -250,9 +250,6 @@ class Sync:
                 m.mark_watched_plex()
 
     def watchlist_sync_item(self, m: Media, dry_run=False):
-        if not self.sync_wl:
-            return
-
         if m.media_type == "movies":
             trakt_wl = self.trakt_wl_movies
         else:
