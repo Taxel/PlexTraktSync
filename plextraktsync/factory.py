@@ -1,6 +1,11 @@
-from typing import List
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.cached_property import cached_property
+
+if TYPE_CHECKING:
+    from typing import List
 
 
 class Factory:
