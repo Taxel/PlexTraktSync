@@ -272,6 +272,11 @@ class Sync:
                     if not dry_run:
                         m.remove_from_plex_watchlist()
             else:
+                # Plex Online search is inaccurate, and it doesn't offer search by id.
+                # Remove known match from trakt watchlist, so that the search would not be attempted.
+                # Example, trakt id 187634 where title mismatches:
+                #  - "The Vortex": https://trakt.tv/movies/the-vortex-2012
+                #  - "Big Bad Bugs": https://app.plex.tv/desktop/#!/provider/tv.plex.provider.vod/details?key=%2Flibrary%2Fmetadata%2F60185c5891c237002b37653d
                 trakt_wl.pop(m.trakt.trakt)
         else:
             if m.trakt.trakt in trakt_wl:
