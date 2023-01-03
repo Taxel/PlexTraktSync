@@ -11,7 +11,7 @@ from plextraktsync.trakt.TraktApi import TraktApi
 from plextraktsync.trakt.TraktItem import TraktItem
 
 if TYPE_CHECKING:
-    from typing import Any, Generator, List, Set
+    from typing import Any, Generator, Iterable, List, Set
 
     from plexapi.video import Episode, Movie, Show
 
@@ -338,7 +338,7 @@ class Walker:
             me.show = show
             yield me
 
-    def progressbar(self, iterable, **kwargs):
+    def progressbar(self, iterable: Iterable, **kwargs):
         if self._progressbar:
             pb = self._progressbar(iterable, **kwargs)
             with pb as it:
@@ -346,14 +346,14 @@ class Walker:
         else:
             yield from iterable
 
-    def media_from_traktlist(self, items: List) -> Generator[Media, Any, None]:
-        it = self.progressbar(items, desc="Processing Trakt watchlist")
+    def media_from_traktlist(self, items: Iterable, title="Trakt watchlist") -> Generator[Media, Any, None]:
+        it = self.progressbar(items, desc=f"Processing {title}")
         for media in it:
             tm = TraktItem(media, trakt=self.trakt)
             m = self.mf.resolve_trakt(tm)
             yield m
 
-    def media_from_plexlist(self, items: List) -> Generator[Media, Any, None]:
+    def media_from_plexlist(self, items: Iterable) -> Generator[Media, Any, None]:
         it = self.progressbar(items, desc="Processing Plex watchlist")
         for media in it:
             pm = PlexLibraryItem(media, plex=self.plex)

@@ -250,43 +250,59 @@ class Sync:
                 m.mark_watched_plex()
 
     def watchlist_sync_item(self, m: Media, dry_run=False):
-        if self.sync_wl:
-            if m.media_type == "movies":
-                trakt_wl = self.trakt_wl_movies
-            else:
-                trakt_wl = self.trakt_wl_shows
-            if m.plex is None:
-                if self.config.update_plex_wl:
-                    logger.info(f"Skipping '{m.trakt.title}' from Trakt watchlist because not found in Plex Discover")
-                elif self.config.update_trakt_wl:
-                    logger.info(f"Removing '{m.trakt.title}' from Trakt watchlist")
+        if m.media_type == "movies":
+            trakt_wl = self.trakt_wl_movies
+        else:
+            trakt_wl = self.trakt_wl_shows
+
+        if m.plex is None:
+            if self.config.update_plex_wl:
+                logger.info(f"Skipping '{m.trakt.title}' from Trakt watchlist because not found in Plex Discover")
+            elif self.config.update_trakt_wl:
+                logger.info(f"Removing '{m.trakt.title}' from Trakt watchlist")
+                if not dry_run:
+                    m.remove_from_trakt_watchlist(batch=True)
+            return
+
+        if m.plex.item.guid in self.plex_wl:
+            if m.trakt.trakt not in trakt_wl:
+                if self.config.update_trakt_wl:
+                    logger.info(f"Adding '{m.plex.item.title}' ({m.plex.item.year}) to Trakt watchlist")
                     if not dry_run:
-                        m.remove_from_trakt_watchlist(batch=True)
-            elif m.plex.item.guid in self.plex_wl:
-                if m.trakt.trakt not in trakt_wl:
-                    if self.config.update_trakt_wl:
-                        logger.info(f"Adding '{m.plex.item.title}' ({m.plex.item.year}) to Trakt watchlist")
-                        if not dry_run:
-                            m.add_to_trakt_watchlist(batch=True)
-                    else:
-                        logger.info(f"Removing '{m.trakt.title}' ({m.plex.item.year}) from Plex watchlist")
-                        if not dry_run:
-                            m.remove_from_plex_watchlist()
+                        m.add_to_trakt_watchlist(batch=True)
                 else:
-                    trakt_wl.pop(m.trakt.trakt)
+                    logger.info(f"Removing '{m.trakt.title}' ({m.plex.item.year}) from Plex watchlist")
+                    if not dry_run:
+                        m.remove_from_plex_watchlist()
             else:
-                if m.trakt.trakt in trakt_wl:
-                    if self.config.update_plex_wl:
-                        logger.info(f"Adding '{m.trakt.title}' to Plex watchlist")
-                        if not dry_run:
-                            m.add_to_plex_watchlist()
-                    else:
-                        logger.info(f"Removing '{m.trakt.title}' from Trakt watchlist")
-                        if not dry_run:
-                            m.remove_from_trakt_watchlist(batch=True)
+                # Plex Online search is inaccurate, and it doesn't offer search by id.
+                # Remove known match from trakt watchlist, so that the search would not be attempted.
+                # Example, trakt id 187634 where title mismatches:
+                #  - "The Vortex": https://trakt.tv/movies/the-vortex-2012
+                #  - "Big Bad Bugs": https://app.plex.tv/desktop/#!/provider/tv.plex.provider.vod/details?key=%2Flibrary%2Fmetadata%2F60185c5891c237002b37653d
+                trakt_wl.pop(m.trakt.trakt)
+        elif m.trakt.trakt in trakt_wl:
+            if self.config.update_plex_wl:
+                logger.info(f"Adding '{m.trakt.title}' to Plex watchlist")
+                if not dry_run:
+                    m.add_to_plex_watchlist()
+            else:
+                logger.info(f"Removing '{m.trakt.title}' from Trakt watchlist")
+                if not dry_run:
+                    m.remove_from_trakt_watchlist(batch=True)
 
     def sync_watchlist(self, walker: Walker, dry_run=False):
-        for m in walker.media_from_plexlist(list(self.plex_wl.values())):
+        # NOTE: Plex watchlist sync removes matching items from trakt lists
+        # See the comment above around "trakt_wl.pop(m)"
+        for m in walker.media_from_plexlist(self.plex_wl.values()):
             self.watchlist_sync_item(m, dry_run)
-        for m in walker.media_from_traktlist(list(self.trakt_wl_movies.values()) + list(self.trakt_wl_shows.values())):
-            self.watchlist_sync_item(m, dry_run)
+
+        # Because Plex syncing might have emptied the watchlists, skip printing the 0/0 progress
+        if len(self.trakt_wl_movies):
+            movies = list(self.trakt_wl_movies.values())
+            for m in walker.media_from_traktlist(movies, title="Trakt Movies watchlist"):
+                self.watchlist_sync_item(m, dry_run)
+        if len(self.trakt_wl_shows):
+            shows = list(self.trakt_wl_shows.values())
+            for m in walker.media_from_traktlist(shows, title="Trakt Shows watchlist"):
+                self.watchlist_sync_item(m, dry_run)
