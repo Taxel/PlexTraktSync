@@ -16,11 +16,10 @@ from plextraktsync.factory import logger
 
 if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
-    from plextraktsync.util.Cleanup import Cleanup
 
 
 class TraktBatch:
-    def __init__(self, name: str, add: bool, trakt: TraktApi, timer=None, cleanup: Cleanup = None):
+    def __init__(self, name: str, add: bool, trakt: TraktApi, timer=None):
         if name not in ["collection", "watchlist"]:
             raise ValueError(f"TraktBatch name not allowed: {name}")
         self.name = name

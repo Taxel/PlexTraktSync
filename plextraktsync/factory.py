@@ -233,12 +233,6 @@ class Factory:
         return handler
 
     @cached_property
-    def cleanup(self):
-        from plextraktsync.util.Cleanup import Cleanup
-
-        return Cleanup()
-
-    @cached_property
     def config(self):
         from plextraktsync.config import Config
 
@@ -266,7 +260,6 @@ class Factory:
             TraktBatch,
             trakt=self.trakt_api,
             timer=self.batch_delay_timer,
-            cleanup=self.cleanup,
         )
 
 
