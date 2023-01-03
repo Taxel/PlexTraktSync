@@ -245,11 +245,6 @@ class Sync:
                 m.mark_watched_plex()
 
     def watchlist_sync_item(self, m: Media, dry_run=False):
-        if m.media_type == "movies":
-            trakt_wl = self.trakt_wl_movies
-        else:
-            trakt_wl = self.trakt_wl_shows
-
         if m.plex is None:
             if self.config.update_plex_wl:
                 logger.info(f"Skipping '{m.trakt.title}' from Trakt watchlist because not found in Plex Discover")
@@ -260,7 +255,7 @@ class Sync:
             return
 
         if m in self.plex_wl:
-            if m not in trakt_wl:
+            if m not in self.trakt_wl:
                 if self.config.update_trakt_wl:
                     logger.info(f"Adding '{m.plex.item.title}' ({m.plex.item.year}) to Trakt watchlist")
                     if not dry_run:
@@ -275,8 +270,8 @@ class Sync:
                 # Example, trakt id 187634 where title mismatches:
                 #  - "The Vortex": https://trakt.tv/movies/the-vortex-2012
                 #  - "Big Bad Bugs": https://app.plex.tv/desktop/#!/provider/tv.plex.provider.vod/details?key=%2Flibrary%2Fmetadata%2F60185c5891c237002b37653d
-                del trakt_wl[m]
-        elif m in trakt_wl:
+                del self.trakt_wl[m]
+        elif m in self.trakt_wl:
             if self.config.update_plex_wl:
                 logger.info(f"Adding '{m.trakt.title}' to Plex watchlist")
                 if not dry_run:
@@ -288,14 +283,11 @@ class Sync:
 
     def sync_watchlist(self, walker: Walker, dry_run=False):
         # NOTE: Plex watchlist sync removes matching items from trakt lists
-        # See the comment above around "del trakt_wl[m]"
+        # See the comment above around "del self.trakt_wl[m]"
         for m in walker.media_from_plexlist(self.plex_wl):
             self.watchlist_sync_item(m, dry_run)
 
         # Because Plex syncing might have emptied the watchlists, skip printing the 0/0 progress
-        if len(self.trakt_wl_movies):
-            for m in walker.media_from_traktlist(self.trakt_wl_movies, title="Trakt Movies watchlist"):
-                self.watchlist_sync_item(m, dry_run)
-        if len(self.trakt_wl_shows):
-            for m in walker.media_from_traktlist(self.trakt_wl_shows, title="Trakt Shows watchlist"):
+        if len(self.trakt_wl):
+            for m in walker.media_from_traktlist(self.trakt_wl):
                 self.watchlist_sync_item(m, dry_run)
