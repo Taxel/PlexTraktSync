@@ -125,13 +125,13 @@ class TraktApi:
     def collected_shows(self):
         return pytrakt_extensions.allcollected()
 
-    @cached_property
+    @property
     @rate_limit()
     @retry()
     def watchlist_movies(self) -> List[Movie]:
         return self.me.watchlist_movies
 
-    @cached_property
+    @property
     @rate_limit()
     @retry()
     def watchlist_shows(self) -> List[TVShow]:
