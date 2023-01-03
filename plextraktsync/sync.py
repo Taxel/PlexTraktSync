@@ -3,18 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.cached_property import cached_property
-from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logger
 from plextraktsync.trakt_list_util import TraktListUtil
 
 if TYPE_CHECKING:
-    from typing import Dict, Union
-
-    from plexapi.video import Movie, Show
-    from trakt.movies import Movie as TraktMovie
-    from trakt.tv import TVShow
-
     from plextraktsync.config import Config
     from plextraktsync.media import Media
     from plextraktsync.plex.PlexApi import PlexApi
@@ -106,29 +99,26 @@ class Sync:
         self.trakt = trakt
 
     @cached_property
-    @flatten_dict
-    def plex_wl(self) -> Dict[str, Union[Movie, Show]]:
-        """
-        Return map of [Guid, Plex] of Plex Watchlist
-        """
-        for pm in self.plex.watchlist():
-            yield pm.guid, pm
+    def plex_wl(self):
+        from plextraktsync.plex.PlexWatchList import PlexWatchList
+
+        return PlexWatchList(self.plex.watchlist())
 
     @cached_property
     def sync_wl(self):
         return self.config.sync_wl and len(self.plex_wl) > 0
 
     @cached_property
-    @flatten_dict
-    def trakt_wl_movies(self) -> Dict[int, TraktMovie]:
-        for tm in self.trakt.watchlist_movies:
-            yield tm.trakt, tm
+    def trakt_wl_movies(self):
+        from plextraktsync.trakt.TraktWatchlist import TraktWatchList
+
+        return TraktWatchList(self.trakt.watchlist_movies)
 
     @cached_property
-    @flatten_dict
-    def trakt_wl_shows(self) -> Dict[int, TVShow]:
-        for tm in self.trakt.watchlist_shows:
-            yield tm.trakt, tm
+    def trakt_wl_shows(self):
+        from plextraktsync.trakt.TraktWatchlist import TraktWatchList
+
+        return TraktWatchList(self.trakt.watchlist_shows)
 
     def sync(self, walker: Walker, dry_run=False):
         listutil = TraktListUtil()
@@ -263,8 +253,8 @@ class Sync:
                     m.remove_from_trakt_watchlist(batch=True)
             return
 
-        if m.plex.item.guid in self.plex_wl:
-            if m.trakt.trakt not in trakt_wl:
+        if m in self.plex_wl:
+            if m not in trakt_wl:
                 if self.config.update_trakt_wl:
                     logger.info(f"Adding '{m.plex.item.title}' ({m.plex.item.year}) to Trakt watchlist")
                     if not dry_run:
@@ -279,8 +269,8 @@ class Sync:
                 # Example, trakt id 187634 where title mismatches:
                 #  - "The Vortex": https://trakt.tv/movies/the-vortex-2012
                 #  - "Big Bad Bugs": https://app.plex.tv/desktop/#!/provider/tv.plex.provider.vod/details?key=%2Flibrary%2Fmetadata%2F60185c5891c237002b37653d
-                trakt_wl.pop(m.trakt.trakt)
-        elif m.trakt.trakt in trakt_wl:
+                del trakt_wl[m]
+        elif m in trakt_wl:
             if self.config.update_plex_wl:
                 logger.info(f"Adding '{m.trakt.title}' to Plex watchlist")
                 if not dry_run:
@@ -292,16 +282,14 @@ class Sync:
 
     def sync_watchlist(self, walker: Walker, dry_run=False):
         # NOTE: Plex watchlist sync removes matching items from trakt lists
-        # See the comment above around "trakt_wl.pop(m)"
-        for m in walker.media_from_plexlist(self.plex_wl.values()):
+        # See the comment above around "del trakt_wl[m]"
+        for m in walker.media_from_plexlist(self.plex_wl):
             self.watchlist_sync_item(m, dry_run)
 
         # Because Plex syncing might have emptied the watchlists, skip printing the 0/0 progress
         if len(self.trakt_wl_movies):
-            movies = list(self.trakt_wl_movies.values())
-            for m in walker.media_from_traktlist(movies, title="Trakt Movies watchlist"):
+            for m in walker.media_from_traktlist(self.trakt_wl_movies, title="Trakt Movies watchlist"):
                 self.watchlist_sync_item(m, dry_run)
         if len(self.trakt_wl_shows):
-            shows = list(self.trakt_wl_shows.values())
-            for m in walker.media_from_traktlist(shows, title="Trakt Shows watchlist"):
+            for m in walker.media_from_traktlist(self.trakt_wl_shows, title="Trakt Shows watchlist"):
                 self.watchlist_sync_item(m, dry_run)
