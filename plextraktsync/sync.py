@@ -114,18 +114,6 @@ class Sync:
 
         return TraktWatchList(self.trakt.watchlist_movies + self.trakt.watchlist_shows)
 
-    @cached_property
-    def trakt_wl_movies(self):
-        from plextraktsync.trakt.TraktWatchlist import TraktWatchList
-
-        return TraktWatchList(self.trakt.watchlist_movies)
-
-    @cached_property
-    def trakt_wl_shows(self):
-        from plextraktsync.trakt.TraktWatchlist import TraktWatchList
-
-        return TraktWatchList(self.trakt.watchlist_shows)
-
     def sync(self, walker: Walker, dry_run=False):
         listutil = TraktListUtil()
         is_partial = walker.is_partial
