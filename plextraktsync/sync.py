@@ -254,6 +254,7 @@ class Sync:
             trakt_wl = self.trakt_wl_movies
         else:
             trakt_wl = self.trakt_wl_shows
+
         if m.plex is None:
             if self.config.update_plex_wl:
                 logger.info(f"Skipping '{m.trakt.title}' from Trakt watchlist because not found in Plex Discover")
@@ -261,7 +262,9 @@ class Sync:
                 logger.info(f"Removing '{m.trakt.title}' from Trakt watchlist")
                 if not dry_run:
                     m.remove_from_trakt_watchlist(batch=True)
-        elif m.plex.item.guid in self.plex_wl:
+            return
+
+        if m.plex.item.guid in self.plex_wl:
             if m.trakt.trakt not in trakt_wl:
                 if self.config.update_trakt_wl:
                     logger.info(f"Adding '{m.plex.item.title}' ({m.plex.item.year}) to Trakt watchlist")
