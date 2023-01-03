@@ -290,7 +290,17 @@ class Sync:
                         m.remove_from_trakt_watchlist(batch=True)
 
     def sync_watchlist(self, walker: Walker, dry_run=False):
-        for m in walker.media_from_plexlist(list(self.plex_wl.values())):
+        # NOTE: Plex watchlist sync removes matching items from trakt lists
+        # See the comment above around "trakt_wl.pop(m)"
+        for m in walker.media_from_plexlist(self.plex_wl.values()):
             self.watchlist_sync_item(m, dry_run)
-        for m in walker.media_from_traktlist(list(self.trakt_wl_movies.values()) + list(self.trakt_wl_shows.values())):
-            self.watchlist_sync_item(m, dry_run)
+
+        # Because Plex syncing might have emptied the watchlists, skip printing the 0/0 progress
+        if len(self.trakt_wl_movies):
+            movies = list(self.trakt_wl_movies.values())
+            for m in walker.media_from_traktlist(movies, title="Trakt Movies watchlist"):
+                self.watchlist_sync_item(m, dry_run)
+        if len(self.trakt_wl_shows):
+            shows = list(self.trakt_wl_shows.values())
+            for m in walker.media_from_traktlist(shows, title="Trakt Shows watchlist"):
+                self.watchlist_sync_item(m, dry_run)
