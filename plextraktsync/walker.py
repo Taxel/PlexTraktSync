@@ -346,8 +346,8 @@ class Walker:
         else:
             yield from iterable
 
-    def media_from_traktlist(self, items: Iterable) -> Generator[Media, Any, None]:
-        it = self.progressbar(items, desc="Processing Trakt watchlist")
+    def media_from_traktlist(self, items: Iterable, title="Trakt watchlist") -> Generator[Media, Any, None]:
+        it = self.progressbar(items, desc=f"Processing {title}")
         for media in it:
             tm = TraktItem(media, trakt=self.trakt)
             m = self.mf.resolve_trakt(tm)
