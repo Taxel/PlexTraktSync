@@ -23,7 +23,7 @@ from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
 from plextraktsync.trakt.types import TraktMedia
 
 if TYPE_CHECKING:
-    from typing import List, Optional, Union
+    from typing import Optional, Union
 
     from trakt.movies import Movie
     from trakt.tv import TVEpisode, TVShow
@@ -128,13 +128,13 @@ class TraktApi:
     @property
     @rate_limit()
     @retry()
-    def watchlist_movies(self) -> List[Movie]:
+    def watchlist_movies(self):
         return self.me.watchlist_movies
 
     @property
     @rate_limit()
     @retry()
-    def watchlist_shows(self) -> List[TVShow]:
+    def watchlist_shows(self):
         return self.me.watchlist_shows
 
     @cached_property
