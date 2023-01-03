@@ -109,6 +109,12 @@ class Sync:
         return self.config.sync_wl and len(self.plex_wl) > 0
 
     @cached_property
+    def trakt_wl(self):
+        from plextraktsync.trakt.TraktWatchlist import TraktWatchList
+
+        return TraktWatchList(self.trakt.watchlist_movies + self.trakt.watchlist_shows)
+
+    @cached_property
     def trakt_wl_movies(self):
         from plextraktsync.trakt.TraktWatchlist import TraktWatchList
 
