@@ -1,13 +1,15 @@
+from __future__ import annotations
+
 from datetime import datetime, timedelta
 from functools import partial
 from os import environ
-from typing import List
+from typing import TYPE_CHECKING
 
 import click
 from click import ClickException
 from InquirerPy import get_style, inquirer
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
-from plexapi.myplex import MyPlexAccount, MyPlexResource, ResourceConnection
+from plexapi.myplex import MyPlexAccount
 
 from plextraktsync.config.ServerConfig import ServerConfig
 from plextraktsync.decorators.flatten import flatten_list
@@ -15,6 +17,11 @@ from plextraktsync.factory import factory
 from plextraktsync.style import (comment, disabled, error, highlight, prompt,
                                  success, title)
 from plextraktsync.util.local_url import local_url
+
+if TYPE_CHECKING:
+    from typing import List
+
+    from plexapi.myplex import MyPlexResource, ResourceConnection
 
 PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
 PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username or e-mail")

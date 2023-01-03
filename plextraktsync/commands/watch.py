@@ -1,16 +1,23 @@
-from typing import Union
+from __future__ import annotations
 
-from trakt.movies import Movie
-from trakt.tv import TVEpisode
+from typing import TYPE_CHECKING
 
-from plextraktsync.config import Config
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.events import (ActivityNotification, Error,
                                   PlaySessionStateNotification, TimelineEntry)
 from plextraktsync.factory import factory, logging
-from plextraktsync.media import Media, MediaFactory
-from plextraktsync.plex_api import PlexApi, PlexLibraryItem
-from plextraktsync.trakt_api import TraktApi
+
+if TYPE_CHECKING:
+    from typing import Union
+
+    from trakt.movies import Movie
+    from trakt.tv import TVEpisode
+
+    from plextraktsync.config import Config
+    from plextraktsync.media import Media, MediaFactory
+    from plextraktsync.plex.PlexApi import PlexApi
+    from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
+    from plextraktsync.trakt.TraktApi import TraktApi
 
 
 class ScrobblerCollection(dict):
@@ -92,7 +99,7 @@ class ProgressBar(dict):
 
 class WatchStateUpdater:
     def __init__(
-        self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory, config: Config
+            self, plex: PlexApi, trakt: TraktApi, mf: MediaFactory, config: Config
     ):
         self.plex = plex
         self.trakt = trakt

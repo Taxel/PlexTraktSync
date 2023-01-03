@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from json import JSONDecodeError
 from os.path import exists
+from typing import TYPE_CHECKING
 
 import click
 from trakt.errors import ForbiddenException
@@ -7,7 +10,9 @@ from trakt.errors import ForbiddenException
 from plextraktsync.factory import factory
 from plextraktsync.path import pytrakt_file
 from plextraktsync.style import error, prompt, success, title
-from plextraktsync.trakt_api import TraktApi
+
+if TYPE_CHECKING:
+    from plextraktsync.trakt.TraktApi import TraktApi
 
 PROMPT_TRAKT_CLIENT_ID = prompt("Please enter your client id")
 PROMPT_TRAKT_CLIENT_SECRET = prompt("Please enter your client secret")

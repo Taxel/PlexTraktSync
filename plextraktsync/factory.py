@@ -1,6 +1,11 @@
-from typing import List
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.cached_property import cached_property
+
+if TYPE_CHECKING:
+    from typing import List
 
 
 class Factory:
@@ -18,13 +23,13 @@ class Factory:
 
     @cached_property
     def trakt_api(self):
-        from plextraktsync.trakt_api import TraktApi
+        from plextraktsync.trakt.TraktApi import TraktApi
 
         return TraktApi()
 
     @cached_property
     def plex_api(self):
-        from plextraktsync.plex_api import PlexApi
+        from plextraktsync.plex.PlexApi import PlexApi
 
         server = self.plex_server
         plex = PlexApi(server)
@@ -255,7 +260,7 @@ class Factory:
     def trakt_batch(self):
         from functools import partial
 
-        from plextraktsync.trakt_api import TraktBatch
+        from plextraktsync.trakt.TraktBatch import TraktBatch
 
         return partial(
             TraktBatch,

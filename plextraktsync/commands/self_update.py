@@ -1,8 +1,13 @@
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import click
 
 from plextraktsync.util.execp import execp
+
+if TYPE_CHECKING:
+    from typing import Optional
 
 
 def has_previous_pr(pr: int):
