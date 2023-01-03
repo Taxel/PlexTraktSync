@@ -278,16 +278,15 @@ class Sync:
                 #  - "The Vortex": https://trakt.tv/movies/the-vortex-2012
                 #  - "Big Bad Bugs": https://app.plex.tv/desktop/#!/provider/tv.plex.provider.vod/details?key=%2Flibrary%2Fmetadata%2F60185c5891c237002b37653d
                 trakt_wl.pop(m.trakt.trakt)
-        else:
-            if m.trakt.trakt in trakt_wl:
-                if self.config.update_plex_wl:
-                    logger.info(f"Adding '{m.trakt.title}' to Plex watchlist")
-                    if not dry_run:
-                        m.add_to_plex_watchlist()
-                else:
-                    logger.info(f"Removing '{m.trakt.title}' from Trakt watchlist")
-                    if not dry_run:
-                        m.remove_from_trakt_watchlist(batch=True)
+        elif m.trakt.trakt in trakt_wl:
+            if self.config.update_plex_wl:
+                logger.info(f"Adding '{m.trakt.title}' to Plex watchlist")
+                if not dry_run:
+                    m.add_to_plex_watchlist()
+            else:
+                logger.info(f"Removing '{m.trakt.title}' from Trakt watchlist")
+                if not dry_run:
+                    m.remove_from_trakt_watchlist(batch=True)
 
     def sync_watchlist(self, walker: Walker, dry_run=False):
         # NOTE: Plex watchlist sync removes matching items from trakt lists
