@@ -2,7 +2,7 @@
 from unittest.mock import Mock
 
 from plextraktsync.timer import Timer
-from plextraktsync.trakt_api import TraktBatch
+from plextraktsync.trakt.TraktBatch import TraktBatch
 from tests.conftest import factory, load_mock
 
 trakt = factory.trakt_api
