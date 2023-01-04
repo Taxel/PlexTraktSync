@@ -90,6 +90,18 @@ class TraktApi:
     def remove_from_library(self, media: TraktMedia):
         media.remove_from_library()
 
+    def remove_from_collection(self, m: TraktMedia):
+        if m.media_type in ["movies", "shows"]:
+            item = dict(
+                title=m.title,
+                year=m.year,
+                **m.ids,
+            )
+        else:
+            raise ValueError(f"Unsupported media type: {m.media_type}")
+
+        self.queue.remove_from_collection((m.media_type, item))
+
     @cached_property
     def movie_collection_set(self):
         return set(map(lambda m: m.trakt, self.movie_collection))
