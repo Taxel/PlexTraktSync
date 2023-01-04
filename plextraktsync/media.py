@@ -125,7 +125,7 @@ class Media:
         self.trakt_api.add_to_collection(self.trakt, self.plex, batch=batch)
 
     def remove_from_collection(self):
-        self.trakt_api.remove_from_library(self.trakt)
+        self.trakt_api.remove_from_collection(self.trakt)
 
     def add_to_trakt_watchlist(self, batch=False):
         self.trakt_api.add_to_watchlist(self.trakt, batch=batch)
