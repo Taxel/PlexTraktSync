@@ -6,7 +6,6 @@ import trakt
 import trakt.movies
 import trakt.sync
 import trakt.users
-from deprecated import deprecated
 from trakt.errors import ForbiddenException, OAuthException
 
 from plextraktsync import pytrakt_extensions
@@ -305,16 +304,6 @@ class TraktApi:
         if not guid.is_episode:
             return self.find_by_guid(guid)
         return None
-
-    @deprecated("No longer in use")
-    def flush(self):
-        """
-        Submit all pending data
-        """
-        self.batch_collection_add.flush(force=True)
-        self.batch_collection_del.flush(force=True)
-        self.batch_watchlist_add.flush(force=True)
-        self.batch_watchlist_del.flush(force=True)
 
     @staticmethod
     def trakt_batch(*args, **kwargs) -> TraktBatch:
