@@ -474,7 +474,7 @@ check if [external ids][house-of-the-dragon] are populated on tmdb.
 
 ### I have season 0 matching errors
 
-Season 0 folder must only contains episodes belonging to season 0, also named specials.
+Season 0 folder must only contain episodes belonging to season 0, also named specials.
 Trailers, deleted scenes, featurettes, interviews,... must be stored in a
 separate [Extra folder][extra-folder] (not in season 0) according to Plex rules.
 Keep in mind that seasons 0 aren't really official so datasources (tmdb, imdb
