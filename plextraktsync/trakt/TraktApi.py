@@ -298,6 +298,10 @@ class TraktApi:
             return self.find_by_guid(guid)
         return None
 
+    @cached_property
+    def queue(self):
+        return factory.queue
+
     @staticmethod
     def trakt_batch(*args, **kwargs) -> TraktBatch:
         return factory.trakt_batch(*args, **kwargs)
