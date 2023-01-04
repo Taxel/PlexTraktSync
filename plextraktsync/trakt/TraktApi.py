@@ -28,7 +28,6 @@ if TYPE_CHECKING:
 
     from plextraktsync.plex.PlexGuid import PlexGuid
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
-    from plextraktsync.trakt.TraktBatch import TraktBatch
 
 
 class TraktApi:
@@ -45,22 +44,6 @@ class TraktApi:
         trakt.core.AUTH_METHOD = trakt.core.DEVICE_AUTH
 
         return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
-
-    @cached_property
-    def batch_collection_add(self):
-        return self.trakt_batch("collection", add=True)
-
-    @cached_property
-    def batch_collection_del(self):
-        return self.trakt_batch("collection", add=False)
-
-    @cached_property
-    def batch_watchlist_add(self):
-        return self.trakt_batch("watchlist", add=True)
-
-    @cached_property
-    def batch_watchlist_del(self):
-        return self.trakt_batch("watchlist", add=False)
 
     @cached_property
     @rate_limit()
@@ -293,7 +276,3 @@ class TraktApi:
     @cached_property
     def queue(self):
         return factory.queue
-
-    @staticmethod
-    def trakt_batch(*args, **kwargs) -> TraktBatch:
-        return factory.trakt_batch(*args, **kwargs)
