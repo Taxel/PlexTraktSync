@@ -147,11 +147,10 @@ class TraktApi:
         However, the Movie property is always None.
         So fetch for all types.
         """
-        if m.media_type in ["movies", "shows", "episodes"]:
-            r = self.ratings[m.media_type]
-            return r.get(m.trakt, None)
-        else:
+        if m.media_type not in ["movies", "shows", "episodes"]:
             raise ValueError(f"Unsupported type: {m.media_type}")
+
+        return self.ratings[m.media_type].get(m.trakt, None)
 
     @rate_limit()
     @retry()
