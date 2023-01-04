@@ -245,6 +245,17 @@ class Factory:
         return config
 
     @cached_property
+    def queue(self):
+        from plextraktsync.queue.BackgroundTask import BackgroundTask
+        from plextraktsync.queue.Queue import Queue
+        from plextraktsync.queue.TraktBatchWorker import TraktBatchWorker
+
+        task = BackgroundTask(self.batch_delay_timer, TraktBatchWorker())
+        queue = Queue(task)
+
+        return queue
+
+    @cached_property
     def batch_delay_timer(self):
         from plextraktsync.timer import Timer
 
