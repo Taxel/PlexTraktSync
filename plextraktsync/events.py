@@ -1,20 +1,5 @@
 import importlib
 
-EVENTS = {
-    "account": "AccountUpdateNotification",
-    "activity": "ActivityNotification",
-    "backgroundProcessingQueue": "BackgroundProcessingQueueEventNotification",
-    "playing": "PlaySessionStateNotification",
-    "preference": "Setting",
-    "progress": "ProgressNotification",
-    "reachability": "ReachabilityNotification",
-    "status": "StatusNotification",
-    "timeline": "TimelineEntry",
-    "transcodeSession.end": "TranscodeSession",
-    "transcodeSession.start": "TranscodeSession",
-    "transcodeSession.update": "TranscodeSession",
-}
-
 
 class Event(dict):
     def __str__(self):
@@ -110,6 +95,21 @@ class TranscodeSession(Event):
 
 
 class EventFactory:
+    EVENTS = {
+        "account": "AccountUpdateNotification",
+        "activity": "ActivityNotification",
+        "backgroundProcessingQueue": "BackgroundProcessingQueueEventNotification",
+        "playing": "PlaySessionStateNotification",
+        "preference": "Setting",
+        "progress": "ProgressNotification",
+        "reachability": "ReachabilityNotification",
+        "status": "StatusNotification",
+        "timeline": "TimelineEntry",
+        "transcodeSession.end": "TranscodeSession",
+        "transcodeSession.start": "TranscodeSession",
+        "transcodeSession.update": "TranscodeSession",
+    }
+
     def __init__(self):
         self.module = importlib.import_module(self.__module__)
 
@@ -118,9 +118,9 @@ class EventFactory:
             raise ValueError(f"Unexpected size: {message}")
 
         message_type = message["type"]
-        if message_type not in EVENTS:
+        if message_type not in self.EVENTS:
             return
-        class_name = EVENTS[message_type]
+        class_name = self.EVENTS[message_type]
         if class_name not in message:
             return
         for data in message[class_name]:
