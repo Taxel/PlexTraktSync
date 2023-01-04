@@ -1,5 +1,6 @@
 #!/usr/bin/env python3 -m pytest
-from plextraktsync.plex_api import PlexApi, PlexLibrarySection
+from plextraktsync.plex.PlexApi import PlexApi
+from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
 from plextraktsync.walker import WalkConfig, WalkPlanner
 
 

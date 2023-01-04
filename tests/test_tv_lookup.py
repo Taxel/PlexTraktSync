@@ -1,7 +1,8 @@
 #!/usr/bin/env python3 -m pytest
 from trakt.tv import TVShow
 
-from plextraktsync.plex_api import PlexGuid, PlexLibraryItem
+from plextraktsync.plex.PlexGuid import PlexGuid
+from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from plextraktsync.trakt.TraktLookup import TraktLookup
 from tests.conftest import factory, make
 

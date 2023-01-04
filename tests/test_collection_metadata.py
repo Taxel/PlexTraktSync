@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 
 import pytest
 
-from plextraktsync.plex_api import PlexLibraryItem
+from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from tests.conftest import make
 
 testdata = [
