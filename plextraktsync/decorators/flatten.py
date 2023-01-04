@@ -15,3 +15,11 @@ def flatten_dict(method):
         return dict(method(*args, **kwargs))
 
     return inner
+
+
+def flatten_set(method):
+    @wraps(method)
+    def inner(*args, **kwargs):
+        return set(method(*args, **kwargs))
+
+    return inner
