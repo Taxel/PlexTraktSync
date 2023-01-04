@@ -181,7 +181,7 @@ class Sync:
 
         logger.info(f"Adding to collection: {m}")
         if not dry_run:
-            m.add_to_collection(batch=True)
+            m.add_to_collection()
 
     def sync_ratings(self, m: Media, dry_run=False):
         if not self.config.sync_ratings:
@@ -239,7 +239,7 @@ class Sync:
             elif self.config.update_trakt_wl:
                 logger.info(f"Removing '{m.trakt.title}' from Trakt watchlist")
                 if not dry_run:
-                    m.remove_from_trakt_watchlist(batch=True)
+                    m.remove_from_trakt_watchlist()
             return
 
         if m in self.plex_wl:
@@ -247,7 +247,7 @@ class Sync:
                 if self.config.update_trakt_wl:
                     logger.info(f"Adding '{m.plex.item.title}' ({m.plex.item.year}) to Trakt watchlist")
                     if not dry_run:
-                        m.add_to_trakt_watchlist(batch=True)
+                        m.add_to_trakt_watchlist()
                 else:
                     logger.info(f"Removing '{m.trakt.title}' ({m.plex.item.year}) from Plex watchlist")
                     if not dry_run:
@@ -267,7 +267,7 @@ class Sync:
             else:
                 logger.info(f"Removing '{m.trakt.title}' from Trakt watchlist")
                 if not dry_run:
-                    m.remove_from_trakt_watchlist(batch=True)
+                    m.remove_from_trakt_watchlist()
 
     def sync_watchlist(self, walker: Walker, dry_run=False):
         # NOTE: Plex watchlist sync removes matching items from trakt lists

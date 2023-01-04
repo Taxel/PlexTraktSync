@@ -168,7 +168,7 @@ class TraktApi:
         else:
             raise RuntimeError(f"mark_watched: Unsupported media type: {m.media_type}")
 
-    def add_to_collection(self, m, pm: PlexLibraryItem, batch=False):
+    def add_to_collection(self, m, pm: PlexLibraryItem):
         if m.media_type == "movies":
             item = dict(
                 title=m.title,
@@ -183,7 +183,7 @@ class TraktApi:
 
         self.queue.add_to_collection((m.media_type, item))
 
-    def add_to_watchlist(self, m, batch=False):
+    def add_to_watchlist(self, m):
         if m.media_type in ["movies", "shows"]:
             item = dict(
                 title=m.title,
@@ -195,7 +195,7 @@ class TraktApi:
 
         self.queue.add_to_watchlist((m.media_type, item))
 
-    def remove_from_watchlist(self, m, batch=False):
+    def remove_from_watchlist(self, m):
         if m.media_type in ["movies", "shows"]:
             item = dict(
                 title=m.title,

@@ -121,20 +121,20 @@ class Media:
         return collected.is_collected(
             self.show_trakt_id, self.season_number, self.episode_number)
 
-    def add_to_collection(self, batch=False):
-        self.trakt_api.add_to_collection(self.trakt, self.plex, batch=batch)
+    def add_to_collection(self):
+        self.trakt_api.add_to_collection(self.trakt, self.plex)
 
     def remove_from_collection(self):
         self.trakt_api.remove_from_collection(self.trakt)
 
-    def add_to_trakt_watchlist(self, batch=False):
-        self.trakt_api.add_to_watchlist(self.trakt, batch=batch)
+    def add_to_trakt_watchlist(self):
+        self.trakt_api.add_to_watchlist(self.trakt)
 
     def add_to_plex_watchlist(self):
         self.plex_api.add_to_watchlist(self.plex.item)
 
-    def remove_from_trakt_watchlist(self, batch=False):
-        self.trakt_api.remove_from_watchlist(self.trakt, batch=batch)
+    def remove_from_trakt_watchlist(self):
+        self.trakt_api.remove_from_watchlist(self.trakt)
 
     def remove_from_plex_watchlist(self):
         self.plex_api.remove_from_watchlist(self.plex.item)
