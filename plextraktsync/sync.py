@@ -153,7 +153,7 @@ class Sync:
             for show in walker.walk_shows(shows, title="Syncing show ratings"):
                 self.sync_ratings(show, dry_run=dry_run)
 
-        if self.sync_wl or self.config.sync_liked_lists:
+        if walker.config.walk_watchlist and (self.sync_wl or self.config.sync_liked_lists):
             if is_partial:
                 logger.warning("Partial walk, watchlist and/or liked list updating was skipped")
             else:
