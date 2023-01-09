@@ -61,7 +61,7 @@ label or to improve documentation [docs-needed], thank you.**
 
 ## Pre-requisites
 
-The script is known to work with Python 3.7-3.10 versions.
+The script is known to work with Python 3.7-3.11 versions.
 
 ## Installation
 
