@@ -78,6 +78,9 @@ class WalkConfig:
         if self.walk_movies or self.walk_shows:
             return True
 
+        if self.walk_watchlist:
+            return True
+
         return False
 
 
