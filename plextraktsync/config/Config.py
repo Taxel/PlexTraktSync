@@ -11,27 +11,30 @@ from plextraktsync.path import (cache_dir, config_file, config_yml,
 
 
 class Config(ChangeNotifier, ConfigMergeMixin, dict):
-    env_keys = [
-        "PLEX_BASEURL",      # unused after 0.24.0
-        "PLEX_FALLBACKURL",  # legacy, used before 0.18.21
-        "PLEX_LOCALURL",     # unused after 0.24.0
-        "PLEX_TOKEN",        # unused after 0.24.0
-        "PLEX_SERVER",       # new in 0.24.0
-        "PLEX_USERNAME",
-        "TRAKT_USERNAME",
+    # Value other than True adds a note to the env key to written .env
+    env_keys = {
+        "PLEX_USERNAME": True,
+        "TRAKT_USERNAME": True,
+        "PLEX_SERVER": True,  # new in 0.24.0
 
         # The token of the PMS administrator/owner.
         # This is stored/used only for managed users (home users) so the script
         # can get their watchlist from Plex online servers. Managed users don't
         # have a Plex account, they're local users.
-        "PLEX_OWNER_TOKEN",
+        "PLEX_OWNER_TOKEN": True,
 
         # The account token of the Plex user who have a Plex account but don't
         # own the PMS (use it as shared library).
         # This is stored/used only if user uses a shared PMS.
         # Needed to fetch its watchlist from Plex online servers.
-        "PLEX_ACCOUNT_TOKEN",
-    ]
+        "PLEX_ACCOUNT_TOKEN": True,
+
+        # Old keys, Leave comment why deprecated
+        "PLEX_FALLBACKURL": "Legacy, used before 0.18.21",
+        "PLEX_BASEURL": "Unused after 0.24.0, moved to servers.yml",
+        "PLEX_LOCALURL": "Unused after 0.24.0, moved to servers.yml",
+        "PLEX_TOKEN": "Unused after 0.24.0, moved to servers.yml",
+    }
 
     initialized = False
     config_file = config_file
@@ -126,7 +129,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         override = self["config"]["dotenv_override"]
 
         load_dotenv(self.env_file, override=override)
-        for key in self.env_keys:
+        for key in self.env_keys.keys():
             value = getenv(key)
             if value == "-" or value == "None" or value == "":
                 value = None
@@ -146,7 +149,8 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         If print is None, return the produced string instead.
         """
         data = dict(self)
-        for key in self.env_keys:
+        # Remove env variables. They are usually secrets
+        for key in self.env_keys.keys():
             del data[key]
         return data
 
@@ -160,7 +164,11 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
     def save(self):
         with open(self.env_file, "w") as txt:
             txt.write("# This is .env file for PlexTraktSync\n")
-            for key in self.env_keys:
+            for key, value in self.env_keys.items():
+                if value is not True:
+                    # Include deprecation message
+                    txt.write(f"# {key}: {value}\n")
+
                 if key in self and self[key] is not None:
                     txt.write(f"{key}={self[key]}\n")
                 else:
