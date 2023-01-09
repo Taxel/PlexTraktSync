@@ -16,11 +16,21 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         "PLEX_FALLBACKURL",  # legacy, used before 0.18.21
         "PLEX_LOCALURL",     # unused after 0.24.0
         "PLEX_TOKEN",        # unused after 0.24.0
-        "PLEX_OWNER_TOKEN",
-        "PLEX_ACCOUNT_TOKEN",
-        "PLEX_USERNAME",
         "PLEX_SERVER",       # new in 0.24.0
+        "PLEX_USERNAME",
         "TRAKT_USERNAME",
+
+        # The token of the PMS administrator/owner.
+        # This is stored/used only for managed users (home users) so the script
+        # can get their watchlist from Plex online servers. Managed users don't
+        # have a Plex account, they're local users.
+        "PLEX_OWNER_TOKEN",
+
+        # The account token of the Plex user who have a Plex account but don't
+        # own the PMS (use it as shared library).
+        # This is stored/used only if user uses a shared PMS.
+        # Needed to fetch its watchlist from Plex online servers.
+        "PLEX_ACCOUNT_TOKEN",
     ]
 
     initialized = False
