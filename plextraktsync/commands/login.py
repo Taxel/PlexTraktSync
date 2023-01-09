@@ -16,6 +16,10 @@ def ensure_login():
 
 
 def login():
-    click.echo(highlight("Checking Plex and Trakt logins"))
+    click.echo(highlight("Checking Plex and Trakt login credentials existence"))
+    click.echo("")
+    click.echo("It will not test if the credentials are valid, only that they are present.")
+    click.echo('If you need to re-login use "plex-login" or "trakt-login" commands respectively.')
+    click.echo("")
     ensure_login()
-    click.echo(success("Success!"))
+    click.echo(success("Done!"))
