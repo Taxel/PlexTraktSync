@@ -80,6 +80,9 @@ class ProgressBar(dict):
         )
         progress.start()
 
+        import atexit
+        atexit.register(lambda: progress.stop())
+
         return progress
 
     def __missing__(self, m: PlexLibraryItem):
