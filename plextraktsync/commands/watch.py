@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from collections import UserDict
 from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.events import (ActivityNotification, Error,
                                   PlaySessionStateNotification, TimelineEntry)
 from plextraktsync.factory import factory, logging
+from plextraktsync.trakt.ScrobblerProxy import ScrobblerProxy
 
 if TYPE_CHECKING:
     from typing import Union
@@ -20,15 +22,18 @@ if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
 
 
-class ScrobblerCollection(dict):
+class ScrobblerCollection(UserDict):
     def __init__(self, trakt: TraktApi, threshold=80):
         super().__init__()
         self.trakt = trakt
         self.threshold = threshold
 
-    def __missing__(self, key: Union[Movie, TVEpisode]):
-        self[key] = value = self.trakt.scrobbler(key, self.threshold)
-        return value
+    def __missing__(self, media: Union[Movie, TVEpisode]):
+        scrobbler = media.scrobble(0, None, None)
+        proxy = ScrobblerProxy(scrobbler, self.threshold)
+        self[media] = proxy
+
+        return proxy
 
 
 class SessionCollection(dict):

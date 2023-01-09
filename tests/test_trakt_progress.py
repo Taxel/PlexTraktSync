@@ -2,7 +2,7 @@
 from trakt.tv import TVShow
 
 from plextraktsync.pytrakt_extensions import ShowProgress
-from plextraktsync.trakt_api import TraktApi
+from plextraktsync.trakt.TraktApi import TraktApi
 from tests.conftest import factory
 
 trakt: TraktApi = factory.trakt_api
