@@ -28,7 +28,6 @@ if TYPE_CHECKING:
 
     from plextraktsync.plex.PlexGuid import PlexGuid
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
-    from plextraktsync.trakt.TraktBatch import TraktBatch
 
 
 class TraktApi:
@@ -45,22 +44,6 @@ class TraktApi:
         trakt.core.AUTH_METHOD = trakt.core.DEVICE_AUTH
 
         return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
-
-    @cached_property
-    def batch_collection_add(self):
-        return self.trakt_batch("collection", add=True)
-
-    @cached_property
-    def batch_collection_del(self):
-        return self.trakt_batch("collection", add=False)
-
-    @cached_property
-    def batch_watchlist_add(self):
-        return self.trakt_batch("watchlist", add=True)
-
-    @cached_property
-    def batch_watchlist_del(self):
-        return self.trakt_batch("watchlist", add=False)
 
     @cached_property
     @rate_limit()
@@ -187,10 +170,7 @@ class TraktApi:
         else:
             raise ValueError(f"Unsupported media type: {m.media_type}")
 
-        if batch:
-            self.batch_collection_add.add_to_items(m.media_type, item)
-        else:
-            trakt.sync.add_to_collection(item)
+        self.queue.add_to_collection((m.media_type, item))
 
     def add_to_watchlist(self, m, batch=False):
         if m.media_type in ["movies", "shows"]:
@@ -201,10 +181,8 @@ class TraktApi:
             )
         else:
             raise ValueError(f"Unsupported media type for watchlist: {m.media_type}")
-        if batch:
-            self.batch_watchlist_add.add_to_items(m.media_type, item)
-        else:
-            trakt.sync.add_to_watchlist(item)
+
+        self.queue.add_to_watchlist((m.media_type, item))
 
     def remove_from_watchlist(self, m, batch=False):
         if m.media_type in ["movies", "shows"]:
@@ -216,10 +194,7 @@ class TraktApi:
         else:
             raise ValueError(f"Unsupported media type for watchlist: {m.media_type}")
 
-        if batch:
-            self.batch_watchlist_del.add_to_items(m.media_type, item)
-        else:
-            trakt.sync.remove_from_watchlist(item)
+        self.queue.remove_from_watchlist((m.media_type, item))
 
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
@@ -298,6 +273,6 @@ class TraktApi:
             return self.find_by_guid(guid)
         return None
 
-    @staticmethod
-    def trakt_batch(*args, **kwargs) -> TraktBatch:
-        return factory.trakt_batch(*args, **kwargs)
+    @cached_property
+    def queue(self):
+        return factory.queue
