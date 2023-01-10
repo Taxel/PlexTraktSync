@@ -13,9 +13,9 @@ def clear_collections(confirm, dry_run):
     for movie in trakt.movie_collection:
         logger.info(f"Deleting: {movie}")
         if not dry_run:
-            trakt.remove_from_library(movie)
+            trakt.remove_from_collection(movie)
 
     for show in trakt.show_collection:
         logger.info(f"Deleting: {show}")
         if not dry_run:
-            trakt.remove_from_library(show)
+            trakt.remove_from_collection(show)
