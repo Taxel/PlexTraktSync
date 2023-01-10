@@ -177,7 +177,7 @@ def plex_login():
 @click.option(
     "--sync",
     "sync_option",
-    type=click.Choice(["all", "movies", "tv", "shows"], case_sensitive=False),
+    type=click.Choice(["all", "movies", "tv", "shows", "watchlist"], case_sensitive=False),
     default="all",
     show_default=True,
     help="Specify what to sync",

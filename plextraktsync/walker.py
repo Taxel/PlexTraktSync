@@ -23,20 +23,24 @@ if TYPE_CHECKING:
 class WalkConfig:
     walk_movies = True
     walk_shows = True
+    walk_watchlist = True
     library = []
     show = []
     movie = []
     id = []
 
-    def __init__(self, movies=True, shows=True):
+    def __init__(self, movies=True, shows=True, watchlist=True):
         self.walk_movies = movies
         self.walk_shows = shows
+        self.walk_watchlist = watchlist
 
-    def update(self, movies=None, shows=None):
+    def update(self, movies=None, shows=None, watchlist=None):
         if movies is not None:
             self.walk_movies = movies
         if shows is not None:
             self.walk_shows = shows
+        if watchlist is not None:
+            self.walk_watchlist = watchlist
 
         return self
 
@@ -72,6 +76,9 @@ class WalkConfig:
 
         # Full sync of movies or shows
         if self.walk_movies or self.walk_shows:
+            return True
+
+        if self.walk_watchlist:
             return True
 
         return False

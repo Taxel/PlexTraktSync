@@ -32,6 +32,7 @@ def sync(
 
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]
+    watchlist = sync_option in ["all", "watchlist"]
 
     config = factory.run_config.update(
         dry_run=dry_run,
@@ -49,7 +50,7 @@ def sync(
         config.update(batch_delay=batch_delay)
 
     ensure_login()
-    wc = factory.walk_config.update(movies=movies, shows=shows)
+    wc = factory.walk_config.update(movies=movies, shows=shows, watchlist=watchlist)
     w = factory.walker
 
     if ids:
