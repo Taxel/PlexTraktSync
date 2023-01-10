@@ -6,7 +6,6 @@ import trakt
 import trakt.movies
 import trakt.sync
 import trakt.users
-from deprecated import deprecated
 from trakt.errors import ForbiddenException, OAuthException
 
 from plextraktsync import pytrakt_extensions
@@ -84,10 +83,6 @@ class TraktApi:
     @retry()
     def show_collection(self):
         return self.me.show_collection
-
-    @deprecated("Use remove_from_collection")
-    def remove_from_library(self, media: TraktMedia):
-        self.remove_from_collection(media)
 
     def remove_from_collection(self, m: TraktMedia):
         if m.media_type not in ["movies", "shows"]:
