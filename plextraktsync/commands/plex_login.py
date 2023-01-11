@@ -130,7 +130,7 @@ def prompt_server(servers: List[MyPlexResource]):
 
     owned_servers = [s for s in servers if s.owned]
     unowned_servers = [s for s in servers if not s.owned]
-    sorter = partial(sorted, key=lambda s: s.lastSeenAt)
+    sorter = partial(sorted, key=lambda s: s.lastSeenAt, reverse=True)
 
     server_names = []
     if owned_servers:
