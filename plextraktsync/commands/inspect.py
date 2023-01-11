@@ -41,7 +41,7 @@ def inspect_media(id):
     if not pm.is_legacy_agent:
         print(f"Media.Guids: {media.guids}")
 
-    if media.type in ["episode", "movie"]:
+    if not pm.is_online and media.type in ["episode", "movie"]:
         audio = pm.audio_streams[0]
         print(f"Audio: '{audio.audioChannelLayout}', '{audio.displayTitle}'")
 

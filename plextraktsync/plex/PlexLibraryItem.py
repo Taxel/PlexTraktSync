@@ -159,6 +159,8 @@ class PlexLibraryItem:
         """
         Set to 1.0, 2.0, 2.1, 3.0, 3.1, 4.1, 5.1, 6.1, 7.1, 9.1, or 10.1
         """
+        if self.is_online:
+            return None
 
         try:
             media = self.item.media[0]
@@ -174,6 +176,9 @@ class PlexLibraryItem:
 
     @property
     def audio_codec(self):
+        if self.is_online:
+            return None
+
         try:
             media = self.item.media[0]
             codec = media.audioCodec
@@ -188,6 +193,8 @@ class PlexLibraryItem:
         """
         Set to uhd_4k, hd_1080p, hd_1080i, hd_720p, sd_480p, sd_480i, sd_576p, or sd_576i.
         """
+        if self.is_online:
+            return None
         try:
             stream = self.video_streams[0]
             title = stream.displayTitle.split(" ")[0]
@@ -232,6 +239,9 @@ class PlexLibraryItem:
         """
         Set to dolby_vision, hdr10, hdr10_plus, or hlg
         """
+        if self.is_online:
+            return None
+
         try:
             stream = self.video_streams[0]
             colorTrc = stream.colorTrc
@@ -298,8 +308,7 @@ class PlexLibraryItem:
         return f"<{guid.provider}:{guid.id}:{plex}>"
 
     def to_json(self):
-        collected_at = None if not self.collected_at else timestamp(
-            self.collected_at)
+        collected_at = None if not self.collected_at else timestamp(self.collected_at)
         metadata = {
             "collected_at": collected_at,
             "media_type": "digital",
