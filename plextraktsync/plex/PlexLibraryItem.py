@@ -30,6 +30,12 @@ class PlexLibraryItem:
     def is_legacy_agent(self):
         return not self.item.guid.startswith("plex://")
 
+    @cached_property
+    def is_online(self):
+        # Use __dict__ access to prevent reloads:
+        # https://github.com/pkkid/python-plexapi/pull/1093
+        return self.item.__dict__["librarySectionID"] is None
+
     @retry()
     def get_guids(self):
         return self.item.guids
