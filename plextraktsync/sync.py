@@ -65,7 +65,7 @@ class Sync:
             async for movie in walker.find_movies():
                 await self.sync_collection(movie, dry_run=dry_run)
                 await self.sync_ratings(movie, dry_run=dry_run)
-                self.sync_watched(movie, dry_run=dry_run)
+                await self.sync_watched(movie, dry_run=dry_run)
                 if not is_partial:
                     listutil.addPlexItemToLists(movie)
                     if self.config.clear_collected:
@@ -79,7 +79,7 @@ class Sync:
             async for episode in walker.find_episodes():
                 await self.sync_collection(episode, dry_run=dry_run)
                 await self.sync_ratings(episode, dry_run=dry_run)
-                self.sync_watched(episode, dry_run=dry_run)
+                await self.sync_watched(episode, dry_run=dry_run)
                 if not is_partial:
                     listutil.addPlexItemToLists(episode)
                     if self.config.clear_collected:
@@ -172,7 +172,7 @@ class Sync:
             if not dry_run:
                 m.plex_rate()
 
-    def sync_watched(self, m: Media, dry_run=False):
+    async def sync_watched(self, m: Media, dry_run=False):
         if not self.config.sync_watched_status:
             return
 
