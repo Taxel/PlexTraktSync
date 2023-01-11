@@ -42,6 +42,10 @@ class PlexApi:
     def plex_base_url(self):
         return f"https://app.plex.tv/desktop/#!/server/{self.plex.machineIdentifier}"
 
+    @property
+    def plex_discover_base_url(self):
+        return "https://app.plex.tv/desktop/#!/provider/tv.plex.provider.discover"
+
     @flatten_list
     def movie_sections(self, library=None) -> List[PlexLibrarySection]:
         for section in self.library_sections.values():
