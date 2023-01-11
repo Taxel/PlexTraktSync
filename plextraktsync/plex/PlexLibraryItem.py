@@ -286,7 +286,7 @@ class PlexLibraryItem:
         # https://github.com/pkkid/python-plexapi/issues/1072
         if not isinstance(self.item.ratingKey, int):
             parts = plex.split(":")
-            parts[1] = self.item._data.attrib.get("ratingKey")
+            parts[1] = self.item.guid.rsplit('/', 1)[-1]
             plex = ":".join(parts)
 
         return f"<{guid.provider}:{guid.id}:{plex}>"
