@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from functools import cached_property
 from typing import TYPE_CHECKING
 
@@ -63,9 +64,11 @@ class Sync:
         if self.config.need_library_walk:
             movie_trakt_ids = set()
             async for movie in walker.find_movies():
-                await self.sync_collection(movie, dry_run=dry_run)
-                await self.sync_ratings(movie, dry_run=dry_run)
-                await self.sync_watched(movie, dry_run=dry_run)
+                await asyncio.gather(*[
+                    self.sync_collection(movie, dry_run=dry_run),
+                    self.sync_ratings(movie, dry_run=dry_run),
+                    self.sync_watched(movie, dry_run=dry_run),
+                ])
                 if not is_partial:
                     listutil.addPlexItemToLists(movie)
                     if self.config.clear_collected:
@@ -77,9 +80,11 @@ class Sync:
             shows = set()
             episode_trakt_ids = set()
             async for episode in walker.find_episodes():
-                await self.sync_collection(episode, dry_run=dry_run)
-                await self.sync_ratings(episode, dry_run=dry_run)
-                await self.sync_watched(episode, dry_run=dry_run)
+                await asyncio.gather(*[
+                    self.sync_collection(episode, dry_run=dry_run),
+                    self.sync_ratings(episode, dry_run=dry_run),
+                    self.sync_watched(episode, dry_run=dry_run),
+                ])
                 if not is_partial:
                     listutil.addPlexItemToLists(episode)
                     if self.config.clear_collected:
