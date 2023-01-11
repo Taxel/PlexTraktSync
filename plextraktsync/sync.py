@@ -64,7 +64,7 @@ class Sync:
             movie_trakt_ids = set()
             async for movie in walker.find_movies():
                 await self.sync_collection(movie, dry_run=dry_run)
-                self.sync_ratings(movie, dry_run=dry_run)
+                await self.sync_ratings(movie, dry_run=dry_run)
                 self.sync_watched(movie, dry_run=dry_run)
                 if not is_partial:
                     listutil.addPlexItemToLists(movie)
@@ -78,7 +78,7 @@ class Sync:
             episode_trakt_ids = set()
             async for episode in walker.find_episodes():
                 await self.sync_collection(episode, dry_run=dry_run)
-                self.sync_ratings(episode, dry_run=dry_run)
+                await self.sync_ratings(episode, dry_run=dry_run)
                 self.sync_watched(episode, dry_run=dry_run)
                 if not is_partial:
                     listutil.addPlexItemToLists(episode)
@@ -93,7 +93,7 @@ class Sync:
                 self.clear_collected(self.trakt.episodes_collection, episode_trakt_ids)
 
             async for show in walker.walk_shows(shows, title="Syncing show ratings"):
-                self.sync_ratings(show, dry_run=dry_run)
+                await self.sync_ratings(show, dry_run=dry_run)
 
         if self.config.update_plex_wl_as_pl or self.config.sync_liked_lists:
             if is_partial:
@@ -127,7 +127,7 @@ class Sync:
         if not dry_run:
             m.add_to_collection()
 
-    def sync_ratings(self, m: Media, dry_run=False):
+    async def sync_ratings(self, m: Media, dry_run=False):
         if not self.config.sync_ratings:
             return
 
