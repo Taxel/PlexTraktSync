@@ -209,7 +209,7 @@ class Media:
         self.plex_api.rate(self.plex.item, self.trakt_rating)
 
     def plex_history(self, **kwargs):
-        if self.plex.is_online:
+        if self.plex.is_discover:
             return []
         return self.plex_api.history(self.plex.item, **kwargs)
 
