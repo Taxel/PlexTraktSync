@@ -107,7 +107,7 @@ class PlexLibraryItem:
 
     @retry(retries=1)
     def rating(self, show_id: int = None):
-        if self.plex is not None:
+        if not self.is_online and self.plex is not None:
             return self.plex.ratings.get(self, show_id)
         else:
             user_rating = self.item.userRating
