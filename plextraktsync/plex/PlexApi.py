@@ -42,6 +42,10 @@ class PlexApi:
     def plex_base_url(self):
         return f"https://app.plex.tv/desktop/#!/server/{self.plex.machineIdentifier}"
 
+    @property
+    def plex_discover_base_url(self):
+        return "https://app.plex.tv/desktop/#!/provider/tv.plex.provider.discover"
+
     @flatten_list
     def movie_sections(self, library=None) -> List[PlexLibrarySection]:
         for section in self.library_sections.values():
@@ -64,7 +68,13 @@ class PlexApi:
     @retry()
     def fetch_item(self, key: Union[int, str]) -> Optional[PlexLibraryItem]:
         try:
-            media = self.plex.library.fetchItem(key)
+            if isinstance(key, str) and key.startswith("https://metadata.provider.plex.tv/library/metadata/"):
+                # https://github.com/pkkid/python-plexapi/issues/1091
+                account = self.account
+                media = account.fetchItem(key)
+                media = account._toOnlineMetadata(media)[0]
+            else:
+                media = self.plex.library.fetchItem(key)
         except NotFound:
             return None
 
@@ -82,7 +92,8 @@ class PlexApi:
         return self.fetch_item(key)
 
     def media_url(self, m: PlexLibraryItem):
-        return f"{self.plex_base_url}/details?key={m.item.key}"
+        base_url = self.plex_discover_base_url if m.is_discover else self.plex_base_url
+        return f"{base_url}/details?key={m.item.key}"
 
     def download(self, m: Union[SubtitleStream], **kwargs):
         url = self.plex.url(m.key)

@@ -6,14 +6,19 @@ def id_from_url(url: str):
     Extracts id from urls like:
       https://app.plex.tv/desktop/#!/server/abcdefg/details?key=%2Flibrary%2Fmetadata%2F13202
       https://app.plex.tv/desktop/#!/server/abcdefg/playHistory?filters=metadataItemID%3D6041&filterTitle=&isParentType=false
+      https://app.plex.tv/desktop/#!/provider/tv.plex.provider.discover/details?key=%2Flibrary%2Fmetadata%2F5d7768532e80df001ebe18e7
     """
     result = urlparse(url)
     if result.fragment[0] == "!":
-        parsed = parse_qs(urlparse(result.fragment).query)
+        fragment = urlparse(result.fragment)
+        parsed = parse_qs(fragment.query)
         if "key" in parsed:
             key = ",".join(parsed["key"])
             if key.startswith("/library/metadata/"):
-                return int(key[len("/library/metadata/"):])
+                id = key[len("/library/metadata/"):]
+                if fragment.path == '!/provider/tv.plex.provider.discover/details':
+                    return f"https://metadata.provider.plex.tv/library/metadata/{id}"
+                return int(id)
         if "filters" in parsed:
             filters = parse_qs(parsed["filters"][0])
             if "metadataItemID" in filters:
