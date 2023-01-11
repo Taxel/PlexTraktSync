@@ -64,7 +64,13 @@ class PlexApi:
     @retry()
     def fetch_item(self, key: Union[int, str]) -> Optional[PlexLibraryItem]:
         try:
-            media = self.plex.library.fetchItem(key)
+            if isinstance(key, str) and key.startswith("https://metadata.provider.plex.tv/library/metadata/"):
+                # https://github.com/pkkid/python-plexapi/issues/1091
+                account = self.account
+                media = account.fetchItem(key)
+                media = account._toOnlineMetadata(media)[0]
+            else:
+                media = self.plex.library.fetchItem(key)
         except NotFound:
             return None
 
