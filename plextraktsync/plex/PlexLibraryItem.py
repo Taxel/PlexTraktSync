@@ -87,6 +87,9 @@ class PlexLibraryItem:
         if not self.plex:
             raise RuntimeError("Need plex property to retrieve library")
 
+        if self.is_online:
+            return None
+
         if self.item.librarySectionID not in self.plex.library_sections:
             return None
 
