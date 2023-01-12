@@ -17,6 +17,8 @@ class FilterRule:
     Structure to hold log filters
     """
 
+    # filter by name
+    name: str = None
     # filter by level
     level: bool = False
     # filter by message
