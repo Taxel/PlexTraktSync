@@ -17,6 +17,16 @@ logging:
   console_time: false
   debug: false
   filename: plextraktsync.log
+  # Additional logger names to apply filtering
+  filter_loggers:
+#    - plexapi
+#    - requests_cache.backends
+#    - requests_cache.backends.base
+#    - requests_cache.backends.sqlite
+#    - requests_cache.policy.actions
+#    - requests_cache.session
+#    - trakt.core
+#    - urllib3.connectionpool
   filter:
 #    # Filter out all messages with level WARNING
 #    - level: WARNING
