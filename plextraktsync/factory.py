@@ -210,7 +210,11 @@ class Factory:
         config = self.config
 
         from plextraktsync.logger.filter import LoggerFilter
-        logger.addFilter(LoggerFilter(config["logging"]["filter"], logger))
+        filter = LoggerFilter(config["logging"]["filter"], logger)
+        logger.addFilter(filter)
+
+        for name in config["logging"]["filter_loggers"] or []:
+            self.logging.getLogger(name).addFilter(filter)
 
         return logger
 
