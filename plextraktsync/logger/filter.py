@@ -61,6 +61,12 @@ class LoggerFilter(Filter):
                     matched = True
                 else:
                     continue
+            # Filter by name
+            if rule.name:
+                if rule.name == record.name:
+                    matched = True
+                else:
+                    continue
             # Filter by message
             if rule.message:
                 if rule.message in message:
