@@ -6,7 +6,6 @@ import trakt
 import trakt.movies
 import trakt.sync
 import trakt.users
-from deprecated import deprecated
 from trakt.errors import ForbiddenException, OAuthException
 
 from plextraktsync import pytrakt_extensions
@@ -85,19 +84,15 @@ class TraktApi:
     def show_collection(self):
         return self.me.show_collection
 
-    @deprecated("Use remove_from_collection")
-    def remove_from_library(self, media: TraktMedia):
-        self.remove_from_collection(media)
-
     def remove_from_collection(self, m: TraktMedia):
-        if m.media_type in ["movies", "shows"]:
-            item = dict(
-                title=m.title,
-                year=m.year,
-                **m.ids,
-            )
-        else:
+        if m.media_type not in ["movies", "shows"]:
             raise ValueError(f"Unsupported media type: {m.media_type}")
+
+        item = dict(
+            title=m.title,
+            year=m.year,
+            **m.ids,
+        )
 
         self.queue.remove_from_collection((m.media_type, item))
 
@@ -168,7 +163,7 @@ class TraktApi:
         else:
             raise RuntimeError(f"mark_watched: Unsupported media type: {m.media_type}")
 
-    def add_to_collection(self, m, pm: PlexLibraryItem, batch=False):
+    def add_to_collection(self, m, pm: PlexLibraryItem):
         if m.media_type == "movies":
             item = dict(
                 title=m.title,
@@ -183,27 +178,27 @@ class TraktApi:
 
         self.queue.add_to_collection((m.media_type, item))
 
-    def add_to_watchlist(self, m, batch=False):
-        if m.media_type in ["movies", "shows"]:
-            item = dict(
-                title=m.title,
-                year=m.year,
-                **m.ids,
-            )
-        else:
+    def add_to_watchlist(self, m):
+        if m.media_type not in ["movies", "shows"]:
             raise ValueError(f"Unsupported media type for watchlist: {m.media_type}")
+
+        item = dict(
+            title=m.title,
+            year=m.year,
+            **m.ids,
+        )
 
         self.queue.add_to_watchlist((m.media_type, item))
 
-    def remove_from_watchlist(self, m, batch=False):
-        if m.media_type in ["movies", "shows"]:
-            item = dict(
-                title=m.title,
-                year=m.year,
-                **m.ids,
-            )
-        else:
+    def remove_from_watchlist(self, m):
+        if m.media_type not in ["movies", "shows"]:
             raise ValueError(f"Unsupported media type for watchlist: {m.media_type}")
+
+        item = dict(
+            title=m.title,
+            year=m.year,
+            **m.ids,
+        )
 
         self.queue.remove_from_watchlist((m.media_type, item))
 

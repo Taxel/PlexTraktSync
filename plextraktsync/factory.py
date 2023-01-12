@@ -261,18 +261,6 @@ class Factory:
 
         return Timer(self.run_config.batch_delay) if self.run_config.batch_delay else None
 
-    @cached_property
-    def trakt_batch(self):
-        from functools import partial
-
-        from plextraktsync.trakt.TraktBatch import TraktBatch
-
-        return partial(
-            TraktBatch,
-            trakt=self.trakt_api,
-            timer=self.batch_delay_timer,
-        )
-
 
 factory = Factory()
 logger = factory.logger
