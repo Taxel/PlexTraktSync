@@ -17,6 +17,16 @@ logging:
   console_time: false
   debug: false
   filename: plextraktsync.log
+  # Additional logger names to apply filtering
+  filter_loggers:
+#    - plexapi
+#    - requests_cache.backends
+#    - requests_cache.backends.base
+#    - requests_cache.backends.sqlite
+#    - requests_cache.policy.actions
+#    - requests_cache.session
+#    - trakt.core
+#    - urllib3.connectionpool
   filter:
 #    # Filter out all messages with level WARNING
 #    - level: WARNING
@@ -26,6 +36,12 @@ logging:
 #    - message: "because provider local has no external Id"
 #    - message: "because provider none has no external Id"
 #    - message: "Retry using search for specific Plex Episode"
+#    # Filter out messages by requests_cache
+#    - name: requests_cache.backends
+#    - name: requests_cache.backends.base
+#    - name: requests_cache.backends.sqlite
+#    - name: requests_cache.policy.actions
+#    - name: requests_cache.session
 
 # settings for 'sync' command (default)
 sync:

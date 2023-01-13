@@ -17,6 +17,8 @@ class FilterRule:
     Structure to hold log filters
     """
 
+    # filter by name
+    name: str = None
     # filter by level
     level: bool = False
     # filter by message
@@ -28,16 +30,15 @@ class LoggerFilter(Filter):
     def __init__(self, rules: List[Dict], logger: Logger):
         super().__init__()
         self.logger = logger
-        self._rules = rules or []
+        self.rules = self.build_rules(rules or [])
 
     @cached_property
     def nrules(self):
         return len(self.rules)
 
-    @cached_property
-    def rules(self):
+    def build_rules(self, rules):
         filters = []
-        for rule in self._rules:
+        for rule in rules:
             try:
                 f = FilterRule(**rule)
             except TypeError as e:
@@ -57,6 +58,12 @@ class LoggerFilter(Filter):
             # Filter by level
             if rule.level:
                 if rule.level == record.levelname:
+                    matched = True
+                else:
+                    continue
+            # Filter by name
+            if rule.name:
+                if rule.name == record.name:
                     matched = True
                 else:
                     continue

@@ -208,9 +208,24 @@ class Factory:
     def logger(self):
         logger = self.logging.getLogger("PlexTraktSync")
         config = self.config
+        loggers = [
+            "PlexTraktSync",
+            "PlexTraktSync.BackgroundTask",
+            "PlexTraktSync.EventDispatcher",
+            "PlexTraktSync.PlexServerConnection",
+            "PlexTraktSync.ScrobblerProxy",
+            "PlexTraktSync.Timer",
+            "PlexTraktSync.TraktBatchWorker",
+            "PlexTraktSync.WatchStateUpdater",
+            "PlexTraktSync.WebSocketListener",
+        ]
+        loggers.extend(config["logging"]["filter_loggers"] or [])
 
         from plextraktsync.logger.filter import LoggerFilter
-        logger.addFilter(LoggerFilter(config["logging"]["filter"], logger))
+        filter = LoggerFilter(config["logging"]["filter"], logger)
+
+        for name in loggers:
+            self.logging.getLogger(name).addFilter(filter)
 
         return logger
 
