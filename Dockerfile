@@ -1,6 +1,5 @@
 # syntax = docker/dockerfile:1.3-labs
 FROM python:3.11-alpine3.16 AS base
-
 WORKDIR /app
 
 # Create minimal layer with extra tools
@@ -14,12 +13,24 @@ install -p /usr/lib/libcap-ng.so.0 ./usr/lib
 install -p /usr/sbin/usermod /usr/sbin/groupmod ./usr/bin
 eot
 
+FROM base AS wheels
+# Download wheels/sources
+RUN \
+	--mount=type=cache,id=pip,target=/root/.cache/pip \
+	--mount=type=bind,source=./requirements.txt,target=./requirements.txt \
+	pip download --dest /wheels -r requirements.txt
+# Build missing wheels
+RUN \
+	--mount=type=cache,id=pip,target=/root/.cache/pip \
+	pip wheel $(ls /wheels/*.gz /wheels/*.zip 2>/dev/null) --wheel-dir=/wheels
+
 # Install app dependencies
 FROM base AS build
 RUN apk add git
 RUN pip install pipenv
-COPY Pipfile* ./
-RUN pipenv install --deploy
+RUN \
+	--mount=type=bind,from=wheels,source=/wheels,target=/wheels \
+	pipenv run pip install /wheels/*.whl
 
 FROM base AS compile
 ARG APP_VERSION=$APP_VERSION
