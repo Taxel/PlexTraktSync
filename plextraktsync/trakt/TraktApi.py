@@ -6,6 +6,7 @@ import trakt
 import trakt.movies
 import trakt.sync
 import trakt.users
+from click import ClickException
 from trakt.errors import ForbiddenException, OAuthException
 
 from plextraktsync import pytrakt_extensions
@@ -53,7 +54,7 @@ class TraktApi:
             return trakt.users.User("me")
         except (OAuthException, ForbiddenException) as e:
             logger.fatal(f"Trakt authentication error: {str(e)}")
-            raise e
+            raise ClickException(e)
 
     @cached_property
     @rate_limit()
