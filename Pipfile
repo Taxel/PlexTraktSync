@@ -27,6 +27,7 @@ rich = "==13.0.1"
 tqdm = "==4.64.1"
 urllib3 = "==1.26.14"
 websocket-client = "==1.4.2"
+charset-normalizer = "==2.1.1"
 
 [requires]
 python_version = "3"
