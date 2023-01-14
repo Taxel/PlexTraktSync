@@ -5,9 +5,12 @@ from typing import TYPE_CHECKING
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logger
+from plextraktsync.trakt.types import TraktMedia
 from plextraktsync.trakt_list_util import TraktListUtil
 
 if TYPE_CHECKING:
+    from typing import Iterable, Set
+
     from plextraktsync.config.Config import Config
     from plextraktsync.media import Media
     from plextraktsync.plex.PlexApi import PlexApi
@@ -287,3 +290,16 @@ class Sync:
         if len(self.trakt_wl):
             for m in walker.media_from_traktlist(self.trakt_wl):
                 self.watchlist_sync_item(m, dry_run)
+
+    def clear_collected(self, existing_items: Iterable[TraktMedia], keep_ids: Set[int], dry_run=False):
+        from plextraktsync.trakt.trakt_set import trakt_set
+
+        existing_ids = trakt_set(existing_items)
+        delete_ids = existing_ids - keep_ids
+        delete_items = (tm for tm in existing_items if tm.trakt in delete_ids)
+
+        n = len(delete_ids)
+        for i, tm in enumerate(delete_items, start=1):
+            logger.info(f"Remove from Trakt collection ({i}/{n}): {tm}")
+            if not dry_run:
+                self.trakt.remove_from_collection(tm)
