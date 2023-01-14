@@ -22,6 +22,18 @@ class Factory:
                 pass
 
     @cached_property
+    def console(self):
+        from rich.console import Console
+
+        from plextraktsync.rich_addons import RichHighlighter
+
+        return Console(highlighter=RichHighlighter())
+
+    @cached_property
+    def print(self):
+        return self.console.print
+
+    @cached_property
     def trakt_api(self):
         from plextraktsync.trakt.TraktApi import TraktApi
 
