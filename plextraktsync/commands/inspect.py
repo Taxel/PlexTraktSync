@@ -28,7 +28,11 @@ def inspect_media(id):
         print(f"Library: {pm.library.title}")
 
     url = plex.media_url(pm)
-    print(f"URL: {url}")
+    print(f"Plex Web URL: {url}")
+
+    if not pm.is_discover and not pm.is_legacy_agent:
+        url = plex.media_url(pm, discover=True)
+        print(f"Discover URL: {url}")
 
     media = pm.item
     print(f"Title: {media.title}")
