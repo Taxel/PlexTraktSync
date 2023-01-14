@@ -104,4 +104,4 @@ def cache(sort: str, limit: int, reverse: bool, expire: bool, url: str):
     print("URLs:")
     sorted = get_sorted_cache(session, sort, reverse)
     for i, r in limit_iterator(sorted, limit):
-        print(f"- {i + 1:3d}. {r}")
+        print(f"- {i + 1:3d}. {r}", crop=False, overflow="ignore")
