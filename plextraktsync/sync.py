@@ -122,6 +122,9 @@ class Sync:
         listutil = TraktListUtil()
         is_partial = walker.is_partial
 
+        if is_partial and self.config.clear_collected:
+            logger.warning("Running partial library sync. Clear collected will be disabled.")
+
         if self.config.update_plex_wl_as_pl:
             if is_partial:
                 logger.warning("Running partial library sync. Watchlist as playlist won't update because it needs full library sync.")
