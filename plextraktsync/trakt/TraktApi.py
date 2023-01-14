@@ -22,10 +22,10 @@ from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
 from plextraktsync.trakt.types import TraktMedia
 
 if TYPE_CHECKING:
-    from typing import Optional, Union
+    from typing import Any, Generator, Optional, Union
 
     from trakt.movies import Movie
-    from trakt.tv import TVShow
+    from trakt.tv import TVEpisode, TVShow
 
     from plextraktsync.plex.PlexGuid import PlexGuid
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
@@ -84,6 +84,14 @@ class TraktApi:
     @retry()
     def show_collection(self):
         return self.me.show_collection
+
+    @cached_property
+    @flatten_list
+    def episodes_collection(self) -> List[TVEpisode]:
+        for show in self.show_collection:
+            for season in show.seasons:
+                for episode in season.episodes:
+                    yield episode
 
     def remove_from_collection(self, m: TraktMedia):
         if m.media_type not in ["movies", "shows", "episodes"]:
