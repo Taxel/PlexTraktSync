@@ -1,4 +1,4 @@
-from plextraktsync.console import print
+from plextraktsync.factory import factory
 
 
 def dump(data, print=None):
@@ -14,9 +14,9 @@ def dump(data, print=None):
     print(dump)
 
 
-def config(urls_expire_after: bool, print=print):
-    from plextraktsync.factory import factory
+def config(urls_expire_after: bool):
     config = factory.config
+    print = factory.print
 
     if urls_expire_after:
         print("# HTTP Cache")
