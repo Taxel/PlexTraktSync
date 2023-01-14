@@ -6,7 +6,9 @@ from typing import TYPE_CHECKING
 from plextraktsync.factory import factory
 
 if TYPE_CHECKING:
-    from requests_cache import CachedSession
+    from typing import Any, Generator
+
+    from requests_cache import CachedRequest, CachedSession
 
 
 def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
@@ -20,7 +22,7 @@ def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
     yield from sorter(session.cache.responses.values())
 
 
-def responses_by_url(session, url):
+def responses_by_url(session: CachedSession, url: str) -> Generator[CachedRequest, Any, None]:
     return (
         response for response in session.cache.responses.values() if response.url == url
     )
