@@ -1,10 +1,15 @@
+from __future__ import annotations
+
 import csv
 from dataclasses import dataclass
-from os import PathLike
+from typing import TYPE_CHECKING
 
 from plextraktsync.console import print
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.factory import factory
+
+if TYPE_CHECKING:
+    from os import PathLike
 
 
 def read_csv(file: PathLike):
