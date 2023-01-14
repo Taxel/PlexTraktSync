@@ -33,14 +33,17 @@ class HttpCacheConfig:
     default_policy = {
         # Requests matching these patterns will not be cached
         "*.trakt.tv/shows/*/seasons": DO_NOT_CACHE,
-        "*.trakt.tv/sync/collection/shows": DO_NOT_CACHE,
-        "*.trakt.tv/sync/watched/shows": DO_NOT_CACHE,
+        "*.trakt.tv/sync/collection/shows": "1m",
+        "*.trakt.tv/sync/watched/shows": "1m",
+        "*.trakt.tv/users/*/collection/movies?extended=metadata": "1m",
         "*.trakt.tv/users/*/collection/movies": DO_NOT_CACHE,
-        "*.trakt.tv/users/*/collection/shows": DO_NOT_CACHE,
-        "*.trakt.tv/users/*/ratings/*": DO_NOT_CACHE,
-        "*.trakt.tv/users/*/watched/movies": DO_NOT_CACHE,
-        "*.trakt.tv/users/*/watchlist/movies": DO_NOT_CACHE,
-        "*.trakt.tv/users/*/watchlist/shows": DO_NOT_CACHE,
+        "*.trakt.tv/users/*/collection/shows": "1m",
+        "*.trakt.tv/users/*/ratings/episodes": "1m",
+        "*.trakt.tv/users/*/ratings/shows": "1m",
+        "*.trakt.tv/users/*/ratings/movies": "1m",
+        "*.trakt.tv/users/*/watched/movies": "1m",
+        "*.trakt.tv/users/*/watchlist/movies": "1m",
+        "*.trakt.tv/users/*/watchlist/shows": "1m",
         "*.trakt.tv/users/likes/lists": DO_NOT_CACHE,
         "*.trakt.tv/users/me": DO_NOT_CACHE,
 
@@ -50,7 +53,7 @@ class HttpCacheConfig:
         "metadata.provider.plex.tv/library/metadata/*": LONG_EXPIRY,
         "metadata.provider.plex.tv/library/sections/watchlist/all": DO_NOT_CACHE,
         # plex account
-        "plex.tv/users/account": DO_NOT_CACHE,
+        "plex.tv/users/account": "1m",
 
         # Plex patterns
         # Ratings search
