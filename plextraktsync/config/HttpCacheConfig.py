@@ -107,9 +107,13 @@ class HttpCacheConfig:
         return policy
 
     def serialize(self):
+        policy = self.urls_expire_after.copy()
+        for k in (k for k, v in policy.items() if isinstance(v, timedelta)):
+            policy[k] = str(policy[k])
+
         return {
             "http_cache": {
-                "policy": self.urls_expire_after,
+                "policy": policy,
             },
         }
 
