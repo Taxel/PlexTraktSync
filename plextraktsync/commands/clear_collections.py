@@ -1,11 +1,13 @@
-import click
+
 
 from plextraktsync.factory import factory, logger
 
 
 def clear_collections(confirm, dry_run):
+    print = factory.print
+
     if not confirm and not dry_run:
-        click.echo("You need to pass --confirm or --dry-run option to proceed")
+        print("You need to pass --confirm or --dry-run option to proceed")
         return
 
     trakt = factory.trakt_api
