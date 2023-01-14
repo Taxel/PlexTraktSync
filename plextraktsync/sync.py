@@ -56,6 +56,10 @@ class SyncConfig:
         return self.trakt_to_plex["watchlist"] or self.plex_to_trakt["watchlist"]
 
     @cached_property
+    def clear_collected(self):
+        return self.plex_to_trakt["collection"] and self["plex_to_trakt"]["clear_collected"]
+
+    @cached_property
     def sync_watched_status(self):
         return (
             self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
