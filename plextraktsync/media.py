@@ -43,6 +43,13 @@ class Media:
         self.trakt = trakt
         self._show = None
 
+    @property
+    def title(self):
+        if self.plex:
+            return self.plex.title
+
+        return f"{self.trakt.title} ({self.trakt.year})"
+
     @cached_property
     def media_type(self):
         return self.trakt.media_type
