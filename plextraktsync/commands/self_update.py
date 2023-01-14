@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import click
-
+from plextraktsync.factory import factory
 from plextraktsync.util.execp import execp
 
 if TYPE_CHECKING:
@@ -35,21 +34,23 @@ def pr_number() -> Optional[int]:
 
 
 def self_update(pr: int):
+    print = factory.print
+
     if not pr:
         pr = pr_number()
         if pr:
-            click.echo(f"Installed as pr #{pr}, enabling pr mode")
+            print(f"Installed as pr #{pr}, enabling pr mode")
 
     if pr:
         if has_previous_pr(pr):
             # Uninstall because pipx doesn't update otherwise:
             # - https://github.com/pypa/pipx/issues/902
-            click.echo(f"Uninstalling previous plextraktsync@{pr}")
+            print(f"Uninstalling previous plextraktsync@{pr}")
             execp(f"pipx uninstall plextraktsync@{pr}")
 
-        click.echo(f"Updating PlexTraktSync to the pull request #{pr} version using pipx")
+        print(f"Updating PlexTraktSync to the pull request #{pr} version using pipx")
         execp(f"pipx install --suffix=@{pr} --force git+https://github.com/Taxel/PlexTraktSync@refs/pull/{pr}/head")
         return
 
-    click.echo("Updating PlexTraktSync to the latest version using pipx")
+    print("Updating PlexTraktSync to the latest version using pipx")
     execp("pipx upgrade PlexTraktSync")

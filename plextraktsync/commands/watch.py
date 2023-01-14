@@ -68,15 +68,13 @@ class ProgressBar(dict):
         from rich.progress import (BarColumn, Progress, TextColumn,
                                    TimeRemainingColumn)
 
-        from plextraktsync.console import console
-
         progress = Progress(
             TextColumn("{task.fields[play_state]}  [bold blue]{task.description}", justify="left"),
             BarColumn(bar_width=None),
             "[progress.percentage]{task.percentage:>3.1f}%",
             "•",
             TimeRemainingColumn(),
-            console=console,
+            console=factory.console,
         )
         progress.start()
 

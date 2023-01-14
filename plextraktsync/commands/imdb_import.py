@@ -4,7 +4,6 @@ import csv
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from plextraktsync.console import print
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.factory import factory
 
@@ -65,6 +64,7 @@ class Ratings:
 
 def imdb_import(input: PathLike, dry_run: bool):
     trakt = factory.trakt_api
+    print = factory.print
 
     for r in read_csv(input):
         print(f"Importing [blue]{r.media_type} {r.imdb}[/]: {r.title} ({r.year}), rated at {r.rate_date}")

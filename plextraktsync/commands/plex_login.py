@@ -45,6 +45,8 @@ style = get_style(
     }
 )
 
+print = factory.print
+
 
 @flatten_list
 def server_urls(server: MyPlexResource):
@@ -65,7 +67,7 @@ def server_urls(server: MyPlexResource):
 def myplex_login(username, password):
     while True:
         username = click.prompt(PROMPT_PLEX_USERNAME, type=str, default=username)
-        click.echo(NOTICE_2FA_PASSWORD)
+        print(NOTICE_2FA_PASSWORD)
         password = click.prompt(
             PROMPT_PLEX_PASSWORD,
             type=str,
@@ -76,9 +78,9 @@ def myplex_login(username, password):
         try:
             return MyPlexAccount(username, password)
         except Unauthorized as e:
-            click.echo(error(f"Log in to Plex failed: {e}, Try again."))
+            print(error(f"Log in to Plex failed: '{e}', Try again."))
         except BadRequest as e:
-            click.echo(error(f"Log in to Plex failed: {e}"))
+            print(error(f"Log in to Plex failed: '{e}'"))
             exit(1)
 
 
@@ -87,7 +89,7 @@ def choose_managed_user(account: MyPlexAccount):
     if not users:
         return None
 
-    click.echo(success("Managed user(s) found:"))
+    print(success("Managed user(s) found:"))
     users = sorted(users)
     users.insert(0, account.username)
     user = inquirer.select(
@@ -121,12 +123,12 @@ def prompt_server(servers: List[MyPlexResource]):
 
         product = decorator(f"{s.product}/{s.productVersion}")
         platform = decorator(f"{s.device}: {s.platform}/{s.platformVersion}")
-        click.echo(
+        print(
             f"- {highlight(s.name)}: [Last seen: {decorator(str(s.lastSeenAt))}, Server: {product} on {platform}]"
         )
         c: ResourceConnection
         for c in s.connections:
-            click.echo(f"    {c.uri}")
+            print(f"    {c.uri}")
 
     owned_servers = [s for s in servers if s.owned]
     unowned_servers = [s for s in servers if not s.owned]
@@ -134,12 +136,12 @@ def prompt_server(servers: List[MyPlexResource]):
 
     server_names = []
     if owned_servers:
-        click.echo(success(f"{len(owned_servers)} owned servers found:"))
+        print(success(f"{len(owned_servers)} owned servers found:"))
         for s in sorter(owned_servers):
             fmt_server(s)
             server_names.append(s.name)
     if unowned_servers:
-        click.echo(success(f"{len(unowned_servers)} unowned servers found:"))
+        print(success(f"{len(unowned_servers)} unowned servers found:"))
         for s in sorter(unowned_servers):
             fmt_server(s)
             server_names.append(s.name)
@@ -180,14 +182,14 @@ def choose_server(account: MyPlexAccount):
                 raise ClickException("Unable to find server from Plex account")
 
             # Connect to obtain baseUrl
-            click.echo(
+            print(
                 title(
                     f"Attempting to connect to {server.name}. This may take time and print some errors."
                 )
             )
-            click.echo(title("Server connections:"))
+            print(title("Server connections:"))
             for c in server.connections:
-                click.echo(f"    {c.uri}")
+                print(f"    {c.uri}")
             plex = server.connect()
             return [server, plex]
         except NotFound as e:
@@ -214,10 +216,10 @@ def login(username: str, password: str):
             return
 
     account = myplex_login(username, password)
-    click.echo(success("Login to MyPlex was successful!"))
+    print(success("Login to MyPlex was successful!"))
 
     [server, plex] = choose_server(account)
-    click.echo(success(f"Connection to {plex.friendlyName} established successfully!"))
+    print(success(f"Connection to {plex.friendlyName} established successfully!"))
 
     token = server.accessToken
     user = account.username
@@ -245,4 +247,4 @@ def login(username: str, password: str):
     CONFIG["PLEX_SERVER"] = server.name
     CONFIG.save()
 
-    click.echo(SUCCESS_MESSAGE)
+    print(SUCCESS_MESSAGE)

@@ -3,8 +3,6 @@ from __future__ import annotations
 from functools import partial
 from typing import TYPE_CHECKING
 
-import click
-
 from plextraktsync.factory import factory
 
 if TYPE_CHECKING:
@@ -91,6 +89,7 @@ def cache_status(cache):
 
 def cache(sort: str, limit: int, reverse: bool, expire: bool, url: str):
     session = factory.session
+    print = factory.print
 
     if expire:
         expire_url(session, url)
@@ -100,9 +99,9 @@ def cache(sort: str, limit: int, reverse: bool, expire: bool, url: str):
         inspect_url(session, url)
         return
 
-    click.echo(f"Cache status:\n{cache_status(session.cache)}\n")
+    print(f"Cache status:\n{cache_status(session.cache)}\n")
 
-    click.echo("URLs:")
+    print("URLs:")
     sorted = get_sorted_cache(session, sort, reverse)
     for i, r in limit_iterator(sorted, limit):
-        click.echo(f"- {i + 1:3d}. {r}")
+        print(f"- {i + 1:3d}. {r}")

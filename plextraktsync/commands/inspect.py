@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from urllib.parse import quote_plus
 
-from plextraktsync.console import print
 from plextraktsync.factory import factory
 from plextraktsync.util.expand_id import expand_id
 from plextraktsync.version import version
@@ -16,6 +15,7 @@ if TYPE_CHECKING:
 def inspect_media(id):
     plex = factory.plex_api
     mf = factory.media_factory
+    print = factory.print
 
     print("")
     pm: PlexLibraryItem = plex.fetch_item(id)
@@ -83,6 +83,7 @@ def inspect_media(id):
 
 
 def inspect(input):
+    print = factory.print
     print(f"PlexTraktSync [{version()}]")
 
     for id in expand_id(input):

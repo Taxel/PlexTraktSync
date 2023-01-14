@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import click
-
 from plextraktsync.commands.login import ensure_login
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import factory, logger
@@ -64,7 +62,7 @@ def sync(
         wc.add_movie(movie)
 
     if not wc.is_valid():
-        click.echo("Nothing to sync, this is likely due conflicting options given.")
+        print("Nothing to sync, this is likely due conflicting options given.")
         return
 
     with measure_time("Completed full sync"):

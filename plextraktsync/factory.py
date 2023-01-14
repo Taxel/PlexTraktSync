@@ -22,6 +22,18 @@ class Factory:
                 pass
 
     @cached_property
+    def console(self):
+        from rich.console import Console
+
+        from plextraktsync.rich_addons import RichHighlighter
+
+        return Console(highlighter=RichHighlighter())
+
+    @cached_property
+    def print(self):
+        return self.console.print
+
+    @cached_property
     def trakt_api(self):
         from plextraktsync.trakt.TraktApi import TraktApi
 
@@ -119,8 +131,6 @@ class Factory:
         from tqdm import TqdmExperimentalWarning
         from tqdm.rich import tqdm
 
-        from plextraktsync.console import console
-
         warnings.filterwarnings("ignore", category=TqdmExperimentalWarning)
 
         # Monkeypatch https://github.com/tqdm/tqdm/pull/1395
@@ -131,7 +141,7 @@ class Factory:
                 self.display()
                 super().close()
 
-        return partial(Tqdm, options={'console': console})
+        return partial(Tqdm, options={'console': self.console})
 
     @cached_property
     def run_config(self):
@@ -233,12 +243,11 @@ class Factory:
     def console_logger(self):
         from rich.logging import RichHandler
 
-        from plextraktsync.console import console
         from plextraktsync.rich_addons import RichHighlighter
 
         config = self.config
         handler = RichHandler(
-            console=console,
+            console=self.console,
             show_time=config.log_console_time,
             log_time_format='[%Y-%m-%d %X]',
             show_path=False,

@@ -1,11 +1,11 @@
 from rich.table import Table
 
-from plextraktsync.console import print
 from plextraktsync.factory import factory
 
 
 def watched_shows():
     trakt = factory.trakt_api
+    print = factory.print
 
     table = Table(
         show_header=True, header_style="bold magenta", title="Watched shows on Trakt"

@@ -1,4 +1,4 @@
-import click
+
 
 from plextraktsync.commands.login import ensure_login
 from plextraktsync.factory import factory
@@ -13,7 +13,7 @@ def unmatched(no_progress_bar: bool, local: bool):
     walker = factory.walker
 
     if not wc.is_valid():
-        click.echo("Nothing to scan, this is likely due conflicting options given.")
+        print("Nothing to scan, this is likely due conflicting options given.")
         return
 
     failed = []
