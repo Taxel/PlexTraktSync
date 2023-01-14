@@ -51,6 +51,7 @@ class HttpCacheConfig:
         "metadata.provider.plex.tv/library/metadata/*/userState": DO_NOT_CACHE,
         "metadata.provider.plex.tv/library/metadata/*?*includeUserState=1": DO_NOT_CACHE,
         "metadata.provider.plex.tv/library/metadata/*": LONG_EXPIRY,
+        "metadata.provider.plex.tv/library/sections/watchlist/all?*includeUserState=0": "1m",
         "metadata.provider.plex.tv/library/sections/watchlist/all": DO_NOT_CACHE,
         # plex account
         "plex.tv/users/account": "1m",
