@@ -75,15 +75,22 @@ class Sync:
                 self.clear_collected(self.trakt.movie_collection, movie_trakt_ids)
 
             shows = set()
+            episode_trakt_ids = set()
             for episode in walker.find_episodes():
                 self.sync_collection(episode, dry_run=dry_run)
                 self.sync_ratings(episode, dry_run=dry_run)
                 self.sync_watched(episode, dry_run=dry_run)
                 if not is_partial:
                     listutil.addPlexItemToLists(episode)
+                    if self.config.clear_collected:
+                        episode_trakt_ids.add(episode.trakt_id)
+
                 if self.config.sync_ratings:
                     # collect shows for later ratings sync
                     shows.add(episode.show)
+
+            if episode_trakt_ids:
+                self.clear_collected(self.trakt.episodes_collection, episode_trakt_ids)
 
             for show in walker.walk_shows(shows, title="Syncing show ratings"):
                 self.sync_ratings(show, dry_run=dry_run)

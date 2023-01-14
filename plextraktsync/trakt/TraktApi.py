@@ -22,7 +22,7 @@ from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
 from plextraktsync.trakt.types import TraktMedia
 
 if TYPE_CHECKING:
-    from typing import Any, Generator, Optional, Union
+    from typing import List, Optional, Union
 
     from trakt.movies import Movie
     from trakt.tv import TVEpisode, TVShow
