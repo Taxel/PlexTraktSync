@@ -142,12 +142,18 @@ class Sync:
                     listutil.addList(lst["listid"], lst["listname"])
 
         if self.config.need_library_walk:
+            movie_trakt_ids = set()
             for movie in walker.find_movies():
                 self.sync_collection(movie, dry_run=dry_run)
                 self.sync_ratings(movie, dry_run=dry_run)
                 self.sync_watched(movie, dry_run=dry_run)
                 if not is_partial:
                     listutil.addPlexItemToLists(movie)
+                    if self.config.clear_collected:
+                        movie_trakt_ids.add(movie.trakt_id)
+
+            if movie_trakt_ids:
+                self.clear_collected(self.trakt.movie_collection, movie_trakt_ids)
 
             shows = set()
             for episode in walker.find_episodes():
