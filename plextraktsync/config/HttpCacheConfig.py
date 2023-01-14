@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING
 
 from requests_cache import DO_NOT_CACHE
 
+from plextraktsync.util.parse_date import parse_date
+
 if TYPE_CHECKING:
     from requests_cache import ExpirationPatterns
 
@@ -97,6 +99,10 @@ class HttpCacheConfig:
         policy = self.default_policy.copy()
         # This will keep the order if user overwrote the item
         policy.update(self.policy)
+
+        # Parse string values with units to datetime
+        for k in (k for k, v in policy.items() if isinstance(v, str)):
+            policy[k] = parse_date(policy[k])
 
         return policy
 
