@@ -35,10 +35,6 @@ class PlexApi:
         self.plex = plex
 
     @cached_property
-    def account(self):
-        return self._plex_account()
-
-    @cached_property
     def plex_base_url(self):
         return f"https://app.plex.tv/desktop/#!/server/{self.plex.machineIdentifier}"
 
@@ -223,7 +219,8 @@ class PlexApi:
     def get_sessions(self):
         return self.plex.sessions()
 
-    def _plex_account(self):
+    @cached_property
+    def account(self):
         CONFIG = factory.config
         plex_owner_token = CONFIG.get("PLEX_OWNER_TOKEN")
         plex_account_token = CONFIG.get("PLEX_ACCOUNT_TOKEN")
