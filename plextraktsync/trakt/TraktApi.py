@@ -86,7 +86,7 @@ class TraktApi:
         return self.me.show_collection
 
     def remove_from_collection(self, m: TraktMedia):
-        if m.media_type not in ["movies", "shows"]:
+        if m.media_type not in ["movies", "shows", "episodes"]:
             raise ValueError(f"Unsupported media type: {m.media_type}")
 
         item = dict(
