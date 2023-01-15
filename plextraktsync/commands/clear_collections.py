@@ -3,7 +3,7 @@
 from plextraktsync.factory import factory, logger
 
 
-def clear_collections(confirm, dry_run):
+def clear_collections(confirm: bool, dry_run: bool, collection: str):
     print = factory.print
 
     if not confirm and not dry_run:
