@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 
-def download(plex: PlexApi, pm: PlexLibraryItem):
+def download_subtitles(plex: PlexApi, pm: PlexLibraryItem):
     print(f"Subtitles for {pm}:")
     for index, sub in enumerate(pm.subtitle_streams, start=1):
         print(
@@ -33,4 +33,4 @@ def subdl(input):
         pm = plex.fetch_item(id)
         if not pm:
             continue
-        download(plex, pm)
+        download_subtitles(plex, pm)
