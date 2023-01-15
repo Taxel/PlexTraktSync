@@ -119,10 +119,6 @@ class PlexApi:
                 continue
             yield section.key, PlexLibrarySection(section, plex=self)
 
-    @property
-    def library_section_names(self):
-        return [s.title for s in self.library_sections.values()]
-
     @memoize
     def system_device(self, device_id: int) -> SystemDevice:
         return self.plex.systemDevice(device_id)

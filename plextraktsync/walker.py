@@ -247,19 +247,19 @@ class Walker:
 
     def print_plan(self, print=print):
         if self.plan.movie_sections:
-            print(f"Sync Movie sections: {self.plan.movie_sections}")
+            print(f"Sync Movie sections: {[x.title for x in self.plan.movie_sections]}")
 
         if self.plan.show_sections:
-            print(f"Sync Show sections: {self.plan.show_sections}")
+            print(f"Sync Show sections: {[x.title for x in self.plan.show_sections]}")
 
         if self.plan.movies:
-            print(f"Sync Movies: {self.plan.movies}")
+            print(f"Sync Movies: {[x.title for x in self.plan.movies]}")
 
         if self.plan.shows:
-            print(f"Sync Shows: {self.plan.shows}")
+            print(f"Sync Shows: {[x.title for x in self.plan.shows]}")
 
         if self.plan.episodes:
-            print(f"Sync Episodes: {self.plan.episodes}")
+            print(f"Sync Episodes: {[x.title for x in self.plan.episodes]}")
 
     def get_plex_movies(self) -> Generator[PlexLibraryItem, Any, None]:
         """

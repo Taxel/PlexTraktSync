@@ -34,6 +34,5 @@ def info(print=logger.info):
     if has_plex_token():
         plex = factory.plex_api
         print(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
-        print(
-            f"Enabled {len(plex.library_sections)} libraries in Plex Server: {plex.library_section_names}"
-        )
+        section_titles = [x.title for x in plex.library_sections.values()]
+        print(f"Enabled {len(plex.library_sections)} libraries in Plex Server: {section_titles}")
