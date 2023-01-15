@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 
 import plexapi
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
-from plexapi.media import SubtitleStream
 from plexapi.myplex import MyPlexAccount
 from plexapi.playlist import Playlist
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
@@ -21,6 +20,7 @@ from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
 if TYPE_CHECKING:
     from typing import Dict, List, Optional, Union
 
+    from plexapi.media import MediaPart, SubtitleStream
     from plexapi.video import Movie, Show
 
     from plextraktsync.plex.types import PlexMedia
@@ -93,7 +93,7 @@ class PlexApi:
 
         return f"{base_url}/details?key={key}"
 
-    def download(self, m: Union[SubtitleStream], **kwargs):
+    def download(self, m: Union[SubtitleStream, MediaPart], **kwargs):
         url = self.plex.url(m.key)
         token = self.plex._token
 
