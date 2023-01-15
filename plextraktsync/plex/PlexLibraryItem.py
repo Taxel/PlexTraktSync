@@ -65,6 +65,9 @@ class PlexLibraryItem:
 
     @cached_property
     def duration(self):
+        if self.item.duration is None:
+            return None
+
         hours, remainder = divmod(self.item.duration / 1000, 3600)
         minutes, seconds = divmod(remainder, 60)
 

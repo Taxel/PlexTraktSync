@@ -87,9 +87,11 @@ class PlexApi:
 
         return self.fetch_item(key)
 
-    def media_url(self, m: PlexLibraryItem):
-        base_url = self.plex_discover_base_url if m.is_discover else self.plex_base_url
-        return f"{base_url}/details?key={m.item.key}"
+    def media_url(self, m: PlexLibraryItem, discover=False):
+        base_url = self.plex_discover_base_url if m.is_discover or discover else self.plex_base_url
+        key = f"/library/metadata/{m.item.guid.rsplit('/', 1)[-1]}" if discover else m.item.key
+
+        return f"{base_url}/details?key={key}"
 
     def download(self, m: Union[SubtitleStream], **kwargs):
         url = self.plex.url(m.key)

@@ -84,7 +84,8 @@ class Media:
 
     @property
     def show(self) -> Optional[Media]:
-        if self._show is None and self.mf:
+        if self._show is None and self.mf and not self.plex.is_discover:
+            # TODO: fetch show for discover items
             ps = self.plex_api.fetch_item(self.plex.item.grandparentRatingKey)
             ms = self.mf.resolve_any(ps)
             self._show = ms
@@ -206,7 +207,7 @@ class Media:
 
     @cached_property
     def plex_rating(self):
-        show_id = self.show.plex.item.ratingKey if self.media_type == "episodes" else None
+        show_id = self.show.plex.item.ratingKey if self.media_type == "episodes" and not self.plex.is_discover else None
         return self.plex.rating(show_id)
 
     def trakt_rate(self):
