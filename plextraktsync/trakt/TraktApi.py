@@ -238,17 +238,15 @@ class TraktApi:
         search = trakt.sync.search_by_id(
             media_id, id_type=id_type, media_type=media_type
         )
-        # look for the first wanted type in the results
-        # NOTE: this is not needed, kept around for caution
-        for m in search:
-            if m.media_type != f"{media_type}s":
-                logger.error(
-                    f"Internal error, wrong media type: {m.media_type}. Please report this to PlexTraktSync developers"
-                )
-                continue
-            return m
+        if not search:
+            return None
 
-        return None
+        if len(search) > 1:
+            logger.debug(f"search_by_id({media_id}, {id_type}, {media_type}) got {len(search)} results, taking first one")
+            logger.debug([pm.to_json() for pm in search])
+
+        # TODO: sort by "scrore"?
+        return search[0]
 
     @staticmethod
     def valid_trakt_id(media_id: str):
