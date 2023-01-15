@@ -30,9 +30,11 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem):
 
 def download(input: List[str], only_subs: bool):
     plex = factory.plex_api
+    print = factory.print
 
     for id in expand_id(input):
         pm = plex.fetch_item(id)
         if not pm:
+            print(f"Not found: {id}. Skipping")
             continue
         download_subtitles(plex, pm)
