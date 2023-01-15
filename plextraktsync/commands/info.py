@@ -35,4 +35,4 @@ def info(print=logger.info):
         plex = factory.plex_api
         print(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
         section_titles = [x.title for x in plex.library_sections.values()]
-        print(f"Enabled {len(plex.library_sections)} libraries in Plex Server: {section_titles}")
+        print(f"Enabled {len(section_titles)} libraries in Plex Server: {section_titles}")
