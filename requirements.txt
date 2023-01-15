@@ -31,7 +31,7 @@ requests-cache==0.9.7
 requests-oauthlib==1.3.1; python_version >= '3.4'
 requests==2.28.2
 rich==13.0.1
-six==1.16.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
+six==1.16.0; python_version >= '3.4'
 tqdm==4.64.1
 url-normalize==1.4.3; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'
 urllib3==1.26.14
