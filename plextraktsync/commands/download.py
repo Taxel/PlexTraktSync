@@ -26,7 +26,7 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem):
             plex.download(sub, filename=filename, showstatus=True)
 
 
-def subdl(input):
+def download(input):
     plex = factory.plex_api
 
     for id in expand_id(input):

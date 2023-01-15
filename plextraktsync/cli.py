@@ -263,7 +263,7 @@ def watch():
 
 @command()
 @click.argument("input", nargs=-1)
-def subdl():
+def download():
     """
     Downloads subtitles to a local directory
     """
@@ -333,6 +333,7 @@ cli.add_command(bug_report)
 cli.add_command(cache)
 cli.add_command(clear_collections)
 cli.add_command(config)
+cli.add_command(download)
 cli.add_command(imdb_import)
 cli.add_command(info)
 cli.add_command(inspect)
@@ -340,7 +341,6 @@ cli.add_command(login)
 cli.add_command(plex_login)
 if factory.enable_self_update:
     cli.add_command(self_update)
-cli.add_command(subdl)
 cli.add_command(sync)
 cli.add_command(trakt_login)
 cli.add_command(unmatched)
