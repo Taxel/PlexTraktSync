@@ -16,4 +16,5 @@
 !/plextraktsync/servers.default.yml
 !/plextraktsync/trakt/*.py
 !/plextraktsync/util/*.py
+!/plextraktsync/watch/*.py
 !/requirements.txt
