@@ -67,7 +67,7 @@ def server_urls(server: MyPlexResource):
 def myplex_login(username, password):
     while True:
         username = click.prompt(PROMPT_PLEX_USERNAME, type=str, default=username)
-        print(NOTICE_2FA_PASSWORD)
+        print(NOTICE_2FA_PASSWORD, highlight=False)
         password = click.prompt(
             PROMPT_PLEX_PASSWORD,
             type=str,
@@ -78,9 +78,9 @@ def myplex_login(username, password):
         try:
             return MyPlexAccount(username, password)
         except Unauthorized as e:
-            print(error(f"Log in to Plex failed: '{e}', Try again."))
+            print(error(f"Log in to Plex failed: '{e}', Try again."), highlight=False)
         except BadRequest as e:
-            print(error(f"Log in to Plex failed: '{e}'"))
+            print(error(f"Log in to Plex failed: '{e}'"), highlight=False)
             exit(1)
 
 
