@@ -6,7 +6,6 @@ from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.events import (ActivityNotification, Error,
                                   PlaySessionStateNotification, TimelineEntry)
 from plextraktsync.factory import logging
-from plextraktsync.watch.ProgressBar import ProgressBar
 
 if TYPE_CHECKING:
     from plextraktsync.config import Config
@@ -32,7 +31,6 @@ class WatchStateUpdater:
         self.threshold = config["watch"]["scrobble_threshold"]
         self.remove_collection = config["watch"]["remove_collection"]
         self.add_collection = config["watch"]["add_collection"]
-        self.progressbar = ProgressBar() if config["watch"]["media_progressbar"] else None
 
     @cached_property
     def username_filter(self):
@@ -44,6 +42,15 @@ class WatchStateUpdater:
 
         self.logger.warning("No permission to access sessions, disabling username filter")
         return None
+
+    @cached_property
+    def progressbar(self):
+        if not self.config["watch"]["media_progressbar"]:
+            return None
+
+        from plextraktsync.watch.ProgressBar import ProgressBar
+
+        return ProgressBar()
 
     @cached_property
     def sessions(self):
