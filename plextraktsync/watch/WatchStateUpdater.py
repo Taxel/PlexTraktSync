@@ -32,17 +32,18 @@ class WatchStateUpdater:
         self.threshold = config["watch"]["scrobble_threshold"]
         self.remove_collection = config["watch"]["remove_collection"]
         self.add_collection = config["watch"]["add_collection"]
-        if config["watch"]["username_filter"]:
-            if not self.plex.has_sessions():
-                self.logger.warning(
-                    "No permission to access sessions, disabling username filter"
-                )
-                self.username_filter = None
-            else:
-                self.username_filter = config["PLEX_USERNAME"]
-        else:
-            self.username_filter = None
         self.progressbar = ProgressBar() if config["watch"]["media_progressbar"] else None
+
+    @cached_property
+    def username_filter(self):
+        if not self.config["watch"]["username_filter"]:
+            return None
+
+        if self.plex.has_sessions():
+            return self.config["PLEX_USERNAME"]
+
+        self.logger.warning("No permission to access sessions, disabling username filter")
+        return None
 
     @cached_property
     def sessions(self):
