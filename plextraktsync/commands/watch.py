@@ -1,39 +1,19 @@
 from __future__ import annotations
 
-from collections import UserDict
 from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.events import (ActivityNotification, Error,
                                   PlaySessionStateNotification, TimelineEntry)
 from plextraktsync.factory import factory, logging
-from plextraktsync.trakt.ScrobblerProxy import ScrobblerProxy
 
 if TYPE_CHECKING:
-    from typing import Union
-
-    from trakt.movies import Movie
-    from trakt.tv import TVEpisode
 
     from plextraktsync.config import Config
     from plextraktsync.media import Media, MediaFactory
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
     from plextraktsync.trakt.TraktApi import TraktApi
-
-
-class ScrobblerCollection(UserDict):
-    def __init__(self, trakt: TraktApi, threshold=80):
-        super().__init__()
-        self.trakt = trakt
-        self.threshold = threshold
-
-    def __missing__(self, media: Union[Movie, TVEpisode]):
-        scrobbler = media.scrobble(0, None, None)
-        proxy = ScrobblerProxy(scrobbler, self.threshold)
-        self[media] = proxy
-
-        return proxy
 
 
 class SessionCollection(dict):
@@ -129,6 +109,8 @@ class WatchStateUpdater:
 
     @cached_property
     def scrobblers(self):
+        from plextraktsync.trakt.ScrobblerCollection import ScrobblerCollection
+
         return ScrobblerCollection(self.trakt, self.threshold)
 
     def find_by_key(self, key: str, reload=False):
