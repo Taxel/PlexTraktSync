@@ -214,7 +214,8 @@ class PlexApi:
         except Unauthorized:
             return False
 
-    def get_sessions(self):
+    @property
+    def sessions(self):
         return self.plex.sessions()
 
     @cached_property
