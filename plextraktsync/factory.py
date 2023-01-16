@@ -258,7 +258,7 @@ class Factory:
 
     @cached_property
     def config(self):
-        from plextraktsync.config import Config
+        from plextraktsync.config.Config import Config
 
         def invalidate_plex_cache(key, value):
             self.invalidate(["has_plex_token", "server_config"])

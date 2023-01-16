@@ -8,7 +8,7 @@ from plextraktsync.events import (ActivityNotification, Error,
 from plextraktsync.factory import logging
 
 if TYPE_CHECKING:
-    from plextraktsync.config import Config
+    from plextraktsync.config.Config import Config
     from plextraktsync.media import Media, MediaFactory
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem

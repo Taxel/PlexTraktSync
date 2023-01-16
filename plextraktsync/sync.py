@@ -8,7 +8,7 @@ from plextraktsync.factory import logger
 from plextraktsync.trakt_list_util import TraktListUtil
 
 if TYPE_CHECKING:
-    from plextraktsync.config import Config
+    from plextraktsync.config.Config import Config
     from plextraktsync.media import Media
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.trakt.TraktApi import TraktApi
