@@ -16,26 +16,6 @@ if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
 
 
-class SessionCollection(dict):
-    def __init__(self, plex: PlexApi):
-        super().__init__()
-        self.plex = plex
-
-    def __missing__(self, key: str):
-        self.update_sessions()
-        if key not in self:
-            # Session probably ended
-            return None
-
-        return self[key]
-
-    def update_sessions(self):
-        sessions = self.plex.get_sessions()
-        self.clear()
-        for session in sessions:
-            self[str(session.sessionKey)] = session.usernames[0]
-
-
 ICONS = {
     "playing": "▶️",
     "paused": "⏸️",
@@ -104,8 +84,16 @@ class WatchStateUpdater:
                 self.username_filter = config["PLEX_USERNAME"]
         else:
             self.username_filter = None
-        self.sessions = SessionCollection(plex) if self.username_filter else None
         self.progressbar = ProgressBar() if config["watch"]["media_progressbar"] else None
+
+    @cached_property
+    def sessions(self):
+        if not self.username_filter:
+            return None
+
+        from plextraktsync.plex.SessionCollection import SessionCollection
+
+        return SessionCollection(self.plex)
 
     @cached_property
     def scrobblers(self):
