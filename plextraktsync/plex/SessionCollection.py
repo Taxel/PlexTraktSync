@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from collections import UserDict
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexApi import PlexApi
 
 
-class SessionCollection(dict):
+class SessionCollection(UserDict):
     def __init__(self, plex: PlexApi):
         super().__init__()
         self.plex = plex
