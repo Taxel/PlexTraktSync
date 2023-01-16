@@ -139,6 +139,7 @@ def prompt_server(servers: List[MyPlexResource]):
         for s in sorter(unowned_servers):
             server_names.append(format_server(s))
 
+    print()
     return inquirer.rawlist(
         message="Select default server:",
         choices=server_names,
@@ -174,6 +175,7 @@ def choose_server(account: MyPlexAccount):
                 raise ClickException("Unable to find server from Plex account")
 
             # Connect to obtain baseUrl
+            print()
             print(
                 title(
                     f"Attempting to connect to {server.name}. This may take time and print some errors."
@@ -182,10 +184,12 @@ def choose_server(account: MyPlexAccount):
             print(title("Server connections:"))
             for c in server.connections:
                 print(f"    {c.uri}")
+            print()
             plex = server.connect()
             return [server, plex]
         except NotFound as e:
-            click.secho(f"{e}, Try another server, {type(e)}")
+            print(error(f"{e}. Try another server"))
+            print()
 
 
 def has_plex_token():
