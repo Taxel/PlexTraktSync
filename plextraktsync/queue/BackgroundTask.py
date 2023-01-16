@@ -50,7 +50,7 @@ class BackgroundTask:
         """
         The shutdown handler: run timed events now.
         """
-        self.logger.debug("BackgroundTask: shutdown, run timed events now")
+        self.logger.debug("Shutdown, run timed events now")
         self.timed_events()
 
     def __call__(self, queue: SimpleQueue):
