@@ -93,7 +93,7 @@ class WatchStateUpdater:
     def on_error(self, error: Error):
         self.logger.error(error.msg)
         self.scrobblers.clear()
-        if self.sessions:
+        if self.sessions is not None:
             self.sessions.clear()
 
     def on_activity(self, activity: ActivityNotification):
@@ -166,6 +166,6 @@ class WatchStateUpdater:
 
             value = self.scrobblers[tm].stop(percent)
             del self.scrobblers[tm]
-            if self.sessions:
+            if self.sessions is not None:
                 del self.sessions[event.session_key]
             return value
