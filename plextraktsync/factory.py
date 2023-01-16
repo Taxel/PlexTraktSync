@@ -194,7 +194,7 @@ class Factory:
 
     @cached_property
     def watch_state_updater(self):
-        from plextraktsync.commands.watch import WatchStateUpdater
+        from plextraktsync.watch.WatchStateUpdater import WatchStateUpdater
 
         return WatchStateUpdater(
             plex=self.plex_api,
