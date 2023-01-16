@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta
 from functools import partial
 from os import environ
 from typing import TYPE_CHECKING
@@ -8,14 +7,15 @@ from typing import TYPE_CHECKING
 import click
 from click import ClickException
 from InquirerPy import get_style, inquirer
+from InquirerPy.base import Choice
+from InquirerPy.separator import Separator
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount
 
 from plextraktsync.config.ServerConfig import ServerConfig
 from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.factory import factory
-from plextraktsync.style import (comment, disabled, error, highlight, prompt,
-                                 success, title)
+from plextraktsync.style import comment, error, prompt, success, title
 from plextraktsync.util.local_url import local_url
 
 if TYPE_CHECKING:
@@ -112,45 +112,37 @@ def choose_managed_user(account: MyPlexAccount):
     return None
 
 
+def format_server(s):
+    lines = []
+    product = f"{s.product}/{s.productVersion}"
+    platform = f"{s.device}: {s.platform}/{s.platformVersion}"
+    lines.append(f"{s.name}: Last seen: {str(s.lastSeenAt)}, Server: {product} on {platform}")
+    c: ResourceConnection
+    for c in s.connections:
+        lines.append(f"    {c.uri}")
+
+    return Choice(value=s.name, name="\n    ".join(lines))
+
+
 def prompt_server(servers: List[MyPlexResource]):
-    old_age = datetime.now() - timedelta(weeks=1)
-
-    def fmt_server(s):
-        if s.lastSeenAt < old_age:
-            decorator = disabled
-        else:
-            decorator = comment
-
-        product = decorator(f"{s.product}/{s.productVersion}")
-        platform = decorator(f"{s.device}: {s.platform}/{s.platformVersion}")
-        print(
-            f"- {highlight(s.name)}: [Last seen: {decorator(str(s.lastSeenAt))}, Server: {product} on {platform}]"
-        )
-        c: ResourceConnection
-        for c in s.connections:
-            print(f"    {c.uri}")
-
     owned_servers = [s for s in servers if s.owned]
     unowned_servers = [s for s in servers if not s.owned]
     sorter = partial(sorted, key=lambda s: s.lastSeenAt, reverse=True)
 
     server_names = []
     if owned_servers:
-        print(success(f"{len(owned_servers)} owned servers found:"))
+        server_names.append(Separator("Owned servers"))
         for s in sorter(owned_servers):
-            fmt_server(s)
-            server_names.append(s.name)
+            server_names.append(format_server(s))
     if unowned_servers:
-        print(success(f"{len(unowned_servers)} unowned servers found:"))
+        server_names.append(Separator("Unowned servers"))
         for s in sorter(unowned_servers):
-            fmt_server(s)
-            server_names.append(s.name)
+            server_names.append(format_server(s))
 
-    return inquirer.select(
+    return inquirer.rawlist(
         message="Select default server:",
-        choices=sorted(server_names),
+        choices=server_names,
         default=None,
-        style=style,
         qmark="",
         pointer=">",
     ).execute()
