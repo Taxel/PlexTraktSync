@@ -37,7 +37,8 @@ class WatchStateUpdater:
             return None
 
         if self.plex.has_sessions():
-            return self.config["PLEX_USERNAME"]
+            # This must be username, not email
+            return self.plex.account.username
 
         self.logger.warning("No permission to access sessions, disabling username filter")
         return None
