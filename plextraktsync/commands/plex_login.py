@@ -4,7 +4,6 @@ from functools import partial
 from os import environ
 from typing import TYPE_CHECKING
 
-import click
 from click import ClickException
 from InquirerPy import get_style, inquirer
 from InquirerPy.base import Choice
@@ -17,6 +16,8 @@ from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.factory import factory
 from plextraktsync.style import comment, error, prompt, success, title
 from plextraktsync.util.local_url import local_url
+from rich.panel import Panel
+from rich.prompt import Confirm, Prompt
 
 if TYPE_CHECKING:
     from typing import List
@@ -66,15 +67,9 @@ def server_urls(server: MyPlexResource):
 
 def myplex_login(username, password):
     while True:
-        username = click.prompt(PROMPT_PLEX_USERNAME, type=str, default=username)
+        username = Prompt.ask(PROMPT_PLEX_USERNAME, default=username)
         print(NOTICE_2FA_PASSWORD, highlight=False)
-        password = click.prompt(
-            PROMPT_PLEX_PASSWORD,
-            type=str,
-            default=password,
-            hide_input=True,
-            show_default=False,
-        )
+        password = Prompt.ask(PROMPT_PLEX_PASSWORD, password=True, default=password, show_default=False)
         try:
             return MyPlexAccount(username, password)
         except Unauthorized as e:
@@ -188,8 +183,7 @@ def choose_server(account: MyPlexAccount):
             plex = server.connect()
             return [server, plex]
         except NotFound as e:
-            print(error(f"{e}. Try another server"))
-            print()
+            print(Panel.fit(f"{e}. Try another server", padding=1, title="[b red]ERROR", border_style="red"))
 
 
 def has_plex_token():
@@ -208,11 +202,12 @@ def plex_login(username, password):
 
 def login(username: str, password: str):
     if has_plex_token():
-        if not click.confirm(PROMPT_PLEX_RELOGIN, default=True):
+        if not Confirm.ask(PROMPT_PLEX_RELOGIN, default=True):
             return
 
     account = myplex_login(username, password)
-    print(success("Login to MyPlex was successful!"))
+    print(Panel.fit("Login to MyPlex was successful", title="Plex Login",
+                    title_align="left", padding=1, border_style="bright_blue"))
 
     [server, plex] = choose_server(account)
     print(success(f"Connection to {plex.friendlyName} established successfully!"))
