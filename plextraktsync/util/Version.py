@@ -29,6 +29,12 @@ class Version:
         return __version__
 
     @property
+    def py_full_version(self):
+        from sys import version
+
+        return version.replace("\n", "")
+
+    @property
     def py_version(self):
         from platform import python_version
 
