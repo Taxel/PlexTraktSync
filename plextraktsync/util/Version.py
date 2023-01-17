@@ -2,6 +2,12 @@ from plextraktsync.decorators.cached_property import cached_property
 
 
 class Version:
+    @property
+    def version(self):
+        from plextraktsync import __version__
+
+        return __version__
+
     @cached_property
     def full_version(self):
         from plextraktsync import __version__
@@ -19,6 +25,30 @@ class Version:
         gv = self.git_version_info
         if gv:
             return f"{__version__}: {gv}"
+
+        return __version__
+
+    @property
+    def py_version(self):
+        from platform import python_version
+
+        return python_version()
+
+    @property
+    def py_platform(self):
+        from platform import platform
+
+        return platform(terse=True, aliased=True)
+
+    @property
+    def plex_api_version(self):
+        from plexapi import VERSION
+
+        return VERSION
+
+    @property
+    def trakt_api_version(self):
+        from trakt import __version__
 
         return __version__
 
