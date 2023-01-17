@@ -1,5 +1,6 @@
-from plextraktsync.events import Error, EventFactory
+from plextraktsync.events import Error
 from plextraktsync.factory import logging
+from plextraktsync.watch.EventFactory import EventFactory
 
 
 class EventDispatcher:

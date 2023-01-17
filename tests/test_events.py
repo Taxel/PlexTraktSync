@@ -1,6 +1,7 @@
 #!/usr/bin/env python3 -m pytest
-from plextraktsync.events import ActivityNotification, EventFactory
+from plextraktsync.events import ActivityNotification
 from plextraktsync.watch.EventDispatcher import EventDispatcher
+from plextraktsync.watch.EventFactory import EventFactory
 from tests.conftest import load_mock
 
 
