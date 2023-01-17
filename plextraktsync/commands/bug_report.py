@@ -7,14 +7,13 @@ URL_TEMPLATE = 'https://github.com/Taxel/PlexTraktSync/issues/new?template=bug.y
 
 def bug_url():
     from plextraktsync.factory import factory
-    from plextraktsync.util.versions import (pts_version, py_platform,
-                                             py_version)
     config = factory.config
+    version = factory.version
 
     q = urlencode({
-        'os': py_platform(),
-        'python': py_version(),
-        'version': pts_version(),
+        'os': version.py_platform,
+        'python': version.py_version,
+        'version': version.full_version,
         'config': config.dump(),
     })
 
