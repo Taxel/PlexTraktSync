@@ -1,22 +1,23 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta
 from functools import partial
 from os import environ
 from typing import TYPE_CHECKING
 
-import click
 from click import ClickException
 from InquirerPy import get_style, inquirer
+from InquirerPy.base import Choice
+from InquirerPy.separator import Separator
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount
 
 from plextraktsync.config.ServerConfig import ServerConfig
 from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.factory import factory
-from plextraktsync.style import (comment, disabled, error, highlight, prompt,
-                                 success, title)
+from plextraktsync.style import comment, error, prompt, success, title
 from plextraktsync.util.local_url import local_url
+from rich.panel import Panel
+from rich.prompt import Confirm, Prompt
 
 if TYPE_CHECKING:
     from typing import List
@@ -66,21 +67,15 @@ def server_urls(server: MyPlexResource):
 
 def myplex_login(username, password):
     while True:
-        username = click.prompt(PROMPT_PLEX_USERNAME, type=str, default=username)
-        print(NOTICE_2FA_PASSWORD)
-        password = click.prompt(
-            PROMPT_PLEX_PASSWORD,
-            type=str,
-            default=password,
-            hide_input=True,
-            show_default=False,
-        )
+        username = Prompt.ask(PROMPT_PLEX_USERNAME, default=username)
+        print(NOTICE_2FA_PASSWORD, highlight=False)
+        password = Prompt.ask(PROMPT_PLEX_PASSWORD, password=True, default=password, show_default=False)
         try:
             return MyPlexAccount(username, password)
         except Unauthorized as e:
-            print(error(f"Log in to Plex failed: '{e}', Try again."))
+            print(error(f"Log in to Plex failed: '{e}', Try again."), highlight=False)
         except BadRequest as e:
-            print(error(f"Log in to Plex failed: '{e}'"))
+            print(error(f"Log in to Plex failed: '{e}'"), highlight=False)
             exit(1)
 
 
@@ -112,45 +107,38 @@ def choose_managed_user(account: MyPlexAccount):
     return None
 
 
+def format_server(s):
+    lines = []
+    product = f"{s.product}/{s.productVersion}"
+    platform = f"{s.device}: {s.platform}/{s.platformVersion}"
+    lines.append(f"{s.name}: Last seen: {str(s.lastSeenAt)}, Server: {product} on {platform}")
+    c: ResourceConnection
+    for c in s.connections:
+        lines.append(f"    {c.uri}")
+
+    return Choice(value=s.name, name="\n    ".join(lines))
+
+
 def prompt_server(servers: List[MyPlexResource]):
-    old_age = datetime.now() - timedelta(weeks=1)
-
-    def fmt_server(s):
-        if s.lastSeenAt < old_age:
-            decorator = disabled
-        else:
-            decorator = comment
-
-        product = decorator(f"{s.product}/{s.productVersion}")
-        platform = decorator(f"{s.device}: {s.platform}/{s.platformVersion}")
-        print(
-            f"- {highlight(s.name)}: [Last seen: {decorator(str(s.lastSeenAt))}, Server: {product} on {platform}]"
-        )
-        c: ResourceConnection
-        for c in s.connections:
-            print(f"    {c.uri}")
-
     owned_servers = [s for s in servers if s.owned]
     unowned_servers = [s for s in servers if not s.owned]
     sorter = partial(sorted, key=lambda s: s.lastSeenAt, reverse=True)
 
     server_names = []
     if owned_servers:
-        print(success(f"{len(owned_servers)} owned servers found:"))
+        server_names.append(Separator("Owned servers"))
         for s in sorter(owned_servers):
-            fmt_server(s)
-            server_names.append(s.name)
+            server_names.append(format_server(s))
     if unowned_servers:
-        print(success(f"{len(unowned_servers)} unowned servers found:"))
+        server_names.append(Separator("Unowned servers"))
         for s in sorter(unowned_servers):
-            fmt_server(s)
-            server_names.append(s.name)
+            server_names.append(format_server(s))
 
-    return inquirer.select(
+    print()
+    return inquirer.rawlist(
         message="Select default server:",
-        choices=sorted(server_names),
+        choices=server_names,
         default=None,
-        style=style,
         qmark="",
         pointer=">",
     ).execute()
@@ -182,6 +170,7 @@ def choose_server(account: MyPlexAccount):
                 raise ClickException("Unable to find server from Plex account")
 
             # Connect to obtain baseUrl
+            print()
             print(
                 title(
                     f"Attempting to connect to {server.name}. This may take time and print some errors."
@@ -190,10 +179,11 @@ def choose_server(account: MyPlexAccount):
             print(title("Server connections:"))
             for c in server.connections:
                 print(f"    {c.uri}")
+            print()
             plex = server.connect()
             return [server, plex]
         except NotFound as e:
-            click.secho(f"{e}, Try another server, {type(e)}")
+            print(Panel.fit(f"{e}. Try another server", padding=1, title="[b red]ERROR", border_style="red"))
 
 
 def has_plex_token():
@@ -212,11 +202,12 @@ def plex_login(username, password):
 
 def login(username: str, password: str):
     if has_plex_token():
-        if not click.confirm(PROMPT_PLEX_RELOGIN, default=True):
+        if not Confirm.ask(PROMPT_PLEX_RELOGIN, default=True):
             return
 
     account = myplex_login(username, password)
-    print(success("Login to MyPlex was successful!"))
+    print(Panel.fit("Login to MyPlex was successful", title="Plex Login",
+                    title_align="left", padding=1, border_style="bright_blue"))
 
     [server, plex] = choose_server(account)
     print(success(f"Connection to {plex.friendlyName} established successfully!"))
