@@ -279,7 +279,7 @@ class Factory:
 
     @cached_property
     def batch_delay_timer(self):
-        from plextraktsync.timer import Timer
+        from plextraktsync.util.Timer import Timer
 
         return Timer(self.run_config.batch_delay) if self.run_config.batch_delay else None
 

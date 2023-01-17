@@ -1,7 +1,7 @@
 from functools import wraps
 
 from plextraktsync.config import TRAKT_POST_DELAY
-from plextraktsync.timer import Timer
+from plextraktsync.util.Timer import Timer
 
 timer = Timer(TRAKT_POST_DELAY)
 
