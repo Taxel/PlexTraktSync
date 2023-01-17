@@ -3,7 +3,7 @@ from plextraktsync.decorators.cached_property import cached_property
 
 class Version:
     @cached_property
-    def version(self):
+    def full_version(self):
         from plextraktsync import __version__
 
         # Released in PyPI
