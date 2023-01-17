@@ -47,6 +47,8 @@ logging:
 sync:
   plex_to_trakt:
     collection: true
+    # Clear collected state of items not present in Plex
+    clear_collected: false
     ratings: true
     watched_status: true
     # If plex_to_trakt watchlist=false and trakt_to_plex watchlist=true

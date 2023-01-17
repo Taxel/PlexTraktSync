@@ -5,9 +5,12 @@ from typing import TYPE_CHECKING
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logger
+from plextraktsync.trakt.types import TraktMedia
 from plextraktsync.trakt_list_util import TraktListUtil
 
 if TYPE_CHECKING:
+    from typing import Iterable, Set
+
     from plextraktsync.config.Config import Config
     from plextraktsync.media import Media
     from plextraktsync.plex.PlexApi import PlexApi
@@ -54,6 +57,10 @@ class SyncConfig:
     @cached_property
     def sync_watchlists(self):
         return self.trakt_to_plex["watchlist"] or self.plex_to_trakt["watchlist"]
+
+    @cached_property
+    def clear_collected(self):
+        return self.plex_to_trakt["collection"] and self["plex_to_trakt"]["clear_collected"]
 
     @cached_property
     def sync_watched_status(self):
@@ -118,6 +125,9 @@ class Sync:
         listutil = TraktListUtil()
         is_partial = walker.is_partial
 
+        if is_partial and self.config.clear_collected:
+            logger.warning("Running partial library sync. Clear collected will be disabled.")
+
         if self.config.update_plex_wl_as_pl:
             if is_partial:
                 logger.warning("Running partial library sync. Watchlist as playlist won't update because it needs full library sync.")
@@ -132,12 +142,18 @@ class Sync:
                     listutil.addList(lst["listid"], lst["listname"])
 
         if self.config.need_library_walk:
+            movie_trakt_ids = set()
             for movie in walker.find_movies():
                 self.sync_collection(movie, dry_run=dry_run)
                 self.sync_ratings(movie, dry_run=dry_run)
                 self.sync_watched(movie, dry_run=dry_run)
                 if not is_partial:
                     listutil.addPlexItemToLists(movie)
+                    if self.config.clear_collected:
+                        movie_trakt_ids.add(movie.trakt_id)
+
+            if movie_trakt_ids:
+                self.clear_collected(self.trakt.movie_collection, movie_trakt_ids)
 
             shows = set()
             for episode in walker.find_episodes():
@@ -280,3 +296,16 @@ class Sync:
         if len(self.trakt_wl):
             for m in walker.media_from_traktlist(self.trakt_wl):
                 self.watchlist_sync_item(m, dry_run)
+
+    def clear_collected(self, existing_items: Iterable[TraktMedia], keep_ids: Set[int], dry_run=False):
+        from plextraktsync.trakt.trakt_set import trakt_set
+
+        existing_ids = trakt_set(existing_items)
+        delete_ids = existing_ids - keep_ids
+        delete_items = (tm for tm in existing_items if tm.trakt in delete_ids)
+
+        n = len(delete_ids)
+        for i, tm in enumerate(delete_items, start=1):
+            logger.info(f"Remove from Trakt collection ({i}/{n}): {tm}")
+            if not dry_run:
+                self.trakt.remove_from_collection(tm)

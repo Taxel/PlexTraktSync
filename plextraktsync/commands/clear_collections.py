@@ -11,16 +11,15 @@ def clear_collections(confirm: bool, dry_run: bool, collection: str):
         return
 
     trakt = factory.trakt_api
-
     movies = collection in ["all", "movies"]
     shows = collection in ["all", "shows"]
 
     for movie in trakt.movie_collection if movies else []:
-        logger.info(f"Deleting: {movie}")
+        logger.info(f"Deleting from Trakt: {movie}")
         if not dry_run:
             trakt.remove_from_collection(movie)
 
     for show in trakt.show_collection if shows else []:
-        logger.info(f"Deleting: {show}")
+        logger.info(f"Deleting from Trakt: {show}")
         if not dry_run:
             trakt.remove_from_collection(show)
