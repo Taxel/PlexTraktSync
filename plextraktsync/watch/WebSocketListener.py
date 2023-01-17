@@ -3,9 +3,9 @@ from __future__ import annotations
 from time import sleep
 from typing import TYPE_CHECKING
 
-from plextraktsync.events import Error
 from plextraktsync.factory import logging
 from plextraktsync.watch.EventDispatcher import EventDispatcher
+from plextraktsync.watch.events import Error
 
 if TYPE_CHECKING:
     from plexapi.server import PlexServer

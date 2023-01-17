@@ -3,9 +3,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.cached_property import cached_property
-from plextraktsync.events import (ActivityNotification, Error,
-                                  PlaySessionStateNotification, TimelineEntry)
 from plextraktsync.factory import logging
+from plextraktsync.watch.events import (ActivityNotification, Error,
+                                        PlaySessionStateNotification,
+                                        TimelineEntry)
 
 if TYPE_CHECKING:
     from plextraktsync.config.Config import Config
