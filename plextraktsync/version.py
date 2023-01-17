@@ -1,4 +1,4 @@
-from plextraktsync.util.Version import Version
+from plextraktsync.factory import factory
 
 
 def git_version_info():
@@ -16,8 +16,5 @@ def git_version_info():
     return f"{commit['commit'][0:8]}: {message} @{commit['author_date']}"
 
 
-VERSION = Version()
-
-
 def version():
-    return VERSION.version
+    return factory.version.version
