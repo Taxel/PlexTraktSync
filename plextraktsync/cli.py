@@ -53,8 +53,7 @@ def cli(ctx,
     """
 
     if version:
-        from .version import version
-        print(f"PlexTraktSync {version()}")
+        print(f"PlexTraktSync {factory.version.full_version}")
         return
 
     factory.run_config.update(

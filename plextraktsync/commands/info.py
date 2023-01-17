@@ -6,11 +6,10 @@ from trakt import __version__ as TRAKT_API_VERSION
 from plextraktsync.commands.plex_login import has_plex_token
 from plextraktsync.factory import factory, logger
 from plextraktsync.path import cache_dir, config_dir, log_dir, servers_config
-from plextraktsync.version import version as get_version
 
 
 def info(print=logger.info):
-    print(f"PlexTraktSync Version: {get_version()}")
+    print(f"PlexTraktSync Version: {factory.version.full_version}")
 
     py_version = sys.version.replace("\n", "")
     print(f"Python Version: {py_version}")

@@ -2,4 +2,4 @@ from plextraktsync.factory import factory
 
 
 def version():
-    return factory.version.full_version
+    return factory.full_version.full_version

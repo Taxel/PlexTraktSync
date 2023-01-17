@@ -5,7 +5,6 @@ from urllib.parse import quote_plus
 
 from plextraktsync.factory import factory
 from plextraktsync.util.expand_id import expand_id
-from plextraktsync.version import version
 
 if TYPE_CHECKING:
     from typing import List
@@ -90,7 +89,7 @@ def inspect_media(id: str):
 
 def inspect(inputs: List[str]):
     print = factory.print
-    print(f"PlexTraktSync [{version()}]")
+    print(f"PlexTraktSync [{factory.version.full_version}]")
 
     for id in expand_id(inputs):
         inspect_media(id)
