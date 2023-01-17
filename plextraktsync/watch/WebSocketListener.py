@@ -1,10 +1,14 @@
-from time import sleep
+from __future__ import annotations
 
-from plexapi.server import PlexServer
+from time import sleep
+from typing import TYPE_CHECKING
 
 from plextraktsync.events import Error
 from plextraktsync.factory import logging
 from plextraktsync.watch.EventDispatcher import EventDispatcher
+
+if TYPE_CHECKING:
+    from plexapi.server import PlexServer
 
 
 class WebSocketListener:
