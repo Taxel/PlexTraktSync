@@ -98,6 +98,13 @@ def cache():
 @command()
 @click.option("--confirm", is_flag=True, help="Confirm the dangerous action")
 @click.option("--dry-run", is_flag=True, help="Do not perform delete actions")
+@click.option(
+    "--collection",
+    type=click.Choice(["all", "movies", "shows"], case_sensitive=False),
+    default="all",
+    show_default=True,
+    help="Specify what type of Trakt collection to clear",
+)
 def clear_collections():
     """
     Clear Movies and Shows collections in Trakt
