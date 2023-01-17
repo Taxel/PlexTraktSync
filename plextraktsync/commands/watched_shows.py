@@ -1,6 +1,5 @@
-from rich.table import Table
-
 from plextraktsync.factory import factory
+from rich.table import Table
 
 
 def watched_shows():
