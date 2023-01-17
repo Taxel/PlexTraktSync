@@ -16,12 +16,17 @@ class Version:
             return f'{__version__[0:-4]}@pr/{v["pr"]}#{v["short_commit_id"]}'
 
         # If installed with Git
-        from plextraktsync.util.git_version_info import git_version_info
-        gv = git_version_info()
+        gv = self.git_version_info
         if gv:
             return f"{__version__}: {gv}"
 
         return __version__
+
+    @property
+    def git_version_info(self):
+        from plextraktsync.util.git_version_info import git_version_info
+
+        return git_version_info()
 
     @property
     def vcs_info(self):
