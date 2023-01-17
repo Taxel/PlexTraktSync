@@ -22,6 +22,12 @@ class Factory:
                 pass
 
     @cached_property
+    def version(self):
+        from plextraktsync.util.Version import Version
+
+        return Version()
+
+    @cached_property
     def console(self):
         from plextraktsync.rich_addons import RichHighlighter
         from rich.console import Console
