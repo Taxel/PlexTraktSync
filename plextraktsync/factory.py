@@ -187,7 +187,7 @@ class Factory:
 
     @cached_property
     def web_socket_listener(self):
-        from plextraktsync.listener import WebSocketListener
+        from plextraktsync.watch.WebSocketListener import WebSocketListener
 
         return WebSocketListener(plex=self.plex_server)
 

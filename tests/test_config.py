@@ -1,7 +1,7 @@
 #!/usr/bin/env python3 -m pytest
 from os.path import join
 
-from plextraktsync.config import Config
+from plextraktsync.config.Config import Config
 from plextraktsync.factory import factory
 
 

@@ -90,7 +90,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
 
     @property
     def sync(self):
-        from plextraktsync.sync import SyncConfig
+        from plextraktsync.config.SyncConfig import SyncConfig
 
         return SyncConfig(self)
 
