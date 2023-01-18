@@ -6,6 +6,7 @@ from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import logging
+from plextraktsync.util.remove_empty_values import remove_empty_values
 
 
 class TraktBatchWorker:
@@ -31,7 +32,7 @@ class TraktBatchWorker:
     def submit(self, name, items):
         method = getattr(self, name)
         result = method(self.normalize(items))
-        result = self.remove_empty_values(result.copy())
+        result = remove_empty_values(result.copy())
         if result:
             self.logger.debug(f"Submitted {name}: {result}")
 
