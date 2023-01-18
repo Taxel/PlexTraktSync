@@ -122,7 +122,7 @@ def info():
 
 
 @command()
-@click.argument("input", nargs=-1)
+@click.argument("inputs", nargs=-1)
 def inspect():
     """
     Inspect details of an object
