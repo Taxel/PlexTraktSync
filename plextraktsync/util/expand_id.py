@@ -27,6 +27,11 @@ def id_from_url(url: str):
     return url
 
 
+def plex_id(id):
+    key = id.rsplit('/', 1)[-1]
+    return f"https://metadata.provider.plex.tv/library/metadata/{key}"
+
+
 def expand_id(input):
     """
     Takes list of id or urls and resolves to Plex media id.
@@ -36,4 +41,6 @@ def expand_id(input):
             id = int(id)
         elif id.startswith("https:") or id.startswith("http:"):
             id = id_from_url(id)
+        elif id.startswith("plex://"):
+            id = plex_id(id)
         yield id
