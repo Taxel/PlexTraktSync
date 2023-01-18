@@ -26,6 +26,9 @@ class Queue:
     def remove_from_watchlist(self, data):
         self.add_queue("remove_from_watchlist", data)
 
+    def add_to_history(self, data):
+        self.add_queue("add_to_history", data)
+
     def add_queue(self, queue: str, data: Any):
         """
         Add "data" to "queue". Returns immediately
