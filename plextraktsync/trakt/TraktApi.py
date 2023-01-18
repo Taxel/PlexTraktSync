@@ -163,7 +163,7 @@ class TraktApi:
     @rate_limit()
     @time_limit()
     @retry()
-    def mark_watched(self, m, time, show_trakt_id=None):
+    def mark_watched(self, m: TraktMedia, time, show_trakt_id=None):
         m.mark_as_seen(time)
         if m.media_type == "movies":
             self.watched_movies.add(m.trakt)
