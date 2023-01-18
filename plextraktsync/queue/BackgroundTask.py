@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from queue import SimpleQueue
     from typing import Any
 
-    from plextraktsync.timer import Timer
+    from plextraktsync.util.Timer import Timer
 
 
 class BackgroundTask:

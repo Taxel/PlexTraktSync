@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 from plextraktsync.commands.login import ensure_login
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import factory, logger
-from plextraktsync.version import version
 
 if TYPE_CHECKING:
     from typing import List
@@ -26,7 +25,7 @@ def sync(
     Perform sync between Plex and Trakt
     """
 
-    logger.info(f"PlexTraktSync [{version()}]")
+    logger.info(f"PlexTraktSync [{factory.version.full_version}]")
 
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]

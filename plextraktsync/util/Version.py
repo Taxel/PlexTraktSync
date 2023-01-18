@@ -2,8 +2,14 @@ from plextraktsync.decorators.cached_property import cached_property
 
 
 class Version:
-    @cached_property
+    @property
     def version(self):
+        from plextraktsync import __version__
+
+        return __version__
+
+    @cached_property
+    def full_version(self):
         from plextraktsync import __version__
 
         # Released in PyPI
@@ -16,11 +22,47 @@ class Version:
             return f'{__version__[0:-4]}@pr/{v["pr"]}#{v["short_commit_id"]}'
 
         # If installed with Git
-        gv = git_version_info()
+        gv = self.git_version_info
         if gv:
             return f"{__version__}: {gv}"
 
         return __version__
+
+    @property
+    def py_full_version(self):
+        from sys import version
+
+        return version.replace("\n", "")
+
+    @property
+    def py_version(self):
+        from platform import python_version
+
+        return python_version()
+
+    @property
+    def py_platform(self):
+        from platform import platform
+
+        return platform(terse=True, aliased=True)
+
+    @property
+    def plex_api_version(self):
+        from plexapi import VERSION
+
+        return VERSION
+
+    @property
+    def trakt_api_version(self):
+        from trakt import __version__
+
+        return __version__
+
+    @property
+    def git_version_info(self):
+        from plextraktsync.util.git_version_info import git_version_info
+
+        return git_version_info()
 
     @property
     def vcs_info(self):
@@ -44,25 +86,3 @@ class Version:
         from plextraktsync.util.packaging import installed
 
         return installed()
-
-
-def git_version_info():
-    try:
-        from gitinfo import get_git_info
-    except (ImportError, TypeError):
-        return None
-
-    commit = get_git_info()
-    if not commit:
-        return None
-
-    message = commit["message"].split("\n")[0]
-
-    return f"{commit['commit'][0:8]}: {message} @{commit['author_date']}"
-
-
-VERSION = Version()
-
-
-def version():
-    return VERSION.version

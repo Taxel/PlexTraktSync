@@ -1,21 +1,15 @@
-import sys
-
-from plexapi import VERSION as PLEX_API_VERSION
-from trakt import __version__ as TRAKT_API_VERSION
-
 from plextraktsync.commands.plex_login import has_plex_token
 from plextraktsync.factory import factory, logger
 from plextraktsync.path import cache_dir, config_dir, log_dir, servers_config
-from plextraktsync.version import version as get_version
 
 
 def info(print=logger.info):
-    print(f"PlexTraktSync Version: {get_version()}")
+    version = factory.version
+    print(f"PlexTraktSync Version: {version.full_version}")
 
-    py_version = sys.version.replace("\n", "")
-    print(f"Python Version: {py_version}")
-    print(f"Plex API Version: {PLEX_API_VERSION}")
-    print(f"Trakt API Version: {TRAKT_API_VERSION}")
+    print(f"Python Version: {version.py_full_version}")
+    print(f"Plex API Version: {version.plex_api_version}")
+    print(f"Trakt API Version: {version.trakt_api_version}")
     print(f"Cache Dir: {cache_dir}")
     print(f"Config Dir: {config_dir}")
     print(f"Log Dir: {log_dir}")
