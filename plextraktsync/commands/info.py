@@ -1,4 +1,3 @@
-from plextraktsync.commands.plex_login import has_plex_token
 from plextraktsync.factory import factory, logger
 from plextraktsync.path import cache_dir, config_dir, log_dir, servers_config
 
@@ -25,7 +24,7 @@ def info(print=logger.info):
 
     print(f"Plex Server Name: {factory.server_config.name}")
 
-    if has_plex_token():
+    if factory.has_plex_token:
         plex = factory.plex_api
         print(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
         section_titles = [x.title for x in plex.library_sections.values()]
