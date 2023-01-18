@@ -4,7 +4,6 @@ from collections import defaultdict
 from typing import TYPE_CHECKING
 
 import trakt.sync
-from trakt.utils import timestamp
 
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
@@ -49,7 +48,7 @@ class TraktMarkWatchedWorker:
         for (m, watched_at) in items:
             result[m.media_type].append({
                 "ids": m.ids["ids"],
-                "watched_at": timestamp(watched_at),
+                "watched_at": watched_at,
             })
 
         return result
