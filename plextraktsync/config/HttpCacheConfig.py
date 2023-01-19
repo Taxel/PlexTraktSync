@@ -35,16 +35,23 @@ class HttpCacheConfig:
         "*.trakt.tv/shows/*/seasons": DO_NOT_CACHE,
         "*.trakt.tv/shows/*/seasons?extended=episodes": "1m",
         "*.trakt.tv/sync/collection/shows": "1m",
-        "*.trakt.tv/sync/watched/shows": "1m",
         "*.trakt.tv/users/*/collection/movies?extended=metadata": "1m",
         "*.trakt.tv/users/*/collection/movies": DO_NOT_CACHE,
         "*.trakt.tv/users/*/collection/shows": "1m",
         "*.trakt.tv/users/*/ratings/episodes": "1m",
         "*.trakt.tv/users/*/ratings/shows": "1m",
         "*.trakt.tv/users/*/ratings/movies": "1m",
-        "*.trakt.tv/users/*/watched/movies": "1m",
-        "*.trakt.tv/users/*/watchlist/movies": "1m",
-        "*.trakt.tv/users/*/watchlist/shows": "1m",
+
+        # Keep watched status cached, but fresh
+        "*.trakt.tv/sync/watched/shows": "1s",
+        "*.trakt.tv/users/*/watched/movies": "1s",
+
+        # Watchlist better be fresh for next run
+        "*.trakt.tv/users/*/watchlist/movies": "1s",
+        "*.trakt.tv/users/*/watchlist/shows": "1s",
+        "metadata.provider.plex.tv/library/sections/watchlist/all?*includeUserState=0": "1s",
+        "metadata.provider.plex.tv/library/sections/watchlist/all": "1s",
+
         "*.trakt.tv/users/likes/lists": DO_NOT_CACHE,
         "*.trakt.tv/users/me": DO_NOT_CACHE,
 
@@ -52,8 +59,6 @@ class HttpCacheConfig:
         "metadata.provider.plex.tv/library/metadata/*/userState": DO_NOT_CACHE,
         "metadata.provider.plex.tv/library/metadata/*?*includeUserState=1": DO_NOT_CACHE,
         "metadata.provider.plex.tv/library/metadata/*": LONG_EXPIRY,
-        "metadata.provider.plex.tv/library/sections/watchlist/all?*includeUserState=0": "1m",
-        "metadata.provider.plex.tv/library/sections/watchlist/all": DO_NOT_CACHE,
         "metadata.provider.plex.tv/library/search?query=*&searchTypes=movies&includeMetadata=1": "1h",
         "metadata.provider.plex.tv/library/search?query=*&searchTypes=tv&includeMetadata=1": "1h",
         # plex account
