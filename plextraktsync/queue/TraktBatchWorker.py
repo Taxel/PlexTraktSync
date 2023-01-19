@@ -6,6 +6,7 @@ from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import logging
+from plextraktsync.util.remove_empty_values import remove_empty_values
 
 
 class TraktBatchWorker:
@@ -31,7 +32,7 @@ class TraktBatchWorker:
     def submit(self, name, items):
         method = getattr(self, name)
         result = method(self.normalize(items))
-        result = self.remove_empty_values(result.copy())
+        result = remove_empty_values(result.copy())
         if result:
             self.logger.debug(f"Submitted {name}: {result}")
 
@@ -64,32 +65,5 @@ class TraktBatchWorker:
         result = defaultdict(list)
         for (media_type, item) in items:
             result[media_type].append(item)
-
-        return result
-
-    @staticmethod
-    def remove_empty_values(result):
-        """
-        Update result to remove empty changes.
-        This makes diagnostic printing cleaner if we don't print "changed: 0"
-        """
-        for change_type in ["added", "existing", "updated"]:
-            if change_type not in result:
-                continue
-            for media_type, value in result[change_type].copy().items():
-                if value == 0:
-                    del result[change_type][media_type]
-            if len(result[change_type]) == 0:
-                del result[change_type]
-
-        for media_type, items in result["not_found"].copy().items():
-            if len(items) == 0:
-                del result["not_found"][media_type]
-
-        if len(result["not_found"]) == 0:
-            del result["not_found"]
-
-        if len(result) == 0:
-            return None
 
         return result
