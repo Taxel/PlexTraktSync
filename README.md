@@ -216,7 +216,7 @@ Installing from GitHub is considered developer mode, and it's documented in
 - At first run you will be asked to setup Trakt and Plex access.
 
   Follow the instructions, your credentials and API keys will be stored in
-  `.env` and `.pytrakt.json` files.
+  `.env`and `.pytrakt.json` files. Plex URL and token is stored in `servers.yml`.
 
   If you have [2 Factor Authentication enabled on Plex][two-factor-authentication] you can append the code to your password.
 
