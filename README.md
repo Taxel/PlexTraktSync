@@ -301,6 +301,7 @@ last run then edit the "append" variable in `config.yml` to `false`.
 
 The `sync` subcommand supports `--sync=shows` and `--sync=movies` options,
 so you can sync only specific library types.
+Or only watchlist: `--sync=watchlist`.
 
 ```
 ➔ plextraktsync sync --help
@@ -309,8 +310,9 @@ Usage: plextraktsync sync [OPTIONS]
   Perform sync between Plex and Trakt
 
 Options:
-  --sync [all|movies|shows] Specify what to sync  [default: all]
-  --help                    Show this message and exit.
+  --sync [all|movies|shows|watchlist]
+                                  Specify what to sync  [default: all]
+  --help                          Show this message and exit.
 ```
 
 ### Unmatched
