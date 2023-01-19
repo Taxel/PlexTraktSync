@@ -1,7 +1,6 @@
 
 
-from plextraktsync.commands.plex_login import (has_plex_token,
-                                               plex_login_autoconfig)
+from plextraktsync.commands.plex_login import plex_login_autoconfig
 from plextraktsync.commands.trakt_login import (has_trakt_token,
                                                 trakt_login_autoconfig)
 from plextraktsync.factory import factory
@@ -9,7 +8,7 @@ from plextraktsync.style import highlight, success
 
 
 def ensure_login():
-    if not has_plex_token():
+    if not factory.has_plex_token:
         plex_login_autoconfig()
 
     if not has_trakt_token():

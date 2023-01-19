@@ -186,10 +186,6 @@ def choose_server(account: MyPlexAccount):
             print(Panel.fit(f"{e}. Try another server", padding=1, title="[b red]ERROR", border_style="red"))
 
 
-def has_plex_token():
-    return factory.has_plex_token
-
-
 def plex_login_autoconfig():
     username = environ.get("PLEX_USERNAME", CONFIG["PLEX_USERNAME"])
     password = environ.get("PLEX_PASSWORD", None)
@@ -201,7 +197,7 @@ def plex_login(username, password):
 
 
 def login(username: str, password: str):
-    if has_plex_token():
+    if factory.has_plex_token():
         if not Confirm.ask(PROMPT_PLEX_RELOGIN, default=True):
             return
 
