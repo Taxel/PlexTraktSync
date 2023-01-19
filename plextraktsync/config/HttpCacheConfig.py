@@ -61,7 +61,9 @@ class HttpCacheConfig:
         "metadata.provider.plex.tv/library/metadata/*": LONG_EXPIRY,
         "metadata.provider.plex.tv/library/search?query=*&searchTypes=movies&includeMetadata=1": "1h",
         "metadata.provider.plex.tv/library/search?query=*&searchTypes=tv&includeMetadata=1": "1h",
-        # plex account
+
+        # Plex account
+        # Cache for some time, this activates 304 responses
         "plex.tv/users/account": "1m",
 
         # Plex patterns
