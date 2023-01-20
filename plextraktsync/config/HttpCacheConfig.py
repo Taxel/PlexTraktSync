@@ -32,7 +32,7 @@ class HttpCacheConfig:
 
     default_policy = {
         # Requests matching these patterns will not be cached
-        "*.trakt.tv/shows/*/seasons?extended=episodes": "1m",
+        "*.trakt.tv/shows/*/seasons?extended=episodes": 28800,
         "*.trakt.tv/shows/*/seasons": DO_NOT_CACHE,
         "*.trakt.tv/sync/collection/shows": "1m",
         "*.trakt.tv/users/*/collection/movies?extended=metadata": "1m",
