@@ -61,6 +61,9 @@ class HttpCacheConfig:
         "metadata.provider.plex.tv/library/metadata/*": LONG_EXPIRY,
         "metadata.provider.plex.tv/library/search?query=*&searchTypes=movies&includeMetadata=1": "1h",
         "metadata.provider.plex.tv/library/search?query=*&searchTypes=tv&includeMetadata=1": "1h",
+        # https://web.dev/stale-while-revalidate/
+        # cache-control: max-age=0,stale-while-revalidate=86400
+        "metadata.provider.plex.tv/": 86400,
 
         # Plex account
         # Cache for some time, this activates 304 responses
