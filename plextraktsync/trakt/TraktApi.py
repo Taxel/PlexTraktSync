@@ -17,6 +17,7 @@ from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import factory, logger
 from plextraktsync.path import pytrakt_file
+from plextraktsync.trakt.PartialTraktMedia import PartialTraktMedia
 from plextraktsync.trakt.TraktLookup import TraktLookup
 from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
 from plextraktsync.trakt.types import TraktMedia
@@ -163,14 +164,17 @@ class TraktApi:
     @rate_limit()
     @time_limit()
     @retry()
-    def mark_watched(self, m, time, show_trakt_id=None):
-        m.mark_as_seen(time)
+    def mark_watched(self, m: TraktMedia, time, show_trakt_id=None):
         if m.media_type == "movies":
             self.watched_movies.add(m.trakt)
         elif m.media_type == "episodes" and show_trakt_id:
             self.watched_shows.add(show_trakt_id, m.season, m.number)
         else:
             raise RuntimeError(f"mark_watched: Unsupported media type: {m.media_type}")
+
+        # Add partial object to conserve memory
+        partial = PartialTraktMedia.create(m)
+        self.queue.add_to_history((partial, time))
 
     def add_to_collection(self, m, pm: PlexLibraryItem):
         if m.media_type == "movies":

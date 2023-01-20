@@ -278,8 +278,14 @@ class Factory:
         from plextraktsync.queue.BackgroundTask import BackgroundTask
         from plextraktsync.queue.Queue import Queue
         from plextraktsync.queue.TraktBatchWorker import TraktBatchWorker
+        from plextraktsync.queue.TraktMarkWatchedWorker import \
+            TraktMarkWatchedWorker
 
-        task = BackgroundTask(self.batch_delay_timer, TraktBatchWorker())
+        workers = [
+            TraktBatchWorker(),
+            TraktMarkWatchedWorker(),
+        ]
+        task = BackgroundTask(self.batch_delay_timer, *workers)
         queue = Queue(task)
 
         return queue
