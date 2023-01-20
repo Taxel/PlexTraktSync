@@ -84,8 +84,11 @@ xbmc-providers:
 #http_cache:
   # https://requests-cache.readthedocs.io/en/stable/user_guide/expiration.html#url-patterns
   #
-  # The value is seconds to cache,
-  # Special values "0" means never cache, value "-1" means never expires.
+  # The value is seconds to cache.
+  # Special values can be used:
+  #  - EXPIRE_IMMEDIATELY
+  #  - NEVER_EXPIRE
+  #  - DO_NOT_CACHE
   #
   # The value can be also suffixed with a time unit:
   # - 5m, 1h, 3d
@@ -95,6 +98,6 @@ xbmc-providers:
   # NOTE: If there is more than one match, the first match will be used in the order they are defined
 #  policy:
 #    "*.trakt.tv/users/me": 1d
-#    "*.trakt.tv/users/likes/lists": 0
+#    "*.trakt.tv/users/likes/lists": DO_NOT_CACHE
 
 # vim:ts=2:sw=2:et
