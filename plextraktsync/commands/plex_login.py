@@ -197,7 +197,7 @@ def plex_login(username, password):
 
 
 def login(username: str, password: str):
-    if factory.has_plex_token():
+    if factory.has_plex_token:
         if not Confirm.ask(PROMPT_PLEX_RELOGIN, default=True):
             return
 
