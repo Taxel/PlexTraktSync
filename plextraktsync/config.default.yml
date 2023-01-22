@@ -82,13 +82,14 @@ xbmc-providers:
 
 ##### Advanced settings below this line, don't edit unless you know what you're doing #####
 #http_cache:
-  # https://requests-cache.readthedocs.io/en/stable/user_guide/expiration.html#url-patterns
+  # https://requests-cache.readthedocs.io/en/main/user_guide/expiration.html#url-patterns
+  # https://requests-cache.readthedocs.io/en/main/user_guide/expiration.html#expiration-values
   #
   # The value is seconds to cache.
-  # Special values can be used:
-  #  - EXPIRE_IMMEDIATELY
-  #  - NEVER_EXPIRE
-  #  - DO_NOT_CACHE
+  # Or one of the following special values:
+  # - DO_NOT_CACHE: Skip both reading from and writing to the cache
+  # - EXPIRE_IMMEDIATELY: Consider the response already expired, but potentially usable
+  # - NEVER_EXPIRE: Store responses indefinitely
   #
   # The value can be also suffixed with a time unit:
   # - 5m, 1h, 3d
