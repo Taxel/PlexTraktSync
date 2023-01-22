@@ -18,7 +18,7 @@ class EventFactory:
     }
 
     def __init__(self):
-        self.module = importlib.import_module(self.__module__)
+        self.module = importlib.import_module("plextraktsync.watch.events")
 
     def get_events(self, message):
         if message["size"] != 1:
