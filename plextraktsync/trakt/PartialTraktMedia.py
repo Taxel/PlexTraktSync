@@ -13,10 +13,12 @@ if TYPE_CHECKING:
 class PartialTraktMedia:
     ids: Any
     media_type: str
+    watched_at: str = None
 
     @classmethod
-    def create(cls, m: TraktMedia):
+    def create(cls, m: TraktMedia, **extra):
         return cls(**{
             "ids": m.ids,
             "media_type": m.media_type,
+            **extra,
         })
