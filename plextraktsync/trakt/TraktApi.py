@@ -173,7 +173,7 @@ class TraktApi:
             raise RuntimeError(f"mark_watched: Unsupported media type: {m.media_type}")
 
         # Add partial object to conserve memory
-        partial = PartialTraktMedia.create(m)
+        partial = PartialTraktMedia.create(m, watched_at=time)
         self.queue.add_to_history((partial, time))
 
     def add_to_collection(self, m, pm: PlexLibraryItem):
