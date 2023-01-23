@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import timedelta
 from typing import TYPE_CHECKING
 
-from requests_cache import DO_NOT_CACHE
+from requests_cache import DO_NOT_CACHE, EXPIRE_IMMEDIATELY, NEVER_EXPIRE
 
 from plextraktsync.util.parse_date import parse_date
 
@@ -22,6 +22,13 @@ class HttpCacheConfig:
     """
 
     policy: ExpirationPatterns
+
+    # Special values for expiry patterns
+    expire_constants = {
+        "DO_NOT_CACHE": DO_NOT_CACHE,
+        "EXPIRE_IMMEDIATELY": EXPIRE_IMMEDIATELY,
+        "NEVER_EXPIRE": NEVER_EXPIRE,
+    }
 
     default_policy = {
         # Requests matching these patterns will not be cached
@@ -100,9 +107,13 @@ class HttpCacheConfig:
         # This will keep the order if user overwrote the item
         policy.update(self.policy)
 
-        # Parse string values with units to datetime
-        for k in (k for k, v in policy.items() if isinstance(v, str)):
-            policy[k] = parse_date(policy[k])
+        for (k, v) in ((k, v) for k, v in policy.items() if isinstance(v, str)):
+            # Special constants
+            if v in self.expire_constants:
+                policy[k] = self.expire_constants[v]
+                continue
+            # Parse string values with units to datetime
+            policy[k] = parse_date(v)
 
         return policy
 
