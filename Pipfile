@@ -23,7 +23,7 @@ pfzy = {version="==0.3.4", markers="python_version >= '3.7' and python_version <
 plexapi = "==4.13.2"
 prompt-toolkit = "==3.0.36"
 pygments = "==2.14.0"
-python-dotenv = "==0.21.0"
+python-dotenv = "==0.21.1"
 python-git-info = "==0.8.2"
 pytimeparse = "==1.1.8"
 pytrakt = "==3.4.20"
