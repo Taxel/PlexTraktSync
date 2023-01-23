@@ -6,7 +6,6 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-appdirs = "==1.4.4"
 attrs = "==22.2.0"
 "backports.cached-property" = {version="==1.0.2", python_version="<='3.7'"}
 cattrs = {version="==22.2.0", python_version=">='3.7'"}

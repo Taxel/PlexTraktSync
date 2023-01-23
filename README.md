@@ -98,9 +98,9 @@ plextraktsync sync
 ```
 
 NOTE: `pipx` install will use OS specific paths for Config, Logs, Cache, see
-[appdirs] documentation for details or check output of [info command](#info-command).
+[platformdirs] documentation for details or check output of [info command](#info-command).
 
-[appdirs]: https://pypi.org/project/appdirs
+[platformdirs]: https://pypi.org/project/platformdirs
 [install-pipx]: https://github.com/pypa/pipx#install-pipx
 
 ### Docker Compose
