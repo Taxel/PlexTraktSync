@@ -45,10 +45,10 @@ class TraktMarkWatchedWorker:
     @staticmethod
     def normalize(items: List):
         result = defaultdict(list)
-        for (m, watched_at) in items:
+        for m in items:
             result[m.media_type].append({
                 "ids": m.ids["ids"],
-                "watched_at": watched_at,
+                "watched_at": m.watched_at,
             })
 
         return result

@@ -174,7 +174,7 @@ class TraktApi:
 
         # Add partial object to conserve memory
         partial = PartialTraktMedia.create(m, watched_at=time)
-        self.queue.add_to_history((partial, time))
+        self.queue.add_to_history(partial)
 
     def add_to_collection(self, m, pm: PlexLibraryItem):
         if m.media_type == "movies":
