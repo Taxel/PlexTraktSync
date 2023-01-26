@@ -135,7 +135,7 @@ def prompt_server(servers: List[MyPlexResource]):
             server_names.append(format_server(s))
 
     print()
-    return inquirer.rawlist(
+    return inquirer.select(
         message="Select default server:",
         choices=server_names,
         default=None,
