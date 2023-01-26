@@ -37,5 +37,5 @@ tqdm==4.64.1
 url-normalize==1.4.3; python_version >= '3.6'
 urllib3==1.26.14
 wcwidth==0.2.6
-websocket-client==1.4.2
+websocket-client==1.5.0
 wrapt==1.14.1; python_version >= '3.5'
