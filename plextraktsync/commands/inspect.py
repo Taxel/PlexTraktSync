@@ -3,6 +3,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from urllib.parse import quote_plus
 
+from plexapi.utils import millisecondToHumanstr
+
 from plextraktsync.factory import factory
 from plextraktsync.util.expand_id import expand_id
 
@@ -60,6 +62,12 @@ def inspect_media(id: str):
         print("Parts:")
         for index, part in enumerate(pm.parts, start=1):
             print(f"  Part {index}: [link=file://{quote_plus(part.file)}]{part.file}[/link]")
+
+        print("Markers:")
+        for marker in pm.item.markers:
+            start = millisecondToHumanstr(marker.start)
+            end = millisecondToHumanstr(marker.end)
+            print(f"  {marker.type}: {start} - {end}")
 
     print("Guids:")
     for guid in pm.guids:
