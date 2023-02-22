@@ -49,7 +49,7 @@ label or to improve documentation [docs-needed], thank you.**
 ## Features
 
 - Media in Plex are added to Trakt collection
-- Ratings are synced (if ratings differ, Trakt takes precedence)
+- Ratings are synced
 - Watched status are synced (dates are not reported from Trakt to Plex)
 - Liked lists in Trakt are downloaded and all movies in Plex belonging to that
   list are added
