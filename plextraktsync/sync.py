@@ -133,16 +133,12 @@ class Sync:
         if m.plex_rating is m.trakt_rating:
             return
 
-        # Plex rating takes precedence over Trakt rating
-        if m.plex_rating is not None:
-            if not self.config.plex_to_trakt["ratings"]:
-                return
+        # If two-way rating sync, Plex rating takes precedence over Trakt rating
+        if m.plex_rating is not None and self.config.plex_to_trakt["ratings"]:
             logger.info(f"Rating '{m.title}' with {m.plex_rating} on Trakt")
             if not dry_run:
                 m.trakt_rate()
-        elif m.trakt_rating is not None:
-            if not self.config.trakt_to_plex["ratings"]:
-                return
+        elif m.trakt_rating is not None and self.config.trakt_to_plex["ratings"]:
             logger.info(f"Rating '{m.title}' with {m.trakt_rating} on Plex")
             if not dry_run:
                 m.plex_rate()
