@@ -38,7 +38,7 @@ url-normalize = {version="==1.4.3", python_version=">='3.6'"}
 urllib3 = "==1.26.14"
 wcwidth = "==0.2.6"
 websocket-client = "==1.5.1"
-wrapt = {version="==1.14.1", python_version=">='3.5'"}
+wrapt = {version="==1.15.0", python_version=">='3.5'"}
 
 [requires]
 python_version = "3"
