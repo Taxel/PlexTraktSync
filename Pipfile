@@ -21,7 +21,7 @@ oauthlib = "==3.2.2"
 pfzy = {version="==0.3.4", markers="python_version >= '3.7' and python_version < '4.0'"}
 platformdirs = {version="==3.0.0", python_version=">='3.7'"}
 plexapi = "==4.13.2"
-prompt-toolkit = "==3.0.37"
+prompt-toolkit = "==3.0.38"
 pygments = "==2.14.0"
 python-dotenv = "==0.21.1"
 python-git-info = "==0.8.2"
