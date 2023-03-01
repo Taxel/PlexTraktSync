@@ -108,6 +108,7 @@ class Factory:
 
         return CachedSession(
             cache_name=self.config.cache_path,
+            cache_control=True,
             urls_expire_after=urls_expire_after,
         )
 
