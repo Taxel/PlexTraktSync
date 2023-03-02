@@ -64,7 +64,7 @@ def inspect_media(id: str):
             print(f"  Part {index}: [link=file://{quote_plus(part.file)}]{part.file}[/link]")
 
         print("Markers:")
-        for marker in pm.item.markers:
+        for marker in pm.markers:
             start = millisecondToHumanstr(marker.start)
             end = millisecondToHumanstr(marker.end)
             print(f"  {marker.type}: {start} - {end}")
