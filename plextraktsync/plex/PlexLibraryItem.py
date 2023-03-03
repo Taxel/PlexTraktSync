@@ -136,6 +136,14 @@ class PlexLibraryItem:
         return self.date_value(self.item.addedAt)
 
     @property
+    def markers(self) -> List[MediaPart]:
+        try:
+            return self.item.markers
+        except AttributeError:
+            # If not enough access to server, the markers attribute is missing
+            return []
+
+    @property
     def parts(self) -> List[MediaPart]:
         item = self.plex.fetch_item(self.item.ratingKey)
         for media in item.item.media:
