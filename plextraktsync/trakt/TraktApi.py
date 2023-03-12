@@ -23,8 +23,6 @@ from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
 from plextraktsync.trakt.types import TraktMedia
 
 if TYPE_CHECKING:
-    from typing import List, Optional, Union
-
     from trakt.movies import Movie
     from trakt.tv import TVEpisode, TVShow
 
@@ -88,11 +86,10 @@ class TraktApi:
 
     @cached_property
     @flatten_list
-    def episodes_collection(self) -> List[TVEpisode]:
+    def episodes_collection(self) -> list[TVEpisode]:
         for show in self.show_collection:
             for season in show.seasons:
-                for episode in season.episodes:
-                    yield episode
+                yield from season.episodes
 
     def remove_from_collection(self, m: TraktMedia):
         if m.media_type not in ["movies", "shows", "episodes"]:
@@ -138,7 +135,7 @@ class TraktApi:
     def ratings(self):
         return TraktRatingCollection(self)
 
-    def rating(self, m) -> Optional[int]:
+    def rating(self, m) -> int | None:
         """
         The trakt api (Python module) is inconsistent:
         - Movie has "rating" property, while TVShow does not
@@ -229,7 +226,7 @@ class TraktApi:
 
     @rate_limit()
     @retry()
-    def search_by_id(self, media_id: str, id_type: str, media_type: str) -> Optional[Union[TVShow, Movie]]:
+    def search_by_id(self, media_id: str, id_type: str, media_type: str) -> TVShow | Movie | None:
         if id_type == "tvdb" and media_type == "movie":
             # Skip invalid search.
             # The Trakt API states that tvdb is only for shows and episodes:

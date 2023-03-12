@@ -6,14 +6,12 @@ from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_dict
 
 if TYPE_CHECKING:
-    from typing import Dict, List
-
     from plextraktsync.media import Media
     from plextraktsync.trakt.types import TraktMedia
 
 
 class TraktWatchList:
-    def __init__(self, watchlist: List[TraktMedia]):
+    def __init__(self, watchlist: list[TraktMedia]):
         self.watchlist = watchlist
 
     def __iter__(self):
@@ -33,7 +31,7 @@ class TraktWatchList:
 
     @cached_property
     @flatten_dict
-    def idmap(self) -> Dict[int]:
+    def idmap(self) -> dict[int]:
         """
         Return map of trakt_id of Trakt Watchlist items.
         We use dict() rather set() to be able to remove items from it.

@@ -8,7 +8,6 @@ from plextraktsync.decorators.cached_property import cached_property
 
 if TYPE_CHECKING:
     from logging import Logger, LogRecord
-    from typing import Dict, List
 
 
 @dataclass
@@ -27,7 +26,7 @@ class FilterRule:
 
 # https://stackoverflow.com/a/879937/2314626
 class LoggerFilter(Filter):
-    def __init__(self, rules: List[Dict], logger: Logger):
+    def __init__(self, rules: list[dict], logger: Logger):
         super().__init__()
         self.logger = logger
         self.rules = self.build_rules(rules or [])

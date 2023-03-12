@@ -18,8 +18,6 @@ from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
 
 if TYPE_CHECKING:
-    from typing import Dict, List, Optional, Union
-
     from plexapi.media import MediaPart, SubtitleStream
     from plexapi.video import Movie, Show
 
@@ -43,7 +41,7 @@ class PlexApi:
         return "https://app.plex.tv/desktop/#!/provider/tv.plex.provider.discover"
 
     @flatten_list
-    def movie_sections(self, library=None) -> List[PlexLibrarySection]:
+    def movie_sections(self, library=None) -> list[PlexLibrarySection]:
         for section in self.library_sections.values():
             if section.type != "movie":
                 continue
@@ -52,7 +50,7 @@ class PlexApi:
             yield section
 
     @flatten_list
-    def show_sections(self, library=None) -> List[PlexLibrarySection]:
+    def show_sections(self, library=None) -> list[PlexLibrarySection]:
         for section in self.library_sections.values():
             if section.type != "show":
                 continue
@@ -62,7 +60,7 @@ class PlexApi:
 
     @memoize
     @retry()
-    def fetch_item(self, key: Union[int, str]) -> Optional[PlexLibraryItem]:
+    def fetch_item(self, key: int | str) -> PlexLibraryItem | None:
         try:
             if isinstance(key, str) and key.startswith("https://metadata.provider.plex.tv/library/metadata/"):
                 # https://github.com/pkkid/python-plexapi/issues/1091
@@ -93,7 +91,7 @@ class PlexApi:
 
         return f"{base_url}/details?key={key}"
 
-    def download(self, m: Union[SubtitleStream, MediaPart], **kwargs):
+    def download(self, m: SubtitleStream | MediaPart, **kwargs):
         url = self.plex.url(m.key)
         token = self.plex._token
 
@@ -114,7 +112,7 @@ class PlexApi:
 
     @cached_property
     @flatten_dict
-    def library_sections(self) -> Dict[int, PlexLibrarySection]:
+    def library_sections(self) -> dict[int, PlexLibrarySection]:
         excluded_libraries = factory.config["excluded-libraries"]
         for section in self.plex.library.sections():
             if section.title in excluded_libraries:
@@ -140,7 +138,7 @@ class PlexApi:
         m.rate(rating)
 
     @staticmethod
-    def same_list(list_a: List[PlexMedia], list_b: List[PlexMedia]) -> bool:
+    def same_list(list_a: list[PlexMedia], list_b: list[PlexMedia]) -> bool:
         """
         Return true if two list contain same Plex items.
         The comparison is made on ratingKey property,
@@ -156,11 +154,11 @@ class PlexApi:
 
         return a == b
 
-    def update_playlist(self, name: str, items: List[PlexMedia], description=None) -> bool:
+    def update_playlist(self, name: str, items: list[PlexMedia], description=None) -> bool:
         """
         Updates playlist (creates if name missing) replacing contents with items[]
         """
-        playlist: Optional[Playlist] = None
+        playlist: Playlist | None = None
         try:
             playlist = self.plex.playlist(name)
         except NotFound:
@@ -242,7 +240,7 @@ class PlexApi:
                 logger.error(f"Error during {plex_username} account access: {e}")
         return None
 
-    def watchlist(self, libtype=None) -> Optional[List[Union[Movie, Show]]]:
+    def watchlist(self, libtype=None) -> list[Movie | Show] | None:
         if self.account:
             params = {
                 'includeCollections': 0,

@@ -9,7 +9,7 @@ from plextraktsync.trakt.types import TraktMedia
 from plextraktsync.trakt_list_util import TraktListUtil
 
 if TYPE_CHECKING:
-    from typing import Iterable, Set
+    from typing import Iterable
 
     from plextraktsync.config.Config import Config
     from plextraktsync.media import Media
@@ -219,7 +219,7 @@ class Sync:
             for m in walker.media_from_traktlist(self.trakt_wl):
                 self.watchlist_sync_item(m, dry_run)
 
-    def clear_collected(self, existing_items: Iterable[TraktMedia], keep_ids: Set[int], dry_run=False):
+    def clear_collected(self, existing_items: Iterable[TraktMedia], keep_ids: set[int], dry_run=False):
         from plextraktsync.trakt.trakt_set import trakt_set
 
         existing_ids = trakt_set(existing_items)

@@ -1,10 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from typing import List
 
 
 @dataclass
@@ -15,7 +11,7 @@ class PlexServerConfig:
 
     name: str
     token: str
-    urls: List[str]
+    urls: list[str]
 
     def asdict(self):
         data = asdict(self)

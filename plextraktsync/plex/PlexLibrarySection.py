@@ -9,8 +9,6 @@ from plextraktsync.decorators.retry import retry
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 if TYPE_CHECKING:
-    from typing import Optional, Union
-
     from plexapi.library import LibrarySection
 
     from plextraktsync.plex.PlexApi import PlexApi
@@ -45,7 +43,7 @@ class PlexLibrarySection:
     def search(self, **kwargs):
         return self.section.search(**kwargs)
 
-    def find_by_id(self, id: Union[str, int]) -> Optional[PlexMedia]:
+    def find_by_id(self, id: str | int) -> PlexMedia | None:
         try:
             return self.section.fetchItem(int(id))
         except NotFound:

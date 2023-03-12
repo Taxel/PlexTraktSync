@@ -13,8 +13,6 @@ from plextraktsync.factory import factory
 from plextraktsync.plex.PlexGuid import PlexGuid
 
 if TYPE_CHECKING:
-    from typing import List
-
     from plexapi.media import MediaPart
 
     from plextraktsync.plex.PlexApi import PlexApi
@@ -136,7 +134,7 @@ class PlexLibraryItem:
         return self.date_value(self.item.addedAt)
 
     @property
-    def markers(self) -> List[MediaPart]:
+    def markers(self) -> list[MediaPart]:
         try:
             return self.item.markers
         except AttributeError:
@@ -144,7 +142,7 @@ class PlexLibraryItem:
             return []
 
     @property
-    def parts(self) -> List[MediaPart]:
+    def parts(self) -> list[MediaPart]:
         item = self.plex.fetch_item(self.item.ratingKey)
         for media in item.item.media:
             yield from media.parts

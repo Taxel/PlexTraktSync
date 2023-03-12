@@ -1,13 +1,8 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from plextraktsync.commands.login import ensure_login
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import factory, logger
-
-if TYPE_CHECKING:
-    from typing import List
 
 
 def sync(
@@ -15,7 +10,7 @@ def sync(
     library: str,
     show: str,
     movie: str,
-    ids: List[str],
+    ids: list[str],
     server: str,
     batch_delay: int,
     dry_run: bool,

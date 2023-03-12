@@ -11,7 +11,7 @@ from plextraktsync.trakt.TraktApi import TraktApi
 from plextraktsync.trakt.TraktItem import TraktItem
 
 if TYPE_CHECKING:
-    from typing import Any, Generator, Iterable, List, Set
+    from typing import Any, Generator, Iterable
 
     from plexapi.video import Episode, Movie, Show
 
@@ -85,11 +85,11 @@ class WalkConfig:
 
 
 class WalkPlan(NamedTuple):
-    movie_sections: List[PlexLibrarySection]
-    show_sections: List[PlexLibrarySection]
-    movies: List[Movie]
-    shows: List[Show]
-    episodes: List[Episode]
+    movie_sections: list[PlexLibrarySection]
+    show_sections: list[PlexLibrarySection]
+    movies: list[Movie]
+    shows: list[Show]
+    episodes: list[Episode]
 
 
 class WalkPlanner:
@@ -301,7 +301,7 @@ class Walker:
                 continue
             yield from self.episode_from_show(show)
 
-    def walk_shows(self, shows: Set[Media], title="Processing Shows"):
+    def walk_shows(self, shows: set[Media], title="Processing Shows"):
         if not shows:
             return
         yield from self.progressbar(shows, desc=title)
@@ -320,7 +320,7 @@ class Walker:
             me.show = show
             yield me
 
-    def media_from_sections(self, sections: List[PlexLibrarySection]) -> Generator[PlexLibraryItem, Any, None]:
+    def media_from_sections(self, sections: list[PlexLibrarySection]) -> Generator[PlexLibraryItem, Any, None]:
         for section in sections:
             with measure_time(f"{section.title} processed"):
                 total = len(section)
@@ -331,7 +331,7 @@ class Walker:
                 )
                 yield from it
 
-    def media_from_items(self, libtype: str, items: List) -> Generator[PlexLibraryItem, Any, None]:
+    def media_from_items(self, libtype: str, items: list) -> Generator[PlexLibraryItem, Any, None]:
         it = self.progressbar(items, desc=f"Processing {libtype}s")
         for m in it:
             yield PlexLibraryItem(m, self.plex)

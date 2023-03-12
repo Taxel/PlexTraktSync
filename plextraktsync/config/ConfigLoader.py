@@ -31,7 +31,7 @@ class ConfigLoader:
     def load_json(path: str):
         from json import JSONDecodeError, load
 
-        with open(path, "r", encoding="utf-8") as fp:
+        with open(path, encoding="utf-8") as fp:
             try:
                 config = load(fp)
             except JSONDecodeError as e:
@@ -42,7 +42,7 @@ class ConfigLoader:
     def load_yaml(path: str):
         import yaml
 
-        with open(path, "r", encoding="utf-8") as fp:
+        with open(path, encoding="utf-8") as fp:
             try:
                 config = yaml.safe_load(fp)
             except yaml.YAMLError as e:

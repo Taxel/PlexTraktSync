@@ -20,8 +20,6 @@ from rich.panel import Panel
 from rich.prompt import Confirm, Prompt
 
 if TYPE_CHECKING:
-    from typing import List
-
     from plexapi.myplex import MyPlexResource, ResourceConnection
 
 PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
@@ -119,7 +117,7 @@ def format_server(s):
     return Choice(value=s.name, name="\n    ".join(lines))
 
 
-def prompt_server(servers: List[MyPlexResource]):
+def prompt_server(servers: list[MyPlexResource]):
     owned_servers = [s for s in servers if s.owned]
     unowned_servers = [s for s in servers if not s.owned]
     sorter = partial(sorted, key=lambda s: s.lastSeenAt, reverse=True)
