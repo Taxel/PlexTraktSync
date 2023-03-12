@@ -73,10 +73,6 @@ class Media:
         return self.trakt.trakt
 
     @property
-    def plex_url(self):
-        return self.plex_api.media_url(self.plex)
-
-    @property
     def trakt_url(self):
         return f"https://trakt.tv/{self.media_type}/{self.trakt_id}"
 
