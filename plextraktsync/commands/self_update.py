@@ -1,12 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from plextraktsync.factory import factory
 from plextraktsync.util.execp import execp
-
-if TYPE_CHECKING:
-    from typing import Optional
 
 
 def has_previous_pr(pr: int):
@@ -17,7 +12,7 @@ def has_previous_pr(pr: int):
     return package is not None
 
 
-def pr_number() -> Optional[int]:
+def pr_number() -> int | None:
     """
     Check if current executable is named plextraktsync@<pr>
     """

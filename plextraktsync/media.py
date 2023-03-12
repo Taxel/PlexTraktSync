@@ -11,8 +11,6 @@ from plextraktsync.factory import logger
 from plextraktsync.trakt.TraktLookup import TraktLookup
 
 if TYPE_CHECKING:
-    from typing import List, Optional
-
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.PlexGuid import PlexGuid
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
@@ -83,7 +81,7 @@ class Media:
         return f"https://trakt.tv/{self.media_type}/{self.trakt_id}"
 
     @property
-    def show(self) -> Optional[Media]:
+    def show(self) -> Media | None:
         if self._show is None and self.mf and not self.plex.is_discover:
             # TODO: fetch show for discover items
             ps = self.plex_api.fetch_item(self.plex.item.grandparentRatingKey)
@@ -237,7 +235,7 @@ class MediaFactory:
         self.plex = plex
         self.trakt = trakt
 
-    def resolve_any(self, pm: PlexLibraryItem, show: Media = None) -> Optional[Media]:
+    def resolve_any(self, pm: PlexLibraryItem, show: Media = None) -> Media | None:
         try:
             guids = pm.guids
         except (PlexApiException, RequestException) as e:
@@ -287,7 +285,7 @@ class MediaFactory:
     def make_media(self, plex: PlexLibraryItem, trakt):
         return Media(plex, trakt, plex_api=self.plex, trakt_api=self.trakt, mf=self)
 
-    def _guid_match(self, candidates: List[PlexLibraryItem], tm: TraktItem) -> Optional[PlexLibraryItem]:
+    def _guid_match(self, candidates: list[PlexLibraryItem], tm: TraktItem) -> PlexLibraryItem | None:
         if candidates:
             for pm in candidates:
                 for guid in pm.guids:

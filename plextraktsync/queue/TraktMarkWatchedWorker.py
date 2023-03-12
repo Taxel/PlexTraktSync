@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import TYPE_CHECKING
 
 import trakt.sync
 
@@ -10,9 +9,6 @@ from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import logging
 from plextraktsync.util.remove_empty_values import remove_empty_values
-
-if TYPE_CHECKING:
-    from typing import Dict, List
 
 
 class TraktMarkWatchedWorker:
@@ -39,11 +35,11 @@ class TraktMarkWatchedWorker:
     @rate_limit()
     @time_limit()
     @retry()
-    def add_to_history(self, items: Dict):
+    def add_to_history(self, items: dict):
         return trakt.sync.add_to_history(items)
 
     @staticmethod
-    def normalize(items: List):
+    def normalize(items: list):
         result = defaultdict(list)
         for m in items:
             result[m.media_type].append({

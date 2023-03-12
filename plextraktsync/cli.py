@@ -91,7 +91,6 @@ def cache():
     """
     Manage and analyze Requests Cache.
     """
-    pass
 
 
 @command()
@@ -109,16 +108,12 @@ def clear_collections():
     Clear Movies and Shows collections in Trakt
     """
 
-    pass
-
 
 @command()
 def info():
     """
     Print application and environment version info
     """
-
-    pass
 
 
 @command()
@@ -128,15 +123,12 @@ def inspect():
     Inspect details of an object
     """
 
-    pass
-
 
 @command()
 def login():
     """
     Log in to Plex and Trakt if needed
     """
-    pass
 
 
 def env_plex_username():
@@ -161,7 +153,6 @@ def plex_login():
     """
     Log in to Plex Account to obtain Access Token. Optionally can use managed user on servers that you own.
     """
-    pass
 
 
 @command()
@@ -219,7 +210,6 @@ def sync():
     """
     Perform sync between Plex and Trakt
     """
-    pass
 
 
 @command()
@@ -227,7 +217,6 @@ def trakt_login():
     """
     Log in to Trakt Account to obtain Access Token.
     """
-    pass
 
 
 @command()
@@ -251,8 +240,6 @@ def unmatched():
     List media that has no match in Trakt or Plex
     """
 
-    pass
-
 
 @command()
 @click.option(
@@ -264,7 +251,6 @@ def watch():
     """
     Listen to events from Plex
     """
-    pass
 
 
 @command()
@@ -278,7 +264,6 @@ def download():
     """
     Downloads movie or subtitles to a local directory
     """
-    pass
 
 
 @command()
@@ -297,7 +282,6 @@ def self_update():
     Updating PlexTraktSync to latest using pipx
     upgraded package plextraktsync from 0.15.3 to 0.18.5 (location: /Users/glen/.local/pipx/venvs/plextraktsync)
     """
-    pass
 
 
 @command()
@@ -305,7 +289,6 @@ def bug_report():
     """
     Create a pre-populated GitHub issue with information about your configuration
     """
-    pass
 
 
 @command()
@@ -320,7 +303,6 @@ def imdb_import():
     \b
     - https://help.imdb.com/article/imdb/track-movies-tv/ratings-faq/G67Y87TFYYP6TWAV
     """
-    pass
 
 
 @command()
@@ -328,7 +310,6 @@ def watched_shows():
     """
     Print a table of watched shows
     """
-    pass
 
 
 @command()
@@ -337,7 +318,6 @@ def config():
     """
     Print user config for debugging and bug reports.
     """
-    pass
 
 
 cli.add_command(bug_report)

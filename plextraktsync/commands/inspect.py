@@ -9,8 +9,6 @@ from plextraktsync.factory import factory
 from plextraktsync.util.expand_id import expand_id
 
 if TYPE_CHECKING:
-    from typing import List
-
     from plextraktsync.media import Media
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
@@ -95,7 +93,7 @@ def inspect_media(id: str):
         )
 
 
-def inspect(inputs: List[str]):
+def inspect(inputs: list[str]):
     print = factory.print
     print(f"PlexTraktSync [{factory.version.full_version}]")
 

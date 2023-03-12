@@ -1,10 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from typing import Optional
 
 
 @dataclass
@@ -17,7 +13,7 @@ class RunConfig:
     batch_delay: int = 5
     progressbar: bool = True
     cache: bool = True
-    server: Optional[str] = None
+    server: str | None = None
 
     def update(self, **kwargs):
         for name, value in kwargs.items():

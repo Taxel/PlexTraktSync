@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import plexapi
 from plexapi.exceptions import Unauthorized
 from plexapi.server import PlexServer
@@ -10,9 +8,6 @@ from requests.exceptions import ConnectionError, SSLError
 from plextraktsync.config import PLEX_PLATFORM
 from plextraktsync.decorators.nocache import nocache
 from plextraktsync.factory import Factory, logging
-
-if TYPE_CHECKING:
-    from typing import List
 
 
 class PlexServerConnection:
@@ -33,7 +28,7 @@ class PlexServerConnection:
         return self.factory.session
 
     @nocache
-    def connect(self, urls: List[str], token: str):
+    def connect(self, urls: list[str], token: str):
         plexapi.X_PLEX_PLATFORM = PLEX_PLATFORM
         plexapi.TIMEOUT = self.timeout
         plexapi.BASE_HEADERS["X-Plex-Platform"] = plexapi.X_PLEX_PLATFORM

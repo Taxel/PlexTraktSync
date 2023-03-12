@@ -7,8 +7,6 @@ from plextraktsync.factory import factory
 from plextraktsync.util.expand_id import expand_id
 
 if TYPE_CHECKING:
-    from typing import List
-
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
@@ -35,7 +33,7 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem):
             plex.download(sub, filename=filename, showstatus=True)
 
 
-def download(input: List[str], only_subs: bool):
+def download(input: list[str], only_subs: bool):
     plex = factory.plex_api
     print = factory.print
 

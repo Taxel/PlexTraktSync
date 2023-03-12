@@ -6,13 +6,11 @@ from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.factory import factory
 
 if TYPE_CHECKING:
-    from typing import Optional
-
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 
 class PlexGuid:
-    def __init__(self, guid: str, type: str, pm: Optional[PlexLibraryItem] = None):
+    def __init__(self, guid: str, type: str, pm: PlexLibraryItem | None = None):
         self.guid = guid
         self.type = type
         self.pm = pm

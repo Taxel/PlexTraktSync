@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from itertools import count
-from typing import TYPE_CHECKING
 
 from plexapi.video import Episode
 from trakt.core import get
@@ -9,9 +8,6 @@ from trakt.errors import NotFoundException, OAuthException
 from trakt.users import UserList
 
 from plextraktsync.factory import logger
-
-if TYPE_CHECKING:
-    from typing import List
 
 
 class LazyUserList(UserList):
@@ -85,7 +81,7 @@ class TraktList:
 
 
 class TraktListUtil:
-    lists: List[TraktList]
+    lists: list[TraktList]
 
     def __init__(self):
         self.lists = []

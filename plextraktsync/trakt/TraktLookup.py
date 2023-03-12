@@ -10,8 +10,6 @@ EPISODES_ORDERING_WARNING = "episodes ordering is different in Plex and Trakt. "
                             "Check your Plex media source, TMDB is recommended."
 
 if TYPE_CHECKING:
-    from typing import Optional
-
     from trakt.tv import TVEpisode, TVShow
 
     from plextraktsync.plex.PlexGuid import PlexGuid
@@ -68,7 +66,7 @@ class TraktLookup:
         return te
 
     @staticmethod
-    def invalid_match(guid: PlexGuid, episode: Optional[TVEpisode]) -> bool:
+    def invalid_match(guid: PlexGuid, episode: TVEpisode | None) -> bool:
         """
         Checks if guid and episode don't match by comparing trakt provided id
         """

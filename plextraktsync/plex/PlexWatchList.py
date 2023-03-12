@@ -6,14 +6,12 @@ from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_set
 
 if TYPE_CHECKING:
-    from typing import List, Set
-
     from plextraktsync.media import Media
     from plextraktsync.plex.types import PlexMedia
 
 
 class PlexWatchList:
-    def __init__(self, watchlist: List[PlexMedia]):
+    def __init__(self, watchlist: list[PlexMedia]):
         self.watchlist = watchlist
 
     def __iter__(self):
@@ -27,7 +25,7 @@ class PlexWatchList:
 
     @cached_property
     @flatten_set
-    def guidmap(self) -> Set[str]:
+    def guidmap(self) -> set[str]:
         """
         Return set() of guid of Plex Watchlist items
         """
