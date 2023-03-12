@@ -1,5 +1,3 @@
-
-
 from plextraktsync.factory import factory, logger
 
 

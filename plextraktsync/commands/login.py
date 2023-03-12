@@ -1,5 +1,3 @@
-
-
 from plextraktsync.commands.plex_login import plex_login_autoconfig
 from plextraktsync.commands.trakt_login import (has_trakt_token,
                                                 trakt_login_autoconfig)

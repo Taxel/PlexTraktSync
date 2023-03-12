@@ -1,5 +1,3 @@
-
-
 from plextraktsync.commands.login import ensure_login
 from plextraktsync.factory import factory
 
