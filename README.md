@@ -125,6 +125,12 @@ services:
 
 #### Run the Docker Container
 
+To login to Plex: 
+
+```
+docker-compose run --rm plextraktsync plex-login
+```
+
 To run sync:
 
 ```
