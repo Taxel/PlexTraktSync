@@ -3,11 +3,9 @@ from __future__ import annotations
 import datetime
 from typing import TYPE_CHECKING
 
-from plexapi.media import AudioStream, SubtitleStream, VideoStream
 from trakt.utils import timestamp
 
 from plextraktsync.decorators.cached_property import cached_property
-from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory
 from plextraktsync.plex.PlexGuid import PlexGuid
@@ -147,24 +145,17 @@ class PlexLibraryItem:
         for media in item.item.media:
             yield from media.parts
 
-    @flatten_list
-    def streams(self, cls):
-        for part in self.parts:
-            for stream in part.streams:
-                if isinstance(stream, cls):
-                    yield stream
-
     @property
     def audio_streams(self):
-        return self.streams(AudioStream)
+        return self.item.audioStreams()
 
     @property
     def video_streams(self):
-        return self.streams(VideoStream)
+        return self.item.videoStreams()
 
     @property
     def subtitle_streams(self):
-        return self.streams(SubtitleStream)
+        return self.item.subtitleStreams()
 
     @property
     def audio_channels(self):
