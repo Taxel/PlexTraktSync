@@ -38,6 +38,7 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem):
                 continue
 
             plex.download(sub, filename=filename, showstatus=True)
+            print(f"Downloaded: {filename}")
 
 
 def download(input: list[str], only_subs: bool):
