@@ -123,6 +123,14 @@ services:
       - TZ=Europe/Tallinn
 ```
 
+You can use specific version `0.25.16`:
+- `image: ghcr.io/taxel/plextraktsync:0.25.16`
+
+or latest 0.25.x version:
+- `image: ghcr.io/taxel/plextraktsync:0.25`
+
+Note: `main` is development version and reporting bugs against development versions are not supported.
+
 #### Run the Docker Container
 
 To run sync:
