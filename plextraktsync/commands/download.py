@@ -12,14 +12,13 @@ if TYPE_CHECKING:
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 
-def download_media(plex: PlexApi, pm: PlexLibraryItem, savepath: str):
+def download_media(plex: PlexApi, pm: PlexLibraryItem, savepath: Path):
     print(f"Download media for {pm}:")
     for index, part in enumerate(pm.parts, start=1):
         # Remove directory part (Windows server on Unix)
         # plex.download() is able to do that on Unix to Unix server, but not Windows to Unix
         filename = PureWindowsPath(part.file).name
-        # Prepend save path, and expand ~ as HOME
-        filename = Path(savepath, filename).expanduser()
+        filename = Path(savepath, filename)
 
         if exists(filename):
             print(f"Skip existing file: {filename}")
@@ -30,7 +29,7 @@ def download_media(plex: PlexApi, pm: PlexLibraryItem, savepath: str):
         plex.download(part, savepath=savepath, filename=filename, showstatus=True)
 
 
-def download_subtitles(plex: PlexApi, pm: PlexLibraryItem, savepath: str):
+def download_subtitles(plex: PlexApi, pm: PlexLibraryItem, savepath: Path):
     print(f"Subtitles for {pm}:")
     for index, sub in enumerate(pm.subtitle_streams, start=1):
         print(
@@ -44,8 +43,7 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem, savepath: str):
             f"{sub.languageCode}.{sub.codec}"
         ])
 
-        # Prepend save path, and expand ~ as HOME
-        filename = Path(savepath, filename).expanduser()
+        filename = Path(savepath, filename)
 
         if not exists(filename):
             if not sub.key:
@@ -60,6 +58,8 @@ def download(input: list[str], only_subs: bool, target: str):
     plex = factory.plex_api
     print = factory.print
 
+    # Expand ~ as HOME
+    savepath = Path(target).expanduser()
     for id in expand_id(input):
         pm = plex.fetch_item(id)
         if not pm:
@@ -67,6 +67,6 @@ def download(input: list[str], only_subs: bool, target: str):
             continue
 
         if not only_subs:
-            download_media(plex, pm, target)
+            download_media(plex, pm, savepath)
 
-        download_subtitles(plex, pm, target)
+        download_subtitles(plex, pm, savepath)
