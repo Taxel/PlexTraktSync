@@ -19,6 +19,10 @@ def download_media(plex: PlexApi, pm: PlexLibraryItem):
         # plex.download() is able to do that on Unix to Unix server, but not Windows to Unix
         filename = PureWindowsPath(part.file).name
 
+        if exists(filename):
+            print(f"Skip existing file: {filename}")
+            continue
+
         print(f"Downloading part {index}: {filename}")
         plex.download(part, filename=filename, showstatus=True)
 
