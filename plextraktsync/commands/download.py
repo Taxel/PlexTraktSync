@@ -30,7 +30,7 @@ def download_media(plex: PlexApi, pm: PlexLibraryItem, savepath: str):
         plex.download(part, savepath=savepath, filename=filename, showstatus=True)
 
 
-def download_subtitles(plex: PlexApi, pm: PlexLibraryItem):
+def download_subtitles(plex: PlexApi, pm: PlexLibraryItem, savepath: str):
     print(f"Subtitles for {pm}:")
     for index, sub in enumerate(pm.subtitle_streams, start=1):
         print(
@@ -44,12 +44,15 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem):
             f"{sub.languageCode}.{sub.codec}"
         ])
 
+        # Prepend save path, and expand ~ as HOME
+        filename = Path(savepath, filename).expanduser()
+
         if not exists(filename):
             if not sub.key:
                 print(f"  ERROR: Subtitle {index}: has no key: Not downloadable")
                 continue
 
-            plex.download(sub, filename=filename, showstatus=True)
+            plex.download(sub, savepath=savepath, filename=filename, showstatus=True)
             print(f"Downloaded: {filename}")
 
 
@@ -66,4 +69,4 @@ def download(input: list[str], only_subs: bool, target: str):
         if not only_subs:
             download_media(plex, pm, target)
 
-        download_subtitles(plex, pm)
+        download_subtitles(plex, pm, target)
