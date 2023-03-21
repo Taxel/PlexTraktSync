@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from os.path import exists
-from pathlib import PureWindowsPath
+from pathlib import Path, PureWindowsPath
 from typing import TYPE_CHECKING
 
 from plextraktsync.factory import factory
@@ -12,19 +12,22 @@ if TYPE_CHECKING:
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 
-def download_media(plex: PlexApi, pm: PlexLibraryItem):
+def download_media(plex: PlexApi, pm: PlexLibraryItem, savepath: str):
     print(f"Download media for {pm}:")
     for index, part in enumerate(pm.parts, start=1):
         # Remove directory part (Windows server on Unix)
         # plex.download() is able to do that on Unix to Unix server, but not Windows to Unix
         filename = PureWindowsPath(part.file).name
+        # Prepend save path, and expand ~ as HOME
+        filename = Path(savepath, filename).expanduser()
 
         if exists(filename):
             print(f"Skip existing file: {filename}")
             continue
 
-        print(f"Downloading part {index}: {filename}")
-        plex.download(part, filename=filename, showstatus=True)
+        print(f"Downloading part {index}: {part.file}")
+        print(f"Saving as {filename}")
+        plex.download(part, savepath=savepath, filename=filename, showstatus=True)
 
 
 def download_subtitles(plex: PlexApi, pm: PlexLibraryItem):
@@ -61,6 +64,6 @@ def download(input: list[str], only_subs: bool, target: str):
             continue
 
         if not only_subs:
-            download_media(plex, pm)
+            download_media(plex, pm, target)
 
         download_subtitles(plex, pm)
