@@ -24,13 +24,21 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem):
         print(
             f"  Subtitle {index}: ({sub.language}) {sub.title} (codec: {sub.codec}, selected: {sub.selected}, transient: {sub.transient})"
         )
-        filename = f"{sub.id}. {f'{sub.language}.' if sub.language else ''}{sub.languageCode}.{sub.codec}"
+
+        filename = ''.join([
+            f"{sub.id}. ",
+            f"{sub.title}" if sub.title else "",
+            f"{sub.language}." if sub.language else "",
+            f"{sub.languageCode}.{sub.codec}"
+        ])
+
         if not exists(filename):
             if not sub.key:
                 print(f"  ERROR: Subtitle {index}: has no key: Not downloadable")
                 continue
 
             plex.download(sub, filename=filename, showstatus=True)
+            print(f"Downloaded: {filename}")
 
 
 def download(input: list[str], only_subs: bool):
