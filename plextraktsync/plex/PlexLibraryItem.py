@@ -97,10 +97,17 @@ class PlexLibraryItem:
         return self.plex.library_sections[self.item.librarySectionID]
 
     @cached_property
+    def edition_title(self):
+        if self.type == "movie":
+            # Use __dict__ access to prevent reloads
+            return self.item.__dict__.get('editionTitle')
+        return None
+
+    @cached_property
     def title(self):
         value = self.item.title
-        if self.type == "movie" and self.item.editionTitle:
-            value = f"{value} ({self.item.editionTitle})"
+        if self.type == "movie" and self.edition_title:
+            value = f"{value} ({self.edition_title})"
 
         if self.type == "episode":
             value = f"{self.item.grandparentTitle}/{self.item.seasonEpisode}/{value}"
