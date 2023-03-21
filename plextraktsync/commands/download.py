@@ -50,7 +50,7 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem):
             print(f"Downloaded: {filename}")
 
 
-def download(input: list[str], only_subs: bool):
+def download(input: list[str], only_subs: bool, target: str):
     plex = factory.plex_api
     print = factory.print
 
