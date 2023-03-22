@@ -260,6 +260,12 @@ def watch():
     is_flag=True,
     help="Download only subtitles",
 )
+@click.option(
+    "--target",
+    help="Download directory",
+    default=".",
+    show_default=True,
+)
 def download():
     """
     Downloads movie or subtitles to a local directory
