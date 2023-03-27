@@ -9,6 +9,7 @@ from trakt.errors import TraktException
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.factory import logger
 from plextraktsync.trakt.TraktLookup import TraktLookup
+from rich.markup import escape
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexApi import PlexApi
@@ -47,6 +48,12 @@ class Media:
             return self.plex.title
 
         return f"{self.trakt.title} ({self.trakt.year})"
+
+    @property
+    def title_link(self):
+        link = self.plex_api.media_url(self.plex)
+
+        return f"[link={link}][green]{escape(self.title)}[/][/]"
 
     @cached_property
     def media_type(self):
