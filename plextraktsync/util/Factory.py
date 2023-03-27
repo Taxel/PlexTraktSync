@@ -252,6 +252,7 @@ class Factory:
             log_time_format='[%Y-%m-%d %X]',
             show_path=False,
             highlighter=RichHighlighter(),
+            rich_tracebacks=True,
         )
 
         return handler

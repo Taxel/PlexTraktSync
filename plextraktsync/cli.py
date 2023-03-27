@@ -23,9 +23,11 @@ def command():
 
             try:
                 cmd(*args, **kwargs)
-            except RuntimeError as e:
-                from click import ClickException
+            except Exception as e:
+                from plextraktsync.factory import logger
+                logger.exception(e)
 
+                from click import ClickException
                 raise ClickException(f"Error running {name} command: {str(e)}")
 
         return wrap
