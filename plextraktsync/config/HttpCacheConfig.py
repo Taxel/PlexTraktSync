@@ -31,16 +31,26 @@ class HttpCacheConfig:
     }
 
     default_policy = {
-        # Requests matching these patterns will not be cached
+        "*.trakt.tv/shows/*/seasons?extended=episodes": 28800,
         "*.trakt.tv/shows/*/seasons": DO_NOT_CACHE,
-        "*.trakt.tv/sync/collection/shows": DO_NOT_CACHE,
-        "*.trakt.tv/sync/watched/shows": DO_NOT_CACHE,
+        "*.trakt.tv/sync/collection/shows": "1m",
+        "*.trakt.tv/users/*/collection/movies?extended=metadata": "1m",
         "*.trakt.tv/users/*/collection/movies": DO_NOT_CACHE,
-        "*.trakt.tv/users/*/collection/shows": DO_NOT_CACHE,
-        "*.trakt.tv/users/*/ratings/*": DO_NOT_CACHE,
-        "*.trakt.tv/users/*/watched/movies": DO_NOT_CACHE,
-        "*.trakt.tv/users/*/watchlist/movies": DO_NOT_CACHE,
-        "*.trakt.tv/users/*/watchlist/shows": DO_NOT_CACHE,
+        "*.trakt.tv/users/*/collection/shows": "1m",
+        "*.trakt.tv/users/*/ratings/episodes": "1m",
+        "*.trakt.tv/users/*/ratings/shows": "1m",
+        "*.trakt.tv/users/*/ratings/movies": "1m",
+
+        # Keep watched status cached, but fresh
+        "*.trakt.tv/sync/watched/shows": "1s",
+        "*.trakt.tv/users/*/watched/movies": "1s",
+
+        # Watchlist better be fresh for next run
+        "*.trakt.tv/users/*/watchlist/movies": "1s",
+        "*.trakt.tv/users/*/watchlist/shows": "1s",
+        "metadata.provider.plex.tv/library/sections/watchlist/all?*includeUserState=0": "1s",
+        "metadata.provider.plex.tv/library/sections/watchlist/all": "1s",
+
         "*.trakt.tv/users/likes/lists": DO_NOT_CACHE,
         "*.trakt.tv/users/me": DO_NOT_CACHE,
 
@@ -48,9 +58,15 @@ class HttpCacheConfig:
         "metadata.provider.plex.tv/library/metadata/*/userState": DO_NOT_CACHE,
         "metadata.provider.plex.tv/library/metadata/*?*includeUserState=1": DO_NOT_CACHE,
         "metadata.provider.plex.tv/library/metadata/*": LONG_EXPIRY,
-        "metadata.provider.plex.tv/library/sections/watchlist/all": DO_NOT_CACHE,
-        # plex account
-        "plex.tv/users/account": DO_NOT_CACHE,
+        "metadata.provider.plex.tv/library/search?query=*&searchTypes=movies&includeMetadata=1": "1h",
+        "metadata.provider.plex.tv/library/search?query=*&searchTypes=tv&includeMetadata=1": "1h",
+        # https://web.dev/stale-while-revalidate/
+        # cache-control: max-age=0,stale-while-revalidate=86400
+        "metadata.provider.plex.tv/": 86400,
+
+        # Plex account
+        # Cache for some time, this activates 304 responses
+        "plex.tv/users/account": "1m",
 
         # Plex patterns
         # Ratings search
