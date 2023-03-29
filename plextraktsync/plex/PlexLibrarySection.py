@@ -34,6 +34,13 @@ class PlexLibrarySection:
     def title(self):
         return self.section.title
 
+    @property
+    def link(self):
+        """ Return Plex App URL for this section """
+        base_url = self.plex.plex_base_url("media")
+
+        return f"{base_url}/com.plexapp.plugins.library?source={self.section.key}"
+
     def find_by_title(self, name: str):
         try:
             return self.section.get(name)
