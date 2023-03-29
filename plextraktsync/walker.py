@@ -322,12 +322,12 @@ class Walker:
 
     def media_from_sections(self, sections: list[PlexLibrarySection]) -> Generator[PlexLibraryItem, Any, None]:
         for section in sections:
-            with measure_time(f"{section.title} processed"):
+            with measure_time(f"{section.title_link} processed", extra={"markup": True}):
                 total = len(section)
                 it = self.progressbar(
                     section.items(total),
                     total=total,
-                    desc=f"Processing {section.title}",
+                    desc=f"Processing {section.title_link}",
                 )
                 yield from it
 
