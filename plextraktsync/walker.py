@@ -245,7 +245,7 @@ class Walker:
     def is_partial(self):
         return self.config.is_partial
 
-    def print_plan(self, print=print):
+    def print_plan(self, print):
         if self.plan.movie_sections:
             print(f"Sync Movie sections: {[x.title for x in self.plan.movie_sections]}")
 
