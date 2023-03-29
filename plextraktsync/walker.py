@@ -247,10 +247,10 @@ class Walker:
 
     def print_plan(self, print):
         if self.plan.movie_sections:
-            print(f"Sync Movie sections: {[x.title for x in self.plan.movie_sections]}")
+            print(f"Sync Movie sections: {[x.title_link for x in self.plan.movie_sections]}", extra={"markup": True})
 
         if self.plan.show_sections:
-            print(f"Sync Show sections: {[x.title for x in self.plan.show_sections]}")
+            print(f"Sync Show sections: {[x.title_link for x in self.plan.show_sections]}", extra={"markup": True})
 
         if self.plan.movies:
             print(f"Sync Movies: {[x.title for x in self.plan.movies]}")
