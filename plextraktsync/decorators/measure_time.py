@@ -6,7 +6,7 @@ from plextraktsync.factory import logger
 
 
 @contextmanager
-def measure_time(message, level=logging.INFO):
+def measure_time(message, level=logging.INFO, **kwargs):
     start = time()
     yield
     timedelta = time() - start
@@ -15,4 +15,5 @@ def measure_time(message, level=logging.INFO):
     logger.log(
         level,
         f"{message} in " + (m > 0) * f"{m:.0f} min " + (s > 0) * f"{s:.1f} seconds",
+        **kwargs
     )

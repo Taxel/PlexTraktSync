@@ -7,6 +7,7 @@ from plexapi.exceptions import NotFound
 
 from plextraktsync.decorators.retry import retry
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
+from rich.markup import escape
 
 if TYPE_CHECKING:
     from plexapi.library import LibrarySection
@@ -33,6 +34,17 @@ class PlexLibrarySection:
     @property
     def title(self):
         return self.section.title
+
+    @property
+    def link(self):
+        """ Return Plex App URL for this section """
+        base_url = self.plex.plex_base_url("media")
+
+        return f"{base_url}/com.plexapp.plugins.library?source={self.section.key}"
+
+    @property
+    def title_link(self):
+        return f"[link={self.link}][green]{escape(self.title)}[/][/]"
 
     def find_by_title(self, name: str):
         try:
