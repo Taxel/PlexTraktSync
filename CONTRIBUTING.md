@@ -221,6 +221,30 @@ python3 -m pytest tests/test_version.py
 
 [pytest]: https://pytest.org/
 
+## Trakt API
+
+You can use such shell script helper to make requests to [trakt api].
+The `.pytrakt.json` file can be found from PlexTraktSync Config dir (`plextraktsync info`).
+
+[trakt api]: https://trakt.docs.apiary.io/
+
+```sh
+#!/bin/sh
+: ${TRAKT_API_KEY=$(jq -r .CLIENT_ID < .pytrakt.json)}
+: ${TRAKT_AUTHORIZATION=Bearer $(jq -r .OAUTH_TOKEN < .pytrakt.json)}
+
+curl -sSf \
+     --header "Content-Type: application/json" \
+     --header "trakt-api-version: 2" \
+     --header "trakt-api-key: $TRAKT_API_KEY" \
+     --header "Authorization: $TRAKT_AUTHORIZATION" \
+	 "$@"
+```
+
+```
+$ ./trakt-api.sh "https://api-v2launch.trakt.tv/users/me" | jq -C | less
+```
+
 ## Sharing Plex Media Server Database
 
 Sometimes it is useful to share your copy of your Plex Media Server database
