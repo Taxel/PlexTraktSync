@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f607a35532ac3a5b49779dfaa1563374cab77cfac832bc35d9768d2562a59c5d"
+            "sha256": "428a7da96e03323c8ff4d96f3b7e808844ae8b1056dfae2ee6286f249c1b6a28"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -241,11 +241,11 @@
         },
         "python-git-info": {
             "hashes": [
-                "sha256:6417d2385d4dcbd411b4456b4edfcb97e911e0564e52f68524cef0977845ba35",
-                "sha256:8ea2efa3b62db47443e7264410fde8b0383a05a6025b48fcc5c3df7b51ecae5b"
+                "sha256:c08a2764a16da029e4db909ab8436ae484f8846405f83b1bcfd415fe5e3ab30d",
+                "sha256:f8911aa590170434272c834d1967b74faea71ee573e50cbe0b88e938e3db406b"
             ],
             "index": "pypi",
-            "version": "==0.8.2"
+            "version": "==0.8.3"
         },
         "pytimeparse": {
             "hashes": [
