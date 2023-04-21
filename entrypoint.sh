@@ -54,6 +54,12 @@ needs_switch_user() {
 set -eu
 test -n "$TRACE" && set -x
 
+# fix permissions and switch user if configured
+if needs_switch_user; then
+	setup_user
+	fix_permissions
+fi
+
 # Use "sh" command to passthrough to shell
 if [ "${1:-}" != "sh" ]; then
 	# Prepend default command
@@ -62,8 +68,6 @@ fi
 
 # fix permissions and switch user if configured
 if needs_switch_user; then
-	setup_user
-	fix_permissions
 	switch_user "$@"
 fi
 
