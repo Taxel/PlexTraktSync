@@ -36,6 +36,7 @@ switch_user() {
 fix_permissions() {
 	ensure_dir /app/config
 	ensure_owner /app/config -R
+	ensure_owner "$HOME"
 }
 
 needs_switch_user() {
