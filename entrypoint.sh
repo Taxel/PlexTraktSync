@@ -26,6 +26,13 @@ setup_user() {
 
 # Run command as app user
 # https://github.com/karelzak/util-linux/issues/325
+run_user() {
+	local uid=$(id -u "$APP_USER")
+	local gid=$(id -g "$APP_GROUP")
+
+	setpriv --euid "$uid" --ruid "$uid" --clear-groups --egid "$gid" --rgid "$gid" -- "$@"
+}
+
 switch_user() {
 	local uid=$(id -u "$APP_USER")
 	local gid=$(id -g "$APP_GROUP")
