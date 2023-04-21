@@ -75,8 +75,11 @@ fi
 # Shortcut to pre-install "pipx" and enter as "sh"
 if [ "${1:-}" = "pipx" ]; then
 	# https://github.com/Taxel/PlexTraktSync/blob/main/CONTRIBUTING.md#install-code-from-pull-request
+	msg "Installing git"
 	apk add git
+	msg "Installing pipx"
 	run_user pip install pipx
+	msg "Installing plextraktsync from pipx"
 	run_user pipx install plextraktsync
 	set -- "sh"
 fi
