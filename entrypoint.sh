@@ -3,6 +3,10 @@
 : ${APP_USER:=plextraktsync}
 : ${APP_GROUP:=plextraktsync}
 
+msg() {
+	echo >&2 "* $*"
+}
+
 ensure_dir() {
 	install -o "$APP_USER" -g "$APP_GROUP" -d "$@"
 }
