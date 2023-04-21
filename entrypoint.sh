@@ -68,6 +68,15 @@ if needs_switch_user; then
 	fix_permissions
 fi
 
+# Shortcut to pre-install "pipx" and enter as "sh"
+if [ "${1:-}" = "pipx" ]; then
+	# https://github.com/Taxel/PlexTraktSync/blob/main/CONTRIBUTING.md#install-code-from-pull-request
+	apk add git
+	run_user pip install pipx
+	run_user pipx install plextraktsync
+	set -- "sh"
+fi
+
 # Use "sh" command to passthrough to shell
 if [ "${1:-}" != "sh" ]; then
 	# Prepend default command
