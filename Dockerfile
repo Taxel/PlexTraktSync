@@ -60,6 +60,8 @@ ENV \
 	# https://pypa.github.io/pipx/docs/
 	PIPX_BIN_DIR=/app/xdg/bin \
 	PIPX_HOME=/app/xdg/pipx \
+	# https://stackoverflow.com/questions/2915471/install-a-python-package-into-a-different-directory-using-pip/29103053#29103053
+	PYTHONUSERBASE=/app/xdg \
 	# Fallback for anything else
 	HOME=/app/xdg \
 	\
