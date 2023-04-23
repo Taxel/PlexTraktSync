@@ -3,6 +3,10 @@
 : ${APP_USER:=plextraktsync}
 : ${APP_GROUP:=plextraktsync}
 
+msg() {
+	echo >&2 "* $*"
+}
+
 ensure_dir() {
 	install -o "$APP_USER" -g "$APP_GROUP" -d "$@"
 }
@@ -26,6 +30,13 @@ setup_user() {
 
 # Run command as app user
 # https://github.com/karelzak/util-linux/issues/325
+run_user() {
+	local uid=$(id -u "$APP_USER")
+	local gid=$(id -g "$APP_GROUP")
+
+	setpriv --euid "$uid" --ruid "$uid" --clear-groups --egid "$gid" --rgid "$gid" -- "$@"
+}
+
 switch_user() {
 	local uid=$(id -u "$APP_USER")
 	local gid=$(id -g "$APP_GROUP")
@@ -36,6 +47,7 @@ switch_user() {
 fix_permissions() {
 	ensure_dir /app/config
 	ensure_owner /app/config -R
+	ensure_owner "$HOME"
 }
 
 needs_switch_user() {
@@ -58,6 +70,18 @@ test -n "$TRACE" && set -x
 if needs_switch_user; then
 	setup_user
 	fix_permissions
+fi
+
+# Shortcut to pre-install "pipx" and enter as "sh"
+if [ "${1:-}" = "pipx" ]; then
+	# https://github.com/Taxel/PlexTraktSync/blob/main/CONTRIBUTING.md#install-code-from-pull-request
+	msg "Installing git"
+	apk add git
+	msg "Installing pipx"
+	run_user pip install pipx
+	msg "Installing plextraktsync from pipx"
+	run_user pipx install plextraktsync
+	set -- "sh"
 fi
 
 # Use "sh" command to passthrough to shell

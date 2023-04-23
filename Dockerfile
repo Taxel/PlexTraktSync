@@ -52,7 +52,20 @@ ENTRYPOINT ["/init"]
 LABEL org.opencontainers.image.description Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
 
 ENV \
-	PATH=/root/.local/bin:$PATH \
+	\
+	# https://specifications.freedesktop.org/basedir-spec/latest/ar01s03.html
+	XDG_CACHE_HOME=/app/xdg/cache \
+	XDG_CONFIG_HOME=/app/xdg/config \
+	XDG_DATA_HOME=/app/xdg/data \
+	# https://pypa.github.io/pipx/docs/
+	PIPX_BIN_DIR=/app/xdg/bin \
+	PIPX_HOME=/app/xdg/pipx \
+	# https://stackoverflow.com/questions/2915471/install-a-python-package-into-a-different-directory-using-pip/29103053#29103053
+	PYTHONUSERBASE=/app/xdg \
+	# Fallback for anything else
+	HOME=/app/xdg \
+	\
+	PATH=/app/xdg/bin:/app/xdg/.local/bin:/root/.local/bin:$PATH \
 	PTS_CONFIG_DIR=/app/config \
 	PTS_CACHE_DIR=/app/config \
 	PTS_LOG_DIR=/app/config \
@@ -60,6 +73,7 @@ ENV \
 	PYTHONUNBUFFERED=1
 
 VOLUME /app/config
+VOLUME $HOME
 
 # Add user/group
 RUN <<eot
