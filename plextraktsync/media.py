@@ -51,9 +51,12 @@ class Media:
 
     @property
     def title_link(self):
-        link = self.plex_api.media_url(self.plex)
+        if self.plex:
+            link = self.plex_api.media_url(self.plex)
 
-        return f"[link={link}][green]{escape(self.title)}[/][/]"
+            return f"[link={link}][green]{escape(self.title)}[/][/]"
+
+        return f"[green]{escape(self.title)}[/]"
 
     @cached_property
     def media_type(self):
