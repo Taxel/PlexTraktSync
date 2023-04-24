@@ -40,7 +40,7 @@ class PlexServerConnection:
         for url in urls:
             self.logger.debug(f"Trying url: {url}")
             try:
-                return PlexServer(baseurl=url, token=token, session=self.session)
+                return PlexServer(baseurl=url, token=token, session=self.session, timeout=self.timeout)
             except SSLError as e:
                 self.logger.error(e)
                 message = str(e.__context__)
