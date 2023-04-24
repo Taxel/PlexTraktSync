@@ -240,17 +240,19 @@ class PlexApi:
         return None
 
     def watchlist(self, libtype=None) -> list[Movie | Show] | None:
-        if self.account:
-            params = {
-                'includeCollections': 0,
-                'includeExternalMedia': 0,
-                'includeUserState': 0,
-            }
-            try:
-                return self.account.watchlist(libtype=libtype, **params)
-            except BadRequest as e:
-                logger.error(f"Error during {self.account.username} watchlist access: {e}")
-        return None
+        if not self.account:
+            return None
+
+        params = {
+            'includeCollections': 0,
+            'includeExternalMedia': 0,
+            'includeUserState': 0,
+        }
+        try:
+            return self.account.watchlist(libtype=libtype, **params)
+        except BadRequest as e:
+            logger.error(f"Error during {self.account.username} watchlist access: {e}")
+            return None
 
     def add_to_watchlist(self, item):
         try:
