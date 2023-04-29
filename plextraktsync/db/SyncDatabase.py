@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from plextraktsync.db.Database import Database
+from plextraktsync.db.SyncRecord import SyncRecord
 
 if TYPE_CHECKING:
-    from plextraktsync.db.SyncRecord import SyncRecord
     from plextraktsync.media import Media
 
 
@@ -41,4 +41,12 @@ class SyncDatabase:
         pass
 
     def update(self, m: Media):
-        pass
+        record = SyncRecord(
+            media_id=m.trakt_id,
+            plex_timestamp_watched=m.watched_on_plex,
+            seen_on_plex_sync=m.watched_on_plex,
+            trakt_timestamp_watched=m.watched_on_trakt,
+            seen_on_trakt_sync=m.watched_on_trakt,
+            result="",
+        )
+        print(record)
