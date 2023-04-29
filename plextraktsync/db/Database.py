@@ -3,7 +3,7 @@ import sqlite3
 from plextraktsync.factory import logging
 
 
-class Database(object):
+class Database:
     _uncommited = False
 
     def __init__(self, database_path: str):
