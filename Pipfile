@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
+annotated-types = {version="==0.7.0", python_version=">= '3.8'"}
 apluggy = "==0.9.4"
 attrs = "==23.2.0"
 cattrs = {version="==23.2.3", python_version=">='3.7'"}
@@ -14,6 +15,7 @@ charset-normalizer = "==3.3.2"
 click = "==8.1.7"
 decorator = "==5.1.1"
 deprecated = "==1.2.14"
+greenlet = {version="==3.0.3", markers="python_version < '3.13' and platform_machine == 'aarch64' or (platform_machine == 'ppc64le' or (platform_machine == 'x86_64' or (platform_machine == 'amd64' or (platform_machine == 'AMD64' or (platform_machine == 'win32' or platform_machine == 'WIN32')))))"}
 humanize = "==4.10.0"
 idna = {version="==3.7", python_version=">='3.5'"}
 inquirerpy = "==0.3.4"
@@ -25,6 +27,8 @@ platformdirs = {version="==4.2.2", python_version=">='3.7'"}
 plexapi = "==4.15.15"
 pluggy = "==1.5.0"
 prompt-toolkit = "==3.0.47"
+pydantic = {version="==2.8.2", python_version=">= '3.8'"}
+pydantic-core = {version="==2.20.1", python_version=">= '3.8'"}
 pygments = "==2.18.0"
 python-dotenv = "==1.0.1"
 python-git-info = "==0.8.3"
@@ -36,6 +40,8 @@ requests-cache = "==1.2.1"
 requests-oauthlib = {version="==2.0.0", python_version=">='3.4'"}
 rich = "==13.7.1"
 six = {version="==1.16.0", python_version=">='3.4'"}
+sqlalchemy = {version="==2.0.31", python_version=">= '3.7'"}
+sqlmodel = {version="==0.0.19", python_version=">= '3.7'"}
 tqdm = "==4.66.4"
 typing-extensions = {version="==4.12.2", python_version=">= '3.8'"}
 url-normalize = {version="==1.4.3", python_version=">='3.6'"}
