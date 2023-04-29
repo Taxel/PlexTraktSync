@@ -1,4 +1,11 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from plextraktsync.db.Database import Database
+
+if TYPE_CHECKING:
+    from plextraktsync.db.SyncRecord import SyncRecord
 
 
 class SyncDatabase:
