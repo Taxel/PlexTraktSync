@@ -2,7 +2,23 @@ from plextraktsync.db.Database import Database
 
 
 class SyncDatabase:
-    table_name = 'sync'
+    table_name = "sync"
+    # fields:
+    # A. Media ID
+    # B. Plex timestamp watched
+    # C. seen on Plex sync?
+    # D. Trakt timestamp watched
+    # E. seen on Trakt sync?
+    # F. result
+    schema = """
+        id PRIMARY KEY,
+        media_id,
+        plex_timestamp_watched,
+        seen_on_plex_sync,
+        trakt_timestamp_watched,
+        seen_on_trakt_sync,
+        result
+    """
 
     def __init__(self, con: Database):
         self.con = con
@@ -11,4 +27,4 @@ class SyncDatabase:
 
     # Initial CREATE TABLE must happen in shared connection; subsequent queries will use thread-local connections
     def _create_table(self, connection: Database):
-        connection.execute(f'CREATE TABLE IF NOT EXISTS {self.table_name} (key PRIMARY KEY, value)')
+        connection.execute(f'CREATE TABLE IF NOT EXISTS {self.table_name} ({self.schema})')
