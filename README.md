@@ -8,7 +8,7 @@ unlike the Plex app provided by Trakt.
 
 ![image](https://raw.githubusercontent.com/twolaw/PlexTraktSync/img/plextraktsync_banner.png)
 
-Originally created by [@Taxel][@taxel], but now maintained by [contributors].
+Originally created by [@Taxel][@taxel], now maintained by [contributors].
 
 [@taxel]: https://github.com/Taxel
 [contributors]: https://github.com/Taxel/PlexTraktSync/graphs/contributors
@@ -16,11 +16,16 @@ Originally created by [@Taxel][@taxel], but now maintained by [contributors].
 Note: The PyTrakt API keys are not stored securely, so if you do not want to
 have a file containing those on your harddrive, you can not use this project.
 
-**Looking for a way to contribute? Please find issues with the [help-wanted]
-label or to improve documentation [docs-needed], thank you.**
+**Looking for a way to contribute?**
+- find issues with the [help-wanted] label
+- improve documentation [docs-needed] label
+- or just [create a pull request] to improve documentation
 
 [help-wanted]: https://github.com/Taxel/PlexTraktSync/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22
 [docs-needed]: https://github.com/Taxel/PlexTraktSync/issues?q=label%3A%22docs+needed%22+sort%3Aupdated-desc
+[create a pull request]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request
+
+----
 
 - [Plex-Trakt-Sync](#plex-trakt-sync)
   - [Features](#features)
