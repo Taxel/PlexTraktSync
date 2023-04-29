@@ -312,6 +312,11 @@ last run then edit the "append" variable in `config.yml` to `false`.
 
 ## Commands
 
+Run `plextraktsync --help` to see available commands.
+Run `plextraktsync COMMAND --help` to see help for `COMMAND`.
+
+You can [contribute](#contribute) yourself missing documentation.
+
 ### Sync
 
 The `sync` subcommand supports `--sync=shows` and `--sync=movies` options,
