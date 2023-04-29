@@ -49,9 +49,11 @@ class Sync:
 
         if self.config.need_library_walk:
             async for movie in walker.find_movies():
+                self.sync_state.update(movie)
                 await pm.ahook.walk_movie(movie=movie, dry_run=dry_run)
 
             async for episode in walker.find_episodes():
+                self.sync_state.update(episode)
                 await pm.ahook.walk_episode(episode=episode, dry_run=dry_run)
 
         await pm.ahook.fini(walker=walker, dry_run=dry_run)
