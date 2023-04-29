@@ -21,7 +21,8 @@ have a file containing those on your harddrive, you can not use this project.
 **Looking for a way to contribute?**
 - find issues with the [help-wanted] label
 - improve documentation [docs-needed] label
-- or just [create a pull request] to improve documentation
+- you can also just [create a pull request] to improve documentation
+- ... more [developer contribution](CONTRIBUTING.md) docs
 
 [help-wanted]: https://github.com/Taxel/PlexTraktSync/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22
 [docs-needed]: https://github.com/Taxel/PlexTraktSync/issues?q=label%3A%22docs+needed%22+sort%3Aupdated-desc
