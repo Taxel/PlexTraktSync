@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from typing import Iterable
 
     from plextraktsync.config.Config import Config
+    from plextraktsync.db.SyncDatabase import SyncDatabase
     from plextraktsync.media import Media
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.trakt.TraktApi import TraktApi
@@ -19,10 +20,11 @@ if TYPE_CHECKING:
 
 
 class Sync:
-    def __init__(self, config: Config, plex: PlexApi, trakt: TraktApi):
+    def __init__(self, config: Config, plex: PlexApi, trakt: TraktApi, sync_db: SyncDatabase):
         self.config = config.sync
         self.plex = plex
         self.trakt = trakt
+        self.sync_db = sync_db
 
     @cached_property
     def plex_wl(self):
