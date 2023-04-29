@@ -214,6 +214,17 @@ class Factory:
         )
 
     @cached_property
+    def sync_engine(self):
+        from os.path import join
+
+        from sqlmodel import create_engine
+
+        from plextraktsync.path import cache_dir
+
+        db_path = join(cache_dir, "sync.sqlite")
+        return create_engine(f"sqlite:///{db_path}")
+
+    @cached_property
     def logging(self):
         import logging
 
