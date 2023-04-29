@@ -16,6 +16,8 @@ Originally created by [@Taxel][@taxel], now maintained by [contributors].
 Note: The PyTrakt API keys are not stored securely, so if you do not want to
 have a file containing those on your harddrive, you can not use this project.
 
+## Contribute
+
 **Looking for a way to contribute?**
 - find issues with the [help-wanted] label
 - improve documentation [docs-needed] label
