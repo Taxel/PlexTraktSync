@@ -1,4 +1,11 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from plextraktsync.db.Database import Database
+
+if TYPE_CHECKING:
+    from plextraktsync.db.SyncRecord import SyncRecord
 
 
 class SyncDatabase:
@@ -28,3 +35,6 @@ class SyncDatabase:
     # Initial CREATE TABLE must happen in shared connection; subsequent queries will use thread-local connections
     def _create_table(self, connection: Database):
         connection.execute(f'CREATE TABLE IF NOT EXISTS {self.table_name} ({self.schema})')
+
+    def insert(self, record: SyncRecord):
+        pass
