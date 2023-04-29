@@ -20,11 +20,11 @@ if TYPE_CHECKING:
 
 
 class Sync:
-    def __init__(self, config: Config, plex: PlexApi, trakt: TraktApi, sync_db: SyncDatabase):
+    def __init__(self, config: Config, plex: PlexApi, trakt: TraktApi, sync_state: SyncDatabase):
         self.config = config.sync
         self.plex = plex
         self.trakt = trakt
-        self.sync_db = sync_db
+        self.sync_state = sync_state
 
     @cached_property
     def plex_wl(self):
