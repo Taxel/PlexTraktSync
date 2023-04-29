@@ -6,6 +6,7 @@ from plextraktsync.db.Database import Database
 
 if TYPE_CHECKING:
     from plextraktsync.db.SyncRecord import SyncRecord
+    from plextraktsync.media import Media
 
 
 class SyncDatabase:
@@ -37,4 +38,7 @@ class SyncDatabase:
         con.execute(f'CREATE TABLE IF NOT EXISTS {self.table_name} ({self.schema})')
 
     def insert(self, record: SyncRecord):
+        pass
+
+    def update(self, m: Media):
         pass
