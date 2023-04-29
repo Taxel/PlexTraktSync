@@ -5,7 +5,9 @@ from typing import TYPE_CHECKING
 
 from rich.markup import escape
 
+from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.factory import logging
+from plextraktsync.media import Media
 
 if TYPE_CHECKING:
     from plexapi.playlist import Playlist
@@ -19,6 +21,15 @@ class PlexPlaylist:
         self.server = server
         self.name = name
         self.logger = logging.getLogger("PlexTraktSync.PlexPlaylist")
+
+    def __iter__(self):
+        return iter(self.items)
+
+    def __len__(self):
+        return len(self.items.keys())
+
+    def __contains__(self, m: Media):
+        return m.plex_key in self.items
 
     @cached_property
     def playlist(self) -> Playlist | None:
@@ -34,6 +45,14 @@ class PlexPlaylist:
             self.logger.debug(f'Unable to find Plex playlist with title "{self.name}".')
             return None
 
+    @cached_property
+    @flatten_dict
+    def items(self) -> dict[int, PlexMedia]:
+        if self.playlist is None:
+            return
+        for m in self.playlist.items():
+            yield m.ratingKey, m
+
     def update(self, items: list[PlexMedia], description=None) -> bool:
         """
         Updates playlist (creates if name missing) replacing contents with items[]
@@ -42,6 +61,7 @@ class PlexPlaylist:
         if playlist is None and len(items) > 0:
             # Force reload
             del self.__dict__["playlist"]
+            del self.__dict__["items"]
             playlist = self.server.createPlaylist(self.name, items=items)
             self.logger.info(f"Created plex playlist '{self.name}' with {len(items)} items")
 
