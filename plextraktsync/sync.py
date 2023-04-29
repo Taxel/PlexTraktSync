@@ -150,6 +150,8 @@ class Sync:
         if not self.config.sync_watched_status:
             return
 
+        self.sync_state.update(m)
+
         if m.watched_on_plex is m.watched_on_trakt:
             return
 
