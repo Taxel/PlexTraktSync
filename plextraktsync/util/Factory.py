@@ -290,15 +290,9 @@ class Factory:
 
     @cached_property
     def sync_database(self):
-        from os.path import join
-
-        from plextraktsync.db.Database import Database
         from plextraktsync.db.SyncDatabase import SyncDatabase
-        from plextraktsync.path import cache_dir
 
-        db_path = join(cache_dir, "sync.sqlite")
-
-        return SyncDatabase(Database(db_path))
+        return SyncDatabase(self.sync_engine)
 
     @cached_property
     def queue(self):
