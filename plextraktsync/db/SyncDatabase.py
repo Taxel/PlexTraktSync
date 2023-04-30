@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from plextraktsync.db.Database import Database
-from plextraktsync.db.SyncRecord import SyncRecord
+from plextraktsync.db.models.SyncRecord import SyncRecord
 
 if TYPE_CHECKING:
     from plextraktsync.media import Media
