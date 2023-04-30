@@ -5,11 +5,13 @@ from typing import TYPE_CHECKING
 from plextraktsync.db.models.SyncRecord import SyncRecord
 
 if TYPE_CHECKING:
+    from sqlalchemy.future import Engine
+
     from plextraktsync.media import Media
 
 
 class SyncDatabase:
-    def __init__(self, engine):
+    def __init__(self, engine: Engine):
         self.engine = engine
 
     def insert(self, record: SyncRecord):
