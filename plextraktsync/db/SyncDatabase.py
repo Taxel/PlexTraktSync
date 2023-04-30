@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from sqlmodel import Session, select
+
 from plextraktsync.db.models.SyncRecord import SyncRecord
 
 if TYPE_CHECKING:
@@ -13,6 +15,11 @@ if TYPE_CHECKING:
 class SyncDatabase:
     def __init__(self, engine: Engine):
         self.engine = engine
+
+    def find_by_id(self, media_id: int):
+        with Session(self.engine) as session:
+            statement = select(SyncRecord).where(SyncRecord.media_id == media_id)
+            return session.exec(statement).first()
 
     def insert(self, record: SyncRecord):
         pass
