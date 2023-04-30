@@ -216,6 +216,9 @@ class Factory:
         db_path = join(cache_dir, "sync.sqlite")
         engine = create_engine(f"sqlite:///{db_path}")
 
+        # Import all models for metadata.create_all
+        import plextraktsync.db.models  # noqa: F401
+
         SQLModel.metadata.create_all(engine)
 
         return engine
