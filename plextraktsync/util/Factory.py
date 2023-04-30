@@ -222,7 +222,7 @@ class Factory:
         from plextraktsync.path import cache_dir
 
         db_path = join(cache_dir, "sync.sqlite")
-        engine = create_engine(f"sqlite:///{db_path}")
+        engine = create_engine(f"sqlite:///{db_path}", echo=False)
 
         # Import all models for metadata.create_all
         import plextraktsync.db.models  # noqa: F401
