@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logger
+from plextraktsync.trakt.TraktUserListCollection import TraktUserListCollection
 from plextraktsync.trakt.types import TraktMedia
 from plextraktsync.trakt_list_util import TraktListUtil
 
@@ -41,8 +42,8 @@ class Sync:
         return TraktWatchList(self.trakt.watchlist_movies + self.trakt.watchlist_shows)
 
     def sync(self, walker: Walker, dry_run=False):
-        listutil = TraktListUtil()
-        is_partial = walker.is_partial
+        trakt_lists = TraktUserListCollection()
+        is_partial = walker.is_partial and not dry_run
 
         if is_partial and self.config.clear_collected:
             logger.warning("Running partial library sync. Clear collected will be disabled.")
@@ -51,14 +52,13 @@ class Sync:
             if is_partial:
                 logger.warning("Running partial library sync. Watchlist as playlist won't update because it needs full library sync.")
             else:
-                listutil.addList(None, "Trakt Watchlist", trakt_list=self.trakt.watchlist_movies)
+                trakt_lists.add_watchlist(self.trakt.watchlist_movies)
 
         if self.config.sync_liked_lists:
             if is_partial:
                 logger.warning("Partial walk, disabling liked lists updating. Liked lists won't update because it needs full library sync.")
             else:
-                for lst in self.trakt.liked_lists:
-                    listutil.addList(lst["listid"], lst["listname"])
+                trakt_lists.load_lists(self.trakt.liked_lists)
 
         if self.config.need_library_walk:
             movie_trakt_ids = set()
@@ -67,7 +67,7 @@ class Sync:
                 self.sync_ratings(movie, dry_run=dry_run)
                 self.sync_watched(movie, dry_run=dry_run)
                 if not is_partial:
-                    listutil.addPlexItemToLists(movie)
+                    trakt_lists.add_to_lists(movie)
                     if self.config.clear_collected:
                         movie_trakt_ids.add(movie.trakt_id)
 
@@ -81,7 +81,7 @@ class Sync:
                 self.sync_ratings(episode, dry_run=dry_run)
                 self.sync_watched(episode, dry_run=dry_run)
                 if not is_partial:
-                    listutil.addPlexItemToLists(episode)
+                    trakt_lists.add_to_lists(episode)
                     if self.config.clear_collected:
                         episode_trakt_ids.add(episode.trakt_id)
 
@@ -99,8 +99,9 @@ class Sync:
             if is_partial:
                 logger.warning("Running partial library sync. Liked lists won't update because it needs full library sync.")
             else:
-                with measure_time("Updated liked list"):
-                    self.update_playlists(listutil, dry_run=dry_run)
+                if not dry_run:
+                    with measure_time("Updated liked list"):
+                        trakt_lists.sync()
 
         if walker.config.walk_watchlist and self.sync_wl:
             with measure_time("Updated watchlist"):
