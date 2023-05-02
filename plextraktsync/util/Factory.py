@@ -81,6 +81,13 @@ class Factory:
         )
 
     @cached_property
+    def plex_lists(self):
+        from plextraktsync.plex.PlexPlaylistCollection import \
+            PlexPlaylistCollection
+
+        return PlexPlaylistCollection(self.plex_server)
+
+    @cached_property
     def has_plex_token(self):
         try:
             return self.server_config.token is not None
