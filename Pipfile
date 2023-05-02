@@ -39,6 +39,7 @@ urllib3 = "==1.26.15"
 wcwidth = "==0.2.6"
 websocket-client = "==1.5.1"
 wrapt = {version="==1.15.0", python_version=">='3.5'"}
+sqlmodel = "==0.0.8"
 
 [requires]
 python_version = "3"
