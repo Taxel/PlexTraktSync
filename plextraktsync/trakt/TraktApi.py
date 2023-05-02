@@ -20,7 +20,6 @@ from plextraktsync.path import pytrakt_file
 from plextraktsync.trakt.PartialTraktMedia import PartialTraktMedia
 from plextraktsync.trakt.TraktLookup import TraktLookup
 from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
-from plextraktsync.trakt.types import TraktMedia
 
 if TYPE_CHECKING:
     from trakt.movies import Movie
@@ -28,6 +27,7 @@ if TYPE_CHECKING:
 
     from plextraktsync.plex.PlexGuid import PlexGuid
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
+    from plextraktsync.trakt.types import TraktLikedList, TraktMedia
 
 
 class TraktApi:
@@ -58,7 +58,7 @@ class TraktApi:
     @rate_limit()
     @retry()
     @flatten_list
-    def liked_lists(self):
+    def liked_lists(self) -> list[TraktLikedList]:
         for item in self.me.get_liked_lists("lists", limit=1000):
             yield {
                 'listname': item['list']['name'],
