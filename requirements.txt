@@ -35,7 +35,7 @@ rich==13.3.5
 six==1.16.0; python_version >= '3.4'
 tqdm==4.65.0
 url-normalize==1.4.3; python_version >= '3.6'
-urllib3==1.26.15
+urllib3==2.0.2
 wcwidth==0.2.6
 websocket-client==1.5.1
 wrapt==1.15.0; python_version >= '3.5'
