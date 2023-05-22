@@ -1,4 +1,5 @@
 import logging
+import re
 
 from .factory import factory
 
@@ -17,7 +18,7 @@ def initialize(config):
     mode = "a" if config.log_append else "w"
     file_handler = logging.FileHandler(config.log_file, mode, "utf-8")
     file_handler.setFormatter(
-        logging.Formatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s")
+        CustomFormatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s")
     )
     file_handler.setLevel(logging.DEBUG)
 
@@ -34,3 +35,13 @@ def initialize(config):
 
         logger.removeHandler(loghandler)
         logger.setLevel(logging.DEBUG)
+
+
+class CustomFormatter(logging.Formatter):
+    def format(self, record):
+        record.msg = self.remove_markup(record.msg)
+        return super().format(record)
+
+    def remove_markup(self, text):
+        pattern = r'\[link=[^\]]*\]|(\[green\])|(\[\/\])'
+        return re.sub(pattern, '', text)
