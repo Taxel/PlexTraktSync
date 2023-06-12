@@ -19,7 +19,7 @@ markdown-it-py = {version="==2.2.0", python_version=">='3.7'"}
 mdurl = {version="==0.1.2", python_version=">='3.7'"}
 oauthlib = "==3.2.2"
 pfzy = {version="==0.3.4", markers="python_version >= '3.7' and python_version < '4.0'"}
-platformdirs = {version="==3.5.0", python_version=">='3.7'"}
+platformdirs = {version="==3.5.3", python_version=">='3.7'"}
 plexapi = "==4.13.4"
 prompt-toolkit = "==3.0.38"
 pygments = "==2.15.1"
