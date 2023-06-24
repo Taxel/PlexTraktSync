@@ -38,9 +38,9 @@ def initialize(config):
 
 
 class CustomFormatter(logging.Formatter):
-    def format(self, record):
-        record.msg = self.remove_markup(record.msg)
-        return super().format(record)
+    def formatMessage(self, record):
+        record.message = self.remove_markup(record.message)
+        return super().formatMessage(record)
 
     def remove_markup(self, text):
         pattern = r'\[link=[^\]]*\]|(\[green\])|(\[\/\])'
