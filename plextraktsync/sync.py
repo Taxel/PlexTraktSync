@@ -163,12 +163,12 @@ class Sync:
                 rate = "plex"
 
         if rate == "trakt":
-            logger.info(f"Rating {m.title_link} with {m.plex_rating} on Trakt", extra={"markup": True})
+            logger.info(f"Rating {m.title_link} with {m.plex_rating} on Trakt ({m.trakt_rating})", extra={"markup": True})
             if not dry_run:
                 m.trakt_rate()
 
         elif rate == "plex":
-            logger.info(f"Rating {m.title_link} with {m.trakt_rating} on Plex", extra={"markup": True})
+            logger.info(f"Rating {m.title_link} with {m.trakt_rating} on Plex ({m.plex_rating})", extra={"markup": True})
             if not dry_run:
                 m.plex_rate()
 
