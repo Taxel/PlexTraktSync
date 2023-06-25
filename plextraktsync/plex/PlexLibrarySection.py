@@ -80,7 +80,7 @@ class PlexLibrarySection:
 
     @retry()
     def fetch_items(self, key: str, size: int, start: int):
-        return self.section.fetchItems(key, container_start=start, container_size=size)
+        return self.section.fetchItems(key, container_start=start, container_size=size, maxresults=size)
 
     def items(self, max_items: int):
         for item in self.all(max_items):
