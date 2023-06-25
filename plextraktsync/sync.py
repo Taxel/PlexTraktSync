@@ -135,39 +135,42 @@ class Sync:
             return
 
         rating_priority = self.config["rating_priority"]
+        plex_to_trakt = self.config.plex_to_trakt["ratings"]
+        trakt_to_plex = self.config.trakt_to_plex["ratings"]
+        has_trakt = m.trakt_rating is not None
+        has_plex = m.plex_rating is not None
+        rate = None
 
         if rating_priority == "none":
             # Only rate items with missing rating
-            if m.plex_rating is not None and m.trakt_rating is None and self.config.plex_to_trakt["ratings"]:
-                logger.info(f"Rating {m.title_link} with {m.plex_rating} on Trakt", extra={"markup": True})
-                if not dry_run:
-                    m.trakt_rate()
-            elif m.trakt_rating is not None and m.plex_rating is None and self.config.trakt_to_plex["ratings"]:
-                logger.info(f"Rating {m.title_link} with {m.trakt_rating} on Plex", extra={"markup": True})
-                if not dry_run:
-                    m.plex_rate()
+            if plex_to_trakt and has_plex and not has_trakt:
+                rate = "trakt"
+            elif trakt_to_plex and has_trakt and not has_plex:
+                rate = "plex"
 
         elif rating_priority == "trakt":
             # If two-way rating sync, Trakt rating takes precedence over Plex rating
-            if m.trakt_rating is not None and self.config.trakt_to_plex["ratings"]:
-                logger.info(f"Rating {m.title_link} with {m.trakt_rating} on Plex", extra={"markup": True})
-                if not dry_run:
-                    m.plex_rate()
-            elif m.plex_rating is not None and self.config.plex_to_trakt["ratings"]:
-                logger.info(f"Rating {m.title_link} with {m.plex_rating} on Trakt", extra={"markup": True})
-                if not dry_run:
-                    m.trakt_rate()
+            if trakt_to_plex and has_trakt:
+                rate = "plex"
+            elif plex_to_trakt and has_plex:
+                rate = "trakt"
 
         elif rating_priority == "plex":
             # If two-way rating sync, Plex rating takes precedence over Trakt rating
-            if m.plex_rating is not None and self.config.plex_to_trakt["ratings"]:
-                logger.info(f"Rating {m.title_link} with {m.plex_rating} on Trakt", extra={"markup": True})
-                if not dry_run:
-                    m.trakt_rate()
-            elif m.trakt_rating is not None and self.config.trakt_to_plex["ratings"]:
-                logger.info(f"Rating {m.title_link} with {m.trakt_rating} on Plex", extra={"markup": True})
-                if not dry_run:
-                    m.plex_rate()
+            if plex_to_trakt and has_plex:
+                rate = "trakt"
+            elif trakt_to_plex and has_trakt:
+                rate = "plex"
+
+        if rate == "trakt":
+            logger.info(f"Rating {m.title_link} with {m.plex_rating} on Trakt", extra={"markup": True})
+            if not dry_run:
+                m.trakt_rate()
+
+        elif rate == "plex":
+            logger.info(f"Rating {m.title_link} with {m.trakt_rating} on Plex", extra={"markup": True})
+            if not dry_run:
+                m.plex_rate()
 
     def sync_watched(self, m: Media, dry_run=False):
         if not self.config.sync_watched_status:
