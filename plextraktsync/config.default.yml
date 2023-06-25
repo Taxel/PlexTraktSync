@@ -64,11 +64,12 @@ sync:
     # If you prefer to fetch trakt watchlist as a playlist instead of
     # plex watchlist, toggle this to true (is read only if watchlist=true)
     watchlist_as_playlist: false
-  # Setting for whether or not ratings from one platform should have priority. Valid values are trakt, plex or none. (default: none)
+  # Setting for whether ratings from one platform should have priority.
+  # Valid values are trakt, plex or none. (default: plex)
   # none - No rating priority. Existing ratings are not overwritten.
   # trakt - Trakt ratings have priority. Existing Plex ratings are overwritten.
   # plex - Plex ratings have priority. Existing Trakt ratings are overwritten.
-  rating_priority: none
+  rating_priority: plex
 
 # settings for 'watch' command
 watch:
