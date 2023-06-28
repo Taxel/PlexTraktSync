@@ -32,7 +32,7 @@ echo.
 
 IF NOT EXIST "%cd%\Plex Trakt Sync.lnk" goto :START
 
-echo WARNING: SETUP HAS ALRADY BEEN RUN!
+echo WARNING: SETUP HAS ALREADY BEEN RUN!
 echo.
 echo What would you like to do?
 echo  1. Reset all settings and start again from scratch
@@ -104,7 +104,7 @@ pause > nul
 goto :ENDIT
 
 :NO_WRITE_ACCESS
-echo AN ERROR HAS OCCCURED!
+echo AN ERROR HAS OCCURRED!
 echo Please ensure that you have read / write access to the current directory, then restart setup.
 echo Press any key to exit
 echo.
