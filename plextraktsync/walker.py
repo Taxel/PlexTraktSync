@@ -60,7 +60,7 @@ class WalkConfig:
     def is_partial(self):
         """
         Returns true if partial library walk is performed.
-        Due the way watchlist is filled, watchlists should only be updated on full walk.
+        Due to the way watchlist is filled, watchlists should only be updated on full walk.
         """
         # Single item provided
         if self.library or self.movie or self.show or self.id:
