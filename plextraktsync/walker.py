@@ -324,6 +324,7 @@ class Walker(SetWindowTitle):
     def media_from_sections(self, sections: list[PlexLibrarySection]) -> Generator[PlexLibraryItem, Any, None]:
         for section in sections:
             with measure_time(f"{section.title_link} processed", extra={"markup": True}):
+                self.set_window_title(f"Processing {section.title}")
                 total = len(section)
                 it = self.progressbar(
                     section.items(total),
