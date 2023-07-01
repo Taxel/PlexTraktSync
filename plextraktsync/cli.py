@@ -2,6 +2,7 @@ from functools import wraps
 from os import environ
 
 import click
+from click import ClickException
 
 from plextraktsync.factory import factory
 
@@ -23,11 +24,13 @@ def command():
 
             try:
                 cmd(*args, **kwargs)
+            except ClickException as e:
+                from plextraktsync.factory import logger
+                logger.fatal(f"Error running {name} command: {str(e)}")
             except Exception as e:
                 from plextraktsync.factory import logger
                 logger.exception(e)
 
-                from click import ClickException
                 raise ClickException(f"Error running {name} command: {str(e)}")
 
         return wrap
