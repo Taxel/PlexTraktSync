@@ -52,8 +52,7 @@ class TraktApi:
         try:
             return trakt.users.User("me")
         except (OAuthException, ForbiddenException) as e:
-            logger.fatal(f"Trakt authentication error: {str(e)}")
-            raise ClickException(e)
+            raise ClickException(f"Trakt authentication error: {str(e)}")
 
     @cached_property
     @rate_limit()
