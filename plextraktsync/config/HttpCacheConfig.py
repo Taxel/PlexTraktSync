@@ -86,7 +86,7 @@ class HttpCacheConfig:
         # reloads
         "*/library/metadata/*?*include*": DO_NOT_CACHE,
         # episodes
-        "*/library/metadata/*/allLeaves": DO_NOT_CACHE,
+        "*/library/sections/*/all?includeGuids=1&type=4*": DO_NOT_CACHE,
         # find_by_id
         "*/library/metadata/*": DO_NOT_CACHE,
         # mark played, mark unplayed

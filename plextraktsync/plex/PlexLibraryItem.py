@@ -283,7 +283,7 @@ class PlexLibraryItem:
 
     @retry()
     def _get_episodes(self):
-        return self.item.episodes()
+        return self.library.search(libtype='episode', filters={'show.id': self.item.ratingKey})
 
     @cached_property
     def season_number(self):
