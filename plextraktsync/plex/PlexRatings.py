@@ -19,6 +19,12 @@ class PlexRatings:
 
     def get(self, m: PlexLibraryItem, show_id: int = None):
         section_id = m.item.librarySectionID
+
+        # item is from section that is in excluded-libraries
+        # this can happen when doing "inspect"
+        if section_id not in self.plex.library_sections:
+            return None
+
         media_type = m.media_type
         section = self.plex.library_sections[section_id]
         ratings = self.ratings(section, media_type)
