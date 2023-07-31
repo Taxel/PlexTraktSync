@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, NamedTuple
 
 from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.measure_time import measure_time
+from plextraktsync.mixin.SetWindowTitle import SetWindowTitle
 from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from plextraktsync.trakt.TraktApi import TraktApi
@@ -218,7 +219,7 @@ class WalkPlanner:
         return [movie_sections, show_sections]
 
 
-class Walker:
+class Walker(SetWindowTitle):
     """
     Class dealing with finding and walking library, movies/shows, episodes
     """
@@ -323,6 +324,7 @@ class Walker:
     def media_from_sections(self, sections: list[PlexLibrarySection]) -> Generator[PlexLibraryItem, Any, None]:
         for section in sections:
             with measure_time(f"{section.title_link} processed", extra={"markup": True}):
+                self.set_window_title(f"Processing {section.title}")
                 total = len(section)
                 it = self.progressbar(
                     section.items(total),
