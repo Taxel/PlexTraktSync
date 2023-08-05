@@ -316,6 +316,40 @@ last run then edit the "append" variable in `config.yml` to `false`.
 Run `plextraktsync --help` to see available commands.
 Run `plextraktsync COMMAND --help` to see help for `COMMAND`.
 
+```
+$ plextraktsync --help                           
+Usage: plextraktsync [OPTIONS] COMMAND [ARGS]...
+
+  Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
+
+Options:
+  --version              Print version and exit
+  --no-cache             Disable cache in for Trakt HTTP requests
+  --no-progressbar       Disable progressbar
+  --batch-delay INTEGER  Time in seconds between each collection batch submit
+                         to Trakt  [default: 5]
+  --server TEXT          Plex Server name from servers.yml
+  --help                 Show this message and exit.
+
+Commands:
+  bug-report         Create a pre-populated GitHub issue with information...
+  cache              Manage and analyze Requests Cache.
+  clear-collections  Clear Movies and Shows collections in Trakt
+  config             Print user config for debugging and bug reports.
+  download           Downloads movie or subtitles to a local directory
+  imdb-import        Import IMDB ratings from CSV file.
+  info               Print application and environment version info
+  inspect            Inspect details of an object
+  login              Log in to Plex and Trakt if needed
+  plex-login         Log in to Plex Account to obtain Access Token.
+  self-update        Update PlexTraktSync to the latest version using pipx
+  sync               Perform sync between Plex and Trakt
+  trakt-login        Log in to Trakt Account to obtain Access Token.
+  unmatched          List media that has no match in Trakt or Plex
+  watch              Listen to events from Plex
+  watched-shows      Print a table of watched shows
+```
+
 You can [contribute](#contribute) yourself missing documentation.
 
 ### Sync
