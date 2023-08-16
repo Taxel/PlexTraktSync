@@ -22,7 +22,7 @@ pfzy==0.3.4; python_version >= '3.7' and python_version < '4.0'
 platformdirs==3.10.0; python_version >= '3.7'
 plexapi==4.14.0
 prompt-toolkit==3.0.39
-pygments==2.15.1
+pygments==2.16.1
 python-dotenv==0.21.1
 python-git-info==0.8.3
 pytimeparse==1.1.8
