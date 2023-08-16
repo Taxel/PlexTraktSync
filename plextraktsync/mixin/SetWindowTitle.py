@@ -1,4 +1,4 @@
-from plextraktsync.decorators.cached_property import cached_property
+from functools import cached_property
 
 
 class SetWindowTitle:

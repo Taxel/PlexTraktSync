@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 import trakt
@@ -10,7 +11,6 @@ from click import ClickException
 from trakt.errors import ForbiddenException, OAuthException
 
 from plextraktsync import pytrakt_extensions
-from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plexapi.exceptions import PlexApiException
 from requests import RequestException
 from trakt.errors import TraktException
 
-from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.factory import logger
 from plextraktsync.trakt.TraktLookup import TraktLookup
 from rich.markup import escape

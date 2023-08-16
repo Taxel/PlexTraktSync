@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import cached_property
 from logging import Filter
 from typing import TYPE_CHECKING
-
-from plextraktsync.decorators.cached_property import cached_property
 
 if TYPE_CHECKING:
     from logging import Logger, LogRecord

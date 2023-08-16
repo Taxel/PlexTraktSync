@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 import plexapi
@@ -9,7 +10,6 @@ from plexapi.myplex import MyPlexAccount
 from plexapi.playlist import Playlist
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 
-from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.flatten import flatten_dict, flatten_list
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.retry import retry

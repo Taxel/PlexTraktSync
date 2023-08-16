@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from functools import cached_property
 from typing import TYPE_CHECKING, NamedTuple
 
-from plextraktsync.decorators.cached_property import cached_property
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.mixin.SetWindowTitle import SetWindowTitle
 from plextraktsync.plex.PlexGuid import PlexGuid
