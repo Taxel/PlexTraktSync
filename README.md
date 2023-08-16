@@ -317,7 +317,7 @@ Run `plextraktsync --help` to see available commands.
 Run `plextraktsync COMMAND --help` to see help for `COMMAND`.
 
 ```
-$ plextraktsync --help                           
+$ plextraktsync --help
 Usage: plextraktsync [OPTIONS] COMMAND [ARGS]...
 
   Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
