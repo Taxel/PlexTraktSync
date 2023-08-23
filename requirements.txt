@@ -3,7 +3,7 @@ attrs==23.1.0
 cattrs==23.1.2
 certifi==2023.7.22
 charset-normalizer==3.2.0
-click==8.1.6
+click==8.1.7
 deprecated==1.2.14
 idna==3.4
 inquirerpy==0.3.4
