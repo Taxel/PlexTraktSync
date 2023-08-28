@@ -7,7 +7,7 @@ click==8.1.7
 deprecated==1.2.14
 idna==3.4
 inquirerpy==0.3.4
-markdown-it-py==2.2.0
+markdown-it-py==3.0.0
 mdurl==0.1.2
 oauthlib==3.2.2
 pfzy==0.3.4
