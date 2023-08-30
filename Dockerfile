@@ -52,7 +52,6 @@ ENTRYPOINT ["/init"]
 LABEL org.opencontainers.image.description Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
 
 ENV \
-	\
 	# https://specifications.freedesktop.org/basedir-spec/latest/ar01s03.html
 	XDG_CACHE_HOME=/app/xdg/cache \
 	XDG_CONFIG_HOME=/app/xdg/config \
