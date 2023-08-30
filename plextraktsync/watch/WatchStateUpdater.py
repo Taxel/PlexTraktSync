@@ -4,6 +4,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plextraktsync.factory import logging
+from plextraktsync.mixin.SetWindowTitle import SetWindowTitle
 from plextraktsync.watch.events import (ActivityNotification, Error,
                                         PlaySessionStateNotification,
                                         TimelineEntry)
@@ -16,7 +17,7 @@ if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
 
 
-class WatchStateUpdater:
+class WatchStateUpdater(SetWindowTitle):
     def __init__(
             self,
             plex: PlexApi,
