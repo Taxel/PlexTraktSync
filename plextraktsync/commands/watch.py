@@ -3,7 +3,7 @@ from __future__ import annotations
 from plextraktsync.factory import factory
 from plextraktsync.watch.events import (ActivityNotification, Error,
                                         PlaySessionStateNotification,
-                                        TimelineEntry)
+                                        ServerStarted, TimelineEntry)
 
 
 def watch(server: str):
@@ -13,6 +13,7 @@ def watch(server: str):
     ws = factory.web_socket_listener
     updater = factory.watch_state_updater
 
+    ws.on(ServerStarted, updater.on_start)
     ws.on(
         PlaySessionStateNotification,
         updater.on_play,
