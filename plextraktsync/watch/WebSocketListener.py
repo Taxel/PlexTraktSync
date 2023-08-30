@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from plextraktsync.factory import logging
 from plextraktsync.watch.EventDispatcher import EventDispatcher
-from plextraktsync.watch.events import Error
+from plextraktsync.watch.events import Error, ServerStarted
 
 if TYPE_CHECKING:
     from plexapi.server import PlexServer
@@ -28,6 +28,8 @@ class WebSocketListener:
             notifier = self.plex.startAlertListener(
                 callback=self.dispatcher.event_handler
             )
+            self.dispatcher.event_handler(ServerStarted(notifier=notifier))
+
             while notifier.is_alive():
                 sleep(self.poll_interval)
 
