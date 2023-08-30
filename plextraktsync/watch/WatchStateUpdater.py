@@ -93,8 +93,15 @@ class WatchStateUpdater(SetWindowTitle):
 
         return m
 
+    @property
+    def server(self):
+        return self.plex.plex
+
     def on_start(self, event: ServerStarted):
-        self.set_window_title(f"watch: {event.server.friendlyName} ({event.server.version})")
+        self.reset_title()
+
+    def reset_title(self):
+        self.set_window_title(f"watch: {self.server.friendlyName} ({self.server.version})")
 
     def on_error(self, error: Error):
         self.logger.error(error.msg)
