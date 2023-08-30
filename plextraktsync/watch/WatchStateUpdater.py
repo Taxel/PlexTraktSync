@@ -7,7 +7,7 @@ from plextraktsync.factory import logging
 from plextraktsync.mixin.SetWindowTitle import SetWindowTitle
 from plextraktsync.watch.events import (ActivityNotification, Error,
                                         PlaySessionStateNotification,
-                                        TimelineEntry)
+                                        ServerStarted, TimelineEntry)
 
 if TYPE_CHECKING:
     from plextraktsync.config.Config import Config
@@ -92,6 +92,9 @@ class WatchStateUpdater(SetWindowTitle):
             m.show = ms
 
         return m
+
+    def on_start(self, event: ServerStarted):
+        self.set_window_title(f"watch: {event.server.friendlyName} ({event.server.version})")
 
     def on_error(self, error: Error):
         self.logger.error(error.msg)
