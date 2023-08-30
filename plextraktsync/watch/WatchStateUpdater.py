@@ -157,18 +157,21 @@ class WatchStateUpdater(SetWindowTitle):
         if state == "playing":
             if self.progressbar is not None:
                 self.progressbar.play(m.plex, percent)
+            self.set_window_title(f"Watching {m.title}")
 
             return self.scrobblers[tm].update(percent)
 
         if state == "paused":
             if self.progressbar is not None:
                 self.progressbar.pause(m.plex, percent)
+            self.clear_window_title()
 
             return self.scrobblers[tm].pause(percent)
 
         if state == "stopped":
             if self.progressbar is not None:
                 self.progressbar.stop(m.plex)
+            self.clear_window_title()
 
             value = self.scrobblers[tm].stop(percent)
             del self.scrobblers[tm]
