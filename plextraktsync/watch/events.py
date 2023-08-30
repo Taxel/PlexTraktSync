@@ -1,6 +1,24 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from plexapi.server import PlexServer
+
+
 class Event(dict):
     def __str__(self):
         return f"{self.__class__}:{str(self.copy())}"
+
+
+class ServerStarted(Event):
+    @property
+    def notifier(self):
+        return self["notifier"]
+
+    @property
+    def server(self) -> PlexServer:
+        return self.notifier._server
 
 
 class Error(Event):
