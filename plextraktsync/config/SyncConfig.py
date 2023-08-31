@@ -5,11 +5,13 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from plextraktsync.config.Config import Config
+    from plextraktsync.config.PlexServerConfig import PlexServerConfig
 
 
 class SyncConfig:
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, server_config: PlexServerConfig):
         self.config = dict(config["sync"])
+        self.server_config = server_config.sync_config
 
     def __getitem__(self, key):
         return self.config[key]

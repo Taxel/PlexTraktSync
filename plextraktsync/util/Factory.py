@@ -287,7 +287,7 @@ class Factory:
     def sync_config(self):
         from plextraktsync.config.SyncConfig import SyncConfig
 
-        return SyncConfig(self.config)
+        return SyncConfig(self.config, self.server_config)
 
     @cached_property
     def queue(self):
