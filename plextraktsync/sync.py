@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from typing import Iterable
 
     from plextraktsync.config.Config import Config
+    from plextraktsync.db.SyncDatabase import SyncDatabase
     from plextraktsync.media import Media
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.trakt.TraktApi import TraktApi
@@ -19,10 +20,11 @@ if TYPE_CHECKING:
 
 
 class Sync:
-    def __init__(self, config: Config, plex: PlexApi, trakt: TraktApi):
+    def __init__(self, config: Config, plex: PlexApi, trakt: TraktApi, sync_state: SyncDatabase):
         self.config = config.sync
         self.plex = plex
         self.trakt = trakt
+        self.sync_state = sync_state
 
     @cached_property
     def plex_wl(self):
@@ -175,6 +177,8 @@ class Sync:
     def sync_watched(self, m: Media, dry_run=False):
         if not self.config.sync_watched_status:
             return
+
+        self.sync_state.update(m)
 
         if m.watched_on_plex is m.watched_on_trakt:
             return
