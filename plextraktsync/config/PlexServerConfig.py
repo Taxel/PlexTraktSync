@@ -14,6 +14,7 @@ class PlexServerConfig:
     urls: list[str]
     # The machineIdentifier value of this server
     id: str = None
+    config: dict = None
 
     def asdict(self):
         data = asdict(self)
