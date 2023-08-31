@@ -79,12 +79,17 @@ class Factory:
             return False
 
     @cached_property
-    def server_config(self):
+    def server_config_factory(self):
         from plextraktsync.config.ServerConfig import ServerConfig
+
+        return ServerConfig()
+
+    @cached_property
+    def server_config(self):
 
         config = self.config
         run_config = self.run_config
-        server_config = ServerConfig()
+        server_config = self.server_config_factory
         server_name = run_config.server
 
         if server_name is None:
