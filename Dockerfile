@@ -23,8 +23,11 @@ RUN \
 RUN \
 	--mount=type=cache,id=pip,target=/root/.cache/pip \
 <<eot
+	set -x
 	set -- $(ls /wheels/*.gz /wheels/*.zip 2>/dev/null)
-	test -n "${1:-}" && pip wheel "$@" --wheel-dir=/wheels
+	if [ $# -gt 0 ]; then
+		pip wheel "$@" --wheel-dir=/wheels
+	fi
 eot
 
 # Install app dependencies
