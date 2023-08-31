@@ -284,6 +284,12 @@ class Factory:
 
         return config
 
+    @property
+    def sync_config(self):
+        from plextraktsync.config.SyncConfig import SyncConfig
+
+        return SyncConfig(self.config)
+
     @cached_property
     def queue(self):
         from plextraktsync.queue.BackgroundTask import BackgroundTask
