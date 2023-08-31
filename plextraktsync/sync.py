@@ -11,7 +11,7 @@ from plextraktsync.trakt_list_util import TraktListUtil
 if TYPE_CHECKING:
     from typing import Iterable
 
-    from plextraktsync.config.Config import Config
+    from plextraktsync.config.SyncConfig import SyncConfig
     from plextraktsync.media import Media
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.trakt.TraktApi import TraktApi
@@ -19,8 +19,8 @@ if TYPE_CHECKING:
 
 
 class Sync:
-    def __init__(self, config: Config, plex: PlexApi, trakt: TraktApi):
-        self.config = config.sync
+    def __init__(self, config: SyncConfig, plex: PlexApi, trakt: TraktApi):
+        self.config = config
         self.plex = plex
         self.trakt = trakt
 
