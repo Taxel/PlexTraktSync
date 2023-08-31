@@ -6,7 +6,7 @@ from plextraktsync.config.PlexServerConfig import PlexServerConfig
 from plextraktsync.path import default_servers_file, servers_config
 
 
-class ServerConfig(ConfigMergeMixin):
+class ServerConfigFactory(ConfigMergeMixin):
     config_path = servers_config
     loaded = False
 
