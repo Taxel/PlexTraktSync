@@ -1,6 +1,6 @@
 from plextraktsync.factory import logging
 from plextraktsync.watch.EventFactory import EventFactory
-from plextraktsync.watch.events import Error
+from plextraktsync.watch.events import Error, ServerStarted
 
 
 class EventDispatcher:
@@ -21,7 +21,7 @@ class EventDispatcher:
 
     def event_handler(self, data):
         self.logger.debug(data)
-        if isinstance(data, Error):
+        if isinstance(data, (Error, ServerStarted)):
             return self.dispatch(data)
 
         events = self.event_factory.get_events(data)

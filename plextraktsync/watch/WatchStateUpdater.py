@@ -4,9 +4,10 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plextraktsync.factory import logging
+from plextraktsync.mixin.SetWindowTitle import SetWindowTitle
 from plextraktsync.watch.events import (ActivityNotification, Error,
                                         PlaySessionStateNotification,
-                                        TimelineEntry)
+                                        ServerStarted, TimelineEntry)
 
 if TYPE_CHECKING:
     from plextraktsync.config.Config import Config
@@ -16,7 +17,7 @@ if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
 
 
-class WatchStateUpdater:
+class WatchStateUpdater(SetWindowTitle):
     def __init__(
             self,
             plex: PlexApi,
@@ -92,6 +93,16 @@ class WatchStateUpdater:
 
         return m
 
+    @property
+    def server(self):
+        return self.plex.plex
+
+    def on_start(self, event: ServerStarted):
+        self.reset_title()
+
+    def reset_title(self):
+        self.set_window_title(f"watch: {self.server.friendlyName} ({self.server.version})")
+
     def on_error(self, error: Error):
         self.logger.error(error.msg)
         self.scrobblers.clear()
@@ -153,18 +164,21 @@ class WatchStateUpdater:
         if state == "playing":
             if self.progressbar is not None:
                 self.progressbar.play(m.plex, percent)
+            self.set_window_title(f"Watching {m.title}")
 
             return self.scrobblers[tm].update(percent)
 
         if state == "paused":
             if self.progressbar is not None:
                 self.progressbar.pause(m.plex, percent)
+            self.reset_title()
 
             return self.scrobblers[tm].pause(percent)
 
         if state == "stopped":
             if self.progressbar is not None:
                 self.progressbar.stop(m.plex)
+            self.reset_title()
 
             value = self.scrobblers[tm].stop(percent)
             del self.scrobblers[tm]
