@@ -22,7 +22,7 @@ class PlexId:
         return self.provider == self.METADATA
 
     def __repr__(self):
-        keys = [self.__class__.__name__, self.provider, self.key]
+        keys = [self.__class__.__name__, self.server, self.provider, self.key]
         fields = map(str, filter(None, keys))
 
         return f'<{":".join(fields)}>'
