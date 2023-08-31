@@ -24,7 +24,7 @@ RUN \
 	--mount=type=cache,id=pip,target=/root/.cache/pip \
 <<eot
 	set -- $(ls /wheels/*.gz /wheels/*.zip 2>/dev/null)
-	test -n "${1:-}" && pip wheel $(ls /wheels/*.gz /wheels/*.zip 2>/dev/null) --wheel-dir=/wheels
+	test -n "${1:-}" && pip wheel "$@" --wheel-dir=/wheels
 eot
 
 # Install app dependencies
