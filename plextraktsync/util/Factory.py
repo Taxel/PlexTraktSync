@@ -58,6 +58,14 @@ class Factory:
 
         return mf
 
+    def get_plex_by_id(self, server_id: str):
+        server_config = self.server_config_factory.server_by_id(server_id)
+        if server_config is not None and server_config is not self.server_config:
+            self.invalidate(["plex_api", "plex_server", "server_config"])
+            self.run_config.server = server_config.name
+
+        return self.plex_api
+
     @cached_property
     def plex_server(self):
         from plextraktsync.factory import factory
