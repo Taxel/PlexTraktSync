@@ -21,3 +21,10 @@ class PlexServerConfig:
         del data["name"]
 
         return data
+
+    @property
+    def sync_config(self):
+        if self.config is None or "sync" not in self.config or self.config["sync"] is None:
+            return {}
+
+        return self.config["sync"]
