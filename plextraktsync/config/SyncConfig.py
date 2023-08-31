@@ -20,6 +20,9 @@ class SyncConfig:
         return key in self.config
 
     def get(self, section, key):
+        if section in self.server_config and key in self.server_config[section]:
+            return self.server_config[section][key]
+
         return self[key] if key in self else self[section][key]
 
     @cached_property
