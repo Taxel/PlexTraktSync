@@ -32,6 +32,9 @@ class PlexApi:
     def __init__(self, plex: PlexServer):
         self.plex = plex
 
+    def __str__(self):
+        return str(self.plex)
+
     def plex_base_url(self, section="server"):
         return f"https://app.plex.tv/desktop/#!/{section}/{self.plex.machineIdentifier}"
 

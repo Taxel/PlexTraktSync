@@ -5,7 +5,7 @@ from pathlib import Path, PureWindowsPath
 from typing import TYPE_CHECKING
 
 from plextraktsync.factory import factory
-from plextraktsync.util.expand_id import expand_id
+from plextraktsync.util.expand_id import expand_plexid
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexApi import PlexApi
@@ -60,10 +60,12 @@ def download(input: list[str], only_subs: bool, target: str):
 
     # Expand ~ as HOME
     savepath = Path(target).expanduser()
-    for id in expand_id(input):
-        pm = plex.fetch_item(id)
+    for plex_id in expand_plexid(input):
+        if plex_id.server:
+            plex = factory.get_plex_by_id(plex_id.server)
+        pm = plex.fetch_item(plex_id.key)
         if not pm:
-            print(f"Not found: {id}. Skipping")
+            print(f"Not found: {plex_id} from {plex}. Skipping")
             continue
 
         if not only_subs:

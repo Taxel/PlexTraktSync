@@ -32,6 +32,13 @@ def plex_id(id):
     return f"https://metadata.provider.plex.tv/library/metadata/{key}"
 
 
+def expand_plexid(input):
+    from plextraktsync.plex.PlexIdFactory import PlexIdFactory
+
+    for id in input:
+        yield PlexIdFactory.create(id)
+
+
 def expand_id(input):
     """
     Takes list of id or urls and resolves to Plex media id.

@@ -58,6 +58,14 @@ class Factory:
 
         return mf
 
+    def get_plex_by_id(self, server_id: str):
+        server_config = self.server_config_factory.server_by_id(server_id)
+        if server_config is not None and server_config is not self.server_config:
+            self.invalidate(["plex_api", "plex_server", "server_config"])
+            self.run_config.server = server_config.name
+
+        return self.plex_api
+
     @cached_property
     def plex_server(self):
         from plextraktsync.factory import factory
@@ -79,12 +87,17 @@ class Factory:
             return False
 
     @cached_property
-    def server_config(self):
+    def server_config_factory(self):
         from plextraktsync.config.ServerConfig import ServerConfig
+
+        return ServerConfig()
+
+    @cached_property
+    def server_config(self):
 
         config = self.config
         run_config = self.run_config
-        server_config = ServerConfig()
+        server_config = self.server_config_factory
         server_name = run_config.server
 
         if server_name is None:

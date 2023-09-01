@@ -20,6 +20,11 @@ class ServerConfig(ConfigMergeMixin):
         except KeyError:
             raise RuntimeError(f"Server with name {name} is not defined")
 
+    def server_by_id(self, id: str):
+        for name, server in self.servers.items():
+            if "id" in server and id == server["id"]:
+                return self.get_server(name)
+
     def load(self):
         if self.loaded:
             return self

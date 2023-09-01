@@ -220,6 +220,7 @@ def login(username: str, password: str):
 
     sc = ServerConfig()
     sc.add_server(
+        id=plex.machineIdentifier,
         name=server.name,
         token=token,
         urls=server_urls(server),
