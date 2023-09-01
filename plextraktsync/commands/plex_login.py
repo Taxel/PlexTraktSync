@@ -11,7 +11,7 @@ from InquirerPy.separator import Separator
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount
 
-from plextraktsync.config.ServerConfig import ServerConfig
+from plextraktsync.config.ServerConfigFactory import ServerConfigFactory
 from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.factory import factory
 from plextraktsync.style import comment, error, prompt, success, title
@@ -218,7 +218,7 @@ def login(username: str, password: str):
     else:
         plex_account_token = account._token
 
-    sc = ServerConfig()
+    sc = ServerConfigFactory()
     sc.add_server(
         id=plex.machineIdentifier,
         name=server.name,

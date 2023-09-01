@@ -88,9 +88,10 @@ class Factory:
 
     @cached_property
     def server_config_factory(self):
-        from plextraktsync.config.ServerConfig import ServerConfig
+        from plextraktsync.config.ServerConfigFactory import \
+            ServerConfigFactory
 
-        return ServerConfig()
+        return ServerConfigFactory()
 
     @cached_property
     def server_config(self):
