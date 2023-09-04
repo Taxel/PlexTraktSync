@@ -13,7 +13,6 @@
 !/plextraktsync/mixin/*.py
 !/plextraktsync/plex/*.py
 !/plextraktsync/queue/*.py
-!/plextraktsync/servers.default.yml
 !/plextraktsync/trakt/*.py
 !/plextraktsync/util/*.py
 !/plextraktsync/watch/*.py

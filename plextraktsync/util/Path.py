@@ -14,7 +14,6 @@ class Path:
         self.ensure_dir(self.cache_dir)
 
         self.default_config_file = join(self.module_path, "config.default.yml")
-        self.default_servers_file = join(self.module_path, "servers.default.yml")
         self.config_file = join(self.config_dir, "config.json")
         self.config_yml = join(self.config_dir, "config.yml")
         self.servers_config = join(self.config_dir, "servers.yml")
