@@ -130,11 +130,10 @@ class Factory:
     def sync(self):
         from plextraktsync.sync import Sync
 
-        config = self.config
         plex = self.plex_api
         trakt = self.trakt_api
 
-        return Sync(config, plex, trakt)
+        return Sync(self.sync_config, plex, trakt)
 
     @cached_property
     def progressbar(self):
@@ -283,6 +282,12 @@ class Factory:
         config.add_listener(invalidate_plex_cache, ["PLEX_SERVER"])
 
         return config
+
+    @property
+    def sync_config(self):
+        from plextraktsync.config.SyncConfig import SyncConfig
+
+        return SyncConfig(self.config, self.server_config)
 
     @cached_property
     def queue(self):

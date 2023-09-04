@@ -88,12 +88,6 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
 
         return HttpCacheConfig(**cache)
 
-    @property
-    def sync(self):
-        from plextraktsync.config.SyncConfig import SyncConfig
-
-        return SyncConfig(self)
-
     def initialize(self):
         """
         Config load order:

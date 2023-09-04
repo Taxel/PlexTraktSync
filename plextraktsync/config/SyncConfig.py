@@ -5,11 +5,13 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from plextraktsync.config.Config import Config
+    from plextraktsync.config.PlexServerConfig import PlexServerConfig
 
 
 class SyncConfig:
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, server_config: PlexServerConfig):
         self.config = dict(config["sync"])
+        self.server_config = server_config.sync_config
 
     def __getitem__(self, key):
         return self.config[key]
@@ -18,6 +20,9 @@ class SyncConfig:
         return key in self.config
 
     def get(self, section, key):
+        if section in self.server_config and key in self.server_config[section]:
+            return self.server_config[section][key]
+
         return self[key] if key in self else self[section][key]
 
     @cached_property
