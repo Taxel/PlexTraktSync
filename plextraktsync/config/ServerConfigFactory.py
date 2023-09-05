@@ -3,7 +3,7 @@ from os.path import exists
 from plextraktsync.config.ConfigLoader import ConfigLoader
 from plextraktsync.config.ConfigMergeMixin import ConfigMergeMixin
 from plextraktsync.config.PlexServerConfig import PlexServerConfig
-from plextraktsync.path import default_servers_file, servers_config
+from plextraktsync.path import servers_config
 
 
 class ServerConfigFactory(ConfigMergeMixin):
@@ -30,9 +30,6 @@ class ServerConfigFactory(ConfigMergeMixin):
             return self
         self.loaded = True
         loader = ConfigLoader()
-
-        defaults = loader.load(default_servers_file)
-        self.servers.update(defaults["servers"])
 
         if exists(self.config_path):
             servers = loader.load(self.config_path)
