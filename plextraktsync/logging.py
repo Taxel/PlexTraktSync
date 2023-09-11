@@ -26,7 +26,7 @@ def initialize(config):
         file_handler,
         console_handler,
     ]
-    logging.basicConfig(handlers=handlers, level=log_level)
+    logging.basicConfig(handlers=handlers, level=log_level, force=True)
 
     # Set debug for other components as well
     if log_level == logging.DEBUG:
