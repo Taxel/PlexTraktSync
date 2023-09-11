@@ -28,5 +28,21 @@ class PlexShowSectionPager:
             raise RuntimeError("Needs PlexAPI patch")
 
     def __iter__(self):
-        for ep in self.section.searchEpisodes():
-            yield PlexLibraryItem(ep, plex=self.plex)
+        from plexapi import X_PLEX_CONTAINER_SIZE
+
+        max_items = self.total_size
+        start = 0
+        size = X_PLEX_CONTAINER_SIZE
+
+        while True:
+            items = self.section.searchEpisodes(container_start=start, container_size=size, maxresults=size)
+
+            if not len(items):
+                break
+
+            for ep in items:
+                yield PlexLibraryItem(ep, plex=self.plex)
+
+            start += size
+            if start > max_items:
+                break
