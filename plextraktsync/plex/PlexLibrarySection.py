@@ -63,24 +63,10 @@ class PlexLibrarySection:
 
     def search_episodes(self):
         if self.section.type == "show":
-            maxresults = self.section.searchEpisodes(maxresults=0)
-            try:
-                total_size = maxresults.total_size
-            except AttributeError:
-                raise RuntimeError("Needs PlexAPI patch")
-            section = self.section
-            plex = self.plex
+            from plextraktsync.plex.PlexShowSectionPager import \
+                PlexShowSectionPager
 
-            class Wrapper:
-                def __len__(self):
-                    return total_size
-
-                def __iter__(self):
-                    for ep in section.searchEpisodes():
-                        # print(f"giving out {ep}")
-                        yield PlexLibraryItem(ep, plex=plex)
-
-            return Wrapper()
+            return PlexShowSectionPager(section=self.section, plex=self.plex)
 
         return None
 
