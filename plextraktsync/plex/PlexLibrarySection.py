@@ -10,14 +10,14 @@ from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from rich.markup import escape
 
 if TYPE_CHECKING:
-    from plexapi.library import LibrarySection
+    from plexapi.library import MovieSection, ShowSection
 
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.types import PlexMedia
 
 
 class PlexLibrarySection:
-    def __init__(self, section: LibrarySection, plex: PlexApi = None):
+    def __init__(self, section: ShowSection | MovieSection, plex: PlexApi = None):
         self.section = section
         self.plex = plex
 
