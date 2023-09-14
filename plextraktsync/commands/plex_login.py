@@ -14,7 +14,7 @@ from plexapi.myplex import MyPlexAccount
 from plextraktsync.config.ServerConfigFactory import ServerConfigFactory
 from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.factory import factory
-from plextraktsync.style import comment, error, prompt, success, title
+from plextraktsync.style import error, prompt, success, title
 from plextraktsync.util.local_url import local_url
 from rich.panel import Panel
 from rich.prompt import Confirm, Prompt
