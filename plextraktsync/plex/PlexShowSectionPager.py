@@ -21,11 +21,7 @@ class PlexShowSectionPager:
 
     @cached_property
     def total_size(self):
-        maxresults = self.section.searchEpisodes(maxresults=0)
-        try:
-            return maxresults.total_size
-        except AttributeError:
-            raise RuntimeError("Needs PlexAPI patch")
+        return self.section.totalViewSize(libtype="episode")
 
     def __iter__(self):
         from plexapi import X_PLEX_CONTAINER_SIZE
