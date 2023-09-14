@@ -66,7 +66,7 @@ def myplex_login(username, password):
         password = Prompt.ask(PROMPT_PLEX_PASSWORD, password=True, default=password, show_default=False)
         code = Prompt.ask(PROMPT_PLEX_CODE)
         try:
-            return MyPlexAccount(username, password, code)
+            return MyPlexAccount(username=username, password=password, code=code)
         except Unauthorized as e:
             print(error(f"Log in to Plex failed: '{e}', Try again."), highlight=False)
         except BadRequest as e:
