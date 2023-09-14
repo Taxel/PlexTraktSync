@@ -234,7 +234,7 @@ Installing from GitHub is considered developer mode, and it's documented in
   Follow the instructions, your credentials and API keys will be stored in
   `.env`and `.pytrakt.json` files. Plex URL and token is stored in `servers.yml`.
 
-  If you have [2 Factor Authentication enabled on Plex][two-factor-authentication] you can append the code to your password.
+  If you have [2 Factor Authentication enabled on Plex][two-factor-authentication], input the code when prompted. If you don't have 2FA enabled, just leave the prompt blank and press Enter.
 
 [two-factor-authentication]: https://support.plex.tv/articles/two-factor-authentication/#toc-1:~:text=Old%20Third%2DParty%20Apps%20%26%20Tools
 
