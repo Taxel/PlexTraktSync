@@ -34,7 +34,7 @@ trogon==0.5.0
 typing-extensions==4.8.0
 uc-micro-py==1.0.2
 url-normalize==1.4.3
-urllib3==2.0.4
+urllib3==2.0.5
 wcwidth==0.2.6
 websocket-client==1.6.3
 wrapt==1.15.0
