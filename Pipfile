@@ -44,7 +44,7 @@ typing-extensions = {version="==4.8.0", python_version=">='3.7'"}
 uc-micro-py = {version="==1.0.2", python_version=">='3.7'"}
 url-normalize = {version="==1.4.3", python_version=">='3.6'"}
 urllib3 = "==2.0.5"
-wcwidth = "==0.2.6"
+wcwidth = "==0.2.7"
 websocket-client = "==1.6.3"
 wrapt = {version="==1.15.0", python_version=">='3.5'"}
 zipp = {version="==3.17.0", python_version=">='3.8'"}
