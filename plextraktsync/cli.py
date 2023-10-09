@@ -3,7 +3,6 @@ from os import environ
 
 import click
 from click import ClickException
-from trogon import tui
 
 from plextraktsync.factory import factory
 
@@ -39,7 +38,6 @@ def command():
     return decorator
 
 
-@tui()
 @click.group(invoke_without_command=True)
 @click.option("--version", is_flag=True, help="Print version and exit")
 @click.option("--no-cache", is_flag=True, help="Disable cache in for Trakt HTTP requests")
