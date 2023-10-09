@@ -1,4 +1,5 @@
 # syntax = docker/dockerfile:1.3-labs
+ARG PYTHON_VERSION=3.12
 FROM python:3.12-alpine3.18 AS base
 WORKDIR /app
 
@@ -37,6 +38,10 @@ RUN pip install pipenv
 RUN \
 	--mount=type=bind,from=wheels,source=/wheels,target=/wheels \
 	pipenv run pip install /wheels/*.whl
+
+# Verify site-packages path
+ARG PYTHON_VERSION
+RUN du -sh /root/.local/share/virtualenvs/app-*/lib/python$PYTHON_VERSION/site-packages
 
 FROM base AS compile
 ARG APP_VERSION=$APP_VERSION
@@ -96,7 +101,8 @@ eot
 
 # Copy things together
 COPY --from=tools /dist /
-COPY --from=build /root/.local/share/virtualenvs/app-*/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+ARG PYTHON_VERSION
+COPY --from=build /root/.local/share/virtualenvs/app-*/lib/python$PYTHON_VERSION/site-packages /usr/local/lib/python$PYTHON_VERSION/site-packages
 COPY --from=compile /app ./
 COPY entrypoint.sh /init
 RUN ln -s /app/plextraktsync.sh /usr/bin/plextraktsync
