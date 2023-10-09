@@ -345,7 +345,6 @@ Commands:
   self-update        Update PlexTraktSync to the latest version using pipx
   sync               Perform sync between Plex and Trakt
   trakt-login        Log in to Trakt Account to obtain Access Token.
-  tui                Open Textual TUI.
   unmatched          List media that has no match in Trakt or Plex
   watch              Listen to events from Plex
   watched-shows      Print a table of watched shows
