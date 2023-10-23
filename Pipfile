@@ -34,7 +34,7 @@ rich = "==13.6.0"
 six = {version="==1.16.0", python_version=">='3.4'"}
 tqdm = "==4.66.1"
 url-normalize = {version="==1.4.3", python_version=">='3.6'"}
-urllib3 = "==2.0.6"
+urllib3 = "==2.0.7"
 wcwidth = "==0.2.8"
 websocket-client = "==1.6.4"
 wrapt = {version="==1.15.0", python_version=">='3.5'"}
