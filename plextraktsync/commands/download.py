@@ -66,19 +66,19 @@ def expand_media(input):
             continue
 
         if pm.type == "season":
-            yield from pm.episodes()
+            for ep in pm.episodes():
+                yield plex, ep
             return
 
-        yield pm
+        yield plex, pm
 
 
 def download(input: list[str], only_subs: bool, target: str):
-    plex = factory.plex_api
     print = factory.print
 
     # Expand ~ as HOME
     savepath = Path(target).expanduser()
-    for pm in expand_media(input):
+    for plex, pm in expand_media(input):
         if not pm.has_media:
             print(f"{pm} is not a type with media")
             continue
