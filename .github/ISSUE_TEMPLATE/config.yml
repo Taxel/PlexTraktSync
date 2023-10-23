@@ -1,5 +1,5 @@
 contact_links:
   - name: 💬 Discussions
     url: https://github.com/Taxel/PlexTraktSync/discussions/new?category=support
-    about: Please use Discussions to ask for community support. Bugs (application crashes, errors) needs to be reported to developers as issues.
+    about: Please use Discussions to ask for **community** support. Bugs (application crashes, errors) may not be reported here.
 blank_issues_enabled: false
