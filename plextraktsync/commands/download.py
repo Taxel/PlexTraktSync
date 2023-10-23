@@ -67,6 +67,9 @@ def download(input: list[str], only_subs: bool, target: str):
         if not pm:
             print(f"Not found: {plex_id} from {plex}. Skipping")
             continue
+        if not pm.has_media:
+            print(f"{pm} is not a type with media")
+            continue
 
         if not only_subs:
             download_media(plex, pm, savepath)
