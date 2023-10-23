@@ -1,5 +1,5 @@
 name: 🐞 Bug Report
-description: Create a bug report to help us improve. Use "plextraktsync bug-report" to pre-fill version info and your config.
+description: Create a bug (i.e. crash) report to help us improve. Use "plextraktsync bug-report" to pre-fill version info and your config.
 
 body:
   - type: markdown
