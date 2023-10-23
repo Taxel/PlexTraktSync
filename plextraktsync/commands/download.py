@@ -54,12 +54,9 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem, savepath: Path):
             print(f"Downloaded: {filename}")
 
 
-def download(input: list[str], only_subs: bool, target: str):
+def expand_media(input):
     plex = factory.plex_api
-    print = factory.print
 
-    # Expand ~ as HOME
-    savepath = Path(target).expanduser()
     for plex_id in expand_plexid(input):
         if plex_id.server:
             plex = factory.get_plex_by_id(plex_id.server)
@@ -67,6 +64,16 @@ def download(input: list[str], only_subs: bool, target: str):
         if not pm:
             print(f"Not found: {plex_id} from {plex}. Skipping")
             continue
+        yield pm
+
+
+def download(input: list[str], only_subs: bool, target: str):
+    plex = factory.plex_api
+    print = factory.print
+
+    # Expand ~ as HOME
+    savepath = Path(target).expanduser()
+    for pm in expand_media(input):
         if not pm.has_media:
             print(f"{pm} is not a type with media")
             continue
