@@ -64,6 +64,11 @@ def expand_media(input):
         if not pm:
             print(f"Not found: {plex_id} from {plex}. Skipping")
             continue
+
+        if pm.type == "season":
+            yield from pm.episodes()
+            return
+
         yield pm
 
 
