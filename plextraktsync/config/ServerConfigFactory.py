@@ -21,6 +21,7 @@ class ServerConfigFactory(ConfigMergeMixin):
             raise RuntimeError(f"Server with name {name} is not defined")
 
     def server_by_id(self, id: str):
+        self.load()
         for name, server in self.servers.items():
             if "id" in server and id == server["id"]:
                 return self.get_server(name)
