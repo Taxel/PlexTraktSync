@@ -14,6 +14,15 @@ class PlexId:
     METADATA_URL = "https://metadata.provider.plex.tv/library/metadata"
 
     @property
+    def plex(self):
+        from plextraktsync.factory import factory
+
+        if not self.server:
+            return factory.plex_api
+
+        return factory.get_plex_by_id(self.server)
+
+    @property
     def metadata_url(self):
         return f"{self.METADATA_URL}/{self.key}"
 

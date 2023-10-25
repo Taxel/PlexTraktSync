@@ -10,6 +10,7 @@ from InquirerPy.base import Choice
 from InquirerPy.separator import Separator
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount
+from plexapi.server import PlexServer
 
 from plextraktsync.config.ServerConfigFactory import ServerConfigFactory
 from plextraktsync.decorators.flatten import flatten_list
@@ -139,7 +140,7 @@ def prompt_server(servers: list[MyPlexResource]):
     ).execute()
 
 
-def pick_server(account: MyPlexAccount):
+def pick_server(account: MyPlexAccount) -> MyPlexResource | None:
     servers = account.resources()
     if not servers:
         return None
@@ -157,7 +158,7 @@ def pick_server(account: MyPlexAccount):
     return None
 
 
-def choose_server(account: MyPlexAccount):
+def choose_server(account: MyPlexAccount) -> tuple[MyPlexResource, PlexServer]:
     while True:
         try:
             server = pick_server(account)
@@ -176,7 +177,7 @@ def choose_server(account: MyPlexAccount):
                 print(f"    {c.uri}")
             print()
             plex = server.connect()
-            return [server, plex]
+            return server, plex
         except NotFound as e:
             print(Panel.fit(f"{e}. Try another server", padding=1, title="[b red]ERROR", border_style="red"))
 
@@ -200,7 +201,7 @@ def login(username: str, password: str):
     print(Panel.fit("Login to MyPlex was successful", title="Plex Login",
                     title_align="left", padding=1, border_style="bright_blue"))
 
-    [server, plex] = choose_server(account)
+    (server, plex) = choose_server(account)
     print(success(f"Connection to {plex.friendlyName} established successfully!"))
 
     token = server.accessToken
