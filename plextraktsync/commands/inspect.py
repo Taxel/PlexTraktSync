@@ -6,25 +6,26 @@ from urllib.parse import quote_plus
 from plexapi.utils import millisecondToHumanstr
 
 from plextraktsync.factory import factory
-from plextraktsync.util.expand_id import expand_id
+from plextraktsync.plex.PlexId import PlexId
+from plextraktsync.util.expand_id import expand_plexid
 
 if TYPE_CHECKING:
     from plextraktsync.media import Media
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 
-def inspect_media(id: str):
-    plex = factory.plex_api
+def inspect_media(plex_id: PlexId):
+    plex = plex_id.plex
     mf = factory.media_factory
     print = factory.print
 
     print("")
-    pm: PlexLibraryItem = plex.fetch_item(id)
+    pm: PlexLibraryItem = plex.fetch_item(plex_id.key)
     if not pm:
-        print(f"Inspecting {id}: Not found")
+        print(f"Inspecting {plex_id}: Not found from {plex}")
         return
 
-    print(f"Inspecting {id}: {pm}")
+    print(f"Inspecting {plex_id}: {pm}")
     if pm.library:
         print(f"Library: {pm.library.title}")
 
@@ -101,5 +102,5 @@ def inspect(inputs: list[str]):
     print = factory.print
     print(f"PlexTraktSync [{factory.version.full_version}]")
 
-    for id in expand_id(inputs):
-        inspect_media(id)
+    for plex_id in expand_plexid(inputs):
+        inspect_media(plex_id)
