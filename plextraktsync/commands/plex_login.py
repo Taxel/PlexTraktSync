@@ -196,7 +196,13 @@ def login(username: str, password: str):
         if not Confirm.ask(PROMPT_PLEX_RELOGIN, default=True):
             return
 
-    account = myplex_login(username, password)
+    config = factory.config
+
+    if config["PLEX_ACCOUNT_TOKEN"]:
+        account = MyPlexAccount(username=username, token=config["PLEX_ACCOUNT_TOKEN"])
+    else:
+        account = myplex_login(username, password)
+
     print(Panel.fit("Login to MyPlex was successful", title="Plex Login",
                     title_align="left", padding=1, border_style="bright_blue"))
 
