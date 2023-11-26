@@ -56,13 +56,13 @@ def server_urls(server: MyPlexResource):
     yield local_url()
 
 
-def myplex_login(username, password):
+def myplex_login(username: str, password: str, token: str | None):
     while True:
         username = Prompt.ask(PROMPT_PLEX_USERNAME, default=username)
         password = Prompt.ask(PROMPT_PLEX_PASSWORD, password=True, default=password, show_default=False)
         code = Prompt.ask(PROMPT_PLEX_CODE)
         try:
-            return MyPlexAccount(username=username, password=password, code=code)
+            return MyPlexAccount(username=username, password=password, code=code, token=token)
         except Unauthorized as e:
             print(error(f"Log in to Plex failed: '{e}', Try again."), highlight=False)
         except BadRequest as e:
@@ -194,7 +194,8 @@ def login(username: str, password: str):
         if not Confirm.ask(PROMPT_PLEX_RELOGIN, default=True):
             return
 
-    account = myplex_login(username, password)
+    config = factory.config
+    account = myplex_login(username, password, config["PLEX_ACCOUNT_TOKEN"])
     print(
         Panel.fit(
             "Login to MyPlex was successful",
