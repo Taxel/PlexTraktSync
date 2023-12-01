@@ -1,6 +1,6 @@
 -i https://pypi.org/simple
 attrs==23.1.0; python_version >= '3.7'
-cattrs==23.1.2; python_version >= '3.7'
+cattrs==23.2.3; python_version >= '3.8'
 certifi==2023.7.22; python_version >= '3.6'
 charset-normalizer==3.3.2; python_full_version >= '3.7.0'
 click==8.1.7; python_version >= '3.7'
