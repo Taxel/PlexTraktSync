@@ -12,7 +12,7 @@ certifi = "==2023.7.22"
 charset-normalizer = "==3.3.2"
 click = "==8.1.7"
 deprecated = "==1.2.14"
-idna = {version="==3.4", python_version=">='3.5'"}
+idna = {version="==3.6", python_version=">='3.5'"}
 inquirerpy = "==0.3.4"
 markdown-it-py = {version="==3.0.0", python_version=">='3.7'"}
 mdurl = {version="==0.1.2", python_version=">='3.7'"}
