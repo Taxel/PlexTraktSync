@@ -64,5 +64,5 @@ class PlexRatings:
             ]
         }
 
-        for item in section.search(filters=filters):
+        for item in section.search(filters=filters, includeGuids=False):
             yield item.ratingKey, item.userRating
