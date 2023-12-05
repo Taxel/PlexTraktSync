@@ -2,7 +2,10 @@ import logging
 import random
 import time
 
-from cysystemd.journal import JournaldLogHandler
+try:
+    from cysystemd.journal import JournaldLogHandler
+except ImportError:
+    pass
 
 # get an instance of the logger object this module will use
 logger = logging.getLogger(__name__)
@@ -22,6 +25,7 @@ logger.addHandler(journald_handler)
 logger.setLevel(logging.DEBUG)
 
 if __name__ == '__main__':
+    print("logger:", logger)
     while True:
         # log a sample event
         logger.info(
