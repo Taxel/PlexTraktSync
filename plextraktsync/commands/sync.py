@@ -21,6 +21,7 @@ def sync(
     """
 
     logger.info(f"PlexTraktSync [{factory.version.full_version}]")
+    logger.info("System-D journal", extra={"PRIORITY": "5"})
 
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]
