@@ -28,6 +28,9 @@ def initialize(config):
         console_handler,
     ]
     if systemd_handler:
+        systemd_handler.setFormatter(
+            CustomFormatter("%(message)s")
+        )
         handlers.append(systemd_handler)
     logging.basicConfig(handlers=handlers, level=log_level, force=True)
 
