@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2d7b7f90238d8ae75272032c587115357ecaf591d0dad47289b4cda91a526c9c"
+            "sha256": "59848411ce56a8a4526362e7b3828b02b16d549e300b87840aabcd70d11bbea0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -147,6 +147,14 @@
             "index": "pypi",
             "markers": "python_version >= '3.7'",
             "version": "==8.1.7"
+        },
+        "cysystemd": {
+            "hashes": [
+                "sha256:5224dd8fee146de08528bbf685edb177568246c7728bbb548b2257c9a44a2454"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.7' and python_version < '4'",
+            "version": "==1.6.0"
         },
         "deprecated": {
             "hashes": [
