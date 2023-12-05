@@ -2,6 +2,7 @@ import logging
 import re
 
 from plextraktsync.factory import factory
+from plextraktsync.logger.systemd import systemd_handler
 
 
 def initialize(config):
@@ -26,6 +27,8 @@ def initialize(config):
         file_handler,
         console_handler,
     ]
+    if systemd_handler:
+        handlers.append(systemd_handler)
     logging.basicConfig(handlers=handlers, level=log_level, force=True)
 
     # Set debug for other components as well
