@@ -11,7 +11,7 @@ cattrs = {version="==23.2.3", python_version=">='3.7'"}
 certifi = "==2023.11.17"
 charset-normalizer = "==3.3.2"
 click = "==8.1.7"
-cysystemd = "==1.6.0"
+cysystemd = {version="==1.6.0", extras=["systemd"]}
 deprecated = "==1.2.14"
 idna = {version="==3.6", python_version=">='3.5'"}
 inquirerpy = "==0.3.4"

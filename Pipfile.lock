@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "59848411ce56a8a4526362e7b3828b02b16d549e300b87840aabcd70d11bbea0"
+            "sha256": "0a025b7ec99adb02913a3f7fcec4ab7229a23ce324d151dda86e43d69f616fd0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -149,6 +149,9 @@
             "version": "==8.1.7"
         },
         "cysystemd": {
+            "extras": [
+                "systemd"
+            ],
             "hashes": [
                 "sha256:5224dd8fee146de08528bbf685edb177568246c7728bbb548b2257c9a44a2454"
             ],
