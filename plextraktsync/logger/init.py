@@ -1,7 +1,7 @@
 import logging
 import re
 
-from .factory import factory
+from plextraktsync.factory import factory
 
 
 def initialize(config):
