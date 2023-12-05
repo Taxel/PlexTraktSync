@@ -1,6 +1,7 @@
 # syntax = docker/dockerfile:1.3-labs
 ARG PYTHON_VERSION=3.12
 FROM python:3.12-alpine3.18 AS base
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 WORKDIR /app
 
 # Create minimal layer with extra tools
