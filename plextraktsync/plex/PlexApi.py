@@ -104,11 +104,11 @@ class PlexApi:
         for media in result:
             yield PlexLibraryItem(media, plex=self)
 
-    @cached_property
+    @property
     def version(self):
         return self.plex.version
 
-    @cached_property
+    @property
     def updated_at(self):
         return self.plex.updatedAt
 
