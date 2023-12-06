@@ -222,7 +222,7 @@ class Factory:
     def logging(self):
         import logging
 
-        from plextraktsync.logging import initialize
+        from plextraktsync.logger.init import initialize
 
         config = self.config
         initialize(config)
