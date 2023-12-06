@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "65c8e7452cdf19583e078c9c744a786d9a685b73a24086795da420b2f72d9718"
+            "sha256": "952588fd59023ed447123f057806b8d87b4794908e75f461da2828657fe090d6"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -30,8 +30,7 @@
                 "sha256:0341994d94971052e9ee70662542699a3162ea1e0c62f7ce1b4a57f563685108",
                 "sha256:a934090d95abaa9e911dac357e3a8699e0b4b14f8529bcc7d2b1ad9d51672b9f"
             ],
-            "index": "pypi",
-            "markers": "python_version >= '3.8'",
+            "markers": "python_version >= '3.7' and python_version >= '3.8'",
             "version": "==23.2.3"
         },
         "certifi": {
@@ -163,7 +162,6 @@
                 "sha256:9ecdbbd083b06798ae1e86adcbfe8ab1479cf864e4ee30fe4e46a003d12491ca",
                 "sha256:c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f"
             ],
-            "index": "pypi",
             "markers": "python_version >= '3.5'",
             "version": "==3.6"
         },
@@ -214,8 +212,7 @@
                 "sha256:11c8f37bcca40db96d8144522d925583bdb7a31f7b0e37e3ed4318400a8e2380",
                 "sha256:906d548203468492d432bcb294d4bc2fff751bf84971fbb2c10918cc206ee420"
             ],
-            "index": "pypi",
-            "markers": "python_version >= '3.8'",
+            "markers": "python_version >= '3.7' and python_version >= '3.8'",
             "version": "==4.1.0"
         },
         "plexapi": {
@@ -346,12 +343,12 @@
         },
         "requests-cache": {
             "hashes": [
-                "sha256:178282bce704b912c59e7f88f367c42bddd6cde6bf511b2a3e3cfb7e5332a92a",
-                "sha256:41b79166aa8e300cc4de982f7ab7c52af914a785160be1eda25c6e9265969a67"
+                "sha256:764f93d3fa860be72125a568c2cc8eafb151cf29b4dc2515433a56ee657e1c60",
+                "sha256:c8420cf096f3aafde13c374979c21844752e2694ffd8710e6764685bb577ac90"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.7' and python_version < '4.0'",
-            "version": "==1.1.0"
+            "version": "==1.1.1"
         },
         "requests-oauthlib": {
             "hashes": [
