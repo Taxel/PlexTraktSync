@@ -26,6 +26,8 @@ def inspect_media(plex_id: PlexId):
         return
 
     print(f"Inspecting {plex_id}: {pm}")
+
+    print("--- Plex")
     if pm.library:
         print(f"Library: {pm.library.title}")
 
@@ -73,7 +75,19 @@ def inspect_media(plex_id: PlexId):
         print(f"  Guid: {guid}, Id: {guid.id}, Provider: '{guid.provider}'")
 
     print(f"Metadata: {pm.to_json()}")
+    print(f"Watched on Plex: {pm.is_watched}")
 
+    print("Plex play history:")
+    for h in plex.history(media, device=True, account=True):
+        d = h.device
+        # handle cases like "local" for offline plays
+        if d.name == '' and d.platform == '':
+            dn = h.device.clientIdentifier
+        else:
+            dn = f"{d.name} with {d.platform}"
+        print(f"- {h.viewedAt} {h}: by {h.account.name} on {dn}")
+
+    print("--- Trakt")
     m: Media = mf.resolve_any(pm)
     if not m:
         print("Trakt: No match found")
@@ -82,20 +96,9 @@ def inspect_media(plex_id: PlexId):
     print(f"Trakt: {m.trakt_url}")
     print(f"Plex Rating: {m.plex_rating}")
     print(f"Trakt Rating: {m.trakt_rating}")
-    print(f"Watched on Plex: {m.watched_on_plex}")
     if pm.has_media:
         print(f"Watched on Trakt: {m.watched_on_trakt}")
         print(f"Collected on Trakt: {m.is_collected}")
-
-    print("Plex play history:")
-    for h in m.plex_history(device=True, account=True):
-        d = h.device
-        # handle cases like "local" for offline plays
-        if d.name == '' and d.platform == '':
-            dn = h.device.clientIdentifier
-        else:
-            dn = f"{d.name} with {d.platform}"
-        print(f"- {h.viewedAt} {h}: by {h.account.name} on {dn}")
 
 
 def inspect(inputs: list[str]):
