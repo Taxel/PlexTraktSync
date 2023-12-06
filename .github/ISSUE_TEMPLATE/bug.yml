@@ -107,7 +107,7 @@ body:
     attributes:
       label: Version
       description: Run `plextraktsync --version`. Fill exact version, filling "latest" is not acceptable.
-      placeholder: eg. 0.15.0. 
+      placeholder: eg. 0.15.0
     validations:
       required: true
 
