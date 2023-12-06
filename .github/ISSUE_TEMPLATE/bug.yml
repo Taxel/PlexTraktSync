@@ -124,6 +124,7 @@ body:
     id: plex
     attributes:
       label: Plex Server Version
+      description: You can find it from `plextraktsync info`
       placeholder: eg. 1.32.8.7639
     validations:
       required: true
