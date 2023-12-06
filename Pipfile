@@ -36,7 +36,7 @@ tqdm = "==4.66.1"
 url-normalize = {version="==1.4.3", python_version=">='3.6'"}
 urllib3 = "==2.1.0"
 wcwidth = "==0.2.12"
-websocket-client = "==1.6.4"
+websocket-client = "==1.7.0"
 wrapt = {version="==1.16.0", python_version=">='3.5'"}
 
 [requires]
