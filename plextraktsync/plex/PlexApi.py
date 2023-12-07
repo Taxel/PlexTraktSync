@@ -173,7 +173,7 @@ class PlexApi:
 
         updated = False
         if description is not None and description != playlist.summary:
-            playlist.edit(summary=description)
+            playlist.editSummary(description)
             updated = True
 
         # Skip if nothing to update
