@@ -257,14 +257,12 @@ class MediaFactory:
 
     def resolve_guid(self, guid: PlexGuid, show: Media = None):
         if guid.provider in ["local", "none", "agents.none"]:
-            logger.warning(f"{guid.pm.item}: Skipping {guid} because provider {guid.provider} has no external Id")
+            logger.warning(f"Skipping {guid} because provider {guid.provider} has no external Id")
 
             return None
 
         if guid.provider not in ["imdb", "tmdb", "tvdb"]:
-            logger.error(
-                f"{guid.pm.item}: Unable to parse a valid provider from guid {guid}"
-            )
+            logger.error(f"Unable to parse a valid provider from {guid}")
             return None
 
         try:
@@ -273,11 +271,11 @@ class MediaFactory:
             else:
                 tm = self.trakt.find_by_guid(guid)
         except (TraktException, RequestException) as e:
-            logger.warning(f"{guid.pm.item}: Skipping guid {guid} Trakt errors: {e}")
+            logger.warning(f"Skipping {guid}: Trakt errors: {e}")
             return None
 
         if tm is None:
-            logger.warning(f"{guid.pm.item}: Skipping guid {guid} not found on Trakt")
+            logger.warning(f"Skipping {guid}: not found on Trakt")
             return None
 
         return self.make_media(guid.pm, tm)
