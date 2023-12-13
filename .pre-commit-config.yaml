@@ -46,6 +46,6 @@ repos:
     hooks:
       - id: pyupgrade
         args:
-          - --py37-plus
+          - --py38-plus
 
 # vim:ts=2:sw=2:et
