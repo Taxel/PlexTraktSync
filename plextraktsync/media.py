@@ -273,7 +273,7 @@ class MediaFactory:
             return None
 
         if tm is None:
-            logger.warning(f"Skipping {guid}: not found on Trakt")
+            logger.warning(f"Skipping {guid.title_link}: not found on Trakt", extra={"markup": True})
             return None
 
         return self.make_media(guid.pm, tm)
