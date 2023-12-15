@@ -4,6 +4,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plextraktsync.factory import factory
+from rich.markup import escape
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
@@ -73,6 +74,13 @@ class PlexGuid:
 
         # old item, like imdb 'tt0112253'
         return guid[0:2] == "tt" and guid[2:].isnumeric()
+
+    @property
+    def title_link(self):
+        if self.pm:
+            return self.pm.title_link
+
+        return f"[green]{escape(str(self))}[/]"
 
     def __str__(self):
         return f"<PlexGuid:{self.guid}>"
