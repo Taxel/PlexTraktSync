@@ -52,9 +52,7 @@ class Media:
     @property
     def title_link(self):
         if self.plex:
-            link = self.plex_api.media_url(self.plex)
-
-            return f"[link={link}][green]{escape(self.title)}[/][/]"
+            return self.plex.title_link
 
         return f"[green]{escape(self.title)}[/]"
 
