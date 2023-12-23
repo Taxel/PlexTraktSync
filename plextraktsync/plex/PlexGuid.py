@@ -77,6 +77,13 @@ class PlexGuid(RichMarkup):
         """Known providers that can't be synced"""
         return self.provider in ["youtube", "xmltv"]
 
+    @property
+    def is_special(self):
+        if self.media_type != "episodes":
+            raise ValueError("is_special is not valid for non-episodes")
+
+        return self.pm.season_number == 0
+
     @cached_property
     def show_id(self):
         if not self.is_episode:
