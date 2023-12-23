@@ -221,7 +221,13 @@ class TraktApi:
 
                 return self.find_episode_guid(guid, lookup)
         else:
-            return self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
+            tm = self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
+            if tm is None and guid.type == "movie":
+                tm = self.search_by_id(guid.id, id_type=guid.provider, media_type="show")
+                if tm:
+                    logger.warning(f"Retied using show search: {guid.title_link}", extra={"markup": True})
+
+            return tm
 
     @rate_limit()
     @retry()
