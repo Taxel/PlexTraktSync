@@ -203,7 +203,7 @@ class Media:
             )
 
     def mark_watched_plex(self):
-        self.plex_api.mark_watched(self.plex.item)
+        self.plex_api.mark_watched(self.plex.item, self.plex.is_discover)
 
     @property
     def trakt_rating(self):
