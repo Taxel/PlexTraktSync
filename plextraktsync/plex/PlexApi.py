@@ -200,12 +200,20 @@ class PlexApi:
             yield h
 
     @retry()
-    def mark_watched(self, m):
-        m.markPlayed()
+    def mark_watched(self, m, is_discover=False):
+        if is_discover:
+            acc = self.account
+            acc.markPlayed(m)
+        else:
+            m.markPlayed()
 
     @retry()
-    def mark_unwatched(self, m):
-        m.markUnplayed()
+    def mark_unwatched(self, m, is_discover=False):
+        if is_discover:
+            acc = self.account
+            acc.markUnplayed(m)
+        else:
+            m.markUnplayed()
 
     def has_sessions(self):
         try:
