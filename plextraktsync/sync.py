@@ -91,9 +91,10 @@ class Sync:
                         sync_items.append(tm)
                         remaining_movies_ids.remove(tm.trakt)
                 for movie in walker.media_from_traktlist(sync_items, title="Trakt watched movies"):
-                    self.sync_watched(movie, dry_run=dry_run)
-                    # Rating medias from Plex Discover not implemented yet https://github.com/pkkid/python-plexapi/issues/1137
-                    # self.sync_ratings(movie, dry_run=dry_run)
+                    if movie is not None:
+                        self.sync_watched(movie, dry_run=dry_run)
+                        # Rating medias from Plex Discover not implemented yet https://github.com/pkkid/python-plexapi/issues/1137
+                        # self.sync_ratings(movie, dry_run=dry_run)
 
             shows = set()
             episode_trakt_ids = set()
