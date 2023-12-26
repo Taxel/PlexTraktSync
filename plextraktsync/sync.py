@@ -68,11 +68,32 @@ class Sync:
                 self.sync_watched(movie, dry_run=dry_run)
                 if not is_partial:
                     listutil.addPlexItemToLists(movie)
-                    if self.config.clear_collected:
-                        movie_trakt_ids.add(movie.trakt_id)
+                    movie_trakt_ids.add(movie.trakt_id)
 
-            if movie_trakt_ids:
+            if self.config.clear_collected and movie_trakt_ids:
                 self.clear_collected(self.trakt.movie_collection, movie_trakt_ids)
+
+            remaining_movies_ids = (
+                set(self.trakt.watched_movies.keys()).union(
+                    set(self.trakt.ratings["movies"])
+                ) - movie_trakt_ids
+            )
+
+            if remaining_movies_ids and not is_partial and self.config["plex_online"]:
+                """Sync ratings and watched status of movies not in Plex library"""
+                items = set(self.trakt.watched_movies.values()).union(
+                    set(self.trakt.ratings.items["movies"])
+                )
+                # items is a set() of trakt.movies.Movies already watched or rated (can a user rate without watch?)
+                sync_items = []
+                for tm in items:
+                    if tm.trakt in remaining_movies_ids:
+                        sync_items.append(tm)
+                        remaining_movies_ids.remove(tm.trakt)
+                for movie in walker.media_from_traktlist(sync_items, title="Trakt watched movies"):
+                    self.sync_watched(movie, dry_run=dry_run)
+                    # Rating medias from Plex Discover not implemented yet https://github.com/pkkid/python-plexapi/issues/1137
+                    # self.sync_ratings(movie, dry_run=dry_run)
 
             shows = set()
             episode_trakt_ids = set()
