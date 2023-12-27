@@ -9,6 +9,7 @@ from trakt.utils import timestamp
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory
 from plextraktsync.plex.PlexGuid import PlexGuid
+from rich.markup import escape
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
@@ -305,6 +306,15 @@ class PlexLibraryItem:
             return None
 
         return date.astimezone(datetime.timezone.utc)
+
+    @property
+    def title_link(self):
+        if self.plex:
+            link = self.plex.media_url(self)
+
+            return f"[link={link}][green]{escape(self.title)}[/][/]"
+
+        return f"[green]{escape(self.title)}[/]"
 
     def __repr__(self):
         try:

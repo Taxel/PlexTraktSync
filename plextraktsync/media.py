@@ -52,9 +52,7 @@ class Media:
     @property
     def title_link(self):
         if self.plex:
-            link = self.plex_api.media_url(self.plex)
-
-            return f"[link={link}][green]{escape(self.title)}[/][/]"
+            return self.plex.title_link
 
         return f"[green]{escape(self.title)}[/]"
 
@@ -275,7 +273,7 @@ class MediaFactory:
             return None
 
         if tm is None:
-            logger.warning(f"Skipping {guid}: not found on Trakt")
+            logger.warning(f"Skipping {guid.title_link}: not found on Trakt", extra={"markup": True})
             return None
 
         return self.make_media(guid.pm, tm)
