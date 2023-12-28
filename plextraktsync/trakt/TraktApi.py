@@ -258,7 +258,7 @@ class TraktApi:
             logger.debug(f"search_by_id({media_id}, {id_type}, {media_type}) got {len(search)} results, taking first one")
             logger.debug([pm.to_json() for pm in search])
 
-        # TODO: sort by "scrore"?
+        # TODO: sort by "score"?
         return search[0]
 
     @staticmethod
