@@ -235,7 +235,7 @@ class TraktApi:
             # Skip invalid search.
             # The Trakt API states that tvdb is only for shows and episodes:
             # https://trakt.docs.apiary.io/#reference/search/id-lookup/get-id-lookup-results
-            logger.debug("tvdb does not support movie provider")
+            logger.debug(f"search_by_id: tvdb does not support movie provider, skip {id_type}/{media_type}/{media_id}")
             return None
         if media_type == "season":
             # Search by season is missing
