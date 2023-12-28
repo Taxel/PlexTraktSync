@@ -221,7 +221,12 @@ class TraktApi:
 
                 return self.find_episode_guid(guid, lookup)
         else:
-            return self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
+            tm = self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
+            if tm is None and guid.type == "movie":
+                if self.search_by_id(guid.id, id_type=guid.provider, media_type="show"):
+                    logger.warning(f"Found match using show search: {guid.title_link}", extra={"markup": True})
+
+            return tm
 
     @rate_limit()
     @retry()
