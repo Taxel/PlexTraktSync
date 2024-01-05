@@ -60,7 +60,6 @@ class PlexApi:
                 continue
             yield section
 
-    @memoize
     @retry()
     def fetch_item(self, key: int | str) -> PlexLibraryItem | None:
         try:
