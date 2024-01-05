@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from collections import defaultdict
 from functools import cached_property
-from typing import TYPE_CHECKING, NamedTuple
+from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.mixin.SetWindowTitle import SetWindowTitle
+from plextraktsync.plan.WalkPlan import WalkPlan
 from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from plextraktsync.trakt.TraktApi import TraktApi
@@ -14,20 +15,12 @@ from plextraktsync.trakt.TraktItem import TraktItem
 if TYPE_CHECKING:
     from typing import Any, Generator, Iterable
 
-    from plexapi.video import Episode, Movie, Show
+    from plexapi.video import Episode
 
     from plextraktsync.media import Media, MediaFactory
     from plextraktsync.plan.WalkConfig import WalkConfig
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
-
-
-class WalkPlan(NamedTuple):
-    movie_sections: list[PlexLibrarySection]
-    show_sections: list[PlexLibrarySection]
-    movies: list[Movie]
-    shows: list[Show]
-    episodes: list[Episode]
 
 
 class WalkPlanner:
