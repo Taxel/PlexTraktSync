@@ -46,7 +46,7 @@ class PlexPlaylist:
 
         updated = False
         if description is not None and description != playlist.summary:
-            playlist.edit(summary=description)
+            playlist.editSummary(summary=description)
             self.logger.debug(f"Updated '{self.name}' description: {description}")
             updated = True
 
