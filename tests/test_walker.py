@@ -1,8 +1,8 @@
 #!/usr/bin/env python3 -m pytest
 from plextraktsync.plan.WalkConfig import WalkConfig
+from plextraktsync.plan.WalkPlanner import WalkPlanner
 from plextraktsync.plex.PlexApi import PlexApi
 from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
-from plextraktsync.walker import WalkPlanner
 
 
 class PlexLibrarySectionMock(PlexLibrarySection):
