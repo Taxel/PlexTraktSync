@@ -41,6 +41,13 @@ class HttpCacheConfig:
         "*.trakt.tv/users/*/ratings/shows": "1m",
         "*.trakt.tv/users/*/ratings/movies": "1m",
 
+        # Trakt search urls
+        "*.trakt.tv/search/imdb/tt*?type=movie": "1d",
+        "*.trakt.tv/search/imdb/tt*?type=show": "1d",
+        "*.trakt.tv/search/tmdb/*?type=movie": "1d",
+        "*.trakt.tv/search/tmdb/*?type=show": "1d",
+        "*.trakt.tv/search/tvdb/*?type=show": "1d",
+
         # Keep watched status cached, but fresh
         "*.trakt.tv/sync/watched/shows": "1s",
         "*.trakt.tv/users/*/watched/movies": "1s",
