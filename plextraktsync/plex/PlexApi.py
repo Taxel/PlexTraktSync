@@ -14,6 +14,7 @@ from plextraktsync.decorators.flatten import flatten_dict, flatten_list
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory, logger
+from plextraktsync.plex.PlexId import PlexId
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
 
@@ -62,13 +63,17 @@ class PlexApi:
 
     @memoize
     @retry()
-    def fetch_item(self, key: int | str) -> PlexLibraryItem | None:
+    def fetch_item(self, key: int | str | PlexId) -> PlexLibraryItem | None:
         try:
-            if isinstance(key, str) and key.startswith("https://metadata.provider.plex.tv/library/metadata/"):
-                # https://github.com/pkkid/python-plexapi/issues/1091
-                account = self.account
-                media = account.fetchItem(key)
-                media = account._toOnlineMetadata(media)[0]
+            if isinstance(key, PlexId):
+                plex_id = key
+                if plex_id.is_discover:
+                    # https://github.com/pkkid/python-plexapi/issues/1091
+                    account = self.account
+                    media = account.fetchItem(key.metadata_url)
+                    media = account._toOnlineMetadata(media)[0]
+                else:
+                    media = self.plex.library.fetchItem(plex_id.key)
             else:
                 media = self.plex.library.fetchItem(key)
         except NotFound:
