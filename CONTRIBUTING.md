@@ -242,7 +242,7 @@ curl -sSf \
 ```
 
 ```
-$ ./trakt-api.sh "https://api-v2launch.trakt.tv/users/me" | jq -C | less
+$ ./trakt-api.sh "https://api.trakt.tv/users/me" | jq -C | less
 ```
 
 ## Sharing Plex Media Server Database
