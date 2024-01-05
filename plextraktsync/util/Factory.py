@@ -44,7 +44,7 @@ class Factory:
         from plextraktsync.plex.PlexApi import PlexApi
 
         return PlexApi(
-            plex=self.plex_server,
+            server=self.plex_server,
             config=self.server_config,
         )
 

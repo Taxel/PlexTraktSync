@@ -108,7 +108,7 @@ class WatchStateUpdater(SetWindowTitle):
 
     @property
     def server(self):
-        return self.plex.plex
+        return self.plex.server
 
     def on_start(self, event: ServerStarted):
         self.logger.info(f"Server connected: {event.server.friendlyName} ({event.server.version})")
