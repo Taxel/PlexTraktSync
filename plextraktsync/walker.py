@@ -336,7 +336,7 @@ class Walker(SetWindowTitle):
     def media_from_items(self, libtype: str, items: list) -> Generator[PlexLibraryItem, Any, None]:
         it = self.progressbar(items, desc=f"Processing {libtype}s")
         for m in it:
-            yield PlexLibraryItem(m, self.plex)
+            yield PlexLibraryItem(m, plex=self.plex)
 
     def episode_from_show(self, show: Media) -> Generator[Media, Any, None]:
         for pe in show.plex.episodes():
