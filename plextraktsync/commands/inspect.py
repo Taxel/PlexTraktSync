@@ -77,8 +77,9 @@ def inspect_media(plex_id: PlexId):
     print(f"Metadata: {pm.to_json()}")
     print(f"Watched on Plex: {pm.is_watched}")
 
+    history = plex.history(media, device=True, account=True) if not pm.is_discover else []
     print("Plex play history:")
-    for h in plex.history(media, device=True, account=True):
+    for h in history:
         d = h.device
         # handle cases like "local" for offline plays
         if d.name == '' and d.platform == '':
