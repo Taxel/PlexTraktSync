@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 import plexapi
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount
-from plexapi.server import PlexServer, SystemAccount, SystemDevice
+from plexapi.server import SystemAccount, SystemDevice
 
 from plextraktsync.decorators.flatten import flatten_dict, flatten_list
 from plextraktsync.decorators.memoize import memoize
@@ -19,6 +19,7 @@ from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart, SubtitleStream
+    from plexapi.server import PlexServer
     from plexapi.video import Movie, Show
 
     from plextraktsync.config.PlexServerConfig import PlexServerConfig
