@@ -20,7 +20,7 @@ def inspect_media(plex_id: PlexId):
     print = factory.print
 
     print("")
-    pm: PlexLibraryItem = plex.fetch_item(plex_id.key)
+    pm: PlexLibraryItem = plex.fetch_item(plex_id)
     if not pm:
         print(f"Inspecting {plex_id}: Not found from {plex}")
         return
