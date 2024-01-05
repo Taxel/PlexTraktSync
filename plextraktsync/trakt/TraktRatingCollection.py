@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
 
 
-class TraktRatingCollection(dict):
+class TraktRatingCollection(dict[str, dict[int, int]]):
     def __init__(self, trakt: TraktApi):
         super().__init__()
         self.trakt = trakt
