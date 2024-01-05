@@ -168,7 +168,7 @@ class Factory:
 
     @cached_property
     def walk_config(self):
-        from plextraktsync.walker import WalkConfig
+        from plextraktsync.plan.WalkConfig import WalkConfig
 
         wc = WalkConfig()
 
