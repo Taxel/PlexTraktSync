@@ -307,7 +307,7 @@ class Walker(SetWindowTitle):
             return
         yield from self.progressbar(shows, desc=title)
 
-    def get_plex_episodes(self, episodes) -> Generator[Media, Any, None]:
+    def get_plex_episodes(self, episodes: list[Episode]) -> Generator[Media, Any, None]:
         it = self.progressbar(episodes, desc="Processing episodes")
         for pe in it:
             guid = PlexGuid(pe.grandparentGuid, "show")
