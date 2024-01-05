@@ -9,6 +9,12 @@ if TYPE_CHECKING:
 
 
 class TraktRatingCollection(dict[str, dict[int, int]]):
+    """
+    A dictionary of:
+    ["movies", "shows", "episodes"] => {
+        trakt_id => rating
+    }
+    """
     def __init__(self, trakt: TraktApi):
         super().__init__()
         self.trakt = trakt
