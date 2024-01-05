@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, NamedTuple
 
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.mixin.SetWindowTitle import SetWindowTitle
-from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from plextraktsync.trakt.TraktApi import TraktApi
 from plextraktsync.trakt.TraktItem import TraktItem
@@ -310,11 +309,12 @@ class Walker(SetWindowTitle):
     def get_plex_episodes(self, episodes: list[Episode]) -> Generator[Media, Any, None]:
         it = self.progressbar(episodes, desc="Processing episodes")
         for pe in it:
-            guid = PlexGuid(pe.grandparentGuid, "show")
-            show = self.mf.resolve_guid(guid)
+            ps = self.plex.fetch_item(pe.grandparentKey)
+            show = self.mf.resolve_any(ps)
             if not show:
                 continue
-            me = self.mf.resolve_any(PlexLibraryItem(pe), show)
+            pm = PlexLibraryItem(pe, show=ps.item, plex=self.plex)
+            me = self.mf.resolve_any(pm, show)
             if not me:
                 continue
 

@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from trakt.utils import timestamp
 
+from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory
 from plextraktsync.plex.PlexGuid import PlexGuid
@@ -13,19 +14,41 @@ from rich.markup import escape
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
+    from plexapi.video import Episode, Movie, Show
 
     from plextraktsync.plex.PlexApi import PlexApi
-    from plextraktsync.plex.types import PlexMedia
 
 
 class PlexLibraryItem:
-    def __init__(self, item: PlexMedia, plex: PlexApi = None):
+    def __init__(self,
+                 item: Movie | Show | Episode,
+                 show: Show | None = None,
+                 plex: PlexApi = None,
+                 ):
         self.item = item
         self.plex = plex
+        if show and self.is_episode:
+            self._show = show
+        else:
+            self._show = None
 
     @property
     def is_legacy_agent(self):
         return not self.item.guid.startswith("plex://")
+
+    @cached_property
+    def is_episode(self):
+        return self.type == "episode"
+
+    @property
+    def show(self):
+        return self._show
+
+    @show.setter
+    def show(self, show: Show):
+        if not self.is_episode:
+            raise RuntimeError("show property can only be set to episodes")
+        self._show = show
 
     @cached_property
     def is_discover(self):
@@ -278,19 +301,18 @@ class PlexLibraryItem:
         percent = view_offset / self.item.duration * 100
         return percent
 
-    def episodes(self):
-        for ep in self._get_episodes():
-            yield PlexLibraryItem(ep, plex=self.plex)
-
     @retry()
-    def _get_episodes(self):
+    @flatten_list
+    def episodes(self):
         if self.type == "season":
             show_id = self.item.parentRatingKey
             season = self.item.seasonNumber
+            filters = {"show.id": show_id, "season.index": season}
+        else:
+            filters = {"show.id": self.item.ratingKey}
 
-            return self.library.search(libtype='episode', filters={'show.id': show_id, 'season.index': season})
-
-        return self.library.search(libtype='episode', filters={'show.id': self.item.ratingKey})
+        for ep in self.library.search(libtype="episode", filters=filters):
+            yield PlexLibraryItem(ep, show=self.item, plex=self.plex)
 
     @cached_property
     def season_number(self):

@@ -225,9 +225,9 @@ class Media:
 
     def __str__(self):
         if self.plex:
-            return str(self.plex)
+            return f"Media<{str(self.plex).strip('<>')}>"
 
-        return str(self.trakt)
+        return f"Media<{str(self.trakt)}>"
 
 
 class MediaFactory:
