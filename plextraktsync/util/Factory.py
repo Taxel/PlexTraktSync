@@ -140,23 +140,11 @@ class Factory:
         if not self.run_config.progressbar:
             return None
 
-        import warnings
         from functools import partial
 
-        from tqdm import TqdmExperimentalWarning
-        from tqdm.rich import tqdm
+        from plextraktsync.rich.RichProgressBar import RichProgressBar
 
-        warnings.filterwarnings("ignore", category=TqdmExperimentalWarning)
-
-        # Monkeypatch https://github.com/tqdm/tqdm/pull/1395
-        class Tqdm(tqdm):
-            def close(self):
-                if self.disable:
-                    return
-                self.display()
-                super().close()
-
-        return partial(Tqdm, options={'console': self.console})
+        return partial(RichProgressBar, options={'console': self.console})
 
     @cached_property
     def run_config(self):
