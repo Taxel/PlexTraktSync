@@ -10,18 +10,40 @@ class RichProgressBar:
         self.total = total
         self.i = 0
 
-        if hasattr(iterable, "__next__"):
-            self.iterable_next = iterable.__next__
-        else:
-            self.iterable_next = iter(iterable).__next__
+        self.iterable_awaitable = False
+        if iterable is not None:
+            if hasattr(iterable, "__anext__"):
+                self.iterable_next = iterable.__anext__
+                self.iterable_awaitable = True
+            elif hasattr(iterable, "__next__"):
+                self.iterable_next = iterable.__next__
+            else:
+                self.iterable_next = iter(iterable).__next__
 
     def __iter__(self):
+        if self.iterable_awaitable:
+            raise RuntimeError("Iterable must be awaited")
+
+        return self
+
+    def __aiter__(self):
         return self
 
     def __next__(self):
         res = self.iterable_next()
         self.update()
         return res
+
+    async def __anext__(self):
+        try:
+            if self.iterable_awaitable:
+                res = await self.iterable_next()
+            else:
+                res = self.iterable_next()
+            self.update()
+            return res
+        except StopIteration:
+            raise StopAsyncIteration
 
     def __enter__(self):
         self.progress.__enter__()
