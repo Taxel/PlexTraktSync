@@ -60,7 +60,6 @@ class PlexApi:
                 continue
             yield section
 
-    @memoize
     @retry()
     def fetch_item(self, key: int | str | PlexId) -> PlexLibraryItem | None:
         try:
@@ -79,17 +78,6 @@ class PlexApi:
             return None
 
         return PlexLibraryItem(media, plex=self)
-
-    def reload_item(self, pm: PlexLibraryItem):
-        try:
-            key = pm.item.ratingKey
-        except AttributeError as e:
-            logger.debug(f"Invalid object: {e}")
-            return None
-
-        self.fetch_item.cache_clear()
-
-        return self.fetch_item(key)
 
     def media_url(self, m: PlexLibraryItem, discover=False):
         base_url = self.plex_discover_base_url if m.is_discover or discover else self.plex_base_url("server")

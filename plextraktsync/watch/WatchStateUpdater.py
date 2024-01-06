@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from functools import cached_property
+from functools import cached_property, lru_cache
 from typing import TYPE_CHECKING
 
 from plextraktsync.factory import logging
@@ -69,26 +69,35 @@ class WatchStateUpdater(SetWindowTitle):
 
         return ScrobblerCollection(self.trakt, self.config["watch"]["scrobble_threshold"])
 
+    @lru_cache(maxsize=2)
+    def fetch_item(self, key: str):
+        return self.plex.fetch_item(key)
+
+    @lru_cache(maxsize=2)
+    def mf_resolve(self, pm: PlexLibraryItem):
+        return self.mf.resolve_any(pm)
+
     def find_by_key(self, key: str, reload=False):
-        pm: PlexLibraryItem = self.plex.fetch_item(key)
+        if reload:
+            self.fetch_item.cache_clear()
+
+        pm: PlexLibraryItem = self.fetch_item(key)
 
         # Skip excluded libraries
         if pm.library is None:
             return None
 
-        if reload:
-            pm = self.plex.reload_item(pm)
         if not pm:
             return None
 
-        m = self.mf.resolve_any(pm)
+        m = self.mf_resolve(pm)
         if not m:
             return None
 
         # setup show property for trakt watched status
         if m.is_episode:
-            ps = self.plex.fetch_item(m.plex.item.grandparentRatingKey)
-            ms = self.mf.resolve_any(ps)
+            ps = self.fetch_item(m.plex.item.grandparentRatingKey)
+            ms = self.mf_resolve(ps)
             m.show = ms
 
         return m
