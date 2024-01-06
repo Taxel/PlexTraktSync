@@ -7,16 +7,15 @@ class RichProgressBar:
         self.options = options or {}
         self.desc = desc
         self.total = total
+        self.i = 0
 
     def __iter__(self):
-        p = self.progress
-        task_id = p.add_task(self.desc, total=self.total)
+        return self
 
-        i = 0
-        for it in self.iter:
-            yield it
-            i += 1
-            p.update(task_id, completed=i)
+    def __next__(self):
+        res = self.iter.__next__()
+        self.update()
+        return res
 
     def __enter__(self):
         self.progress.__enter__()
@@ -24,6 +23,14 @@ class RichProgressBar:
 
     def __exit__(self, *exc):
         self.progress.__exit__(*exc)
+
+    def update(self):
+        self.i += 1
+        self.progress.update(self.task_id, completed=self.i)
+
+    @cached_property
+    def task_id(self):
+        return self.progress.add_task(self.desc, total=self.total)
 
     @cached_property
     def progress(self):
