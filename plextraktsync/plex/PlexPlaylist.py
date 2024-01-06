@@ -3,6 +3,8 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
+from rich.markup import escape
+
 from plextraktsync.factory import logging
 
 if TYPE_CHECKING:
@@ -62,6 +64,15 @@ class PlexPlaylist:
         self.logger.debug(f"Updated '{self.name}' items")
 
         return True
+
+    @property
+    def title_link(self):
+        if self.playlist is not None:
+            link = self.playlist._getWebURL()
+
+            return f"[link={link}][green]{escape(self.name)}[/][/]"
+
+        return f"[green]{escape(self.name)}[/]"
 
     @staticmethod
     def same_list(list_a: list[PlexMedia], list_b: list[PlexMedia]) -> bool:
