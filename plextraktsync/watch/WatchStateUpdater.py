@@ -114,6 +114,9 @@ class WatchStateUpdater(SetWindowTitle):
             self.sessions.clear()
 
     def on_activity(self, activity: ActivityNotification):
+        # Skip Show ands Seasons view
+        if activity.key.endswith("/children"):
+            return
         m = self.find_by_key(activity.key, reload=True)
         if not m:
             return
