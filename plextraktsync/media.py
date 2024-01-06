@@ -81,6 +81,10 @@ class Media:
     def trakt_id(self):
         return self.trakt.trakt
 
+    @cached_property
+    def plex_key(self):
+        return self.plex.key
+
     @property
     def trakt_url(self):
         path = self.trakt.slug if self.trakt.slug else self.trakt_id
