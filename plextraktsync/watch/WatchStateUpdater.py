@@ -72,6 +72,10 @@ class WatchStateUpdater(SetWindowTitle):
     def find_by_key(self, key: str, reload=False):
         pm: PlexLibraryItem = self.plex.fetch_item(key)
 
+        # Skip unwanted kind
+        if pm.type not in ["episode", "movie"]:
+            return None
+
         # Skip excluded libraries
         if pm.library is None:
             return None
