@@ -38,7 +38,7 @@ class PlexPlaylist:
             # Remove cached_property cache
             del self.__dict__["playlist"]
             playlist = self.server.createPlaylist(self.name, items=items)
-            self.logger.debug(f"Created plex playlist '{self.name}' with {len(items)} items")
+            self.logger.info(f"Created plex playlist '{self.name}' with {len(items)} items")
 
         # Skip if playlist could not be made/retrieved
         if not playlist:
