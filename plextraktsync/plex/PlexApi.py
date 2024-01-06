@@ -34,7 +34,7 @@ class PlexApi:
     def __init__(
             self,
             server: PlexServer,
-            config: PlexServerConfig = None,
+            config: PlexServerConfig,
     ):
         self.server = server
         self.config = config
