@@ -78,7 +78,7 @@ class PlexApi:
                     media = account.fetchItem(key.metadata_url)
                     media = account._toOnlineMetadata(media)[0]
                 else:
-                    media = self.plex.library.fetchItem(plex_id.key)
+                    media = self.server.library.fetchItem(plex_id.key)
             else:
                 media = self.server.library.fetchItem(key)
         except NotFound:
