@@ -102,6 +102,7 @@ class WatchStateUpdater(SetWindowTitle):
         return self.plex.plex
 
     def on_start(self, event: ServerStarted):
+        self.logger.info(f"Server connected: {event.server.friendlyName} ({event.server.version})")
         self.reset_title()
 
     def reset_title(self):
