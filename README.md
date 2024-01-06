@@ -278,7 +278,7 @@ services:
       - ./config:/app/config
 ```
 
-## Sync settings
+## Configuration
 
 To disable parts of the functionality of this software, look no further than
 `config.yml`. At first run, the script will create `config.yml` based on
