@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from plexapi.media import MediaPart, SubtitleStream
     from plexapi.video import Movie, Show
 
+    from plextraktsync.config.PlexServerConfig import PlexServerConfig
     from plextraktsync.plex.types import PlexMedia
 
 
@@ -29,8 +30,13 @@ class PlexApi:
     Plex API class abstracting common data access and dealing with requests cache.
     """
 
-    def __init__(self, plex: PlexServer):
+    def __init__(
+            self,
+            plex: PlexServer,
+            config: PlexServerConfig = None,
+    ):
         self.plex = plex
+        self.config = config
 
     def __str__(self):
         return str(self.plex)
