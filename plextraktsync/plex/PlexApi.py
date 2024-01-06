@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 import plexapi
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount
-from plexapi.server import PlexServer, SystemAccount, SystemDevice
+from plexapi.server import SystemAccount, SystemDevice
 
 from plextraktsync.decorators.flatten import flatten_dict, flatten_list
 from plextraktsync.decorators.memoize import memoize
@@ -19,6 +19,7 @@ from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart, SubtitleStream
+    from plexapi.server import PlexServer
     from plexapi.video import Movie, Show
 
     from plextraktsync.config.PlexServerConfig import PlexServerConfig
@@ -32,17 +33,17 @@ class PlexApi:
 
     def __init__(
             self,
-            plex: PlexServer,
+            server: PlexServer,
             config: PlexServerConfig = None,
     ):
-        self.plex = plex
+        self.server = server
         self.config = config
 
     def __str__(self):
-        return str(self.plex)
+        return str(self.server)
 
     def plex_base_url(self, section="server"):
-        return f"https://app.plex.tv/desktop/#!/{section}/{self.plex.machineIdentifier}"
+        return f"https://app.plex.tv/desktop/#!/{section}/{self.server.machineIdentifier}"
 
     @property
     def plex_discover_base_url(self):
@@ -79,7 +80,7 @@ class PlexApi:
                 else:
                     media = self.plex.library.fetchItem(plex_id.key)
             else:
-                media = self.plex.library.fetchItem(key)
+                media = self.server.library.fetchItem(key)
         except NotFound:
             return None
 
@@ -92,35 +93,35 @@ class PlexApi:
         return f"{base_url}/details?key={key}"
 
     def download(self, m: SubtitleStream | MediaPart, **kwargs):
-        url = self.plex.url(m.key)
-        token = self.plex._token
+        url = self.server.url(m.key)
+        token = self.server._token
 
         return plexapi.utils.download(url, token, **kwargs)
 
     @property
     def version(self):
-        return self.plex.version
+        return self.server.version
 
     @property
     def updated_at(self):
-        return self.plex.updatedAt
+        return self.server.updatedAt
 
     @cached_property
     @flatten_dict
     def library_sections(self) -> dict[int, PlexLibrarySection]:
         excluded_libraries = factory.config["excluded-libraries"]
-        for section in self.plex.library.sections():
+        for section in self.server.library.sections():
             if section.title in excluded_libraries:
                 continue
             yield section.key, PlexLibrarySection(section, plex=self)
 
     @memoize
     def system_device(self, device_id: int) -> SystemDevice:
-        return self.plex.systemDevice(device_id)
+        return self.server.systemDevice(device_id)
 
     @memoize
     def system_account(self, account_id: int) -> SystemAccount:
-        return self.plex.systemAccount(account_id)
+        return self.server.systemAccount(account_id)
 
     @cached_property
     def ratings(self):
@@ -138,7 +139,7 @@ class PlexApi:
         """
         from plextraktsync.plex.PlexPlaylist import PlexPlaylist
 
-        playlist = PlexPlaylist(self.plex, name)
+        playlist = PlexPlaylist(self.server, name)
 
         return playlist.update(items, description)
 
@@ -167,14 +168,14 @@ class PlexApi:
 
     def has_sessions(self):
         try:
-            self.plex.sessions()
+            self.server.sessions()
             return True
         except Unauthorized:
             return False
 
     @property
     def sessions(self):
-        return self.plex.sessions()
+        return self.server.sessions()
 
     @cached_property
     def account(self):
@@ -195,7 +196,7 @@ class PlexApi:
                 logger.error(f"Error during {plex_username} account access: {e}")
         else:
             try:
-                return self.plex.myPlexAccount()
+                return self.server.myPlexAccount()
             except BadRequest as e:
                 logger.error(f"Error during {plex_username} account access: {e}")
         return None
