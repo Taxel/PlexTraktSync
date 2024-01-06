@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING
 import plexapi
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount
-from plexapi.playlist import Playlist
 from plexapi.server import PlexServer, SystemAccount, SystemDevice
 
 from plextraktsync.decorators.flatten import flatten_dict, flatten_list
@@ -139,50 +138,15 @@ class PlexApi:
     def rate(self, m, rating):
         m.rate(rating)
 
-    @staticmethod
-    def same_list(list_a: list[PlexMedia], list_b: list[PlexMedia]) -> bool:
-        """
-        Return true if two list contain same Plex items.
-        The comparison is made on ratingKey property,
-        the items don't have to actually be identical.
-        """
-
-        # Quick way out of lists with different length
-        if len(list_a) != len(list_b):
-            return False
-
-        a = [m.ratingKey for m in list_a]
-        b = [m.ratingKey for m in list_b]
-
-        return a == b
-
     def update_playlist(self, name: str, items: list[PlexMedia], description=None) -> bool:
         """
         Updates playlist (creates if name missing) replacing contents with items[]
         """
-        playlist: Playlist | None = None
-        try:
-            playlist = self.plex.playlist(name)
-        except NotFound:
-            if len(items) > 0:
-                playlist = self.plex.createPlaylist(name, items=items)
+        from plextraktsync.plex.PlexPlaylist import PlexPlaylist
 
-        # Skip if playlist could not be made/retrieved
-        if playlist is None:
-            return False
+        playlist = PlexPlaylist(self.plex, name)
 
-        updated = False
-        if description is not None and description != playlist.summary:
-            playlist.editSummary(description)
-            updated = True
-
-        # Skip if nothing to update
-        if self.same_list(items, playlist.items()):
-            return updated
-
-        playlist.removeItems(playlist.items())
-        playlist.addItems(items)
-        return True
+        return playlist.update(items, description)
 
     @flatten_list
     def history(self, m, device=False, account=False):
