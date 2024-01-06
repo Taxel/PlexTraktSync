@@ -109,7 +109,7 @@ class Walker(SetWindowTitle):
     def walk_shows(self, shows: set[Media], title="Processing Shows"):
         if not shows:
             return
-        yield from self.progressbar(shows, desc=title)
+        yield from self.progressbar(shows, desc=title, total=len(shows))
 
     def get_plex_episodes(self, episodes: list[Episode]) -> Generator[Media, Any, None]:
         it = self.progressbar(episodes, desc="Processing episodes")
