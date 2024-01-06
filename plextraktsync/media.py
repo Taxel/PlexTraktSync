@@ -30,7 +30,7 @@ class Media:
     def __init__(
             self,
             plex: PlexLibraryItem,
-            trakt,
+            trakt: TraktMedia,
             plex_api: PlexApi = None,
             trakt_api: TraktApi = None,
             mf: MediaFactory = None,
