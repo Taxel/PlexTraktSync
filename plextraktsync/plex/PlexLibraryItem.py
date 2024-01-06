@@ -33,6 +33,17 @@ class PlexLibraryItem:
         # https://github.com/pkkid/python-plexapi/pull/1093
         return self.item.__dict__["librarySectionID"] is None
 
+    @property
+    def web_url(self):
+        return self.plex.media_url(self)
+
+    @property
+    def discover_url(self):
+        if not self.is_discover and not self.is_legacy_agent:
+            return self.plex.media_url(self, discover=True)
+
+        return None
+
     @retry()
     def get_guids(self):
         return self.item.guids
