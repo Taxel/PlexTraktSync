@@ -43,10 +43,10 @@ class Factory:
     def plex_api(self):
         from plextraktsync.plex.PlexApi import PlexApi
 
-        server = self.plex_server
-        plex = PlexApi(server)
-
-        return plex
+        return PlexApi(
+            plex=self.plex_server,
+            config=self.server_config,
+        )
 
     @cached_property
     def media_factory(self):
