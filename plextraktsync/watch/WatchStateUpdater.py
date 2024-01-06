@@ -83,6 +83,10 @@ class WatchStateUpdater(SetWindowTitle):
 
         pm: PlexLibraryItem = self.fetch_item(key)
 
+        # Skip unwanted kind
+        if pm.type not in ["episode", "movie"]:
+            return None
+
         # Skip excluded libraries
         if pm.library is None:
             return None
@@ -107,6 +111,7 @@ class WatchStateUpdater(SetWindowTitle):
         return self.plex.plex
 
     def on_start(self, event: ServerStarted):
+        self.logger.info(f"Server connected: {event.server.friendlyName} ({event.server.version})")
         self.reset_title()
 
     def reset_title(self):
@@ -119,6 +124,9 @@ class WatchStateUpdater(SetWindowTitle):
             self.sessions.clear()
 
     def on_activity(self, activity: ActivityNotification):
+        # Skip Show ands Seasons view
+        if activity.key.endswith("/children"):
+            return
         m = self.find_by_key(activity.key, reload=True)
         if not m:
             return

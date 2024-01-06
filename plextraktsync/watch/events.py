@@ -41,7 +41,7 @@ class ActivityNotification(Event):
         return self["Activity"]["progress"]
 
     @property
-    def key(self):
+    def key(self) -> str:
         return self["Activity"]["Context"]["key"]
 
     @property

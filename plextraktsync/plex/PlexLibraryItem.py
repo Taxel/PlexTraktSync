@@ -56,6 +56,7 @@ class PlexLibraryItem:
             "tvdb": 2,
             "imdb": 3,
             "local": 100,
+            "mbid": 1000,
         }
         ordered = sorted(guids, key=lambda guid: sort_order[guid.provider])
         return ordered
