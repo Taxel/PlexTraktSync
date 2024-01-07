@@ -162,7 +162,7 @@ class Walker(SetWindowTitle):
     def media_from_traktlist(self, items: Iterable, title="Trakt watchlist") -> Generator[Media, Any, None]:
         it = self.progressbar(items, desc=f"Processing {title}")
         for media in it:
-            tm = TraktItem(media, trakt=self.trakt)
+            tm = TraktItem(media)
             m = self.mf.resolve_trakt(tm)
             yield m
 

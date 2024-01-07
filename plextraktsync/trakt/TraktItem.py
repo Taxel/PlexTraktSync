@@ -4,14 +4,12 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from plextraktsync.trakt.TraktApi import TraktApi
     from plextraktsync.trakt.types import TraktMedia
 
 
 class TraktItem:
-    def __init__(self, item: TraktMedia, trakt: TraktApi = None):
+    def __init__(self, item: TraktMedia):
         self.item = item
-        self.trakt = trakt
 
     @cached_property
     def type(self):
