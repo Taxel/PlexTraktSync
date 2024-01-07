@@ -11,6 +11,7 @@
 !/plextraktsync/decorators/*.py
 !/plextraktsync/logger/*.py
 !/plextraktsync/mixin/*.py
+!/plextraktsync/plan/*.py
 !/plextraktsync/plex/*.py
 !/plextraktsync/queue/*.py
 !/plextraktsync/rich/*.py
