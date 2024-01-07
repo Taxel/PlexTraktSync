@@ -82,12 +82,11 @@ class TraktLookup:
             return True
         return False
 
-    def from_number(self, season, number):
+    def from_number(self, season: int, number: int):
         try:
-            ep = self.table[season][number]
+            return self.table[season][number]
         except KeyError:
             return None
-        return ep
 
     def from_id(self, provider, id):
         # NB: the code assumes from_id is called only if from_number fails
