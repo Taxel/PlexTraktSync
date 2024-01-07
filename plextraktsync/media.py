@@ -223,11 +223,21 @@ class Media:
             return []
         return self.plex_api.history(self.plex.item, **kwargs)
 
-    def __str__(self):
+    def __repr__(self):
         if self.plex:
-            return str(self.plex)
+            return repr(self.plex)
 
-        return str(self.trakt)
+        trakt = self.trakt
+        if self.type in ["movie", "show"]:
+            return f"<trakt:Movie:{trakt.title} ({trakt.year})>"
+        elif self.type == "show":
+            return f"<trakt:TVShow:{trakt.title}>"
+        elif self.type == "season":
+            return f"<trakt:TVSeason:{trakt.show} ({trakt.year}):s{trakt.season:02d}>"
+        elif self.type == "episode":
+            return f"<trakt:TVEpisode:{trakt.show} ({trakt.year}):s{trakt.season:02d}e{trakt.number:02d}:{trakt.title}>"
+        else:
+            return f"<trakt:{str(self.trakt).strip('<>')}>)"
 
 
 class MediaFactory:
