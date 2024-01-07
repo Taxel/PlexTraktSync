@@ -4,6 +4,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.measure_time import measure_time
+from plextraktsync.factory import logging
 from plextraktsync.mixin.SetWindowTitle import SetWindowTitle
 from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
@@ -39,6 +40,7 @@ class Walker(SetWindowTitle):
         self.trakt = trakt
         self.mf = mf
         self.config = config
+        self.logger = logging.getLogger("PlexTraktSync.Walker")
 
     @cached_property
     def plan(self):
