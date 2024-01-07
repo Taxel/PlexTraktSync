@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 from plexapi.exceptions import PlexApiException
 from requests import RequestException
 from trakt.errors import TraktException
+from trakt.tv import TVShow
 
 from plextraktsync.factory import logger
 from plextraktsync.trakt.TraktLookup import TraktLookup
@@ -90,7 +91,11 @@ class Media:
     def show(self) -> Media | None:
         if self._show is None and self.mf and not self.plex.is_discover:
             ps = self.plex.show
-            ms = self.mf.resolve_any(ps)
+            if isinstance(self.trakt.show, TVShow):
+                ts = self.trakt.show
+                ms = self.mf.make_media(trakt=ts, plex=ps)
+            else:
+                ms = self.mf.resolve_any(ps)
             self._show = ms
 
         return self._show
