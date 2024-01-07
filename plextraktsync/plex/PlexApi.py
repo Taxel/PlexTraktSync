@@ -34,7 +34,7 @@ class PlexApi:
     def __init__(
             self,
             server: PlexServer,
-            config: PlexServerConfig = None,
+            config: PlexServerConfig,
     ):
         self.server = server
         self.config = config
@@ -109,10 +109,22 @@ class PlexApi:
     @cached_property
     @flatten_dict
     def library_sections(self) -> dict[int, PlexLibrarySection]:
-        excluded_libraries = factory.config["excluded-libraries"]
+        enabled_libraries = self.config.libraries
+
+        # If server has defined libraries, ignore global "excluded libraries"
+        # otherwise merge server excluded libraries with global excluded libraries
+        if enabled_libraries is not None:
+            excluded_libraries = self.config.excluded_libraries or []
+        else:
+            excluded_libraries = factory.config["excluded-libraries"] + (self.config.excluded_libraries or [])
+
         for section in self.server.library.sections():
+            if enabled_libraries is not None:
+                if section.title not in enabled_libraries:
+                    continue
             if section.title in excluded_libraries:
                 continue
+
             yield section.key, PlexLibrarySection(section, plex=self)
 
     @memoize

@@ -1,6 +1,8 @@
 cache:
   path: $PTS_CACHE_DIR/trakt_cache
 
+# You may want to use per server libraries config instead:
+# - https://github.com/Taxel/PlexTraktSync#libraries
 excluded-libraries:
   - Private
   - Family Holidays

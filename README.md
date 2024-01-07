@@ -278,7 +278,7 @@ services:
       - ./config:/app/config
 ```
 
-## Sync settings
+## Configuration
 
 To disable parts of the functionality of this software, look no further than
 `config.yml`. At first run, the script will create `config.yml` based on
@@ -302,6 +302,44 @@ seconds, second run - 111 seconds
 
 You can view sync progress in the `plextraktsync.log` file which will be
 created.
+
+### Libraries
+
+By default, all libraries are processed. You can disable libraries by name by
+changing `excluded-libraries` in `config.yml`.
+
+You can also set `excluded-libraries` per server in `servers.yml`:
+
+```yml
+  Example1:
+    token: ~
+    urls:
+      - http://localhost:32400
+    config:
+      excluded-libraries:
+        - "Family Movies"
+```
+
+Additionally, you can list only libraries to be processed, in this case global
+`excluded-libraries` will not be used for this server.
+
+```yml
+  Example1:
+    token: ~
+    urls:
+      - http://localhost:32400
+    config:
+      libraries:
+        - "Movies"
+        - "TV Shows"
+```
+
+you can see the final list of libraries with info command:
+
+```commandline
+$ plextraktsync --server=Example1 info
+INFO     Enabled 2 libraries in Plex Server: ['Movies', 'TV Shows']
+```
 
 ### Logging
 
