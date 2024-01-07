@@ -100,10 +100,16 @@ class Walker(SetWindowTitle):
         if self.plan.episodes:
             yield from self.get_plex_episodes(self.plan.episodes)
 
+        show_cache = {}
         for ep in self.episodes_from_sections(self.plan.show_sections):
-            m = self.mf.resolve_any(ep)
+            show_id = ep.show_id
+            show = show_cache[show_id] if show_id in show_cache else None
+            m = self.mf.resolve_any(ep, show)
             if not m:
                 continue
+            if show:
+                m.show = show
+            show_cache[show_id] = m.show
             yield m
 
     def walk_shows(self, shows: set[Media], title="Processing Shows"):
