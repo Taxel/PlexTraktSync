@@ -217,8 +217,14 @@ class TraktApi:
             return None
 
         lookup = TraktLookup(ts)
+        te = self.find_episode_guid(guid, lookup)
+        if not te:
+            return None
 
-        return self.find_episode_guid(guid, lookup)
+        # NOTE: overwrites property of type str
+        te.show = ts
+
+        return te
 
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
