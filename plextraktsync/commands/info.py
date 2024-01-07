@@ -1,8 +1,8 @@
-from plextraktsync.factory import factory, logger
+from plextraktsync.factory import factory
 from plextraktsync.path import cache_dir, config_dir, log_dir, servers_config
 
 
-def info(print=logger.info):
+def info(print=factory.print):
     version = factory.version
     print(f"PlexTraktSync Version: {version.full_version}")
 
