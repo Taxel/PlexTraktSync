@@ -1,7 +1,7 @@
 #!/bin/sh
 
-: ${TRAKT_API_KEY=$(jq -r .CLIENT_ID < .pytrakt.json)}
-: ${TRAKT_AUTHORIZATION=Bearer $(jq -r .OAUTH_TOKEN < .pytrakt.json)}
+: "${TRAKT_API_KEY=$(jq -r .CLIENT_ID < .pytrakt.json)}"
+: "${TRAKT_AUTHORIZATION=Bearer $(jq -r .OAUTH_TOKEN < .pytrakt.json)}"
 
 curl -sSf \
      --header "Content-Type: application/json" \
