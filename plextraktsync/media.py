@@ -89,8 +89,7 @@ class Media:
     @property
     def show(self) -> Media | None:
         if self._show is None and self.mf and not self.plex.is_discover:
-            # TODO: fetch show for discover items
-            ps = self.plex_api.fetch_item(self.plex.item.grandparentRatingKey)
+            ps = self.plex.show
             ms = self.mf.resolve_any(ps)
             self._show = ms
 
