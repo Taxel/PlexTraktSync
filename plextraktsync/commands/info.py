@@ -27,5 +27,8 @@ def info(print=factory.print):
     if factory.has_plex_token:
         plex = factory.plex_api
         print(f"Plex Server version: {plex.version}, updated at: {plex.updated_at}")
-        section_titles = [x.title for x in plex.library_sections.values()]
-        print(f"Enabled {len(section_titles)} libraries in Plex Server: {section_titles}")
+
+        sections = plex.library_sections.values()
+        print(f"Enabled {len(sections)} libraries in Plex Server:")
+        for i, section in enumerate(sections, start=1):
+            print(f" - {i}: {section.title_link}")
