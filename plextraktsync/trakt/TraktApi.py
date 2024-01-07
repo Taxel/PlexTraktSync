@@ -211,15 +211,18 @@ class TraktApi:
 
         self.queue.remove_from_watchlist((m.media_type, item))
 
+    def find_by_episode_guid(self, guid: PlexGuid):
+        ts: TVShow = self.search_by_id(guid.show_id, id_type=guid.provider, media_type="show")
+        if not ts:
+            return None
+
+        lookup = TraktLookup(ts)
+
+        return self.find_episode_guid(guid, lookup)
+
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
-            ts: TVShow = self.search_by_id(
-                guid.show_id, id_type=guid.provider, media_type="show"
-            )
-            if ts:
-                lookup = TraktLookup(ts)
-
-                return self.find_episode_guid(guid, lookup)
+            return self.find_by_episode_guid(guid)
         else:
             tm = self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
             if tm is None and guid.type == "movie":
