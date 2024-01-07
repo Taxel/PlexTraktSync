@@ -82,7 +82,7 @@ class Media:
 
     @property
     def trakt_url(self):
-        return f"https://trakt.tv/{self.media_type}/{self.trakt_id}"
+        return f"https://trakt.tv/{self.media_type}/{self.trakt.slug}"
 
     @property
     def show(self) -> Media | None:
