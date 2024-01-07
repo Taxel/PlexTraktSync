@@ -24,6 +24,10 @@ class PlexLibraryItem:
         self.plex = plex
 
     @property
+    def key(self):
+        return self.item.ratingKey
+
+    @property
     def is_legacy_agent(self):
         return not self.item.guid.startswith("plex://")
 
