@@ -52,10 +52,8 @@ class PlexGuid:
         Return true of the id is in form of <show>/<season>/<episode>
         """
         parts = self.id.split("/")
-        if len(parts) == 3 and all(x.isnumeric() for x in parts):
-            return True
 
-        return False
+        return len(parts) == 3 and all(x.isnumeric() for x in parts)
 
     @cached_property
     def show_id(self):
