@@ -312,6 +312,12 @@ class PlexLibraryItem:
     def episode_number(self):
         return self.item.index
 
+    @property
+    def show_id(self):
+        if self.type != "episode":
+            raise RuntimeError("show_id is valid for episodes only")
+        return self.item.grandparentRatingKey
+
     @staticmethod
     def date_value(date):
         if not date:
