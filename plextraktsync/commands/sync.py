@@ -21,6 +21,17 @@ def sync(
     """
 
     logger.info(f"PlexTraktSync [{factory.version.full_version}]")
+    logger.info("System-D journal: red:0", extra={"PRIORITY": "0"})
+    logger.info("System-D journal: red:1", extra={"PRIORITY": "1"})
+    logger.info("System-D journal: red:2", extra={"PRIORITY": "2"})
+    logger.info("System-D journal: red:#", extra={"PRIORITY": "3"})
+    logger.info("System-D journal: green", extra={"PRIORITY": "4"})
+    logger.info("System-D journal: bold", extra={"PRIORITY": "5"})
+    logger.info("System-D journal: norm:6", extra={"PRIORITY": "6"})
+    logger.info("System-D journal: gray", extra={"PRIORITY": "7"})
+    logger.info("System-D journal: norm:8", extra={"PRIORITY": "8"})
+    logger.info("Override SYSLOG_IDENTIFIER", extra={"SYSLOG_IDENTIFIER": "PlexTraktSync.SYSLOG_IDENTIFIER"})
+    logger.info("Override LOGGER_NAME", extra={"LOGGER_NAME": "PlexTraktSync.LOGGER_NAME"})
 
     movies = sync_option in ["all", "movies"]
     shows = sync_option in ["all", "tv", "shows"]
