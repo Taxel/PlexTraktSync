@@ -34,14 +34,14 @@ class PlexPlaylist:
         Updates playlist (creates if name missing) replacing contents with items[]
         """
         playlist = self.playlist
-        if not playlist and len(items) > 0:
-            # Remove cached_property cache
+        if playlist is None and len(items) > 0:
+            # Force reload
             del self.__dict__["playlist"]
             playlist = self.server.createPlaylist(self.name, items=items)
             self.logger.info(f"Created plex playlist '{self.name}' with {len(items)} items")
 
         # Skip if playlist could not be made/retrieved
-        if not playlist:
+        if playlist is None:
             return False
 
         updated = False
