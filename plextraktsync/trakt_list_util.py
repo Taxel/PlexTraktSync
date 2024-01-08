@@ -4,7 +4,6 @@ from itertools import count
 
 from plexapi.video import Episode
 from trakt.core import get
-from trakt.errors import NotFoundException, OAuthException
 from trakt.users import UserList
 
 from plextraktsync.factory import logger
@@ -78,27 +77,3 @@ class TraktList:
                 )
             else:
                 logger.info(f"Added to list '{self.name}': {plex_item}")
-
-
-class TraktListUtil:
-    lists: list[TraktList]
-
-    def __init__(self):
-        self.lists = []
-
-    def addList(self, listid, listname, trakt_list=None):
-        if trakt_list is not None:
-            self.lists.append(TraktList.from_trakt_list(listname, trakt_list))
-            logger.info(f"Created list '{listname}' from {len(trakt_list)} items")
-            return
-        try:
-            self.lists.append(TraktList(listid, listname))
-            logger.info(f"Downloaded list '{listname}'")
-        except (NotFoundException, OAuthException):
-            logger.warning(
-                f"Failed to get list '{listname}' with id {listid}"
-            )
-
-    def addPlexItemToLists(self, m):
-        for tl in self.lists:
-            tl.addPlexItem(m.trakt, m.plex.item)
