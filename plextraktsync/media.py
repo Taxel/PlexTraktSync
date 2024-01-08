@@ -241,7 +241,7 @@ class MediaFactory:
         self.plex = plex
         self.trakt = trakt
 
-    def resolve_any(self, pm: PlexLibraryItem, show: Media = None) -> Media | None:
+    async def resolve_any(self, pm: PlexLibraryItem, show: Media = None) -> Media | None:
         try:
             guids = pm.guids
         except (PlexApiException, RequestException) as e:

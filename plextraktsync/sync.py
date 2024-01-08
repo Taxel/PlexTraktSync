@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from functools import cached_property
 from typing import TYPE_CHECKING
 
@@ -40,7 +41,7 @@ class Sync:
 
         return TraktWatchList(self.trakt.watchlist_movies + self.trakt.watchlist_shows)
 
-    def sync(self, walker: Walker, dry_run=False):
+    async def sync(self, walker: Walker, dry_run=False):
         listutil = TraktListUtil()
         is_partial = walker.is_partial
 
@@ -60,51 +61,68 @@ class Sync:
                 for lst in self.trakt.liked_lists:
                     listutil.addList(lst["listid"], lst["listname"])
 
+        tasks = []
         if self.config.need_library_walk:
-            movie_trakt_ids = set()
-            for movie in walker.find_movies():
-                self.sync_collection(movie, dry_run=dry_run)
-                self.sync_ratings(movie, dry_run=dry_run)
-                self.sync_watched(movie, dry_run=dry_run)
-                if not is_partial:
-                    listutil.addPlexItemToLists(movie)
-                    if self.config.clear_collected:
-                        movie_trakt_ids.add(movie.trakt_id)
+            async def sync_movies():
+                movie_trakt_ids = set()
+                async for movie in walker.find_movies():
+                    await asyncio.gather(
+                        self.sync_collection(movie, dry_run=dry_run),
+                        self.sync_ratings(movie, dry_run=dry_run),
+                        self.sync_watched(movie, dry_run=dry_run),
+                    )
+                    if not is_partial:
+                        listutil.addPlexItemToLists(movie)
+                        if self.config.clear_collected:
+                            movie_trakt_ids.add(movie.trakt_id)
 
-            if movie_trakt_ids:
-                self.clear_collected(self.trakt.movie_collection, movie_trakt_ids)
+                if movie_trakt_ids:
+                    self.clear_collected(self.trakt.movie_collection, movie_trakt_ids)
+            tasks.append(sync_movies())
 
-            shows = set()
-            episode_trakt_ids = set()
-            for episode in walker.find_episodes():
-                self.sync_collection(episode, dry_run=dry_run)
-                self.sync_ratings(episode, dry_run=dry_run)
-                self.sync_watched(episode, dry_run=dry_run)
-                if not is_partial:
-                    listutil.addPlexItemToLists(episode)
-                    if self.config.clear_collected:
-                        episode_trakt_ids.add(episode.trakt_id)
+            async def sync_shows():
+                shows = set()
+                episode_trakt_ids = set()
+                async for episode in walker.find_episodes():
+                    await asyncio.gather(
+                        self.sync_collection(episode, dry_run=dry_run),
+                        self.sync_ratings(episode, dry_run=dry_run),
+                        self.sync_watched(episode, dry_run=dry_run),
+                    )
+                    if not is_partial:
+                        listutil.addPlexItemToLists(episode)
+                        if self.config.clear_collected:
+                            episode_trakt_ids.add(episode.trakt_id)
 
-                if self.config.sync_ratings:
-                    # collect shows for later ratings sync
-                    shows.add(episode.show)
+                    if self.config.sync_ratings:
+                        # collect shows for later ratings sync
+                        shows.add(episode.show)
 
-            if episode_trakt_ids:
-                self.clear_collected(self.trakt.episodes_collection, episode_trakt_ids)
+                if episode_trakt_ids:
+                    self.clear_collected(self.trakt.episodes_collection, episode_trakt_ids)
 
-            for show in walker.walk_shows(shows, title="Syncing show ratings"):
-                self.sync_ratings(show, dry_run=dry_run)
+                async for show in walker.walk_shows(shows, title="Syncing show ratings"):
+                    await self.sync_ratings(show, dry_run=dry_run)
+
+            tasks.append(sync_shows())
 
         if self.config.update_plex_wl_as_pl or self.config.sync_liked_lists:
-            if is_partial:
-                logger.warning("Running partial library sync. Liked lists won't update because it needs full library sync.")
-            else:
-                with measure_time("Updated liked list"):
-                    self.update_playlists(listutil, dry_run=dry_run)
+            async def sync_lists():
+                if is_partial:
+                    logger.warning("Running partial library sync. Liked lists won't update because it needs full library sync.")
+                else:
+                    with measure_time("Updated liked list"):
+                        self.update_playlists(listutil, dry_run=dry_run)
+
+            tasks.append(sync_lists())
 
         if walker.config.walk_watchlist and self.sync_wl:
-            with measure_time("Updated watchlist"):
-                self.sync_watchlist(walker, dry_run=dry_run)
+            async def sync_watchlist():
+                with measure_time("Updated watchlist"):
+                    await self.sync_watchlist(walker, dry_run=dry_run)
+            tasks.append(sync_watchlist())
+
+        await asyncio.gather(*tasks)
 
     def update_playlists(self, listutil: TraktListUtil, dry_run=False):
         if dry_run:
@@ -115,7 +133,7 @@ class Sync:
             updated = self.plex.update_playlist(tl.name, tl.plex_items_sorted, description=tl.description)
             logger.info(f"Plex list '{tl.name}' ({len(tl.plex_items)} items) {'updated' if updated else 'nothing to update'}")
 
-    def sync_collection(self, m: Media, dry_run=False):
+    async def sync_collection(self, m: Media, dry_run=False):
         if not self.config.plex_to_trakt["collection"]:
             return
 
@@ -127,7 +145,7 @@ class Sync:
         if not dry_run:
             m.add_to_collection()
 
-    def sync_ratings(self, m: Media, dry_run=False):
+    async def sync_ratings(self, m: Media, dry_run=False):
         if not self.config.sync_ratings:
             return
 
@@ -172,7 +190,7 @@ class Sync:
             if not dry_run:
                 m.plex_rate()
 
-    def sync_watched(self, m: Media, dry_run=False):
+    async def sync_watched(self, m: Media, dry_run=False):
         if not self.config.sync_watched_status:
             return
 
@@ -237,15 +255,15 @@ class Sync:
                 if not dry_run:
                     m.remove_from_trakt_watchlist()
 
-    def sync_watchlist(self, walker: Walker, dry_run=False):
+    async def sync_watchlist(self, walker: Walker, dry_run=False):
         # NOTE: Plex watchlist sync removes matching items from trakt lists
         # See the comment above around "del self.trakt_wl[m]"
-        for m in walker.media_from_plexlist(self.plex_wl):
+        async for m in walker.media_from_plexlist(self.plex_wl):
             self.watchlist_sync_item(m, dry_run)
 
         # Because Plex syncing might have emptied the watchlists, skip printing the 0/0 progress
         if len(self.trakt_wl):
-            for m in walker.media_from_traktlist(self.trakt_wl):
+            async for m in walker.media_from_traktlist(self.trakt_wl):
                 self.watchlist_sync_item(m, dry_run)
 
     def clear_collected(self, existing_items: Iterable[TraktMedia], keep_ids: set[int], dry_run=False):
