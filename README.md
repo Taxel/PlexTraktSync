@@ -69,7 +69,7 @@ have a file containing those on your harddrive, you can not use this project.
 
 ## Pre-requisites
 
-The script is known to work with Python 3.8-3.11 versions.
+The script is known to work with Python 3.8-3.12 versions.
 
 ## Installation
 
