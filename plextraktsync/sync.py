@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logger
 from plextraktsync.trakt.TraktUserListCollection import TraktUserListCollection
-from plextraktsync.trakt_list_util import TraktListUtil
 
 if TYPE_CHECKING:
     from typing import Iterable
@@ -106,15 +105,6 @@ class Sync:
         if walker.config.walk_watchlist and self.sync_wl:
             with measure_time("Updated watchlist"):
                 self.sync_watchlist(walker, dry_run=dry_run)
-
-    def update_playlists(self, listutil: TraktListUtil, dry_run=False):
-        if dry_run:
-            return
-
-        for tl in listutil.lists:
-            logger.debug(f"Updating Plex list '{tl.name}' ({len(tl.plex_items)} items)")
-            updated = self.plex.update_playlist(tl.name, tl.plex_items_sorted, description=tl.description)
-            logger.info(f"Plex list '{tl.name}' ({len(tl.plex_items)} items) {'updated' if updated else 'nothing to update'}")
 
     def sync_collection(self, m: Media, dry_run=False):
         if not self.config.plex_to_trakt["collection"]:
