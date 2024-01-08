@@ -3,11 +3,10 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from plexapi.exceptions import NotFound
-
 from plextraktsync.factory import logging
 
 if TYPE_CHECKING:
+    from plexapi.playlist import Playlist
     from plexapi.server import PlexServer
 
     from plextraktsync.plex.types import PlexMedia
@@ -22,11 +21,15 @@ class PlexPlaylist:
     @cached_property
     def playlist(self):
         try:
-            playlist = self.server.playlist(self.name)
+            playlists = self.server.playlists(title=self.name, title__iexact=self.name)
+            playlist: Playlist = playlists[0]
+            if len(playlists) > 1:
+                self.logger.warning(f"Found multiple playlists ({len(playlists)}) with same name: '{self.name}', "
+                                    f"Using first playlist with id {playlist.ratingKey}")
             self.logger.debug(f"Loaded plex list: '{self.name}'")
             return playlist
-        except NotFound:
-            self.logger.debug(f"Plex list not found: '{self.name}'")
+        except IndexError:
+            self.logger.debug(f'Unable to find Plex playlist with title "{self.name}".')
             return None
 
     def update(self, items: list[PlexMedia], description=None) -> bool:
