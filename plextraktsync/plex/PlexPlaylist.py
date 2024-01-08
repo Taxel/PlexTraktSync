@@ -19,7 +19,7 @@ class PlexPlaylist:
         self.logger = logging.getLogger("PlexTraktSync.PlexPlaylist")
 
     @cached_property
-    def playlist(self):
+    def playlist(self) -> Playlist | None:
         try:
             playlists = self.server.playlists(title=self.name, title__iexact=self.name)
             playlist: Playlist = playlists[0]
