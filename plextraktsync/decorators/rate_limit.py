@@ -31,10 +31,7 @@ def rate_limit(retries=5):
                         )
                         exit(1)
 
-                    if isinstance(e, RateLimitException):
-                        seconds = e.retry_after
-                    else:
-                        seconds = 1 + retry
+                    seconds = e.retry_after
                     retry += 1
                     logger.warning(
                         f"{e} for {fn.__module__}.{fn.__name__}(), retrying after {seconds} seconds (try: {retry}/{retries})"
