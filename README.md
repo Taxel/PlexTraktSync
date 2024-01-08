@@ -52,7 +52,7 @@ have a file containing those on your harddrive, you can not use this project.
   - [Good practices](#good-practices)
   - [Troubleshooting](#troubleshooting)
 
-[python-versions-badge]: https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-blue
+[python-versions-badge]: https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue
 
 ## Features
 
