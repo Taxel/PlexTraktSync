@@ -441,7 +441,7 @@ Server has 2 libraries: ['Movies', 'TV Shows']
 ### Watch
 
 You can use the `watch` command to listen to events from Plex Media Server
-and scrobble plays. It does NOT run a sync between Plex and Trakt.
+and scrobble plays.
 
 > What is scrobbling?
 >
