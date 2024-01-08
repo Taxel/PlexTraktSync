@@ -36,6 +36,7 @@ def rate_limit(retries=5):
                     logger.warning(
                         f"{e} for {fn.__module__}.{fn.__name__}(), retrying after {seconds} seconds (try: {retry}/{retries})"
                     )
+                    logger.debug(e.details)
                     sleep(seconds)
 
         return wrapper
