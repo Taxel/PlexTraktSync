@@ -56,7 +56,7 @@ class PlexServerConnection:
                 # )
                 if "doesn't match '*." in message and ".plex.direct" in url:
                     url = self.extract_plex_direct(url, message)
-                    self.logger.warning(f"Trying with url: {url}")
+                    self.logger.warning(f"Adding rewritten plex.direct url to connect with: {url}")
                     urls.append(url)
                     continue
 
@@ -67,7 +67,7 @@ class PlexServerConnection:
                 # 2.
                 if url and url[:5] == "https":
                     url = url.replace("https", "http")
-                    self.logger.warning(f"Trying with url: {url}")
+                    self.logger.warning(f"Adding rewritten http url to connect with: {url}")
                     urls.append(url)
                     continue
             except Unauthorized as e:
