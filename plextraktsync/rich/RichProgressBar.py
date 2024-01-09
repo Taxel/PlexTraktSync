@@ -34,10 +34,9 @@ class RichProgressBar:
 
     @cached_property
     def progress(self):
-        from tqdm.rich import FractionColumn, RateColumn
-
         from rich.progress import (BarColumn, Progress, TimeElapsedColumn,
                                    TimeRemainingColumn)
+        from tqdm.rich import FractionColumn, RateColumn
 
         args = (
             "[progress.description]{task.description}"
