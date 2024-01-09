@@ -82,6 +82,8 @@ class WatchStateUpdater(SetWindowTitle):
             self.fetch_item.cache_clear()
 
         pm: PlexLibraryItem = self.fetch_item(key)
+        if not pm:
+            return None
 
         # Skip unwanted kind
         if pm.type not in ["episode", "movie"]:
@@ -89,9 +91,6 @@ class WatchStateUpdater(SetWindowTitle):
 
         # Skip excluded libraries
         if pm.library is None:
-            return None
-
-        if not pm:
             return None
 
         m = self.mf_resolve(pm)
