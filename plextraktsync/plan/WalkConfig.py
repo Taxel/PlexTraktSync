@@ -5,10 +5,10 @@ class WalkConfig:
     walk_movies = True
     walk_shows = True
     walk_watchlist = True
-    library = []
-    show = []
-    movie = []
-    id = []
+    library: list[str] = []
+    show: list[str] = []
+    movie: list[str] = []
+    id: list[str] = []
 
     def __init__(self, movies=True, shows=True, watchlist=True):
         self.walk_movies = movies
@@ -25,16 +25,16 @@ class WalkConfig:
 
         return self
 
-    def add_library(self, library):
+    def add_library(self, library: str):
         self.library.append(library)
 
-    def add_id(self, id):
+    def add_id(self, id: str):
         self.id.append(id)
 
-    def add_show(self, show):
+    def add_show(self, show: str):
         self.show.append(show)
 
-    def add_movie(self, movie):
+    def add_movie(self, movie: str):
         self.movie.append(movie)
 
     @property
