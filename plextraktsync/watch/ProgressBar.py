@@ -17,21 +17,34 @@ class ProgressBar(dict):
 
     @cached_property
     def progress(self):
+        from rich.box import MINIMAL
+        from rich.live import Live
+        from rich.panel import Panel
         from rich.progress import (BarColumn, Progress, TextColumn,
                                    TimeRemainingColumn)
 
+        console = factory.console
         progress = Progress(
-            TextColumn("{task.fields[play_state]}  [bold blue]{task.description}", justify="left"),
+            TextColumn(" {task.fields[play_state]}  [bold blue]{task.description}", justify="left"),
             BarColumn(bar_width=None),
             "[progress.percentage]{task.percentage:>3.1f}%",
             "•",
             TimeRemainingColumn(),
-            console=factory.console,
+            console=console,
         )
-        progress.start()
+
+        # -1 to adjust Kitty terminal issue
+        # https://github.com/Textualize/rich/issues/3254#issuecomment-1881885471
+        panel_width = console.size.width - 1
+        panel = Panel(progress, width=panel_width, padding=(0, 0), box=MINIMAL)
+        live = Live(panel, console=console).__enter__()
+
+        def stop():
+            progress.stop()
+            live.stop()
 
         import atexit
-        atexit.register(lambda: progress.stop())
+        atexit.register(lambda: stop())
 
         return progress
 
