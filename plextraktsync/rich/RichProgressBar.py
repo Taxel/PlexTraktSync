@@ -2,10 +2,12 @@ from functools import cached_property
 
 
 class RichProgressBar:
-    def __init__(self, iterable, total, options=None, desc=""):
+    def __init__(self, iterable, total=None, options=None, desc=""):
         self.iter = iter(iterable)
         self.options = options or {}
         self.desc = desc
+        if total is None:
+            total = len(iterable)
         self.total = total
         self.i = 0
 
