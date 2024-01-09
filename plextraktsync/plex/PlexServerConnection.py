@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import plexapi
+from click import ClickException
 from plexapi.exceptions import Unauthorized
 from plexapi.server import PlexServer
 from requests.exceptions import ConnectionError, SSLError
@@ -38,7 +39,7 @@ class PlexServerConnection:
         # 2. url without ssl
         # 3. local url (localhost)
         for url in urls:
-            self.logger.debug(f"Trying url: {url}")
+            self.logger.info(f"Connecting with url: {url}, timeout {self.timeout} seconds")
             try:
                 return PlexServer(baseurl=url, token=token, session=self.session, timeout=self.timeout)
             except SSLError as e:
@@ -56,7 +57,7 @@ class PlexServerConnection:
                 # )
                 if "doesn't match '*." in message and ".plex.direct" in url:
                     url = self.extract_plex_direct(url, message)
-                    self.logger.warning(f"Trying with url: {url}")
+                    self.logger.warning(f"Adding rewritten plex.direct url to connect with: {url}")
                     urls.append(url)
                     continue
 
@@ -67,14 +68,13 @@ class PlexServerConnection:
                 # 2.
                 if url and url[:5] == "https":
                     url = url.replace("https", "http")
-                    self.logger.warning(f"Trying with url: {url}")
+                    self.logger.warning(f"Adding rewritten http url to connect with: {url}")
                     urls.append(url)
                     continue
             except Unauthorized as e:
                 self.logger.error(e)
 
-        self.logger.error("No more methods to connect. Giving up.")
-        exit(1)
+        raise ClickException("No more methods to connect. Giving up")
 
     @staticmethod
     def extract_plex_direct(url: str, message: str):
