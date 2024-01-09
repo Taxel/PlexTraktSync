@@ -11,14 +11,14 @@ from InquirerPy.separator import Separator
 from plexapi.exceptions import BadRequest, NotFound, Unauthorized
 from plexapi.myplex import MyPlexAccount
 from plexapi.server import PlexServer
+from rich.panel import Panel
+from rich.prompt import Confirm, Prompt
 
 from plextraktsync.config.ServerConfigFactory import ServerConfigFactory
 from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.factory import factory
 from plextraktsync.style import error, prompt, success, title
 from plextraktsync.util.local_url import local_url
-from rich.panel import Panel
-from rich.prompt import Confirm, Prompt
 
 if TYPE_CHECKING:
     from plexapi.myplex import MyPlexResource, ResourceConnection

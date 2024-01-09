@@ -5,11 +5,11 @@ from typing import TYPE_CHECKING
 
 from plexapi.exceptions import PlexApiException
 from requests import RequestException
+from rich.markup import escape
 from trakt.errors import TraktException
 
 from plextraktsync.factory import logger
 from plextraktsync.trakt.TraktLookup import TraktLookup
-from rich.markup import escape
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexApi import PlexApi

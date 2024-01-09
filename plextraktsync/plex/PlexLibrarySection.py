@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING
 
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import NotFound
+from rich.markup import escape
 
 from plextraktsync.decorators.retry import retry
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
-from rich.markup import escape
 
 if TYPE_CHECKING:
     from plexapi.library import MovieSection, ShowSection

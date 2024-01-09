@@ -24,8 +24,9 @@ class Factory:
 
     @cached_property
     def console(self):
-        from plextraktsync.rich.RichHighlighter import RichHighlighter
         from rich.console import Console
+
+        from plextraktsync.rich.RichHighlighter import RichHighlighter
 
         return Console(highlighter=RichHighlighter())
 
@@ -244,8 +245,9 @@ class Factory:
 
     @cached_property
     def console_logger(self):
-        from plextraktsync.rich.RichHighlighter import RichHighlighter
         from rich.logging import RichHandler
+
+        from plextraktsync.rich.RichHighlighter import RichHighlighter
 
         config = self.config
         handler = RichHandler(

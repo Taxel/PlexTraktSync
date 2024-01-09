@@ -3,8 +3,9 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from plextraktsync.factory import factory
 from rich.markup import escape
+
+from plextraktsync.factory import factory
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem

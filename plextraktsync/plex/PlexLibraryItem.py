@@ -4,12 +4,12 @@ import datetime
 from functools import cached_property
 from typing import TYPE_CHECKING
 
+from rich.markup import escape
 from trakt.utils import timestamp
 
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory
 from plextraktsync.plex.PlexGuid import PlexGuid
-from rich.markup import escape
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
