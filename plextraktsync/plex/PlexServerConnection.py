@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import plexapi
+from click import ClickException
 from plexapi.exceptions import Unauthorized
 from plexapi.server import PlexServer
 from requests.exceptions import ConnectionError, SSLError
@@ -73,8 +74,7 @@ class PlexServerConnection:
             except Unauthorized as e:
                 self.logger.error(e)
 
-        self.logger.error("No more methods to connect. Giving up.")
-        exit(1)
+        raise ClickException("No more methods to connect. Giving up")
 
     @staticmethod
     def extract_plex_direct(url: str, message: str):
