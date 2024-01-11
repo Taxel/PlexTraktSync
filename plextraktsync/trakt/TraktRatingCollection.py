@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
 
 
-class TraktRatingCollection(dict[str, dict[int, int]]):
+class TraktRatingCollection(dict):
     """
     A dictionary of:
     ["movies", "shows", "episodes"] => {
