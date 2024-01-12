@@ -61,7 +61,7 @@ RUN python -c "from plextraktsync import __version__; print(__version__)"
 RUN python -m compileall .
 RUN chmod -R a+rX,g-w .
 
-FROM base
+FROM base AS runtime
 ENTRYPOINT ["/init"]
 LABEL org.opencontainers.image.description Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
 
@@ -111,3 +111,12 @@ COPY entrypoint.sh /init
 RUN ln -s /app/plextraktsync.sh /usr/bin/plextraktsync
 # https://github.com/python/cpython/issues/69667
 RUN chmod a+x /root
+
+# For image self-test
+# docker build --target=test . -t app
+FROM runtime AS test
+ENV TRACE=1
+RUN ["/init", "test"]
+
+# default target
+FROM runtime
