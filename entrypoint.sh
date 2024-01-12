@@ -72,7 +72,8 @@ if [ "${1:-}" = "test" ]; then
 	ldd /usr/bin/setpriv
 	ldd /usr/bin/usermod
 	ldd /usr/bin/groupmod
-	exit 0
+	# Continue with info command
+	set -- "info"
 fi
 
 # fix permissions and switch user if configured
