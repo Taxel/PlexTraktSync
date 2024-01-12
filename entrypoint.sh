@@ -66,6 +66,16 @@ needs_switch_user() {
 set -eu
 test -n "$TRACE" && set -x
 
+# Test docker image health
+if [ "${1:-}" = "test" ]; then
+	# Check tools linkage
+	ldd /usr/bin/setpriv
+	ldd /usr/bin/usermod
+	ldd /usr/bin/groupmod
+	# Continue with info command
+	set -- "info"
+fi
+
 # fix permissions and switch user if configured
 if needs_switch_user; then
 	setup_user

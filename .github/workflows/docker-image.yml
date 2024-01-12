@@ -77,9 +77,9 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Test Docker image
+      - name: Self-test Docker image
         run: |
-          docker run --rm ${{ env.TEST_IMAGE }} info
+          docker run -e TRACE=1 --rm ${{ env.TEST_IMAGE }} test
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
