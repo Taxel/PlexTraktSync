@@ -12,6 +12,7 @@ RUN <<eot
 install -d ./usr/bin ./usr/lib
 install -p /usr/bin/setpriv ./usr/bin
 install -p /usr/lib/libcap-ng.so.0 ./usr/lib
+install -p /usr/lib/libbsd.so.0 ./usr/lib
 install -p /usr/sbin/usermod /usr/sbin/groupmod ./usr/bin
 eot
 
