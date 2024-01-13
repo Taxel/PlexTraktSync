@@ -72,6 +72,9 @@ sync:
   # trakt - Trakt ratings have priority. Existing Plex ratings are overwritten.
   # plex - Plex ratings have priority. Existing Trakt ratings are overwritten.
   rating_priority: plex
+  # watched_status and ratings of media not actually in your Plex server can 
+  # be synced with your Plex online account
+  plex_online: false
 
 # settings for 'watch' command
 watch:

@@ -207,7 +207,7 @@ class Media:
             )
 
     def mark_watched_plex(self):
-        self.plex_api.mark_watched(self.plex.item)
+        self.plex_api.mark_watched(self.plex.item, self.plex.is_discover)
 
     @property
     def trakt_rating(self):
@@ -288,6 +288,9 @@ class MediaFactory:
         """Find Plex media from Trakt id using Plex Search and Discover"""
         result = self.plex.search_online(tm.item.title, tm.type)
         pm = self._guid_match(result, tm)
+        if pm is None:
+            logger.warning(f"Skipping '{tm.item.title}': not found on Plex Discover")
+            return None
         return self.make_media(pm, tm.item)
 
     def make_media(self, plex: PlexLibraryItem, trakt):

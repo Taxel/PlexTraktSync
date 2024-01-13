@@ -69,7 +69,7 @@ class TraktApi:
     @rate_limit()
     @retry()
     def watched_movies(self):
-        return set(map(lambda m: m.trakt, self.me.watched_movies))
+        return {m.trakt: m for m in self.me.watched_movies}
 
     @cached_property
     @rate_limit()
@@ -162,7 +162,7 @@ class TraktApi:
     @retry()
     def mark_watched(self, m: TraktMedia, time, show_trakt_id=None):
         if m.media_type == "movies":
-            self.watched_movies.add(m.trakt)
+            self.watched_movies[m.trakt] = m
         elif m.media_type == "episodes" and show_trakt_id:
             self.watched_shows.add(show_trakt_id, m.season, m.number)
         else:
