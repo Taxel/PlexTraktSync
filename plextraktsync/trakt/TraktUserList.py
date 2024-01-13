@@ -102,9 +102,9 @@ class TraktUserList:
         self.logger.info(f'Adding {m.title_link} ({m.plex_key}) to Plex list {self.title_link}', extra={"markup": True})
 
         # Report duplicates
-        duplicates = [p for _, p in self.plex_items if p.key != m.plex_key and p.title == m.title]
+        duplicates = [p for _, p in self.plex_items if p.key != m.plex_key and p == m.plex]
         for p in duplicates:
-            self.logger.warning(f'Possible duplicate {p.title_link} ({p.key})', extra={"markup": True})
+            self.logger.warning(f'Duplicate {p.title_link} ({p.key}) with {m.title_link} {m.plex_key}', extra={"markup": True})
 
     @property
     def title_link(self):
