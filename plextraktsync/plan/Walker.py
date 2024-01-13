@@ -4,6 +4,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.measure_time import measure_time
+from plextraktsync.factory import logging
 from plextraktsync.mixin.SetWindowTitle import SetWindowTitle
 from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
@@ -39,6 +40,7 @@ class Walker(SetWindowTitle):
         self.trakt = trakt
         self.mf = mf
         self.config = config
+        self.logger = logging.getLogger("PlexTraktSync.Walker")
 
     @cached_property
     def plan(self):
@@ -100,11 +102,26 @@ class Walker(SetWindowTitle):
         if self.plan.episodes:
             yield from self.get_plex_episodes(self.plan.episodes)
 
-        for ps in self.get_plex_shows():
-            show = self.mf.resolve_any(ps)
-            if not show:
+        # Preload plex shows
+        plex_shows = {}
+
+        self.logger.info("Preload shows data")
+        for show in self.get_plex_shows():
+            plex_shows[show.key] = show
+        self.logger.info(f"Preloaded shows data ({len(plex_shows)} shows)")
+
+        show_cache = {}
+        for ep in self.episodes_from_sections(self.plan.show_sections):
+            show_id = ep.show_id
+            ep.show = plex_shows[show_id]
+            show = show_cache[show_id] if show_id in show_cache else None
+            m = self.mf.resolve_any(ep, show)
+            if not m:
                 continue
-            yield from self.episode_from_show(show)
+            if show:
+                m.show = show
+            show_cache[show_id] = m.show
+            yield m
 
     def walk_shows(self, shows: set[Media], title="Processing Shows"):
         if not shows:
@@ -133,6 +150,18 @@ class Walker(SetWindowTitle):
                 it = self.progressbar(
                     section.items(total),
                     total=total,
+                    desc=f"Processing {section.title_link}",
+                )
+                yield from it
+
+    def episodes_from_sections(self, sections: list[PlexLibrarySection]) -> Generator[PlexLibraryItem, Any, None]:
+        for section in sections:
+            with measure_time(f"{section.title_link} processed", extra={"markup": True}):
+                self.set_window_title(f"Processing {section.title}")
+                items = section.search_episodes()
+                it = self.progressbar(
+                    items,
+                    total=len(items),
                     desc=f"Processing {section.title_link}",
                 )
                 yield from it

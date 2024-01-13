@@ -61,6 +61,15 @@ class PlexLibrarySection:
         except NotFound:
             return None
 
+    def search_episodes(self):
+        if self.section.type == "show":
+            from plextraktsync.plex.PlexShowSectionPager import \
+                PlexShowSectionPager
+
+            return PlexShowSectionPager(section=self.section, plex=self.plex)
+
+        return None
+
     def all(self, max_items: int):
         libtype = self.section.TYPE
         key = self.section._buildSearchKey(libtype=libtype, returnKwargs=False)

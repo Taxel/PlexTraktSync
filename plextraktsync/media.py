@@ -7,6 +7,7 @@ from plexapi.exceptions import PlexApiException
 from requests import RequestException
 from rich.markup import escape
 from trakt.errors import TraktException
+from trakt.tv import TVShow
 
 from plextraktsync.factory import logger
 from plextraktsync.trakt.TraktLookup import TraktLookup
@@ -89,9 +90,12 @@ class Media:
     @property
     def show(self) -> Media | None:
         if self._show is None and self.mf and not self.plex.is_discover:
-            # TODO: fetch show for discover items
-            ps = self.plex_api.fetch_item(self.plex.item.grandparentRatingKey)
-            ms = self.mf.resolve_any(ps)
+            ps = self.plex.show
+            if isinstance(self.trakt.show, TVShow):
+                ts = self.trakt.show
+                ms = self.mf.make_media(trakt=ts, plex=ps)
+            else:
+                ms = self.mf.resolve_any(ps)
             self._show = ms
 
         return self._show

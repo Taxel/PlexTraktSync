@@ -22,6 +22,11 @@ class PlexLibraryItem:
     def __init__(self, item: PlexMedia, plex: PlexApi = None):
         self.item = item
         self.plex = plex
+        self._show = None
+
+    @property
+    def key(self):
+        return self.item.ratingKey
 
     @property
     def is_legacy_agent(self):
@@ -311,6 +316,26 @@ class PlexLibraryItem:
     @cached_property
     def episode_number(self):
         return self.item.index
+
+    @property
+    def show_id(self):
+        if self.type != "episode":
+            raise RuntimeError("show_id is valid for episodes only")
+        return self.item.grandparentRatingKey
+
+    @property
+    def show(self):
+        if self._show is None:
+            self._show = self.plex.fetch_item(self.show_id)
+
+        return self._show
+
+    @show.setter
+    def show(self, show):
+        if self.type != "episode":
+            raise RuntimeError("show_id is valid for episodes only")
+
+        self._show = show
 
     @staticmethod
     def date_value(date):
