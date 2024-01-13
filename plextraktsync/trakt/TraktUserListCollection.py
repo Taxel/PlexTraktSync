@@ -39,6 +39,7 @@ class TraktUserListCollection(UserList):
 
     def sync(self):
         for tl in self:
-            pl = tl.plex_list
-            updated = pl.update(tl.plex_items_sorted)
-            self.logger.info(f"Plex list '{tl.name}' ({len(tl.plex_items)} items) {'updated' if updated else 'nothing to update'}")
+            updated = tl.plex_list.update(tl.plex_items_sorted)
+            if not updated:
+                continue
+            self.logger.info(f"Plex list {tl.title_link} ({len(tl.plex_items)} items) updated", extra={"markup": True})
