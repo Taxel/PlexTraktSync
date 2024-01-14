@@ -146,10 +146,8 @@ class Walker(SetWindowTitle):
         for section in sections:
             with measure_time(f"{section.title_link} processed", extra={"markup": True}):
                 self.set_window_title(f"Processing {section.title}")
-                total = len(section)
                 it = self.progressbar(
-                    section.items(total),
-                    total=total,
+                    section.pager(),
                     desc=f"Processing {section.title_link}",
                 )
                 yield from it
@@ -158,10 +156,8 @@ class Walker(SetWindowTitle):
         for section in sections:
             with measure_time(f"{section.title_link} processed", extra={"markup": True}):
                 self.set_window_title(f"Processing {section.title}")
-                items = section.search_episodes()
                 it = self.progressbar(
-                    items,
-                    total=len(items),
+                    section.pager("episode"),
                     desc=f"Processing {section.title_link}",
                 )
                 yield from it
