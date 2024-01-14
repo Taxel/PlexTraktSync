@@ -71,8 +71,7 @@ def myplex_login(username, password):
         except Unauthorized as e:
             print(error(f"Log in to Plex failed: '{e}', Try again."), highlight=False)
         except BadRequest as e:
-            print(error(f"Log in to Plex failed: '{e}'"), highlight=False)
-            exit(1)
+            raise ClickException(f"Log in to Plex failed: {e}")
 
 
 def choose_managed_user(account: MyPlexAccount):
