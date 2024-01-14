@@ -7,11 +7,8 @@ from plextraktsync.factory import logging
 from plextraktsync.trakt.TraktUserList import TraktUserList
 
 if TYPE_CHECKING:
-    from trakt.movies import Movie
-    from trakt.tv import TVEpisode
-
     from plextraktsync.media import Media
-    from plextraktsync.trakt.types import TraktLikedList
+    from plextraktsync.trakt.types import TraktLikedList, TraktPlayable
 
 
 class TraktUserListCollection(UserList):
@@ -27,7 +24,7 @@ class TraktUserListCollection(UserList):
         for liked_list in liked_lists:
             self.add_list(liked_list["listid"], liked_list["listname"])
 
-    def add_watchlist(self, items: list[Movie, TVEpisode]):
+    def add_watchlist(self, items: list[TraktPlayable]):
         tl = TraktUserList.from_watchlist(items)
         self.append(tl)
         return tl
