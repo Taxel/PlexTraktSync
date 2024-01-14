@@ -24,21 +24,18 @@ class PlexServerConfig:
 
     @property
     def sync_config(self):
-        if self.config is None or "sync" not in self.config or self.config["sync"] is None:
-            return {}
-
-        return self.config["sync"]
+        return self.get_section("sync", {})
 
     @property
     def libraries(self):
-        if self.config is None or "libraries" not in self.config:
-            return None
-
-        return self.config["libraries"]
+        return self.get_section("libraries")
 
     @property
     def excluded_libraries(self):
-        if self.config is None or "excluded-libraries" not in self.config:
-            return None
+        return self.get_section("excluded-libraries")
 
-        return self.config["excluded-libraries"]
+    def get_section(self, section: str, default=None):
+        if self.config is None:
+            return default
+
+        return self.config.get(section, default)
