@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from plextraktsync.plex.PlexApi import PlexApi
 
 
-class PlexShowSectionPager:
+class PlexSectionPager:
     def __init__(self, section: ShowSection, plex: PlexApi):
         self.section = section
         self.plex = plex

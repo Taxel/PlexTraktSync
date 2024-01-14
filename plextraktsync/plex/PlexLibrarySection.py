@@ -63,10 +63,9 @@ class PlexLibrarySection(RichMarkup):
 
     def search_episodes(self):
         if self.section.type == "show":
-            from plextraktsync.plex.PlexShowSectionPager import \
-                PlexShowSectionPager
+            from plextraktsync.plex.PlexSectionPager import PlexSectionPager
 
-            return PlexShowSectionPager(section=self.section, plex=self.plex)
+            return PlexSectionPager(section=self.section, plex=self.plex)
 
         return None
 
