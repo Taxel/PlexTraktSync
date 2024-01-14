@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plexapi import X_PLEX_CONTAINER_SIZE
@@ -26,6 +27,12 @@ class PlexLibrarySection(RichMarkup):
 
     def __iter__(self):
         return self.items(len(self))
+
+    @cached_property
+    def pager(self):
+        from plextraktsync.plex.PlexSectionPager import PlexSectionPager
+
+        return PlexSectionPager(section=self.section, plex=self.plex)
 
     @property
     def type(self):
