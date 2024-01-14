@@ -270,7 +270,7 @@ class MediaFactory:
             return None
 
         if guid.provider not in ["imdb", "tmdb", "tvdb"]:
-            logger.error(f"{guid.title_link}: Unable to parse a valid provider from {guid}", extra={"markup": True})
+            logger.error(f"{guid.title_link}: '{guid.provider}' is not valid provider from {guid}", extra={"markup": True})
             return None
 
         try:
