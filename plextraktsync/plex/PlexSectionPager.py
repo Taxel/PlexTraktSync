@@ -13,10 +13,10 @@ if TYPE_CHECKING:
 
 
 class PlexSectionPager:
-    def __init__(self, section: ShowSection | MovieSection, plex: PlexApi):
+    def __init__(self, section: ShowSection | MovieSection, plex: PlexApi, libtype: str = None):
         self.section = section
         self.plex = plex
-        self.libtype = "episode" if section.type == "show" else section.TYPE
+        self.libtype = libtype if libtype is not None else section.TYPE
 
     def __len__(self):
         return self.total_size
