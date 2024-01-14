@@ -1,6 +1,7 @@
 from functools import wraps
 from time import sleep
 
+from click import ClickException
 from trakt.errors import RateLimitException
 
 from plextraktsync.factory import logger
@@ -24,12 +25,11 @@ def rate_limit(retries=5):
                     if retry == retries:
                         logger.error(f"Trakt Error: {e}")
                         logger.error(
-                            "Trakt API didn't respond properly, script will abort now. Please try again later."
-                        )
-                        logger.error(
                             f"Last call: {fn.__module__}.{fn.__name__}({args[1:]}, {kwargs})"
                         )
-                        exit(1)
+                        raise ClickException(
+                            "Trakt API didn't respond properly, script will abort now. Please try again later."
+                        )
 
                     seconds = e.retry_after
                     retry += 1
