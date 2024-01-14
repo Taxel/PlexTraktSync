@@ -23,12 +23,6 @@ class PlexLibrarySection(RichMarkup):
         self.section = section
         self.plex = plex
 
-    def __len__(self):
-        return self.section.totalSize
-
-    def __iter__(self):
-        return self.items(len(self))
-
     def pager(self, libtype: Literal["episode"] = None):
         from plextraktsync.plex.PlexSectionPager import PlexSectionPager
 
