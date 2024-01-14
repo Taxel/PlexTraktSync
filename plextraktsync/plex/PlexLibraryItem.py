@@ -53,6 +53,17 @@ class PlexLibraryItem:
     def get_guids(self):
         return self.item.guids
 
+    def __eq__(self, other: PlexLibraryItem):
+        """
+        Compare with other PlexLibraryItem.
+        Items are equal if one of their guids matches
+        """
+        for guid in self.guids:
+            for other_guid in other.guids:
+                if guid == other_guid:
+                    return True
+        return False
+
     @cached_property
     def guids(self):
         # return early if legacy agent

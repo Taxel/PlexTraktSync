@@ -21,6 +21,11 @@ class PlexGuid:
     def media_type(self):
         return f"{self.type}s"
 
+    def __eq__(self, other: PlexGuid):
+        # These are same guids even they come from different Agent
+        # compare <PlexGuid:imdb://tt0100802> with <PlexGuid:com.plexapp.agents.imdb://tt0100802?lang=en>
+        return self.provider == other.provider and self.id == other.id
+
     @cached_property
     def provider(self):
         if self.guid_is_imdb_legacy:

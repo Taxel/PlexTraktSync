@@ -20,6 +20,10 @@ class TraktUserListCollection(UserList):
         self.logger = logging.getLogger("PlexTraktSync.TraktUserListCollection")
 
     def add_to_lists(self, m: Media):
+        # Skip movie editions
+        # https://support.plex.tv/articles/multiple-editions/#:~:text=Do%20Multiple%20Editions%20work%20with%20watch%20state%20syncing%3F
+        if m.plex.edition_title is not None:
+            return
         for tl in self:
             tl.add(m)
 
