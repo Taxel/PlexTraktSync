@@ -3,6 +3,7 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
+from plextraktsync.decorators.retry import retry
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 if TYPE_CHECKING:
@@ -24,6 +25,10 @@ class PlexSectionPager:
     def total_size(self):
         return self.section.totalViewSize(libtype=self.libtype, includeCollections=False)
 
+    @retry()
+    def fetch_items(self, start: int, size: int):
+        return self.section.search(libtype=self.libtype, container_start=start, container_size=size, maxresults=size)
+
     def __iter__(self):
         from plexapi import X_PLEX_CONTAINER_SIZE
 
@@ -32,7 +37,7 @@ class PlexSectionPager:
         size = X_PLEX_CONTAINER_SIZE
 
         while True:
-            items = self.section.searchEpisodes(container_start=start, container_size=size, maxresults=size)
+            items = self.fetch_items(start=start, size=size)
 
             if not len(items):
                 break
