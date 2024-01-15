@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from urllib.parse import quote_plus
 
 from plexapi.utils import millisecondToHumanstr
+from rich.markup import escape
 
 from plextraktsync.factory import factory
 from plextraktsync.plex.PlexId import PlexId
@@ -59,7 +60,7 @@ def inspect_media(plex_id: PlexId):
 
         print("Parts:")
         for index, part in enumerate(pm.parts, start=1):
-            print(f"  Part {index}: [link=file://{quote_plus(part.file)}]{part.file}[/link] {part.size} bytes")
+            print(f"  Part {index}: [link=file://{quote_plus(part.file)}]{escape(part.file)}[/link] {part.size} bytes")
 
         print("Markers:")
         for marker in pm.markers:
