@@ -64,6 +64,9 @@ class PlexLibraryItem(RichMarkup):
                     return True
         return False
 
+    def __hash__(self):
+        return hash((guid.provider, guid.id) for guid in self.guids)
+
     @cached_property
     def guids(self):
         # return early if legacy agent
