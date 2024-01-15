@@ -264,13 +264,16 @@ class MediaFactory:
         return None
 
     def resolve_guid(self, guid: PlexGuid, show: Media = None):
+        if guid.provider in ["youtube"]:
+            logger.debug(f"{guid.title_link}: Skipping {guid} because unsupported provider '{guid.provider}'", extra={"markup": True})
+            return None
+
         if guid.provider in ["local", "none", "agents.none"]:
             logger.warning(f"{guid.title_link}: Skipping {guid} because provider {guid.provider} has no external Id", extra={"markup": True})
-
             return None
 
         if guid.provider not in ["imdb", "tmdb", "tvdb"]:
-            logger.error(f"{guid.title_link}: Unable to parse a valid provider from {guid}", extra={"markup": True})
+            logger.error(f"{guid.title_link}: '{guid.provider}' is not valid provider from {guid}", extra={"markup": True})
             return None
 
         try:
