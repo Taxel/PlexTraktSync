@@ -4,9 +4,9 @@ from typing import TYPE_CHECKING
 
 from plexapi import X_PLEX_CONTAINER_SIZE
 from plexapi.exceptions import NotFound
-from rich.markup import escape
 
 from plextraktsync.decorators.retry import retry
+from plextraktsync.mixin.RichMarkup import RichMarkup
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 if TYPE_CHECKING:
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from plextraktsync.plex.types import PlexMedia
 
 
-class PlexLibrarySection:
+class PlexLibrarySection(RichMarkup):
     def __init__(self, section: ShowSection | MovieSection, plex: PlexApi = None):
         self.section = section
         self.plex = plex
@@ -44,7 +44,7 @@ class PlexLibrarySection:
 
     @property
     def title_link(self):
-        return f"[link={self.link}][green]{escape(self.title)}[/][/]"
+        return self.markup_link(self.link, self.title)
 
     def find_by_title(self, name: str):
         try:

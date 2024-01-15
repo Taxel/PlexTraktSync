@@ -3,11 +3,10 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from rich.markup import escape
-
 from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.factory import logging
 from plextraktsync.media import Media
+from plextraktsync.mixin.RichMarkup import RichMarkup
 
 if TYPE_CHECKING:
     from plexapi.playlist import Playlist
@@ -16,7 +15,7 @@ if TYPE_CHECKING:
     from plextraktsync.plex.types import PlexMedia
 
 
-class PlexPlaylist:
+class PlexPlaylist(RichMarkup):
     def __init__(self, server: PlexServer, name: str):
         self.server = server
         self.name = name
@@ -90,9 +89,9 @@ class PlexPlaylist:
         if self.playlist is not None:
             link = self.playlist._getWebURL()
 
-            return f"[link={link}][green]{escape(self.name)}[/][/]"
+            return self.markup_link(link, self.name)
 
-        return f"[green]{escape(self.name)}[/]"
+        return self.markup_title(self.name)
 
     @staticmethod
     def same_list(list_a: list[PlexMedia], list_b: list[PlexMedia]) -> bool:

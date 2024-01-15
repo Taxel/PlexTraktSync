@@ -3,15 +3,14 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from rich.markup import escape
-
 from plextraktsync.factory import factory
+from plextraktsync.mixin.RichMarkup import RichMarkup
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 
-class PlexGuid:
+class PlexGuid(RichMarkup):
     def __init__(self, guid: str, type: str, pm: PlexLibraryItem | None = None):
         self.guid = guid
         self.type = type
@@ -84,7 +83,7 @@ class PlexGuid:
         if self.pm:
             return self.pm.title_link
 
-        return f"[green]{escape(str(self))}[/]"
+        return self.markup_title(str(self))
 
     def __str__(self):
         return f"<PlexGuid:{self.guid}>"

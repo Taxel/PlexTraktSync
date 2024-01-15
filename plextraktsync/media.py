@@ -5,11 +5,11 @@ from typing import TYPE_CHECKING
 
 from plexapi.exceptions import PlexApiException
 from requests import RequestException
-from rich.markup import escape
 from trakt.errors import TraktException
 from trakt.tv import TVShow
 
 from plextraktsync.factory import logger
+from plextraktsync.mixin.RichMarkup import RichMarkup
 from plextraktsync.trakt.TraktLookup import TraktLookup
 
 if TYPE_CHECKING:
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from plextraktsync.trakt.types import TraktMedia
 
 
-class Media:
+class Media(RichMarkup):
     """
     Class containing Plex and Trakt media items (Movie, Episode)
     """
@@ -55,7 +55,7 @@ class Media:
         if self.plex:
             return self.plex.title_link
 
-        return f"[green]{escape(self.title)}[/]"
+        return self.markup_title(self.title)
 
     @cached_property
     def media_type(self):

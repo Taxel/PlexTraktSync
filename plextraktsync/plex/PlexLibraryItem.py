@@ -4,11 +4,11 @@ import datetime
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from rich.markup import escape
 from trakt.utils import timestamp
 
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory
+from plextraktsync.mixin.RichMarkup import RichMarkup
 from plextraktsync.plex.PlexGuid import PlexGuid
 
 if TYPE_CHECKING:
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from plextraktsync.plex.types import PlexMedia
 
 
-class PlexLibraryItem:
+class PlexLibraryItem(RichMarkup):
     def __init__(self, item: PlexMedia, plex: PlexApi = None):
         self.item = item
         self.plex = plex
@@ -360,9 +360,9 @@ class PlexLibraryItem:
         if self.plex:
             link = self.plex.media_url(self)
 
-            return f"[link={link}][green]{escape(self.title)}[/][/]"
+            return self.markup_link(link, self.title)
 
-        return f"[green]{escape(self.title)}[/]"
+        return self.markup_title(self.title)
 
     def __repr__(self):
         try:
