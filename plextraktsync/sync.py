@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logger
 from plextraktsync.trakt.TraktUserListCollection import TraktUserListCollection
-from plextraktsync.trakt.types import TraktMedia
 from plextraktsync.trakt_list_util import TraktListUtil
 
 if TYPE_CHECKING:
@@ -17,6 +16,7 @@ if TYPE_CHECKING:
     from plextraktsync.plan.Walker import Walker
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.trakt.TraktApi import TraktApi
+    from plextraktsync.trakt.types import TraktMedia
 
 
 class Sync:

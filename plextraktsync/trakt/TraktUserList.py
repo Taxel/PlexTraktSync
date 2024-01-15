@@ -5,11 +5,9 @@ from itertools import count
 from typing import TYPE_CHECKING
 
 from plextraktsync.factory import factory, logging
+from plextraktsync.trakt.types import TraktPlayable
 
 if TYPE_CHECKING:
-    from trakt.movies import Movie
-    from trakt.tv import TVEpisode
-
     from plextraktsync.media import Media
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
@@ -63,13 +61,13 @@ class TraktUserList:
         return userlist.description, dict(zip(prelist, count(1)))
 
     @classmethod
-    def from_trakt_list(cls, name: str, items: list[Movie, TVEpisode]):
+    def from_trakt_list(cls, name: str, items: list[TraktPlayable]):
         items = zip([(item.media_type, item.trakt) for item in items], count(1))
 
         return cls(name=name, items=dict(items))
 
     @classmethod
-    def from_watchlist(cls, items: list[Movie, TVEpisode]):
+    def from_watchlist(cls, items: list[TraktPlayable]):
         trakt_items = dict(
             zip([(elem.media_type, elem.trakt) for elem in items], count(1))
         )
