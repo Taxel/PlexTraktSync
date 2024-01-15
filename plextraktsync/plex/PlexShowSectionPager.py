@@ -21,7 +21,7 @@ class PlexShowSectionPager:
 
     @cached_property
     def total_size(self):
-        return self.section.totalViewSize(libtype="episode")
+        return self.section.totalViewSize(libtype="episode", includeCollections=False)
 
     def __iter__(self):
         from plexapi import X_PLEX_CONTAINER_SIZE
