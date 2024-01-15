@@ -1,6 +1,7 @@
 from functools import wraps
 from time import sleep
 
+from click import ClickException
 from plexapi.exceptions import BadRequest
 from requests import ReadTimeout, RequestException
 from trakt.errors import (BadResponseException, TraktBadGateway,
@@ -42,12 +43,11 @@ def retry(retries=5):
                             logger.error(f"Error message: {e.error_message}")
 
                         logger.error(
-                            "API didn't respond properly, script will abort now. Please try again later."
-                        )
-                        logger.error(
                             f"Last call: {fn.__module__}.{fn.__name__}({args[1:]}, {kwargs})"
                         )
-                        exit(1)
+                        raise ClickException(
+                            "API didn't respond properly, script will abort now. Please try again later."
+                        )
 
                     seconds = 1 + count
                     count += 1
