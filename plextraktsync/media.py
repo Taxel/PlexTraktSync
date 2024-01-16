@@ -278,6 +278,10 @@ class MediaFactory:
 
         try:
             if show:
+                if guid.is_special:
+                    logger.warning(f"Skipping Special: {guid.title_link}", extra={"markup": True})
+                    return None
+
                 tm = self.trakt.find_episode_guid(guid, show.seasons)
             else:
                 tm = self.trakt.find_by_guid(guid)
