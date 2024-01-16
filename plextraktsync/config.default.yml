@@ -47,6 +47,7 @@ logging:
 
 # settings for 'sync' command (default)
 sync:
+  remove_watched_from_watchlists: true
   plex_to_trakt:
     collection: true
     # Clear collected state of items not present in Plex
