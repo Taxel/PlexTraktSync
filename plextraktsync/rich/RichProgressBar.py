@@ -3,7 +3,6 @@ from functools import cached_property
 
 class RichProgressBar:
     def __init__(self, iterable, total=None, options=None, desc=""):
-        self.iter = iter(iterable)
         self.options = options or {}
         self.desc = desc
         if total is None:
@@ -11,11 +10,16 @@ class RichProgressBar:
         self.total = total
         self.i = 0
 
+        if hasattr(iterable, "__next__"):
+            self.iterable_next = iterable.__next__
+        else:
+            self.iterable_next = iter(iterable).__next__
+
     def __iter__(self):
         return self
 
     def __next__(self):
-        res = self.iter.__next__()
+        res = self.iterable_next()
         self.update()
         return res
 
