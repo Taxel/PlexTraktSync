@@ -45,7 +45,7 @@ logging:
 #    - name: requests_cache.policy.actions
 #    - name: requests_cache.session
 
-# settings for 'sync' command (default)
+# settings for 'sync' command
 sync:
   # Setting for whether ratings from one platform should have priority.
   # Valid values are trakt, plex or none. (default: plex)
