@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from typing import Iterable
 
     from plextraktsync.config.SyncConfig import SyncConfig
-    from plextraktsync.media import Media
+    from plextraktsync.media.Media import Media
     from plextraktsync.plan.Walker import Walker
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.trakt.TraktApi import TraktApi

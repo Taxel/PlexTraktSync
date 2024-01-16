@@ -11,7 +11,8 @@ from plextraktsync.watch.events import (ActivityNotification, Error,
 
 if TYPE_CHECKING:
     from plextraktsync.config.Config import Config
-    from plextraktsync.media import Media, MediaFactory
+    from plextraktsync.media.Media import Media
+    from plextraktsync.media.MediaFactory import MediaFactory
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
     from plextraktsync.trakt.TraktApi import TraktApi

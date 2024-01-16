@@ -9,7 +9,7 @@ from plextraktsync.mixin.RichMarkup import RichMarkup
 from plextraktsync.trakt.TraktLookup import TraktLookup
 
 if TYPE_CHECKING:
-    from plextraktsync.media import MediaFactory
+    from plextraktsync.media.MediaFactory import MediaFactory
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
     from plextraktsync.trakt.TraktApi import TraktApi

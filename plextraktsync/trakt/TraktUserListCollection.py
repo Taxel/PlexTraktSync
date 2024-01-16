@@ -7,7 +7,7 @@ from plextraktsync.factory import logging
 from plextraktsync.trakt.TraktUserList import TraktUserList
 
 if TYPE_CHECKING:
-    from plextraktsync.media import Media
+    from plextraktsync.media.Media import Media
     from plextraktsync.trakt.types import TraktLikedList, TraktPlayable
 
 

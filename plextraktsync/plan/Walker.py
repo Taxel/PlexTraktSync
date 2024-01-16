@@ -16,7 +16,8 @@ if TYPE_CHECKING:
 
     from plexapi.video import Episode
 
-    from plextraktsync.media import Media, MediaFactory
+    from plextraktsync.media.Media import Media
+    from plextraktsync.media.MediaFactory import MediaFactory
     from plextraktsync.plan.WalkConfig import WalkConfig
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection

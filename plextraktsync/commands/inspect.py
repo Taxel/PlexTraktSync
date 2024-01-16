@@ -11,7 +11,7 @@ from plextraktsync.plex.PlexId import PlexId
 from plextraktsync.util.expand_id import expand_plexid
 
 if TYPE_CHECKING:
-    from plextraktsync.media import Media
+    from plextraktsync.media.Media import Media
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 
