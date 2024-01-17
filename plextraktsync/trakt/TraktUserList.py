@@ -8,7 +8,7 @@ from plextraktsync.factory import factory, logging
 from plextraktsync.trakt.types import TraktPlayable
 
 if TYPE_CHECKING:
-    from plextraktsync.media import Media
+    from plextraktsync.media.Media import Media
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 

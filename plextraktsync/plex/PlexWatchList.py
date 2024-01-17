@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from plextraktsync.decorators.flatten import flatten_set
 
 if TYPE_CHECKING:
-    from plextraktsync.media import Media
+    from plextraktsync.media.Media import Media
     from plextraktsync.plex.types import PlexMedia
 
 

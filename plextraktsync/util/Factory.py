@@ -51,7 +51,7 @@ class Factory:
 
     @cached_property
     def media_factory(self):
-        from plextraktsync.media import MediaFactory
+        from plextraktsync.media.MediaFactory import MediaFactory
 
         trakt = self.trakt_api
         plex = self.plex_api

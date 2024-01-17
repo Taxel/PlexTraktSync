@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.factory import logging
-from plextraktsync.media import Media
+from plextraktsync.media.Media import Media
 from plextraktsync.mixin.RichMarkup import RichMarkup
 
 if TYPE_CHECKING:
