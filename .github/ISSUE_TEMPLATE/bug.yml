@@ -29,8 +29,19 @@ body:
       label: The problem
       description: >
         A description of what the bug is.
+    validations:
+      required: true
 
-        Explain in detail how it can be reproduced, share command line, hou did you execute the command?
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce the behavior
+      description: Write the exact command you used to run it, what you did before and after
+      placeholder: |
+        1.
+        2.
+        3.
+        ...
     validations:
       required: true
 
@@ -49,19 +60,6 @@ body:
     attributes:
       label: Expected behavior
       description: A description of what you expected to happen
-    validations:
-      required: true
-
-  - type: textarea
-    id: steps
-    attributes:
-      label: Steps to reproduce the behavior
-      description: Write the command you used to run it, what you did before and after
-      placeholder: |
-        1.
-        2.
-        3.
-        ...
     validations:
       required: true
 
