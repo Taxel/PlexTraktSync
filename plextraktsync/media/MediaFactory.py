@@ -41,16 +41,21 @@ class MediaFactory:
         return None
 
     def resolve_guid(self, guid: PlexGuid, show: Media = None):
-        if guid.provider in ["youtube", "xmltv"]:
-            logger.debug(f"{guid.title_link}: Skipping {guid} because unsupported provider '{guid.provider}'", extra={"markup": True})
-            return None
+        if not guid.syncable:
+            error = f"{guid.title_link}: Skipping {guid} because"
 
-        if guid.provider in ["local", "none", "agents.none"]:
-            logger.warning(f"{guid.title_link}: Skipping {guid} because provider {guid.provider} has no external Id", extra={"markup": True})
-            return None
+            if guid.unsupported:
+                level = "debug"
+                reason = f"unsupported provider '{guid.provider}'"
+            elif guid.local:
+                level = "warning"
+                reason = f"provider '{guid.provider}' has no external Id"
+            else:
+                level = "error"
+                reason = "is not a valid provider"
 
-        if guid.provider not in ["imdb", "tmdb", "tvdb"]:
-            logger.error(f"{guid.title_link}: '{guid.provider}' is not valid provider from {guid}", extra={"markup": True})
+            getattr(logger, level)(f"{error} {reason}", extra={"markup": True})
+
             return None
 
         try:

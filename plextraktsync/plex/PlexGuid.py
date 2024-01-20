@@ -61,6 +61,21 @@ class PlexGuid(RichMarkup):
 
         return len(parts) == 3 and all(x.isnumeric() for x in parts)
 
+    @property
+    def syncable(self):
+        """Is the provider syncable with trakt"""
+        return self.provider in ["imdb", "tmdb", "tvdb"]
+
+    @property
+    def local(self):
+        """Is the provider local"""
+        return self.provider in ["local", "none", "agents.none"]
+
+    @property
+    def unsupported(self):
+        """Known providers that can't be synced"""
+        return self.provider in ["youtube", "xmltv"]
+
     @cached_property
     def show_id(self):
         if not self.is_episode:
