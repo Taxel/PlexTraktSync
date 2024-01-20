@@ -27,7 +27,10 @@ body:
     id: description
     attributes:
       label: The problem
-      description: A description of what the bug is
+      description: >
+        A description of what the bug is
+
+        Explain in detail how it can be reproduced, share command line, you did you execute the command.
     validations:
       required: true
 
