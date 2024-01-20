@@ -28,9 +28,9 @@ body:
     attributes:
       label: The problem
       description: >
-        A description of what the bug is
+        A description of what the bug is.
 
-        Explain in detail how it can be reproduced, share command line, you did you execute the command.
+        Explain in detail how it can be reproduced, share command line, hou did you execute the command?
     validations:
       required: true
 
