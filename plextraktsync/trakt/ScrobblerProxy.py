@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.rate_limit import rate_limit
-from plextraktsync.factory import logging
+from plextraktsync.factory import factory, logging
 
 if TYPE_CHECKING:
     from trakt.sync import Scrobbler
@@ -37,3 +38,7 @@ class ScrobblerProxy:
         else:
             self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
             return self.scrobbler.pause(progress)
+
+    @cached_property
+    def queue(self):
+        return factory.queue
