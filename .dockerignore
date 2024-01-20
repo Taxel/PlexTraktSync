@@ -10,6 +10,7 @@
 !/plextraktsync/config/*.py
 !/plextraktsync/decorators/*.py
 !/plextraktsync/logger/*.py
+!/plextraktsync/media/*.py
 !/plextraktsync/mixin/*.py
 !/plextraktsync/plan/*.py
 !/plextraktsync/plex/*.py
