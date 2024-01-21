@@ -75,7 +75,10 @@ body:
     id: workarounds
     attributes:
       label: Workarounds
-      description: Is there an existing workaround for this issue? Did you try downgrading? Try finding version that can be used as a workaround.
+      description:  >
+        Is there an existing workaround for this issue?
+        Did you try downgrading?
+        Try finding a version that can be used as a workaround.
 
   - type: dropdown
     id: install-method
