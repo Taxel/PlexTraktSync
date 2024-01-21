@@ -79,6 +79,7 @@ body:
         Is there an existing workaround for this issue?
         Did you try downgrading?
         Try finding a version that can be used as a workaround.
+        Fill in the version here that worked before.
 
   - type: dropdown
     id: install-method
