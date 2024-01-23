@@ -163,7 +163,7 @@ class WatchStateUpdater(SetWindowTitle):
         percent = m.plex.watch_progress(event.view_offset)
 
         self.logger.info(
-            f"on_play: {movie}: {percent:.6F}%, State: {event.state}, Watched: {movie.isPlayed}, LastViewed: {movie.lastViewedAt}"
+            f"on_play: {movie}: {percent:.6F}%, State: {event.state}, Played: {movie.isPlayed}, LastViewed: {movie.lastViewedAt}"
         )
         scrobbled = self.scrobble(m, percent, event)
         self.logger.debug(f"Scrobbled: {scrobbled}")
