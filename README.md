@@ -47,6 +47,7 @@ have a file containing those on your harddrive, you can not use this project.
     - [Sync](#sync)
     - [Unmatched](#unmatched)
     - [Info command](#info-command)
+    - [Inspect](#inspect)
     - [Watch](#watch)
       - [Systemd setup](#systemd-setup)
   - [Good practices](#good-practices)
@@ -437,6 +438,24 @@ Trakt username: nobody
 Plex Server version: 1.24.3.5033-757abe6b4, updated at: 2021-02-21 17:00:00
 Server has 2 libraries: ['Movies', 'TV Shows']
 ```
+
+### Inspect
+
+Inspect command is used to get info about Plex Media Server items,
+which is useful when debugging problems and reporting issues.
+
+- Plex Web URL from your server:
+  - https://app.plex.tv/desktop/#!/server/53aff62c4bb6027c1ada814d417e83ccdf4d5045/details?key=/library/metadata/123
+- Plex Discover URL:
+  - https://app.plex.tv/desktop/#!/provider/tv.plex.provider.discover/details?key=/library/metadata/5d7768258718ba001e311845
+- Id from from your Plex Media Server:
+  - `123`
+```
+plextraktsync inspect 123
+plextraktsync inspect "https://app.plex.tv/desktop/#!/server/53aff62c4bb6027c1ada814d417e83ccdf4d5045/details?key=/library/metadata/123"
+```
+
+To avoid problems with various shells, put the value in double quotes.
 
 ### Watch
 
