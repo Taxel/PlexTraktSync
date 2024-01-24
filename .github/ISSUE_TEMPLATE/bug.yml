@@ -145,4 +145,8 @@ body:
   - type: markdown
     attributes:
       value: |
+        Be available and respond to questions developers or other users ask.
+        Check the issue from time to time until it's resolved.
+        If you disappear after reporting a problem your issue will be just closed.
+        
         Make sure to close your issue when it's solved! If you found the solution yourself please comment so that others benefit from it.
