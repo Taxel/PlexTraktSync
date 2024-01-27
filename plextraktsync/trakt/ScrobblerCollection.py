@@ -18,7 +18,6 @@ class ScrobblerCollection(UserDict):
 
     def __missing__(self, media: TraktPlayable):
         scrobbler = media.scrobble(0, None, None)
-        proxy = ScrobblerProxy(scrobbler, self.threshold)
-        self[media] = proxy
+        self[media] = proxy = ScrobblerProxy(scrobbler, self.threshold)
 
         return proxy

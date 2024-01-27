@@ -15,7 +15,6 @@ class PlexPlaylistCollection(UserDict):
         self.server = server
 
     def __missing__(self, name: str):
-        playlist = PlexPlaylist(self.server, name)
-        self[name] = playlist
+        self[name] = playlist = PlexPlaylist(self.server, name)
 
         return playlist
