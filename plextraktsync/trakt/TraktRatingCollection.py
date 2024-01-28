@@ -20,8 +20,7 @@ class TraktRatingCollection(dict):
         self.trakt = trakt
 
     def __missing__(self, media_type: str):
-        ratings = self.ratings(media_type)
-        self[media_type] = ratings
+        self[media_type] = ratings = self.ratings(media_type)
 
         return ratings
 

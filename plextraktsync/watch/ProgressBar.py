@@ -49,8 +49,7 @@ class ProgressBar(dict):
         return progress
 
     def __missing__(self, m: PlexLibraryItem):
-        task = self.progress.add_task(m.title, play_state="")
-        self[m] = task
+        self[m] = task = self.progress.add_task(m.title, play_state="")
 
         return task
 
