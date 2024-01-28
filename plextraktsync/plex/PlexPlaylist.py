@@ -62,7 +62,7 @@ class PlexPlaylist(RichMarkup):
             del self.__dict__["playlist"]
             del self.__dict__["items"]
             playlist = self.server.createPlaylist(self.name, items=items)
-            self.logger.info(f"Created plex playlist '{self.name}' with {len(items)} items")
+            self.logger.info(f"Created plex playlist {self.title_link} with {len(items)} items", extra={"markup": True})
 
         # Skip if playlist could not be made/retrieved
         if playlist is None:
@@ -71,7 +71,7 @@ class PlexPlaylist(RichMarkup):
         updated = False
         if description is not None and description != playlist.summary:
             playlist.editSummary(summary=description)
-            self.logger.debug(f"Updated '{self.name}' description: {description}")
+            self.logger.debug(f"Updated {self.title_link} description: '{description}'", extra={"markup": True})
             updated = True
 
         # Skip if nothing to update
