@@ -44,14 +44,15 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem, savepath: Path):
         ])
 
         filename = Path(savepath, filename)
+        if filename.exists():
+            continue
 
-        if not exists(filename):
-            if not sub.key:
-                print(f"  ERROR: Subtitle {index}: has no key: Not downloadable")
-                continue
+        if not sub.key:
+            print(f"  ERROR: Subtitle {index}: has no key: Not downloadable")
+            continue
 
-            plex.download(sub, savepath=savepath, filename=filename, showstatus=True)
-            print(f"Downloaded: {filename}")
+        plex.download(sub, savepath=savepath, filename=filename, showstatus=True)
+        print(f"Downloaded: {filename}")
 
 
 def expand_media(input):
