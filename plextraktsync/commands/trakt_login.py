@@ -4,7 +4,7 @@ from json import JSONDecodeError
 from os.path import exists
 from typing import TYPE_CHECKING
 
-import click
+from rich.prompt import Prompt
 from trakt.errors import ForbiddenException
 
 from plextraktsync.factory import factory
@@ -37,8 +37,8 @@ def trakt_authenticate(api: TraktApi):
     print("")
 
     while True:
-        client_id = click.prompt(PROMPT_TRAKT_CLIENT_ID, type=str)
-        client_secret = click.prompt(PROMPT_TRAKT_CLIENT_SECRET, type=str)
+        client_id = Prompt.ask(PROMPT_TRAKT_CLIENT_ID)
+        client_secret = Prompt.ask(PROMPT_TRAKT_CLIENT_SECRET, password=True)
 
         print("Attempting to authenticate with Trakt")
         try:
