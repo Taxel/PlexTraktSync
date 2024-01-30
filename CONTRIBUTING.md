@@ -32,7 +32,7 @@ under the same [MIT License] that covers the project.
 
 Feel free to contact the maintainers if that's a concern.
 
-[MIT License]: http://choosealicense.com/licenses/mit/
+[MIT License]: https://choosealicense.com/licenses/mit/
 
 ## Report bugs using GitHub's [issues]
 

@@ -28,7 +28,7 @@ def trakt_authenticate(api: TraktApi):
     print(title("Sign in to Trakt"))
 
     print("If you do not have a Trakt client ID and secret:")
-    print("      1 - Open http://trakt.tv/oauth/applications on any computer")
+    print("      1 - Open https://trakt.tv/oauth/applications on any computer")
     print("      2 - Login to your Trakt account")
     print("      3 - Press the NEW APPLICATION button")
     print("      4 - Set the NAME field = plex")
