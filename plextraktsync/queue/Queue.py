@@ -29,6 +29,15 @@ class Queue:
     def add_to_history(self, data):
         self.add_queue("add_to_history", data)
 
+    def scrobble_update(self, data):
+        self.add_queue("scrobble_update", data)
+
+    def scrobble_pause(self, data):
+        self.add_queue("scrobble_pause", data)
+
+    def scrobble_stop(self, data):
+        self.add_queue("scrobble_stop", data)
+
     def add_queue(self, queue: str, data: Any):
         """
         Add "data" to "queue". Returns immediately

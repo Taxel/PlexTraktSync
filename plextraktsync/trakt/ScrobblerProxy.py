@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+from functools import cached_property
 from typing import TYPE_CHECKING
 
-from plextraktsync.decorators.rate_limit import rate_limit
-from plextraktsync.factory import logging
+from plextraktsync.factory import factory, logging
 
 if TYPE_CHECKING:
     from trakt.sync import Scrobbler
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class ScrobblerProxy:
     """
-    Proxy to Scrobbler that handles requests cache and rate limiting
+    Proxy to Scrobbler that queues requests to update trakt
     """
 
     def __init__(self, scrobbler: Scrobbler, threshold=80):
@@ -19,21 +19,22 @@ class ScrobblerProxy:
         self.threshold = threshold
         self.logger = logging.getLogger("PlexTraktSync.ScrobblerProxy")
 
-    @rate_limit(retries=2)
     def update(self, progress: float):
         self.logger.debug(f"update({self.scrobbler.media}): {progress}")
-        return self.scrobbler.update(progress)
+        self.queue.scrobble_update((self.scrobbler, progress))
 
-    @rate_limit(retries=2)
     def pause(self, progress: float):
         self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
-        return self.scrobbler.pause(progress)
+        self.queue.scrobble_pause((self.scrobbler, progress))
 
-    @rate_limit(retries=2)
     def stop(self, progress: float):
         if progress >= self.threshold:
             self.logger.debug(f"stop({self.scrobbler.media}): {progress}")
-            return self.scrobbler.stop(progress)
+            self.queue.scrobble_stop((self.scrobbler, progress))
         else:
             self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
-            return self.scrobbler.pause(progress)
+            self.queue.scrobble_pause((self.scrobbler, progress))
+
+    @cached_property
+    def queue(self):
+        return factory.queue

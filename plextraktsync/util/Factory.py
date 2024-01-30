@@ -293,10 +293,12 @@ class Factory:
         from plextraktsync.queue.TraktBatchWorker import TraktBatchWorker
         from plextraktsync.queue.TraktMarkWatchedWorker import \
             TraktMarkWatchedWorker
+        from plextraktsync.queue.TraktScrobbleWorker import TraktScrobbleWorker
 
         workers = [
             TraktBatchWorker(),
             TraktMarkWatchedWorker(),
+            TraktScrobbleWorker(),
         ]
         task = BackgroundTask(self.batch_delay_timer, *workers)
         queue = Queue(task)
