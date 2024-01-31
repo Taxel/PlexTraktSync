@@ -8,7 +8,8 @@ import trakt.movies
 import trakt.sync
 import trakt.users
 from click import ClickException
-from trakt.errors import ForbiddenException, OAuthException
+from trakt.errors import (ForbiddenException, OAuthException,
+                          OAuthRefreshException)
 
 from plextraktsync import pytrakt_extensions
 from plextraktsync.decorators.flatten import flatten_list
@@ -51,6 +52,9 @@ class TraktApi:
     def me(self):
         try:
             return trakt.users.User("me")
+        except OAuthRefreshException as e:
+            logger.error(f"{e.error}: {e.error_description}")
+            raise ClickException("Trakt error: Unable to refresh token")
         except (OAuthException, ForbiddenException) as e:
             raise ClickException(f"Trakt authentication error: {str(e)}")
 
