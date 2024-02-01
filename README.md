@@ -50,6 +50,7 @@ have a file containing those on your harddrive, you can not use this project.
     - [Inspect](#inspect)
     - [Watch](#watch)
       - [Systemd setup](#systemd-setup)
+      - [Systemd user setup](#systemd-user-setup)
   - [Good practices](#good-practices)
   - [Troubleshooting](#troubleshooting)
 
@@ -536,6 +537,8 @@ sudo systemctl daemon-reload
 sudo systemctl start PlexTraktSync.service
 sudo systemctl enable PlexTraktSync.service
 ```
+
+#### Systemd user setup
 
 You can also run as systemd user service.
 
