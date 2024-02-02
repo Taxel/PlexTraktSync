@@ -575,6 +575,9 @@ Now create instances based on server names from `servers.yml`, in this example `
 1. `systemctl --user start "plextraktsync@SERVER_NAME.service"`
 1. `systemctl --user status "plextraktsync@SERVER_NAME.service"`
 
+for complete logs, you can use `journalctl` (add `-f` to follow logs):
+1. `journalctl -u "plextraktsync@SERVER_NAME.service"`
+
 If all works, enable it for auto-start on host reboot
 
 1. `systemctl --user enable "plextraktsync@SERVER_NAME.service"`
