@@ -8,7 +8,7 @@ verify_ssl = true
 [packages]
 attrs = "==23.2.0"
 cattrs = {version="==23.2.3", python_version=">='3.7'"}
-certifi = "==2023.11.17"
+certifi = "==2024.2.2"
 charset-normalizer = "==3.3.2"
 click = "==8.1.7"
 deprecated = "==1.2.14"
