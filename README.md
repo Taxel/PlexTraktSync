@@ -50,6 +50,7 @@ have a file containing those on your harddrive, you can not use this project.
     - [Inspect](#inspect)
     - [Watch](#watch)
       - [Systemd setup](#systemd-setup)
+      - [Systemd user setup](#systemd-user-setup)
   - [Good practices](#good-practices)
   - [Troubleshooting](#troubleshooting)
 
@@ -536,6 +537,56 @@ sudo systemctl daemon-reload
 sudo systemctl start PlexTraktSync.service
 sudo systemctl enable PlexTraktSync.service
 ```
+
+#### Systemd user setup
+
+You can also run as systemd user service.
+
+This walkthough allows to use different servers with the same configuration.
+
+This assumes `plextraktsync` is installed with `pipx` for your user.
+
+```ini
+# plextraktsync@.service
+[Unit]
+Description=PlexTraktSync watch daemon
+After=network-online.target
+
+[Service]
+ExecSearchPath=%h/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=plextraktsync watch --server=%i
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+```
+
+Install the service template file:
+1. as `root`: `/etc/xdg/systemd/user/plextraktsync@.service` for all users
+1. as your user: `~/.config/systemd/user/plextraktsync@.service` for your user only
+
+Next, you need to reload systemd:
+1. if installed as `root`: `sudo systemctl daemon-reload`
+2. if installed as user: `systemctl --user daemon-reload`
+
+Now create instances based on server names from `servers.yml`, in this example `SERVER_NAME`.
+
+1. `systemctl --user start "plextraktsync@SERVER_NAME.service"`
+1. `systemctl --user status "plextraktsync@SERVER_NAME.service"`
+
+for complete logs, you can use `journalctl` (add `-f` to follow logs):
+1. `journalctl -u "plextraktsync@SERVER_NAME.service"`
+
+If all works, enable it for auto-start on host reboot
+
+1. `systemctl --user enable "plextraktsync@SERVER_NAME.service"`
+
+For systemd --user session to start without having to log in you need to enable [systemd-linger]:
+
+1. `loginctl enable-linger`
+
+[systemd-linger]: https://wiki.archlinux.org/title/systemd/User#Automatic_start-up_of_systemd_user_instances
 
 ## Good practices
 
