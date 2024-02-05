@@ -99,7 +99,7 @@ class PlexLibraryItem(RichMarkup):
         hours, remainder = divmod(self.item.duration / 1000, 3600)
         minutes, seconds = divmod(remainder, 60)
 
-        return f'{int(hours):02}:{int(minutes):02}:{int(seconds):02}'
+        return f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
 
     @cached_property
     def has_media(self):
@@ -130,7 +130,7 @@ class PlexLibraryItem(RichMarkup):
     def edition_title(self):
         if self.type == "movie":
             # Use __dict__ access to prevent reloads
-            return self.item.__dict__.get('editionTitle')
+            return self.item.__dict__.get("editionTitle")
         return None
 
     @cached_property
@@ -320,9 +320,9 @@ class PlexLibraryItem(RichMarkup):
             show_id = self.item.parentRatingKey
             season = self.item.seasonNumber
 
-            return self.library.search(libtype='episode', filters={'show.id': show_id, 'season.index': season})
+            return self.library.search(libtype="episode", filters={"show.id": show_id, "season.index": season})
 
-        return self.library.search(libtype='episode', filters={'show.id': self.item.ratingKey})
+        return self.library.search(libtype="episode", filters={"show.id": self.item.ratingKey})
 
     @cached_property
     def season_number(self):
@@ -374,13 +374,13 @@ class PlexLibraryItem(RichMarkup):
         except IndexError:
             return f"<{self.item}>"
 
-        plex = str(self.item).strip('<>')
+        plex = str(self.item).strip("<>")
 
         # assemble ourselves to handle online sources nan issue
         # https://github.com/pkkid/python-plexapi/issues/1072
         if not isinstance(self.item.ratingKey, int):
             parts = plex.split(":")
-            parts[1] = self.item.guid.rsplit('/', 1)[-1]
+            parts[1] = self.item.guid.rsplit("/", 1)[-1]
             plex = ":".join(parts)
 
         return f"<{guid.provider}:{guid.id}:{plex}>"

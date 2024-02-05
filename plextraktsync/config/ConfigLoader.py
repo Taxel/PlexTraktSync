@@ -1,19 +1,19 @@
 class ConfigLoader:
     @classmethod
     def load(cls, path: str):
-        if path.endswith('.yml'):
+        if path.endswith(".yml"):
             return cls.load_yaml(path)
-        if path.endswith('.json'):
+        if path.endswith(".json"):
             return cls.load_json(path)
-        raise RuntimeError(f'Unknown file type: {path}')
+        raise RuntimeError(f"Unknown file type: {path}")
 
     @classmethod
     def write(cls, path: str, config):
-        if path.endswith('.yml'):
+        if path.endswith(".yml"):
             return cls.write_yaml(path, config)
-        if path.endswith('.json'):
+        if path.endswith(".json"):
             return cls.write_json(path, config)
-        raise RuntimeError(f'Unknown file type: {path}')
+        raise RuntimeError(f"Unknown file type: {path}")
 
     @staticmethod
     def copy(src: str, dst: str):

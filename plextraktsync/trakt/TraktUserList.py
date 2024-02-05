@@ -97,12 +97,12 @@ class TraktUserList:
             # Already in the list
             return
 
-        self.logger.info(f'Adding {m.title_link} ({m.plex_key}) to Plex list {self.title_link}', extra={"markup": True})
+        self.logger.info(f"Adding {m.title_link} ({m.plex_key}) to Plex list {self.title_link}", extra={"markup": True})
 
         # Report duplicates
         duplicates = [p for _, p in self.plex_items if p.key != m.plex_key and p == m.plex]
         for p in duplicates:
-            msg = f'Duplicate {p.title_link} #{p.key} with {m.title_link} #{m.plex_key}'
+            msg = f"Duplicate {p.title_link} #{p.key} with {m.title_link} #{m.plex_key}"
             if p.edition_title is not None:
                 self.logger.info(msg, extra={"markup": True})
             else:

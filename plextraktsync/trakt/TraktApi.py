@@ -65,8 +65,8 @@ class TraktApi:
     def liked_lists(self) -> list[TraktLikedList]:
         for item in self.me.get_liked_lists("lists", limit=1000):
             tll: TraktLikedList = {
-                'listname': item['list']['name'],
-                'listid': item['list']['ids']['trakt'],
+                "listname": item["list"]["name"],
+                "listid": item["list"]["ids"]["trakt"],
             }
             yield tll
 

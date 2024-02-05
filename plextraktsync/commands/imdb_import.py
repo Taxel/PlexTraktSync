@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 def read_csv(file: PathLike):
-    with open(file, newline='') as fh:
+    with open(file, newline="") as fh:
         reader = csv.DictReader(fh)
         for row in reader:
             yield Ratings.from_csv(row)
@@ -28,12 +28,12 @@ class Ratings:
     type: str
 
     FIELD_MAPPING = {
-        'Const': 'imdb',
-        'Your Rating': 'rating',
-        'Date Rated': 'rate_date',
-        'Title': 'title',
-        'Year': 'year',
-        'Title Type': 'type',
+        "Const": "imdb",
+        "Your Rating": "rating",
+        "Date Rated": "rate_date",
+        "Title": "title",
+        "Year": "year",
+        "Title Type": "type",
         # 'URL': 'url',
         # 'IMDb Rating': 'imdb_rating',
         # 'Runtime (mins)': 'runtime',

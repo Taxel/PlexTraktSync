@@ -92,7 +92,7 @@ def inspect_url(session: CachedSession, url: str):
 
 def cache_status(cache):
     # https://github.com/requests-cache/requests-cache/commit/35b48cf3486e546a5e4090e8e410b698e8a6b7be#r87356998
-    return f'Total rows: {len(cache.responses)} responses, {len(cache.redirects)} redirects'
+    return f"Total rows: {len(cache.responses)} responses, {len(cache.redirects)} redirects"
 
 
 def cache(sort: str, limit: int, reverse: bool, expire: bool, url: str):

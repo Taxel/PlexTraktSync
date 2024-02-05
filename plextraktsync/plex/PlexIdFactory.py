@@ -19,7 +19,7 @@ class PlexIdFactory:
 
     @classmethod
     def from_plex_guid(cls, id):
-        key = id.rsplit('/', 1)[-1]
+        key = id.rsplit("/", 1)[-1]
         return PlexId(key, provider=PlexId.METADATA)
 
     @staticmethod
@@ -39,8 +39,8 @@ class PlexIdFactory:
         fragment = urlparse(result.fragment)
         parsed = parse_qs(fragment.query)
 
-        if fragment.path.startswith('!/server/'):
-            server = fragment.path.split('/')[2]
+        if fragment.path.startswith("!/server/"):
+            server = fragment.path.split("/")[2]
         else:
             server = None
 
@@ -48,7 +48,7 @@ class PlexIdFactory:
             key = ",".join(parsed["key"])
             if key.startswith("/library/metadata/"):
                 id = key[len("/library/metadata/"):]
-                if fragment.path == '!/provider/tv.plex.provider.discover/details':
+                if fragment.path == "!/provider/tv.plex.provider.discover/details":
                     return PlexId(id, provider=PlexId.METADATA)
                 return PlexId(int(id), server=server)
 

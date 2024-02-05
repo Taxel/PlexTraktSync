@@ -8,11 +8,11 @@ from plextraktsync.util.execx import execx
 def openurl(url: str):
     try:
         opener = {
-            'darwin': 'open',
-            'win32': 'start',
+            "darwin": "open",
+            "win32": "start",
         }[sys.platform]
     except KeyError:
-        opener = 'xdg-open'
+        opener = "xdg-open"
 
     try:
         execx([opener, url])

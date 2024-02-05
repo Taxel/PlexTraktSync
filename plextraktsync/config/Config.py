@@ -16,19 +16,16 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         "PLEX_USERNAME": True,
         "TRAKT_USERNAME": True,
         "PLEX_SERVER": True,  # new in 0.24.0
-
         # The token of the PMS administrator/owner.
         # This is stored/used only for managed users (home users) so the script
         # can get their watchlist from Plex online servers. Managed users don't
         # have a Plex account, they're local users.
         "PLEX_OWNER_TOKEN": True,
-
         # The account token of the Plex user who have a Plex account but don't
         # own the PMS (use it as shared library).
         # This is stored/used only if user uses a shared PMS.
         # Needed to fetch its watchlist from Plex online servers.
         "PLEX_ACCOUNT_TOKEN": True,
-
         # Old keys, Leave comment why deprecated
         "PLEX_FALLBACKURL": "Legacy, used before 0.18.21",
         "PLEX_BASEURL": "Unused after 0.24.0, moved to servers.yml",
@@ -111,6 +108,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
             # Rename, so users would not mistakenly edit outdated file
             config_bak = f"{self.config_file}.old"
             from plextraktsync.factory import factory
+
             logger = factory.logger
             logger.warning(f"Renaming {self.config_file} to {config_bak}")
             loader.rename(self.config_file, config_bak)

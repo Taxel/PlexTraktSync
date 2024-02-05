@@ -20,6 +20,6 @@ class LazyUserList(UserList):
     @get
     def _get(cls, title, id):
         data = yield f"lists/{id}"
-        ulist = cls(creator=data['user']['username'], **data)
+        ulist = cls(creator=data["user"]["username"], **data)
         ulist.get_items()
         yield ulist

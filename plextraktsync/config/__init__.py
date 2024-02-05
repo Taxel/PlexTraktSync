@@ -1,6 +1,7 @@
 """
 Platform name to identify our application
 """
+
 PLEX_PLATFORM = "PlexTraktSync"
 
 """

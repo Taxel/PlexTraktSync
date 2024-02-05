@@ -38,7 +38,7 @@ def inspect_media(plex_id: PlexId):
 
     media = pm.item
     print(f"Title: {media.title}")
-    if media.type == 'movie' and pm.edition_title:
+    if media.type == "movie" and pm.edition_title:
         print(f"Edition Title: {pm.edition_title}")
     if pm.has_media:
         print(f"Media.Duration: {pm.duration}")
@@ -80,7 +80,7 @@ def inspect_media(plex_id: PlexId):
     for h in history:
         d = h.device
         # handle cases like "local" for offline plays
-        if d.name == '' and d.platform == '':
+        if d.name == "" and d.platform == "":
             dn = h.device.clientIdentifier
         else:
             dn = f"{d.name} with {d.platform}"

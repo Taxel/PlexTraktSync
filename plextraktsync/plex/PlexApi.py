@@ -218,9 +218,9 @@ class PlexApi:
             return None
 
         params = {
-            'includeCollections': 0,
-            'includeExternalMedia': 0,
-            'includeUserState': 0,
+            "includeCollections": 0,
+            "includeExternalMedia": 0,
+            "includeUserState": 0,
         }
         try:
             return self.account.watchlist(libtype=libtype, **params)

@@ -153,7 +153,7 @@ class Factory:
 
         from plextraktsync.rich.RichProgressBar import RichProgressBar
 
-        return partial(RichProgressBar, options={'console': self.console})
+        return partial(RichProgressBar, options={"console": self.console})
 
     @cached_property
     def run_config(self):
@@ -262,7 +262,7 @@ class Factory:
         handler = RichHandler(
             console=self.console,
             show_time=config.log_console_time,
-            log_time_format='[%Y-%m-%d %X]',
+            log_time_format="[%Y-%m-%d %X]",
             show_path=False,
             highlighter=RichHighlighter(),
             rich_tracebacks=True,

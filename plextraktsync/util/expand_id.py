@@ -16,7 +16,7 @@ def id_from_url(url: str):
             key = ",".join(parsed["key"])
             if key.startswith("/library/metadata/"):
                 id = key[len("/library/metadata/"):]
-                if fragment.path == '!/provider/tv.plex.provider.discover/details':
+                if fragment.path == "!/provider/tv.plex.provider.discover/details":
                     return f"https://metadata.provider.plex.tv/library/metadata/{id}"
                 return int(id)
         if "filters" in parsed:
@@ -28,7 +28,7 @@ def id_from_url(url: str):
 
 
 def plex_id(id):
-    key = id.rsplit('/', 1)[-1]
+    key = id.rsplit("/", 1)[-1]
     return f"https://metadata.provider.plex.tv/library/metadata/{key}"
 
 

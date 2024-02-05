@@ -138,6 +138,6 @@ def test_find_episode():
     assert te.imdb == "tt11909222"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_show_episodes()
     test_show_episodes_attack_on_titan()

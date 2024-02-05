@@ -9,7 +9,7 @@ trakt: TraktApi = factory.trakt_api
 
 
 def test_trakt_watched_progress():
-    show = TVShow('Game of Thrones')
+    show = TVShow("Game of Thrones")
     data = show.watched_progress()
     watched = ShowProgress(**data)
 
@@ -18,5 +18,5 @@ def test_trakt_watched_progress():
     assert isinstance(s01e01, bool)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_trakt_watched_progress()
