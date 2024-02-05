@@ -62,7 +62,7 @@ class RichProgressBar:
                 unit_scale=False,
                 unit_divisor=1000,
             ),
-            "]"
+            "]",
         )
         progress = Progress(*args, **self.options)
 
