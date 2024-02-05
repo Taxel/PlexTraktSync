@@ -63,7 +63,7 @@ class TraktBatchWorker:
     @staticmethod
     def normalize(items):
         result = defaultdict(list)
-        for (media_type, item) in items:
+        for media_type, item in items:
             result[media_type].append(item)
 
         return result

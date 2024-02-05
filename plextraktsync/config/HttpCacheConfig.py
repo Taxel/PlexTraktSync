@@ -130,7 +130,7 @@ class HttpCacheConfig:
         # This will keep the order if user overwrote the item
         policy.update(self.policy)
 
-        for (k, v) in ((k, v) for k, v in policy.items() if isinstance(v, str)):
+        for k, v in ((k, v) for k, v in policy.items() if isinstance(v, str)):
             # Special constants
             if v in self.expire_constants:
                 policy[k] = self.expire_constants[v]

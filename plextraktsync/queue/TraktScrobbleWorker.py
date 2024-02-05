@@ -63,7 +63,7 @@ class TraktScrobbleWorker:
     @staticmethod
     def normalize(items: list[TraktPlayable]):
         result = {}
-        for (scrobbler, progress) in items:
+        for scrobbler, progress in items:
             result[scrobbler] = progress
 
         return result
