@@ -20,6 +20,7 @@ class Media(RichMarkup):
     """
     Class containing Plex and Trakt media items (Movie, Episode)
     """
+
     trakt: TraktMedia
     plex: PlexLibraryItem
 

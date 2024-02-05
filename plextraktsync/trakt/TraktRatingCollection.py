@@ -15,6 +15,7 @@ class TraktRatingCollection(dict):
         trakt_id => rating
     }
     """
+
     def __init__(self, trakt: TraktApi):
         super().__init__()
         self.trakt = trakt

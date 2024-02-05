@@ -40,27 +40,22 @@ class HttpCacheConfig:
         "api.trakt.tv/users/*/ratings/episodes": "1m",
         "api.trakt.tv/users/*/ratings/shows": "1m",
         "api.trakt.tv/users/*/ratings/movies": "1m",
-
         # Trakt search urls
         "api.trakt.tv/search/imdb/tt*?type=movie": "1d",
         "api.trakt.tv/search/imdb/tt*?type=show": "1d",
         "api.trakt.tv/search/tmdb/*?type=movie": "1d",
         "api.trakt.tv/search/tmdb/*?type=show": "1d",
         "api.trakt.tv/search/tvdb/*?type=show": "1d",
-
         # Keep watched status cached, but fresh
         "api.trakt.tv/sync/watched/shows": "1s",
         "api.trakt.tv/users/*/watched/movies": "1s",
-
         # Watchlist better be fresh for next run
         "api.trakt.tv/users/*/watchlist/movies": "1s",
         "api.trakt.tv/users/*/watchlist/shows": "1s",
         "metadata.provider.plex.tv/library/sections/watchlist/all?*includeUserState=0": "1s",
         "metadata.provider.plex.tv/library/sections/watchlist/all": "1s",
-
         "api.trakt.tv/users/likes/lists": DO_NOT_CACHE,
         "api.trakt.tv/users/me": DO_NOT_CACHE,
-
         # Online Plex patterns
         "metadata.provider.plex.tv/library/metadata/*/userState": DO_NOT_CACHE,
         "metadata.provider.plex.tv/library/metadata/*?*includeUserState=1": DO_NOT_CACHE,
@@ -70,11 +65,9 @@ class HttpCacheConfig:
         # https://web.dev/stale-while-revalidate/
         # cache-control: max-age=0,stale-while-revalidate=86400
         "metadata.provider.plex.tv/": 86400,
-
         # Plex account
         # Cache for some time, this activates 304 responses
         "plex.tv/users/account": "1m",
-
         # Plex patterns
         # Ratings search
         "*/library/sections/*/all?*userRating%3E%3E=-1*": DO_NOT_CACHE,
@@ -89,7 +82,6 @@ class HttpCacheConfig:
         "*/library/sections/*/collections": DO_NOT_CACHE,
         # library_sections
         "*/library/sections": DO_NOT_CACHE,
-
         # reloads
         "*/library/metadata/*?*include*": DO_NOT_CACHE,
         # episodes
@@ -157,6 +149,7 @@ class HttpCacheConfig:
         If print is None, return the produced string instead.
         """
         from plextraktsync.config.ConfigLoader import ConfigLoader
+
         data = self.serialize()
         dump = ConfigLoader.dump_yaml(None, data)
         if print is None:

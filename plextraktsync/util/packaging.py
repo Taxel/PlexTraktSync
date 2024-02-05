@@ -18,6 +18,7 @@ def installed():
 
 def pip_installed(name: str):
     import sys
+
     try:
         output = execx(f"{sys.executable} -m pip inspect")
     except FileNotFoundError:

@@ -124,6 +124,7 @@ class Factory:
             urls_expire_after = self.config.http_cache.urls_expire_after
         else:
             from requests_cache import DO_NOT_CACHE
+
             urls_expire_after = {
                 "*": DO_NOT_CACHE,
             }
@@ -243,6 +244,7 @@ class Factory:
         loggers.extend(config["logging"]["filter_loggers"] or [])
 
         from plextraktsync.logger.filter import LoggerFilter
+
         filter = LoggerFilter(config["logging"]["filter"], logger)
 
         for name in loggers:

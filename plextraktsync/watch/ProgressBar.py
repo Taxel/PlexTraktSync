@@ -44,6 +44,7 @@ class ProgressBar(dict):
             live.stop()
 
         import atexit
+
         atexit.register(lambda: stop())
 
         return progress

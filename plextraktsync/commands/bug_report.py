@@ -7,6 +7,7 @@ URL_TEMPLATE = 'https://github.com/Taxel/PlexTraktSync/issues/new?template=bug.y
 
 def bug_url():
     from plextraktsync.factory import factory
+
     config = factory.config
     version = factory.version
 

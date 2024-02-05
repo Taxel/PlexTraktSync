@@ -28,9 +28,11 @@ def command():
                 raise ClickException(f"Program requested terminal, No terminal is connected: {e}")
             except ClickException as e:
                 from plextraktsync.factory import logger
+
                 logger.fatal(f"Error running {name} command: {str(e)}")
             except Exception as e:
                 from plextraktsync.factory import logger
+
                 logger.exception(e)
 
                 raise ClickException(f"Error running {name} command: {str(e)}")
@@ -140,6 +142,7 @@ def login():
 
 def env_plex_username():
     from plextraktsync.factory import factory
+
     config = factory.config
 
     return environ.get("PLEX_USERNAME", config["PLEX_USERNAME"])

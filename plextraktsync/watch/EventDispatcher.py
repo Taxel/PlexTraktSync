@@ -39,6 +39,7 @@ class EventDispatcher:
                 self.logger.error(f"{type(e).__name__} was raised: {e}")
 
                 import traceback
+
                 self.logger.debug(traceback.format_tb(e.__traceback__))
 
     @staticmethod
