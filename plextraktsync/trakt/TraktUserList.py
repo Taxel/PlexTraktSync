@@ -54,7 +54,7 @@ class TraktUserList:
             for elem in list_items
             if elem[0] in ["movies", "episodes"]
         ]
-        self.logger.info(f"Downloaded Trakt list '{self.name}' https://trakt.tv/lists/{self.trakt_id}")
+        self.logger.info(f"Downloaded Trakt list '{self.name}' ({len(list_items)} items): https://trakt.tv/lists/{self.trakt_id}")
 
         return userlist.description, dict(zip(prelist, count(1)))
 
