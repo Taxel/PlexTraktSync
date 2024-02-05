@@ -52,7 +52,7 @@ class TraktScrobbleWorker:
     @time_limit()
     @retry()
     def scrobble_pause(self, scrobbler: Scrobbler, progress: float):
-        return scrobbler.update(progress)
+        return scrobbler.pause(progress)
 
     @rate_limit()
     @time_limit()
