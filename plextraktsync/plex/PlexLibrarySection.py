@@ -35,7 +35,7 @@ class PlexLibrarySection(RichMarkup):
 
     @property
     def link(self):
-        """ Return Plex App URL for this section """
+        """Return Plex App URL for this section"""
         base_url = self.plex.plex_base_url("media")
 
         return f"{base_url}/com.plexapp.plugins.library?source={self.section.key}"
