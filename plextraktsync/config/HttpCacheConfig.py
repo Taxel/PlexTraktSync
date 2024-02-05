@@ -31,35 +31,35 @@ class HttpCacheConfig:
     }
 
     default_policy = {
-        "*.trakt.tv/shows/*/seasons?extended=episodes": 28800,
-        "*.trakt.tv/shows/*/seasons": DO_NOT_CACHE,
-        "*.trakt.tv/sync/collection/shows": "1m",
-        "*.trakt.tv/users/*/collection/movies?extended=metadata": "1m",
-        "*.trakt.tv/users/*/collection/movies": DO_NOT_CACHE,
-        "*.trakt.tv/users/*/collection/shows": "1m",
-        "*.trakt.tv/users/*/ratings/episodes": "1m",
-        "*.trakt.tv/users/*/ratings/shows": "1m",
-        "*.trakt.tv/users/*/ratings/movies": "1m",
+        "api.trakt.tv/shows/*/seasons?extended=episodes": 28800,
+        "api.trakt.tv/shows/*/seasons": DO_NOT_CACHE,
+        "api.trakt.tv/sync/collection/shows": "1m",
+        "api.trakt.tv/users/*/collection/movies?extended=metadata": "1m",
+        "api.trakt.tv/users/*/collection/movies": DO_NOT_CACHE,
+        "api.trakt.tv/users/*/collection/shows": "1m",
+        "api.trakt.tv/users/*/ratings/episodes": "1m",
+        "api.trakt.tv/users/*/ratings/shows": "1m",
+        "api.trakt.tv/users/*/ratings/movies": "1m",
 
         # Trakt search urls
-        "*.trakt.tv/search/imdb/tt*?type=movie": "1d",
-        "*.trakt.tv/search/imdb/tt*?type=show": "1d",
-        "*.trakt.tv/search/tmdb/*?type=movie": "1d",
-        "*.trakt.tv/search/tmdb/*?type=show": "1d",
-        "*.trakt.tv/search/tvdb/*?type=show": "1d",
+        "api.trakt.tv/search/imdb/tt*?type=movie": "1d",
+        "api.trakt.tv/search/imdb/tt*?type=show": "1d",
+        "api.trakt.tv/search/tmdb/*?type=movie": "1d",
+        "api.trakt.tv/search/tmdb/*?type=show": "1d",
+        "api.trakt.tv/search/tvdb/*?type=show": "1d",
 
         # Keep watched status cached, but fresh
-        "*.trakt.tv/sync/watched/shows": "1s",
-        "*.trakt.tv/users/*/watched/movies": "1s",
+        "api.trakt.tv/sync/watched/shows": "1s",
+        "api.trakt.tv/users/*/watched/movies": "1s",
 
         # Watchlist better be fresh for next run
-        "*.trakt.tv/users/*/watchlist/movies": "1s",
-        "*.trakt.tv/users/*/watchlist/shows": "1s",
+        "api.trakt.tv/users/*/watchlist/movies": "1s",
+        "api.trakt.tv/users/*/watchlist/shows": "1s",
         "metadata.provider.plex.tv/library/sections/watchlist/all?*includeUserState=0": "1s",
         "metadata.provider.plex.tv/library/sections/watchlist/all": "1s",
 
-        "*.trakt.tv/users/likes/lists": DO_NOT_CACHE,
-        "*.trakt.tv/users/me": DO_NOT_CACHE,
+        "api.trakt.tv/users/likes/lists": DO_NOT_CACHE,
+        "api.trakt.tv/users/me": DO_NOT_CACHE,
 
         # Online Plex patterns
         "metadata.provider.plex.tv/library/metadata/*/userState": DO_NOT_CACHE,
