@@ -215,7 +215,12 @@ class Media(RichMarkup):
 
     @cached_property
     def plex_rating(self):
-        show_id = self.show.plex.item.ratingKey if self.media_type == "episodes" and not self.plex.is_discover else None
+        if self.media_type == "episodes" and not self.plex.is_discover:
+            if not self.show:
+                raise RuntimeError(f"Need show attribute, but it is missing for {self}")
+            show_id = self.show.plex.item.ratingKey
+        else:
+            show_id = None
         return self.plex.rating(show_id)
 
     def trakt_rate(self):
