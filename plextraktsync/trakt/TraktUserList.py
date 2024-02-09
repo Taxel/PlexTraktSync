@@ -20,8 +20,6 @@ class TraktUserList:
                  name: str = None,
                  items=None,
                  ):
-        if items is None:
-            items = []
         self.trakt_id = trakt_id
         self.name = name
         self._items = items
@@ -42,7 +40,7 @@ class TraktUserList:
 
     @property
     def items(self):
-        if not self._items:
+        if self._items is None:
             self.description, self._items = self.load_items()
         return self._items
 
@@ -56,7 +54,7 @@ class TraktUserList:
             for elem in list_items
             if elem[0] in ["movies", "episodes"]
         ]
-        self.logger.info(f"Downloaded Trakt list '{self.name}' https://trakt.tv/lists/{self.trakt_id}")
+        self.logger.info(f"Downloaded Trakt list '{self.name}' ({len(list_items)} items): https://trakt.tv/lists/{self.trakt_id}")
 
         return userlist.description, dict(zip(prelist, count(1)))
 
