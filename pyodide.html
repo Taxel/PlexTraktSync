@@ -8,12 +8,24 @@
     Open your browser console to see Pyodide output
     <script type="text/javascript">
       async function main(){
-        let pyodide = await loadPyodide();
-        console.log(pyodide.runPython(`
-            import sys
-            sys.version
-        `));
-        pyodide.runPython("print(1 + 2)");
+        const pyodide = await loadPyodide();
+        window.p = pyodide
+        await pyodide.loadPackage("certifi");
+        await pyodide.loadPackage("urllib3");
+        pyodide.runPython(`
+
+        def main():
+          import certifi
+          import urllib3
+          resp = urllib3.request("GET", "https://api.trakt.tv/users/me")
+
+          print(resp.status)  # 200
+          print(resp.headers) # HTTPHeaderDict(...)
+          print(resp.data)    # ...
+
+        main()
+        `)
+
       }
       main();
     </script>
