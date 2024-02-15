@@ -44,7 +44,7 @@ def command():
 
 @click.group(invoke_without_command=True)
 @click.option("--version", is_flag=True, help="Print version and exit")
-@click.option("--no-cache", is_flag=True, help="Disable cache in for Trakt HTTP requests")
+@click.option("--no-cache", is_flag=True, help="Disable cache for Trakt HTTP requests")
 @click.option("--no-progressbar", is_flag=True, help="Disable progressbar")
 @click.option("--batch-delay", default=5, show_default=True,
               help="Time in seconds between each collection batch submit to Trakt")
