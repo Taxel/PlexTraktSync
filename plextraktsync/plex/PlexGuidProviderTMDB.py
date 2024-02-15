@@ -7,16 +7,33 @@ if TYPE_CHECKING:
 
 
 class PlexGuidProviderTMDB:
+    url = "https://www.themoviedb.org"
+
     def __init__(self, guid: PlexGuid):
         self.guid = guid
 
     @property
     def link(self):
-        return f"https://www.themoviedb.org/{self.type}/{self.guid.id}"
+        if self.guid.type == "episode":
+            return f"{self.url}/tv/{self.show_guid.id}/season/{self.season_number}/episode/{self.episode_number}"
+
+        return f"{self.url}/{self.type}/{self.guid.id}"
 
     @property
     def title(self):
         return f"{self.guid.provider}:{self.guid.type}:{self.guid.id}"
+
+    @property
+    def show_guid(self):
+        return next(guid for guid in self.guid.pm.show.guids if guid.provider == "tmdb")
+
+    @property
+    def season_number(self):
+        return self.guid.pm.season_number
+
+    @property
+    def episode_number(self):
+        return self.guid.pm.episode_number
 
     @property
     def type(self):
