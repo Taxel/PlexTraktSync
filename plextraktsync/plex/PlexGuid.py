@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from plextraktsync.factory import factory
 from plextraktsync.mixin.RichMarkup import RichMarkup
+from plextraktsync.plex.PlexGuidProvider import PlexGuidProvider
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
@@ -100,6 +101,16 @@ class PlexGuid(RichMarkup):
             return self.pm.title_link
 
         return self.markup_title(str(self))
+
+    @property
+    def provider_link(self):
+        provider = PlexGuidProvider().create(self)
+        link = provider.link
+
+        if not link:
+            return self.markup_title(provider.title)
+
+        return self.markup_link(link, provider.title)
 
     def __str__(self):
         return f"<PlexGuid:{self.guid}>"
