@@ -12,7 +12,7 @@ class PlexGuidProviderIMDB:
 
     @property
     def link(self):
-        return f"https://www.imdb.com/title/{self.guid.id}"
+        return f"https://www.imdb.com/title/{self.guid.id}/"
 
     @property
     def title(self):
