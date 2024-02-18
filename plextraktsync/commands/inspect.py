@@ -70,7 +70,7 @@ def inspect_media(plex_id: PlexId):
 
     print("Guids:")
     for guid in pm.guids:
-        print(f"  Guid: {guid}, Id: {guid.id}, Provider: '{guid.provider}'")
+        print(f"  Guid: {guid.provider_link}, Id: {guid.id}, Provider: '{guid.provider}'")
 
     print(f"Metadata: {pm.to_json()}")
     print(f"Played on Plex: {pm.is_watched}")
