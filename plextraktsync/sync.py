@@ -84,7 +84,7 @@ class Sync:
                     if self.config.clear_collected:
                         episode_trakt_ids.add(episode.trakt_id)
 
-                if self.config.sync_ratings:
+                if self.config.sync_ratings and episode.show:
                     # collect shows for later ratings sync
                     shows.add(episode.show)
 
