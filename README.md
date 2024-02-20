@@ -396,7 +396,7 @@ This can also be used to have different configs between different libraries. To 
 The above config would make it so that the "Movies" library syncs both ratings and watched status, while the "TV Shows" library only syncs ratings.
 To then run the sync you need to specify `--server Example1` or `--server Example2` to run the sync for that specific server. Running the sync command without it will result in running the sync using the default config.
 
-If you want to run these jobs using `oflia`, you can do so by running something similar to this in your `docker-compose.yml`:
+If you want to run these jobs using `ofelia`, you can do so by running something similar to this in your `docker-compose.yml`:
 ```yml
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
