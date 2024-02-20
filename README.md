@@ -343,6 +343,90 @@ $ plextraktsync --server=Example1 info
 INFO     Enabled 2 libraries in Plex Server: ['Movies', 'TV Shows']
 ```
 
+### Per server configuration
+
+If you want to specify your config per server you can do so inside of `servers.yml`. Within the `config` part of the server configuration you can specify how that specific server should work.
+
+```yml
+  Example1:
+    token: ~
+    urls:
+      - http://localhost:32400
+    config:
+      sync:
+        plex_to_trakt:
+          collection: true
+        trakt_to_plex:
+          liked_lists: false
+```
+Both `watch` and `sync` can be used inside of the config key-value.
+
+This can also be used to have different configs between different libraries. To be able to do this you specifiy the number of servers you need (most likely equal to the number of different config setups you need). For example:
+
+```yml
+  Example1:
+    token: ~
+    urls:
+      - http://localhost:32400
+    config:
+      libraries:
+        - "Movies"
+      sync:
+        plex_to_trakt:
+          ratings: true
+          watched_status: true
+        trakt_to_plex:
+          ratings: true
+          watched_status: true
+  Example2:
+    token: ~
+    urls:
+      - http://localhost:32400
+    config:
+      libraries:
+        - "TV Shows"
+      sync:
+        plex_to_trakt:
+          ratings: true
+          watched_status: false
+        trakt_to_plex:
+          ratings: true
+          watched_status: false
+```
+The above config would make it so that the "Movies" library syncs both ratings and watched status, while the "TV Shows" library only syncs ratings.
+To then run the sync you need to specify `--server Example1` or `--server Example2` to run the sync for that specific server. Running the sync command without it will result in running the sync using the default config.
+
+If you want to run these jobs using `oflia`, you can do so by running something similar to this in your `docker-compose.yml`:
+```yml
+  plextraktsync: # - SIngle run  sudo docker-compose run --rm plextraktsync --server "The Big Vault Movies" sync; sudo docker-compose run --rm plextraktsync --server "The Big Vault TV Shows" sync
+    image: ghcr.io/taxel/plextraktsync
+    command: sync
+    container_name: plextraktsync
+    profiles: ["schedule"]
+    volumes:
+      - /configs/mediarr/plextraktsync:/app/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+    depends_on:
+      - plex
+  scheduler:
+    image: mcuadros/ofelia:latest
+    container_name: scheduler
+    command: daemon --docker
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      ofelia.job-run.plextraktsync.schedule: "0 6,18 * * *"
+      ofelia.job-run.plextraktsync.container: "plextraktsync"
+      ofelia.job-run.plextraktsync.command: "--server 'Example1' sync"
+      ofelia.job-run.plextraktsync2.schedule: "0 12,0 * * *"
+      ofelia.job-run.plextraktsync2.container: "plextraktsync"
+      ofelia.job-run.plextraktsync2.command: "--server 'Example2' sync"
+```
+This means that a job is running every 6 hours, alternating between the two "servers". Keep in mind that since this example assumes that you are only running one container, you need to make sure that the jobs don't overlap.
+
 ### Logging
 
 The logging level by default is `INFO`. This can be changed to DEBUG by editing
