@@ -398,7 +398,7 @@ To then run the sync you need to specify `--server Example1` or `--server Exampl
 
 If you want to run these jobs using `oflia`, you can do so by running something similar to this in your `docker-compose.yml`:
 ```yml
-  plextraktsync: # - SIngle run  sudo docker-compose run --rm plextraktsync --server "The Big Vault Movies" sync; sudo docker-compose run --rm plextraktsync --server "The Big Vault TV Shows" sync
+  plextraktsync:
     image: ghcr.io/taxel/plextraktsync
     command: sync
     container_name: plextraktsync
