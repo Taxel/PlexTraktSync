@@ -368,7 +368,7 @@ Options:
   --no-progressbar       Disable progressbar
   --batch-delay INTEGER  Time in seconds between each collection batch submit
                          to Trakt  [default: 5]
-  --server TEXT          Plex Server name from servers.yml
+  --server NAME          Plex Server name from servers.yml
   --help                 Show this message and exit.
 
 Commands:
