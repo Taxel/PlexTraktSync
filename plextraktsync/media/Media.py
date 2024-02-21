@@ -222,7 +222,10 @@ class Media(RichMarkup):
         return self.plex.rating(show_id)
 
     def trakt_rate(self):
-        self.trakt_api.rate(self.trakt, self.plex_rating)
+        rating = self.plex_rating
+        if rating is None:
+            return
+        self.trakt_api.rate(self.trakt, rating)
 
     def plex_rate(self):
         rating = self.trakt_rating
