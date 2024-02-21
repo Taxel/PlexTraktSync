@@ -83,4 +83,4 @@ def imdb_import(input: PathLike, dry_run: bool):
             continue
         print(f"{'Would rate' if dry_run else 'Rating'} {m} with {r.rating} (was {rating})")
         if not dry_run:
-            trakt.rate(m, r.rating)
+            trakt.rate(m, r.rating, r.rate_date)
