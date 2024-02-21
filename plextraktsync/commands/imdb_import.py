@@ -50,16 +50,16 @@ class Ratings:
 
         return self.type
 
-    @staticmethod
-    def from_csv(row):
-        mapping = Ratings.FIELD_MAPPING
+    @classmethod
+    def from_csv(cls, row):
+        mapping = cls.FIELD_MAPPING
         data = {}
         for k, v in row.items():
             if k not in mapping:
                 continue
             data[mapping[k]] = v
 
-        return Ratings(**data)
+        return cls(**data)
 
 
 def imdb_import(input: PathLike, dry_run: bool):
