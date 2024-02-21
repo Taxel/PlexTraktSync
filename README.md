@@ -359,7 +359,7 @@ If you want to specify your config per server you can do so inside of `servers.y
         trakt_to_plex:
           liked_lists: false
 ```
-Only `sync` can be used inside of the config key-value. Keep in mind that the sync-config set in `servers.yml` overrides the global sync-config in `config.yml`.
+Using `sync` in a server config overrides the global sync-config in `config.yml`.
 
 This can also be used to have different configs between different libraries. To be able to do this you specifiy the number of servers you need (most likely equal to the number of different config setups you need). For example:
 
@@ -425,7 +425,9 @@ If you want to run these jobs using `ofelia`, you can do so by running something
       ofelia.job-run.plextraktsync2.container: "plextraktsync"
       ofelia.job-run.plextraktsync2.command: "--server 'Example2' sync"
 ```
-This means that a job is running every 6 hours, alternating between the two "servers". Keep in mind that since this example assumes that you are only running one container, you need to make sure that the jobs don't overlap.
+If you are running only one PlexTraktSync container, you need to make sure that the two jobs Ofelia jobs don't run at the same time. Depending on how long it takes for the job to run on your server you might have to keep the schedule of the two jobs seperated with a few minutes or a few hours. If you have two different PlexTraktSync containers in your docker compose, you can run them at the same time.
+
+The above config means that a job is running every 6 hours, alternating between the two "servers". The PlexTraktSync container also has a profile (docker-compose feature) called "schedule" which means that it won't run automatically when you run for example `docker-compose up`.
 
 ### Logging
 
