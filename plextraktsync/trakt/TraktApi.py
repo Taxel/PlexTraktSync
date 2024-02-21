@@ -160,8 +160,8 @@ class TraktApi:
     @rate_limit()
     @time_limit()
     @retry()
-    def rate(self, m: TraktMedia, rating: int):
-        m.rate(rating)
+    def rate(self, m: TraktMedia, rating: int, rate_date: datetime.datetime = None):
+        m.rate(rating, rate_date)
 
     @rate_limit()
     @time_limit()
