@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import csv
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from functools import cached_property
 from typing import TYPE_CHECKING
 
@@ -42,6 +42,14 @@ class Ratings:
         # 'Release Date': 'release_date',
         # 'Directors': 'directors',
     }
+
+    def __post_init__(self):
+        # cast "int" fields
+        fieldnames = [f.name for f in fields(self) if f.type == "int"]
+        for name in fieldnames:
+            value = self.__dict__[name]
+            if value is not None and not isinstance(value, int):
+                self.__dict__[name] = int(value)
 
     @cached_property
     def media_type(self):
