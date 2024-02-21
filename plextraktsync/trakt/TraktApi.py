@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 from functools import cached_property
 from typing import TYPE_CHECKING
 
@@ -165,7 +166,7 @@ class TraktApi:
     @rate_limit()
     @time_limit()
     @retry()
-    def mark_watched(self, m: TraktMedia, time, show_trakt_id=None):
+    def mark_watched(self, m: TraktMedia, time: datetime.datetime, show_trakt_id=None):
         if m.media_type == "movies":
             self.watched_movies.add(m.trakt)
         elif m.media_type == "episodes" and show_trakt_id:
