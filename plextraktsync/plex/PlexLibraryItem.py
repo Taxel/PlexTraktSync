@@ -353,7 +353,7 @@ class PlexLibraryItem(RichMarkup):
         self._show = show
 
     @staticmethod
-    def date_value(date):
+    def date_value(date) -> datetime.datetime | None:
         if not date:
             return None
 
