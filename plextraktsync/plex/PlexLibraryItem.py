@@ -10,6 +10,7 @@ from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory
 from plextraktsync.mixin.RichMarkup import RichMarkup
 from plextraktsync.plex.PlexGuid import PlexGuid
+from plextraktsync.util.Rating import Rating
 
 if TYPE_CHECKING:
     from plexapi.media import MediaPart
@@ -156,7 +157,7 @@ class PlexLibraryItem(RichMarkup):
         if user_rating is None:
             return None
 
-        return int(user_rating)
+        return Rating(int(user_rating), self.item.lastRatedAt)
 
     @property
     def seen_date(self):
