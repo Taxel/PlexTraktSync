@@ -425,7 +425,9 @@ If you want to run these jobs using `ofelia`, you can do so by running something
       ofelia.job-run.plextraktsync2.container: "plextraktsync"
       ofelia.job-run.plextraktsync2.command: "--server 'Example2' sync"
 ```
-If you are running only one PlexTraktSync container, you need to make sure that the two jobs Ofelia jobs don't run at the same time. Depending on how long it takes for the job to run on your server you might have to keep the schedule of the two jobs seperated with a few minutes or a few hours. If you have two different PlexTraktSync containers in your docker compose, you can run them at the same time.
+If you are running only one PlexTraktSync container, you need to make sure that the two jobs Ofelia jobs don't run at the same time. Ofelia skips scheduling a new job run if the previous job is still running.
+
+Depending on how long it takes for the job to run on your server you might have to keep the schedule of the two jobs seperated with a few minutes or a few hours. If you have two different PlexTraktSync containers in your docker compose, you can run them at the same time.
 
 The above config means that a job is running every 6 hours, alternating between the two "servers". The PlexTraktSync container also has a [docker compose profile] called "schedule" which means that it won't run automatically when you run for example `docker-compose up`.
 
