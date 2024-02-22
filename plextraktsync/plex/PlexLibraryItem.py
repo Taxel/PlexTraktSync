@@ -148,7 +148,6 @@ class PlexLibraryItem(RichMarkup):
 
         return value
 
-    @retry(retries=1)
     def rating(self, show_id: int = None):
         if not self.is_discover and self.plex is not None:
             return self.plex.ratings.get(self, show_id)
