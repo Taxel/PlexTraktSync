@@ -15,6 +15,9 @@ class Rating(NamedTuple):
         if isinstance(other, (int, float)):
             return self.rating == int(other)
 
+        if other is None:
+            return False
+
         return self.rating == other.rating
 
     def __str__(self):
