@@ -394,7 +394,9 @@ This can also be used to have different configs between different libraries. To 
           watched_status: false
 ```
 The above config would make it so that the "Movies" library syncs both ratings and watched status, while the "TV Shows" library only syncs ratings.
-To then run the sync you need to specify `--server Example1` or `--server Example2` to run the sync for that specific server. Running the sync command without it will result in running the sync using the default config.
+To then run the sync you need to specify `--server Example1` or `--server Example2` to run the sync for that specific server.
+
+Running the sync command without `--server` will use default server from `.env`
 
 If you want to run these jobs using `ofelia`, you can do so by running something similar to this in your `docker-compose.yml`:
 ```yml
