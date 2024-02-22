@@ -7,7 +7,7 @@ from trakt.utils import timestamp
 
 
 class Rating(NamedTuple):
-    rating: int | None
+    rating: int
     rated_at: datetime | None
 
     def __eq__(self, other):
