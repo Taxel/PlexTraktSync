@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import csv
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from functools import cached_property
 from typing import TYPE_CHECKING
 
@@ -43,6 +43,14 @@ class Ratings:
         # 'Directors': 'directors',
     }
 
+    def __post_init__(self):
+        # cast "int" fields
+        fieldnames = [f.name for f in fields(self) if f.type == "int"]
+        for name in fieldnames:
+            value = self.__dict__[name]
+            if value is not None and not isinstance(value, int):
+                self.__dict__[name] = int(value)
+
     @cached_property
     def media_type(self):
         if self.type == "tvSeries":
@@ -50,16 +58,16 @@ class Ratings:
 
         return self.type
 
-    @staticmethod
-    def from_csv(row):
-        mapping = Ratings.FIELD_MAPPING
+    @classmethod
+    def from_csv(cls, row):
+        mapping = cls.FIELD_MAPPING
         data = {}
         for k, v in row.items():
             if k not in mapping:
                 continue
             data[mapping[k]] = v
 
-        return Ratings(**data)
+        return cls(**data)
 
 
 def imdb_import(input: PathLike, dry_run: bool):
@@ -70,6 +78,9 @@ def imdb_import(input: PathLike, dry_run: bool):
         print(f"Importing [blue]{r.media_type} {r.imdb}[/]: {r.title} ({r.year}), rated at {r.rate_date}")
         m = trakt.search_by_id(r.imdb, "imdb", r.media_type)
         rating = trakt.rating(m)
+        if r.rating == rating:
+            print(f"Rating {rating} already exists")
+            continue
         print(f"{'Would rate' if dry_run else 'Rating'} {m} with {r.rating} (was {rating})")
         if not dry_run:
             trakt.rate(m, r.rating)
