@@ -122,7 +122,7 @@ class Sync:
         if not self.config.sync_ratings:
             return
 
-        if m.plex_rating is m.trakt_rating:
+        if m.plex_rating == m.trakt_rating:
             return
 
         rating_priority = self.config["rating_priority"]
