@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import NamedTuple
 
 
@@ -19,6 +19,12 @@ class Rating(NamedTuple):
 
         rating = int(rating)
         if isinstance(rated_at, str):
-            rated_at = datetime.fromisoformat(rated_at)
+            try:
+                rated_at = datetime.fromisoformat(rated_at)
+            except ValueError:
+                # Handle older Python < 3.11
+                rated_at = (datetime.strptime(rated_at, "%Y-%m-%dT%H:%M:%S.%fZ")
+                            # https://stackoverflow.com/questions/3305413/how-to-preserve-timezone-when-parsing-date-time-strings-with-strptime/63988322#63988322
+                            .replace(tzinfo=timezone.utc))
 
         return cls(rating, rated_at)
