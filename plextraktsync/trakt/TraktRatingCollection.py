@@ -30,4 +30,4 @@ class TraktRatingCollection(dict):
     def ratings(self, media_type: str):
         index = media_type.rstrip("s")
         for r in self.trakt.get_ratings(media_type):
-            yield r[index]["ids"]["trakt"], Rating(r["rating"], r["rated_at"])
+            yield r[index]["ids"]["trakt"], Rating.create(r["rating"], r["rated_at"])

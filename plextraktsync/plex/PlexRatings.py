@@ -39,7 +39,7 @@ class PlexRatings:
             # if show id is not listed, return none, otherwise fetch from item itself
             if show_id not in ratings:
                 return None
-            return Rating(m.item.userRating, m.item.lastRatedAt)
+            return Rating.create(m.item.userRating, m.item.lastRatedAt)
         else:
             raise RuntimeError(f"Unsupported media type: {media_type}")
 
@@ -62,4 +62,4 @@ class PlexRatings:
         }
 
         for item in section.search(filters=filters, includeGuids=False):
-            yield item.ratingKey, Rating(int(item.userRating), item.lastRatedAt)
+            yield item.ratingKey, Rating.create(item.userRating, item.lastRatedAt)
