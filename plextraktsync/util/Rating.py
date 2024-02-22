@@ -5,15 +5,12 @@ from typing import NamedTuple
 
 
 class Rating(NamedTuple):
-    rating: int | float | None
-    rated_at: datetime | str | None
+    rating: int | None
+    rated_at: datetime | None
 
     def __eq__(self, other):
         """ Ratings are equal if their rating value is the same """
-        if self.rating is None or other.rating is None:
-            return self.rating is other.rating
-
-        return int(self.rating) == int(other.rating)
+        return self.rating == other.rating
 
     @classmethod
     def create(cls, rating: int | float | None, rated_at: datetime | str | None):
