@@ -10,4 +10,7 @@ class Rating(NamedTuple):
 
     def __eq__(self, other):
         """ Ratings are equal if their rating value is the same """
-        return self.rating == other.rating
+        if self.rating is None or other.rating is None:
+            return self.rating is other.rating
+
+        return int(self.rating) == int(other.rating)
