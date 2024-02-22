@@ -361,7 +361,7 @@ If you want to specify your config per server you can do so inside of `servers.y
 ```
 Using `sync` in a server config overrides the global sync-config in `config.yml`.
 
-This can also be used to have different configs between different libraries. To be able to do this you specifiy the number of servers you need (most likely equal to the number of different config setups you need). For example:
+This can also be used to have different configs between different libraries. To be able to do this you specify the number of servers you need (most likely equal to the number of different config setups you need). For example:
 
 ```yml
   Example1:
