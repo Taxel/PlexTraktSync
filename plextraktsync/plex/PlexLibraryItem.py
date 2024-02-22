@@ -153,11 +153,7 @@ class PlexLibraryItem(RichMarkup):
         if not self.is_discover and self.plex is not None:
             return self.plex.ratings.get(self, show_id)
 
-        user_rating = self.item.userRating
-        if user_rating is None:
-            return None
-
-        return Rating.create(user_rating, self.item.lastRatedAt)
+        return Rating.create(self.item.userRating, self.item.lastRatedAt)
 
     @property
     def seen_date(self):
