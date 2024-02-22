@@ -3,6 +3,8 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import NamedTuple
 
+from trakt.utils import timestamp
+
 
 class Rating(NamedTuple):
     rating: int | None
@@ -11,6 +13,9 @@ class Rating(NamedTuple):
     def __eq__(self, other):
         """ Ratings are equal if their rating value is the same """
         return self.rating == other.rating
+
+    def __str__(self):
+        return f"Rating(rating={self.rating}, rated_at='{timestamp(self.rated_at)}')"
 
     @classmethod
     def create(cls, rating: int | float | None, rated_at: datetime | str | None):
