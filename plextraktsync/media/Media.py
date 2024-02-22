@@ -225,7 +225,10 @@ class Media(RichMarkup):
         self.trakt_api.rate(self.trakt, self.plex_rating)
 
     def plex_rate(self):
-        self.plex_api.rate(self.plex.item, self.trakt_rating)
+        rating = self.trakt_rating
+        if rating is None:
+            return
+        self.plex_api.rate(self.plex.item, rating)
 
     def plex_history(self, **kwargs):
         if self.plex.is_discover:
