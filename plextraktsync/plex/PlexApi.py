@@ -142,7 +142,7 @@ class PlexApi:
         return PlexRatings(self)
 
     @retry()
-    def rate(self, m, rating):
+    def rate(self, m: PlexMedia, rating: int | float | None):
         m.rate(rating)
 
     def update_playlist(self, name: str, items: list[PlexMedia], description=None) -> bool:

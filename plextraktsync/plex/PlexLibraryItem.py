@@ -151,9 +151,8 @@ class PlexLibraryItem(RichMarkup):
     def rating(self, show_id: int = None):
         if not self.is_discover and self.plex is not None:
             return self.plex.ratings.get(self, show_id)
-        else:
-            user_rating = self.item.userRating
 
+        user_rating = self.item.userRating
         if user_rating is None:
             return None
 
