@@ -14,8 +14,10 @@ class Rating(NamedTuple):
 
     @classmethod
     def create(cls, rating: int | float | None, rated_at: datetime | str | None):
-        if rating is not None:
-            rating = int(rating)
+        if rating is None:
+            return None
+
+        rating = int(rating)
         if isinstance(rated_at, str):
             rated_at = datetime.fromisoformat(rated_at)
 
