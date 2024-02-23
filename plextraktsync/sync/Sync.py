@@ -43,7 +43,7 @@ class Sync:
         return TraktWatchList(self.trakt.watchlist_movies + self.trakt.watchlist_shows)
 
     def sync(self, walker: Walker, dry_run=False):
-        trakt_lists = TraktUserListCollection()
+        trakt_lists = TraktUserListCollection(self.config.liked_lists_keep_watched)
         is_partial = walker.is_partial and not dry_run
 
         if is_partial and self.config.clear_collected:
