@@ -6,7 +6,7 @@ from plexapi.exceptions import PlexApiException
 from requests import RequestException
 from trakt.errors import TraktException
 
-from plextraktsync.factory import logger
+from plextraktsync.factory import logging
 from plextraktsync.media.Media import Media
 
 if TYPE_CHECKING:
@@ -25,18 +25,19 @@ class MediaFactory:
     def __init__(self, plex: PlexApi, trakt: TraktApi):
         self.plex = plex
         self.trakt = trakt
+        self.logger = logging.getLogger(__name__)
 
     def resolve_any(self, pm: PlexLibraryItem, show: Media = None) -> Media | None:
         try:
             guids = pm.guids
         except (PlexApiException, RequestException) as e:
-            logger.error(f"Skipping {pm}: {e}")
+            self.logger.error(f"Skipping {pm}: {e}")
             return None
 
         for guid in guids:
             m = self.resolve_guid(guid, show)
             if m:
-                logger.debug(f"Resolved {guid} of {guid.pm} to {m}")
+                self.logger.debug(f"Resolved {guid} of {guid.pm} to {m}")
                 return m
 
         return None
@@ -55,7 +56,7 @@ class MediaFactory:
                 level = "error"
                 reason = "is not a valid provider"
 
-            getattr(logger, level)(f"{error} {reason}", extra={"markup": True})
+            getattr(self.logger, level)(f"{error} {reason}", extra={"markup": True})
 
             return None
 
@@ -65,11 +66,11 @@ class MediaFactory:
             else:
                 tm = self.trakt.find_by_guid(guid)
         except (TraktException, RequestException) as e:
-            logger.warning(f"{guid.title_link}: Skipping {guid}: Trakt errors: {e}", extra={"markup": True})
+            self.logger.warning(f"{guid.title_link}: Skipping {guid}: Trakt errors: {e}", extra={"markup": True})
             return None
 
         if tm is None:
-            logger.warning(f"{guid.title_link}: Skipping {guid} not found on Trakt", extra={"markup": True})
+            self.logger.warning(f"{guid.title_link}: Skipping {guid} not found on Trakt", extra={"markup": True})
             return None
 
         return self.make_media(guid.pm, tm)
