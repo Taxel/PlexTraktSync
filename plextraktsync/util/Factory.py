@@ -137,7 +137,7 @@ class Factory:
 
     @cached_property
     def sync(self):
-        from plextraktsync.sync import Sync
+        from plextraktsync.sync.Sync import Sync
 
         plex = self.plex_api
         trakt = self.trakt_api
