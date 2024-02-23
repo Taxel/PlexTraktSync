@@ -17,7 +17,7 @@ from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
-from plextraktsync.factory import factory, logger
+from plextraktsync.factory import factory, logging
 from plextraktsync.path import pytrakt_file
 from plextraktsync.trakt.PartialTraktMedia import PartialTraktMedia
 from plextraktsync.trakt.TraktLookup import TraktLookup
@@ -41,6 +41,7 @@ class TraktApi:
     def __init__(self):
         trakt.core.CONFIG_PATH = pytrakt_file
         trakt.core.session = factory.session
+        self.logger = logging.getLogger(__name__)
 
     @staticmethod
     def device_auth(client_id: str, client_secret: str):
@@ -55,7 +56,7 @@ class TraktApi:
         try:
             return trakt.users.User("me")
         except OAuthRefreshException as e:
-            logger.error(f"{e.error}: {e.error_description}")
+            self.logger.error(f"{e.error}: {e.error_description}")
             raise ClickException("Trakt error: Unable to refresh token")
         except (OAuthException, ForbiddenException) as e:
             raise ClickException(f"Trakt authentication error: {str(e)}")
@@ -240,7 +241,7 @@ class TraktApi:
             tm = self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
             if tm is None and guid.type == "movie":
                 if self.search_by_id(guid.id, id_type=guid.provider, media_type="show"):
-                    logger.warning(f"Found match using show search: {guid.title_link}", extra={"markup": True})
+                    self.logger.warning(f"Found match using show search: {guid.title_link}", extra={"markup": True})
 
             return tm
 
@@ -251,16 +252,16 @@ class TraktApi:
             # Skip invalid search.
             # The Trakt API states that tvdb is only for shows and episodes:
             # https://trakt.docs.apiary.io/#reference/search/id-lookup/get-id-lookup-results
-            logger.debug(f"search_by_id: tvdb does not support movie provider, skip {id_type}/{media_type}/{media_id}")
+            self.logger.debug(f"search_by_id: tvdb does not support movie provider, skip {id_type}/{media_type}/{media_id}")
             return None
         if media_type == "season":
             # Search by season is missing
             # https://github.com/Taxel/PlexTraktSync/issues/1117#issuecomment-1286884897
-            logger.debug("trakt does not support search by season")
+            self.logger.debug("trakt does not support search by season")
             return None
 
         if not self.valid_trakt_id(media_id):
-            logger.error(f"Ignoring invalid id: '{media_id}'")
+            self.logger.error(f"Ignoring invalid id: '{media_id}'")
 
             return None
 
@@ -271,8 +272,8 @@ class TraktApi:
             return None
 
         if len(search) > 1:
-            logger.debug(f"search_by_id({media_id}, {id_type}, {media_type}) got {len(search)} results, taking first one")
-            logger.debug([pm.to_json() for pm in search])
+            self.logger.debug(f"search_by_id({media_id}, {id_type}, {media_type}) got {len(search)} results, taking first one")
+            self.logger.debug([pm.to_json() for pm in search])
 
         # TODO: sort by "score"?
         return search[0]
@@ -302,7 +303,7 @@ class TraktApi:
         if te:
             return te
 
-        logger.debug(f"Retry using search for specific Plex Episode {guid.guid}")
+        self.logger.debug(f"Retry using search for specific Plex Episode {guid.guid}")
         if not guid.is_episode:
             return self.find_by_guid(guid)
         return None
