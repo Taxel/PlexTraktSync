@@ -219,15 +219,30 @@ class Factory:
     def logging(self):
         import logging
 
+        from plextraktsync.decorators.memoize import memoize
         from plextraktsync.logger.init import initialize
 
         config = self.config
         initialize(config)
+        logger_filter = self.logger_filter
 
-        # Setup log filters
-        self.logger_filter_apply(logging.getLogger("plextraktsync"))
+        # Setup log filters for external packages
+        self.logger_filter_apply(logger_filter)
 
-        return logging
+        class Logging:
+            @staticmethod
+            @memoize
+            def getLogger(name):
+                """ Wrap getLogger and add our filters """
+                logger = logging.getLogger(name)
+                logger.addFilter(logger_filter)
+                return logger
+
+            def __getattr__(self, name):
+                """ Wrap log level attributes """
+                return getattr(logging, name)
+
+        return Logging()
 
     @cached_property
     def logger(self):
@@ -244,45 +259,13 @@ class Factory:
 
         return LoggerFilter(config["logging"]["filter"], logger)
 
-    def logger_filter_apply(self, logger):
-        config = self.config
-        loggers = [
-            "plextraktsync",
-            "plextraktsync.cli",
-            "plextraktsync.commands.sync",
-            "plextraktsync.decorators.measure_time",
-            "plextraktsync.decorators.rate_limit",
-            "plextraktsync.decorators.retry",
-            "plextraktsync.media.MediaFactory",
-            "plextraktsync.plan.Walker",
-            "plextraktsync.plex.PlexApi",
-            "plextraktsync.plex.PlexPlaylist",
-            "plextraktsync.plex.PlexServerConnection",
-            "plextraktsync.queue.BackgroundTask",
-            "plextraktsync.queue.TraktBatchWorker",
-            "plextraktsync.queue.TraktMarkWatchedWorker",
-            "plextraktsync.queue.TraktScrobbleWorker",
-            "plextraktsync.sync",
-            "plextraktsync.trakt.ScrobblerProxy",
-            "plextraktsync.trakt.TraktApi",
-            "plextraktsync.trakt.TraktLookup",
-            "plextraktsync.trakt.TraktUserList",
-            "plextraktsync.trakt.TraktUserListCollection",
-            "plextraktsync.util.Factory",
-            "plextraktsync.util.Timer",
-            "plextraktsync.watch.EventDispatcher",
-            "plextraktsync.watch.WatchStateUpdater",
-            "plextraktsync.watch.WebSocketListener",
-        ]
-        loggers.extend(config["logging"]["filter_loggers"] or [])
-
+    def logger_filter_apply(self, logger_filter):
         import logging
+        config = self.config
+        loggers = config["logging"]["filter_loggers"] or []
 
-        logger_filter = self.logger_filter
         for name in loggers:
             logging.getLogger(name).addFilter(logger_filter)
-
-        return logger
 
     @cached_property
     def console_logger(self):
