@@ -36,6 +36,7 @@ class MediaFactory:
         for guid in guids:
             m = self.resolve_guid(guid, show)
             if m:
+                logger.debug(f"Resolved {guid} of {guid.pm} to {m}")
                 return m
 
         return None
