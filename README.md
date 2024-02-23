@@ -349,7 +349,9 @@ you can see the final list of libraries with info command:
 
 ```commandline
 $ plextraktsync --server=Example1 info
-INFO     Enabled 2 libraries in Plex Server: ['Movies', 'TV Shows']
+Enabled 2 libraries in Plex Server:
+ - 1: Movies
+ - 2: TV Shows
 ```
 
 ### Per server configuration
