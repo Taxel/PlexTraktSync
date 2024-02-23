@@ -19,6 +19,7 @@ have a file containing those on your harddrive, you can not use this project.
 ## Contribute
 
 **Looking for a way to contribute?**
+
 - find issues with the [help-wanted] label
 - improve documentation [docs-needed] label
 - you can also just [create a pull request] to improve documentation
@@ -28,7 +29,7 @@ have a file containing those on your harddrive, you can not use this project.
 [docs-needed]: https://github.com/Taxel/PlexTraktSync/issues?q=label%3A%22docs+needed%22+sort%3Aupdated-desc
 [create a pull request]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request
 
-----
+---
 
 - [Plex-Trakt-Sync](#plex-trakt-sync)
   - [Features](#features)
@@ -118,7 +119,7 @@ NOTE: `pipx` install will use OS specific paths for Config, Logs, Cache, see
 You can setup docker compose file like this:
 
 ```yaml
-version: '2'
+version: "2"
 services:
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
@@ -134,9 +135,11 @@ services:
 ```
 
 You can use specific version `0.25.16`:
+
 - `image: ghcr.io/taxel/plextraktsync:0.25.16`
 
 or latest 0.25.x version:
+
 - `image: ghcr.io/taxel/plextraktsync:0.25`
 
 Note: `main` is development version and reporting bugs against development versions are not supported.
@@ -192,6 +195,7 @@ Utilize the "Community Apps" Unraid Plugin.
 - Go to the Plugins tab, paste the Community Apps URL in the URL area, and click "Install".
 
 Once installed (or if already installed):
+
 - Go to the (newly created) Apps tab and search "plextraktsync", and click on
   the App, and click "Install" (https://forums.unraid.net/topic/38582-plug-in-community-applications/)
 - Take all the default settings (the -it switch as outlined elsewhere in the
@@ -203,6 +207,7 @@ Schedule (cron) the container to start at given intervals to process the sync
 - Go to the Plugins tab, past the User Scripts URL in the URL area, and click "Install" (https://forums.unraid.net/topic/48286-plugin-ca-user-scripts/)
 
 Once installed (or if already installed):
+
 - Go to the Plugins tab, click on "User Scripts", and click the "Add New Script" button
 - Name your script accordingly
 - Click the "gear" icon next to the script name, and click "Edit Script"
@@ -259,7 +264,7 @@ Installing from GitHub is considered developer mode, and it's documented in
 A docker-compose example with a 6h interval:
 
 ```yaml
-version: '2'
+version: "2"
 services:
   scheduler:
     image: mcuadros/ofelia:latest
@@ -313,6 +318,7 @@ changing `excluded-libraries` in `config.yml`.
 You can also set `excluded-libraries` per server in `servers.yml`:
 
 ```yml
+servers:
   Example1:
     token: ~
     urls:
@@ -326,6 +332,7 @@ Additionally, you can list only libraries to be processed, in this case global
 `excluded-libraries` will not be used for this server.
 
 ```yml
+servers:
   Example1:
     token: ~
     urls:
@@ -350,6 +357,7 @@ If you want to specify your config per server you can do so inside of
 specify how that specific server should work.
 
 ```yml
+servers:
   Example1:
     token: ~
     urls:
@@ -370,6 +378,7 @@ be able to do this you specify the number of servers you need (most likely
 equal to the number of different config setups you need). For example:
 
 ```yml
+servers:
   Example1:
     token: ~
     urls:
@@ -401,7 +410,7 @@ equal to the number of different config setups you need). For example:
 ```
 
 The above config would make it so that the "Movies" library syncs both ratings
-and watched status, while the "TV Shows" library only syncs ratings.  To then
+and watched status, while the "TV Shows" library only syncs ratings. To then
 run the sync you need to specify `--server Example1` or `--server Example2` to
 run the sync for that specific server.
 
@@ -411,6 +420,7 @@ If you want to run these jobs using `ofelia`, you can do so by running
 something similar to this in your `docker-compose.yml`:
 
 ```yml
+services:
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
     command: sync
@@ -563,6 +573,7 @@ which is useful when debugging problems and reporting issues.
   - https://app.plex.tv/desktop/#!/provider/tv.plex.provider.discover/details?key=/library/metadata/5d7768258718ba001e311845
 - Id from from your Plex Media Server:
   - `123`
+
 ```
 plextraktsync inspect 123
 plextraktsync inspect "https://app.plex.tv/desktop/#!/server/53aff62c4bb6027c1ada814d417e83ccdf4d5045/details?key=/library/metadata/123"
@@ -606,7 +617,7 @@ or add `command: watch` to docker compose file, and `docker-compose up -d
 plextraktsync` to start the container detached:
 
 ```yaml
-version: '2'
+version: "2"
 services:
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
@@ -675,10 +686,12 @@ WantedBy=default.target
 ```
 
 Install the service template file:
+
 1. as `root`: `/etc/xdg/systemd/user/plextraktsync@.service` for all users
 1. as your user: `~/.config/systemd/user/plextraktsync@.service` for your user only
 
 Next, you need to reload systemd:
+
 1. if installed as `root`: `sudo systemctl daemon-reload`
 2. if installed as user: `systemctl --user daemon-reload`
 
@@ -688,6 +701,7 @@ Now create instances based on server names from `servers.yml`, in this example `
 1. `systemctl --user status "plextraktsync@SERVER_NAME.service"`
 
 for complete logs, you can use `journalctl` (add `-f` to follow logs):
+
 1. `journalctl -u "plextraktsync@SERVER_NAME.service"`
 
 If all works, enable it for auto-start on host reboot
