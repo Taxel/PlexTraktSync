@@ -42,7 +42,9 @@ have a file containing those on your harddrive, you can not use this project.
     - [Unraid setup](#unraid-setup), unsupported
     - [GitHub](#github), unsupported
   - [Setup](#setup)
-  - [Sync settings](#sync-settings)
+  - [Configuration](#configuration)
+    - [Libraries](#libraries)
+    - [Per server configuration](#per-server-configuration)
     - [Logging](#logging)
   - [Commands](#commands)
     - [Sync](#sync)
