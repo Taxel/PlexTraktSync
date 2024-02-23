@@ -14,6 +14,10 @@ if TYPE_CHECKING:
 class TraktUserListCollection(UserList):
     logger = logging.getLogger(__name__)
 
+    def __init__(self, keep_watched=True):
+        super().__init__()
+        self.keep_watched = keep_watched
+
     @property
     def is_empty(self):
         return not len(self)
