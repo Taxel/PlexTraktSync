@@ -22,7 +22,7 @@ class BackgroundTask:
         self.queues = defaultdict(list)
         self.timer = timer
         self.tasks = tasks
-        self.logger = logging.getLogger("PlexTraktSync.BackgroundTask")
+        self.logger = logging.getLogger(__name__)
 
     def check_timer(self):
         if not self.timer:

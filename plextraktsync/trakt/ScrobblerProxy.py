@@ -17,7 +17,7 @@ class ScrobblerProxy:
     def __init__(self, scrobbler: Scrobbler, threshold=80):
         self.scrobbler = scrobbler
         self.threshold = threshold
-        self.logger = logging.getLogger("PlexTraktSync.ScrobblerProxy")
+        self.logger = logging.getLogger(__name__)
 
     def update(self, progress: float):
         self.logger.debug(f"update({self.scrobbler.media}): {progress}")

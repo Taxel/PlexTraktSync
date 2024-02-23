@@ -13,7 +13,7 @@ class Timer:
             raise ValueError(f"Delay must be a positive number: {delay}")
         self.delay = delay
         self.last_time = None
-        self.logger = logging.getLogger("PlexTraktSync.Timer")
+        self.logger = logging.getLogger(__name__)
 
     @property
     def time_remaining(self):

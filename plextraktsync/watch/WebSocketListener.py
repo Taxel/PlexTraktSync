@@ -17,7 +17,7 @@ class WebSocketListener:
         self.poll_interval = poll_interval
         self.restart_interval = restart_interval
         self.dispatcher = EventDispatcher()
-        self.logger = logging.getLogger("PlexTraktSync.WebSocketListener")
+        self.logger = logging.getLogger(__name__)
 
     def on(self, event_type, listener, **kwargs):
         self.dispatcher.on(event_type, listener, **kwargs)

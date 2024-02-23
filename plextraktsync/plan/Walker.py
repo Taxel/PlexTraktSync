@@ -41,7 +41,7 @@ class Walker(SetWindowTitle):
         self.trakt = trakt
         self.mf = mf
         self.config = config
-        self.logger = logging.getLogger("PlexTraktSync.Walker")
+        self.logger = logging.getLogger(__name__)
 
     @cached_property
     def plan(self):

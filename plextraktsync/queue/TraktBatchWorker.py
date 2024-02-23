@@ -19,7 +19,7 @@ class TraktBatchWorker:
     )
 
     def __init__(self):
-        self.logger = logging.getLogger("PlexTraktSync.TraktBatchWorker")
+        self.logger = logging.getLogger(__name__)
 
     def __call__(self, queues):
         for name in self.QUEUES:

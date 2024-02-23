@@ -14,7 +14,7 @@ from plextraktsync.factory import Factory, logging
 class PlexServerConnection:
     def __init__(self, factory: Factory):
         self.factory = factory
-        self.logger = logging.getLogger("PlexTraktSync.PlexServerConnection")
+        self.logger = logging.getLogger(__name__)
 
     @property
     def timeout(self):

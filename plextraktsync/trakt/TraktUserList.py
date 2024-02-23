@@ -25,7 +25,7 @@ class TraktUserList:
         self._items = items
         self.description = None
         self.plex_items = []
-        self.logger = logging.getLogger("PlexTraktSync.TraktUserList")
+        self.logger = logging.getLogger(__name__)
 
     def __iter__(self):
         return iter(self.items)

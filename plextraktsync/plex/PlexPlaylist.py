@@ -19,7 +19,7 @@ class PlexPlaylist(RichMarkup):
     def __init__(self, server: PlexServer, name: str):
         self.server = server
         self.name = name
-        self.logger = logging.getLogger("PlexTraktSync.PlexPlaylist")
+        self.logger = logging.getLogger(__name__)
 
     def __iter__(self):
         return iter(self.items)

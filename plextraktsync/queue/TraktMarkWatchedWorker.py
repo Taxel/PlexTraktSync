@@ -16,7 +16,7 @@ class TraktMarkWatchedWorker:
     QUEUE = "add_to_history"
 
     def __init__(self):
-        self.logger = logging.getLogger("PlexTraktSync.TraktMarkWatchedWorker")
+        self.logger = logging.getLogger(__name__)
 
     def __call__(self, queues):
         items = queues[self.QUEUE]

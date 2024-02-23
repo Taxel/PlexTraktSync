@@ -7,7 +7,7 @@ class EventDispatcher:
     def __init__(self):
         self.event_listeners = []
         self.event_factory = EventFactory()
-        self.logger = logging.getLogger("PlexTraktSync.EventDispatcher")
+        self.logger = logging.getLogger(__name__)
 
     def on(self, event_type, listener, **kwargs):
         self.event_listeners.append(
