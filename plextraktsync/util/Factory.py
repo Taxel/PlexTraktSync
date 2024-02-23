@@ -219,7 +219,6 @@ class Factory:
     def logging(self):
         import logging
 
-        from plextraktsync.decorators.memoize import memoize
         from plextraktsync.logger.init import initialize
 
         config = self.config
@@ -231,7 +230,6 @@ class Factory:
 
         class Logging:
             @staticmethod
-            @memoize
             def getLogger(name):
                 """ Wrap getLogger and add our filters """
                 logger = logging.getLogger(name)
