@@ -4,7 +4,9 @@ from time import sleep
 from click import ClickException
 from trakt.errors import RateLimitException
 
-from plextraktsync.factory import logger
+from plextraktsync.factory import logging
+
+logger = logging.getLogger(__name__)
 
 
 # https://trakt.docs.apiary.io/#introduction/rate-limiting

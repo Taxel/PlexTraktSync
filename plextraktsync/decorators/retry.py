@@ -7,7 +7,9 @@ from requests import ReadTimeout, RequestException
 from trakt.errors import (BadResponseException, TraktBadGateway,
                           TraktInternalException, TraktUnavailable)
 
-from plextraktsync.factory import logger
+from plextraktsync.factory import logging
+
+logger = logging.getLogger(__name__)
 
 
 def retry(retries=5):
