@@ -228,18 +228,35 @@ class Factory:
 
     @cached_property
     def logger(self):
-        logger = self.logging.getLogger("PlexTraktSync")
+        logger = self.logging.getLogger("plextraktsync")
         config = self.config
         loggers = [
-            "PlexTraktSync",
-            "PlexTraktSync.BackgroundTask",
-            "PlexTraktSync.EventDispatcher",
-            "PlexTraktSync.PlexServerConnection",
-            "PlexTraktSync.ScrobblerProxy",
-            "PlexTraktSync.Timer",
-            "PlexTraktSync.TraktBatchWorker",
-            "PlexTraktSync.WatchStateUpdater",
-            "PlexTraktSync.WebSocketListener",
+            "plextraktsync",
+            "plextraktsync.cli",
+            "plextraktsync.commands.sync",
+            "plextraktsync.decorators.measure_time",
+            "plextraktsync.decorators.rate_limit",
+            "plextraktsync.decorators.retry",
+            "plextraktsync.media.MediaFactory",
+            "plextraktsync.plan.Walker",
+            "plextraktsync.plex.PlexApi",
+            "plextraktsync.plex.PlexPlaylist",
+            "plextraktsync.plex.PlexServerConnection",
+            "plextraktsync.queue.BackgroundTask",
+            "plextraktsync.queue.TraktBatchWorker",
+            "plextraktsync.queue.TraktMarkWatchedWorker",
+            "plextraktsync.queue.TraktScrobbleWorker",
+            "plextraktsync.sync",
+            "plextraktsync.trakt.ScrobblerProxy",
+            "plextraktsync.trakt.TraktApi",
+            "plextraktsync.trakt.TraktLookup",
+            "plextraktsync.trakt.TraktUserList",
+            "plextraktsync.trakt.TraktUserListCollection",
+            "plextraktsync.util.Factory",
+            "plextraktsync.util.Timer",
+            "plextraktsync.watch.EventDispatcher",
+            "plextraktsync.watch.WatchStateUpdater",
+            "plextraktsync.watch.WebSocketListener",
         ]
         loggers.extend(config["logging"]["filter_loggers"] or [])
 
