@@ -56,6 +56,10 @@ class SyncConfig:
     def sync_watched_status(self):
         return self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
 
+    @property
+    def liked_lists_keep_watched(self):
+        return self["trakt_to_plex"]["liked_lists_keep_watched"]
+
     @cached_property
     def update_plex_wl(self):
         return self.trakt_to_plex["watchlist"] and not self.trakt_to_plex["watchlist_as_playlist"]
