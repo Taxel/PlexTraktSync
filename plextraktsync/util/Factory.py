@@ -224,11 +224,16 @@ class Factory:
         config = self.config
         initialize(config)
 
+        # Setup log filters
+        self.logger_filter_apply(logging.getLogger("plextraktsync"))
+
         return logging
 
     @cached_property
     def logger(self):
-        logger = self.logging.getLogger("plextraktsync")
+        return self.logging.getLogger("plextraktsync")
+
+    def logger_filter_apply(self, logger):
         config = self.config
         loggers = [
             "plextraktsync",
@@ -264,8 +269,9 @@ class Factory:
 
         filter = LoggerFilter(config["logging"]["filter"], logger)
 
+        import logging
         for name in loggers:
-            self.logging.getLogger(name).addFilter(filter)
+            logging.getLogger(name).addFilter(filter)
 
         return logger
 
