@@ -345,7 +345,9 @@ INFO     Enabled 2 libraries in Plex Server: ['Movies', 'TV Shows']
 
 ### Per server configuration
 
-If you want to specify your config per server you can do so inside of `servers.yml`. Within the `config` part of the server configuration you can specify how that specific server should work.
+If you want to specify your config per server you can do so inside of
+`servers.yml`. Within the `config` part of the server configuration you can
+specify how that specific server should work.
 
 ```yml
   Example1:
@@ -359,9 +361,13 @@ If you want to specify your config per server you can do so inside of `servers.y
         trakt_to_plex:
           liked_lists: false
 ```
-Using `sync` in a server config overrides the global sync-config in `config.yml`.
 
-This can also be used to have different configs between different libraries. To be able to do this you specify the number of servers you need (most likely equal to the number of different config setups you need). For example:
+Using `sync` in a server config overrides the global sync-config in
+`config.yml`.
+
+This can also be used to have different configs between different libraries. To
+be able to do this you specify the number of servers you need (most likely
+equal to the number of different config setups you need). For example:
 
 ```yml
   Example1:
@@ -393,12 +399,17 @@ This can also be used to have different configs between different libraries. To 
           ratings: true
           watched_status: false
 ```
-The above config would make it so that the "Movies" library syncs both ratings and watched status, while the "TV Shows" library only syncs ratings.
-To then run the sync you need to specify `--server Example1` or `--server Example2` to run the sync for that specific server.
+
+The above config would make it so that the "Movies" library syncs both ratings
+and watched status, while the "TV Shows" library only syncs ratings.  To then
+run the sync you need to specify `--server Example1` or `--server Example2` to
+run the sync for that specific server.
 
 Running the sync command without `--server` will use default server from `.env`
 
-If you want to run these jobs using `ofelia`, you can do so by running something similar to this in your `docker-compose.yml`:
+If you want to run these jobs using `ofelia`, you can do so by running
+something similar to this in your `docker-compose.yml`:
+
 ```yml
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
@@ -427,11 +438,20 @@ If you want to run these jobs using `ofelia`, you can do so by running something
       ofelia.job-run.plextraktsync2.container: "plextraktsync"
       ofelia.job-run.plextraktsync2.command: "--server 'Example2' sync"
 ```
-If you are running only one PlexTraktSync container, you need to make sure that the two jobs Ofelia jobs don't run at the same time. Ofelia skips scheduling a new job run if the previous job is still running.
 
-Depending on how long it takes for the job to run on your server you might have to keep the schedule of the two jobs seperated with a few minutes or a few hours. If you have two different PlexTraktSync containers in your docker compose, you can run them at the same time.
+If you are running only one PlexTraktSync container, you need to make sure that
+the two jobs Ofelia jobs don't run at the same time. Ofelia skips scheduling a
+new job run if the previous job is still running.
 
-The above config means that a job is running every 6 hours, alternating between the two "servers". The PlexTraktSync container also has a [docker compose profile] called "schedule" which means that it won't run automatically when you run for example `docker-compose up`.
+Depending on how long it takes for the job to run on your server you might have
+to keep the schedule of the two jobs seperated with a few minutes or a few
+hours. If you have two different PlexTraktSync containers in your docker
+compose, you can run them at the same time.
+
+The above config means that a job is running every 6 hours, alternating between
+the two "servers". The PlexTraktSync container also has a [docker compose
+profile] called "schedule" which means that it won't run automatically when you
+run for example `docker-compose up`.
 
 [docker compose profile]: https://docs.docker.com/compose/profiles/
 
