@@ -19,12 +19,12 @@ class TraktLookup:
     """
     Trakt lookup table to find all Trakt episodes of a TVShow
     """
+    logger = logging.getLogger(__name__)
 
     def __init__(self, tm: TVShow):
         self.provider_table = {}
         self.tm = tm
         self.same_order = True
-        self.logger = logging.getLogger(__name__)
 
     @cached_property
     @retry()

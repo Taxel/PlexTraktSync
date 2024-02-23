@@ -21,11 +21,11 @@ class MediaFactory:
     """
     Class that is able to resolve Trakt media item from Plex media item and vice versa and return generic Media class
     """
+    logger = logging.getLogger(__name__)
 
     def __init__(self, plex: PlexApi, trakt: TraktApi):
         self.plex = plex
         self.trakt = trakt
-        self.logger = logging.getLogger(__name__)
 
     def resolve_any(self, pm: PlexLibraryItem, show: Media = None) -> Media | None:
         try:

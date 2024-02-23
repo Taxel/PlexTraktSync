@@ -19,11 +19,12 @@ if TYPE_CHECKING:
 
 
 class Sync:
+    logger = logging.getLogger(__name__)
+
     def __init__(self, config: SyncConfig, plex: PlexApi, trakt: TraktApi):
         self.config = config
         self.plex = plex
         self.trakt = trakt
-        self.logger = logging.getLogger(__name__)
 
     @cached_property
     def plex_wl(self):

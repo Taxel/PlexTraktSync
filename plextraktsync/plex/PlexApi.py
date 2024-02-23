@@ -30,6 +30,7 @@ class PlexApi:
     """
     Plex API class abstracting common data access and dealing with requests cache.
     """
+    logger = logging.getLogger(__name__)
 
     def __init__(
             self,
@@ -38,7 +39,6 @@ class PlexApi:
     ):
         self.server = server
         self.config = config
-        self.logger = logging.getLogger(__name__)
 
     def __str__(self):
         return str(self.server)

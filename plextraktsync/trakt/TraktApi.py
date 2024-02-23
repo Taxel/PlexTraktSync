@@ -37,11 +37,11 @@ class TraktApi:
     """
     Trakt API class abstracting common data access and dealing with requests cache.
     """
+    logger = logging.getLogger(__name__)
 
     def __init__(self):
         trakt.core.CONFIG_PATH = pytrakt_file
         trakt.core.session = factory.session
-        self.logger = logging.getLogger(__name__)
 
     @staticmethod
     def device_auth(client_id: str, client_secret: str):
