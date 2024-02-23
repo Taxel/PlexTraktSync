@@ -27,12 +27,14 @@ def command():
             except EOFError as e:
                 raise ClickException(f"Program requested terminal, No terminal is connected: {e}")
             except ClickException as e:
-                from plextraktsync.factory import logger
+                from plextraktsync.factory import logging
 
+                logger = logging.getLogger(__name__)
                 logger.fatal(f"Error running {name} command: {str(e)}")
             except Exception as e:
-                from plextraktsync.factory import logger
+                from plextraktsync.factory import logging
 
+                logger = logging.getLogger(__name__)
                 logger.exception(e)
 
                 raise ClickException(f"Error running {name} command: {str(e)}")
