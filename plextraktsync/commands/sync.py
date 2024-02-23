@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from plextraktsync.commands.login import ensure_login
 from plextraktsync.decorators.measure_time import measure_time
-from plextraktsync.factory import factory, logger
+from plextraktsync.factory import factory, logging
+
+logger = logging.getLogger(__name__)
 
 
 def sync(
