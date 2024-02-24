@@ -53,7 +53,7 @@ class PlexPlaylist(RichMarkup):
         for m in self.playlist.items():
             yield m.ratingKey, m
 
-    def update(self, items: list[PlexMedia], description=None) -> bool:
+    def update(self, items: list[PlexMedia], description=None, section=None) -> bool:
         """
         Updates playlist (creates if name missing) replacing contents with items[]
         """
