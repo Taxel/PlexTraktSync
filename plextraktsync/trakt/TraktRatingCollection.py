@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.flatten import flatten_dict
+from plextraktsync.util.Rating import Rating
 
 if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
@@ -29,4 +30,4 @@ class TraktRatingCollection(dict):
     def ratings(self, media_type: str):
         index = media_type.rstrip("s")
         for r in self.trakt.get_ratings(media_type):
-            yield r[index]["ids"]["trakt"], r["rating"]
+            yield r[index]["ids"]["trakt"], Rating.create(r["rating"], r["rated_at"])

@@ -22,6 +22,7 @@ from plextraktsync.path import pytrakt_file
 from plextraktsync.trakt.PartialTraktMedia import PartialTraktMedia
 from plextraktsync.trakt.TraktLookup import TraktLookup
 from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
+from plextraktsync.util.Rating import Rating
 
 if TYPE_CHECKING:
     from trakt.movies import Movie
@@ -140,7 +141,7 @@ class TraktApi:
     def ratings(self):
         return TraktRatingCollection(self)
 
-    def rating(self, m) -> int | None:
+    def rating(self, m) -> Rating | None:
         """
         The trakt api (Python module) is inconsistent:
         - Movie has "rating" property, while TVShow does not
@@ -160,8 +161,8 @@ class TraktApi:
     @rate_limit()
     @time_limit()
     @retry()
-    def rate(self, m: TraktMedia, rating: int):
-        m.rate(rating)
+    def rate(self, m: TraktMedia, rating: int, rate_date: datetime.datetime = None):
+        m.rate(rating, rate_date)
 
     @rate_limit()
     @time_limit()

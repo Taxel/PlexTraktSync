@@ -209,7 +209,7 @@ class Media(RichMarkup):
     def mark_watched_plex(self):
         self.plex_api.mark_watched(self.plex.item)
 
-    @property
+    @cached_property
     def trakt_rating(self):
         return self.trakt_api.rating(self.trakt)
 
@@ -225,13 +225,13 @@ class Media(RichMarkup):
         rating = self.plex_rating
         if rating is None:
             return
-        self.trakt_api.rate(self.trakt, rating)
+        self.trakt_api.rate(self.trakt, rating.rating, rating.rated_at)
 
     def plex_rate(self):
         rating = self.trakt_rating
         if rating is None:
             return
-        self.plex_api.rate(self.plex.item, rating)
+        self.plex_api.rate(self.plex.item, rating.rating)
 
     def plex_history(self, **kwargs):
         if self.plex.is_discover:

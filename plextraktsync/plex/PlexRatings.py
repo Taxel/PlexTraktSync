@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.decorators.memoize import memoize
+from plextraktsync.util.Rating import Rating
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexApi import PlexApi
@@ -27,26 +28,22 @@ class PlexRatings:
 
         media_type = m.media_type
         section = self.plex.library_sections[section_id]
-        ratings = self.ratings(section, media_type)
+        ratings: dict[int, Rating] = self.ratings(section, media_type)
 
         if media_type in ["movies", "shows"]:
             # For movies and shows, just return from the dict
-            user_rating = (
-                ratings[m.item.ratingKey] if m.item.ratingKey in ratings else None
-            )
+            if m.item.ratingKey in ratings:
+                return ratings[m.item.ratingKey]
         elif media_type == "episodes":
             # For episodes the ratings is just (show_id, show_rating) tuples
             # if show id is not listed, return none, otherwise fetch from item itself
             if show_id not in ratings:
                 return None
-            user_rating = m.item.userRating
+            return Rating.create(m.item.userRating, m.item.lastRatedAt)
         else:
             raise RuntimeError(f"Unsupported media type: {media_type}")
 
-        if user_rating is None:
-            return None
-
-        return int(user_rating)
+        return None
 
     @staticmethod
     @memoize
@@ -65,4 +62,4 @@ class PlexRatings:
         }
 
         for item in section.search(filters=filters, includeGuids=False):
-            yield item.ratingKey, item.userRating
+            yield item.ratingKey, Rating.create(item.userRating, item.lastRatedAt)
