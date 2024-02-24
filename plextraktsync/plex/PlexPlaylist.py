@@ -79,7 +79,8 @@ class PlexPlaylist(RichMarkup):
         if self.same_list(items, playlist.items()):
             return updated
 
-        playlist.removeItems(playlist.items())
+        if playlist.items():
+            playlist.removeItems(playlist.items())
         playlist.addItems(items)
         self.logger.debug(f"Updated '{self.name}' items")
 
