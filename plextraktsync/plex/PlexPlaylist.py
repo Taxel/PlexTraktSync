@@ -80,6 +80,7 @@ class PlexPlaylist(RichMarkup):
             return updated
 
         if playlist.items():
+            print(self.name, playlist.items())
             playlist.removeItems(playlist.items())
         playlist.addItems(items)
         self.logger.debug(f"Updated '{self.name}' items")
