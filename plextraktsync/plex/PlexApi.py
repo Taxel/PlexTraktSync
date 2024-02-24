@@ -146,16 +146,6 @@ class PlexApi:
     def rate(self, m: PlexMedia, rating: int | float | None):
         m.rate(rating)
 
-    def update_playlist(self, name: str, items: list[PlexMedia], description=None) -> bool:
-        """
-        Updates playlist (creates if name missing) replacing contents with items[]
-        """
-        from plextraktsync.plex.PlexPlaylist import PlexPlaylist
-
-        playlist = PlexPlaylist(self.server, name)
-
-        return playlist.update(items, description)
-
     @flatten_list
     def history(self, m, device=False, account=False):
         try:
