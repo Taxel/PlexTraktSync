@@ -101,8 +101,10 @@ class Sync:
                 self.logger.warning("Running partial library sync. Liked lists won't update because it needs full library sync.")
             else:
                 if not dry_run:
+                    section = self.plex.library_sections[1]
+                    print("section:", section)
                     with measure_time("Updated liked list"):
-                        trakt_lists.sync()
+                        trakt_lists.sync(section=section.section)
 
         if walker.config.walk_watchlist and self.sync_wl:
             with measure_time("Updated watchlist"):
