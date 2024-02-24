@@ -62,7 +62,7 @@ class PlexPlaylist(RichMarkup):
             # Force reload
             del self.__dict__["playlist"]
             del self.__dict__["items"]
-            playlist = self.server.createPlaylist(self.name, items=items)
+            playlist = self.server.createPlaylist(self.name, items=items, smart=True, section=section)
             self.logger.info(f"Created plex playlist {self.title_link} with {len(items)} items", extra={"markup": True})
 
         # Skip if playlist could not be made/retrieved
