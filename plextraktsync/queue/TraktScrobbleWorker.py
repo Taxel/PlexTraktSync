@@ -20,9 +20,7 @@ class TraktScrobbleWorker:
         "scrobble_pause",
         "scrobble_stop",
     )
-
-    def __init__(self):
-        self.logger = logging.getLogger("PlexTraktSync.TraktScrobbleWorker")
+    logger = logging.getLogger(__name__)
 
     def __call__(self, queues):
         for name in self.QUEUES:

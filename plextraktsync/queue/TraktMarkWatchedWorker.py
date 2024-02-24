@@ -14,9 +14,7 @@ from plextraktsync.util.remove_empty_values import remove_empty_values
 class TraktMarkWatchedWorker:
     # Queue this Worker can handle
     QUEUE = "add_to_history"
-
-    def __init__(self):
-        self.logger = logging.getLogger("PlexTraktSync.TraktMarkWatchedWorker")
+    logger = logging.getLogger(__name__)
 
     def __call__(self, queues):
         items = queues[self.QUEUE]

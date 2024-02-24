@@ -12,12 +12,13 @@ if TYPE_CHECKING:
 
 
 class WebSocketListener:
+    logger = logging.getLogger(__name__)
+
     def __init__(self, plex: PlexServer, poll_interval=5, restart_interval=15):
         self.plex = plex
         self.poll_interval = poll_interval
         self.restart_interval = restart_interval
         self.dispatcher = EventDispatcher()
-        self.logger = logging.getLogger("PlexTraktSync.WebSocketListener")
 
     def on(self, event_type, listener, **kwargs):
         self.dispatcher.on(event_type, listener, **kwargs)

@@ -1,8 +1,9 @@
-import logging
 from contextlib import contextmanager
 from time import time
 
-from plextraktsync.factory import logger
+from plextraktsync.factory import logging
+
+logger = logging.getLogger(__name__)
 
 
 @contextmanager

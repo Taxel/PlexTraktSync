@@ -17,12 +17,12 @@ class BackgroundTask:
     """
     Class to read events from queue and invoke them at tasks to flush them at interval set by the timer
     """
+    logger = logging.getLogger(__name__)
 
     def __init__(self, timer: Timer = None, *tasks):
         self.queues = defaultdict(list)
         self.timer = timer
         self.tasks = tasks
-        self.logger = logging.getLogger("PlexTraktSync.BackgroundTask")
 
     def check_timer(self):
         if not self.timer:

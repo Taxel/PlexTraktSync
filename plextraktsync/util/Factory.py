@@ -223,34 +223,47 @@ class Factory:
 
         config = self.config
         initialize(config)
+        logger_filter = self.logger_filter
 
-        return logging
+        # Setup log filters for external packages
+        self.logger_filter_apply(logger_filter)
+
+        class Logging:
+            @staticmethod
+            def getLogger(name):
+                """ Wrap getLogger and add our filters """
+                logger = logging.getLogger(name)
+                logger.addFilter(logger_filter)
+                return logger
+
+            def __getattr__(self, name):
+                """ Wrap log level attributes """
+                return getattr(logging, name)
+
+        return Logging()
 
     @cached_property
     def logger(self):
-        logger = self.logging.getLogger("PlexTraktSync")
-        config = self.config
-        loggers = [
-            "PlexTraktSync",
-            "PlexTraktSync.BackgroundTask",
-            "PlexTraktSync.EventDispatcher",
-            "PlexTraktSync.PlexServerConnection",
-            "PlexTraktSync.ScrobblerProxy",
-            "PlexTraktSync.Timer",
-            "PlexTraktSync.TraktBatchWorker",
-            "PlexTraktSync.WatchStateUpdater",
-            "PlexTraktSync.WebSocketListener",
-        ]
-        loggers.extend(config["logging"]["filter_loggers"] or [])
+        return self.logging.getLogger("plextraktsync")
+
+    @cached_property
+    def logger_filter(self):
+        import logging
 
         from plextraktsync.logger.filter import LoggerFilter
 
-        filter = LoggerFilter(config["logging"]["filter"], logger)
+        config = self.config
+        logger = logging.getLogger("plextraktsync")
+
+        return LoggerFilter(config["logging"]["filter"], logger)
+
+    def logger_filter_apply(self, logger_filter):
+        import logging
+        config = self.config
+        loggers = config["logging"]["filter_loggers"] or []
 
         for name in loggers:
-            self.logging.getLogger(name).addFilter(filter)
-
-        return logger
+            logging.getLogger(name).addFilter(logger_filter)
 
     @cached_property
     def console_logger(self):

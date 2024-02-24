@@ -27,6 +27,7 @@ class Walker(SetWindowTitle):
     """
     Class dealing with finding and walking library, movies/shows, episodes
     """
+    logger = logging.getLogger(__name__)
 
     def __init__(
         self,
@@ -41,7 +42,6 @@ class Walker(SetWindowTitle):
         self.trakt = trakt
         self.mf = mf
         self.config = config
-        self.logger = logging.getLogger("PlexTraktSync.Walker")
 
     @cached_property
     def plan(self):

@@ -7,13 +7,13 @@ class Timer:
     """
     Class dealing with limiting that something is not called more often than {delay}
     """
+    logger = logging.getLogger(__name__)
 
     def __init__(self, delay: float):
         if delay <= 0:
             raise ValueError(f"Delay must be a positive number: {delay}")
         self.delay = delay
         self.last_time = None
-        self.logger = logging.getLogger("PlexTraktSync.Timer")
 
     @property
     def time_remaining(self):

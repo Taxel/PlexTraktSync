@@ -19,6 +19,8 @@ if TYPE_CHECKING:
 
 
 class WatchStateUpdater(SetWindowTitle):
+    logger = logging.getLogger(__name__)
+
     def __init__(
             self,
             plex: PlexApi,
@@ -29,7 +31,6 @@ class WatchStateUpdater(SetWindowTitle):
         self.plex = plex
         self.trakt = trakt
         self.mf = mf
-        self.logger = logging.getLogger("PlexTraktSync.WatchStateUpdater")
         self.config = config
         self.remove_collection = config["watch"]["remove_collection"]
         self.add_collection = config["watch"]["add_collection"]

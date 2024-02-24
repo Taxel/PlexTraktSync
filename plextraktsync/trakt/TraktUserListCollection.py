@@ -12,9 +12,7 @@ if TYPE_CHECKING:
 
 
 class TraktUserListCollection(UserList):
-    def __init__(self):
-        super().__init__()
-        self.logger = logging.getLogger("PlexTraktSync.TraktUserListCollection")
+    logger = logging.getLogger(__name__)
 
     def add_to_lists(self, m: Media):
         # Skip movie editions

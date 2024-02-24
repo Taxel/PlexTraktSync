@@ -4,10 +4,11 @@ from plextraktsync.watch.events import Error, ServerStarted
 
 
 class EventDispatcher:
+    logger = logging.getLogger(__name__)
+
     def __init__(self):
         self.event_listeners = []
         self.event_factory = EventFactory()
-        self.logger = logging.getLogger("PlexTraktSync.EventDispatcher")
 
     def on(self, event_type, listener, **kwargs):
         self.event_listeners.append(

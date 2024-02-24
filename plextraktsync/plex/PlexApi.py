@@ -12,7 +12,7 @@ from plexapi.server import SystemAccount, SystemDevice
 from plextraktsync.decorators.flatten import flatten_dict, flatten_list
 from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.retry import retry
-from plextraktsync.factory import factory, logger
+from plextraktsync.factory import factory, logging
 from plextraktsync.plex.PlexId import PlexId
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
@@ -30,6 +30,7 @@ class PlexApi:
     """
     Plex API class abstracting common data access and dealing with requests cache.
     """
+    logger = logging.getLogger(__name__)
 
     def __init__(
             self,
@@ -160,7 +161,7 @@ class PlexApi:
         try:
             history = m.history()
         except Unauthorized as e:
-            logger.debug(f"No permission to access play history: {e}")
+            self.logger.debug(f"No permission to access play history: {e}")
             return
 
         for h in history:
@@ -200,17 +201,17 @@ class PlexApi:
                 plex_owner_account = MyPlexAccount(token=plex_owner_token, session=factory.session)
                 return plex_owner_account.switchHomeUser(plex_username)
             except BadRequest as e:
-                logger.error(f"Error during {plex_username} account access: {e}")
+                self.logger.error(f"Error during {plex_username} account access: {e}")
         elif plex_account_token:
             try:
                 return MyPlexAccount(token=plex_account_token, session=factory.session)
             except BadRequest as e:
-                logger.error(f"Error during {plex_username} account access: {e}")
+                self.logger.error(f"Error during {plex_username} account access: {e}")
         else:
             try:
                 return self.server.myPlexAccount()
             except BadRequest as e:
-                logger.error(f"Error during {plex_username} account access: {e}")
+                self.logger.error(f"Error during {plex_username} account access: {e}")
         return None
 
     def watchlist(self, libtype=None) -> list[Movie | Show] | None:
@@ -225,20 +226,20 @@ class PlexApi:
         try:
             return self.account.watchlist(libtype=libtype, **params)
         except BadRequest as e:
-            logger.error(f"Error during {self.account.username} watchlist access: {e}")
+            self.logger.error(f"Error during {self.account.username} watchlist access: {e}")
             return None
 
     def add_to_watchlist(self, item):
         try:
             self.account.addToWatchlist(item)
         except BadRequest as e:
-            logger.error(f"Error when adding {item.title} to Plex watchlist: {e}")
+            self.logger.error(f"Error when adding {item.title} to Plex watchlist: {e}")
 
     def remove_from_watchlist(self, item):
         try:
             self.account.removeFromWatchlist(item)
         except BadRequest as e:
-            logger.error(f"Error when removing {item.title} from Plex watchlist: {e}")
+            self.logger.error(f"Error when removing {item.title} from Plex watchlist: {e}")
 
     @retry()
     def search_online(self, title: str, media_type: str):
@@ -247,7 +248,7 @@ class PlexApi:
         try:
             result = self.account.searchDiscover(title, libtype=media_type)
         except (BadRequest, Unauthorized) as e:
-            logger.error(f"{title}: Searching Plex Discover error: {e}")
+            self.logger.error(f"{title}: Searching Plex Discover error: {e}")
             return None
         except NotFound:
             return None
@@ -261,6 +262,6 @@ class PlexApi:
                 self.mark_unwatched(ep)
                 reset_count += 1
             else:
-                logger.debug(
+                self.logger.debug(
                     f"{show.title} {ep.seasonEpisode} watched at {ep.lastViewedAt} after reset date {reset_date}")
-        logger.debug(f"{show.title}: {reset_count} Plex episode(s) marked as unwatched.")
+        self.logger.debug(f"{show.title}: {reset_count} Plex episode(s) marked as unwatched.")

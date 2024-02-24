@@ -17,9 +17,7 @@ class TraktBatchWorker:
         "add_to_watchlist",
         "remove_from_watchlist",
     )
-
-    def __init__(self):
-        self.logger = logging.getLogger("PlexTraktSync.TraktBatchWorker")
+    logger = logging.getLogger(__name__)
 
     def __call__(self, queues):
         for name in self.QUEUES:

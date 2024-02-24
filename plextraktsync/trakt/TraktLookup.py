@@ -4,7 +4,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.retry import retry
-from plextraktsync.factory import logger
+from plextraktsync.factory import logging
 
 EPISODES_ORDERING_WARNING = "episodes ordering is different in Plex and Trakt. " \
                             "Check your Plex media source, TMDB is recommended."
@@ -19,6 +19,7 @@ class TraktLookup:
     """
     Trakt lookup table to find all Trakt episodes of a TVShow
     """
+    logger = logging.getLogger(__name__)
 
     def __init__(self, tm: TVShow):
         self.provider_table = {}
@@ -53,7 +54,7 @@ class TraktLookup:
             for te in self.table[season].values():
                 table[str(te.ids.get(provider))] = te
         self.provider_table[provider] = table
-        logger.debug(f"{self.tm.title}: lookup table build with '{provider}' ids")
+        self.logger.debug(f"{self.tm.title}: lookup table build with '{provider}' ids")
 
     def from_guid(self, guid: PlexGuid):
         """
@@ -97,6 +98,6 @@ class TraktLookup:
         except KeyError:
             return None
         if self.same_order:
-            logger.warning(f"'{self.tm.title}' {EPISODES_ORDERING_WARNING}")
+            self.logger.warning(f"'{self.tm.title}' {EPISODES_ORDERING_WARNING}")
             self.same_order = False
         return ep

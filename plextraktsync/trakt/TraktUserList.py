@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 
 class TraktUserList:
     plex_items: list[tuple[int, PlexLibraryItem]]
+    logger = logging.getLogger(__name__)
 
     def __init__(self,
                  trakt_id: int = None,
@@ -25,7 +26,6 @@ class TraktUserList:
         self._items = items
         self.description = None
         self.plex_items = []
-        self.logger = logging.getLogger("PlexTraktSync.TraktUserList")
 
     def __iter__(self):
         return iter(self.items)
