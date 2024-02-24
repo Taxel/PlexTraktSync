@@ -4,6 +4,19 @@ from functools import cached_property
 
 
 class Factory:
+    def selftest(self):
+        fail = 0
+        # load every method from factory
+        for m in dir(self):
+            try:
+                getattr(self, m)
+            except Exception as e:
+                print(e)
+                fail += 1
+
+        if fail:
+            raise RuntimeError(f"Unpexpected {fail} methods failing")
+
     def invalidate(self, keys: list[str] = None):
         """
         Invalidate set of cached properties
