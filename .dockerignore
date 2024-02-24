@@ -16,6 +16,7 @@
 !/plextraktsync/plex/*.py
 !/plextraktsync/queue/*.py
 !/plextraktsync/rich/*.py
+!/plextraktsync/sync/*.py
 !/plextraktsync/trakt/*.py
 !/plextraktsync/util/*.py
 !/plextraktsync/watch/*.py
