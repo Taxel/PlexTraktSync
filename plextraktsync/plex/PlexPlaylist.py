@@ -10,18 +10,21 @@ from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.factory import logging
 from plextraktsync.media.Media import Media
 from plextraktsync.mixin.RichMarkup import RichMarkup
+from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 if TYPE_CHECKING:
     from plexapi.playlist import Playlist
     from plexapi.server import PlexServer
 
+    from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.types import PlexMedia
 
 
 class PlexPlaylist(RichMarkup):
     logger = logging.getLogger(__name__)
 
-    def __init__(self, section: LibrarySection, name: str):
+    def __init__(self, plex: PlexApi, section: LibrarySection, name: str):
+        self.plex = plex
         self.section = section
         self.name = name
 
@@ -65,7 +68,9 @@ class PlexPlaylist(RichMarkup):
             # Force reload
             del self.__dict__["playlist"]
             del self.__dict__["items"]
-            playlist = self.section.createCollection(self.name, section=self.section, items=items)
+            for item in items:
+                print(type(item), PlexLibraryItem(item, plex=self.plex).library.section)
+            playlist = self.section.createCollection(self.name, items=items)
             self.logger.info(f"Created plex playlist {self.title_link} with {len(items)} items", extra={"markup": True})
 
         # Skip if playlist could not be made/retrieved

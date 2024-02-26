@@ -73,8 +73,9 @@ class TraktUserList:
             PlexPlaylistCollection
 
         section = factory.plex_api.library_sections[1].section
+        plex = factory.plex_api
 
-        return PlexPlaylistCollection(section)
+        return PlexPlaylistCollection(plex=plex, section=section)
 
     @cached_property
     def plex_list(self):
