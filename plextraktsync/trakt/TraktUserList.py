@@ -76,7 +76,7 @@ class TraktUserList:
         from plextraktsync.plex.PlexPlaylistCollection import \
             PlexPlaylistCollection
 
-        section = factory.library_sections[1]
+        section = factory.plex_api.library_sections[1]
 
         return PlexPlaylistCollection(section)
 
