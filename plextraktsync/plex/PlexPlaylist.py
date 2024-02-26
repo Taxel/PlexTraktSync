@@ -56,7 +56,7 @@ class PlexPlaylist(RichMarkup):
         for m in self.playlist.items():
             yield m.ratingKey, m
 
-    def update(self, section, items: list[PlexMedia], description=None) -> bool:
+    def update(self, items: list[PlexMedia], description=None) -> bool:
         """
         Updates playlist (creates if name missing) replacing contents with items[]
         """
@@ -65,7 +65,7 @@ class PlexPlaylist(RichMarkup):
             # Force reload
             del self.__dict__["playlist"]
             del self.__dict__["items"]
-            playlist = self.section.createCollection(self.name, section=section, items=items)
+            playlist = self.section.createCollection(self.name, section=self.section, items=items)
             self.logger.info(f"Created plex playlist {self.title_link} with {len(items)} items", extra={"markup": True})
 
         # Skip if playlist could not be made/retrieved
