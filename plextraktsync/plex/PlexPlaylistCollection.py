@@ -7,6 +7,7 @@ from plextraktsync.plex.PlexPlaylist import PlexPlaylist
 
 if TYPE_CHECKING:
     from plexapi.library import LibrarySection
+
     from plextraktsync.plex.PlexApi import PlexApi
 
 

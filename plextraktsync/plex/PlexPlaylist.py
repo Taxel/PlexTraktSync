@@ -15,8 +15,8 @@ from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 if TYPE_CHECKING:
     from plexapi.playlist import Playlist
     from plexapi.server import PlexServer
-    from plextraktsync.plex.PlexApi import PlexApi
 
+    from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.types import PlexMedia
 
 
