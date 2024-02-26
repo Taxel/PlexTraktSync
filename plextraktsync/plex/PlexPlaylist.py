@@ -69,8 +69,8 @@ class PlexPlaylist(RichMarkup):
             del self.__dict__["playlist"]
             del self.__dict__["items"]
             for item in items:
-                print(type(item), PlexLibraryItem(item, plex=self.plex).library.section)
-            playlist = self.section.createCollection(self.name, items=items)
+                section = PlexLibraryItem(item, plex=self.plex).library.section
+            playlist = section.createCollection(self.name, items=items)
             self.logger.info(f"Created plex playlist {self.title_link} with {len(items)} items", extra={"markup": True})
 
         # Skip if playlist could not be made/retrieved
