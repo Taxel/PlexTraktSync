@@ -81,6 +81,17 @@ body:
         Try finding a version that can be used as a workaround.
         Fill in the version here that worked before.
 
+  - type: textarea
+    id: config
+    attributes:
+      render: yaml
+      label: Config file contents
+      description: >
+        Contents of your config file.
+
+        You can copy this from `plextraktsync config` output.
+        This textarea will be automatically formatted as yaml text.
+
   - type: dropdown
     id: install-method
     attributes:
@@ -95,17 +106,6 @@ body:
         - Unraid installation (not supported)
     validations:
       required: true
-
-  - type: textarea
-    id: config
-    attributes:
-      render: yaml
-      label: Config file contents
-      description: >
-        Contents of your config file.
-
-        You can copy this from `plextraktsync config` output.
-        This textarea will be automatically formatted as yaml text.
 
   - type: input
     id: version
