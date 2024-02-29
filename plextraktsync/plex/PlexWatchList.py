@@ -12,6 +12,8 @@ if TYPE_CHECKING:
 
 class PlexWatchList:
     def __init__(self, watchlist: list[PlexMedia]):
+        if watchlist is None:
+            raise RuntimeError("Plex watchlist is None")
         self.watchlist = watchlist
 
     def __iter__(self):

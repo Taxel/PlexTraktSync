@@ -186,23 +186,24 @@ class PlexApi:
         plex_owner_token = CONFIG.get("PLEX_OWNER_TOKEN")
         plex_account_token = CONFIG.get("PLEX_ACCOUNT_TOKEN")
         plex_username = CONFIG.get("PLEX_USERNAME")
-        if plex_owner_token:
-            try:
+
+        def try_login():
+            if plex_owner_token:
                 plex_owner_account = MyPlexAccount(token=plex_owner_token, session=factory.session)
                 return plex_owner_account.switchHomeUser(plex_username)
-            except BadRequest as e:
-                self.logger.error(f"Error during {plex_username} account access: {e}")
-        elif plex_account_token:
-            try:
+            elif plex_account_token:
                 return MyPlexAccount(token=plex_account_token, session=factory.session)
-            except BadRequest as e:
-                self.logger.error(f"Error during {plex_username} account access: {e}")
-        else:
-            try:
+            else:
                 return self.server.myPlexAccount()
-            except BadRequest as e:
-                self.logger.error(f"Error during {plex_username} account access: {e}")
-        return None
+
+        try:
+            return try_login()
+        except BadRequest as e:
+            self.logger.error(
+                f"Error during Plex {plex_username} account access: {e}. Try log in with plex-login again"
+            )
+
+            return None
 
     def watchlist(self, libtype=None) -> list[Movie | Show] | None:
         if not self.account:
