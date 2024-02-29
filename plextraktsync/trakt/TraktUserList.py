@@ -48,7 +48,7 @@ class TraktUserList:
 
     @staticmethod
     def build_dict(pl: PublicList):
-        return {(f"{le.type}s", le.trakt): le.rank for le in pl}
+        return {(f"{le.type}s", le.trakt): le.rank for le in pl if le.type in ["movie", "episode"]}
 
     def load_items(self):
         pl = PublicList.load(self.trakt_id)
