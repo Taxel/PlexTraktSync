@@ -4,6 +4,8 @@ from functools import cached_property
 from itertools import count
 from typing import TYPE_CHECKING
 
+from trakt.users import PublicList
+
 from plextraktsync.factory import factory, logging
 from plextraktsync.trakt.types import TraktPlayable
 
@@ -44,19 +46,15 @@ class TraktUserList:
             self.description, self._items = self.load_items()
         return self._items
 
+    @staticmethod
+    def build_dict(pl: PublicList):
+        return {(f"{le.type}s", le.trakt): le.rank for le in pl}
+
     def load_items(self):
-        from plextraktsync.trakt_list_util import LazyUserList
+        pl = PublicList.load(self.trakt_id)
+        self.logger.info(f"Downloaded Trakt list '{pl.name}' ({len(pl)} items): {pl.share_link}")
 
-        userlist = LazyUserList._get(self.name, self.trakt_id)
-        list_items = userlist._items
-        prelist = [
-            (elem[0], elem[1])
-            for elem in list_items
-            if elem[0] in ["movies", "episodes"]
-        ]
-        self.logger.info(f"Downloaded Trakt list '{self.name}' ({len(list_items)} items): https://trakt.tv/lists/{self.trakt_id}")
-
-        return userlist.description, dict(zip(prelist, count(1)))
+        return pl.description, self.build_dict(pl)
 
     @classmethod
     def from_trakt_list(cls, name: str, items: list[TraktPlayable]):
