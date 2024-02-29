@@ -57,10 +57,8 @@ class TraktUserList:
         return pl.description, self.build_dict(pl)
 
     @classmethod
-    def from_trakt_list(cls, name: str, items: list[TraktPlayable]):
-        items = zip([(item.media_type, item.trakt) for item in items], count(1))
-
-        return cls(name=name, items=dict(items))
+    def from_trakt_list(cls, list_id: int, list_name: str):
+        return cls(trakt_id=list_id, name=list_name)
 
     @classmethod
     def from_watchlist(cls, items: list[TraktPlayable]):
