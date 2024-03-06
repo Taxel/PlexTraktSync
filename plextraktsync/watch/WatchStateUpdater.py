@@ -174,6 +174,10 @@ class WatchStateUpdater(SetWindowTitle):
         self.logger.debug(f"Scrobbled: {scrobbled}")
 
     def can_scrobble(self, event: PlaySessionStateNotification):
+        if self.ignore_clients:
+            if event.client_identifier in self.ignore_clients:
+                return False
+
         if not self.username_filter:
             return True
 
