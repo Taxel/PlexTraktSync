@@ -48,6 +48,10 @@ class WatchStateUpdater(SetWindowTitle):
         return None
 
     @cached_property
+    def ignore_clients(self):
+        return self.config["watch"]["ignore_clients"] or []
+
+    @cached_property
     def progressbar(self):
         if not self.config["watch"]["media_progressbar"]:
             return None
