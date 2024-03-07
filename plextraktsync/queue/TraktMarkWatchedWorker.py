@@ -25,6 +25,7 @@ class TraktMarkWatchedWorker:
 
     def submit(self, items):
         items = self.normalize(items)
+        self.logger.debug(f"Submit add_to_history: {items}")
         result = self.add_to_history(items)
         result = remove_empty_values(result.copy())
         if result:
