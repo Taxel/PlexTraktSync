@@ -48,6 +48,10 @@ class WatchStateUpdater(SetWindowTitle):
         return None
 
     @cached_property
+    def ignore_clients(self):
+        return self.config["watch"]["ignore_clients"] or []
+
+    @cached_property
     def progressbar(self):
         if not self.config["watch"]["media_progressbar"]:
             return None
@@ -170,6 +174,10 @@ class WatchStateUpdater(SetWindowTitle):
         self.logger.debug(f"Scrobbled: {scrobbled}")
 
     def can_scrobble(self, event: PlaySessionStateNotification):
+        if self.ignore_clients:
+            if event.client_identifier in self.ignore_clients:
+                return False
+
         if not self.username_filter:
             return True
 

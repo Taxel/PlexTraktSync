@@ -84,6 +84,8 @@ watch:
   username_filter: true
   # Show the progress bar of played media in terminal
   media_progressbar: true
+  # Clients to ignore when listening Play events
+  ignore_clients: ~
 
 xbmc-providers:
   movies: imdb
