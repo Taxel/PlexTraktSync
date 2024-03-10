@@ -124,6 +124,29 @@ class PlexApi:
         # result = self.server.library.search(libtype=libtype)
         print("got", len(result), "items")
         print(result)
+        # Do proper matching with provider type and provider id
+        from plextraktsync.plex.PlexGuid import PlexGuid
+        plexguids = [PlexGuid(f"{k}://{v}", type=libtype) for k, v in guids.items()]
+        print("plexguids", plexguids)
+        # fakepm = PlexLibraryItem(result[0])
+        # fakepm.guids = plexguids
+        results = []
+        for m in result:
+            pm = PlexLibraryItem(m, self)
+            matched = len([[True for g1 in pm.guids if g1 == g2] for g2 in plexguids])
+            if matched:
+                results.append(pm)
+
+            # for g1 in pm.guids:
+            #     for g2 in plexguids:
+            #         if g1 == g2:
+            #             return True
+            # matched = any([guid for guid in pm.guids if guid == plexguids])
+        # result = [result for result in result if all([guid for guid in plexguids if guid == result.guid])]
+        print("result2", results)
+        if not len(results):
+            return None
+        return results
 
     @property
     def version(self):
