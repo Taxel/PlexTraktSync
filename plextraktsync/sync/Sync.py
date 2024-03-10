@@ -218,7 +218,7 @@ class Sync:
                 # Remove known match from trakt watchlist, so that the search would not be attempted.
                 # Example, trakt id 187634 where title mismatches:
                 #  - "The Vortex": https://trakt.tv/movies/the-vortex-2012
-                #  - "Big Bad Bugs": https://app.plex.tv/desktop/#!/provider/tv.plex.provider.vod/details?key=%2Flibrary%2Fmetadata%2F60185c5891c237002b37653d
+                #  - "Big Bad Bugs": https://app.plex.tv/desktop/#!/provider/tv.plex.provider.vod/details?key=%2Flibrary%2Fmetadata%2F5d776b1cad5437001f7936f4
                 del self.trakt_wl[m]
         elif m in self.trakt_wl:
             if self.config.update_plex_wl:
