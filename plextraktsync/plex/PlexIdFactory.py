@@ -10,6 +10,8 @@ class PlexIdFactory:
     def create(cls, key: str | int):
         if isinstance(key, int) or key.isnumeric():
             return PlexId(int(key))
+        elif key.startswith("https://trakt.tv/"):
+            return cls.from_trakt_url(key)
         elif key.startswith("https:") or key.startswith("http:"):
             return cls.from_url(key)
         elif key.startswith("plex://"):
@@ -58,3 +60,12 @@ class PlexIdFactory:
                 return PlexId(int(filters["metadataItemID"][0]), server=server)
 
         raise RuntimeError(f"Unable to parse: {url}")
+
+    @classmethod
+    def from_trakt_url(cls, url: str):
+        path = urlparse(url).path
+        print(path)
+        if path.startswith("/movies"):
+            ...
+
+        raise RuntimeError(f"Unable to create PlexId: {path}")
