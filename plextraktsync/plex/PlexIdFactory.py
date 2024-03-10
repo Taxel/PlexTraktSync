@@ -70,7 +70,11 @@ class PlexIdFactory:
             factory.trakt_api  # ensure proper trakt init
             from trakt.movies import Movie
             slug = path[len("/movies/"):]
-            m = Movie(slug, slug=slug)
+            from trakt.errors import NotFoundException
+            try:
+                m = Movie(slug, slug=slug)
+            except NotFoundException:
+                raise RuntimeError(f"Unable to find Trakt Match: {url}")
             print(m)
             print(m.ids)
             plex = factory.plex_api
