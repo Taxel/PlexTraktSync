@@ -65,7 +65,14 @@ class PlexIdFactory:
     def from_trakt_url(cls, url: str):
         path = urlparse(url).path
         print(path)
-        if path.startswith("/movies"):
+        if path.startswith("/movies/"):
+            from plextraktsync.factory import factory
+            factory.trakt_api  # ensure proper trakt init
+            from trakt.movies import Movie
+            slug = path[len("/movies/"):]
+            m = Movie(slug, slug=slug)
+            print(m)
+            print(m.ids)
             ...
 
         raise RuntimeError(f"Unable to create PlexId: {path}")
