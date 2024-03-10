@@ -99,6 +99,11 @@ class PlexApi:
 
         return plexapi.utils.download(url, token, **kwargs)
 
+    def search(self, title: str, **kwargs):
+        result = self.server.library.search(title, **kwargs)
+        for media in result:
+            yield PlexLibraryItem(media, plex=self)
+
     @property
     def version(self):
         return self.server.version
