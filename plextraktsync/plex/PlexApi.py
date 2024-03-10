@@ -110,13 +110,17 @@ class PlexApi:
                     fetchItem(ekey, guid__id__regex=r"(imdb|tmdb|tvdb)://")
         """
         # result = self.server.library.fetchItems(title, **kwargs)
-        # keys = "|".join(guids.keys())
-        # values = "|".join(map(str, guids.values()))
-        # regex = f"({keys})://({values})"
+        keys = "|".join(guids.keys())
+        values = "|".join(map(str, guids.values()))
+        regex = f"({keys})://({values})"
+        # regex = r"(imdb|tmdb|tvdb)://"
         # regex = f"({keys})://"
-        regex = r"com\.plexapp\.agents\.(imdb|themoviedb)://|tt\d+"
+        # regex = r"com\.plexapp\.agents\.(imdb|themoviedb)://|tt\d+"
         print(regex)
-        result = self.server.library.fetchItems(ekey="/library/all?type=1", guid__id__regex=regex, libtype=libtype)
+        # result = self.server.library.fetchItems(ekey="/library/all?type=1&?includeGuids=1", guid__id__regex=regex, libtype=libtype)
+        # result = self.server.fetchItems(ekey="/library/sections/1/all?type=1&includeGuids=1", guid__id__regex=regex, libtype=libtype)
+        result = self.server.fetchItems(ekey="/library/sections/1/all?includeGuids=1", guid__id__regex=regex)
+        # result = self.server.fetchItems(ekey="/library/all?type=1&includeGuids=1", guid__id__regex=regex)
         # result = self.server.library.search(libtype=libtype)
         print("got", len(result), "items")
         print(result)
