@@ -21,7 +21,8 @@ class Rating(NamedTuple):
         return self.rating == other.rating
 
     def __str__(self):
-        return f"Rating(rating={self.rating}, rated_at='{timestamp(self.rated_at)}')"
+        rated_at = f"'{timestamp(self.rated_at)}'" if self.rated_at else None
+        return f"Rating(rating={self.rating}, rated_at={rated_at})"
 
     @classmethod
     def create(cls, rating: int | float | None, rated_at: datetime | str | None):
