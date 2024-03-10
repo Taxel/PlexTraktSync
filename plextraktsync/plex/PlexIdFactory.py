@@ -73,6 +73,11 @@ class PlexIdFactory:
             m = Movie(slug, slug=slug)
             print(m)
             print(m.ids)
+            plex = factory.plex_api
+            guids = {k: v for k, v in m.ids["ids"].items() if k in ["imdb", "tmdb"]}
+            print(guids)
+            plex.search_by_guid(guids, libtype="movie")
             ...
 
-        raise RuntimeError(f"Unable to create PlexId: {path}")
+        from click import ClickException
+        raise ClickException(f"Unable to create PlexId: {path}")
