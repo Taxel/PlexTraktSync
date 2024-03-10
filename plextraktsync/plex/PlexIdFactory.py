@@ -74,7 +74,7 @@ class PlexIdFactory:
             print(m)
             print(m.ids)
             plex = factory.plex_api
-            guids = {k: v for k, v in m.ids["ids"].items() if k in ["imdb", "tmdb"]}
+            guids = {k: v for k, v in m.ids["ids"].items() if k in ["imdb", "tmdb", "tvdb"]}
             print(guids)
             plex.search_by_guid(guids, libtype="movie")
             ...
