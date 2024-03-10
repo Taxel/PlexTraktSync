@@ -104,6 +104,23 @@ class PlexApi:
         for media in result:
             yield PlexLibraryItem(media, plex=self)
 
+    def search_by_guid(self, guids: dict, libtype=None):
+        r"""
+                    fetchItem(ekey, guid__regex=r"com\.plexapp\.agents\.(imdb|themoviedb)://|tt\d+")
+                    fetchItem(ekey, guid__id__regex=r"(imdb|tmdb|tvdb)://")
+        """
+        # result = self.server.library.fetchItems(title, **kwargs)
+        # keys = "|".join(guids.keys())
+        # values = "|".join(map(str, guids.values()))
+        # regex = f"({keys})://({values})"
+        # regex = f"({keys})://"
+        regex = r"com\.plexapp\.agents\.(imdb|themoviedb)://|tt\d+"
+        print(regex)
+        result = self.server.library.fetchItems(ekey="/library/all?type=1", guid__id__regex=regex, libtype=libtype)
+        # result = self.server.library.search(libtype=libtype)
+        print("got", len(result), "items")
+        print(result)
+
     @property
     def version(self):
         return self.server.version
