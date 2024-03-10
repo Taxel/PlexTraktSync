@@ -30,6 +30,7 @@ class PlexIdFactory:
           https://app.plex.tv/desktop/#!/server/abcdefg/playHistory?filters=metadataItemID%3D6041&filterTitle=&isParentType=false
           https://app.plex.tv/desktop/#!/provider/tv.plex.provider.discover/details?key=%2Flibrary%2Fmetadata%2F5d7768532e80df001ebe18e7
           https://app.plex.tv/desktop/#!/provider/tv.plex.provider.discover/details?key=/library/metadata/5d776a8e51dd69001fe24eb8'
+          https://app.plex.tv/desktop/#!/provider/tv.plex.provider.vod/details?key=%2Flibrary%2Fmetadata%2F5d776b1cad5437001f7936f4
         """
 
         result = urlparse(url)
@@ -49,6 +50,8 @@ class PlexIdFactory:
             if key.startswith("/library/metadata/"):
                 id = key[len("/library/metadata/"):]
                 if fragment.path == "!/provider/tv.plex.provider.discover/details":
+                    return PlexId(id, provider=PlexId.METADATA)
+                if fragment.path == "!/provider/tv.plex.provider.vod/details":
                     return PlexId(id, provider=PlexId.METADATA)
                 return PlexId(int(id), server=server)
 
