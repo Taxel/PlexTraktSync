@@ -104,7 +104,7 @@ class PlexApi:
         for media in result:
             yield PlexLibraryItem(media, plex=self)
 
-    def search_by_guid(self, guids: dict, libtype=None):
+    def search_by_guid(self, guids: dict, libtype):
         r"""
                     fetchItem(ekey, guid__regex=r"com\.plexapp\.agents\.(imdb|themoviedb)://|tt\d+")
                     fetchItem(ekey, guid__id__regex=r"(imdb|tmdb|tvdb)://")

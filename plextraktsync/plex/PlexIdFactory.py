@@ -76,8 +76,13 @@ class PlexIdFactory:
             plex = factory.plex_api
             guids = {k: v for k, v in m.ids["ids"].items() if k in ["imdb", "tmdb", "tvdb"]}
             print(guids)
-            plex.search_by_guid(guids, libtype="movie")
-            ...
+            results = plex.search_by_guid(guids, libtype="movie")
+            if results is None:
+                raise RuntimeError(f"Unable to find Plex Match: {url}")
+            if len(results) > 1:
+                raise RuntimeError(f"Failed to find unique match: {url}")
+            pm = results[0]
+            return PlexId(pm.key)
 
         from click import ClickException
         raise ClickException(f"Unable to create PlexId: {path}")
