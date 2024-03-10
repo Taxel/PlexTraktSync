@@ -4,11 +4,15 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import Any
+
     from plextraktsync.config.Config import Config
     from plextraktsync.config.PlexServerConfig import PlexServerConfig
 
 
 class SyncConfig:
+    config: dict[str, Any]
+
     def __init__(self, config: Config, server_config: PlexServerConfig):
         self.config = dict(config["sync"])
         self.server_config = server_config.sync_config
