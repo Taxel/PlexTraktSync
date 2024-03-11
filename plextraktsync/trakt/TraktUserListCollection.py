@@ -32,7 +32,7 @@ class TraktUserListCollection(UserList):
         return tl
 
     def add_list(self, list_id: int, list_name: str):
-        tl = TraktUserList(list_id, list_name)
+        tl = TraktUserList.from_trakt_list(list_id, list_name)
         self.append(tl)
         return tl
 
