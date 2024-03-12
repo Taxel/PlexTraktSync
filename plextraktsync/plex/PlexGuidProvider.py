@@ -20,7 +20,7 @@ class PlexGuidProvider:
             return PlexGuidProviderTMDB(guid)
         if guid.provider == "tvdb":
             return PlexGuidProviderTVDB(guid)
-        if guid.provider == "local":
+        if guid.provider in ["local", "none"]:
             return PlexGuidProviderLocal(guid)
 
         raise RuntimeError(f"Unsupported provider: {guid.provider}")
