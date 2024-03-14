@@ -17,7 +17,7 @@ def unmatched(no_progress_bar: bool, local: bool):
     failed = []
     if local:
         for pm in walker.get_plex_movies():
-            if pm.guids[0].provider == "local":
+            if all(guid.local for guid in pm.guids):
                 failed.append(pm)
     else:
         for pm in walker.get_plex_movies():
