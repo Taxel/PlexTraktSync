@@ -43,9 +43,12 @@ class HttpCacheConfig:
         # Trakt search urls
         "api.trakt.tv/search/imdb/tt*?type=movie": "1d",
         "api.trakt.tv/search/imdb/tt*?type=show": "1d",
+        "api.trakt.tv/search/imdb/tt*?type=episode": "1d",
         "api.trakt.tv/search/tmdb/*?type=movie": "1d",
         "api.trakt.tv/search/tmdb/*?type=show": "1d",
+        "api.trakt.tv/search/tmdb/*?type=episode": "1d",
         "api.trakt.tv/search/tvdb/*?type=show": "1d",
+        "api.trakt.tv/search/tvdb/*?type=episode": "1d",
         # Keep watched status cached, but fresh
         "api.trakt.tv/sync/watched/shows": "1s",
         "api.trakt.tv/users/*/watched/movies": "1s",
