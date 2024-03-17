@@ -60,7 +60,7 @@ def inspect_media(plex_id: PlexId):
 
         print("Parts:")
         for index, part in enumerate(pm.parts, start=1):
-            print(f"  Part {index}: [link=file://{quote_plus(part.file)}]{escape(part.file)}[/link] {part.size} bytes")
+            print(f"  Part {index} (exists: {part.exists}): [link=file://{quote_plus(part.file)}]{escape(part.file)}[/link] {part.size} bytes")
 
         print("Markers:")
         for marker in pm.markers:
