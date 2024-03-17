@@ -56,6 +56,8 @@ class HttpCacheConfig:
         "metadata.provider.plex.tv/library/sections/watchlist/all": "1s",
         "api.trakt.tv/users/likes/lists": DO_NOT_CACHE,
         "api.trakt.tv/users/me": DO_NOT_CACHE,
+        # Public Lists
+        "api.trakt.tv/lists/*": "1d",
         # Online Plex patterns
         "metadata.provider.plex.tv/library/metadata/*/userState": DO_NOT_CACHE,
         "metadata.provider.plex.tv/library/metadata/*?*includeUserState=1": DO_NOT_CACHE,
