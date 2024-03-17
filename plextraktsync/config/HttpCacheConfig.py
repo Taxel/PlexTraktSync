@@ -43,9 +43,12 @@ class HttpCacheConfig:
         # Trakt search urls
         "api.trakt.tv/search/imdb/tt*?type=movie": "1d",
         "api.trakt.tv/search/imdb/tt*?type=show": "1d",
+        "api.trakt.tv/search/imdb/tt*?type=episode": "1d",
         "api.trakt.tv/search/tmdb/*?type=movie": "1d",
         "api.trakt.tv/search/tmdb/*?type=show": "1d",
+        "api.trakt.tv/search/tmdb/*?type=episode": "1d",
         "api.trakt.tv/search/tvdb/*?type=show": "1d",
+        "api.trakt.tv/search/tvdb/*?type=episode": "1d",
         # Keep watched status cached, but fresh
         "api.trakt.tv/sync/watched/shows": "1s",
         "api.trakt.tv/users/*/watched/movies": "1s",
@@ -56,6 +59,8 @@ class HttpCacheConfig:
         "metadata.provider.plex.tv/library/sections/watchlist/all": "1s",
         "api.trakt.tv/users/likes/lists": DO_NOT_CACHE,
         "api.trakt.tv/users/me": DO_NOT_CACHE,
+        # Public Lists
+        "api.trakt.tv/lists/*": "1d",
         # Online Plex patterns
         "metadata.provider.plex.tv/library/metadata/*/userState": DO_NOT_CACHE,
         "metadata.provider.plex.tv/library/metadata/*?*includeUserState=1": DO_NOT_CACHE,
@@ -68,6 +73,7 @@ class HttpCacheConfig:
         # Plex account
         # Cache for some time, this activates 304 responses
         "plex.tv/users/account": "1m",
+        "plex.tv/api/v2/user": "1m",
         # Plex patterns
         # Ratings search
         "*/library/sections/*/all?*userRating%3E%3E=-1*": DO_NOT_CACHE,
