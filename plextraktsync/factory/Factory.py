@@ -137,7 +137,8 @@ class Factory:
 
         return CachedSession(
             cache_name=self.config.cache_path,
-            cache_control=True,
+            # Plex sends "Cache-Control: no-cache" headers to requests we want to cache
+            cache_control=False,
             urls_expire_after=self.urls_expire_after,
             # https://requests-cache.readthedocs.io/en/stable/user_guide/expiration.html#expiration-and-error-handling
             stale_if_error=True,
