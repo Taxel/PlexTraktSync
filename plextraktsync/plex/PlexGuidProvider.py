@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from plextraktsync.plex.PlexGuidProviderIMDB import PlexGuidProviderIMDB
 from plextraktsync.plex.PlexGuidProviderLocal import PlexGuidProviderLocal
+from plextraktsync.plex.PlexGuidProviderMbid import PlexGuidProviderMbid
 from plextraktsync.plex.PlexGuidProviderTMDB import PlexGuidProviderTMDB
 from plextraktsync.plex.PlexGuidProviderTVDB import PlexGuidProviderTVDB
 
@@ -20,6 +21,8 @@ class PlexGuidProvider:
             return PlexGuidProviderTMDB(guid)
         if guid.provider == "tvdb":
             return PlexGuidProviderTVDB(guid)
+        if guid.provider == "mbid":
+            return PlexGuidProviderMbid(guid)
         if guid.provider in ["local", "none"]:
             return PlexGuidProviderLocal(guid)
 
