@@ -139,6 +139,8 @@ class Factory:
             cache_name=self.config.cache_path,
             cache_control=True,
             urls_expire_after=self.urls_expire_after,
+            # Plex doesn't Send Vary: X-Plex-Container-Start
+            match_headers=["X-Plex-Container-Start"],
         )
 
     @cached_property
