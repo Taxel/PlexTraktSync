@@ -109,8 +109,9 @@ class HttpCacheConfig:
         "*/devices": DO_NOT_CACHE,
         # system_account
         "*/accounts": DO_NOT_CACHE,
+        # Plex server root
         # version, updated_at
-        # "*/": DO_NOT_CACHE,
+        "*/": "10m",
     }
 
     @property
