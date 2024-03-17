@@ -139,6 +139,10 @@ class Factory:
             cache_name=self.config.cache_path,
             cache_control=True,
             urls_expire_after=self.urls_expire_after,
+            # https://requests-cache.readthedocs.io/en/stable/user_guide/expiration.html#expiration-and-error-handling
+            stale_if_error=True,
+            # https://requests-cache.readthedocs.io/en/stable/user_guide/expiration.html#asynchronous-revalidation
+            stale_while_revalidate=True,
             # Plex doesn't Send Vary: X-Plex-Container-Start
             match_headers=["X-Plex-Container-Start"],
         )
