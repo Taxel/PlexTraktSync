@@ -26,11 +26,11 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         # This is stored/used only if user uses a shared PMS.
         # Needed to fetch its watchlist from Plex online servers.
         "PLEX_ACCOUNT_TOKEN": True,
-        # Old keys, Leave comment why deprecated
-        "PLEX_FALLBACKURL": "Legacy, used before 0.18.21",
-        "PLEX_BASEURL": "Unused after 0.24.0, moved to servers.yml",
-        "PLEX_LOCALURL": "Unused after 0.24.0, moved to servers.yml",
-        "PLEX_TOKEN": "Unused after 0.24.0, moved to servers.yml",
+        # Old keys, Do not write to .env anymore
+        "PLEX_FALLBACKURL": False,
+        "PLEX_BASEURL": False,
+        "PLEX_LOCALURL": False,
+        "PLEX_TOKEN": False,
     }
 
     initialized = False
@@ -157,6 +157,10 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         with open(self.env_file, "w") as txt:
             txt.write("# This is .env file for PlexTraktSync\n")
             for key, value in self.env_keys.items():
+                if value is False:
+                    # Skip the item
+                    continue
+
                 if value is not True:
                     # Include deprecation message
                     txt.write(f"# {key}: {value}\n")
