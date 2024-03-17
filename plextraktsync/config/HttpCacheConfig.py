@@ -34,7 +34,7 @@ class HttpCacheConfig:
         "api.trakt.tv/shows/*/seasons?extended=episodes": 28800,
         "api.trakt.tv/shows/*/seasons": DO_NOT_CACHE,
         "api.trakt.tv/sync/collection/shows": "1m",
-        "api.trakt.tv/users/*/collection/movies?extended=metadata": "1m",
+        "api.trakt.tv/users/*/collection/movies?extended=metadata": "10s",
         "api.trakt.tv/users/*/collection/movies": DO_NOT_CACHE,
         "api.trakt.tv/users/*/collection/shows": "1m",
         "api.trakt.tv/users/*/ratings/episodes": "1m",
@@ -55,10 +55,10 @@ class HttpCacheConfig:
         # Watchlist better be fresh for next run
         "api.trakt.tv/users/*/watchlist/movies": "1s",
         "api.trakt.tv/users/*/watchlist/shows": "1s",
-        "metadata.provider.plex.tv/library/sections/watchlist/all?*includeUserState=0": "1s",
-        "metadata.provider.plex.tv/library/sections/watchlist/all": "1s",
-        "api.trakt.tv/users/likes/lists": DO_NOT_CACHE,
-        "api.trakt.tv/users/me": DO_NOT_CACHE,
+        "metadata.provider.plex.tv/library/sections/watchlist/all?*includeUserState=0": "60m",
+        "metadata.provider.plex.tv/library/sections/watchlist/all": "10m",
+        "api.trakt.tv/users/likes/lists": "5m",
+        "api.trakt.tv/users/me": "60m",
         # Public Lists
         "api.trakt.tv/lists/*": "1d",
         # Online Plex patterns
@@ -73,25 +73,26 @@ class HttpCacheConfig:
         # Plex account
         # Cache for some time, this activates 304 responses
         "plex.tv/users/account": "1m",
-        "plex.tv/api/v2/user": "1m",
+        "plex.tv/api/v2/user": "15m",
         # Plex patterns
         # Ratings search
-        "*/library/sections/*/all?*userRating%3E%3E=-1*": "1m",
+        "*/library/sections/*/all?*userRating*=-1*": "5m",
         # len(PlexLibrarySection)
-        "*/library/sections/*/all?includeCollections=0&X-Plex-Container-Size=0&X-Plex-Container-Start=0": DO_NOT_CACHE,
+        "*/library/sections/*/all?*X-Plex-Container-Size=0": DO_NOT_CACHE,
         # __iter__(PlexLibrarySection)
         "*/library/sections/*/all?includeGuids=1": DO_NOT_CACHE,
         # find_by_title
         "*/library/sections/*/all?includeGuids=1&title=*": DO_NOT_CACHE,
+        # episodes
+        "*/library/sections/*/all?includeGuids=1&type=4*": DO_NOT_CACHE,
         # fetch_item, fetch_items
         "*/library/sections/*/all?*": DO_NOT_CACHE,
+        "*/library/sections/*/collections?*X-Plex-Container-Size=0": DO_NOT_CACHE,
         "*/library/sections/*/collections": DO_NOT_CACHE,
         # library_sections
         "*/library/sections": DO_NOT_CACHE,
         # reloads
         "*/library/metadata/*?*include*": DO_NOT_CACHE,
-        # episodes
-        "*/library/sections/*/all?includeGuids=1&type=4*": DO_NOT_CACHE,
         # find_by_id
         "*/library/metadata/*": DO_NOT_CACHE,
         # mark played, mark unplayed
