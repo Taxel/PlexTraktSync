@@ -70,6 +70,7 @@ class HttpCacheConfig:
         # Plex account
         # Cache for some time, this activates 304 responses
         "plex.tv/users/account": "1m",
+        "plex.tv/api/v2/user": "1m",
         # Plex patterns
         # Ratings search
         "*/library/sections/*/all?*userRating%3E%3E=-1*": DO_NOT_CACHE,
