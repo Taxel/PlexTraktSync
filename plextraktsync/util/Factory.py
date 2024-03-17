@@ -117,22 +117,24 @@ class Factory:
         return server_config.get_server(server_name)
 
     @cached_property
-    def session(self):
-        from requests_cache import CachedSession
-
-        if self.run_config.cache:
-            urls_expire_after = self.config.http_cache.urls_expire_after
-        else:
+    def urls_expire_after(self):
+        if not self.run_config.cache:
             from requests_cache import DO_NOT_CACHE
 
-            urls_expire_after = {
+            return {
                 "*": DO_NOT_CACHE,
             }
+
+        return self.config.http_cache.urls_expire_after
+
+    @cached_property
+    def session(self):
+        from requests_cache import CachedSession
 
         return CachedSession(
             cache_name=self.config.cache_path,
             cache_control=True,
-            urls_expire_after=urls_expire_after,
+            urls_expire_after=self.urls_expire_after,
         )
 
     @cached_property
