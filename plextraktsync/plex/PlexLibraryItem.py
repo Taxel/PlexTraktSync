@@ -13,7 +13,7 @@ from plextraktsync.plex.PlexGuid import PlexGuid
 from plextraktsync.util.Rating import Rating
 
 if TYPE_CHECKING:
-    from plexapi.media import MediaPart
+    from plexapi.media import Marker, MediaPart
 
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.types import PlexMedia
@@ -167,7 +167,7 @@ class PlexLibraryItem(RichMarkup):
         return self.date_value(self.item.addedAt)
 
     @property
-    def markers(self) -> list[MediaPart]:
+    def markers(self) -> list[Marker]:
         try:
             return self.item.markers
         except AttributeError:
