@@ -176,8 +176,10 @@ class PlexLibraryItem(RichMarkup):
 
     @property
     def parts(self) -> list[MediaPart]:
-        item = self.plex.fetch_item(self.item.ratingKey)
-        for media in item.item.media:
+        if self.item.isPartialObject():
+            self.item.reload()
+
+        for media in self.item.media:
             yield from media.parts
 
     @property
