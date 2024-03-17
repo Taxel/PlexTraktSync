@@ -143,7 +143,7 @@ class PlexLibraryItem(RichMarkup):
         if self.type == "episode":
             value = f"{self.item.grandparentTitle}/{self.item.seasonEpisode}/{value}"
 
-        if self.item.year:
+        if self.type != "artist" and self.item.year:
             value = f"{value} ({self.item.year})"
 
         return value
