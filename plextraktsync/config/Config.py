@@ -157,6 +157,10 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         with open(self.env_file, "w") as txt:
             txt.write("# This is .env file for PlexTraktSync\n")
             for key, value in self.env_keys.items():
+                if value is False:
+                    # Skip the item
+                    continue
+
                 if value is not True:
                     # Include deprecation message
                     txt.write(f"# {key}: {value}\n")
