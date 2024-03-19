@@ -14,10 +14,16 @@ if TYPE_CHECKING:
 class TraktUserListCollection(UserList):
     logger = logging.getLogger(__name__)
 
+    def __init__(self, keep_watched=True):
+        super().__init__()
+        self.keep_watched = keep_watched
+
     def add_to_lists(self, m: Media):
         # Skip movie editions
         # https://support.plex.tv/articles/multiple-editions/#:~:text=Do%20Multiple%20Editions%20work%20with%20watch%20state%20syncing%3F
         if m.plex.edition_title is not None:
+            return
+        if not self.keep_watched and m.plex.is_watched:
             return
         for tl in self:
             tl.add(m)
@@ -38,7 +44,7 @@ class TraktUserListCollection(UserList):
 
     def sync(self):
         for tl in self:
-            updated = tl.plex_list.update(tl.plex_items_sorted)
+            updated = tl.plex_list.update(tl.plex_items_sorted(self.keep_watched))
             if not updated:
                 continue
             self.logger.info(f"Plex list {tl.title_link} ({len(tl.plex_items)} items) updated", extra={"markup": True})

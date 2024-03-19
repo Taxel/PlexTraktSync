@@ -65,6 +65,8 @@ sync:
     watchlist: true
   trakt_to_plex:
     liked_lists: true
+    # Add watched items to liked lists
+    liked_lists_keep_watched: true
     ratings: true
     watched_status: true
     # If trakt_to_plex watchlist=false and plex_to_trakt watchlist=true
