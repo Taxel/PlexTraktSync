@@ -99,6 +99,55 @@ class PlexApi:
 
         return plexapi.utils.download(url, token, **kwargs)
 
+    def search(self, title: str, **kwargs):
+        result = self.server.library.search(title, **kwargs)
+        for media in result:
+            yield PlexLibraryItem(media, plex=self)
+
+    def search_by_guid(self, guids: dict, libtype):
+        r"""
+                    fetchItem(ekey, guid__regex=r"com\.plexapp\.agents\.(imdb|themoviedb)://|tt\d+")
+                    fetchItem(ekey, guid__id__regex=r"(imdb|tmdb|tvdb)://")
+        """
+        # result = self.server.library.fetchItems(title, **kwargs)
+        keys = "|".join(guids.keys())
+        values = "|".join(map(str, guids.values()))
+        regex = f"({keys})://({values})"
+        # regex = r"(imdb|tmdb|tvdb)://"
+        # regex = f"({keys})://"
+        # regex = r"com\.plexapp\.agents\.(imdb|themoviedb)://|tt\d+"
+        print(regex)
+        # result = self.server.library.fetchItems(ekey="/library/all?type=1&?includeGuids=1", guid__id__regex=regex, libtype=libtype)
+        # result = self.server.fetchItems(ekey="/library/sections/1/all?type=1&includeGuids=1", guid__id__regex=regex, libtype=libtype)
+        result = self.server.fetchItems(ekey="/library/sections/1/all?includeGuids=1", guid__id__regex=regex)
+        # result = self.server.fetchItems(ekey="/library/all?type=1&includeGuids=1", guid__id__regex=regex)
+        # result = self.server.library.search(libtype=libtype)
+        print("got", len(result), "items")
+        print(result)
+        # Do proper matching with provider type and provider id
+        from plextraktsync.plex.PlexGuid import PlexGuid
+        plexguids = [PlexGuid(f"{k}://{v}", type=libtype) for k, v in guids.items()]
+        print("plexguids", plexguids)
+        # fakepm = PlexLibraryItem(result[0])
+        # fakepm.guids = plexguids
+        results = []
+        for m in result:
+            pm = PlexLibraryItem(m, self)
+            matched = len([[True for g1 in pm.guids if g1 == g2] for g2 in plexguids])
+            if matched:
+                results.append(pm)
+
+            # for g1 in pm.guids:
+            #     for g2 in plexguids:
+            #         if g1 == g2:
+            #             return True
+            # matched = any([guid for guid in pm.guids if guid == plexguids])
+        # result = [result for result in result if all([guid for guid in plexguids if guid == result.guid])]
+        print("result2", results)
+        if not len(results):
+            return None
+        return results
+
     @property
     def version(self):
         return self.server.version
