@@ -32,3 +32,6 @@ def info(print=factory.print):
         print(f"Enabled {len(sections.keys())} libraries in Plex Server:")
         for id, section in sorted(sections.items()):
             print(f" - {id}: {section.title_link}")
+
+    # load every method from factory
+    factory.selftest()
