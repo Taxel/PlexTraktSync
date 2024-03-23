@@ -36,6 +36,10 @@ class MediaFactory:
         return self.server_config.ignore_ids
 
     def resolve_any(self, pm: PlexLibraryItem, show: Media = None) -> Media | None:
+        if pm.key in self.ignore_ids:
+            self.logger.error(f"Skipping {pm} because listed in ignore_ids")
+            return None
+
         try:
             guids = pm.guids
         except (PlexApiException, RequestException) as e:
