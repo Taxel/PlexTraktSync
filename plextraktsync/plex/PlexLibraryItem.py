@@ -353,8 +353,12 @@ class PlexLibraryItem(RichMarkup):
     def date_value(date) -> datetime.datetime | None:
         if not date:
             return None
-
-        return date.astimezone(datetime.timezone.utc)
+        try:
+            return date.astimezone(datetime.timezone.utc)
+        except OSError:
+            # python on Windows cannot find tz for pre-epoch dates
+            # https://github.com/python/cpython/issues/80940
+            return date
 
     @property
     def title_link(self):
