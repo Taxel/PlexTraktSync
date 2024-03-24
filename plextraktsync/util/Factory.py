@@ -125,7 +125,27 @@ class Factory:
                 "*": DO_NOT_CACHE,
             }
 
-        return self.config.http_cache.urls_expire_after
+        def patch_plex_urls(patterns, base_urls, glob="*.plex.direct:*"):
+            """
+            Replace plex.direct urls from patterns to current server urls
+            """
+            from fnmatch import filter
+
+            for pattern, expire in patterns.items():
+                # add original pattern
+                yield pattern, expire
+
+                # replaced patterns
+                for url in filter(base_urls, glob):
+                    url = pattern.replace(glob, url)
+                    yield url, expire
+
+        urls_expire_after = dict(patch_plex_urls(
+            self.config.http_cache.urls_expire_after,
+            self.server_config.base_urls,
+        ))
+
+        return urls_expire_after
 
     @cached_property
     def session(self):
