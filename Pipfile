@@ -29,7 +29,7 @@ pytrakt = "==3.4.31"
 pyyaml = "==6.0.1"
 requests = "==2.31.0"
 requests-cache = "==1.2.0"
-requests-oauthlib = {version="==1.4.0", python_version=">='3.4'"}
+requests-oauthlib = {version="==2.0.0", python_version=">='3.4'"}
 rich = "==13.7.1"
 six = {version="==1.16.0", python_version=">='3.4'"}
 tqdm = "==4.66.2"
