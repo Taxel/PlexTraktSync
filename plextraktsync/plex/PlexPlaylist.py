@@ -3,23 +3,29 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
+from plexapi.library import LibrarySection
+from plexapi.myplex import Section
+
 from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.factory import logging
 from plextraktsync.media.Media import Media
 from plextraktsync.mixin.RichMarkup import RichMarkup
+from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 
 if TYPE_CHECKING:
     from plexapi.playlist import Playlist
     from plexapi.server import PlexServer
 
+    from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.types import PlexMedia
 
 
 class PlexPlaylist(RichMarkup):
     logger = logging.getLogger(__name__)
 
-    def __init__(self, server: PlexServer, name: str):
-        self.server = server
+    def __init__(self, plex: PlexApi, section: LibrarySection, name: str):
+        self.plex = plex
+        self.section = section
         self.name = name
 
     def __iter__(self):
@@ -32,13 +38,13 @@ class PlexPlaylist(RichMarkup):
         return m.plex_key in self.items
 
     @cached_property
-    def playlist(self) -> Playlist | None:
+    def playlist(self):
         try:
-            playlists = self.server.playlists(title=self.name, title__iexact=self.name)
-            playlist: Playlist = playlists[0]
+            playlists = self.section.collections(title=self.name, title__iexact=self.name)
+            playlist = playlists[0]
             if len(playlists) > 1:
-                self.logger.warning(f"Found multiple playlists ({len(playlists)}) with same name: '{self.name}', "
-                                    f"Using first playlist with id {playlist.ratingKey}")
+                self.logger.warning(f"Found multiple collections ({len(playlists)}) with same name: '{self.name}', "
+                                    f"Using first collection with id {playlist.ratingKey}")
             self.logger.debug(f"Loaded plex list: '{self.name}'")
             return playlist
         except IndexError:
@@ -62,7 +68,9 @@ class PlexPlaylist(RichMarkup):
             # Force reload
             del self.__dict__["playlist"]
             del self.__dict__["items"]
-            playlist = self.server.createPlaylist(self.name, items=items)
+            for item in items:
+                section = PlexLibraryItem(item, plex=self.plex).library.section
+            playlist = section.createCollection(self.name, items=items)
             self.logger.info(f"Created plex playlist {self.title_link} with {len(items)} items", extra={"markup": True})
 
         # Skip if playlist could not be made/retrieved
