@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plexapi.exceptions import PlexApiException
 from requests import RequestException
 from trakt.errors import TraktException
 
-from plextraktsync.factory import logging
+from plextraktsync.factory import factory, logging
 from plextraktsync.media.Media import Media
 
 if TYPE_CHECKING:
@@ -27,7 +28,19 @@ class MediaFactory:
         self.plex = plex
         self.trakt = trakt
 
+    @property
+    def config(self):
+        return factory.config
+
+    @cached_property
+    def ignore_ids(self):
+        return self.config.ignore_ids
+
     def resolve_any(self, pm: PlexLibraryItem, show: Media = None) -> Media | None:
+        if pm.key in self.ignore_ids:
+            self.logger.error(f"Skipping {pm} because listed in ignore_ids")
+            return None
+
         try:
             guids = pm.guids
         except (PlexApiException, RequestException) as e:

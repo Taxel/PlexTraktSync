@@ -45,6 +45,11 @@ logging:
 #    - name: requests_cache.policy.actions
 #    - name: requests_cache.session
 
+# Plex Ids to ignore
+# This is to workaround of broken sync if some items have unrecoverable errors
+ignore_ids:
+#    - 123
+
 # settings for 'sync' command
 sync:
   # Setting for whether ratings from one platform should have priority.
