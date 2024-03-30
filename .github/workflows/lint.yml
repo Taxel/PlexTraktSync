@@ -19,5 +19,4 @@ jobs:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: flake8 Lint
         uses: py-actions/flake8@v2
-
 # vim:ts=2:sw=2:et

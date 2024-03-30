@@ -10,7 +10,7 @@ on:
     branches:
       - main
     tags:
-      - '*.*.*'
+      - "*.*.*"
   pull_request:
 
 env:
@@ -95,5 +95,4 @@ jobs:
             APP_VERSION=${{ env.APP_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
 # vim:ts=2:sw=2:et

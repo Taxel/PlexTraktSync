@@ -21,14 +21,14 @@ logging:
   filename: plextraktsync.log
   # Additional logger names to apply filtering
   filter_loggers:
-#    - plexapi
-#    - requests_cache.backends
-#    - requests_cache.backends.base
-#    - requests_cache.backends.sqlite
-#    - requests_cache.policy.actions
-#    - requests_cache.session
-#    - trakt.core
-#    - urllib3.connectionpool
+  #    - plexapi
+  #    - requests_cache.backends
+  #    - requests_cache.backends.base
+  #    - requests_cache.backends.sqlite
+  #    - requests_cache.policy.actions
+  #    - requests_cache.session
+  #    - trakt.core
+  #    - urllib3.connectionpool
   filter:
 #    # Filter out all messages with level WARNING
 #    - level: WARNING
@@ -90,24 +90,23 @@ watch:
 xbmc-providers:
   movies: imdb
   shows: tvdb
-
 ##### Advanced settings below this line, don't edit unless you know what you're doing #####
 #http_cache:
-  # https://requests-cache.readthedocs.io/en/main/user_guide/expiration.html#url-patterns
-  # https://requests-cache.readthedocs.io/en/main/user_guide/expiration.html#expiration-values
-  #
-  # The value is seconds to cache.
-  # Or one of the following special values:
-  # - DO_NOT_CACHE: Skip both reading from and writing to the cache
-  # - EXPIRE_IMMEDIATELY: Consider the response already expired, but potentially usable
-  # - NEVER_EXPIRE: Store responses indefinitely
-  #
-  # The value can be also suffixed with a time unit:
-  # - 5m, 1h, 3d
-  # See full documentation at:
-  # - https://github.com/wroberts/pytimeparse#pytimeparse-time-expression-parser
-  #
-  # NOTE: If there is more than one match, the first match will be used in the order they are defined
+# https://requests-cache.readthedocs.io/en/main/user_guide/expiration.html#url-patterns
+# https://requests-cache.readthedocs.io/en/main/user_guide/expiration.html#expiration-values
+#
+# The value is seconds to cache.
+# Or one of the following special values:
+# - DO_NOT_CACHE: Skip both reading from and writing to the cache
+# - EXPIRE_IMMEDIATELY: Consider the response already expired, but potentially usable
+# - NEVER_EXPIRE: Store responses indefinitely
+#
+# The value can be also suffixed with a time unit:
+# - 5m, 1h, 3d
+# See full documentation at:
+# - https://github.com/wroberts/pytimeparse#pytimeparse-time-expression-parser
+#
+# NOTE: If there is more than one match, the first match will be used in the order they are defined
 #  policy:
 #    "*.trakt.tv/users/me": 1d
 #    "*.trakt.tv/users/likes/lists": DO_NOT_CACHE

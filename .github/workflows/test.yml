@@ -25,5 +25,4 @@ jobs:
 
       - name: "Test: Info"
         run: ./plextraktsync.sh info
-
 # vim:ts=2:sw=2:et

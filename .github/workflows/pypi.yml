@@ -10,7 +10,7 @@ on:
     types: [published]
   push:
     tags:
-      - '*.*.*'
+      - "*.*.*"
 
 env:
   DEFAULT_PYTHON: 3.8
@@ -23,46 +23,45 @@ jobs:
       name: release
       url: https://pypi.org/p/plextraktsync
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set version variable
-      id: vars
-      run: |
-        if [[ "${GITHUB_REF#refs/heads/}" = "${GITHUB_REF}" ]]; then
-          APP_VERSION=${GITHUB_REF#refs/tags/}
-        else
-          git fetch --tags --unshallow
-          version=$(git describe --tags --abbrev=0)
-          subver=${{ github.run_number }}
-          APP_VERSION=$version.post$subver
-        fi
-        echo "version=$APP_VERSION" >> $GITHUB_OUTPUT
+      - name: Set version variable
+        id: vars
+        run: |
+          if [[ "${GITHUB_REF#refs/heads/}" = "${GITHUB_REF}" ]]; then
+            APP_VERSION=${GITHUB_REF#refs/tags/}
+          else
+            git fetch --tags --unshallow
+            version=$(git describe --tags --abbrev=0)
+            subver=${{ github.run_number }}
+            APP_VERSION=$version.post$subver
+          fi
+          echo "version=$APP_VERSION" >> $GITHUB_OUTPUT
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ env.DEFAULT_PYTHON }}
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
 
-    - name: Install dependencies and build
-      env:
-        APP_VERSION: ${{ steps.vars.outputs.version }}
-      run: |
-        set -x
-        echo "__version__ = '$APP_VERSION'" > plextraktsync/__init__.py
-        cat plextraktsync/__init__.py
-        python -c "from plextraktsync import __version__; print(__version__)"
-        python -m pip install --upgrade build
-        #
-        # Patch requirements.txt fpor setuptools-declarative-requirements:
-        # https://github.com/s0undt3ch/setuptools-declarative-requirements/issues/6
-        sed -i -e '/^-i/d' requirements.txt
-        python -m build
+      - name: Install dependencies and build
+        env:
+          APP_VERSION: ${{ steps.vars.outputs.version }}
+        run: |
+          set -x
+          echo "__version__ = '$APP_VERSION'" > plextraktsync/__init__.py
+          cat plextraktsync/__init__.py
+          python -c "from plextraktsync import __version__; print(__version__)"
+          python -m pip install --upgrade build
+          #
+          # Patch requirements.txt fpor setuptools-declarative-requirements:
+          # https://github.com/s0undt3ch/setuptools-declarative-requirements/issues/6
+          sed -i -e '/^-i/d' requirements.txt
+          python -m build
 
-    - name: Publish to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_TOKEN }}
-
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN }}
 # vim:ts=2:sw=2:et

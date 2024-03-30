@@ -3,7 +3,6 @@ name: "\U0001F680 Feature request"
 about: "Request a new feature or other non-bugfix improvement"
 title: "Feature request:"
 labels: enhancement
-
 ---
 
 ### Feature description

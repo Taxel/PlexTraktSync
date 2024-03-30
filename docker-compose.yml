@@ -1,8 +1,7 @@
-version: '2'
+version: "2"
 services:
   plextraktsync:
     image: ghcr.io/taxel/plextraktsync
     volumes:
       - ./config:/app/config
-
 # vim:ts=2:sw=2:et

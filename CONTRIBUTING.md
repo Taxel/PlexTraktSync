@@ -44,6 +44,7 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 ## Checking out code
 
 If you checkout a specific version, this can be done in one of different ways:
+
 - [GitHub download](#github-download)
 - [Git clone](#git-clone)
 - [Install code from Pull request](#install-code-from-pull-request)
@@ -81,21 +82,24 @@ Proceed to [Install dependencies](#install-dependencies)
 This applies to [GitHub download](#github-download) and [Git clone](#git-clone).
 
 In the `PlexTraktSync` directory, install the required Python packages:
+
 ```
 python3 -m pip install -r requirements.txt
 ```
 
 To run from `PlexTraktSync` directory:
+
 ```
 python3 -m plextraktsync
 ```
 
 Or use a wrapper which is able to change directory accordingly:
+
 ```
 /path/to/PlexTraktSync/plextraktsync.sh
 ```
 
-*or* alternatively you can use [pipenv]:
+_or_ alternatively you can use [pipenv]:
 
 ```
 python3 -m pip install pipenv
@@ -134,7 +138,9 @@ $ docker-compose run --rm --entrypoint sh plextraktsync
 /app # plextraktsync self-update --pr 969
 /app # plextraktsync@969 info
 ```
+
 ͏͏͏͏ ͏ ͏ 2. then run the script with:
+
 ```
 /app # plextraktsync@969 sync
 ```
@@ -203,6 +209,7 @@ tag on the default branch.
 We use [pytest] for testing.
 
 First, ensure you have dependencies installed:
+
 ```
 pip3 install -r tests/requirements.txt
 ```
@@ -257,6 +264,7 @@ send your database only to people you trust. Plex removes password hashes from
 the download, so passwords are not exposed, not even in hashed form.
 
 To download and send the database:
+
 1. Visit [`Plex Web`] -> `Manage Server` -> `Settings` -> `Troubleshooting` -> `Download database`.
    This is typically `https://app.plex.tv/desktop/#!/settings/server/<your_server_id>/manage/help`
 1. To find developer email, take any commit made by them, add `.patch` to the url.
@@ -272,7 +280,7 @@ your library.
 
 The XML can be viewed from Plex Media Servers that you own:
 
-  - Overflow menu → Get Info → View XML in bottom-left corner of the modal
+- Overflow menu → Get Info → View XML in bottom-left corner of the modal
 
 ![][xml-menu]
 
