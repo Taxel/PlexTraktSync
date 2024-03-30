@@ -18,3 +18,7 @@ class TraktItem:
         """
         # NB: TVSeason does not have "media_type" property
         return self.item.media_type[:-1]
+
+    @property
+    def guids(self):
+        return {k: v for k, v in self.item.ids["ids"].items() if k in ["imdb", "tmdb", "tvdb"]}
