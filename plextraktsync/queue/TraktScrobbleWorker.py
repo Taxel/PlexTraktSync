@@ -31,10 +31,10 @@ class TraktScrobbleWorker:
             queues[name].clear()
 
     def submit(self, name, items):
-        method = getattr(self, name)
+        name = name.replace("scrobble_", "")
         results = []
         for scrobbler, progress in self.normalize(items).items():
-            res = method(scrobbler, progress)
+            res = self.scrobble(scrobbler, name, progress)
             results.append(res)
 
         if results:
@@ -43,20 +43,9 @@ class TraktScrobbleWorker:
     @rate_limit()
     @time_limit()
     @retry()
-    def scrobble_update(self, scrobbler: Scrobbler, progress: float):
-        return scrobbler.update(progress)
-
-    @rate_limit()
-    @time_limit()
-    @retry()
-    def scrobble_pause(self, scrobbler: Scrobbler, progress: float):
-        return scrobbler.pause(progress)
-
-    @rate_limit()
-    @time_limit()
-    @retry()
-    def scrobble_stop(self, scrobbler: Scrobbler, progress: float):
-        return scrobbler.stop(progress)
+    def scrobble(self, scrobbler: Scrobbler, name: str, progress: float):
+        method = getattr(scrobbler, name)
+        return method(progress)
 
     @staticmethod
     def normalize(items: list[TraktPlayable]):
