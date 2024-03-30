@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from trakt.errors import ConflictException
+
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
@@ -45,7 +47,10 @@ class TraktScrobbleWorker:
     @retry()
     def scrobble(self, scrobbler: Scrobbler, name: str, progress: float):
         method = getattr(scrobbler, name)
-        return method(progress)
+        try:
+            return method(progress)
+        except ConflictException:
+            return
 
     @staticmethod
     def normalize(items: list[TraktPlayable]):
