@@ -9,8 +9,8 @@ import trakt.movies
 import trakt.sync
 import trakt.users
 from click import ClickException
-from trakt.errors import (ForbiddenException, OAuthException,
-                          OAuthRefreshException)
+from trakt.errors import (ForbiddenException, NotFoundException,
+                          OAuthException, OAuthRefreshException)
 
 from plextraktsync import pytrakt_extensions
 from plextraktsync.decorators.flatten import flatten_list
@@ -256,6 +256,19 @@ class TraktApi:
                     self.logger.warning(f"Found match using show search: {guid.title_link}", extra={"markup": True})
 
             return tm
+
+    @staticmethod
+    def find_by_slug(slug: str, media_type: str):
+        if media_type == "movie":
+            from trakt.movies import Movie
+            factory_method = Movie
+        else:
+            raise RuntimeError(f"Unsupported media_type={media_type}")
+
+        try:
+            return factory_method(title=slug, slug=slug)
+        except NotFoundException:
+            raise RuntimeError(f"Unable to find by slug: {slug}")
 
     @rate_limit()
     @retry()
