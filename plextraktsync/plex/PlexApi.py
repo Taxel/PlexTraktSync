@@ -99,6 +99,38 @@ class PlexApi:
 
         return plexapi.utils.download(url, token, **kwargs)
 
+    def search_by_guid(self, guids: dict, libtype: str):
+        r"""
+                    fetchItem(ekey, guid__regex=r"com\.plexapp\.agents\.(imdb|themoviedb)://|tt\d+")
+                    fetchItem(ekey, guid__id__regex=r"(imdb|tmdb|tvdb)://")
+        """
+        from plexapi.utils import searchType
+
+        from plextraktsync.plex.PlexGuid import PlexGuid
+
+        search_type = searchType(libtype)
+        # Build regex of possible matches
+        keys = "|".join(guids.keys())
+        values = "|".join(map(str, guids.values()))
+        regex = f"({keys})://({values})"
+
+        # Search by regexp all libraries
+        result = self.server.fetchItems(ekey=f"/library/all?includeGuids=1&type={search_type}", guid__id__regex=regex)
+
+        # Do proper matching with provider type and provider id
+        plexguids = [PlexGuid(f"{k}://{v}", type=libtype) for k, v in guids.items()]
+        results = []
+        for m in result:
+            pm = PlexLibraryItem(m, self)
+            matched = len([[True for g1 in pm.guids if g1 == g2] for g2 in plexguids])
+            if matched:
+                results.append(pm)
+
+        if not len(results):
+            return None
+
+        return results
+
     @property
     def version(self):
         return self.server.version
