@@ -49,8 +49,8 @@ class TraktScrobbleWorker:
         method = getattr(scrobbler, name)
         try:
             return method(progress)
-        except ConflictException:
-            return
+        except ConflictException as e:
+            self.logger.error(e)
 
     @staticmethod
     def normalize(items: list[TraktPlayable]):
