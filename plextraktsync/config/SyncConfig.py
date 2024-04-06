@@ -57,6 +57,10 @@ class SyncConfig:
         return self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
 
     @cached_property
+    def sync_playback_status(self):
+        return self["trakt_to_plex"]["playback_status"]
+
+    @cached_property
     def update_plex_wl(self):
         return self.trakt_to_plex["watchlist"] and not self.trakt_to_plex["watchlist_as_playlist"]
 
