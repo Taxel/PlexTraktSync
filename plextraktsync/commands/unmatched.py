@@ -10,7 +10,7 @@ def unmatched(no_progress_bar: bool, local: bool):
     wc = factory.walk_config
     walker = factory.walker
 
-    if not wc.is_valid():
+    if not wc.is_valid:
         print("Nothing to scan, this is likely due conflicting options given.")
         return
 

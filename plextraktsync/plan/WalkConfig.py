@@ -50,6 +50,7 @@ class WalkConfig:
         # Must sync both movies and shows to be full sync
         return not self.walk_movies or not self.walk_shows
 
+    @property
     def is_valid(self):
         # Single item provided
         if self.library or self.movie or self.show or self.id:
