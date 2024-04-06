@@ -88,4 +88,5 @@ class SyncConfig:
             self.sync_ratings,
             self.plex_to_trakt["collection"],
             self.sync_liked_lists,
+            self.sync_playback_status,
         ])
