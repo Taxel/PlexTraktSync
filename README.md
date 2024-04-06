@@ -312,6 +312,9 @@ seconds, second run - 111 seconds
 You can view sync progress in the `plextraktsync.log` file which will be
 created.
 
+You can use `--edit` or `--locate` flags to `config` command to open config
+file in editor or in file browser.
+
 ### Libraries
 
 By default, all libraries are processed. You can disable libraries by name by
