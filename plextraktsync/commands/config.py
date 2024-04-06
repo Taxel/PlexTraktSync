@@ -14,9 +14,14 @@ def dump(data, print=None):
     print(dump)
 
 
-def config(urls_expire_after: bool):
+def config(urls_expire_after: bool, edit: bool):
     config = factory.config
     print = factory.print
+
+    if edit:
+        import click
+        click.launch(config.config_yml)
+        return
 
     if urls_expire_after:
         print("# HTTP Cache")
