@@ -25,6 +25,7 @@ class Sync:
         self.config = config
         self.plex = plex
         self.trakt = trakt
+        self.walker = None
 
     @cached_property
     def plex_wl(self):
@@ -43,8 +44,15 @@ class Sync:
         return TraktWatchList(self.trakt.watchlist_movies + self.trakt.watchlist_shows)
 
     def sync(self, walker: Walker, dry_run=False):
+        self.walker = walker
         trakt_lists = TraktUserListCollection()
         is_partial = walker.is_partial and not dry_run
+
+        from plextraktsync.sync.plugin import SyncPluginManager
+        pm = SyncPluginManager()
+        pm.register_plugins(self)
+
+        pm.hook.init(sync=self, trakt_lists=trakt_lists, is_partial=is_partial)
 
         if is_partial and self.config.clear_collected:
             self.logger.warning("Running partial library sync. Clear collected will be disabled.")
@@ -64,6 +72,7 @@ class Sync:
         if self.config.need_library_walk:
             movie_trakt_ids = set()
             for movie in walker.find_movies():
+                pm.hook.walk_movie(movie=movie, dry_run=dry_run)
                 self.sync_collection(movie, dry_run=dry_run)
                 self.sync_ratings(movie, dry_run=dry_run)
                 self.sync_watched(movie, dry_run=dry_run)
@@ -78,6 +87,7 @@ class Sync:
             shows = set()
             episode_trakt_ids = set()
             for episode in walker.find_episodes():
+                pm.hook.walk_episode(episode=episode, dry_run=dry_run)
                 self.sync_collection(episode, dry_run=dry_run)
                 self.sync_ratings(episode, dry_run=dry_run)
                 self.sync_watched(episode, dry_run=dry_run)
@@ -107,6 +117,8 @@ class Sync:
         if walker.config.walk_watchlist and self.sync_wl:
             with measure_time("Updated watchlist"):
                 self.sync_watchlist(walker, dry_run=dry_run)
+
+        pm.hook.fini(walker=walker, trakt_lists=trakt_lists, dry_run=dry_run)
 
     def sync_collection(self, m: Media, dry_run=False):
         if not self.config.plex_to_trakt["collection"]:
