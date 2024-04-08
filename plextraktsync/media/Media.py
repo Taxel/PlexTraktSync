@@ -3,6 +3,7 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
+from trakt.sync import PlaybackEntry
 from trakt.tv import TVShow
 
 from plextraktsync.mixin.RichMarkup import RichMarkup
@@ -38,6 +39,12 @@ class Media(RichMarkup):
         self.plex = plex
         self.trakt = trakt
         self._show = None
+
+    def __eq__(self, other):
+        if isinstance(other, PlaybackEntry):
+            return self.type == other.type and self.trakt_id == other.trakt
+
+        return False
 
     @property
     def title(self):
