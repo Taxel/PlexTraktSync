@@ -46,6 +46,9 @@ class Media(RichMarkup):
 
         return False
 
+    def __hash__(self):
+        return hash((self.type, self.plex, self.trakt))
+
     @property
     def title(self):
         if self.plex:
