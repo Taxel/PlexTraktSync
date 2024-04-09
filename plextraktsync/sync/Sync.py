@@ -8,14 +8,11 @@ from plextraktsync.factory import logging
 from plextraktsync.trakt.TraktUserListCollection import TraktUserListCollection
 
 if TYPE_CHECKING:
-    from typing import Iterable
-
     from plextraktsync.config.SyncConfig import SyncConfig
     from plextraktsync.media.Media import Media
     from plextraktsync.plan.Walker import Walker
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.trakt.TraktApi import TraktApi
-    from plextraktsync.trakt.types import TraktMedia
 
 
 class Sync:
@@ -54,9 +51,6 @@ class Sync:
 
         pm.hook.init(sync=self, trakt_lists=trakt_lists, is_partial=is_partial, dry_run=dry_run)
 
-        if is_partial and self.config.clear_collected:
-            self.logger.warning("Running partial library sync. Clear collected will be disabled.")
-
         if self.config.update_plex_wl_as_pl:
             if is_partial:
                 self.logger.warning("Running partial library sync. Watchlist as playlist won't update because it needs full library sync.")
@@ -70,36 +64,24 @@ class Sync:
                 trakt_lists.load_lists(self.trakt.liked_lists)
 
         if self.config.need_library_walk:
-            movie_trakt_ids = set()
             for movie in walker.find_movies():
                 pm.hook.walk_movie(movie=movie, dry_run=dry_run)
                 self.sync_ratings(movie, dry_run=dry_run)
                 self.sync_watched(movie, dry_run=dry_run)
                 if not is_partial:
                     trakt_lists.add_to_lists(movie)
-                    if self.config.clear_collected:
-                        movie_trakt_ids.add(movie.trakt_id)
-
-            if movie_trakt_ids:
-                self.clear_collected(self.trakt.movie_collection, movie_trakt_ids)
 
             shows = set()
-            episode_trakt_ids = set()
             for episode in walker.find_episodes():
                 pm.hook.walk_episode(episode=episode, dry_run=dry_run)
                 self.sync_ratings(episode, dry_run=dry_run)
                 self.sync_watched(episode, dry_run=dry_run)
                 if not is_partial:
                     trakt_lists.add_to_lists(episode)
-                    if self.config.clear_collected:
-                        episode_trakt_ids.add(episode.trakt_id)
 
                 if self.config.sync_ratings and episode.show:
                     # collect shows for later ratings sync
                     shows.add(episode.show)
-
-            if episode_trakt_ids:
-                self.clear_collected(self.trakt.episodes_collection, episode_trakt_ids)
 
             for show in walker.walk_shows(shows, title="Syncing show ratings"):
                 self.sync_ratings(show, dry_run=dry_run)
@@ -238,16 +220,3 @@ class Sync:
         if len(self.trakt_wl):
             for m in walker.media_from_traktlist(self.trakt_wl):
                 self.watchlist_sync_item(m, dry_run)
-
-    def clear_collected(self, existing_items: Iterable[TraktMedia], keep_ids: set[int], dry_run=False):
-        from plextraktsync.trakt.trakt_set import trakt_set
-
-        existing_ids = trakt_set(existing_items)
-        delete_ids = existing_ids - keep_ids
-        delete_items = (tm for tm in existing_items if tm.trakt in delete_ids)
-
-        n = len(delete_ids)
-        for i, tm in enumerate(delete_items, start=1):
-            self.logger.info(f"Remove from Trakt collection ({i}/{n}): {tm}")
-            if not dry_run:
-                self.trakt.remove_from_collection(tm)
