@@ -14,6 +14,10 @@ if TYPE_CHECKING:
 class TraktUserListCollection(UserList):
     logger = logging.getLogger(__name__)
 
+    @property
+    def is_empty(self):
+        return not len(self)
+
     def add_to_lists(self, m: Media):
         # Skip movie editions
         # https://support.plex.tv/articles/multiple-editions/#:~:text=Do%20Multiple%20Editions%20work%20with%20watch%20state%20syncing%3F
