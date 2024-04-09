@@ -44,7 +44,6 @@ class Sync:
         self.walker = walker
         trakt_lists = TraktUserListCollection()
         is_partial = walker.is_partial and not dry_run
-        add_to_lists = not is_partial
 
         from plextraktsync.sync.plugin import SyncPluginManager
         pm = SyncPluginManager()
@@ -53,10 +52,13 @@ class Sync:
         pm.hook.init(sync=self, trakt_lists=trakt_lists, is_partial=is_partial, dry_run=dry_run)
 
         if self.config.update_plex_wl_as_pl:
-            if not add_to_lists:
+            if is_partial:
                 self.logger.warning("Running partial library sync. Watchlist as playlist won't update because it needs full library sync.")
             else:
                 trakt_lists.add_watchlist(self.trakt.watchlist_movies)
+
+        # Skip updating lists if it's empty
+        add_to_lists = not trakt_lists.is_empty
 
         if self.config.need_library_walk:
             for movie in walker.find_movies():
