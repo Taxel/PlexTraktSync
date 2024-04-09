@@ -181,6 +181,14 @@ To build for a pull request:
 docker build https://github.com/Taxel/PlexTraktSync.git#refs/pull/1281/head -t plextraktsync/1281
 ```
 
+To build from pull request in docker-compose:
+
+```yml
+services:
+  plextraktsync:
+    build: https://github.com/Taxel/PlexTraktSync.git#refs/pull/1892/head
+```
+
 ## Git: setup pre-commit
 
 For convenience this project uses [pre-commit] hooks:
