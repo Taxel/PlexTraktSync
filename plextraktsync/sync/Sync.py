@@ -73,7 +73,6 @@ class Sync:
             movie_trakt_ids = set()
             for movie in walker.find_movies():
                 pm.hook.walk_movie(movie=movie, dry_run=dry_run)
-                self.sync_collection(movie, dry_run=dry_run)
                 self.sync_ratings(movie, dry_run=dry_run)
                 self.sync_watched(movie, dry_run=dry_run)
                 if not is_partial:
@@ -88,7 +87,6 @@ class Sync:
             episode_trakt_ids = set()
             for episode in walker.find_episodes():
                 pm.hook.walk_episode(episode=episode, dry_run=dry_run)
-                self.sync_collection(episode, dry_run=dry_run)
                 self.sync_ratings(episode, dry_run=dry_run)
                 self.sync_watched(episode, dry_run=dry_run)
                 if not is_partial:
@@ -119,18 +117,6 @@ class Sync:
                 self.sync_watchlist(walker, dry_run=dry_run)
 
         pm.hook.fini(walker=walker, trakt_lists=trakt_lists, dry_run=dry_run)
-
-    def sync_collection(self, m: Media, dry_run=False):
-        if not self.config.plex_to_trakt["collection"]:
-            return
-
-        if m.is_collected:
-            return
-
-        self.logger.info(f"Adding to Trakt collection: {m.title_link}", extra={"markup": True})
-
-        if not dry_run:
-            m.add_to_collection()
 
     def sync_ratings(self, m: Media, dry_run=False):
         if not self.config.sync_ratings:
