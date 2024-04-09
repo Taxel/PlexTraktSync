@@ -66,13 +66,11 @@ class Sync:
         if self.config.need_library_walk:
             for movie in walker.find_movies():
                 pm.hook.walk_movie(movie=movie, dry_run=dry_run)
-                self.sync_watched(movie, dry_run=dry_run)
                 if not is_partial:
                     trakt_lists.add_to_lists(movie)
 
             for episode in walker.find_episodes():
                 pm.hook.walk_episode(episode=episode, dry_run=dry_run)
-                self.sync_watched(episode, dry_run=dry_run)
                 if not is_partial:
                     trakt_lists.add_to_lists(episode)
 
@@ -89,34 +87,6 @@ class Sync:
                 self.sync_watchlist(walker, dry_run=dry_run)
 
         pm.hook.fini(walker=walker, trakt_lists=trakt_lists, dry_run=dry_run)
-
-    def sync_watched(self, m: Media, dry_run=False):
-        if not self.config.sync_watched_status:
-            return
-
-        if m.watched_on_plex is m.watched_on_trakt:
-            return
-
-        if m.watched_on_plex:
-            if not self.config.plex_to_trakt["watched_status"]:
-                return
-
-            if m.is_episode and m.watched_before_reset:
-                show = m.plex.item.show()
-                self.logger.info(f"Show '{show.title}' has been reset in trakt at {m.show_reset_at}.")
-                self.logger.info(f"Marking '{show.title}' as unwatched in Plex.")
-                if not dry_run:
-                    m.reset_show()
-            else:
-                self.logger.info(f"Marking as watched in Trakt: {m.title_link}", extra={"markup": True})
-                if not dry_run:
-                    m.mark_watched_trakt()
-        elif m.watched_on_trakt:
-            if not self.config.trakt_to_plex["watched_status"]:
-                return
-            self.logger.info(f"Marking as watched in Plex: {m.title_link}", extra={"markup": True})
-            if not dry_run:
-                m.mark_watched_plex()
 
     def watchlist_sync_item(self, m: Media, dry_run=False):
         if m.plex is None:
