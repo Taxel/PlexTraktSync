@@ -66,25 +66,15 @@ class Sync:
         if self.config.need_library_walk:
             for movie in walker.find_movies():
                 pm.hook.walk_movie(movie=movie, dry_run=dry_run)
-                self.sync_ratings(movie, dry_run=dry_run)
                 self.sync_watched(movie, dry_run=dry_run)
                 if not is_partial:
                     trakt_lists.add_to_lists(movie)
 
-            shows = set()
             for episode in walker.find_episodes():
                 pm.hook.walk_episode(episode=episode, dry_run=dry_run)
-                self.sync_ratings(episode, dry_run=dry_run)
                 self.sync_watched(episode, dry_run=dry_run)
                 if not is_partial:
                     trakt_lists.add_to_lists(episode)
-
-                if self.config.sync_ratings and episode.show:
-                    # collect shows for later ratings sync
-                    shows.add(episode.show)
-
-            for show in walker.walk_shows(shows, title="Syncing show ratings"):
-                self.sync_ratings(show, dry_run=dry_run)
 
         if self.config.update_plex_wl_as_pl or self.config.sync_liked_lists:
             if is_partial:
@@ -99,51 +89,6 @@ class Sync:
                 self.sync_watchlist(walker, dry_run=dry_run)
 
         pm.hook.fini(walker=walker, trakt_lists=trakt_lists, dry_run=dry_run)
-
-    def sync_ratings(self, m: Media, dry_run=False):
-        if not self.config.sync_ratings:
-            return
-
-        if m.plex_rating == m.trakt_rating:
-            return
-
-        rating_priority = self.config["rating_priority"]
-        plex_to_trakt = self.config.plex_to_trakt["ratings"]
-        trakt_to_plex = self.config.trakt_to_plex["ratings"]
-        has_trakt = m.trakt_rating is not None
-        has_plex = m.plex_rating is not None
-        rate = None
-
-        if rating_priority == "none":
-            # Only rate items with missing rating
-            if plex_to_trakt and has_plex and not has_trakt:
-                rate = "trakt"
-            elif trakt_to_plex and has_trakt and not has_plex:
-                rate = "plex"
-
-        elif rating_priority == "trakt":
-            # If two-way rating sync, Trakt rating takes precedence over Plex rating
-            if trakt_to_plex and has_trakt:
-                rate = "plex"
-            elif plex_to_trakt and has_plex:
-                rate = "trakt"
-
-        elif rating_priority == "plex":
-            # If two-way rating sync, Plex rating takes precedence over Trakt rating
-            if plex_to_trakt and has_plex:
-                rate = "trakt"
-            elif trakt_to_plex and has_trakt:
-                rate = "plex"
-
-        if rate == "trakt":
-            self.logger.info(f"Rating {m.title_link} with {m.plex_rating} on Trakt (was {m.trakt_rating})", extra={"markup": True})
-            if not dry_run:
-                m.trakt_rate()
-
-        elif rate == "plex":
-            self.logger.info(f"Rating {m.title_link} with {m.trakt_rating} on Plex (was {m.plex_rating})", extra={"markup": True})
-            if not dry_run:
-                m.plex_rate()
 
     def sync_watched(self, m: Media, dry_run=False):
         if not self.config.sync_watched_status:
