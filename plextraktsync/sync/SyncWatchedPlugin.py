@@ -18,9 +18,9 @@ class SyncWatchedPlugin:
         self.plex_to_trakt = config.plex_to_trakt["watched_status"]
         self.trakt_to_plex = config.trakt_to_plex["watched_status"]
 
-    @classmethod
-    def enabled(cls, sync: Sync):
-        return sync.config.sync_watched_status
+    @staticmethod
+    def enabled(config: SyncConfig):
+        return config.sync_watched_status
 
     @classmethod
     def factory(cls, sync: Sync):
