@@ -128,7 +128,7 @@ plextraktsync@838 self-update
 
 If you need to do the same in docker container, you should:
 
-͏ ͏ ͏ 1. first prepare the container with:
+͏ ͏ ͏1. first prepare the container with:
 
 ```
 $ docker-compose run --rm --entrypoint sh plextraktsync
@@ -139,7 +139,7 @@ $ docker-compose run --rm --entrypoint sh plextraktsync
 /app # plextraktsync@969 info
 ```
 
-͏͏͏͏ ͏ ͏ 2. then run the script with:
+͏͏͏͏ ͏ ͏2. then run the script with:
 
 ```
 /app # plextraktsync@969 sync
