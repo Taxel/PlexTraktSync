@@ -57,12 +57,6 @@ class Sync:
             else:
                 trakt_lists.add_watchlist(self.trakt.watchlist_movies)
 
-        if self.config.sync_liked_lists:
-            if is_partial:
-                self.logger.warning("Partial walk, disabling liked lists updating. Liked lists won't update because it needs full library sync.")
-            else:
-                trakt_lists.load_lists(self.trakt.liked_lists)
-
         if self.config.need_library_walk:
             for movie in walker.find_movies():
                 pm.hook.walk_movie(movie=movie, dry_run=dry_run)
