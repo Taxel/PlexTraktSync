@@ -89,8 +89,10 @@ if [ "${1:-}" = "pipx" ]; then
 	apk add git
 	msg "Installing pipx"
 	run_user pip install pipx
-	msg "Installing plextraktsync from pipx"
-	run_user pipx install plextraktsync
+	if [ ! -x "$PIPX_BIN_DIR/plextraktsync" ]; then
+		msg "Installing plextraktsync from pipx"
+		run_user pipx install plextraktsync
+	fi
 	set -- "sh"
 fi
 
