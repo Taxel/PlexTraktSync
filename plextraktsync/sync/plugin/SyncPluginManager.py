@@ -35,12 +35,14 @@ class SyncPluginManager:
         from ..SyncRatingsPlugin import SyncRatingsPlugin
         from ..SyncWatchedPlugin import SyncWatchedPlugin
         from ..WatchListPlugin import WatchListPlugin
+        from ..WatchProgressPlugin import WatchProgressPlugin
         yield AddCollectionPlugin
         yield ClearCollectedPlugin
         yield LikedListsPlugin
         yield SyncRatingsPlugin
         yield SyncWatchedPlugin
         yield WatchListPlugin
+        yield WatchProgressPlugin
 
     def register_plugins(self, sync: Sync):
         for plugin in self.plugins:
