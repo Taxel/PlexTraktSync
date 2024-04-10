@@ -1,23 +1,8 @@
-# https://docs.docker.com/engine/reference/builder/#dockerignore-file
+# https://docs.docker.com/build/building/context/#dockerignore-files
 /*
 !/Pipfile
 !/Pipfile.lock
 !/entrypoint.sh
 !/plextraktsync.sh
-!/plextraktsync/*.py
-!/plextraktsync/commands/*.py
-!/plextraktsync/config.default.yml
-!/plextraktsync/config/*.py
-!/plextraktsync/decorators/*.py
-!/plextraktsync/logger/*.py
-!/plextraktsync/media/*.py
-!/plextraktsync/mixin/*.py
-!/plextraktsync/plan/*.py
-!/plextraktsync/plex/*.py
-!/plextraktsync/queue/*.py
-!/plextraktsync/rich/*.py
-!/plextraktsync/sync/*.py
-!/plextraktsync/trakt/*.py
-!/plextraktsync/util/*.py
-!/plextraktsync/watch/*.py
+!/plextraktsync/
 !/requirements.txt
