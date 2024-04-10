@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from time import time
+from time import monotonic
 
 from plextraktsync.factory import logging
 
@@ -8,9 +8,9 @@ logger = logging.getLogger(__name__)
 
 @contextmanager
 def measure_time(message, level=logging.INFO, **kwargs):
-    start = time()
+    start = monotonic()
     yield
-    timedelta = time() - start
+    timedelta = monotonic() - start
 
     m, s = divmod(timedelta, 60)
     logger.log(
