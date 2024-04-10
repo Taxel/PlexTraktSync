@@ -52,7 +52,7 @@ class Sync:
         pm = SyncPluginManager()
         pm.register_plugins(self)
 
-        pm.hook.init(sync=self, trakt_lists=trakt_lists, is_partial=is_partial)
+        pm.hook.init(sync=self, trakt_lists=trakt_lists, is_partial=is_partial, dry_run=dry_run)
 
         if is_partial and self.config.clear_collected:
             self.logger.warning("Running partial library sync. Clear collected will be disabled.")
