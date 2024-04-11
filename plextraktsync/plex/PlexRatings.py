@@ -25,25 +25,13 @@ class PlexRatings:
         # this can happen when doing "inspect"
         if section_id not in self.plex.library_sections:
             return None
+        if m.media_type not in ["movies", "shows", "episodes"]:
+            raise RuntimeError(f"Unsupported media type: {m.media_type}")
 
-        media_type = m.media_type
         section = self.plex.library_sections[section_id]
-        ratings: dict[int, Rating] = self.ratings(section, media_type)
+        ratings: dict[int, Rating] = self.ratings(section, m.media_type)
 
-        if media_type in ["movies", "shows"]:
-            # For movies and shows, just return from the dict
-            if m.item.ratingKey in ratings:
-                return ratings[m.item.ratingKey]
-        elif media_type == "episodes":
-            # For episodes the ratings is just (show_id, show_rating) tuples
-            # if show id is not listed, return none, otherwise fetch from item itself
-            if show_id not in ratings:
-                return None
-            return Rating.create(m.item.userRating, m.item.lastRatedAt)
-        else:
-            raise RuntimeError(f"Unsupported media type: {media_type}")
-
-        return None
+        return ratings.get(m.item.ratingKey, None)
 
     @staticmethod
     @memoize
@@ -54,6 +42,11 @@ class PlexRatings:
             "episodes": "episode.userRating",
             "shows": "show.userRating",
         }[media_type]
+        libtype = {
+            "movies": "movie",
+            "episodes": "episode",
+            "shows": "show",
+        }[media_type]
 
         filters = {
             "and": [
@@ -61,5 +54,5 @@ class PlexRatings:
             ]
         }
 
-        for item in section.search(filters=filters, includeGuids=False):
+        for item in section.search(filters=filters, libtype=libtype, includeGuids=False):
             yield item.ratingKey, Rating.create(item.userRating, item.lastRatedAt)
