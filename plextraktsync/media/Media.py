@@ -225,11 +225,7 @@ class Media(RichMarkup):
 
     @cached_property
     def plex_rating(self):
-        if self.media_type == "episodes" and not self.plex.is_discover and self.show:
-            show_id = self.show.plex.item.ratingKey
-        else:
-            show_id = None
-        return self.plex.rating(show_id)
+        return self.plex.rating()
 
     def trakt_rate(self):
         rating = self.plex_rating
