@@ -135,6 +135,13 @@ class PlexLibraryItem(RichMarkup):
         return None
 
     @cached_property
+    def year(self):
+        if self.type == "artist":
+            return None
+
+        return self.item.__dict__.get("year")
+
+    @cached_property
     def title(self):
         value = self.item.title
         if self.type == "movie" and self.edition_title:
