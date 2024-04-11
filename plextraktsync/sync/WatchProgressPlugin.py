@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import timedelta
 from typing import TYPE_CHECKING
 
 from plextraktsync.factory import logging
@@ -43,8 +44,10 @@ class WatchProgressPlugin:
             self.logger.warning(f"{m.title_link}: Skip progress, setting to 0 will not work", extra={"markup": True})
             return
 
+        view_offset = timedelta(milliseconds=m.plex.item.viewOffset)
+        progress_offset = timedelta(milliseconds=progress)
         self.logger.info(
-            f"{m.title_link}: Set watch progress to {p.progress:.02F}%: {m.plex.item.viewOffset}ms -> {progress}ms",
+            f"{m.title_link}: Set watch progress to {p.progress:.02F}%: {view_offset} -> {progress_offset}",
             extra={"markup": True}
         )
         if not dry_run:
