@@ -57,7 +57,7 @@ def sync(
     if movie:
         wc.add_movie(movie)
 
-    if not wc.is_valid():
+    if not wc.is_valid:
         print("Nothing to sync, this is likely due conflicting options given.")
         return
 
