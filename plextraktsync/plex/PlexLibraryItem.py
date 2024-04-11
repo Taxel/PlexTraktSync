@@ -135,6 +135,13 @@ class PlexLibraryItem(RichMarkup):
         return None
 
     @cached_property
+    def year(self):
+        if self.type == "artist":
+            return None
+
+        return self.item.__dict__.get("year")
+
+    @cached_property
     def title(self):
         value = self.item.title
         if self.type == "movie" and self.edition_title:
@@ -143,8 +150,8 @@ class PlexLibraryItem(RichMarkup):
         if self.type == "episode":
             value = f"{self.item.grandparentTitle}/{self.item.seasonEpisode}/{value}"
 
-        if self.type != "artist" and self.item.year:
-            value = f"{value} ({self.item.year})"
+        if self.year:
+            value = f"{value} ({self.year})"
 
         return value
 
