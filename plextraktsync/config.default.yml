@@ -73,6 +73,8 @@ sync:
     # If you prefer to fetch trakt watchlist as a playlist instead of
     # plex watchlist, toggle this to true (is read only if watchlist=true)
     watchlist_as_playlist: false
+    # Sync Play Progress from Trakt to Plex
+    playback_status: false
 
 # settings for 'watch' command
 watch:

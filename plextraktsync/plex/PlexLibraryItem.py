@@ -314,6 +314,12 @@ class PlexLibraryItem(RichMarkup):
         percent = view_offset / self.item.duration * 100
         return percent
 
+    def progress_millis(self, percentage: float):
+        """
+        Get Movie progress from percentage to milliseconds
+        """
+        return int((percentage / 100) * self.item.duration)
+
     def episodes(self):
         for ep in self._get_episodes():
             yield PlexLibraryItem(ep, plex=self.plex)

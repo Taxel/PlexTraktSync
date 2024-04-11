@@ -22,6 +22,7 @@ from plextraktsync.path import pytrakt_file
 from plextraktsync.trakt.PartialTraktMedia import PartialTraktMedia
 from plextraktsync.trakt.TraktLookup import TraktLookup
 from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
+from plextraktsync.trakt.WatchProgress import WatchProgress
 from plextraktsync.util.Rating import Rating
 
 if TYPE_CHECKING:
@@ -83,6 +84,12 @@ class TraktApi:
     @retry()
     def watched_movies(self):
         return set(map(lambda m: m.trakt, self.me.watched_movies))
+
+    @cached_property
+    @rate_limit()
+    @retry()
+    def watch_progress(self):
+        return WatchProgress(trakt.sync.get_playback())
 
     @cached_property
     @rate_limit()
