@@ -36,11 +36,11 @@ class SyncRatingsPlugin:
             self.sync_ratings(show, dry_run=dry_run)
 
     @hookimpl
-    def walk_movie(self, movie: Media, dry_run: bool):
+    async def walk_movie(self, movie: Media, dry_run: bool):
         self.sync_ratings(movie, dry_run=dry_run)
 
     @hookimpl
-    def walk_episode(self, episode: Media, dry_run: bool):
+    async def walk_episode(self, episode: Media, dry_run: bool):
         self.sync_ratings(episode, dry_run=dry_run)
 
         if episode.show:
