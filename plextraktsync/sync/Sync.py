@@ -26,7 +26,7 @@ class Sync:
     def trakt_lists(self):
         return TraktUserListCollection()
 
-    def sync(self, walker: Walker, dry_run=False):
+    async def sync(self, walker: Walker, dry_run=False):
         self.walker = walker
         is_partial = walker.is_partial
 
