@@ -3,7 +3,7 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-import pluggy
+import apluggy as pluggy
 
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logging
@@ -23,6 +23,10 @@ class SyncPluginManager:
         pm.add_hookspecs(SyncPluginInterface)
 
         return pm
+
+    @cached_property
+    def ahook(self):
+        return self.pm.ahook
 
     @cached_property
     def hook(self):
