@@ -27,6 +27,15 @@ class SyncRatingsPlugin:
         return cls(config=sync.config)
 
     @hookimpl
+    def init(self):
+        self.shows = set()
+
+    @hookimpl
+    def fini(self, walker: Walker, dry_run: bool):
+        for show in walker.walk_shows(self.shows, title="Syncing show ratings"):
+            self.sync_ratings(show, dry_run=dry_run)
+
+    @hookimpl
     def walk_movie(self, movie: Media, dry_run: bool):
         self.sync_ratings(movie, dry_run=dry_run)
 
@@ -36,15 +45,6 @@ class SyncRatingsPlugin:
 
         if episode.show:
             self.shows.add(episode.show)
-
-    @hookimpl
-    def init(self):
-        self.shows = set()
-
-    @hookimpl
-    def fini(self, walker: Walker, dry_run: bool):
-        for show in walker.walk_shows(self.shows, title="Syncing show ratings"):
-            self.sync_ratings(show, dry_run=dry_run)
 
     def sync_ratings(self, m: Media, dry_run: bool):
         if m.plex_rating == m.trakt_rating:
