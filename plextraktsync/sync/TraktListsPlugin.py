@@ -7,7 +7,8 @@ from plextraktsync.factory import logging
 from plextraktsync.plugin import hookimpl
 
 if TYPE_CHECKING:
-    from .plugin.SyncPluginInterface import Media, TraktUserListCollection
+    from .plugin.SyncPluginInterface import (Media, SyncPluginManager,
+                                             TraktUserListCollection)
 
 
 class TraktListsPlugin:
@@ -18,11 +19,10 @@ class TraktListsPlugin:
 
     def __init__(self):
         self.trakt_lists = None
-        self.add_to_lists = None
 
     @staticmethod
     def enabled(config):
-        # Use True for now, would need to keep in sync with other plugins
+        # Check for need is performed in init()
         return True
 
     @classmethod
@@ -30,14 +30,16 @@ class TraktListsPlugin:
         return cls()
 
     @hookimpl(trylast=True)
-    def init(self, trakt_lists: TraktUserListCollection):
+    def init(self, pm: SyncPluginManager, trakt_lists: TraktUserListCollection):
         self.trakt_lists = trakt_lists
         # Skip updating lists if it's empty
-        self.add_to_lists = not trakt_lists.is_empty
+        if trakt_lists.is_empty:
+            self.logger.warning("Disabling TraktListsPlugin: No lists to process")
+            pm.unregister(self)
 
     @hookimpl
     def fini(self, dry_run: bool):
-        if dry_run or self.trakt_lists.is_empty:
+        if dry_run:
             return
 
         with measure_time("Updated liked list"):
@@ -45,12 +47,8 @@ class TraktListsPlugin:
 
     @hookimpl
     def walk_movie(self, movie: Media):
-        if not self.add_to_lists:
-            return
         self.trakt_lists.add_to_lists(movie)
 
     @hookimpl
     def walk_episode(self, episode: Media):
-        if not self.add_to_lists:
-            return
         self.trakt_lists.add_to_lists(episode)
