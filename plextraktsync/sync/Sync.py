@@ -25,7 +25,7 @@ class Sync:
     def sync(self, walker: Walker, dry_run=False):
         self.walker = walker
         trakt_lists = TraktUserListCollection()
-        is_partial = walker.is_partial and not dry_run
+        is_partial = walker.is_partial
 
         from plextraktsync.sync.plugin import SyncPluginManager
         pm = SyncPluginManager()
