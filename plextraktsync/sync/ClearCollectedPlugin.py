@@ -8,6 +8,7 @@ from plextraktsync.plugin import hookimpl
 
 if TYPE_CHECKING:
     from plextraktsync.config.SyncConfig import SyncConfig
+    from plextraktsync.sync.plugin import SyncPluginManager
     from plextraktsync.sync.Sync import Sync
     from plextraktsync.trakt.TraktApi import TraktApi
     from plextraktsync.trakt.types import TraktMedia
@@ -20,7 +21,6 @@ class ClearCollectedPlugin:
         self.trakt = trakt
         self.episode_trakt_ids = set()
         self.movie_trakt_ids = set()
-        self.is_partial = None
 
     @staticmethod
     def enabled(config: SyncConfig):
@@ -31,24 +31,20 @@ class ClearCollectedPlugin:
         return cls(sync.trakt)
 
     @hookimpl
-    def init(self, is_partial: bool):
-        self.is_partial = is_partial
-        if is_partial:
-            self.logger.warning("Running partial library sync. Clear collected will be disabled.")
+    def init(self, pm: SyncPluginManager, is_partial: bool):
+        if not is_partial:
+            return
+
+        self.logger.warning("Disabling Clear Collected: Running partial library sync")
+        pm.unregister(self)
 
     @hookimpl
     def fini(self, dry_run: bool):
-        if self.is_partial:
-            return
-
         self.clear_collected(self.trakt.movie_collection, self.movie_trakt_ids, dry_run=dry_run)
         self.clear_collected(self.trakt.episodes_collection, self.episode_trakt_ids, dry_run=dry_run)
 
     @hookimpl
     def walk_movie(self, movie: Media):
-        if self.is_partial:
-            return
-
         self.movie_trakt_ids.add(movie.trakt_id)
 
     def clear_collected(self, existing_items: Iterable[TraktMedia], keep_ids: set[int], dry_run):

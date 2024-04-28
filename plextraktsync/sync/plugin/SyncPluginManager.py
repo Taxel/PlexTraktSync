@@ -27,6 +27,10 @@ class SyncPluginManager:
     def hook(self):
         return self.pm.hook
 
+    @cached_property
+    def unregister(self):
+        return self.pm.unregister
+
     @property
     def plugins(self):
         from ..AddCollectionPlugin import AddCollectionPlugin

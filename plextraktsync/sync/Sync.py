@@ -30,7 +30,7 @@ class Sync:
         pm = SyncPluginManager()
         pm.register_plugins(self)
 
-        pm.hook.init(sync=self, trakt_lists=trakt_lists, is_partial=is_partial, dry_run=dry_run)
+        pm.hook.init(sync=self, pm=pm, trakt_lists=trakt_lists, is_partial=is_partial, dry_run=dry_run)
 
         if self.config.need_library_walk:
             for movie in walker.find_movies():
