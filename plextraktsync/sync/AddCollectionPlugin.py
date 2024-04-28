@@ -19,7 +19,7 @@ class AddCollectionPlugin:
         return config.plex_to_trakt["collection"]
 
     @classmethod
-    def factory(cls, sync: Sync):
+    def factory(cls, sync):
         return cls()
 
     @hookimpl
