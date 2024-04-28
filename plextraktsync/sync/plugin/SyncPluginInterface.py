@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 from plextraktsync.plugin import hookspec
 
 if TYPE_CHECKING:
+    from plextraktsync.config.SyncConfig import SyncConfig  # noqa: F401
     from plextraktsync.media.Media import Media
     from plextraktsync.plan.Walker import Walker
     from plextraktsync.sync.plugin import SyncPluginManager
