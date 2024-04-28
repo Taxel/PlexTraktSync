@@ -7,8 +7,7 @@ from plextraktsync.factory import logging
 from plextraktsync.plugin import hookimpl
 
 if TYPE_CHECKING:
-    from .plugin.SyncPluginInterface import (Media, SyncPluginManager,
-                                             TraktUserListCollection)
+    from .plugin.SyncPluginInterface import Media, Sync, SyncPluginManager
 
 
 class TraktListsPlugin:
@@ -30,12 +29,14 @@ class TraktListsPlugin:
         return cls()
 
     @hookimpl(trylast=True)
-    def init(self, pm: SyncPluginManager, trakt_lists: TraktUserListCollection):
-        self.trakt_lists = trakt_lists
+    def init(self, pm: SyncPluginManager, sync: Sync):
         # Skip updating lists if it's empty
-        if trakt_lists.is_empty:
+        if sync.trakt_lists.is_empty:
             self.logger.warning("Disabling TraktListsPlugin: No lists to process")
             pm.unregister(self)
+            return
+
+        self.trakt_lists = sync.trakt_lists
 
     @hookimpl
     def fini(self, dry_run: bool):

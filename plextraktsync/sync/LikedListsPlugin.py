@@ -8,8 +8,7 @@ from plextraktsync.plugin import hookimpl
 if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
 
-    from .plugin.SyncPluginInterface import (Sync, SyncConfig,
-                                             TraktUserListCollection)
+    from .plugin.SyncPluginInterface import Sync, SyncConfig
 
 
 class LikedListsPlugin:
@@ -27,10 +26,10 @@ class LikedListsPlugin:
         return cls(sync.trakt)
 
     @hookimpl
-    def init(self, trakt_lists: TraktUserListCollection, is_partial: bool, dry_run: bool):
+    def init(self, sync: Sync, is_partial: bool, dry_run: bool):
         if is_partial and not dry_run:
             self.logger.warning("Partial walk, disabling liked lists updating. "
                                 "Liked lists won't update because it needs full library sync.")
             return
 
-        trakt_lists.load_lists(self.trakt.liked_lists)
+        sync.trakt_lists.load_lists(self.trakt.liked_lists)

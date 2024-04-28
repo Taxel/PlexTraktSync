@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plextraktsync.factory import logging
@@ -21,16 +22,19 @@ class Sync:
         self.trakt = trakt
         self.walker = None
 
+    @cached_property
+    def trakt_lists(self):
+        return TraktUserListCollection()
+
     def sync(self, walker: Walker, dry_run=False):
         self.walker = walker
-        trakt_lists = TraktUserListCollection()
         is_partial = walker.is_partial
 
         from plextraktsync.sync.plugin import SyncPluginManager
         pm = SyncPluginManager()
         pm.register_plugins(self)
 
-        pm.hook.init(sync=self, pm=pm, trakt_lists=trakt_lists, is_partial=is_partial, dry_run=dry_run)
+        pm.hook.init(sync=self, pm=pm, is_partial=is_partial, dry_run=dry_run)
 
         if self.config.need_library_walk:
             for movie in walker.find_movies():
@@ -39,4 +43,4 @@ class Sync:
             for episode in walker.find_episodes():
                 pm.hook.walk_episode(episode=episode, dry_run=dry_run)
 
-        pm.hook.fini(walker=walker, trakt_lists=trakt_lists, dry_run=dry_run)
+        pm.hook.fini(walker=walker, dry_run=dry_run)
