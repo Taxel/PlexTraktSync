@@ -28,14 +28,13 @@ class Sync:
 
     def sync(self, walker: Walker, dry_run=False):
         self.walker = walker
-        trakt_lists = self.trakt_lists
         is_partial = walker.is_partial
 
         from plextraktsync.sync.plugin import SyncPluginManager
         pm = SyncPluginManager()
         pm.register_plugins(self)
 
-        pm.hook.init(sync=self, pm=pm, trakt_lists=trakt_lists, is_partial=is_partial, dry_run=dry_run)
+        pm.hook.init(sync=self, pm=pm, is_partial=is_partial, dry_run=dry_run)
 
         if self.config.need_library_walk:
             for movie in walker.find_movies():
@@ -44,4 +43,4 @@ class Sync:
             for episode in walker.find_episodes():
                 pm.hook.walk_episode(episode=episode, dry_run=dry_run)
 
-        pm.hook.fini(walker=walker, trakt_lists=trakt_lists, dry_run=dry_run)
+        pm.hook.fini(walker=walker, dry_run=dry_run)
