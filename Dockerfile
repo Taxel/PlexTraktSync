@@ -22,7 +22,13 @@ RUN \
 # Build missing wheels
 RUN \
 	--mount=type=cache,id=pip,target=/root/.cache/pip \
-	pip wheel $(ls /wheels/*.gz /wheels/*.zip 2>/dev/null) --wheel-dir=/wheels
+<<eot
+	set -x
+	set -- $(ls /wheels/*.gz /wheels/*.zip 2>/dev/null)
+	if [ $# -gt 0 ]; then
+		pip wheel "$@" --wheel-dir=/wheels
+	fi
+eot
 
 # Install app dependencies
 FROM base AS build
