@@ -34,6 +34,7 @@ class SyncPluginManager:
         from ..LikedListsPlugin import LikedListsPlugin
         from ..SyncRatingsPlugin import SyncRatingsPlugin
         from ..SyncWatchedPlugin import SyncWatchedPlugin
+        from ..TraktListsPlugin import TraktListsPlugin
         from ..WatchListPlugin import WatchListPlugin
         from ..WatchProgressPlugin import WatchProgressPlugin
         yield AddCollectionPlugin
@@ -41,6 +42,7 @@ class SyncPluginManager:
         yield LikedListsPlugin
         yield SyncRatingsPlugin
         yield SyncWatchedPlugin
+        yield TraktListsPlugin
         yield WatchListPlugin
         yield WatchProgressPlugin
 
