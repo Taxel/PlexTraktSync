@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import pluggy
 
+from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logging
 
 if TYPE_CHECKING:
@@ -56,4 +57,7 @@ class SyncPluginManager:
             self.logger.info(f"Enable sync plugin '{plugin.__name__}': {enabled}")
             if not enabled:
                 continue
-            self.pm.register(plugin.factory(sync))
+            with measure_time(f"Created '{plugin.__name__}' plugin", level=logging.DEBUG):
+                p = plugin.factory(sync)
+            with measure_time(f"Registered '{plugin.__name__}' plugin", level=logging.DEBUG):
+                self.pm.register(p)
