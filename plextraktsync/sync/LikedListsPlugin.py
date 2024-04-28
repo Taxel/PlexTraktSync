@@ -28,9 +28,10 @@ class LikedListsPlugin:
         return cls(sync.trakt)
 
     @hookimpl
-    def init(self, trakt_lists: TraktUserListCollection, is_partial: bool):
-        if is_partial:
+    def init(self, trakt_lists: TraktUserListCollection, is_partial: bool, dry_run: bool):
+        if is_partial and not dry_run:
             self.logger.warning("Partial walk, disabling liked lists updating. "
                                 "Liked lists won't update because it needs full library sync.")
-        else:
-            trakt_lists.load_lists(self.trakt.liked_lists)
+            return
+
+        trakt_lists.load_lists(self.trakt.liked_lists)
