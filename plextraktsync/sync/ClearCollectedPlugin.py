@@ -7,11 +7,10 @@ from plextraktsync.media.Media import Media
 from plextraktsync.plugin import hookimpl
 
 if TYPE_CHECKING:
-    from plextraktsync.config.SyncConfig import SyncConfig
-    from plextraktsync.sync.plugin import SyncPluginManager
-    from plextraktsync.sync.Sync import Sync
     from plextraktsync.trakt.TraktApi import TraktApi
     from plextraktsync.trakt.types import TraktMedia
+
+    from .plugin.SyncPluginInterface import Sync, SyncConfig, SyncPluginManager
 
 
 class ClearCollectedPlugin:

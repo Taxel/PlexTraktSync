@@ -6,9 +6,7 @@ from plextraktsync.factory import logging
 from plextraktsync.plugin import hookimpl
 
 if TYPE_CHECKING:
-    from plextraktsync.config.SyncConfig import SyncConfig
-    from plextraktsync.media.Media import Media
-    from plextraktsync.sync.Sync import Sync
+    from .plugin.SyncPluginInterface import Media, SyncConfig
 
 
 class AddCollectionPlugin:
@@ -19,7 +17,7 @@ class AddCollectionPlugin:
         return config.plex_to_trakt["collection"]
 
     @classmethod
-    def factory(cls, sync: Sync):
+    def factory(cls, sync):
         return cls()
 
     @hookimpl

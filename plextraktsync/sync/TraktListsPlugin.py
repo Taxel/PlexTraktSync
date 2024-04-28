@@ -7,11 +7,7 @@ from plextraktsync.factory import logging
 from plextraktsync.plugin import hookimpl
 
 if TYPE_CHECKING:
-    from plextraktsync.config.SyncConfig import SyncConfig
-    from plextraktsync.media.Media import Media
-    from plextraktsync.sync.Sync import Sync
-    from plextraktsync.trakt.TraktUserListCollection import \
-        TraktUserListCollection
+    from .plugin.SyncPluginInterface import Media, TraktUserListCollection
 
 
 class TraktListsPlugin:
@@ -25,12 +21,12 @@ class TraktListsPlugin:
         self.add_to_lists = None
 
     @staticmethod
-    def enabled(config: SyncConfig):
+    def enabled(config):
         # Use True for now, would need to keep in sync with other plugins
         return True
 
     @classmethod
-    def factory(cls, sync: Sync):
+    def factory(cls, sync):
         return cls()
 
     @hookimpl(trylast=True)
