@@ -47,6 +47,10 @@ class ClearCollectedPlugin:
     def walk_movie(self, movie: Media):
         self.movie_trakt_ids.add(movie.trakt_id)
 
+    @hookimpl
+    def walk_episode(self, episode: Media):
+        self.episode_trakt_ids.add(episode.trakt_id)
+
     def clear_collected(self, existing_items: Iterable[TraktMedia], keep_ids: set[int], dry_run):
         from plextraktsync.trakt.trakt_set import trakt_set
 
