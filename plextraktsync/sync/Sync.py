@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plextraktsync.factory import logging
@@ -21,9 +22,13 @@ class Sync:
         self.trakt = trakt
         self.walker = None
 
+    @cached_property
+    def trakt_lists(self):
+        return TraktUserListCollection()
+
     def sync(self, walker: Walker, dry_run=False):
         self.walker = walker
-        trakt_lists = TraktUserListCollection()
+        trakt_lists = self.trakt_lists
         is_partial = walker.is_partial
 
         from plextraktsync.sync.plugin import SyncPluginManager
