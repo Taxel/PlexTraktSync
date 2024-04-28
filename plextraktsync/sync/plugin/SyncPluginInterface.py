@@ -10,19 +10,17 @@ if TYPE_CHECKING:
     from plextraktsync.plan.Walker import Walker
     from plextraktsync.sync.plugin import SyncPluginManager
     from plextraktsync.sync.Sync import Sync
-    from plextraktsync.trakt.TraktUserListCollection import \
-        TraktUserListCollection
 
 
 class SyncPluginInterface:
     """A hook specification namespace."""
 
     @hookspec
-    def init(self, pm: SyncPluginManager, sync: Sync, trakt_lists: TraktUserListCollection, is_partial: bool, dry_run: bool):
+    def init(self, pm: SyncPluginManager, sync: Sync, is_partial: bool, dry_run: bool):
         """Hook called at sync process initialization"""
 
     @hookspec
-    def fini(self, walker: Walker, trakt_lists: TraktUserListCollection, dry_run: bool):
+    def fini(self, walker: Walker, dry_run: bool):
         """Hook called at sync process finalization"""
 
     @hookspec
