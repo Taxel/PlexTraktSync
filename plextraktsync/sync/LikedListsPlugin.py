@@ -32,5 +32,6 @@ class LikedListsPlugin:
         if is_partial and not dry_run:
             self.logger.warning("Partial walk, disabling liked lists updating. "
                                 "Liked lists won't update because it needs full library sync.")
-        else:
-            trakt_lists.load_lists(self.trakt.liked_lists)
+            return
+
+        trakt_lists.load_lists(self.trakt.liked_lists)
