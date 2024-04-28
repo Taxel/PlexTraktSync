@@ -6,10 +6,7 @@ from plextraktsync.factory import logging
 from plextraktsync.plugin import hookimpl
 
 if TYPE_CHECKING:
-    from plextraktsync.config.SyncConfig import SyncConfig
-    from plextraktsync.media.Media import Media
-    from plextraktsync.plan.Walker import Walker
-    from plextraktsync.sync.Sync import Sync
+    from .plugin.SyncPluginInterface import Media, Sync, SyncConfig, Walker
 
 
 class SyncRatingsPlugin:

@@ -8,14 +8,11 @@ from plextraktsync.factory import logging
 from plextraktsync.plugin import hookimpl
 
 if TYPE_CHECKING:
-    from plextraktsync.config.SyncConfig import SyncConfig
-    from plextraktsync.media.Media import Media
-    from plextraktsync.plan.Walker import Walker
     from plextraktsync.plex.PlexApi import PlexApi
-    from plextraktsync.sync.Sync import Sync
     from plextraktsync.trakt.TraktApi import TraktApi
-    from plextraktsync.trakt.TraktUserListCollection import \
-        TraktUserListCollection
+
+    from .plugin.SyncPluginInterface import (Media, Sync, SyncConfig,
+                                             TraktUserListCollection, Walker)
 
 
 class WatchListPlugin:

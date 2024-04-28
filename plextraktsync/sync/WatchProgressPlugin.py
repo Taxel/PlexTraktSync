@@ -8,9 +8,9 @@ from plextraktsync.media.Media import Media
 from plextraktsync.plugin import hookimpl
 
 if TYPE_CHECKING:
-    from plextraktsync.config.SyncConfig import SyncConfig
-    from plextraktsync.sync.Sync import Sync
     from plextraktsync.trakt.TraktApi import TraktApi
+
+    from .plugin.SyncPluginInterface import Sync, SyncConfig
 
 
 class WatchProgressPlugin:
