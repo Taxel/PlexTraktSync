@@ -105,13 +105,19 @@ class Walker(SetWindowTitle):
 
         # Preload plex shows
         plex_shows: dict[int, PlexLibraryItem] = {}
-
         self.logger.info("Preload shows data")
         for show in self.get_plex_shows():
             plex_shows[show.key] = show
         self.logger.info(f"Preloaded shows data ({len(plex_shows)} shows)")
 
+        # Preload matches for shows
         show_cache: dict[int, Media] = {}
+        self.logger.info("Preload shows matches")
+        it = self.progressbar(plex_shows.items(), desc="Processing show matches")
+        for show_id, ps in it:
+            show_cache[show_id] = self.mf.resolve_any(ps)
+        self.logger.info(f"Preloaded shows matches ({len(show_cache)} shows)")
+
         for ep in self.episodes_from_sections(self.plan.show_sections):
             show_id = ep.show_id
             ep.show = plex_shows[show_id]
