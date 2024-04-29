@@ -104,14 +104,14 @@ class Walker(SetWindowTitle):
             yield from self.get_plex_episodes(self.plan.episodes)
 
         # Preload plex shows
-        plex_shows = {}
+        plex_shows: dict[int, PlexLibraryItem] = {}
 
         self.logger.info("Preload shows data")
         for show in self.get_plex_shows():
             plex_shows[show.key] = show
         self.logger.info(f"Preloaded shows data ({len(plex_shows)} shows)")
 
-        show_cache = {}
+        show_cache: dict[int, Media] = {}
         for ep in self.episodes_from_sections(self.plan.show_sections):
             show_id = ep.show_id
             ep.show = plex_shows[show_id]
