@@ -20,7 +20,7 @@ class SyncPluginInterface:
         """Hook called at sync process initialization"""
 
     @hookspec
-    def fini(self, walker: Walker, dry_run: bool):
+    async def fini(self, walker: Walker, dry_run: bool):
         """Hook called at sync process finalization"""
 
     @hookspec

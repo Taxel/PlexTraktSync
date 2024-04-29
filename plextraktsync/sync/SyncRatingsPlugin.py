@@ -31,7 +31,7 @@ class SyncRatingsPlugin:
         self.shows = set()
 
     @hookimpl
-    def fini(self, walker: Walker, dry_run: bool):
+    async def fini(self, walker: Walker, dry_run: bool):
         for show in walker.walk_shows(self.shows, title="Syncing show ratings"):
             self.sync_ratings(show, dry_run=dry_run)
 

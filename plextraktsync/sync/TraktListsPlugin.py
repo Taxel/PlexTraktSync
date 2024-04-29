@@ -39,7 +39,7 @@ class TraktListsPlugin:
         self.trakt_lists = sync.trakt_lists
 
     @hookimpl
-    def fini(self, dry_run: bool):
+    async def fini(self, dry_run: bool):
         if dry_run:
             return
 

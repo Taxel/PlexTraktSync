@@ -43,4 +43,4 @@ class Sync:
             for episode in walker.find_episodes():
                 pm.hook.walk_episode(episode=episode, dry_run=dry_run)
 
-        pm.hook.fini(walker=walker, dry_run=dry_run)
+        await pm.ahook.fini(walker=walker, dry_run=dry_run)

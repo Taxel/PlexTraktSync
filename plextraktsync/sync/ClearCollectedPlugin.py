@@ -38,7 +38,7 @@ class ClearCollectedPlugin:
         pm.unregister(self)
 
     @hookimpl
-    def fini(self, dry_run: bool):
+    async def fini(self, dry_run: bool):
         self.clear_collected(self.trakt.movie_collection, self.movie_trakt_ids, dry_run=dry_run)
         self.clear_collected(self.trakt.episodes_collection, self.episode_trakt_ids, dry_run=dry_run)
 
