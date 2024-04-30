@@ -17,7 +17,8 @@ class TraktListsPlugin:
 
     logger = logging.getLogger(__name__)
 
-    def __init__(self):
+    def __init__(self, keep_watched: bool):
+        self.keep_watched = keep_watched
         self.trakt_lists = None
 
     @staticmethod
@@ -32,8 +33,8 @@ class TraktListsPlugin:
         )
 
     @classmethod
-    def factory(cls, sync):
-        return cls()
+    def factory(cls, sync: Sync):
+        return cls(sync.config.liked_lists_keep_watched)
 
     @hookimpl(trylast=True)
     def init(self, pm: SyncPluginManager, sync: Sync):
