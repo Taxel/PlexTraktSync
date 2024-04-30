@@ -21,8 +21,12 @@ class TraktListsPlugin:
 
     @staticmethod
     def enabled(config):
-        # Check for need is performed in init()
-        return True
+        return any([
+            # LikedListsPlugin
+            config.sync_liked_lists,
+            # WatchListPlugin
+            config.sync_watchlists,
+        ])
 
     @classmethod
     def factory(cls, sync):

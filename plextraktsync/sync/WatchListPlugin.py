@@ -24,10 +24,7 @@ class WatchListPlugin:
 
     @staticmethod
     def enabled(config: SyncConfig):
-        return any([
-            config.plex_to_trakt["watchlist"],
-            config.trakt_to_plex["watchlist"],
-        ])
+        return config.sync_watchlists
 
     @classmethod
     def factory(cls, sync: Sync):
