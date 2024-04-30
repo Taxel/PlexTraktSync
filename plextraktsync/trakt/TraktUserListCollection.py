@@ -39,10 +39,3 @@ class TraktUserListCollection(UserList):
         tl = TraktUserList.from_trakt_list(list_id, list_name)
         self.append(tl)
         return tl
-
-    def sync(self):
-        for tl in self:
-            updated = tl.plex_list.update(tl.plex_items_sorted)
-            if not updated:
-                continue
-            self.logger.info(f"Plex list {tl.title_link} ({len(tl.plex_items)} items) updated", extra={"markup": True})
