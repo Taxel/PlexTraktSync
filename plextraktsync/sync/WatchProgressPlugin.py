@@ -28,11 +28,11 @@ class WatchProgressPlugin:
         return cls(sync.trakt)
 
     @hookimpl
-    def walk_movie(self, movie: Media, dry_run: bool):
+    async def walk_movie(self, movie: Media, dry_run: bool):
         self.sync_progress(movie, dry_run=dry_run)
 
     @hookimpl
-    def walk_episode(self, episode: Media, dry_run: bool):
+    async def walk_episode(self, episode: Media, dry_run: bool):
         self.sync_progress(episode, dry_run=dry_run)
 
     def sync_progress(self, m: Media, dry_run=False):

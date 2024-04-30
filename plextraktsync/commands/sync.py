@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 from plextraktsync.commands.login import ensure_login
+from plextraktsync.decorators.coro import coro
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import factory, logging
 
 logger = logging.getLogger(__name__)
 
 
-def sync(
+@coro
+async def sync(
     sync_option: str,
     library: str,
     show: str,
@@ -67,4 +69,4 @@ def sync(
             w.print_plan(print=logger.info)
         if dry_run:
             logger.info("Enabled dry-run mode: not making actual changes")
-        runner.sync(walker=w, dry_run=config.dry_run)
+        await runner.sync(walker=w, dry_run=config.dry_run)

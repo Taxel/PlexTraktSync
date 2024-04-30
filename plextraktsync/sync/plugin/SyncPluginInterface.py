@@ -20,13 +20,13 @@ class SyncPluginInterface:
         """Hook called at sync process initialization"""
 
     @hookspec
-    def fini(self, walker: Walker, dry_run: bool):
+    async def fini(self, walker: Walker, dry_run: bool):
         """Hook called at sync process finalization"""
 
     @hookspec
-    def walk_movie(self, movie: Media, dry_run: bool):
+    async def walk_movie(self, movie: Media, dry_run: bool):
         """Hook called walk a movie media object"""
 
     @hookspec
-    def walk_episode(self, episode: Media, dry_run: bool):
+    async def walk_episode(self, episode: Media, dry_run: bool):
         """Hook called walk a episode media object"""

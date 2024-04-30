@@ -26,7 +26,7 @@ class Sync:
     def trakt_lists(self):
         return TraktUserListCollection()
 
-    def sync(self, walker: Walker, dry_run=False):
+    async def sync(self, walker: Walker, dry_run=False):
         self.walker = walker
         is_partial = walker.is_partial
 
@@ -38,9 +38,9 @@ class Sync:
 
         if self.config.need_library_walk:
             for movie in walker.find_movies():
-                pm.hook.walk_movie(movie=movie, dry_run=dry_run)
+                await pm.ahook.walk_movie(movie=movie, dry_run=dry_run)
 
             for episode in walker.find_episodes():
-                pm.hook.walk_episode(episode=episode, dry_run=dry_run)
+                await pm.ahook.walk_episode(episode=episode, dry_run=dry_run)
 
-        pm.hook.fini(walker=walker, dry_run=dry_run)
+        await pm.ahook.fini(walker=walker, dry_run=dry_run)

@@ -39,7 +39,7 @@ class TraktListsPlugin:
         self.trakt_lists = sync.trakt_lists
 
     @hookimpl
-    def fini(self, dry_run: bool):
+    async def fini(self, dry_run: bool):
         if dry_run:
             return
 
@@ -47,9 +47,9 @@ class TraktListsPlugin:
             self.trakt_lists.sync()
 
     @hookimpl
-    def walk_movie(self, movie: Media):
+    async def walk_movie(self, movie: Media):
         self.trakt_lists.add_to_lists(movie)
 
     @hookimpl
-    def walk_episode(self, episode: Media):
+    async def walk_episode(self, episode: Media):
         self.trakt_lists.add_to_lists(episode)

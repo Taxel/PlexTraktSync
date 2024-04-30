@@ -25,11 +25,11 @@ class SyncWatchedPlugin:
         return cls(config=sync.config)
 
     @hookimpl
-    def walk_movie(self, movie: Media, dry_run: bool):
+    async def walk_movie(self, movie: Media, dry_run: bool):
         self.sync_watched(movie, dry_run=dry_run)
 
     @hookimpl
-    def walk_episode(self, episode: Media, dry_run: bool):
+    async def walk_episode(self, episode: Media, dry_run: bool):
         self.sync_watched(episode, dry_run=dry_run)
 
     def sync_watched(self, m: Media, dry_run: bool):

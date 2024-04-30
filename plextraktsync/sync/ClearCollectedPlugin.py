@@ -38,16 +38,16 @@ class ClearCollectedPlugin:
         pm.unregister(self)
 
     @hookimpl
-    def fini(self, dry_run: bool):
+    async def fini(self, dry_run: bool):
         self.clear_collected(self.trakt.movie_collection, self.movie_trakt_ids, dry_run=dry_run)
         self.clear_collected(self.trakt.episodes_collection, self.episode_trakt_ids, dry_run=dry_run)
 
     @hookimpl
-    def walk_movie(self, movie: Media):
+    async def walk_movie(self, movie: Media):
         self.movie_trakt_ids.add(movie.trakt_id)
 
     @hookimpl
-    def walk_episode(self, episode: Media):
+    async def walk_episode(self, episode: Media):
         self.episode_trakt_ids.add(episode.trakt_id)
 
     def clear_collected(self, existing_items: Iterable[TraktMedia], keep_ids: set[int], dry_run):
