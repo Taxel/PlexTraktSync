@@ -7,6 +7,7 @@ from plextraktsync.factory import logging
 from plextraktsync.plugin import hookimpl
 
 if TYPE_CHECKING:
+    from ..trakt.TraktUserList import TraktUserList
     from .plugin.SyncPluginInterface import Media, Sync, SyncPluginManager
 
 
@@ -64,6 +65,12 @@ class TraktListsPlugin:
                     f"Plex list {tl.title_link} ({len(tl.plex_items)} items) updated",
                     extra={"markup": True},
                 )
+
+    def list_keep_watched(self, tl: TraktUserList):
+        config = self.trakt_lists_config.get(tl.name)
+        if config is None:
+            return self.keep_watched
+        return config.get("keep_watched", self.keep_watched)
 
     @hookimpl
     async def walk_movie(self, movie: Media):
