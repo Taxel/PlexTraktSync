@@ -43,8 +43,13 @@ class TraktListsPlugin:
         if dry_run:
             return
 
-        with measure_time("Updated liked list"):
-            self.trakt_lists.sync()
+        with measure_time("Updated Trakt Lists"):
+            for tl in self.trakt_lists:
+                updated = tl.plex_list.update(tl.plex_items_sorted)
+                if not updated:
+                    continue
+                self.logger.info(f"Plex list {tl.title_link} ({len(tl.plex_items)} items) updated",
+                                 extra={"markup": True})
 
     @hookimpl
     async def walk_movie(self, movie: Media):
