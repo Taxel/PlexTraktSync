@@ -26,7 +26,7 @@ pygments==2.16.1
 python-dotenv==0.21.1
 python-git-info==0.8.3
 pytimeparse==1.1.8
-pytrakt==3.4.23
+pytrakt==3.4.32
 pyyaml==6.0.1
 requests-cache==1.0.0b1
 requests-oauthlib==1.3.1; python_version >= '3.4'
