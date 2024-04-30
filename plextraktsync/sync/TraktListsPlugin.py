@@ -63,8 +63,14 @@ class TraktListsPlugin:
 
     @hookimpl
     async def walk_movie(self, movie: Media):
+        if not self.keep_watched and movie.plex.is_watched:
+            return
+
         self.trakt_lists.add_to_lists(movie)
 
     @hookimpl
     async def walk_episode(self, episode: Media):
+        if not self.keep_watched and episode.plex.is_watched:
+            return
+
         self.trakt_lists.add_to_lists(episode)
