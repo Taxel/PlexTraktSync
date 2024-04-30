@@ -22,13 +22,13 @@ class AddCollectionPlugin:
 
     @hookimpl
     async def walk_movie(self, movie: Media, dry_run: bool):
-        self.sync_collection(movie, dry_run=dry_run)
+        await self.sync_collection(movie, dry_run=dry_run)
 
     @hookimpl
     async def walk_episode(self, episode: Media, dry_run: bool):
-        self.sync_collection(episode, dry_run=dry_run)
+        await self.sync_collection(episode, dry_run=dry_run)
 
-    def sync_collection(self, m: Media, dry_run: bool):
+    async def sync_collection(self, m: Media, dry_run: bool):
         if m.is_collected:
             return
 
