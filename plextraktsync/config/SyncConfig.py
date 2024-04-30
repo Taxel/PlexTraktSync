@@ -81,6 +81,13 @@ class SyncConfig:
         return self.trakt_to_plex["liked_lists"]
 
     @cached_property
+    def sync_watchlists(self):
+        return any([
+            self.plex_to_trakt["watchlist"],
+            self.trakt_to_plex["watchlist"],
+        ])
+
+    @cached_property
     def need_library_walk(self):
         return any([
             self.update_plex_wl_as_pl,
