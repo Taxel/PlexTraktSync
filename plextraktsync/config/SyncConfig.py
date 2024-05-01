@@ -16,6 +16,7 @@ class SyncConfig:
     def __init__(self, config: Config, server_config: PlexServerConfig):
         self.config = dict(config["sync"])
         self.liked_lists = config["liked_lists"]
+        self.liked_lists_overrides = config["liked_list"] or {}
         self.server_config = server_config.sync_config
 
     def __getitem__(self, key):
@@ -69,10 +70,6 @@ class SyncConfig:
     @property
     def liked_lists_keep_watched(self):
         return self.liked_lists["keep_watched"]
-
-    @property
-    def liked_lists_overrides(self):
-        return self.liked_lists.get("overrides", {})
 
     @cached_property
     def sync_playback_status(self):
