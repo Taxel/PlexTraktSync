@@ -23,12 +23,14 @@ class TraktUserList:
         trakt_id: int = None,
         name: str = None,
         items=None,
+        keep_watched: bool = None,
     ):
         self.trakt_id = trakt_id
         self.name = name
         self._items = items
         self.description = None
         self.plex_items = []
+        self.keep_watched = keep_watched
 
     def __iter__(self):
         return iter(self.items)
