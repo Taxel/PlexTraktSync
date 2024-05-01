@@ -38,7 +38,7 @@ class TraktListsPlugin:
     def factory(cls, sync: Sync):
         return cls(
             sync.config.liked_lists_keep_watched,
-            sync.config.liked_lists.get("overrides", {}),
+            sync.config.liked_lists_overrides,
         )
 
     @hookimpl(trylast=True)
