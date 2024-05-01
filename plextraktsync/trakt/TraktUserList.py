@@ -100,6 +100,10 @@ class TraktUserList:
             # Already in the list
             return
 
+        if not self.keep_watched and m.plex.is_watched:
+            # Skip adding watched items
+            return
+
         self.logger.info(
             f"Adding {m.title_link} ({m.plex_key}) to Plex list {self.title_link}",
             extra={"markup": True},
