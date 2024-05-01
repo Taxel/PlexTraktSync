@@ -7,7 +7,6 @@ from plextraktsync.factory import logging
 from plextraktsync.plugin import hookimpl
 
 if TYPE_CHECKING:
-    from ..trakt.TraktUserList import TraktUserList
     from .plugin.SyncPluginInterface import Media, Sync, SyncPluginManager
 
 
@@ -18,10 +17,9 @@ class TraktListsPlugin:
 
     logger = logging.getLogger(__name__)
 
-    def __init__(self, keep_watched: bool, trakt_lists_config=None):
+    def __init__(self, keep_watched: bool):
         self.keep_watched = keep_watched
         self.trakt_lists = None
-        self.trakt_lists_config = trakt_lists_config or {}
 
     @staticmethod
     def enabled(config):
@@ -38,7 +36,6 @@ class TraktListsPlugin:
     def factory(cls, sync: Sync):
         return cls(
             sync.config.liked_lists_keep_watched,
-            sync.config.liked_lists_overrides,
         )
 
     @hookimpl(trylast=True)
@@ -58,7 +55,7 @@ class TraktListsPlugin:
 
         with measure_time("Updated Trakt Lists"):
             for tl in self.trakt_lists:
-                items = tl.plex_items_sorted(self.list_keep_watched(tl))
+                items = tl.plex_items_sorted()
                 updated = tl.plex_list.update(items)
                 if not updated:
                     continue
@@ -67,22 +64,10 @@ class TraktListsPlugin:
                     extra={"markup": True},
                 )
 
-    def list_keep_watched(self, tl: TraktUserList):
-        config = self.trakt_lists_config.get(tl.name)
-        if config is None:
-            return self.keep_watched
-        return config.get("keep_watched", self.keep_watched)
-
     @hookimpl
     async def walk_movie(self, movie: Media):
-        if not self.keep_watched and movie.plex.is_watched:
-            return
-
         self.trakt_lists.add_to_lists(movie)
 
     @hookimpl
     async def walk_episode(self, episode: Media):
-        if not self.keep_watched and episode.plex.is_watched:
-            return
-
         self.trakt_lists.add_to_lists(episode)
