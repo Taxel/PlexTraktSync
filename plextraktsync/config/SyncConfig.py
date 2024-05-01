@@ -70,6 +70,10 @@ class SyncConfig:
     def liked_lists_keep_watched(self):
         return self.liked_lists["keep_watched"]
 
+    @property
+    def liked_lists_overrides(self):
+        return self.liked_lists.get("overrides", {})
+
     @cached_property
     def sync_playback_status(self):
         return self["trakt_to_plex"]["playback_status"]
