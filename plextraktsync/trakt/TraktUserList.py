@@ -120,7 +120,7 @@ class TraktUserList:
     def title_link(self):
         return self.plex_list.title_link
 
-    def plex_items_sorted(self, keep_watched=True):
+    def plex_items_sorted(self):
         """
         Returns items sorted by trakt rank
 
@@ -132,7 +132,7 @@ class TraktUserList:
         plex_items = [
             (r, p.item)
             for (r, p) in self.plex_items
-            if keep_watched or (not keep_watched and not p.is_watched)
+            if self.keep_watched or (not self.keep_watched and not p.is_watched)
         ]
         if len(plex_items) == 0:
             return []
