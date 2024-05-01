@@ -24,7 +24,10 @@ class Sync:
 
     @cached_property
     def trakt_lists(self):
-        return TraktUserListCollection()
+        return TraktUserListCollection(
+            self.config.liked_lists_keep_watched,
+            self.config.liked_lists_overrides,
+        )
 
     @cached_property
     def pm(self):
