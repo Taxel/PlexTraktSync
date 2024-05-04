@@ -25,7 +25,7 @@ class TraktListsPlugin:
             # LikedListsPlugin
             config.sync_liked_lists,
             # WatchListPlugin
-            config.sync_watchlists,
+            config.update_plex_wl_as_pl,
         ])
 
     @classmethod
