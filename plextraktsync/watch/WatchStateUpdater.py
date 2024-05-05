@@ -157,6 +157,7 @@ class WatchStateUpdater(SetWindowTitle):
 
     def on_play(self, event: PlaySessionStateNotification):
         if not self.can_scrobble(event):
+            self.logger.debug(f"on_play: Rejected event {event}")
             return
 
         m = self.find_by_key(event.key)
