@@ -709,7 +709,7 @@ Now create instances based on server names from `servers.yml`, in this example `
 
 for complete logs, you can use `journalctl` (add `-f` to follow logs):
 
-1. `journalctl -u "plextraktsync@SERVER_NAME.service"`
+1. `journalctl --user -u "plextraktsync@SERVER_NAME.service"`
 
 If all works, enable it for auto-start on host reboot
 
