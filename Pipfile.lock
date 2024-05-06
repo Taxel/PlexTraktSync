@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "705d0b22db061c488bf4abb055666c7684368a27ea0a1cc05eaaa013c695decd"
+            "sha256": "ce088e3e09ce083fafe9c87aeb34e12a02acd41eee77246b12b79404d9e89116"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,12 +18,12 @@
     "default": {
         "apluggy": {
             "hashes": [
-                "sha256:ecfcd7cad1c484281cd528281104c53657297f8ab8e723f26c2f396a407c8d0c",
-                "sha256:fe66316ce1cdd9d7c406bd39582c267df5d6cf70b701bdbe9523d5efecd45308"
+                "sha256:9261e12d60720c4f92189cd7f923e1de1e7aa536cd22e9c5770c289389d5609c",
+                "sha256:985bea17ab2f4062e5d6f5094ea025376ac4f255bf0e7c6b2aadf467ae2ee4da"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.8'",
-            "version": "==0.9.4"
+            "markers": "python_version >= '3.10'",
+            "version": "==0.9.9"
         },
         "attrs": {
             "hashes": [
@@ -191,6 +191,14 @@
             "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==4.9.0"
+        },
+        "hypothesis": {
+            "hashes": [
+                "sha256:f1909d4702d21be55720bbbc58e0b42172e14bf712a8ecbab00ad6ae209a5ec9",
+                "sha256:f6858353a5fae943cae149cc618b9f2b261143df9d8d792cf1065a1b289bbb24"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==6.100.4"
         },
         "idna": {
             "hashes": [
@@ -419,6 +427,13 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3' and python_version >= '3.4'",
             "version": "==1.16.0"
+        },
+        "sortedcontainers": {
+            "hashes": [
+                "sha256:25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88",
+                "sha256:a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0"
+            ],
+            "version": "==2.4.0"
         },
         "tqdm": {
             "hashes": [
