@@ -69,7 +69,13 @@ class TraktUserList:
 
     @cached_property
     def plex_lists(self):
-        return factory.plex_lists
+        from plextraktsync.plex.PlexPlaylistCollection import \
+            PlexPlaylistCollection
+
+        section = factory.plex_api.library_sections[1].section
+        plex = factory.plex_api
+
+        return PlexPlaylistCollection(plex=plex, section=section)
 
     @cached_property
     def plex_list(self):
