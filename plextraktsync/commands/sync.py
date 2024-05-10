@@ -9,7 +9,11 @@ logger = logging.getLogger(__name__)
 
 
 @coro
-async def sync(
+async def run_async(runner, **kwargs):
+    await runner.sync(**kwargs)
+
+
+def sync(
     sync_option: str,
     library: str,
     show: str,
@@ -69,4 +73,4 @@ async def sync(
             w.print_plan(print=logger.info)
         if dry_run:
             logger.info("Enabled dry-run mode: not making actual changes")
-        await runner.sync(walker=w, dry_run=config.dry_run)
+        run_async(runner, walker=w, dry_run=config.dry_run)
