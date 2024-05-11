@@ -32,21 +32,21 @@ class SyncRatingsPlugin:
 
     @hookimpl
     async def fini(self, walker: Walker, dry_run: bool):
-        for show in walker.walk_shows(self.shows, title="Syncing show ratings"):
-            self.sync_ratings(show, dry_run=dry_run)
+        async for show in walker.walk_shows(self.shows, title="Syncing show ratings"):
+            await self.sync_ratings(show, dry_run=dry_run)
 
     @hookimpl
     async def walk_movie(self, movie: Media, dry_run: bool):
-        self.sync_ratings(movie, dry_run=dry_run)
+        await self.sync_ratings(movie, dry_run=dry_run)
 
     @hookimpl
     async def walk_episode(self, episode: Media, dry_run: bool):
-        self.sync_ratings(episode, dry_run=dry_run)
+        await self.sync_ratings(episode, dry_run=dry_run)
 
         if episode.show:
             self.shows.add(episode.show)
 
-    def sync_ratings(self, m: Media, dry_run: bool):
+    async def sync_ratings(self, m: Media, dry_run: bool):
         if m.plex_rating == m.trakt_rating:
             return
 
