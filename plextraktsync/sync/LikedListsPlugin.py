@@ -32,4 +32,8 @@ class LikedListsPlugin:
                                 "Liked lists won't update because it needs full library sync.")
             return
 
+        if dry_run:
+            self.logger.warning("Running partial library sync. "
+                                "Liked lists won't update because it needs full library sync.")
+
         sync.trakt_lists.load_lists(self.trakt.liked_lists)

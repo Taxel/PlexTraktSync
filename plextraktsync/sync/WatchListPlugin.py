@@ -49,7 +49,7 @@ class WatchListPlugin:
             with measure_time("Updated watchlist"):
                 self.sync_watchlist(walker, dry_run=dry_run)
 
-        if self.config.update_plex_wl_as_pl or self.config.sync_liked_lists:
+        if self.config.update_plex_wl_as_pl:
             if dry_run:
                 self.logger.warning("Running partial library sync. "
                                     "Liked lists won't update because it needs full library sync.")
