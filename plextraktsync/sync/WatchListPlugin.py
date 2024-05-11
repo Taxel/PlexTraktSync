@@ -43,6 +43,7 @@ class WatchListPlugin:
             else:
                 sync.trakt_lists.add_watchlist(self.trakt.watchlist_movies)
 
+    @hookimpl
     async def fini(self, walker: Walker, dry_run: bool):
         if walker.config.walk_watchlist and self.sync_wl:
             with measure_time("Updated watchlist"):
