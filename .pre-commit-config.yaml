@@ -32,9 +32,4 @@ repos:
     hooks:
       - id: rm-unneeded-f-str
 
-  - repo: https://github.com/ikamensh/flynt/
-    rev: "1.0.1"
-    hooks:
-      - id: flynt
-
 # vim:ts=2:sw=2:et
