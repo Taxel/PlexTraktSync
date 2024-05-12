@@ -25,6 +25,8 @@ jobs:
       - name: Install test dependencies
         run: pip install -r tests/requirements.txt
 
-      - name: "Test: Info"
+      - name: "Test: info"
         run: ./plextraktsync.sh info
+      - name: "Test: pytest"
+        run: pytest
 # vim:ts=2:sw=2:et
