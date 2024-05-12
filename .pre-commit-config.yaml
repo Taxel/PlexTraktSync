@@ -37,11 +37,6 @@ repos:
     hooks:
       - id: rm-unneeded-f-str
 
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.0.0
-    hooks:
-      - id: flake8
-
   - repo: https://github.com/ikamensh/flynt/
     rev: "1.0.1"
     hooks:
