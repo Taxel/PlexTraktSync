@@ -1,12 +1,10 @@
 #!/usr/bin/env python3 -m pytest
-from plextraktsync.factory import factory
+from plextraktsync.sync.plugin import SyncPluginManager
 
 
 def test_plugin():
     """
     Test that plugin framework initializes
     """
-    sync = factory.sync
-    assert sync is not None
-    pm = sync.pm
+    pm = SyncPluginManager()
     assert pm is not None

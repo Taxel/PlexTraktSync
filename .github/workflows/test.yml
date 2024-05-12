@@ -22,7 +22,11 @@ jobs:
         run: python -m pip install -r requirements.txt -r requirements.pipenv.txt
       - name: Install dependencies (pipenv)
         run: pipenv install --deploy
+      - name: Install test dependencies
+        run: pip install -r tests/requirements.txt
 
-      - name: "Test: Info"
+      - name: "Test: info"
         run: ./plextraktsync.sh info
+      - name: "Test: pytest"
+        run: pytest
 # vim:ts=2:sw=2:et
