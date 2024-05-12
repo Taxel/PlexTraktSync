@@ -49,7 +49,7 @@ class WatchListPlugin:
     async def fini(self, walker: Walker, dry_run: bool):
         if walker.config.walk_watchlist and self.sync_wl:
             with measure_time("Updated watchlist"):
-                self.sync_watchlist(walker, dry_run=dry_run)
+                await self.sync_watchlist(walker, dry_run=dry_run)
 
         if self.config.update_plex_wl_as_pl and dry_run:
             self.logger.warning("Running partial library sync. "
@@ -108,13 +108,13 @@ class WatchListPlugin:
                 if not dry_run:
                     m.remove_from_trakt_watchlist()
 
-    def sync_watchlist(self, walker: Walker, dry_run: bool):
+    async def sync_watchlist(self, walker: Walker, dry_run: bool):
         # NOTE: Plex watchlist sync removes matching items from trakt lists
         # See the comment above around "del self.trakt_wl[m]"
-        for m in walker.media_from_plexlist(self.plex_wl):
+        async for m in walker.media_from_plexlist(self.plex_wl):
             self.watchlist_sync_item(m, dry_run)
 
         # Because Plex syncing might have emptied the watchlists, skip printing the 0/0 progress
         if len(self.trakt_wl):
-            for m in walker.media_from_traktlist(self.trakt_wl):
+            async for m in walker.media_from_traktlist(self.trakt_wl):
                 self.watchlist_sync_item(m, dry_run)

@@ -21,6 +21,8 @@ if TYPE_CHECKING:
     from plextraktsync.plan.WalkConfig import WalkConfig
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.plex.PlexLibrarySection import PlexLibrarySection
+    from plextraktsync.plex.PlexWatchList import PlexWatchList
+    from plextraktsync.trakt.TraktWatchlist import TraktWatchList
 
 
 class Walker(SetWindowTitle):
@@ -199,14 +201,14 @@ class Walker(SetWindowTitle):
             async for m in iterable:
                 yield m
 
-    async def media_from_traktlist(self, items: AsyncIterable, title="Trakt watchlist") -> Generator[Media, Any, None]:
+    async def media_from_traktlist(self, items: TraktWatchList, title="Trakt watchlist") -> Generator[Media, Any, None]:
         it = self.progressbar(items, desc=f"Processing {title}")
         async for media in it:
             tm = TraktItem(media)
             m = self.mf.resolve_trakt(tm)
             yield m
 
-    async def media_from_plexlist(self, items: AsyncIterable) -> Generator[Media, Any, None]:
+    async def media_from_plexlist(self, items: PlexWatchList) -> Generator[Media, Any, None]:
         it = self.progressbar(items, desc="Processing Plex watchlist")
         async for media in it:
             pm = PlexLibraryItem(media, plex=self.plex)
