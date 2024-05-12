@@ -20,6 +20,13 @@ repos:
       - id: destroyed-symlinks
       - id: mixed-line-ending
 
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff
+        args: [ --fix ]
+      - id: ruff-format
+
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
     hooks:
