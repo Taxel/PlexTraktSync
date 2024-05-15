@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "705d0b22db061c488bf4abb055666c7684368a27ea0a1cc05eaaa013c695decd"
+            "sha256": "154b7013546d187ce469b1d2b98fd870e4961d0a94bdc1877a21dd7c7ecc088b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -244,11 +244,12 @@
         },
         "platformdirs": {
             "hashes": [
-                "sha256:031cd18d4ec63ec53e82dceaac0417d218a6863f7745dfcc9efe7793b7039bdf",
-                "sha256:17d5a1161b3fd67b390023cb2d3b026bbd40abde6fdb052dfbd3a29c3ba22ee1"
+                "sha256:2d7a1657e36a80ea911db832a8a6ece5ee53d8de21edd5cc5879af6530b1bfee",
+                "sha256:38b7b51f512eed9e84a22788b4bce1de17c0adb134d6becb09836e37d8654cd3"
             ],
-            "markers": "python_version >= '3.7' and python_version >= '3.8'",
-            "version": "==4.2.1"
+            "index": "pypi",
+            "markers": "python_version >= '3.8'",
+            "version": "==4.2.2"
         },
         "plexapi": {
             "hashes": [
