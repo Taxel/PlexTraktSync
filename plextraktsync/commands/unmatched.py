@@ -1,8 +1,10 @@
 from plextraktsync.commands.login import ensure_login
+from plextraktsync.decorators.coro import coro
 from plextraktsync.factory import factory
 
 
-def unmatched(no_progress_bar: bool, local: bool):
+@coro
+async def unmatched(no_progress_bar: bool, local: bool):
     factory.run_config.update(progressbar=not no_progress_bar)
     ensure_login()
     plex = factory.plex_api
@@ -16,11 +18,11 @@ def unmatched(no_progress_bar: bool, local: bool):
 
     failed = []
     if local:
-        for pm in walker.get_plex_movies():
+        async for pm in walker.get_plex_movies():
             if all(guid.local for guid in pm.guids):
                 failed.append(pm)
     else:
-        for pm in walker.get_plex_movies():
+        async for pm in walker.get_plex_movies():
             movie = mf.resolve_any(pm)
             if not movie:
                 failed.append(pm)
