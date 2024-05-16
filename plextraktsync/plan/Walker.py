@@ -198,7 +198,7 @@ class Walker(SetWindowTitle):
                 async for m in it:
                     yield m
         else:
-            async for m in iterable:
+            for m in iterable:
                 yield m
 
     async def media_from_traktlist(self, items: TraktWatchList, title="Trakt watchlist") -> Generator[Media, Any, None]:
