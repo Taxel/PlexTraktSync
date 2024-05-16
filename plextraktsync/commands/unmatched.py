@@ -1,8 +1,10 @@
 from plextraktsync.commands.login import ensure_login
+from plextraktsync.decorators.coro import coro
 from plextraktsync.factory import factory
 
 
-def unmatched(no_progress_bar: bool, local: bool):
+@coro
+async def unmatched(no_progress_bar: bool, local: bool):
     factory.run_config.update(progressbar=not no_progress_bar)
     ensure_login()
     plex = factory.plex_api
