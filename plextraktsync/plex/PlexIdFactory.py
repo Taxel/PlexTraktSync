@@ -10,6 +10,8 @@ class PlexIdFactory:
     def create(cls, key: str | int):
         if isinstance(key, int) or key.isnumeric():
             return PlexId(int(key))
+        elif key.startswith("https://trakt.tv/"):
+            return cls.from_trakt_url(key)
         elif key.startswith("https:") or key.startswith("http:"):
             return cls.from_url(key)
         elif key.startswith("plex://"):
@@ -61,3 +63,27 @@ class PlexIdFactory:
                 return PlexId(int(filters["metadataItemID"][0]), server=server)
 
         raise RuntimeError(f"Unable to parse: {url}")
+
+    @classmethod
+    def from_trakt_url(cls, url: str):
+        path = urlparse(url).path
+
+        if path.startswith("/movies/"):
+            media_type = "movie"
+            slug = path[len("/movies/"):]
+        else:
+            from click import ClickException
+            raise ClickException(f"Unable to create PlexId: {path}")
+
+        from plextraktsync.factory import factory
+        from plextraktsync.trakt.TraktItem import TraktItem
+
+        tm = TraktItem(factory.trakt_api.find_by_slug(slug, media_type))
+        results = factory.plex_api.search_by_guid(tm.guids, libtype=tm.type)
+        if results is None:
+            raise RuntimeError(f"Unable to find Plex Match: {url}")
+        if len(results) > 1:
+            raise RuntimeError(f"Failed to find unique match: {url}")
+        pm = results[0]
+
+        return PlexId(pm.key, server=pm.plex.server.machineIdentifier)

@@ -99,6 +99,38 @@ class PlexApi:
 
         return plexapi.utils.download(url, token, **kwargs)
 
+    def search_by_guid(self, guids: dict, libtype: str):
+        r"""
+                    fetchItem(ekey, guid__regex=r"com\.plexapp\.agents\.(imdb|themoviedb)://|tt\d+")
+                    fetchItem(ekey, guid__id__regex=r"(imdb|tmdb|tvdb)://")
+        """
+
+        from plextraktsync.plex.PlexGuid import PlexGuid
+
+        # Build regex of possible matches
+        keys = "|".join(guids.keys())
+        values = "|".join(map(str, guids.values()))
+        regex = f"({keys})://({values})"
+
+        plexguids = [PlexGuid(f"{k}://{v}", type=libtype) for k, v in guids.items()]
+        sections = self.movie_sections() if libtype == "movie" else None
+        if not sections:
+            raise RuntimeError(f"Not supported search type: {libtype}")
+        results = []
+        for section in sections:
+            result = section.search(libtype=libtype, guid__id__regex=regex)
+            for m in result:
+                pm = PlexLibraryItem(m, self)
+                # Do proper matching with provider type and provider id
+                matched = len([[True for g1 in pm.guids if g1 == g2] for g2 in plexguids])
+                if matched:
+                    results.append(pm)
+
+        if not len(results):
+            return None
+
+        return results
+
     @property
     def version(self):
         return self.server.version
