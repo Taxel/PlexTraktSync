@@ -70,8 +70,7 @@ class Factory:
     @cached_property
     def plex_server(self):
         from plextraktsync.factory import factory
-        from plextraktsync.plex.PlexServerConnection import \
-            PlexServerConnection
+        from plextraktsync.plex.PlexServerConnection import PlexServerConnection
 
         server = self.server_config
 
@@ -82,8 +81,7 @@ class Factory:
 
     @cached_property
     def plex_lists(self):
-        from plextraktsync.plex.PlexPlaylistCollection import \
-            PlexPlaylistCollection
+        from plextraktsync.plex.PlexPlaylistCollection import PlexPlaylistCollection
 
         return PlexPlaylistCollection(self.plex_server)
 
@@ -96,14 +94,12 @@ class Factory:
 
     @cached_property
     def server_config_factory(self):
-        from plextraktsync.config.ServerConfigFactory import \
-            ServerConfigFactory
+        from plextraktsync.config.ServerConfigFactory import ServerConfigFactory
 
         return ServerConfigFactory()
 
     @cached_property
     def server_config(self):
-
         config = self.config
         run_config = self.run_config
         server_config = self.server_config_factory
@@ -233,13 +229,13 @@ class Factory:
         class Logging:
             @staticmethod
             def getLogger(name):
-                """ Wrap getLogger and add our filters """
+                """Wrap getLogger and add our filters"""
                 logger = logging.getLogger(name)
                 logger.addFilter(logger_filter)
                 return logger
 
             def __getattr__(self, name):
-                """ Wrap log level attributes """
+                """Wrap log level attributes"""
                 return getattr(logging, name)
 
         return Logging()
@@ -261,6 +257,7 @@ class Factory:
 
     def logger_filter_apply(self, logger_filter):
         import logging
+
         config = self.config
         loggers = config["logging"]["filter_loggers"] or []
 
@@ -308,8 +305,7 @@ class Factory:
         from plextraktsync.queue.BackgroundTask import BackgroundTask
         from plextraktsync.queue.Queue import Queue
         from plextraktsync.queue.TraktBatchWorker import TraktBatchWorker
-        from plextraktsync.queue.TraktMarkWatchedWorker import \
-            TraktMarkWatchedWorker
+        from plextraktsync.queue.TraktMarkWatchedWorker import TraktMarkWatchedWorker
         from plextraktsync.queue.TraktScrobbleWorker import TraktScrobbleWorker
 
         workers = [
@@ -326,4 +322,6 @@ class Factory:
     def batch_delay_timer(self):
         from plextraktsync.util.Timer import Timer
 
-        return Timer(self.run_config.batch_delay) if self.run_config.batch_delay else None
+        return (
+            Timer(self.run_config.batch_delay) if self.run_config.batch_delay else None
+        )

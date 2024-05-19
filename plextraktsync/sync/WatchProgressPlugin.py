@@ -41,14 +41,17 @@ class WatchProgressPlugin:
             return
         progress = m.plex.progress_millis(p.progress)
         if progress == 0.0:
-            self.logger.warning(f"{m.title_link}: Skip progress, setting to 0 will not work", extra={"markup": True})
+            self.logger.warning(
+                f"{m.title_link}: Skip progress, setting to 0 will not work",
+                extra={"markup": True},
+            )
             return
 
         view_offset = timedelta(milliseconds=m.plex.item.viewOffset)
         progress_offset = timedelta(milliseconds=progress)
         self.logger.info(
             f"{m.title_link}: Set watch progress to {p.progress:.02F}%: {view_offset} -> {progress_offset}",
-            extra={"markup": True}
+            extra={"markup": True},
         )
         if not dry_run:
             m.plex.item.updateProgress(progress)

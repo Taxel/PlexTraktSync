@@ -25,7 +25,9 @@ def command():
             try:
                 cmd(*args, **kwargs)
             except EOFError as e:
-                raise ClickException(f"Program requested terminal, No terminal is connected: {e}")
+                raise ClickException(
+                    f"Program requested terminal, No terminal is connected: {e}"
+                )
             except ClickException as e:
                 from plextraktsync.factory import logging
 
@@ -48,17 +50,22 @@ def command():
 @click.option("--version", is_flag=True, help="Print version and exit")
 @click.option("--no-cache", is_flag=True, help="Disable cache for Trakt HTTP requests")
 @click.option("--no-progressbar", is_flag=True, help="Disable progressbar")
-@click.option("--batch-delay", default=5, show_default=True,
-              help="Time in seconds between each collection batch submit to Trakt")
+@click.option(
+    "--batch-delay",
+    default=5,
+    show_default=True,
+    help="Time in seconds between each collection batch submit to Trakt",
+)
 @click.option("--server", help="Plex Server name from servers.yml", metavar="NAME")
 @click.pass_context
-def cli(ctx,
-        version: bool,
-        no_cache: bool,
-        no_progressbar: bool,
-        batch_delay: int,
-        server: str,
-        ):
+def cli(
+    ctx,
+    version: bool,
+    no_cache: bool,
+    no_progressbar: bool,
+    batch_delay: int,
+    server: str,
+):
     """
     Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server
     """
@@ -76,7 +83,9 @@ def cli(ctx,
 
     if not ctx.invoked_subcommand:
         logger = factory.logger
-        logger.warning('plextraktsync without command is deprecated. Executing "plextraktsync sync"')
+        logger.warning(
+            'plextraktsync without command is deprecated. Executing "plextraktsync sync"'
+        )
         sync()
 
 
@@ -186,7 +195,9 @@ def plex_login():
 @click.option(
     "--sync",
     "sync_option",
-    type=click.Choice(["all", "movies", "tv", "shows", "watchlist"], case_sensitive=False),
+    type=click.Choice(
+        ["all", "movies", "tv", "shows", "watchlist"], case_sensitive=False
+    ),
     default="all",
     show_default=True,
     help="Specify what to sync",
@@ -331,7 +342,9 @@ def watched_shows():
 
 
 @command()
-@click.option("--urls-expire-after", is_flag=True, help="Print urls_expire_after configuration")
+@click.option(
+    "--urls-expire-after", is_flag=True, help="Print urls_expire_after configuration"
+)
 @click.option("--edit", is_flag=True, help="Open config file in editor")
 @click.option("--locate", is_flag=True, help="Locate config file in file browser")
 def config():

@@ -20,12 +20,14 @@ class ProgressBar(dict):
         from rich.box import MINIMAL
         from rich.live import Live
         from rich.panel import Panel
-        from rich.progress import (BarColumn, Progress, TextColumn,
-                                   TimeRemainingColumn)
+        from rich.progress import BarColumn, Progress, TextColumn, TimeRemainingColumn
 
         console = factory.console
         progress = Progress(
-            TextColumn(" {task.fields[play_state]}  [bold blue]{task.description}", justify="left"),
+            TextColumn(
+                " {task.fields[play_state]}  [bold blue]{task.description}",
+                justify="left",
+            ),
             BarColumn(bar_width=None),
             "[progress.percentage]{task.percentage:>3.1f}%",
             "•",
@@ -56,11 +58,15 @@ class ProgressBar(dict):
 
     def play(self, m: PlexLibraryItem, progress: float):
         task_id = self[m]
-        self.progress.update(task_id, completed=progress, play_state=self.ICONS["playing"])
+        self.progress.update(
+            task_id, completed=progress, play_state=self.ICONS["playing"]
+        )
 
     def pause(self, m: PlexLibraryItem, progress: float):
         task_id = self[m]
-        self.progress.update(task_id, completed=progress, play_state=self.ICONS["paused"])
+        self.progress.update(
+            task_id, completed=progress, play_state=self.ICONS["paused"]
+        )
 
     def stop(self, m: PlexLibraryItem):
         task_id = self[m]

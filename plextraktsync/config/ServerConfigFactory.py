@@ -59,9 +59,12 @@ class ServerConfigFactory(ConfigMergeMixin):
 
     def save(self):
         loader = ConfigLoader()
-        loader.write(self.config_path, {
-            "servers": self.servers,
-        })
+        loader.write(
+            self.config_path,
+            {
+                "servers": self.servers,
+            },
+        )
 
     def add_server(self, **kwargs):
         self.load()

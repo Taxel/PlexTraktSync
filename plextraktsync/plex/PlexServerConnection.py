@@ -40,9 +40,13 @@ class PlexServerConnection:
         # 2. url without ssl
         # 3. local url (localhost)
         for url in urls:
-            self.logger.info(f"Connecting with url: {url}, timeout {self.timeout} seconds")
+            self.logger.info(
+                f"Connecting with url: {url}, timeout {self.timeout} seconds"
+            )
             try:
-                return PlexServer(baseurl=url, token=token, session=self.session, timeout=self.timeout)
+                return PlexServer(
+                    baseurl=url, token=token, session=self.session, timeout=self.timeout
+                )
             except SSLError as e:
                 self.logger.error(e)
                 message = str(e.__context__)
@@ -58,7 +62,9 @@ class PlexServerConnection:
                 # )
                 if "doesn't match '*." in message and ".plex.direct" in url:
                     url = self.extract_plex_direct(url, message)
-                    self.logger.warning(f"Adding rewritten plex.direct url to connect with: {url}")
+                    self.logger.warning(
+                        f"Adding rewritten plex.direct url to connect with: {url}"
+                    )
                     urls.append(url)
                     continue
 
@@ -69,7 +75,9 @@ class PlexServerConnection:
                 # 2.
                 if url and url[:5] == "https":
                     url = url.replace("https", "http")
-                    self.logger.warning(f"Adding rewritten http url to connect with: {url}")
+                    self.logger.warning(
+                        f"Adding rewritten http url to connect with: {url}"
+                    )
                     urls.append(url)
                     continue
             except Unauthorized as e:
@@ -84,7 +92,7 @@ class PlexServerConnection:
         The url must be with .plex.direct domain.
         """
         hash_pos = message.find("*.") + 2
-        hash_value = message[hash_pos:hash_pos + 32]
+        hash_value = message[hash_pos : hash_pos + 32]
         end_pos = url.find(".plex.direct")
 
         return url[: end_pos - 32] + hash_value + url[end_pos:]

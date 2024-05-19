@@ -56,11 +56,15 @@ def inspect_media(plex_id: PlexId):
 
         print("Subtitles:")
         for index, subtitle in enumerate(pm.subtitle_streams, start=1):
-            print(f"  Subtitle {index}: ({subtitle.language}) {subtitle.title} (codec: {subtitle.codec}, selected: {subtitle.selected}, transient: {subtitle.transient})")
+            print(
+                f"  Subtitle {index}: ({subtitle.language}) {subtitle.title} (codec: {subtitle.codec}, selected: {subtitle.selected}, transient: {subtitle.transient})"
+            )
 
         print("Parts:")
         for index, part in enumerate(pm.parts, start=1):
-            print(f"  Part {index} (exists: {part.exists}): [link=file://{quote_plus(part.file)}]{escape(part.file)}[/link] {part.size} bytes")
+            print(
+                f"  Part {index} (exists: {part.exists}): [link=file://{quote_plus(part.file)}]{escape(part.file)}[/link] {part.size} bytes"
+            )
 
         print("Markers:")
         for marker in pm.markers:
@@ -70,12 +74,16 @@ def inspect_media(plex_id: PlexId):
 
     print("Guids:")
     for guid in pm.guids:
-        print(f"  Guid: {guid.provider_link}, Id: {guid.id}, Provider: '{guid.provider}'")
+        print(
+            f"  Guid: {guid.provider_link}, Id: {guid.id}, Provider: '{guid.provider}'"
+        )
 
     print(f"Metadata: {pm.to_json()}")
     print(f"Played on Plex: {pm.is_watched}")
 
-    history = plex.history(media, device=True, account=True) if not pm.is_discover else []
+    history = (
+        plex.history(media, device=True, account=True) if not pm.is_discover else []
+    )
     print("Plex play history:")
     for h in history:
         d = h.device

@@ -47,7 +47,9 @@ class Queue:
     def start_daemon(self, runner):
         from threading import Thread
 
-        daemon = Thread(target=runner, args=(self.queue,), daemon=True, name="BackgroundTask")
+        daemon = Thread(
+            target=runner, args=(self.queue,), daemon=True, name="BackgroundTask"
+        )
         daemon.start()
 
         return daemon

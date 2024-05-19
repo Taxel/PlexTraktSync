@@ -14,6 +14,7 @@ class TraktListsPlugin:
     """
     Plugin handling syncing of Trakt lists.
     """
+
     logger = logging.getLogger(__name__)
 
     def __init__(self):
@@ -21,12 +22,14 @@ class TraktListsPlugin:
 
     @staticmethod
     def enabled(config):
-        return any([
-            # LikedListsPlugin
-            config.sync_liked_lists,
-            # WatchListPlugin
-            config.update_plex_wl_as_pl,
-        ])
+        return any(
+            [
+                # LikedListsPlugin
+                config.sync_liked_lists,
+                # WatchListPlugin
+                config.update_plex_wl_as_pl,
+            ]
+        )
 
     @classmethod
     def factory(cls, sync):
@@ -52,8 +55,10 @@ class TraktListsPlugin:
                 updated = tl.plex_list.update(tl.plex_items_sorted)
                 if not updated:
                     continue
-                self.logger.info(f"Plex list {tl.title_link} ({len(tl.plex_items)} items) updated",
-                                 extra={"markup": True})
+                self.logger.info(
+                    f"Plex list {tl.title_link} ({len(tl.plex_items)} items) updated",
+                    extra={"markup": True},
+                )
 
     @hookimpl
     async def walk_movie(self, movie: Media):

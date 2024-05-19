@@ -37,8 +37,10 @@ class PlexPlaylist(RichMarkup):
             playlists = self.server.playlists(title=self.name, title__iexact=self.name)
             playlist: Playlist = playlists[0]
             if len(playlists) > 1:
-                self.logger.warning(f"Found multiple playlists ({len(playlists)}) with same name: '{self.name}', "
-                                    f"Using first playlist with id {playlist.ratingKey}")
+                self.logger.warning(
+                    f"Found multiple playlists ({len(playlists)}) with same name: '{self.name}', "
+                    f"Using first playlist with id {playlist.ratingKey}"
+                )
             self.logger.debug(f"Loaded plex list: '{self.name}'")
             return playlist
         except IndexError:
@@ -63,7 +65,10 @@ class PlexPlaylist(RichMarkup):
             del self.__dict__["playlist"]
             del self.__dict__["items"]
             playlist = self.server.createPlaylist(self.name, items=items)
-            self.logger.info(f"Created plex playlist {self.title_link} with {len(items)} items", extra={"markup": True})
+            self.logger.info(
+                f"Created plex playlist {self.title_link} with {len(items)} items",
+                extra={"markup": True},
+            )
 
         # Skip if playlist could not be made/retrieved
         if playlist is None:
@@ -72,7 +77,10 @@ class PlexPlaylist(RichMarkup):
         updated = False
         if description is not None and description != playlist.summary:
             playlist.editSummary(summary=description)
-            self.logger.debug(f"Updated {self.title_link} description: '{description}'", extra={"markup": True})
+            self.logger.debug(
+                f"Updated {self.title_link} description: '{description}'",
+                extra={"markup": True},
+            )
             updated = True
 
         # Skip if nothing to update

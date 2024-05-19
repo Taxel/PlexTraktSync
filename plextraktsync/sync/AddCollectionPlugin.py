@@ -32,7 +32,9 @@ class AddCollectionPlugin:
         if m.is_collected:
             return
 
-        self.logger.info(f"Adding to Trakt collection: {m.title_link}", extra={"markup": True})
+        self.logger.info(
+            f"Adding to Trakt collection: {m.title_link}", extra={"markup": True}
+        )
 
         if not dry_run:
             m.add_to_collection()

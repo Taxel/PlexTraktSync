@@ -45,7 +45,9 @@ def self_update(pr: int):
             execp(f"pipx uninstall plextraktsync@{pr}")
 
         print(f"Updating PlexTraktSync to the pull request #{pr} version using pipx")
-        execp(f"pipx install --suffix=@{pr} --force git+https://github.com/Taxel/PlexTraktSync@refs/pull/{pr}/head")
+        execp(
+            f"pipx install --suffix=@{pr} --force git+https://github.com/Taxel/PlexTraktSync@refs/pull/{pr}/head"
+        )
         return
 
     print("Updating PlexTraktSync to the latest version using pipx")

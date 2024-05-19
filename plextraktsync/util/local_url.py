@@ -9,14 +9,20 @@ def local_url(port=32400):
         return f"http://localhost:{port}"
 
     import socket
+
     try:
         host_ip = socket.gethostbyname("host.docker.internal")
     except socket.gaierror:
         try:
             from subprocess import check_output
-            host_ip = check_output(
-                "ip -4 route show default | awk '{ print $3 }'", shell=True
-            ).decode().rstrip()
+
+            host_ip = (
+                check_output(
+                    "ip -4 route show default | awk '{ print $3 }'", shell=True
+                )
+                .decode()
+                .rstrip()
+            )
         except Exception:
             host_ip = "172.17.0.1"
 

@@ -17,8 +17,10 @@ class PartialTraktMedia:
 
     @classmethod
     def create(cls, m: TraktMedia, **extra):
-        return cls(**{
-            "ids": m.ids,
-            "media_type": m.media_type,
-            **extra,
-        })
+        return cls(
+            **{
+                "ids": m.ids,
+                "media_type": m.media_type,
+                **extra,
+            }
+        )

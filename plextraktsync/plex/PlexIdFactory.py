@@ -50,7 +50,7 @@ class PlexIdFactory:
         if "key" in parsed:
             key = ",".join(parsed["key"])
             if key.startswith("/library/metadata/"):
-                id = key[len("/library/metadata/"):]
+                id = key[len("/library/metadata/") :]
                 if fragment.path == "!/provider/tv.plex.provider.discover/details":
                     return PlexId(id, provider=PlexId.METADATA)
                 if fragment.path == "!/provider/tv.plex.provider.vod/details":
@@ -70,9 +70,10 @@ class PlexIdFactory:
 
         if path.startswith("/movies/"):
             media_type = "movie"
-            slug = path[len("/movies/"):]
+            slug = path[len("/movies/") :]
         else:
             from click import ClickException
+
             raise ClickException(f"Unable to create PlexId: {path}")
 
         from plextraktsync.factory import factory

@@ -330,9 +330,13 @@ class PlexLibraryItem(RichMarkup):
             show_id = self.item.parentRatingKey
             season = self.item.seasonNumber
 
-            return self.library.search(libtype="episode", filters={"show.id": show_id, "season.index": season})
+            return self.library.search(
+                libtype="episode", filters={"show.id": show_id, "season.index": season}
+            )
 
-        return self.library.search(libtype="episode", filters={"show.id": self.item.ratingKey})
+        return self.library.search(
+            libtype="episode", filters={"show.id": self.item.ratingKey}
+        )
 
     @cached_property
     def season_number(self):

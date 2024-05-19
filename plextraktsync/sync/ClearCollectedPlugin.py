@@ -39,8 +39,12 @@ class ClearCollectedPlugin:
 
     @hookimpl
     async def fini(self, dry_run: bool):
-        self.clear_collected(self.trakt.movie_collection, self.movie_trakt_ids, dry_run=dry_run)
-        self.clear_collected(self.trakt.episodes_collection, self.episode_trakt_ids, dry_run=dry_run)
+        self.clear_collected(
+            self.trakt.movie_collection, self.movie_trakt_ids, dry_run=dry_run
+        )
+        self.clear_collected(
+            self.trakt.episodes_collection, self.episode_trakt_ids, dry_run=dry_run
+        )
 
     @hookimpl
     async def walk_movie(self, movie: Media):
@@ -50,7 +54,9 @@ class ClearCollectedPlugin:
     async def walk_episode(self, episode: Media):
         self.episode_trakt_ids.add(episode.trakt_id)
 
-    def clear_collected(self, existing_items: Iterable[TraktMedia], keep_ids: set[int], dry_run):
+    def clear_collected(
+        self, existing_items: Iterable[TraktMedia], keep_ids: set[int], dry_run
+    ):
         from plextraktsync.trakt.trakt_set import trakt_set
 
         existing_ids = trakt_set(existing_items)

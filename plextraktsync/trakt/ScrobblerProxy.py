@@ -13,6 +13,7 @@ class ScrobblerProxy:
     """
     Proxy to Scrobbler that queues requests to update trakt
     """
+
     logger = logging.getLogger(__name__)
 
     def __init__(self, scrobbler: Scrobbler, threshold=80):

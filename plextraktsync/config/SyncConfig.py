@@ -50,11 +50,16 @@ class SyncConfig:
 
     @cached_property
     def clear_collected(self):
-        return self.plex_to_trakt["collection"] and self["plex_to_trakt"]["clear_collected"]
+        return (
+            self.plex_to_trakt["collection"]
+            and self["plex_to_trakt"]["clear_collected"]
+        )
 
     @cached_property
     def sync_watched_status(self):
-        return self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
+        return (
+            self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
+        )
 
     @cached_property
     def sync_playback_status(self):
@@ -62,11 +67,17 @@ class SyncConfig:
 
     @cached_property
     def update_plex_wl(self):
-        return self.trakt_to_plex["watchlist"] and not self.trakt_to_plex["watchlist_as_playlist"]
+        return (
+            self.trakt_to_plex["watchlist"]
+            and not self.trakt_to_plex["watchlist_as_playlist"]
+        )
 
     @cached_property
     def update_plex_wl_as_pl(self):
-        return self.trakt_to_plex["watchlist"] and self.trakt_to_plex["watchlist_as_playlist"]
+        return (
+            self.trakt_to_plex["watchlist"]
+            and self.trakt_to_plex["watchlist_as_playlist"]
+        )
 
     @cached_property
     def update_trakt_wl(self):
@@ -82,18 +93,22 @@ class SyncConfig:
 
     @cached_property
     def sync_watchlists(self):
-        return any([
-            self.plex_to_trakt["watchlist"],
-            self.trakt_to_plex["watchlist"],
-        ])
+        return any(
+            [
+                self.plex_to_trakt["watchlist"],
+                self.trakt_to_plex["watchlist"],
+            ]
+        )
 
     @cached_property
     def need_library_walk(self):
-        return any([
-            self.update_plex_wl_as_pl,
-            self.sync_watched_status,
-            self.sync_ratings,
-            self.plex_to_trakt["collection"],
-            self.sync_liked_lists,
-            self.sync_playback_status,
-        ])
+        return any(
+            [
+                self.update_plex_wl_as_pl,
+                self.sync_watched_status,
+                self.sync_ratings,
+                self.plex_to_trakt["collection"],
+                self.sync_liked_lists,
+                self.sync_playback_status,
+            ]
+        )

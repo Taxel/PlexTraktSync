@@ -5,9 +5,13 @@ from typing import TYPE_CHECKING
 
 from plextraktsync.factory import logging
 from plextraktsync.mixin.SetWindowTitle import SetWindowTitle
-from plextraktsync.watch.events import (ActivityNotification, Error,
-                                        PlaySessionStateNotification,
-                                        ServerStarted, TimelineEntry)
+from plextraktsync.watch.events import (
+    ActivityNotification,
+    Error,
+    PlaySessionStateNotification,
+    ServerStarted,
+    TimelineEntry,
+)
 
 if TYPE_CHECKING:
     from plextraktsync.config.Config import Config
@@ -22,11 +26,11 @@ class WatchStateUpdater(SetWindowTitle):
     logger = logging.getLogger(__name__)
 
     def __init__(
-            self,
-            plex: PlexApi,
-            trakt: TraktApi,
-            mf: MediaFactory,
-            config: Config,
+        self,
+        plex: PlexApi,
+        trakt: TraktApi,
+        mf: MediaFactory,
+        config: Config,
     ):
         self.plex = plex
         self.trakt = trakt
@@ -44,7 +48,9 @@ class WatchStateUpdater(SetWindowTitle):
             # This must be username, not email
             return self.plex.account.username
 
-        self.logger.warning("No permission to access sessions, disabling username filter")
+        self.logger.warning(
+            "No permission to access sessions, disabling username filter"
+        )
         return None
 
     @cached_property
@@ -73,7 +79,9 @@ class WatchStateUpdater(SetWindowTitle):
     def scrobblers(self):
         from plextraktsync.trakt.ScrobblerCollection import ScrobblerCollection
 
-        return ScrobblerCollection(self.trakt, self.config["watch"]["scrobble_threshold"])
+        return ScrobblerCollection(
+            self.trakt, self.config["watch"]["scrobble_threshold"]
+        )
 
     @lru_cache(maxsize=2)
     def fetch_item(self, key: str):
@@ -116,11 +124,15 @@ class WatchStateUpdater(SetWindowTitle):
         return self.plex.server
 
     def on_start(self, event: ServerStarted):
-        self.logger.info(f"Server connected: {event.server.friendlyName} ({event.server.version})")
+        self.logger.info(
+            f"Server connected: {event.server.friendlyName} ({event.server.version})"
+        )
         self.reset_title()
 
     def reset_title(self):
-        self.set_window_title(f"watch: {self.server.friendlyName} ({self.server.version})")
+        self.set_window_title(
+            f"watch: {self.server.friendlyName} ({self.server.version})"
+        )
 
     def on_error(self, error: Error):
         self.logger.error(error.msg)

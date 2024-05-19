@@ -55,7 +55,7 @@ def server_urls(server: MyPlexResource):
     connections = server.preferred_connections(
         None,
         locations=server.DEFAULT_LOCATION_ORDER,
-        schemes=server.DEFAULT_SCHEME_ORDER
+        schemes=server.DEFAULT_SCHEME_ORDER,
     )
     yield from connections
     yield local_url()
@@ -64,7 +64,9 @@ def server_urls(server: MyPlexResource):
 def myplex_login(username, password):
     while True:
         username = Prompt.ask(PROMPT_PLEX_USERNAME, default=username)
-        password = Prompt.ask(PROMPT_PLEX_PASSWORD, password=True, default=password, show_default=False)
+        password = Prompt.ask(
+            PROMPT_PLEX_PASSWORD, password=True, default=password, show_default=False
+        )
         code = Prompt.ask(PROMPT_PLEX_CODE)
         try:
             return MyPlexAccount(username=username, password=password, code=code)
@@ -106,7 +108,9 @@ def format_server(s):
     lines = []
     product = f"{s.product}/{s.productVersion}"
     platform = f"{s.device}: {s.platform}/{s.platformVersion}"
-    lines.append(f"{s.name}: Last seen: {str(s.lastSeenAt)}, Server: {product} on {platform}")
+    lines.append(
+        f"{s.name}: Last seen: {str(s.lastSeenAt)}, Server: {product} on {platform}"
+    )
     c: ResourceConnection
     for c in s.connections:
         lines.append(f"    {c.uri}")
@@ -178,7 +182,14 @@ def choose_server(account: MyPlexAccount) -> tuple[MyPlexResource, PlexServer]:
             plex = server.connect()
             return server, plex
         except NotFound as e:
-            print(Panel.fit(f"{e}. Try another server", padding=1, title="[b red]ERROR", border_style="red"))
+            print(
+                Panel.fit(
+                    f"{e}. Try another server",
+                    padding=1,
+                    title="[b red]ERROR",
+                    border_style="red",
+                )
+            )
 
 
 def plex_login_autoconfig():
@@ -197,8 +208,15 @@ def login(username: str, password: str):
             return
 
     account = myplex_login(username, password)
-    print(Panel.fit("Login to MyPlex was successful", title="Plex Login",
-                    title_align="left", padding=1, border_style="bright_blue"))
+    print(
+        Panel.fit(
+            "Login to MyPlex was successful",
+            title="Plex Login",
+            title_align="left",
+            padding=1,
+            border_style="bright_blue",
+        )
+    )
 
     (server, plex) = choose_server(account)
     print(success(f"Connection to {plex.friendlyName} established successfully!"))
