@@ -86,4 +86,4 @@ class PlexIdFactory:
             raise RuntimeError(f"Failed to find unique match: {url}")
         pm = results[0]
 
-        return PlexId(pm.key)
+        return PlexId(pm.key, server=pm.plex.server.machineIdentifier)
