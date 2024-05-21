@@ -1,22 +1,17 @@
-from functools import wraps
-
 from plextraktsync.config import TRAKT_POST_DELAY
 from plextraktsync.util.Timer import Timer
+from decorator import decorator
+
 
 timer = Timer(TRAKT_POST_DELAY)
 
 
-def time_limit():
+@decorator
+def time_limit(fn, *args, **kwargs):
     """
     Throttles calls not to be called more often than TRAKT_POST_DELAY
     """
 
-    def decorator(fn):
-        @wraps(fn)
-        def wrapper(*args, **kwargs):
-            timer.wait_if_needed()
-            return fn(*args, **kwargs)
+    timer.wait_if_needed()
 
-        return wrapper
-
-    return decorator
+    return fn(*args, **kwargs)

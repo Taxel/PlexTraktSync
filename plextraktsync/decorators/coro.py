@@ -1,15 +1,13 @@
 import asyncio
-from functools import wraps
+
+from decorator import decorator
 
 
-def coro(f):
+@decorator
+def coro(f, *args, **kwargs):
     """
     Decorator to get started with async/await with click
 
     https://github.com/pallets/click/issues/85#issuecomment-503464628
     """
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        return asyncio.run(f(*args, **kwargs))
-
-    return wrapper
+    return asyncio.run(f(*args, **kwargs))
