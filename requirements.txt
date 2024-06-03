@@ -25,14 +25,14 @@ python-git-info==0.8.3
 pytimeparse==1.1.8
 pytrakt==3.4.32
 pyyaml==6.0.1
-requests==2.32.2; python_version >= '3.8'
+requests==2.32.3; python_version >= '3.8'
 requests-cache==1.2.0
 requests-oauthlib==2.0.0; python_version >= '3.4'
 rich==13.7.1
 six==1.16.0; python_version >= '3.4'
 tqdm==4.66.4
 types-decorator==5.1.8.20240310; python_version >= '3.8'
-typing-extensions==4.12.1; python_version >= '3.8'
+typing-extensions==4.12.0; python_version >= '3.8'
 url-normalize==1.4.3; python_version >= '3.6'
 urllib3==2.2.1; python_version >= '3.8'
 wcwidth==0.2.13
