@@ -24,7 +24,7 @@ pfzy = {version="==0.3.4", markers="python_version >= '3.7' and python_version <
 platformdirs = {version="==4.2.2", python_version=">='3.7'"}
 plexapi = "==4.15.13"
 pluggy = "==1.5.0"
-prompt-toolkit = "==3.0.45"
+prompt-toolkit = "==3.0.46"
 pygments = "==2.18.0"
 python-dotenv = "==1.0.1"
 python-git-info = "==0.8.3"
