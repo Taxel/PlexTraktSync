@@ -19,6 +19,7 @@ def measure_time(message, *args, level=logging.INFO, logger=None, **kwargs):
     if inspect.ismethod(logger):
         log = logger
     else:
+
         def log(*a, **kw):
             (logger or default_logger).log(level, *a, **kw)
 

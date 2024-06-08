@@ -20,6 +20,7 @@ def config(urls_expire_after: bool, edit: bool, locate: bool):
 
     if edit or locate:
         import click
+
         click.launch(config.config_yml, locate=locate)
         return
 

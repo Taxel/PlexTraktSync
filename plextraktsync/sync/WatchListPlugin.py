@@ -40,8 +40,10 @@ class WatchListPlugin:
             return
 
         if is_partial:
-            self.logger.warning("Running partial library sync. "
-                                "Watchlist as playlist won't update because it needs full library sync.")
+            self.logger.warning(
+                "Running partial library sync. "
+                "Watchlist as playlist won't update because it needs full library sync."
+            )
         else:
             sync.trakt_lists.add_watchlist(self.trakt.watchlist_movies)
 
@@ -52,8 +54,10 @@ class WatchListPlugin:
                 await self.sync_watchlist(walker, dry_run=dry_run)
 
         if self.config.update_plex_wl_as_pl and dry_run:
-            self.logger.warning("Running partial library sync. "
-                                "Liked lists won't update because it needs full library sync.")
+            self.logger.warning(
+                "Running partial library sync. "
+                "Liked lists won't update because it needs full library sync."
+            )
 
     @cached_property
     def plex_wl(self):
@@ -74,9 +78,15 @@ class WatchListPlugin:
     def watchlist_sync_item(self, m: Media, dry_run: bool):
         if m.plex is None:
             if self.config.update_plex_wl:
-                self.logger.info(f"Skipping {m.title_link} from Trakt watchlist because not found in Plex Discover", extra={"markup": True})
+                self.logger.info(
+                    f"Skipping {m.title_link} from Trakt watchlist because not found in Plex Discover",
+                    extra={"markup": True},
+                )
             elif self.config.update_trakt_wl:
-                self.logger.info(f"Removing {m.title_link} from Trakt watchlist", extra={"markup": True})
+                self.logger.info(
+                    f"Removing {m.title_link} from Trakt watchlist",
+                    extra={"markup": True},
+                )
                 if not dry_run:
                     m.remove_from_trakt_watchlist()
             return
@@ -84,11 +94,17 @@ class WatchListPlugin:
         if m in self.plex_wl:
             if m not in self.trakt_wl:
                 if self.config.update_trakt_wl:
-                    self.logger.info(f"Adding {m.title_link} to Trakt watchlist", extra={"markup": True})
+                    self.logger.info(
+                        f"Adding {m.title_link} to Trakt watchlist",
+                        extra={"markup": True},
+                    )
                     if not dry_run:
                         m.add_to_trakt_watchlist()
                 else:
-                    self.logger.info(f"Removing {m.title_link} from Plex watchlist", extra={"markup": True})
+                    self.logger.info(
+                        f"Removing {m.title_link} from Plex watchlist",
+                        extra={"markup": True},
+                    )
                     if not dry_run:
                         m.remove_from_plex_watchlist()
             else:
@@ -100,11 +116,16 @@ class WatchListPlugin:
                 del self.trakt_wl[m]
         elif m in self.trakt_wl:
             if self.config.update_plex_wl:
-                self.logger.info(f"Adding {m.title_link} to Plex watchlist", extra={"markup": True})
+                self.logger.info(
+                    f"Adding {m.title_link} to Plex watchlist", extra={"markup": True}
+                )
                 if not dry_run:
                     m.add_to_plex_watchlist()
             else:
-                self.logger.info(f"Removing {m.title_link} from Trakt watchlist", extra={"markup": True})
+                self.logger.info(
+                    f"Removing {m.title_link} from Trakt watchlist",
+                    extra={"markup": True},
+                )
                 if not dry_run:
                     m.remove_from_trakt_watchlist()
 

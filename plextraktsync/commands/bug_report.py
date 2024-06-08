@@ -11,12 +11,14 @@ def bug_url():
     config = factory.config
     version = factory.version
 
-    q = urlencode({
-        'os': version.py_platform,
-        'python': version.py_version,
-        'version': version.full_version,
-        'config': config.dump(),
-    })
+    q = urlencode(
+        {
+            "os": version.py_platform,
+            "python": version.py_version,
+            "version": version.full_version,
+            "config": config.dump(),
+        }
+    )
 
     return URL_TEMPLATE.format(q)
 
@@ -24,7 +26,9 @@ def bug_url():
 def bug_report():
     url = bug_url()
 
-    print("Opening bug report URL in browser, if that doesn't work open the link manually:")
+    print(
+        "Opening bug report URL in browser, if that doesn't work open the link manually:"
+    )
     print("")
     print(url)
     openurl(url)

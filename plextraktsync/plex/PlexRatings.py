@@ -54,5 +54,7 @@ class PlexRatings:
             ]
         }
 
-        for item in section.search(filters=filters, libtype=libtype, includeGuids=False):
+        for item in section.search(
+            filters=filters, libtype=libtype, includeGuids=False
+        ):
             yield item.ratingKey, Rating.create(item.userRating, item.lastRatedAt)

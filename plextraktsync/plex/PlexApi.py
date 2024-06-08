@@ -30,12 +30,13 @@ class PlexApi:
     """
     Plex API class abstracting common data access and dealing with requests cache.
     """
+
     logger = logging.getLogger(__name__)
 
     def __init__(
-            self,
-            server: PlexServer,
-            config: PlexServerConfig,
+        self,
+        server: PlexServer,
+        config: PlexServerConfig,
     ):
         self.server = server
         self.config = config
@@ -44,7 +45,9 @@ class PlexApi:
         return str(self.server)
 
     def plex_base_url(self, section="server"):
-        return f"https://app.plex.tv/desktop/#!/{section}/{self.server.machineIdentifier}"
+        return (
+            f"https://app.plex.tv/desktop/#!/{section}/{self.server.machineIdentifier}"
+        )
 
     @property
     def plex_discover_base_url(self):
@@ -88,8 +91,16 @@ class PlexApi:
         return PlexLibraryItem(media, plex=self)
 
     def media_url(self, m: PlexLibraryItem, discover=False):
-        base_url = self.plex_discover_base_url if m.is_discover or discover else self.plex_base_url("server")
-        key = f"/library/metadata/{m.item.guid.rsplit('/', 1)[-1]}" if discover else m.item.key
+        base_url = (
+            self.plex_discover_base_url
+            if m.is_discover or discover
+            else self.plex_base_url("server")
+        )
+        key = (
+            f"/library/metadata/{m.item.guid.rsplit('/', 1)[-1]}"
+            if discover
+            else m.item.key
+        )
 
         return f"{base_url}/details?key={key}"
 
@@ -101,8 +112,8 @@ class PlexApi:
 
     def search_by_guid(self, guids: dict, libtype: str):
         r"""
-                    fetchItem(ekey, guid__regex=r"com\.plexapp\.agents\.(imdb|themoviedb)://|tt\d+")
-                    fetchItem(ekey, guid__id__regex=r"(imdb|tmdb|tvdb)://")
+        fetchItem(ekey, guid__regex=r"com\.plexapp\.agents\.(imdb|themoviedb)://|tt\d+")
+        fetchItem(ekey, guid__id__regex=r"(imdb|tmdb|tvdb)://")
         """
 
         from plextraktsync.plex.PlexGuid import PlexGuid
@@ -122,7 +133,9 @@ class PlexApi:
             for m in result:
                 pm = PlexLibraryItem(m, self)
                 # Do proper matching with provider type and provider id
-                matched = len([[True for g1 in pm.guids if g1 == g2] for g2 in plexguids])
+                matched = len(
+                    [[True for g1 in pm.guids if g1 == g2] for g2 in plexguids]
+                )
                 if matched:
                     results.append(pm)
 
@@ -149,7 +162,9 @@ class PlexApi:
         if enabled_libraries is not None:
             excluded_libraries = self.config.excluded_libraries or []
         else:
-            excluded_libraries = factory.config["excluded-libraries"] + (self.config.excluded_libraries or [])
+            excluded_libraries = factory.config["excluded-libraries"] + (
+                self.config.excluded_libraries or []
+            )
 
         for section in self.server.library.sections():
             if enabled_libraries is not None:
@@ -221,7 +236,9 @@ class PlexApi:
 
         def try_login():
             if plex_owner_token:
-                plex_owner_account = MyPlexAccount(token=plex_owner_token, session=factory.session)
+                plex_owner_account = MyPlexAccount(
+                    token=plex_owner_token, session=factory.session
+                )
                 return plex_owner_account.switchHomeUser(plex_username)
             elif plex_account_token:
                 return MyPlexAccount(token=plex_account_token, session=factory.session)
@@ -249,7 +266,9 @@ class PlexApi:
         try:
             return self.account.watchlist(libtype=libtype, **params)
         except BadRequest as e:
-            self.logger.error(f"Error during {self.account.username} watchlist access: {e}")
+            self.logger.error(
+                f"Error during {self.account.username} watchlist access: {e}"
+            )
             return None
 
     def add_to_watchlist(self, item):
@@ -262,7 +281,9 @@ class PlexApi:
         try:
             self.account.removeFromWatchlist(item)
         except BadRequest as e:
-            self.logger.error(f"Error when removing {item.title} from Plex watchlist: {e}")
+            self.logger.error(
+                f"Error when removing {item.title} from Plex watchlist: {e}"
+            )
 
     @retry()
     def search_online(self, title: str, media_type: str):
@@ -286,5 +307,8 @@ class PlexApi:
                 reset_count += 1
             else:
                 self.logger.debug(
-                    f"{show.title} {ep.seasonEpisode} watched at {ep.lastViewedAt} after reset date {reset_date}")
-        self.logger.debug(f"{show.title}: {reset_count} Plex episode(s) marked as unwatched.")
+                    f"{show.title} {ep.seasonEpisode} watched at {ep.lastViewedAt} after reset date {reset_date}"
+                )
+        self.logger.debug(
+            f"{show.title}: {reset_count} Plex episode(s) marked as unwatched."
+        )

@@ -76,11 +76,17 @@ class SyncRatingsPlugin:
                 rate = "plex"
 
         if rate == "trakt":
-            self.logger.info(f"Rating {m.title_link} with {m.plex_rating} on Trakt (was {m.trakt_rating})", extra={"markup": True})
+            self.logger.info(
+                f"Rating {m.title_link} with {m.plex_rating} on Trakt (was {m.trakt_rating})",
+                extra={"markup": True},
+            )
             if not dry_run:
                 m.trakt_rate()
 
         elif rate == "plex":
-            self.logger.info(f"Rating {m.title_link} with {m.trakt_rating} on Plex (was {m.plex_rating})", extra={"markup": True})
+            self.logger.info(
+                f"Rating {m.title_link} with {m.trakt_rating} on Plex (was {m.plex_rating})",
+                extra={"markup": True},
+            )
             if not dry_run:
                 m.plex_rate()

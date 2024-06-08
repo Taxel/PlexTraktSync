@@ -11,7 +11,7 @@ class Rating(NamedTuple):
     rated_at: datetime | None
 
     def __eq__(self, other):
-        """ Ratings are equal if their rating value is the same """
+        """Ratings are equal if their rating value is the same"""
         if isinstance(other, (int, float)):
             return self.rating == int(other)
 
@@ -35,8 +35,10 @@ class Rating(NamedTuple):
                 rated_at = datetime.fromisoformat(rated_at)
             except ValueError:
                 # Handle older Python < 3.11
-                rated_at = (datetime.strptime(rated_at, "%Y-%m-%dT%H:%M:%S.%fZ")
-                            # https://stackoverflow.com/questions/3305413/how-to-preserve-timezone-when-parsing-date-time-strings-with-strptime/63988322#63988322
-                            .replace(tzinfo=timezone.utc))
+                rated_at = (
+                    datetime.strptime(rated_at, "%Y-%m-%dT%H:%M:%S.%fZ")
+                    # https://stackoverflow.com/questions/3305413/how-to-preserve-timezone-when-parsing-date-time-strings-with-strptime/63988322#63988322
+                    .replace(tzinfo=timezone.utc)
+                )
 
         return cls(rating, rated_at)

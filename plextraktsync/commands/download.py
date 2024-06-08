@@ -36,12 +36,14 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem, savepath: Path):
             f"  Subtitle {index}: ({sub.language}) {sub.title} (codec: {sub.codec}, selected: {sub.selected}, transient: {sub.transient})"
         )
 
-        filename = ''.join([
-            f"{sub.id}. ",
-            f"{sub.title}" if sub.title else "",
-            f"{sub.language}." if sub.language else "",
-            f"{sub.languageCode}.{sub.codec}"
-        ])
+        filename = "".join(
+            [
+                f"{sub.id}. ",
+                f"{sub.title}" if sub.title else "",
+                f"{sub.language}." if sub.language else "",
+                f"{sub.languageCode}.{sub.codec}",
+            ]
+        )
 
         filename = Path(savepath, filename)
         if filename.exists():

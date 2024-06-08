@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 from plextraktsync.factory import factory
-from plextraktsync.watch.events import (ActivityNotification, Error,
-                                        PlaySessionStateNotification,
-                                        ServerStarted, TimelineEntry)
+from plextraktsync.watch.events import (
+    ActivityNotification,
+    Error,
+    PlaySessionStateNotification,
+    ServerStarted,
+    TimelineEntry,
+)
 
 
 def watch(server: str):

@@ -41,9 +41,11 @@ class TraktMarkWatchedWorker:
     def normalize(items: list):
         result = defaultdict(list)
         for m in items:
-            result[m.media_type].append({
-                "ids": m.ids["ids"],
-                "watched_at": m.watched_at,
-            })
+            result[m.media_type].append(
+                {
+                    "ids": m.ids["ids"],
+                    "watched_at": m.watched_at,
+                }
+            )
 
         return result

@@ -6,8 +6,13 @@ from dotenv import load_dotenv
 from plextraktsync.config.ConfigLoader import ConfigLoader
 from plextraktsync.config.ConfigMergeMixin import ConfigMergeMixin
 from plextraktsync.mixin.ChangeNotifier import ChangeNotifier
-from plextraktsync.path import (cache_dir, config_file, config_yml,
-                                default_config_file, env_file)
+from plextraktsync.path import (
+    cache_dir,
+    config_file,
+    config_yml,
+    default_config_file,
+    env_file,
+)
 
 
 class Config(ChangeNotifier, ConfigMergeMixin, dict):
@@ -63,7 +68,9 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
 
     @property
     def log_debug(self):
-        return ("log_debug_messages" in self and self["log_debug_messages"]) or self["logging"]["debug"]
+        return ("log_debug_messages" in self and self["log_debug_messages"]) or self[
+            "logging"
+        ]["debug"]
 
     @property
     def log_append(self):
@@ -81,7 +88,11 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
     def http_cache(self):
         from plextraktsync.config.HttpCacheConfig import HttpCacheConfig
 
-        cache = self["http_cache"] if "http_cache" in self and self["http_cache"] else {"policy": {}}
+        cache = (
+            self["http_cache"]
+            if "http_cache" in self and self["http_cache"]
+            else {"policy": {}}
+        )
 
         return HttpCacheConfig(**cache)
 

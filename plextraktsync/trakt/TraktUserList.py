@@ -18,11 +18,12 @@ class TraktUserList:
     plex_items: list[tuple[int, PlexLibraryItem]]
     logger = logging.getLogger(__name__)
 
-    def __init__(self,
-                 trakt_id: int = None,
-                 name: str = None,
-                 items=None,
-                 ):
+    def __init__(
+        self,
+        trakt_id: int = None,
+        name: str = None,
+        items=None,
+    ):
         self.trakt_id = trakt_id
         self.name = name
         self._items = items
@@ -48,11 +49,17 @@ class TraktUserList:
 
     @staticmethod
     def build_dict(pl: PublicList):
-        return {(f"{le.type}s", le.trakt): le.rank for le in pl if le.type in ["movie", "episode"]}
+        return {
+            (f"{le.type}s", le.trakt): le.rank
+            for le in pl
+            if le.type in ["movie", "episode"]
+        }
 
     def load_items(self):
         pl = PublicList.load(self.trakt_id)
-        self.logger.info(f"Downloaded Trakt list '{pl.name}' ({len(pl)} items): {pl.share_link}")
+        self.logger.info(
+            f"Downloaded Trakt list '{pl.name}' ({len(pl)} items): {pl.share_link}"
+        )
 
         return pl.description, self.build_dict(pl)
 
@@ -91,10 +98,15 @@ class TraktUserList:
             # Already in the list
             return
 
-        self.logger.info(f"Adding {m.title_link} ({m.plex_key}) to Plex list {self.title_link}", extra={"markup": True})
+        self.logger.info(
+            f"Adding {m.title_link} ({m.plex_key}) to Plex list {self.title_link}",
+            extra={"markup": True},
+        )
 
         # Report duplicates
-        duplicates = [p for _, p in self.plex_items if p.key != m.plex_key and p == m.plex]
+        duplicates = [
+            p for _, p in self.plex_items if p.key != m.plex_key and p == m.plex
+        ]
         for p in duplicates:
             msg = f"Duplicate {p.title_link} #{p.key} with {m.title_link} #{m.plex_key}"
             if p.edition_title is not None:

@@ -21,6 +21,7 @@ class MediaFactory:
     """
     Class that is able to resolve Trakt media item from Plex media item and vice versa and return generic Media class
     """
+
     logger = logging.getLogger(__name__)
 
     def __init__(self, plex: PlexApi, trakt: TraktApi):
@@ -66,11 +67,17 @@ class MediaFactory:
             else:
                 tm = self.trakt.find_by_guid(guid)
         except (TraktException, RequestException) as e:
-            self.logger.warning(f"{guid.title_link}: Skipping {guid}: Trakt errors: {e}", extra={"markup": True})
+            self.logger.warning(
+                f"{guid.title_link}: Skipping {guid}: Trakt errors: {e}",
+                extra={"markup": True},
+            )
             return None
 
         if tm is None:
-            self.logger.warning(f"{guid.title_link}: Skipping {guid} not found on Trakt", extra={"markup": True})
+            self.logger.warning(
+                f"{guid.title_link}: Skipping {guid} not found on Trakt",
+                extra={"markup": True},
+            )
             return None
 
         return self.make_media(guid.pm, tm)
@@ -84,11 +91,17 @@ class MediaFactory:
     def make_media(self, plex: PlexLibraryItem, trakt):
         return Media(plex, trakt, plex_api=self.plex, trakt_api=self.trakt, mf=self)
 
-    def _guid_match(self, candidates: list[PlexLibraryItem], tm: TraktItem) -> PlexLibraryItem | None:
+    def _guid_match(
+        self, candidates: list[PlexLibraryItem], tm: TraktItem
+    ) -> PlexLibraryItem | None:
         if candidates:
             for pm in candidates:
                 for guid in pm.guids:
                     for provider in ["tmdb", "imdb", "tvdb"]:
-                        if guid.provider == provider and hasattr(tm.item, provider) and guid.id == str(getattr(tm.item, provider)):
+                        if (
+                            guid.provider == provider
+                            and hasattr(tm.item, provider)
+                            and guid.id == str(getattr(tm.item, provider))
+                        ):
                             return pm
         return None

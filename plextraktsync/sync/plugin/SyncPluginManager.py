@@ -46,6 +46,7 @@ class SyncPluginManager:
         from ..TraktListsPlugin import TraktListsPlugin
         from ..WatchListPlugin import WatchListPlugin
         from ..WatchProgressPlugin import WatchProgressPlugin
+
         yield AddCollectionPlugin
         yield ClearCollectedPlugin
         yield LikedListsPlugin
@@ -61,7 +62,11 @@ class SyncPluginManager:
             self.logger.info(f"Enable sync plugin '{plugin.__name__}': {enabled}")
             if not enabled:
                 continue
-            with measure_time(f"Created '{plugin.__name__}' plugin", logger=self.logger.debug):
+            with measure_time(
+                f"Created '{plugin.__name__}' plugin", logger=self.logger.debug
+            ):
                 p = plugin.factory(sync)
-            with measure_time(f"Registered '{plugin.__name__}' plugin", logger=self.logger.debug):
+            with measure_time(
+                f"Registered '{plugin.__name__}' plugin", logger=self.logger.debug
+            ):
                 self.pm.register(p)

@@ -7,6 +7,7 @@ class Timer:
     """
     Class dealing with limiting that something is not called more often than {delay}
     """
+
     logger = logging.getLogger(__name__)
 
     def __init__(self, delay: float):

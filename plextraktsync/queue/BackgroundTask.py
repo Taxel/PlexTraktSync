@@ -17,6 +17,7 @@ class BackgroundTask:
     """
     Class to read events from queue and invoke them at tasks to flush them at interval set by the timer
     """
+
     logger = logging.getLogger(__name__)
 
     def __init__(self, timer: Timer = None, *tasks):

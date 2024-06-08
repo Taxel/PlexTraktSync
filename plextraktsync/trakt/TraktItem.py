@@ -21,4 +21,8 @@ class TraktItem:
 
     @property
     def guids(self):
-        return {k: v for k, v in self.item.ids["ids"].items() if k in ["imdb", "tmdb", "tvdb"]}
+        return {
+            k: v
+            for k, v in self.item.ids["ids"].items()
+            if k in ["imdb", "tmdb", "tvdb"]
+        }
