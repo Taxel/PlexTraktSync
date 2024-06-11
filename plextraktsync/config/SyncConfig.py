@@ -4,13 +4,19 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import Any
+
     from plextraktsync.config.Config import Config
     from plextraktsync.config.PlexServerConfig import PlexServerConfig
 
 
 class SyncConfig:
+    config: dict[str, Any]
+
     def __init__(self, config: Config, server_config: PlexServerConfig):
         self.config = dict(config["sync"])
+        self.liked_lists = config["liked_lists"]
+        self.liked_lists_overrides = config["liked_list"] or {}
         self.server_config = server_config.sync_config
 
     def __getitem__(self, key):
@@ -60,6 +66,10 @@ class SyncConfig:
         return (
             self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
         )
+
+    @property
+    def liked_lists_keep_watched(self):
+        return self.liked_lists["keep_watched"]
 
     @cached_property
     def sync_playback_status(self):

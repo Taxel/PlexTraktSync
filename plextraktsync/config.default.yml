@@ -76,6 +76,16 @@ sync:
     # Sync Play Progress from Trakt to Plex
     playback_status: false
 
+# Configuration for liked lists
+liked_lists:
+  # Whether to keep watched items in the list
+  keep_watched: true
+
+# Configuration override for specific lists
+#liked_list:
+#  "Saw Collection":
+#    keep_watched: true
+
 # settings for 'watch' command
 watch:
   add_collection: false

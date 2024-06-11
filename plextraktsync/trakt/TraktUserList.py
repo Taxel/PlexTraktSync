@@ -23,12 +23,14 @@ class TraktUserList:
         trakt_id: int = None,
         name: str = None,
         items=None,
+        keep_watched: bool = None,
     ):
         self.trakt_id = trakt_id
         self.name = name
         self._items = items
         self.description = None
         self.plex_items = []
+        self.keep_watched = keep_watched
 
     def __iter__(self):
         return iter(self.items)
@@ -64,8 +66,8 @@ class TraktUserList:
         return pl.description, self.build_dict(pl)
 
     @classmethod
-    def from_trakt_list(cls, list_id: int, list_name: str):
-        return cls(trakt_id=list_id, name=list_name)
+    def from_trakt_list(cls, list_id: int, list_name: str, keep_watched: bool):
+        return cls(trakt_id=list_id, name=list_name, keep_watched=keep_watched)
 
     @classmethod
     def from_watchlist(cls, items: list[TraktPlayable]):
@@ -98,6 +100,10 @@ class TraktUserList:
             # Already in the list
             return
 
+        if not self.keep_watched and m.plex.is_watched:
+            # Skip adding watched items
+            return
+
         self.logger.info(
             f"Adding {m.title_link} ({m.plex_key}) to Plex list {self.title_link}",
             extra={"markup": True},
@@ -128,7 +134,14 @@ class TraktUserList:
         if len(self.plex_items) == 0:
             return []
 
-        plex_items = [(r, p.item) for (r, p) in self.plex_items]
+        plex_items = [
+            (r, p.item)
+            for (r, p) in self.plex_items
+            if self.keep_watched or (not self.keep_watched and not p.is_watched)
+        ]
+        if len(plex_items) == 0:
+            return []
+
         _, items = zip(*sorted(dict(reversed(plex_items)).items()))
 
         return items

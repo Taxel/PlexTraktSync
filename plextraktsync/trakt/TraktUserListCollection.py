@@ -14,6 +14,11 @@ if TYPE_CHECKING:
 class TraktUserListCollection(UserList):
     logger = logging.getLogger(__name__)
 
+    def __init__(self, keep_watched: bool, trakt_lists_overrides: dict):
+        super().__init__()
+        self.keep_watched = keep_watched
+        self.trakt_lists_overrides = trakt_lists_overrides
+
     @property
     def is_empty(self):
         return not len(self)
@@ -36,6 +41,8 @@ class TraktUserListCollection(UserList):
         return tl
 
     def add_list(self, list_id: int, list_name: str):
-        tl = TraktUserList.from_trakt_list(list_id, list_name)
+        list_config = self.trakt_lists_overrides.get(list_name, {})
+        keep_watched = list_config.get("keep_watched", self.keep_watched)
+        tl = TraktUserList.from_trakt_list(list_id, list_name, keep_watched)
         self.append(tl)
         return tl
