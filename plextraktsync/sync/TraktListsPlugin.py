@@ -52,8 +52,7 @@ class TraktListsPlugin:
 
         with measure_time("Updated Trakt Lists"):
             for tl in self.trakt_lists:
-                items = tl.plex_items_sorted()
-                updated = tl.plex_list.update(items)
+                updated = tl.plex_list.update(tl.plex_items_sorted)
                 if not updated:
                     continue
                 self.logger.info(

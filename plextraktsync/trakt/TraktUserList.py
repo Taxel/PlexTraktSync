@@ -124,6 +124,7 @@ class TraktUserList:
     def title_link(self):
         return self.plex_list.title_link
 
+    @property
     def plex_items_sorted(self):
         """
         Returns items sorted by trakt rank
