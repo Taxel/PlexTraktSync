@@ -64,9 +64,10 @@ def inspect_media(plex_id: PlexId):
         print("Parts:")
         for index, part in enumerate(pm.parts, start=1):
             size = naturalsize(part.size, binary=True)
-            print(
-                f"  Part {index} (exists: {part.exists}): [link=file://{quote_plus(part.file)}]{escape(part.file)}[/link] {size}"
+            file_link = (
+                f"[link=file://{quote_plus(part.file)}]{escape(part.file)}[/link]"
             )
+            print(f"  Part {index} (exists: {part.exists}): {file_link} {size}")
 
         print("Markers:")
         for marker in pm.markers:
