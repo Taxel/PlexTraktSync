@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from urllib.parse import quote_plus
 
+from humanize import naturalsize
 from plexapi.utils import millisecondToHumanstr
 from rich.markup import escape
 
@@ -62,9 +63,11 @@ def inspect_media(plex_id: PlexId):
 
         print("Parts:")
         for index, part in enumerate(pm.parts, start=1):
-            print(
-                f"  Part {index} (exists: {part.exists}): [link=file://{quote_plus(part.file)}]{escape(part.file)}[/link] {part.size} bytes"
+            size = naturalsize(part.size, binary=True)
+            file_link = (
+                f"[link=file://{quote_plus(part.file)}]{escape(part.file)}[/link]"
             )
+            print(f"  Part {index} (exists: {part.exists}): {file_link} {size}")
 
         print("Markers:")
         for marker in pm.markers:
