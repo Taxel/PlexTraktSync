@@ -16,7 +16,7 @@ class SyncConfig:
     def __init__(self, config: Config, server_config: PlexServerConfig):
         self.config = dict(config["sync"])
         self.liked_lists = config["liked_lists"]
-        self.liked_lists_overrides = config["liked_list"] or {}
+        self.liked_lists_overrides = config.get("liked_list", {})
         self.server_config = server_config.sync_config
 
     def __getitem__(self, key):
