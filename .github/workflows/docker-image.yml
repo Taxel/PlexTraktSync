@@ -65,7 +65,7 @@ jobs:
             type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/0.') }}
 
       - name: Build and export to Docker
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           APP_VERSION: ${{ steps.vars.outputs.version }}
         with:
@@ -82,7 +82,7 @@ jobs:
           docker run -e TRACE=1 --rm ${{ env.TEST_IMAGE }} test
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         env:
           APP_VERSION: ${{ steps.vars.outputs.version }}
         with:
