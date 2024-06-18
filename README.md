@@ -36,7 +36,7 @@ have a file containing those on your harddrive, you can not use this project.
   - [Pre-requisites](#pre-requisites)
   - [Installation](#installation)
     - [pipx](#pipx)
-    - [Docker Compose](#docker-compose)
+    - [Docker Compose](#docker compose)
     - [Install code from Pull request](#install-code-from-pull-request), development
     - [Windows Setup (optional alternative)](#windows-setup-optional-alternative), unsupported
     - [Unraid setup](#unraid-setup), unsupported
@@ -151,7 +151,7 @@ Note: `main` is development version and reporting bugs against development versi
 To run sync:
 
 ```
-docker-compose run --rm plextraktsync sync
+docker compose run --rm plextraktsync sync
 ```
 
 The container will stop after the sync is completed. Read Setup section to run
@@ -263,7 +263,7 @@ Installing from GitHub is considered developer mode, and it's documented in
 
 [ofelia]: https://github.com/mcuadros/ofelia/
 
-A docker-compose example with a 6h interval:
+A docker compose example with a 6h interval:
 
 ```yaml
 version: "2"
@@ -424,7 +424,7 @@ run the sync for that specific server.
 Running the sync command without `--server` will use default server from `.env`
 
 If you want to run these jobs using `ofelia`, you can do so by running
-something similar to this in your `docker-compose.yml`:
+something similar to this in your `docker compose.yml`:
 
 ```yml
 services:
@@ -468,7 +468,7 @@ compose, you can run them at the same time.
 The above config means that a job is running every 6 hours, alternating between
 the two "servers". The PlexTraktSync container also has a [docker compose
 profile] called "schedule" which means that it won't run automatically when you
-run for example `docker-compose up`.
+run for example `docker compose up`.
 
 [docker compose profile]: https://docs.docker.com/compose/profiles/
 
@@ -617,10 +617,10 @@ To run `watch` command:
 or
 
 ```
-docker-compose run --rm plextraktsync watch
+docker compose run --rm plextraktsync watch
 ```
 
-or add `command: watch` to docker compose file, and `docker-compose up -d
+or add `command: watch` to docker compose file, and `docker compose up -d
 plextraktsync` to start the container detached:
 
 ```yaml
@@ -784,7 +784,7 @@ Use tmdb as Plex source as much as you can.
 ### How to sync multiple users ?
 
 The easiest way is to use containers with custom config folder for each user:
-[Multi-User docker-compose][discussions/997].
+[Multi-User docker compose][discussions/997].
 
 [discussions/997]: https://github.com/Taxel/PlexTraktSync/discussions/997
 
