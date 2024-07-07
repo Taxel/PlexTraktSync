@@ -39,6 +39,7 @@ class SyncConfig:
             "liked_lists": self.get("trakt_to_plex", "liked_lists"),
             "watchlist": self.get("trakt_to_plex", "watchlist"),
             "watchlist_as_playlist": self.get("trakt_to_plex", "watchlist_as_playlist"),
+            "playback_status": self.get("trakt_to_plex", "playback_status"),
         }
 
     @cached_property
@@ -48,6 +49,7 @@ class SyncConfig:
             "ratings": self.get("plex_to_trakt", "ratings"),
             "collection": self.get("plex_to_trakt", "collection"),
             "watchlist": self.get("plex_to_trakt", "watchlist"),
+            "clear_collected": self.get("plex_to_trakt", "clear_collected"),
         }
 
     @cached_property
@@ -57,8 +59,7 @@ class SyncConfig:
     @cached_property
     def clear_collected(self):
         return (
-            self.plex_to_trakt["collection"]
-            and self["plex_to_trakt"]["clear_collected"]
+            self.plex_to_trakt["collection"] and self.plex_to_trakt["clear_collected"]
         )
 
     @cached_property
@@ -73,7 +74,7 @@ class SyncConfig:
 
     @cached_property
     def sync_playback_status(self):
-        return self["trakt_to_plex"]["playback_status"]
+        return self.trakt_to_plex["playback_status"]
 
     @cached_property
     def update_plex_wl(self):
