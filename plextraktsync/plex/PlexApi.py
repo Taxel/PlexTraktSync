@@ -133,9 +133,8 @@ class PlexApi:
             for m in result:
                 pm = PlexLibraryItem(m, self)
                 # Do proper matching with provider type and provider id
-                matched = len(
-                    [[True for g1 in pm.guids if g1 == g2] for g2 in plexguids]
-                )
+                matrix = list([g1 for g1 in pm.guids if g1 == g2] for g2 in plexguids)
+                matched = sum(matrix, [])
                 if matched:
                     results.append(pm)
 
