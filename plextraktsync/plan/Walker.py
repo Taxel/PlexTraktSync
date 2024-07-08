@@ -133,7 +133,7 @@ class Walker(SetWindowTitle):
         async for ep in self.episodes_from_sections(self.plan.show_sections):
             show_id = ep.show_id
             ep.show = plex_shows[show_id]
-            show = show_cache[show_id] if show_id in show_cache else None
+            show = show_cache.get(show_id)
             m = self.mf.resolve_any(ep, show)
             if not m:
                 continue
