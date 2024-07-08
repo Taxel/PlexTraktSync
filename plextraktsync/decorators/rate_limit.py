@@ -1,9 +1,8 @@
 from time import sleep
 
 from click import ClickException
-from trakt.errors import RateLimitException
 from decorator import decorator
-
+from trakt.errors import RateLimitException
 
 from plextraktsync.factory import logging
 
