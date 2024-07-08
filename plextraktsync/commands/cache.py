@@ -33,10 +33,8 @@ def responses_by_url(
 # https://stackoverflow.com/questions/36106712/how-can-i-limit-iterations-of-a-loop-in-python
 def limit_iterator(items, limit: int):
     if not limit or limit <= 0:
-        i = 0
-        for v in items:
+        for i, v in enumerate(items):
             yield i, v
-            i += 1
 
     else:
         yield from zip(range(limit), items)
