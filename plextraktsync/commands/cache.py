@@ -22,12 +22,8 @@ def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
     yield from sorter(session.cache.responses.values())
 
 
-def responses_by_url(
-    session: CachedSession, url: str
-) -> Generator[CachedRequest, Any, None]:
-    return (
-        response for response in session.cache.responses.values() if response.url == url
-    )
+def responses_by_url(session: CachedSession, url: str) -> Generator[CachedRequest, Any, None]:
+    return (response for response in session.cache.responses.values() if response.url == url)
 
 
 # https://stackoverflow.com/questions/36106712/how-can-i-limit-iterations-of-a-loop-in-python
@@ -73,9 +69,7 @@ def inspect_url(session: CachedSession, url: str):
     matches = responses_by_url(session, url)
     for m in matches:
         content_type = m.headers["Content-Type"]
-        if content_type.startswith("text/xml") or content_type.startswith(
-            "application/xml"
-        ):
+        if content_type.startswith("text/xml") or content_type.startswith("application/xml"):
             print(f"<!-- {m} -->")
             for name, value in m.headers.items():
                 print(f"<!-- {name}: {value} -->")

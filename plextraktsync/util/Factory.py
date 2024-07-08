@@ -322,6 +322,4 @@ class Factory:
     def batch_delay_timer(self):
         from plextraktsync.util.Timer import Timer
 
-        return (
-            Timer(self.run_config.batch_delay) if self.run_config.batch_delay else None
-        )
+        return Timer(self.run_config.batch_delay) if self.run_config.batch_delay else None

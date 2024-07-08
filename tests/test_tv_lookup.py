@@ -14,9 +14,7 @@ trakt = factory.trakt_api
 
 @pytest.mark.skip(reason="Broken in CI")
 def test_tv_lookup():
-    m = PlexLibraryItem(
-        make(cls="plexapi.video.Show", guid="imdb://tt10584350", type="show")
-    )
+    m = PlexLibraryItem(make(cls="plexapi.video.Show", guid="imdb://tt10584350", type="show"))
     guid = m.guids[0]
     tm: TVShow = trakt.find_by_guid(guid)
     lookup = TraktLookup(tm)
@@ -27,9 +25,7 @@ def test_tv_lookup():
 
 @pytest.mark.skip(reason="Broken in CI")
 def test_show_episodes_plex():
-    m = PlexLibraryItem(
-        make(cls="plexapi.video.Show", guid="imdb://tt10584350", type="show")
-    )
+    m = PlexLibraryItem(make(cls="plexapi.video.Show", guid="imdb://tt10584350", type="show"))
     guid = m.guids[0]
     show = trakt.find_by_guid(guid)
 

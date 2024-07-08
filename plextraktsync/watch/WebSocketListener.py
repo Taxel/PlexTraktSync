@@ -26,16 +26,12 @@ class WebSocketListener:
     def listen(self):
         self.logger.info("Listening for events!")
         while True:
-            notifier = self.plex.startAlertListener(
-                callback=self.dispatcher.event_handler
-            )
+            notifier = self.plex.startAlertListener(callback=self.dispatcher.event_handler)
             self.dispatcher.event_handler(ServerStarted(notifier=notifier))
 
             while notifier.is_alive():
                 sleep(self.poll_interval)
 
             self.dispatcher.event_handler(Error(msg="Server closed connection"))
-            self.logger.error(
-                f"Listener finished. Restarting in {self.restart_interval} seconds"
-            )
+            self.logger.error(f"Listener finished. Restarting in {self.restart_interval} seconds")
             sleep(self.restart_interval)

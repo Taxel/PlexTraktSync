@@ -28,10 +28,7 @@ class LikedListsPlugin:
     @hookimpl
     def init(self, sync: Sync, is_partial: bool, dry_run: bool):
         if is_partial or dry_run:
-            self.logger.warning(
-                "Partial walk, disabling liked lists updating. "
-                "Liked lists won't update because it needs full library sync."
-            )
+            self.logger.warning("Partial walk, disabling liked lists updating. " "Liked lists won't update because it needs full library sync.")
         if is_partial:
             return
 

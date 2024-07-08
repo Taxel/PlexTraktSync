@@ -45,9 +45,7 @@ class PlexApi:
         return str(self.server)
 
     def plex_base_url(self, section="server"):
-        return (
-            f"https://app.plex.tv/desktop/#!/{section}/{self.server.machineIdentifier}"
-        )
+        return f"https://app.plex.tv/desktop/#!/{section}/{self.server.machineIdentifier}"
 
     @property
     def plex_discover_base_url(self):
@@ -91,16 +89,8 @@ class PlexApi:
         return PlexLibraryItem(media, plex=self)
 
     def media_url(self, m: PlexLibraryItem, discover=False):
-        base_url = (
-            self.plex_discover_base_url
-            if m.is_discover or discover
-            else self.plex_base_url("server")
-        )
-        key = (
-            f"/library/metadata/{m.item.guid.rsplit('/', 1)[-1]}"
-            if discover
-            else m.item.key
-        )
+        base_url = self.plex_discover_base_url if m.is_discover or discover else self.plex_base_url("server")
+        key = f"/library/metadata/{m.item.guid.rsplit('/', 1)[-1]}" if discover else m.item.key
 
         return f"{base_url}/details?key={key}"
 
@@ -161,9 +151,7 @@ class PlexApi:
         if enabled_libraries is not None:
             excluded_libraries = self.config.excluded_libraries or []
         else:
-            excluded_libraries = factory.config["excluded-libraries"] + (
-                self.config.excluded_libraries or []
-            )
+            excluded_libraries = factory.config["excluded-libraries"] + (self.config.excluded_libraries or [])
 
         for section in self.server.library.sections():
             if enabled_libraries is not None:
@@ -235,9 +223,7 @@ class PlexApi:
 
         def try_login():
             if plex_owner_token:
-                plex_owner_account = MyPlexAccount(
-                    token=plex_owner_token, session=factory.session
-                )
+                plex_owner_account = MyPlexAccount(token=plex_owner_token, session=factory.session)
                 return plex_owner_account.switchHomeUser(plex_username)
             elif plex_account_token:
                 return MyPlexAccount(token=plex_account_token, session=factory.session)
@@ -247,9 +233,7 @@ class PlexApi:
         try:
             return try_login()
         except BadRequest as e:
-            self.logger.error(
-                f"Error during Plex {plex_username} account access: {e}. Try log in with plex-login again"
-            )
+            self.logger.error(f"Error during Plex {plex_username} account access: {e}. Try log in with plex-login again")
 
             return None
 
@@ -265,9 +249,7 @@ class PlexApi:
         try:
             return self.account.watchlist(libtype=libtype, **params)
         except BadRequest as e:
-            self.logger.error(
-                f"Error during {self.account.username} watchlist access: {e}"
-            )
+            self.logger.error(f"Error during {self.account.username} watchlist access: {e}")
             return None
 
     def add_to_watchlist(self, item):
@@ -280,9 +262,7 @@ class PlexApi:
         try:
             self.account.removeFromWatchlist(item)
         except BadRequest as e:
-            self.logger.error(
-                f"Error when removing {item.title} from Plex watchlist: {e}"
-            )
+            self.logger.error(f"Error when removing {item.title} from Plex watchlist: {e}")
 
     @retry()
     def search_online(self, title: str, media_type: str):
@@ -305,9 +285,5 @@ class PlexApi:
                 self.mark_unwatched(ep)
                 reset_count += 1
             else:
-                self.logger.debug(
-                    f"{show.title} {ep.seasonEpisode} watched at {ep.lastViewedAt} after reset date {reset_date}"
-                )
-        self.logger.debug(
-            f"{show.title}: {reset_count} Plex episode(s) marked as unwatched."
-        )
+                self.logger.debug(f"{show.title} {ep.seasonEpisode} watched at {ep.lastViewedAt} after reset date {reset_date}")
+        self.logger.debug(f"{show.title}: {reset_count} Plex episode(s) marked as unwatched.")

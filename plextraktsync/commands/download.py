@@ -32,9 +32,7 @@ def download_media(plex: PlexApi, pm: PlexLibraryItem, savepath: Path):
 def download_subtitles(plex: PlexApi, pm: PlexLibraryItem, savepath: Path):
     print(f"Subtitles for {pm}:")
     for index, sub in enumerate(pm.subtitle_streams, start=1):
-        print(
-            f"  Subtitle {index}: ({sub.language}) {sub.title} (codec: {sub.codec}, selected: {sub.selected}, transient: {sub.transient})"
-        )
+        print(f"  Subtitle {index}: ({sub.language}) {sub.title} (codec: {sub.codec}, selected: {sub.selected}, transient: {sub.transient})")
 
         filename = "".join(
             [

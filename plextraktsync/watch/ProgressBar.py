@@ -58,15 +58,11 @@ class ProgressBar(dict):
 
     def play(self, m: PlexLibraryItem, progress: float):
         task_id = self[m]
-        self.progress.update(
-            task_id, completed=progress, play_state=self.ICONS["playing"]
-        )
+        self.progress.update(task_id, completed=progress, play_state=self.ICONS["playing"])
 
     def pause(self, m: PlexLibraryItem, progress: float):
         task_id = self[m]
-        self.progress.update(
-            task_id, completed=progress, play_state=self.ICONS["paused"]
-        )
+        self.progress.update(task_id, completed=progress, play_state=self.ICONS["paused"])
 
     def stop(self, m: PlexLibraryItem):
         task_id = self[m]
