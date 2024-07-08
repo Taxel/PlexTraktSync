@@ -76,9 +76,7 @@ class TraktApi:
             # Skip private lists
             # https://github.com/Taxel/PlexTraktSync/issues/1864#issuecomment-2018171311
             if item["list"]["privacy"] == "private":
-                self.logger.warning(
-                    f"Skipping private list: {item['list']['name']} - {item['list']['share_link']}"
-                )
+                self.logger.warning(f"Skipping private list: {item['list']['name']} - {item['list']['share_link']}")
                 continue
             tll: TraktLikedList = {
                 "listname": item["list"]["name"],
@@ -239,9 +237,7 @@ class TraktApi:
         self.queue.remove_from_watchlist((m.media_type, item))
 
     def find_by_episode_guid(self, guid: PlexGuid):
-        ts: TVShow = self.search_by_id(
-            guid.show_id, id_type=guid.provider, media_type="show"
-        )
+        ts: TVShow = self.search_by_id(guid.show_id, id_type=guid.provider, media_type="show")
         if not ts:
             return None
 
@@ -285,16 +281,12 @@ class TraktApi:
 
     @rate_limit()
     @retry()
-    def search_by_id(
-        self, media_id: str, id_type: str, media_type: str
-    ) -> TVShow | Movie | None:
+    def search_by_id(self, media_id: str, id_type: str, media_type: str) -> TVShow | Movie | None:
         if id_type == "tvdb" and media_type == "movie":
             # Skip invalid search.
             # The Trakt API states that tvdb is only for shows and episodes:
             # https://trakt.docs.apiary.io/#reference/search/id-lookup/get-id-lookup-results
-            self.logger.debug(
-                f"search_by_id: tvdb does not support movie provider, skip {id_type}/{media_type}/{media_id}"
-            )
+            self.logger.debug(f"search_by_id: tvdb does not support movie provider, skip {id_type}/{media_type}/{media_id}")
             return None
         if media_type == "season":
             # Search by season is missing
@@ -307,16 +299,12 @@ class TraktApi:
 
             return None
 
-        search = trakt.sync.search_by_id(
-            media_id, id_type=id_type, media_type=media_type
-        )
+        search = trakt.sync.search_by_id(media_id, id_type=id_type, media_type=media_type)
         if not search:
             return None
 
         if len(search) > 1:
-            self.logger.debug(
-                f"search_by_id({media_id}, {id_type}, {media_type}) got {len(search)} results, taking first one"
-            )
+            self.logger.debug(f"search_by_id({media_id}, {id_type}, {media_type}) got {len(search)} results, taking first one")
             self.logger.debug([pm.to_json() for pm in search])
 
         # TODO: sort by "score"?

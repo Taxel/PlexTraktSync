@@ -39,7 +39,5 @@ class PlexAudioCodec:
             try:
                 codecs[k] = re.compile(v, re.IGNORECASE)
             except Exception:
-                raise RuntimeError(
-                    "Unable to compile regex pattern: %r", v, exc_info=True
-                )
+                raise RuntimeError("Unable to compile regex pattern: %r", v, exc_info=True)
         return codecs

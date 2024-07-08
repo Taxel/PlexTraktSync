@@ -6,10 +6,7 @@ from typing import TYPE_CHECKING
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import logging
 
-EPISODES_ORDERING_WARNING = (
-    "episodes ordering is different in Plex and Trakt. "
-    "Check your Plex media source, TMDB is recommended."
-)
+EPISODES_ORDERING_WARNING = "episodes ordering is different in Plex and Trakt. " "Check your Plex media source, TMDB is recommended."
 
 if TYPE_CHECKING:
     from trakt.tv import TVEpisode, TVShow
@@ -53,7 +50,7 @@ class TraktLookup:
         """
         # NB: side effect, assumes that from_number() is called first to populate self.table
         table = {}
-        for season in self.table.keys():
+        for season in self.table:
             for te in self.table[season].values():
                 table[str(te.ids.get(provider))] = te
         self.provider_table[provider] = table
@@ -82,9 +79,7 @@ class TraktLookup:
             # check can not be performed
             return False
         id_from_trakt = getattr(episode, guid.provider, None)
-        if str(id_from_trakt) != guid.id:
-            return True
-        return False
+        return str(id_from_trakt) != guid.id
 
     def from_number(self, season: int, number: int):
         try:

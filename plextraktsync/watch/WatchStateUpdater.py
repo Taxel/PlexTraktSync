@@ -48,9 +48,7 @@ class WatchStateUpdater(SetWindowTitle):
             # This must be username, not email
             return self.plex.account.username
 
-        self.logger.warning(
-            "No permission to access sessions, disabling username filter"
-        )
+        self.logger.warning("No permission to access sessions, disabling username filter")
         return None
 
     @cached_property
@@ -79,9 +77,7 @@ class WatchStateUpdater(SetWindowTitle):
     def scrobblers(self):
         from plextraktsync.trakt.ScrobblerCollection import ScrobblerCollection
 
-        return ScrobblerCollection(
-            self.trakt, self.config["watch"]["scrobble_threshold"]
-        )
+        return ScrobblerCollection(self.trakt, self.config["watch"]["scrobble_threshold"])
 
     @lru_cache(maxsize=2)
     def fetch_item(self, key: str):
@@ -124,15 +120,11 @@ class WatchStateUpdater(SetWindowTitle):
         return self.plex.server
 
     def on_start(self, event: ServerStarted):
-        self.logger.info(
-            f"Server connected: {event.server.friendlyName} ({event.server.version})"
-        )
+        self.logger.info(f"Server connected: {event.server.friendlyName} ({event.server.version})")
         self.reset_title()
 
     def reset_title(self):
-        self.set_window_title(
-            f"watch: {self.server.friendlyName} ({self.server.version})"
-        )
+        self.set_window_title(f"watch: {self.server.friendlyName} ({self.server.version})")
 
     def on_error(self, error: Error):
         self.logger.error(error.msg)
@@ -147,9 +139,7 @@ class WatchStateUpdater(SetWindowTitle):
         m = self.find_by_key(activity.key, reload=True)
         if not m:
             return
-        self.logger.info(
-            f"on_activity: {m}: Collected: {m.is_collected}, Watched: [Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}]"
-        )
+        self.logger.info(f"on_activity: {m}: Collected: {m.is_collected}, Watched: [Plex: {m.watched_on_plex}, Trakt: {m.watched_on_trakt}]")
 
         if self.add_collection and not m.is_collected:
             self.logger.info(f"on_activity: Add {activity.key} to collection: {m}")
@@ -180,9 +170,7 @@ class WatchStateUpdater(SetWindowTitle):
         movie = m.plex.item
         percent = m.plex.watch_progress(event.view_offset)
 
-        self.logger.info(
-            f"on_play: {movie}: {percent:.6F}%, State: {event.state}, Played: {movie.isPlayed}, LastViewed: {movie.lastViewedAt}"
-        )
+        self.logger.info(f"on_play: {movie}: {percent:.6F}%, State: {event.state}, Played: {movie.isPlayed}, LastViewed: {movie.lastViewedAt}")
         scrobbled = self.scrobble(m, percent, event)
         self.logger.debug(f"Scrobbled: {scrobbled}")
 

@@ -51,17 +51,11 @@ class TraktUserList:
 
     @staticmethod
     def build_dict(pl: PublicList):
-        return {
-            (f"{le.type}s", le.trakt): le.rank
-            for le in pl
-            if le.type in ["movie", "episode"]
-        }
+        return {(f"{le.type}s", le.trakt): le.rank for le in pl if le.type in ["movie", "episode"]}
 
     def load_items(self):
         pl = PublicList.load(self.trakt_id)
-        self.logger.info(
-            f"Downloaded Trakt list '{pl.name}' ({len(pl)} items): {pl.share_link}"
-        )
+        self.logger.info(f"Downloaded Trakt list '{pl.name}' ({len(pl)} items): {pl.share_link}")
 
         return pl.description, self.build_dict(pl)
 
@@ -71,9 +65,7 @@ class TraktUserList:
 
     @classmethod
     def from_watchlist(cls, items: list[TraktPlayable]):
-        trakt_items = dict(
-            zip([(elem.media_type, elem.trakt) for elem in items], count(1))
-        )
+        trakt_items = dict(zip([(elem.media_type, elem.trakt) for elem in items], count(1)))
         return cls(name="Trakt Watchlist", items=trakt_items)
 
     @cached_property
@@ -110,9 +102,7 @@ class TraktUserList:
         )
 
         # Report duplicates
-        duplicates = [
-            p for _, p in self.plex_items if p.key != m.plex_key and p == m.plex
-        ]
+        duplicates = [p for _, p in self.plex_items if p.key != m.plex_key and p == m.plex]
         for p in duplicates:
             msg = f"Duplicate {p.title_link} #{p.key} with {m.title_link} #{m.plex_key}"
             if p.edition_title is not None:
@@ -134,11 +124,7 @@ class TraktUserList:
         if len(self.plex_items) == 0:
             return []
 
-        plex_items = [
-            (r, p.item)
-            for (r, p) in self.plex_items
-            if self.keep_watched or (not self.keep_watched and not p.is_watched)
-        ]
+        plex_items = [(r, p.item) for (r, p) in self.plex_items if self.keep_watched or (not self.keep_watched and not p.is_watched)]
         if len(plex_items) == 0:
             return []
 

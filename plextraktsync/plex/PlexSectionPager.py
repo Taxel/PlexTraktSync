@@ -13,9 +13,7 @@ if TYPE_CHECKING:
 
 
 class PlexSectionPager:
-    def __init__(
-        self, section: ShowSection | MovieSection, plex: PlexApi, libtype: str = None
-    ):
+    def __init__(self, section: ShowSection | MovieSection, plex: PlexApi, libtype: str = None):
         self.section = section
         self.plex = plex
         self.libtype = libtype if libtype is not None else section.TYPE
@@ -25,9 +23,7 @@ class PlexSectionPager:
 
     @cached_property
     def total_size(self):
-        return self.section.totalViewSize(
-            libtype=self.libtype, includeCollections=False
-        )
+        return self.section.totalViewSize(libtype=self.libtype, includeCollections=False)
 
     @retry()
     def fetch_items(self, start: int, size: int):

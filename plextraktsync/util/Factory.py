@@ -11,10 +11,10 @@ class Factory:
         https://stackoverflow.com/a/63617398
         """
         for key in keys or []:
-            try:
+            import contextlib
+
+            with contextlib.suppress(KeyError):
                 del self.__dict__[key]
-            except KeyError:
-                pass
 
     @cached_property
     def version(self):
@@ -322,6 +322,4 @@ class Factory:
     def batch_delay_timer(self):
         from plextraktsync.util.Timer import Timer
 
-        return (
-            Timer(self.run_config.batch_delay) if self.run_config.batch_delay else None
-        )
+        return Timer(self.run_config.batch_delay) if self.run_config.batch_delay else None

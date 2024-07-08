@@ -2,6 +2,8 @@
 Platform name to identify our application
 """
 
+from __future__ import annotations
+
 PLEX_PLATFORM = "PlexTraktSync"
 
 """

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from plextraktsync.commands.login import ensure_login
 from plextraktsync.decorators.coro import coro
 from plextraktsync.factory import factory

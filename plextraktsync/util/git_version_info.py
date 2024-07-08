@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 def git_version_info():
     try:
         from gitinfo import get_git_info

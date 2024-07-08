@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from urllib.parse import urlencode
 
 from plextraktsync.util.openurl import openurl
@@ -26,9 +28,7 @@ def bug_url():
 def bug_report():
     url = bug_url()
 
-    print(
-        "Opening bug report URL in browser, if that doesn't work open the link manually:"
-    )
+    print("Opening bug report URL in browser, if that doesn't work open the link manually:")
     print("")
     print(url)
     openurl(url)

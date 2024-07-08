@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 import re
 
@@ -17,9 +19,7 @@ def initialize(config):
     # file handler can log down to debug messages
     mode = "a" if config.log_append else "w"
     file_handler = logging.FileHandler(config.log_file, mode, "utf-8")
-    file_handler.setFormatter(
-        CustomFormatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s")
-    )
+    file_handler.setFormatter(CustomFormatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s"))
     file_handler.setLevel(logging.DEBUG)
 
     handlers = [

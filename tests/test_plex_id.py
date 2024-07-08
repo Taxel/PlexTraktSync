@@ -1,4 +1,6 @@
 #!/usr/bin/env python3 -m pytest
+from __future__ import annotations
+
 from plextraktsync.plex.PlexId import PlexId
 from plextraktsync.plex.PlexIdFactory import PlexIdFactory
 
@@ -23,9 +25,7 @@ def test_plex_id_numeric():
 
 
 def test_plex_id_urls():
-    pid = PlexIdFactory.create(
-        f"https://app.plex.tv/desktop/#!/server/{SERVER_ID}/details?key=%2Flibrary%2Fmetadata%2F13202"
-    )
+    pid = PlexIdFactory.create(f"https://app.plex.tv/desktop/#!/server/{SERVER_ID}/details?key=%2Flibrary%2Fmetadata%2F13202")
     assert pid.key == 13202
     assert pid.media_type is None
     assert pid.provider is None

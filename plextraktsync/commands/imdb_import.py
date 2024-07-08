@@ -75,16 +75,12 @@ def imdb_import(input: PathLike, dry_run: bool):
     print = factory.print
 
     for r in read_csv(input):
-        print(
-            f"Importing [blue]{r.media_type} {r.imdb}[/]: {r.title} ({r.year}), rated at {r.rate_date}"
-        )
+        print(f"Importing [blue]{r.media_type} {r.imdb}[/]: {r.title} ({r.year}), rated at {r.rate_date}")
         m = trakt.search_by_id(r.imdb, "imdb", r.media_type)
         rating = trakt.rating(m)
         if r.rating == rating:
             print(f"Rating {rating} already exists")
             continue
-        print(
-            f"{'Would rate' if dry_run else 'Rating'} {m} with {r.rating} (was {rating})"
-        )
+        print(f"{'Would rate' if dry_run else 'Rating'} {m} with {r.rating} (was {rating})")
         if not dry_run:
             trakt.rate(m, r.rating, r.rate_date)

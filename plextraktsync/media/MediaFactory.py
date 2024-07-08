@@ -91,17 +91,11 @@ class MediaFactory:
     def make_media(self, plex: PlexLibraryItem, trakt):
         return Media(plex, trakt, plex_api=self.plex, trakt_api=self.trakt, mf=self)
 
-    def _guid_match(
-        self, candidates: list[PlexLibraryItem], tm: TraktItem
-    ) -> PlexLibraryItem | None:
+    def _guid_match(self, candidates: list[PlexLibraryItem], tm: TraktItem) -> PlexLibraryItem | None:
         if candidates:
             for pm in candidates:
                 for guid in pm.guids:
                     for provider in ["tmdb", "imdb", "tvdb"]:
-                        if (
-                            guid.provider == provider
-                            and hasattr(tm.item, provider)
-                            and guid.id == str(getattr(tm.item, provider))
-                        ):
+                        if guid.provider == provider and hasattr(tm.item, provider) and guid.id == str(getattr(tm.item, provider)):
                             return pm
         return None

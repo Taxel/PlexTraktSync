@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import wraps
 from os import environ
 
@@ -25,9 +27,7 @@ def command():
             try:
                 cmd(*args, **kwargs)
             except EOFError as e:
-                raise ClickException(
-                    f"Program requested terminal, No terminal is connected: {e}"
-                )
+                raise ClickException(f"Program requested terminal, No terminal is connected: {e}")
             except ClickException as e:
                 from plextraktsync.factory import logging
 
@@ -83,9 +83,7 @@ def cli(
 
     if not ctx.invoked_subcommand:
         logger = factory.logger
-        logger.warning(
-            'plextraktsync without command is deprecated. Executing "plextraktsync sync"'
-        )
+        logger.warning('plextraktsync without command is deprecated. Executing "plextraktsync sync"')
         sync()
 
 
@@ -178,12 +176,8 @@ def plex_login():
 
 @command()
 @click.option("--library", help="Specify Library to use")
-@click.option(
-    "--show", "show", type=str, show_default=True, help="Sync specific show only"
-)
-@click.option(
-    "--movie", "movie", type=str, show_default=True, help="Sync specific movie only"
-)
+@click.option("--show", "show", type=str, show_default=True, help="Sync specific show only")
+@click.option("--movie", "movie", type=str, show_default=True, help="Sync specific movie only")
 @click.option(
     "--id",
     "ids",
@@ -195,9 +189,7 @@ def plex_login():
 @click.option(
     "--sync",
     "sync_option",
-    type=click.Choice(
-        ["all", "movies", "tv", "shows", "watchlist"], case_sensitive=False
-    ),
+    type=click.Choice(["all", "movies", "tv", "shows", "watchlist"], case_sensitive=False),
     default="all",
     show_default=True,
     help="Specify what to sync",
@@ -342,9 +334,7 @@ def watched_shows():
 
 
 @command()
-@click.option(
-    "--urls-expire-after", is_flag=True, help="Print urls_expire_after configuration"
-)
+@click.option("--urls-expire-after", is_flag=True, help="Print urls_expire_after configuration")
 @click.option("--edit", is_flag=True, help="Open config file in editor")
 @click.option("--locate", is_flag=True, help="Locate config file in file browser")
 def config():

@@ -22,21 +22,14 @@ def get_sorted_cache(session: CachedSession, sorting: str, reverse: bool):
     yield from sorter(session.cache.responses.values())
 
 
-def responses_by_url(
-    session: CachedSession, url: str
-) -> Generator[CachedRequest, Any, None]:
-    return (
-        response for response in session.cache.responses.values() if response.url == url
-    )
+def responses_by_url(session: CachedSession, url: str) -> Generator[CachedRequest, Any, None]:
+    return (response for response in session.cache.responses.values() if response.url == url)
 
 
 # https://stackoverflow.com/questions/36106712/how-can-i-limit-iterations-of-a-loop-in-python
 def limit_iterator(items, limit: int):
     if not limit or limit <= 0:
-        i = 0
-        for v in items:
-            yield i, v
-            i += 1
+        yield from enumerate(items)
 
     else:
         yield from zip(range(limit), items)
@@ -49,12 +42,12 @@ def render_xml(data):
         return None
 
     root = ElementTree.fromstring(data)
-    try:
+    import contextlib
+
+    with contextlib.suppress(AttributeError):
         # requires python 3.9
         # https://stackoverflow.com/a/39482716/2314626
         ElementTree.indent(root)
-    except AttributeError:
-        pass
 
     return ElementTree.tostring(root, encoding="utf8").decode("utf8")
 
@@ -75,9 +68,7 @@ def inspect_url(session: CachedSession, url: str):
     matches = responses_by_url(session, url)
     for m in matches:
         content_type = m.headers["Content-Type"]
-        if content_type.startswith("text/xml") or content_type.startswith(
-            "application/xml"
-        ):
+        if content_type.startswith("text/xml") or content_type.startswith("application/xml"):
             print(f"<!-- {m} -->")
             for name, value in m.headers.items():
                 print(f"<!-- {name}: {value} -->")

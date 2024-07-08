@@ -42,9 +42,7 @@ class SyncWatchedPlugin:
 
             if m.is_episode and m.watched_before_reset:
                 show = m.plex.item.show()
-                self.logger.info(
-                    f"Show '{show.title}' has been reset in trakt at {m.show_reset_at}."
-                )
+                self.logger.info(f"Show '{show.title}' has been reset in trakt at {m.show_reset_at}.")
                 self.logger.info(f"Marking '{show.title}' as unwatched in Plex.")
                 if not dry_run:
                     m.reset_show()
@@ -58,8 +56,6 @@ class SyncWatchedPlugin:
         elif m.watched_on_trakt:
             if not self.trakt_to_plex:
                 return
-            self.logger.info(
-                f"Marking as watched in Plex: {m.title_link}", extra={"markup": True}
-            )
+            self.logger.info(f"Marking as watched in Plex: {m.title_link}", extra={"markup": True})
             if not dry_run:
                 m.mark_watched_plex()

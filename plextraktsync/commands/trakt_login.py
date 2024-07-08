@@ -16,10 +16,7 @@ if TYPE_CHECKING:
 
 PROMPT_TRAKT_CLIENT_ID = prompt("Please enter your client id")
 PROMPT_TRAKT_CLIENT_SECRET = prompt("Please enter your client secret")
-TRAKT_LOGIN_SUCCESS = success(
-    "You are now logged into Trakt. "
-    "Your Trakt credentials have been added in .env and .pytrakt.json files."
-)
+TRAKT_LOGIN_SUCCESS = success("You are now logged into Trakt. Your Trakt credentials have been added in .env and .pytrakt.json files.")
 
 
 def trakt_authenticate(api: TraktApi):

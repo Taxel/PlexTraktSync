@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 def remove_empty_values(result):
     """
     Update result to remove empty changes.

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from os import getenv
 from os.path import exists
 
@@ -68,9 +70,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
 
     @property
     def log_debug(self):
-        return ("log_debug_messages" in self and self["log_debug_messages"]) or self[
-            "logging"
-        ]["debug"]
+        return ("log_debug_messages" in self and self["log_debug_messages"]) or self["logging"]["debug"]
 
     @property
     def log_append(self):
@@ -88,11 +88,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
     def http_cache(self):
         from plextraktsync.config.HttpCacheConfig import HttpCacheConfig
 
-        cache = (
-            self["http_cache"]
-            if "http_cache" in self and self["http_cache"]
-            else {"policy": {}}
-        )
+        cache = self["http_cache"] if "http_cache" in self and self["http_cache"] else {"policy": {}}
 
         return HttpCacheConfig(**cache)
 
@@ -132,7 +128,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         override = self["config"]["dotenv_override"]
 
         load_dotenv(self.env_file, override=override)
-        for key in self.env_keys.keys():
+        for key in self.env_keys:
             value = getenv(key)
             if value == "-" or value == "None" or value == "":
                 value = None
@@ -142,9 +138,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
             self["PLEX_LOCALURL"] = self["PLEX_FALLBACKURL"]
             self["PLEX_FALLBACKURL"] = None
 
-        self["cache"]["path"] = self["cache"]["path"].replace(
-            "$PTS_CACHE_DIR", cache_dir
-        )
+        self["cache"]["path"] = self["cache"]["path"].replace("$PTS_CACHE_DIR", cache_dir)
 
     def serialize(self):
         """
@@ -153,7 +147,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         """
         data = dict(self)
         # Remove env variables. They are usually secrets
-        for key in self.env_keys.keys():
+        for key in self.env_keys:
             del data[key]
         return data
 

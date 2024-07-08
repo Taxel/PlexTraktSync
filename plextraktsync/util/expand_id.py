@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from plextraktsync.plex.PlexIdFactory import PlexIdFactory
 
 

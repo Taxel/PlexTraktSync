@@ -1,7 +1,9 @@
-from plextraktsync.config import TRAKT_POST_DELAY
-from plextraktsync.util.Timer import Timer
+from __future__ import annotations
+
 from decorator import decorator
 
+from plextraktsync.config import TRAKT_POST_DELAY
+from plextraktsync.util.Timer import Timer
 
 timer = Timer(TRAKT_POST_DELAY)
 

@@ -26,12 +26,8 @@ if TYPE_CHECKING:
 PROMPT_PLEX_PASSWORD = prompt("Please enter your Plex password")
 PROMPT_PLEX_USERNAME = prompt("Please enter your Plex username or e-mail")
 PROMPT_PLEX_CODE = prompt("Enter a 2FA code if enabled, or leave blank otherwise")
-PROMPT_PLEX_RELOGIN = prompt(
-    "You already have Plex Access Token, do you want to log in again?"
-)
-SUCCESS_MESSAGE = success(
-    "Plex Media Server Authentication Token and base URL have been added to servers.yml"
-)
+PROMPT_PLEX_RELOGIN = prompt("You already have Plex Access Token, do you want to log in again?")
+SUCCESS_MESSAGE = success("Plex Media Server Authentication Token and base URL have been added to servers.yml")
 CONFIG = factory.config
 
 style = get_style(
@@ -64,9 +60,7 @@ def server_urls(server: MyPlexResource):
 def myplex_login(username, password):
     while True:
         username = Prompt.ask(PROMPT_PLEX_USERNAME, default=username)
-        password = Prompt.ask(
-            PROMPT_PLEX_PASSWORD, password=True, default=password, show_default=False
-        )
+        password = Prompt.ask(PROMPT_PLEX_PASSWORD, password=True, default=password, show_default=False)
         code = Prompt.ask(PROMPT_PLEX_CODE)
         try:
             return MyPlexAccount(username=username, password=password, code=code)
@@ -108,9 +102,7 @@ def format_server(s):
     lines = []
     product = f"{s.product}/{s.productVersion}"
     platform = f"{s.device}: {s.platform}/{s.platformVersion}"
-    lines.append(
-        f"{s.name}: Last seen: {str(s.lastSeenAt)}, Server: {product} on {platform}"
-    )
+    lines.append(f"{s.name}: Last seen: {str(s.lastSeenAt)}, Server: {product} on {platform}")
     c: ResourceConnection
     for c in s.connections:
         lines.append(f"    {c.uri}")
@@ -170,11 +162,7 @@ def choose_server(account: MyPlexAccount) -> tuple[MyPlexResource, PlexServer]:
 
             # Connect to obtain baseUrl
             print()
-            print(
-                title(
-                    f"Attempting to connect to {server.name}. This may take time and print some errors."
-                )
-            )
+            print(title(f"Attempting to connect to {server.name}. This may take time and print some errors."))
             print(title("Server connections:"))
             for c in server.connections:
                 print(f"    {c.uri}")

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3 -m pytest
+from __future__ import annotations
+
 from plextraktsync.watch.EventDispatcher import EventDispatcher
 from plextraktsync.watch.EventFactory import EventFactory
 from plextraktsync.watch.events import ActivityNotification
@@ -33,23 +35,17 @@ def test_event_dispatcher():
     raw_events = load_mock("events-played.json")
 
     events = []
-    dispatcher = EventDispatcher().on(
-        ActivityNotification, lambda x: events.append(x), event=["ended"]
-    )
+    dispatcher = EventDispatcher().on(ActivityNotification, lambda x: events.append(x), event=["ended"])
     dispatcher.event_handler(raw_events[4])
     assert len(events) == 1, "Matched event=ended"
 
     events = []
-    dispatcher = EventDispatcher().on(
-        ActivityNotification, lambda x: events.append(x), progress=100
-    )
+    dispatcher = EventDispatcher().on(ActivityNotification, lambda x: events.append(x), progress=100)
     dispatcher.event_handler(raw_events[4])
     assert len(events) == 1, "Test property progress=100"
 
     events = []
-    dispatcher = EventDispatcher().on(
-        ActivityNotification, lambda x: events.append(x), event=["ended"], progress=100
-    )
+    dispatcher = EventDispatcher().on(ActivityNotification, lambda x: events.append(x), event=["ended"], progress=100)
     dispatcher.event_handler(raw_events[4])
     assert len(events) == 1, "Matched event=ended and progress=100"
 
@@ -74,8 +70,6 @@ def test_event_dispatcher():
     assert len(events) == 0, "Matched progress=100 and event=started"
 
     events = []
-    dispatcher = EventDispatcher().on(
-        ActivityNotification, lambda x: events.append(x), event=["ended"], progress=99
-    )
+    dispatcher = EventDispatcher().on(ActivityNotification, lambda x: events.append(x), event=["ended"], progress=99)
     dispatcher.event_handler(raw_events[4])
     assert len(events) == 0, "No match for event=ended and progress=99"

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from plextraktsync.factory import logging
 from plextraktsync.watch.EventFactory import EventFactory
 from plextraktsync.watch.events import Error, ServerStarted

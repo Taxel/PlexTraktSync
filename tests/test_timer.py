@@ -1,4 +1,6 @@
 #!/usr/bin/env python3 -m pytest
+from __future__ import annotations
+
 from contextlib import contextmanager
 from time import perf_counter, sleep
 

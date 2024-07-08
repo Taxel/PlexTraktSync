@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from functools import cached_property
 from os import getenv, makedirs
 from os.path import abspath, dirname, exists, join

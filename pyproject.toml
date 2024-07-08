@@ -5,3 +5,32 @@ requires = [
     "wheel",
 ]
 build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+# https://docs.astral.sh/ruff/settings/#line-length
+line-length = 150
+
+[tool.ruff.lint]
+# https://docs.astral.sh/ruff/linter/#rule-selection
+# https://docs.astral.sh/ruff/settings/#lint_extend-select
+extend-select = [
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "UP", # pyupgrade
+    "B", # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I", # isort
+]
+extend-ignore = [
+    # Not safe changes
+    "SIM102",
+    "SIM103",
+    # TODO
+    "SIM108",
+    "B019", # Concious decision
+    "B904", # Haven't figured out which one to use
+]
+
+[tool.ruff.lint.isort]
+# https://docs.astral.sh/ruff/settings/#lint_isort_required-imports
+required-imports = ["from __future__ import annotations"]

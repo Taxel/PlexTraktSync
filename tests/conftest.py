@@ -1,8 +1,10 @@
+from __future__ import annotations
+
+import contextlib
 import json
 from os import environ
 from os.path import dirname
 from os.path import join as join_path
-from typing import Union
 
 from trakt.tv import TVShow
 
@@ -19,10 +21,8 @@ config.env_file = join_path(TESTS_DIR, ".env")
 
 # Delete environment to ensure consistent tests
 for key in config.env_keys:
-    try:
+    with contextlib.suppress(KeyError):
         del environ[key]
-    except KeyError:
-        pass
 
 
 def load_mock(name: str):
@@ -31,7 +31,7 @@ def load_mock(name: str):
         return json.load(f)
 
 
-def make(cls=None, **kwargs) -> Union[TVShow]:
+def make(cls=None, **kwargs) -> TVShow:
     cls = cls if cls is not None else "object"
     # https://stackoverflow.com/a/2827726/2314626
     return type(cls, (object,), kwargs)
