@@ -30,20 +30,23 @@ class SyncDatabase:
 
     def update(self, m: Media):
         record = self.find_by_id(m.type, m.trakt_id)
-        if record:
-            record.plex_timestamp_watched = m.watched_on_plex
-            record.seen_on_plex_sync = m.watched_on_plex
-            record.trakt_timestamp_watched = m.watched_on_trakt
-            record.seen_on_trakt_sync = m.watched_on_trakt
-        else:
+        if not record:
             record = SyncRecord(
                 media_type=m.type,
                 trakt_id=m.trakt_id,
-                plex_timestamp_watched=m.watched_on_plex,
+                # plex_timestamp_watched=m.watched_on_plex,
                 seen_on_plex_sync=m.watched_on_plex,
-                trakt_timestamp_watched=m.watched_on_trakt,
+                # trakt_timestamp_watched=m.watched_on_trakt,
                 seen_on_trakt_sync=m.watched_on_trakt,
             )
+        # if record.plex_timestamp_watched != m.watched_on_plex:
+        #     record.plex_timestamp_watched = m.watched_on_plex
+        if record.seen_on_plex_sync != m.watched_on_plex:
+            record.seen_on_plex_sync = m.watched_on_plex
+        # if record.trakt_timestamp_watched != m.watched_on_trakt:
+        #     record.trakt_timestamp_watched = m.watched_on_trakt
+        if record.seen_on_trakt_sync != m.watched_on_trakt:
+            record.seen_on_trakt_sync = m.watched_on_trakt
         with Session(self.engine) as session:
             session.add(record)
             session.commit()
