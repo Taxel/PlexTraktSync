@@ -29,8 +29,7 @@ def responses_by_url(session: CachedSession, url: str) -> Generator[CachedReques
 # https://stackoverflow.com/questions/36106712/how-can-i-limit-iterations-of-a-loop-in-python
 def limit_iterator(items, limit: int):
     if not limit or limit <= 0:
-        for i, v in enumerate(items):
-            yield i, v
+        yield from enumerate(items)
 
     else:
         yield from zip(range(limit), items)
