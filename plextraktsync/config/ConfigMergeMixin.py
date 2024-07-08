@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 class ConfigMergeMixin:
     # https://stackoverflow.com/a/20666342/2314626
     def merge(self, source, destination):

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from urllib.parse import urlencode
 
 from plextraktsync.util.openurl import openurl

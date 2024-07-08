@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 def local_url(port=32400):
     """
     Find url for local plex access.

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from trakt.core import get
 from trakt.utils import airs_date
 

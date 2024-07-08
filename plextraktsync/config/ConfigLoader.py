@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 class ConfigLoader:
     @classmethod
     def load(cls, path: str):

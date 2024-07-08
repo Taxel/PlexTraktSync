@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 try:
     from functools import cache as memoize
 except ImportError:

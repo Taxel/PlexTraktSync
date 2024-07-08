@@ -1,4 +1,6 @@
 #!/usr/bin/env python3 -m pytest
+from __future__ import annotations
+
 import pytest
 from trakt.tv import TVShow
 

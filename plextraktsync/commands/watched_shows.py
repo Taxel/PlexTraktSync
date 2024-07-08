@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from rich.table import Table
 
 from plextraktsync.factory import factory

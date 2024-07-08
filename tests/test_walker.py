@@ -1,4 +1,6 @@
 #!/usr/bin/env python3 -m pytest
+from __future__ import annotations
+
 from plextraktsync.plan.WalkConfig import WalkConfig
 from plextraktsync.plan.WalkPlanner import WalkPlanner
 from plextraktsync.plex.PlexApi import PlexApi

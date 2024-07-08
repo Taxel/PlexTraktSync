@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from plextraktsync.factory import factory
 from plextraktsync.path import cache_dir, config_dir, log_dir, servers_config
 

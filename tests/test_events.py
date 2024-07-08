@@ -1,4 +1,6 @@
 #!/usr/bin/env python3 -m pytest
+from __future__ import annotations
+
 from plextraktsync.watch.EventDispatcher import EventDispatcher
 from plextraktsync.watch.EventFactory import EventFactory
 from plextraktsync.watch.events import ActivityNotification

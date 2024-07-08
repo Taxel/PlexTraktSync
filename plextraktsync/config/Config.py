@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from os import getenv
 from os.path import exists
 

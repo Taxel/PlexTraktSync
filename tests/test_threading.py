@@ -1,4 +1,6 @@
 #!/usr/bin/env python3 -m pytest
+from __future__ import annotations
+
 from time import sleep
 
 from tests.conftest import factory

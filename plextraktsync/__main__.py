@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 if len(__package__) == 0:
     import sys
 
