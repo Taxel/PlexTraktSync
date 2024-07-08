@@ -12,3 +12,7 @@ build-backend = "setuptools.build_meta"
 extend-select = [
     "I", # isort
 ]
+
+[tool.ruff.lint.isort]
+# https://docs.astral.sh/ruff/settings/#lint_isort_required-imports
+required-imports = ["from __future__ import annotations"]
