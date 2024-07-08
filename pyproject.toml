@@ -6,6 +6,10 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+[tool.ruff]
+# https://docs.astral.sh/ruff/settings/#line-length
+line-length = 150
+
 [tool.ruff.lint]
 # https://docs.astral.sh/ruff/linter/#rule-selection
 # https://docs.astral.sh/ruff/settings/#lint_extend-select
