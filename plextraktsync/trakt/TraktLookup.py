@@ -53,7 +53,7 @@ class TraktLookup:
         """
         # NB: side effect, assumes that from_number() is called first to populate self.table
         table = {}
-        for season in self.table.keys():
+        for season in self.table:
             for te in self.table[season].values():
                 table[str(te.ids.get(provider))] = te
         self.provider_table[provider] = table

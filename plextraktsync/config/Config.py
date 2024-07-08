@@ -134,7 +134,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         override = self["config"]["dotenv_override"]
 
         load_dotenv(self.env_file, override=override)
-        for key in self.env_keys.keys():
+        for key in self.env_keys:
             value = getenv(key)
             if value == "-" or value == "None" or value == "":
                 value = None
@@ -155,7 +155,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         """
         data = dict(self)
         # Remove env variables. They are usually secrets
-        for key in self.env_keys.keys():
+        for key in self.env_keys:
             del data[key]
         return data
 

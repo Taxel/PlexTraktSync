@@ -54,7 +54,7 @@ class SeasonProgress:
     def get_completed(self, episode, reset_at):
         if self.completed:
             return True
-        elif episode not in self.episodes.keys():
+        elif episode not in self.episodes:
             return False
         last_watched_at = airs_date(self.episodes[episode].last_watched_at)
         if reset_at and reset_at > last_watched_at:
@@ -100,7 +100,7 @@ class ShowProgress:
     def get_completed(self, season, episode):
         if self.completed:
             return True
-        elif season not in self.seasons.keys():
+        elif season not in self.seasons:
             return False
         reset_at = airs_date(self.reset_at)
         return self.seasons[season].get_completed(episode, reset_at)
@@ -114,21 +114,18 @@ class AllShowsProgress:
             self.shows[prog.trakt] = prog
 
     def get_completed(self, trakt_id, season, episode):
-        if trakt_id not in self.shows.keys():
+        if trakt_id not in self.shows:
             return False
         else:
             return self.shows[trakt_id].get_completed(season, episode)
 
     def is_collected(self, trakt_id, season, episode):
-        if (
-            trakt_id not in self.shows.keys()
-            or season not in self.shows[trakt_id].seasons.keys()
-        ):
+        if trakt_id not in self.shows or season not in self.shows[trakt_id].seasons:
             return False
-        return episode in self.shows[trakt_id].seasons[season].episodes.keys()
+        return episode in self.shows[trakt_id].seasons[season].episodes
 
     def reset_at(self, trakt_id):
-        if trakt_id not in self.shows.keys():
+        if trakt_id not in self.shows:
             return None
         else:
             return airs_date(self.shows[trakt_id].reset_at)
