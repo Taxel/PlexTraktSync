@@ -14,7 +14,9 @@ line-length = 150
 # https://docs.astral.sh/ruff/linter/#rule-selection
 # https://docs.astral.sh/ruff/settings/#lint_extend-select
 extend-select = [
+    "E", # pycodestyle
     "F", # Pyflakes
+    "B", # flake8-bugbear
     "SIM", # flake8-simplify
     "I", # isort
 ]
@@ -24,6 +26,8 @@ extend-ignore = [
     "SIM103",
     # TODO
     "SIM108",
+    "B019", # Concious decision
+    "B904", # Haven't figured out which one to use
 ]
 
 [tool.ruff.lint.isort]
