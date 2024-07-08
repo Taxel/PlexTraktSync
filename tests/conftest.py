@@ -5,7 +5,6 @@ import json
 from os import environ
 from os.path import dirname
 from os.path import join as join_path
-from typing import Union
 
 from trakt.tv import TVShow
 
@@ -32,7 +31,7 @@ def load_mock(name: str):
         return json.load(f)
 
 
-def make(cls=None, **kwargs) -> Union[TVShow]:
+def make(cls=None, **kwargs) -> TVShow:
     cls = cls if cls is not None else "object"
     # https://stackoverflow.com/a/2827726/2314626
     return type(cls, (object,), kwargs)
