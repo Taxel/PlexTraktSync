@@ -5,3 +5,10 @@ requires = [
     "wheel",
 ]
 build-backend = "setuptools.build_meta"
+
+[tool.ruff.lint]
+# https://docs.astral.sh/ruff/linter/#rule-selection
+# https://docs.astral.sh/ruff/settings/#lint_extend-select
+extend-select = [
+    "I", # isort
+]
