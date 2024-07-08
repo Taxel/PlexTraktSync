@@ -128,6 +128,25 @@ def clear_collections():
 
 
 @command()
+@click.option(
+    "--library1",
+    type=str,
+    required=True,
+    help="Plex Server/Plex Library name from servers.yml",
+)
+@click.option(
+    "--library2",
+    type=str,
+    required=True,
+    help="Plex Server/Plex Library name from servers.yml",
+)
+def compare_libraries():
+    """
+    Compare two Plex Libraries
+    """
+
+
+@command()
 def info():
     """
     Print application and environment version info
@@ -346,6 +365,7 @@ def config():
 cli.add_command(bug_report)
 cli.add_command(cache)
 cli.add_command(clear_collections)
+cli.add_command(compare_libraries)
 cli.add_command(config)
 cli.add_command(download)
 cli.add_command(imdb_import)
