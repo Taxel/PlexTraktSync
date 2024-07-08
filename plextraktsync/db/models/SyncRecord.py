@@ -18,7 +18,7 @@ class SyncRecord(SQLModel, table=True):
     updated_at: Optional[datetime] = Field(
         sa_column=Column(DateTime(), onupdate=func.now())
     )
-    plex_timestamp_watched: str
-    seen_on_plex_sync: str
-    trakt_timestamp_watched: str
-    seen_on_trakt_sync: str
+    plex_timestamp_watched: Optional[datetime]
+    seen_on_plex_sync: bool
+    trakt_timestamp_watched: Optional[datetime]
+    seen_on_trakt_sync: bool
