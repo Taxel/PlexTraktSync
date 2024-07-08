@@ -11,10 +11,10 @@ class Factory:
         https://stackoverflow.com/a/63617398
         """
         for key in keys or []:
-            try:
+            import contextlib
+
+            with contextlib.suppress(KeyError):
                 del self.__dict__[key]
-            except KeyError:
-                pass
 
     @cached_property
     def version(self):
