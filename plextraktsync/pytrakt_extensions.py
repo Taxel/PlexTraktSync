@@ -120,9 +120,10 @@ class AllShowsProgress:
             return self.shows[trakt_id].get_completed(season, episode)
 
     def is_collected(self, trakt_id, season, episode):
-        if trakt_id not in self.shows.keys():
-            return False
-        elif season not in self.shows[trakt_id].seasons.keys():
+        if (
+            trakt_id not in self.shows.keys()
+            or season not in self.shows[trakt_id].seasons.keys()
+        ):
             return False
         return episode in self.shows[trakt_id].seasons[season].episodes.keys()
 
