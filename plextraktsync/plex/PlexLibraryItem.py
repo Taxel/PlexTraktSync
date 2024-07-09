@@ -37,7 +37,13 @@ class PlexLibraryItem(RichMarkup):
     def section_id(self):
         # Use __dict__ access to prevent reloads:
         # https://github.com/pkkid/python-plexapi/pull/1093
-        return self.item.__dict__["librarySectionID"]
+        section_id = self.item.__dict__["librarySectionID"]
+        # For some odd reason (or bug) section id is NaN.
+        # Treat it as None instead
+        # This is same as math.isnan(section_id)
+        if section_id != section_id:
+            return None
+        return section_id
 
     @cached_property
     def is_discover(self):
