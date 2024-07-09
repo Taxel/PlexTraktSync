@@ -34,10 +34,20 @@ class PlexLibraryItem(RichMarkup):
         return not self.item.guid.startswith("plex://")
 
     @cached_property
-    def is_discover(self):
+    def section_id(self):
         # Use __dict__ access to prevent reloads:
         # https://github.com/pkkid/python-plexapi/pull/1093
-        return self.item.__dict__["librarySectionID"] is None
+        section_id = self.item.__dict__["librarySectionID"]
+        # For some odd reason (or bug) section id is NaN.
+        # Treat it as None instead
+        # This is same as math.isnan(section_id)
+        if section_id != section_id:
+            return None
+        return section_id
+
+    @cached_property
+    def is_discover(self):
+        return self.section_id is None
 
     @property
     def web_url(self):
@@ -122,10 +132,10 @@ class PlexLibraryItem(RichMarkup):
         if self.is_discover:
             return None
 
-        if self.item.librarySectionID not in self.plex.library_sections:
+        if self.section_id not in self.plex.library_sections:
             return None
 
-        return self.plex.library_sections[self.item.librarySectionID]
+        return self.plex.library_sections[self.section_id]
 
     @cached_property
     def edition_title(self):
