@@ -69,6 +69,8 @@ class PlexLibraryItem(RichMarkup):
         Compare with other PlexLibraryItem.
         Items are equal if one of their guids matches
         """
+        if other is None:
+            return False
         for guid in self.guids:
             for other_guid in other.guids:
                 if guid == other_guid:
