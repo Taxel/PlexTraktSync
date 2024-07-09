@@ -1,19 +1,17 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 
+
+@dataclass
 class WalkConfig:
     walk_movies = True
     walk_shows = True
     walk_watchlist = True
-    library: list[str] = []
-    show: list[str] = []
-    movie: list[str] = []
-    id: list[str] = []
-
-    def __init__(self, movies=True, shows=True, watchlist=True):
-        self.walk_movies = movies
-        self.walk_shows = shows
-        self.walk_watchlist = watchlist
+    library: list[str] = field(default_factory=list)
+    show: list[str] = field(default_factory=list)
+    movie: list[str] = field(default_factory=list)
+    id: list[str] = field(default_factory=list)
 
     def update(self, movies=None, shows=None, watchlist=None):
         if movies is not None:
