@@ -140,7 +140,7 @@ class Factory:
         plex = self.plex_api
         trakt = self.trakt_api
 
-        return Sync(self.sync_config, plex, trakt)
+        return Sync(self.sync_config, plex, trakt, self.sync_database)
 
     @cached_property
     def progressbar(self):
@@ -212,6 +212,24 @@ class Factory:
             mf=self.media_factory,
             config=self.config,
         )
+
+    @cached_property
+    def sync_engine(self):
+        from os.path import join
+
+        from sqlmodel import SQLModel, create_engine
+
+        from plextraktsync.path import cache_dir
+
+        db_path = join(cache_dir, "sync.sqlite")
+        engine = create_engine(f"sqlite:///{db_path}", echo=False)
+
+        # Import all models for metadata.create_all
+        import plextraktsync.db.models  # noqa: F401
+
+        SQLModel.metadata.create_all(engine)
+
+        return engine
 
     @cached_property
     def logging(self):
@@ -299,6 +317,12 @@ class Factory:
         from plextraktsync.config.SyncConfig import SyncConfig
 
         return SyncConfig(self.config, self.server_config)
+
+    @cached_property
+    def sync_database(self):
+        from plextraktsync.db.SyncDatabase import SyncDatabase
+
+        return SyncDatabase(self.sync_engine)
 
     @cached_property
     def queue(self):

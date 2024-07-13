@@ -11,16 +11,18 @@ if TYPE_CHECKING:
     from plextraktsync.plan.Walker import Walker
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.trakt.TraktApi import TraktApi
+    from plextraktsync.db.SyncDatabase import SyncDatabase
 
 
 class Sync:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, config: SyncConfig, plex: PlexApi, trakt: TraktApi):
+    def __init__(self, config: SyncConfig, plex: PlexApi, trakt: TraktApi, sync_state: SyncDatabase):
         self.config = config
         self.plex = plex
         self.trakt = trakt
         self.walker = None
+        self.sync_state = sync_state
 
     @cached_property
     def trakt_lists(self):
@@ -47,9 +49,11 @@ class Sync:
 
         if self.config.need_library_walk:
             async for movie in walker.find_movies():
+                self.sync_state.update(movie)
                 await pm.ahook.walk_movie(movie=movie, dry_run=dry_run)
 
             async for episode in walker.find_episodes():
+                self.sync_state.update(episode)
                 await pm.ahook.walk_episode(episode=episode, dry_run=dry_run)
 
         await pm.ahook.fini(walker=walker, dry_run=dry_run)
