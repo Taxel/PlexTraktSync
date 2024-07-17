@@ -91,29 +91,26 @@ async def compare_libraries(library1: str, library2: str):
 
     movies1, movies2 = await load_movies(walker1, walker2)
     matches = set()
+
     cache_file = f"compare-cache-{cache_key(lib1, lib2)}.json"
-    cache = dict()
-    with contextlib.suppress(FileNotFoundError):
-        cache = ConfigLoader.load(cache_file)
-    for pm1, pm2 in get_pairs(movies1, movies2):
-        if cache.get(str(pm1.key)):
-            continue
-        if not pm1.is_watched:
-            cache[str(pm1.key)] = "not watched"
-            continue
+    with use_cache(cache_file) as cache:
+        for pm1, pm2 in get_pairs(movies1, movies2):
+            if cache.get(str(pm1.key)):
+                continue
+            if not pm1.is_watched:
+                cache[str(pm1.key)] = "not watched"
+                continue
 
-        try:
-            paths1 = set([part.file for part in pm1.parts])
-            paths2 = set([part.file for part in pm2.parts])
-        except NotFound as e:
-            print(e)
-            continue
+            try:
+                paths1 = set([part.file for part in pm1.parts])
+                paths2 = set([part.file for part in pm2.parts])
+            except NotFound as e:
+                print(e)
+                continue
 
-        print(f"Checking match '{pm1.key}': {pm1.title_link} == {pm2.title_link}")
-        print(paths1)
-        print(paths2)
-        matches.add(pm2)
-
-    ConfigLoader.write(cache_file, cache)
+            print(f"Checking match '{pm1.key}': {pm1.title_link} == {pm2.title_link}")
+            print(paths1)
+            print(paths2)
+            matches.add(pm2)
 
     print(f"Made {len(matches)} matches")
