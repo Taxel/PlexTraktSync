@@ -7,7 +7,7 @@ charset-normalizer==3.3.2; python_full_version >= '3.7.0'
 click==8.1.7
 decorator==5.1.1
 deprecated==1.2.14
-exceptiongroup==1.2.1; python_version < '3.11'
+exceptiongroup==1.2.2; python_version >= '3.7'
 humanize==4.10.0; python_version >= '3.8'
 idna==3.7; python_version >= '3.5'
 inquirerpy==0.3.4
