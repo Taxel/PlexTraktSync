@@ -69,6 +69,16 @@ def cache_key(lib1: PlexLibrarySection, lib2: PlexLibrarySection):
     )
 
 
+@contextlib.contextmanager
+def use_cache(cache_file: str):
+    cache = dict()  # noqa
+    with contextlib.suppress(FileNotFoundError):
+        cache = ConfigLoader.load(cache_file)
+
+    yield cache
+    ConfigLoader.write(cache_file, cache)
+
+
 @coro
 async def compare_libraries(library1: str, library2: str):
     print = factory.print
