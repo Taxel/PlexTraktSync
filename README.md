@@ -151,7 +151,7 @@ Note: `main` is development version and reporting bugs against development versi
 To run sync:
 
 ```
-docker-compose run --rm plextraktsync sync
+docker compose run --rm plextraktsync sync
 ```
 
 The container will stop after the sync is completed. Read Setup section to run
@@ -264,7 +264,7 @@ Installing from GitHub is considered developer mode, and it's documented in
 
 [ofelia]: https://github.com/mcuadros/ofelia/
 
-A docker-compose example with a 6h interval:
+A docker compose example with a 6h interval:
 
 ```yaml
 version: "2"
@@ -469,7 +469,7 @@ compose, you can run them at the same time.
 The above config means that a job is running every 6 hours, alternating between
 the two "servers". The PlexTraktSync container also has a [docker compose
 profile] called "schedule" which means that it won't run automatically when you
-run for example `docker-compose up`.
+run for example `docker compose up`.
 
 [docker compose profile]: https://docs.docker.com/compose/profiles/
 
@@ -618,10 +618,10 @@ To run `watch` command:
 or
 
 ```
-docker-compose run --rm plextraktsync watch
+docker compose run --rm plextraktsync watch
 ```
 
-or add `command: watch` to docker compose file, and `docker-compose up -d
+or add `command: watch` to docker compose file, and `docker compose up -d
 plextraktsync` to start the container detached:
 
 ```yaml
