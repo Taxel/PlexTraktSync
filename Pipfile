@@ -30,7 +30,7 @@ python-dotenv = "==1.0.1"
 python-git-info = "==0.8.3"
 pytimeparse = "==1.1.8"
 pytrakt = "==3.4.32"
-pyyaml = "==6.0.1"
+pyyaml = "==6.0.2"
 requests = "==2.32.3"
 requests-cache = "==1.2.1"
 requests-oauthlib = {version="==2.0.0", python_version=">='3.4'"}
