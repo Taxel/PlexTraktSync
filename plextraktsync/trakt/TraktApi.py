@@ -254,16 +254,16 @@ class TraktApi:
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
             return self.find_by_episode_guid(guid)
-        else:
-            tm = self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
-            if tm is None and guid.type == "movie":
-                if self.search_by_id(guid.id, id_type=guid.provider, media_type="show"):
-                    self.logger.warning(
-                        f"Found match using show search: {guid.title_link}",
-                        extra={"markup": True},
-                    )
 
-            return tm
+        tm = self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
+        if tm is None and guid.type == "movie":
+            if self.search_by_id(guid.id, id_type=guid.provider, media_type="show"):
+                self.logger.warning(
+                    f"Found match using show search: {guid.title_link}",
+                    extra={"markup": True},
+                )
+
+        return tm
 
     @staticmethod
     def find_by_slug(slug: str, media_type: str):
