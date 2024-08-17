@@ -3,7 +3,6 @@ from __future__ import annotations
 import contextlib
 
 from plexapi.exceptions import NotFound
-from sqlalchemy.util import OrderedSet
 
 from plextraktsync.config.ConfigLoader import ConfigLoader
 from plextraktsync.decorators.coro import coro
@@ -37,7 +36,7 @@ def get_walker(plex: PlexApi, library: PlexLibrarySection):
 
 
 async def load_movies(walker1, walker2):
-    movies1 = OrderedSet()
+    movies1 = set()
     async for pm in walker1.get_plex_movies():
         movies1.add(pm)
 
