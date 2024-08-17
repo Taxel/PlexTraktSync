@@ -260,11 +260,12 @@ class TraktApi:
         if tm is None and guid.type == "movie":
             show = self.search_by_id(guid.id, id_type=guid.provider, media_type="show")
             if show:
-                ts = TraktItem(show)
-                self.logger.warning(
-                    f"Found id match using show search: {guid.title_link}: {ts.title_link}",
-                    extra={"markup": True},
-                )
+                if guid.title == show.title:
+                    ts = TraktItem(show)
+                    self.logger.warning(
+                        f"Found id match using show search: {guid.title_link}: {ts.title_link}",
+                        extra={"markup": True},
+                    )
 
         return tm
 
