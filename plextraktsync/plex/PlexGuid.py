@@ -96,6 +96,10 @@ class PlexGuid(RichMarkup):
         return guid[0:2] == "tt" and guid[2:].isnumeric()
 
     @property
+    def title(self):
+        return self.pm.item.title
+
+    @property
     def title_link(self):
         if self.pm:
             return self.pm.title_link
