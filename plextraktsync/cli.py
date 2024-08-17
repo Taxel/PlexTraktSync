@@ -140,6 +140,7 @@ def clear_collections():
     required=True,
     help="Plex Server/Plex Library name from servers.yml",
 )
+@click.option("--match-watched", is_flag=True, help="Match only watched items")
 def compare_libraries():
     """
     Compare two Plex Libraries

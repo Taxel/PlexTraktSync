@@ -79,7 +79,7 @@ def use_cache(cache_file: str):
 
 
 @coro
-async def compare_libraries(library1: str, library2: str):
+async def compare_libraries(library1: str, library2: str, match_watched: bool):
     print = factory.print
     print(f"Compare contents of '{library1}' and '{library2}'")
     plex1, lib1 = get_plex_from_name(library1)
