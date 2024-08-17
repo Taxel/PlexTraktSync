@@ -94,9 +94,11 @@ async def compare_libraries(library1: str, library2: str, match_watched: bool):
     cache_file = f"compare-cache-{cache_key(lib1, lib2)}.json"
     with use_cache(cache_file) as cache:
         for pm1, pm2 in get_pairs(movies1, movies2):
-            if cache.get(str(pm1.key)):
-                continue
-            if not pm1.is_watched:
+            cached = cache.get(str(pm1.key))
+            if cached:
+                if not match_watched and cached != "not watched":
+                    continue
+            if match_watched and not pm1.is_watched:
                 cache[str(pm1.key)] = "not watched"
                 continue
 
