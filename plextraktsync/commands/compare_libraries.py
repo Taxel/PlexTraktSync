@@ -3,7 +3,6 @@ from __future__ import annotations
 import contextlib
 
 from plexapi.exceptions import NotFound
-from sqlalchemy.util import OrderedSet
 
 from plextraktsync.config.ConfigLoader import ConfigLoader
 from plextraktsync.decorators.coro import coro
@@ -37,7 +36,7 @@ def get_walker(plex: PlexApi, library: PlexLibrarySection):
 
 
 async def load_movies(walker1, walker2):
-    movies1 = OrderedSet()
+    movies1 = set()
     async for pm in walker1.get_plex_movies():
         movies1.add(pm)
 
@@ -80,7 +79,7 @@ def use_cache(cache_file: str):
 
 
 @coro
-async def compare_libraries(library1: str, library2: str):
+async def compare_libraries(library1: str, library2: str, match_watched: bool):
     print = factory.print
     print(f"Compare contents of '{library1}' and '{library2}'")
     plex1, lib1 = get_plex_from_name(library1)
@@ -95,9 +94,11 @@ async def compare_libraries(library1: str, library2: str):
     cache_file = f"compare-cache-{cache_key(lib1, lib2)}.json"
     with use_cache(cache_file) as cache:
         for pm1, pm2 in get_pairs(movies1, movies2):
-            if cache.get(str(pm1.key)):
-                continue
-            if not pm1.is_watched:
+            cached = cache.get(str(pm1.key))
+            if cached:
+                if not match_watched and cached != "not watched":
+                    continue
+            if match_watched and not pm1.is_watched:
                 cache[str(pm1.key)] = "not watched"
                 continue
 
