@@ -3,11 +3,13 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING
 
+from plextraktsync.mixin.RichMarkup import RichMarkup
+
 if TYPE_CHECKING:
     from plextraktsync.trakt.types import TraktMedia
 
 
-class TraktItem:
+class TraktItem(RichMarkup):
     def __init__(self, item: TraktMedia):
         self.item = item
 
@@ -22,3 +24,9 @@ class TraktItem:
     @property
     def guids(self):
         return {k: v for k, v in self.item.ids["ids"].items() if k in ["imdb", "tmdb", "tvdb"]}
+
+    @property
+    def title_link(self):
+        link = f"https://trakt.tv/{self.item.ext}"
+
+        return self.markup_link(link, self.item.title)

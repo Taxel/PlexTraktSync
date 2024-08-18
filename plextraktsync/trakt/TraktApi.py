@@ -24,6 +24,7 @@ from plextraktsync.decorators.time_limit import time_limit
 from plextraktsync.factory import factory, logging
 from plextraktsync.path import pytrakt_file
 from plextraktsync.trakt.PartialTraktMedia import PartialTraktMedia
+from plextraktsync.trakt.TraktItem import TraktItem
 from plextraktsync.trakt.TraktLookup import TraktLookup
 from plextraktsync.trakt.TraktRatingCollection import TraktRatingCollection
 from plextraktsync.trakt.WatchProgress import WatchProgress
@@ -254,16 +255,19 @@ class TraktApi:
     def find_by_guid(self, guid: PlexGuid):
         if guid.type == "episode" and guid.is_episode:
             return self.find_by_episode_guid(guid)
-        else:
-            tm = self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
-            if tm is None and guid.type == "movie":
-                if self.search_by_id(guid.id, id_type=guid.provider, media_type="show"):
+
+        tm = self.search_by_id(guid.id, id_type=guid.provider, media_type=guid.type)
+        if tm is None and guid.type == "movie":
+            show = self.search_by_id(guid.id, id_type=guid.provider, media_type="show")
+            if show:
+                if guid.title == show.title:
+                    ts = TraktItem(show)
                     self.logger.warning(
-                        f"Found match using show search: {guid.title_link}",
+                        f"Found id match using show search: {guid.title_link}: {ts.title_link}",
                         extra={"markup": True},
                     )
 
-            return tm
+        return tm
 
     @staticmethod
     def find_by_slug(slug: str, media_type: str):
