@@ -22,7 +22,7 @@ mdurl = {version="==0.1.2", python_version=">='3.7'"}
 oauthlib = "==3.2.2"
 pfzy = {version="==0.3.4", markers="python_version >= '3.7' and python_version < '4.0'"}
 platformdirs = {version="==4.2.2", python_version=">='3.7'"}
-plexapi = "==4.15.15"
+plexapi = "==4.15.16"
 pluggy = "==1.5.0"
 prompt-toolkit = "==3.0.47"
 pygments = "==2.18.0"
