@@ -63,6 +63,7 @@ def inspect_media(plex_id: PlexId):
             )
 
         print("Parts:")
+        pm.item.reload(checkFiles=True)
         for index, part in enumerate(pm.parts, start=1):
             size = naturalsize(part.size, binary=True)
             file_link = f"[link=file://{quote_plus(part.file)}]{escape(part.file)}[/link]"
