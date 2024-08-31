@@ -49,6 +49,7 @@ jobs:
           APP_VERSION: ${{ steps.vars.outputs.version }}
         run: |
           set -x
+          # APP_VERSION=$(git describe --tags)
           echo "__version__ = '$APP_VERSION'" > plextraktsync/__init__.py
           cat plextraktsync/__init__.py
           python -c "from plextraktsync import __version__; print(__version__)"
