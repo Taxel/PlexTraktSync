@@ -1,7 +1,26 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from plextraktsync.decorators.coro import coro
 from plextraktsync.factory import factory
+
+if TYPE_CHECKING:
+    from plextraktsync.plex.types import PlexPlayable
+
+
+def format_title(p: PlexPlayable):
+    library_title = p._data.attrib.get("librarySectionTitle")
+    title = f"'{p.title}'"
+    if p.year:
+        title += f" ({p.year})"
+
+    if library_title:
+        title += f" (in '{library_title}')"
+    if p.sourceURI:
+        title += f" (on {p.sourceURI})"
+
+    return title
 
 
 @coro
