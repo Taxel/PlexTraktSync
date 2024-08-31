@@ -31,6 +31,9 @@ class PlexPlaylist(RichMarkup):
     def __contains__(self, m: Media):
         return m.plex_key in self.items
 
+    def __str__(self):
+        return f"PlexPlaylist<name='{self.name}'>"
+
     @cached_property
     def playlist(self) -> Playlist | None:
         try:
