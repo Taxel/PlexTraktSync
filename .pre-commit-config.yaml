@@ -26,4 +26,12 @@ repos:
     hooks:
       - id: rm-unneeded-f-str
 
+    # https://pypi.org/project/validate-pyproject/
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.19
+    hooks:
+      - id: validate-pyproject
+        # Optional extra validations from SchemaStore:
+        additional_dependencies: ["validate-pyproject-schema-store[all]"]
+
 # vim:ts=2:sw=2:et
