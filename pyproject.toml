@@ -1,3 +1,40 @@
+[project]
+name = "PlexTraktSync"
+dynamic = ["version"]
+description = "Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server"
+readme = "README.md"
+license = {file = "LICENSE"}
+# See: https://pypi.python.org/pypi?:action=list_classifiers
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+
+  # Indicate who your project is intended for
+  "Environment :: Console",
+  "Operating System :: OS Independent",
+
+  # Pick your license as you wish (see also "license" above)
+  "License :: OSI Approved :: MIT License",
+
+  # List of Python versions and their support status:
+  # https://en.wikipedia.org/wiki/History_of_Python#Support
+  # https://endoflife.date/python
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.8"
+
+[tool.setuptools.dynamic]
+version = {attr = "plextraktsync.__version__"}
+
+[project.urls]
+Homepage = "https://github.com/Taxel/PlexTraktSync"
+Repository = "https://github.com/Taxel/PlexTraktSync.git"
+Issues = "https://github.com/Taxel/PlexTraktSync/issues"
+
 [build-system]
 requires = [
     "setuptools-declarative-requirements>=1.3.0",
