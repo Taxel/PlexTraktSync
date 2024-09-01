@@ -43,6 +43,30 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+packages = [
+    "plextraktsync",
+    "plextraktsync.commands",
+    "plextraktsync.config",
+    "plextraktsync.decorators",
+    "plextraktsync.logger",
+    "plextraktsync.media",
+    "plextraktsync.mixin",
+    "plextraktsync.plan",
+    "plextraktsync.plex",
+    "plextraktsync.plugin",
+    "plextraktsync.queue",
+    "plextraktsync.rich",
+    "plextraktsync.sync",
+    "plextraktsync.sync.plugin",
+    "plextraktsync.trakt",
+    "plextraktsync.util",
+    "plextraktsync.watch",
+]
+
+[project.scripts]
+plextraktsync = "plextraktsync.cli:cli"
+
 [tool.ruff]
 # https://docs.astral.sh/ruff/settings/#line-length
 line-length = 150
