@@ -64,6 +64,9 @@ packages = [
     "plextraktsync.watch",
 ]
 
+[project.scripts]
+plextraktsync = "plextraktsync.cli:cli"
+
 [tool.ruff]
 # https://docs.astral.sh/ruff/settings/#line-length
 line-length = 150
