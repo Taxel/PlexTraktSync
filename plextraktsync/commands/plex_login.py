@@ -14,7 +14,6 @@ from plexapi.server import PlexServer
 from rich.panel import Panel
 from rich.prompt import Confirm, Prompt
 
-from plextraktsync.config.ServerConfigFactory import ServerConfigFactory
 from plextraktsync.decorators.flatten import flatten_list
 from plextraktsync.factory import factory
 from plextraktsync.style import error, prompt, success, title
@@ -221,7 +220,7 @@ def login(username: str, password: str):
     else:
         plex_account_token = account._token
 
-    sc = ServerConfigFactory()
+    sc = factory.server_config_factory
     sc.add_server(
         id=plex.machineIdentifier,
         name=server.name,
