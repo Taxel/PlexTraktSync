@@ -19,7 +19,7 @@ env:
   TEST_IMAGE: plextraktsync:ci-test
 
 jobs:
-  build-and-push-image:
+  docker:
     runs-on: ubuntu-latest
     permissions:
       contents: read
