@@ -9,7 +9,7 @@ decorator==5.1.1
 deprecated==1.2.14
 exceptiongroup==1.2.2; python_version >= '3.7'
 humanize==4.10.0; python_version >= '3.8'
-idna==3.8; python_version >= '3.6'
+idna==3.10; python_version >= '3.6'
 inquirerpy==0.3.4
 markdown-it-py==3.0.0; python_version >= '3.7' and python_version >= '3.8'
 mdurl==0.1.2; python_version >= '3.7'
