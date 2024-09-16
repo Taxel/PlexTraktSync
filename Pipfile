@@ -39,7 +39,7 @@ six = {version="==1.16.0", python_version=">='3.4'"}
 tqdm = "==4.66.5"
 typing-extensions = {version="==4.12.2", python_version=">= '3.8'"}
 url-normalize = {version="==1.4.3", python_version=">='3.6'"}
-urllib3 = "==2.2.2"
+urllib3 = "==2.2.3"
 wcwidth = "==0.2.13"
 websocket-client = "==1.8.0"
 wrapt = {version="==1.16.0", python_version=">='3.5'"}
