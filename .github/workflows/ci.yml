@@ -1,0 +1,29 @@
+name: "CI"
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "*.*.*"
+  pull_request:
+
+jobs:
+  docker:
+    uses: ./.github/workflows/docker-image.yml
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    uses: ./.github/workflows/test.yml
+    if: ${{ github.event_name == 'pull_request' }}
+
+  automerge:
+    uses: ./.github/workflows/automerge.yml
+    needs:
+      - docker
+      - test
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+
+# vim:ft=yaml:et:ts=2:sw=2

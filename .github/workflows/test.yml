@@ -1,7 +1,7 @@
 name: Test
 
 on:
-  - pull_request
+  workflow_call:
 
 env:
   DEFAULT_PYTHON: 3.8
@@ -9,7 +9,6 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Test
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4

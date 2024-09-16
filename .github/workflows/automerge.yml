@@ -1,0 +1,24 @@
+on:
+  workflow_call:
+    secrets:
+      github-token:
+        required: true
+
+jobs:
+  # https://github.com/fastify/github-action-merge-dependabot
+  automerge:
+    name: Dependabot auto-merge
+    runs-on: ubuntu-20.04
+    if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request' }}
+
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v3.0.0
+        with:
+          target: minor
+          github-token: ${{ secrets.github-token }}
+
+# vim:ft=yaml:et:ts=2:sw=2
