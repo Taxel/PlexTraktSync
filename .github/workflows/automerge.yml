@@ -18,6 +18,7 @@ jobs:
       - uses: fastify/github-action-merge-dependabot@v3.0.0
         if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request' }}
         with:
+          target: minor
           github-token: ${{ secrets.github-token }}
 
 # vim:ft=yaml:et:ts=2:sw=2
