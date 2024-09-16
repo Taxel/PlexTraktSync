@@ -9,6 +9,7 @@ jobs:
   automerge:
     name: Dependabot auto-merge
     runs-on: ubuntu-20.04
+    if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request' }}
 
     permissions:
       pull-requests: write
@@ -16,7 +17,6 @@ jobs:
 
     steps:
       - uses: fastify/github-action-merge-dependabot@v3.0.0
-        if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request' }}
         with:
           target: minor
           github-token: ${{ secrets.github-token }}
