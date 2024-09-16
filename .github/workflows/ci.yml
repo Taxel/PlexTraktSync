@@ -16,6 +16,7 @@ jobs:
 
   test:
     uses: ./.github/workflows/test.yml
+    if: ${{ github.event_name == 'pull_request' }}
 
   automerge:
     uses: ./.github/workflows/automerge.yml
