@@ -1,14 +1,14 @@
 on:
-  pull_request:
+  workflow_call:
+    secrets:
+      github-token:
+        required: true
 
 jobs:
   # https://github.com/fastify/github-action-merge-dependabot
   automerge:
     name: Dependabot auto-merge
     runs-on: ubuntu-20.04
-    needs:
-      - docker
-      - test
 
     permissions:
       pull-requests: write
