@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING
 from plextraktsync.factory import factory
 
 if TYPE_CHECKING:
-    from typing import Any, Generator
+    from collections.abc import Generator
+    from typing import Any
 
     from requests_cache import CachedRequest, CachedSession
 
