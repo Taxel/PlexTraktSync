@@ -43,12 +43,7 @@ def render_xml(data):
         return None
 
     root = ElementTree.fromstring(data)
-    import contextlib
-
-    with contextlib.suppress(AttributeError):
-        # requires python 3.9
-        # https://stackoverflow.com/a/39482716/2314626
-        ElementTree.indent(root)
+    ElementTree.indent(root)
 
     return ElementTree.tostring(root, encoding="utf8").decode("utf8")
 
