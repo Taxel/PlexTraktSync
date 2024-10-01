@@ -34,7 +34,7 @@ pyyaml = "==6.0.2"
 requests = "==2.32.3"
 requests-cache = "==1.2.1"
 requests-oauthlib = {version="==2.0.0", python_version=">='3.4'"}
-rich = "==13.8.1"
+rich = "==13.9.0"
 six = {version="==1.16.0", python_version=">='3.4'"}
 tqdm = "==4.66.5"
 typing-extensions = {version="==4.12.2", python_version=">= '3.8'"}
