@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-apluggy = "==0.9.4"
+apluggy = "==1.0.2"
 attrs = "==24.2.0"
 cattrs = {version="==24.1.2", python_version=">='3.7'"}
 certifi = "==2024.8.30"

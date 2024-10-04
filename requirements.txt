@@ -1,11 +1,11 @@
 -i https://pypi.org/simple
-apluggy==0.9.4
+apluggy==1.0.2; python_version >= '3.9'
 attrs==24.2.0; python_version >= '3.7'
 cattrs==24.1.2; python_version >= '3.8'
 certifi==2024.8.30; python_version >= '3.6'
 charset-normalizer==3.3.2; python_full_version >= '3.7.0'
 click==8.1.7
-decorator==5.1.1
+decorator==5.1.1; python_version >= '3.5'
 deprecated==1.2.14
 exceptiongroup==1.2.2; python_version >= '3.7'
 humanize==4.10.0; python_version >= '3.8'
@@ -17,7 +17,7 @@ oauthlib==3.2.2
 pfzy==0.3.4; python_version >= '3.7' and python_version < '4.0'
 platformdirs==4.3.6; python_version >= '3.8'
 plexapi==4.15.16; python_version >= '3.8'
-pluggy==1.5.0
+pluggy==1.5.0; python_version >= '3.8'
 prompt-toolkit==3.0.48; python_full_version >= '3.7.0'
 pygments==2.18.0; python_version >= '3.8'
 python-dotenv==1.0.1
