@@ -213,7 +213,7 @@ Once installed (or if already installed):
 - Go to the Plugins tab, click on "User Scripts", and click the "Add New Script" button
 - Name your script accordingly
 - Click the "gear" icon next to the script name, and click "Edit Script"
-- Below the "#!/bin/bash" line add:
+- Remove the "#!/bin/bash" line and add:
 
 ```
 #!/bin/bash
