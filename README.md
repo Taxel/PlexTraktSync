@@ -213,7 +213,23 @@ Once installed (or if already installed):
 - Go to the Plugins tab, click on "User Scripts", and click the "Add New Script" button
 - Name your script accordingly
 - Click the "gear" icon next to the script name, and click "Edit Script"
-- Below the "#!/bin/bash" line add: `docker exec PlexTraktSync plextraksync sync`
+- Remove the "#!/bin/bash" line and add:
+
+```
+#!/bin/bash
+
+# Check if the container is running
+if [ "$(docker ps -q -f name=PlexTraktSync)" ]; then
+    echo "PlexTraktSync container is already running."
+else
+    echo "PlexTraktSync container is not running. Starting it now..."
+    docker start PlexTraktSync
+fi
+
+# Run the sync command inside the container
+docker exec PlexTraktSync plextraksync sync
+```
+
 - The format of the script needs to be docker calling your container name (if you changed it from the default, ie to something like plex-trakt-sync), then issuing the command to sync.
 - Click "Save Changes"
 - Set the schedule accordingly using the dropdown menu next to the "Run in Background" button
