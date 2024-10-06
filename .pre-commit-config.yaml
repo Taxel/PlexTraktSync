@@ -3,7 +3,7 @@
 # To update dependencies here, run 'pre-commit autoupdate'
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-yaml
       - id: check-json
@@ -15,7 +15,7 @@ repos:
       - id: destroyed-symlinks
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.3
+    rev: v0.6.9
     hooks:
       - id: ruff
         args: [ --fix ]
@@ -28,7 +28,7 @@ repos:
 
     # https://pypi.org/project/validate-pyproject/
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.19
+    rev: v0.20.2
     hooks:
       - id: validate-pyproject
         # Optional extra validations from SchemaStore:
