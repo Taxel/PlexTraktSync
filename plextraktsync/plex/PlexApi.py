@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from functools import cached_property
+from functools import cache, cached_property
 from typing import TYPE_CHECKING
 
 import plexapi
@@ -10,7 +10,6 @@ from plexapi.myplex import MyPlexAccount
 from plexapi.server import SystemAccount, SystemDevice
 
 from plextraktsync.decorators.flatten import flatten_dict, flatten_list
-from plextraktsync.decorators.memoize import memoize
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory, logging
 from plextraktsync.plex.PlexId import PlexId
@@ -162,11 +161,11 @@ class PlexApi:
 
             yield section.key, PlexLibrarySection(section, plex=self)
 
-    @memoize
+    @cache
     def system_device(self, device_id: int) -> SystemDevice:
         return self.server.systemDevice(device_id)
 
-    @memoize
+    @cache
     def system_account(self, account_id: int) -> SystemAccount:
         return self.server.systemAccount(account_id)
 

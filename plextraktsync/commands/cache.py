@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING
 from plextraktsync.factory import factory
 
 if TYPE_CHECKING:
-    from typing import Any, Generator
+    from collections.abc import Generator
+    from typing import Any
 
     from requests_cache import CachedRequest, CachedSession
 
@@ -42,12 +43,7 @@ def render_xml(data):
         return None
 
     root = ElementTree.fromstring(data)
-    import contextlib
-
-    with contextlib.suppress(AttributeError):
-        # requires python 3.9
-        # https://stackoverflow.com/a/39482716/2314626
-        ElementTree.indent(root)
+    ElementTree.indent(root)
 
     return ElementTree.tostring(root, encoding="utf8").decode("utf8")
 

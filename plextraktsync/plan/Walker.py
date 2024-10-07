@@ -12,7 +12,8 @@ from plextraktsync.trakt.TraktApi import TraktApi
 from plextraktsync.trakt.TraktItem import TraktItem
 
 if TYPE_CHECKING:
-    from typing import Any, AsyncGenerator, AsyncIterable, Generator, Iterable
+    from collections.abc import AsyncGenerator, AsyncIterable, Generator, Iterable
+    from typing import Any
 
     from plexapi.video import Episode
 
