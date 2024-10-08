@@ -77,14 +77,17 @@ def choose_managed_user(account: MyPlexAccount):
     print(success("Managed user(s) found:"))
     users = sorted(users)
     users.insert(0, account.username)
-    user = inquirer.select(
-        message="Select the user you would like to use:",
-        choices=users,
-        default=None,
-        style=style,
-        qmark="",
-        pointer=">",
-    ).execute()
+    # user = inquirer.select(
+    #     message="Select the user you would like to use:",
+    #     choices=users,
+    #     default=None,
+    #     style=style,
+    #     qmark="",
+    #     pointer=">",
+    # ).execute()
+    # Prompt.choices()
+    user = Prompt.ask("Select the user you would like to use:",
+                      choices=users, default=None)
 
     if user == account.username:
         return None
@@ -106,7 +109,8 @@ def format_server(s):
     for c in s.connections:
         lines.append(f"    {c.uri}")
 
-    return Choice(value=s.name, name="\n    ".join(lines))
+    # return Choice(value=s.name, name="\n    ".join(lines))
+    return f"  {s.name}" + "\n    ".join(lines)
 
 
 def prompt_server(servers: list[MyPlexResource]):
@@ -116,22 +120,27 @@ def prompt_server(servers: list[MyPlexResource]):
 
     server_names = []
     if owned_servers:
-        server_names.append(Separator("Owned servers"))
+        # server_names.append(Separator("Owned servers"))
         for s in sorter(owned_servers):
             server_names.append(format_server(s))
     if unowned_servers:
-        server_names.append(Separator("Unowned servers"))
+        # server_names.append(Separator("Unowned servers"))
         for s in sorter(unowned_servers):
             server_names.append(format_server(s))
 
     print()
-    return inquirer.select(
-        message="Select default server:",
-        choices=server_names,
-        default=None,
-        qmark="",
-        pointer=">",
-    ).execute()
+    # return inquirer.select(
+    #     message="Select default server:",
+    #     choices=server_names,
+    #     default=None,
+    #     qmark="",
+    #     pointer=">",
+    # ).execute()
+
+    server = Prompt.ask("Select default server:",
+                      choices=server_names, default=None)
+    Prompt.choices
+    return server
 
 
 def pick_server(account: MyPlexAccount) -> MyPlexResource | None:
