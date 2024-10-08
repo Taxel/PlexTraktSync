@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+      <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+  </head>
+  <body>
+    Pyodide test page <br>
+    Open your browser console to see Pyodide output
+    <script type="text/javascript">
+      async function main(){
+        const pyodide = await loadPyodide();
+        window.p = pyodide
+        await pyodide.loadPackage("certifi");
+        await pyodide.loadPackage("urllib3");
+        pyodide.runPython(`
+
+        def main():
+          import certifi
+          import urllib3
+          resp = urllib3.request("GET", "https://api.trakt.tv/users/me")
+
+          print(resp.status)  # 200
+          print(resp.headers) # HTTPHeaderDict(...)
+          print(resp.data)    # ...
+
+        main()
+        `)
+
+      }
+      main();
+    </script>
+  </body>
+</html>
