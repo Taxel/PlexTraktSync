@@ -8,6 +8,7 @@ cache_dir = p.cache_dir
 config_dir = p.config_dir
 log_dir = p.log_dir
 
+module_path = p.module_path
 default_config_file = p.default_config_file
 config_file = p.config_file
 config_yml = p.config_yml
