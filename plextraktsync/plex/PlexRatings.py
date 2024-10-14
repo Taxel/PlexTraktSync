@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+from functools import cache
 from typing import TYPE_CHECKING
 
 from plextraktsync.decorators.flatten import flatten_dict
-from plextraktsync.decorators.memoize import memoize
 from plextraktsync.util.Rating import Rating
 
 if TYPE_CHECKING:
@@ -34,7 +34,7 @@ class PlexRatings:
         return ratings.get(m.item.ratingKey, None)
 
     @staticmethod
-    @memoize
+    @cache
     @flatten_dict
     def ratings(section: PlexLibrarySection, media_type: str):
         key = {
