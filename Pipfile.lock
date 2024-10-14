@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6bee996275c3ed58c2e8e7cfcb7adf045c4e4debd00ae9335a08cfc2523f8b65"
+            "sha256": "84896d66344554f736320f13b156f07818716b324c43219ca6aa1107ace74b90"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,11 +18,12 @@
     "default": {
         "apluggy": {
             "hashes": [
-                "sha256:ecfcd7cad1c484281cd528281104c53657297f8ab8e723f26c2f396a407c8d0c",
-                "sha256:fe66316ce1cdd9d7c406bd39582c267df5d6cf70b701bdbe9523d5efecd45308"
+                "sha256:29d8918a5afbc931b3845149a3973630ec086e718a43ea26618b2dea6a2dd448",
+                "sha256:7b895d0e942a2211e7916bb6de9673a3a131a70fedb172f9b7781643c212075c"
             ],
             "index": "pypi",
-            "version": "==0.9.4"
+            "markers": "python_version >= '3.9'",
+            "version": "==1.0.3"
         },
         "attrs": {
             "hashes": [
@@ -177,6 +178,7 @@
                 "sha256:b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.5'",
             "version": "==5.1.1"
         },
         "deprecated": {
@@ -279,6 +281,7 @@
                 "sha256:44e1ad92c8ca002de6377e165f3e0f1be63266ab4d554740532335b9d75ea669"
             ],
             "index": "pypi",
+            "markers": "python_version >= '3.8'",
             "version": "==1.5.0"
         },
         "prompt-toolkit": {
