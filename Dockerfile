@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1.3-labs
-ARG PYTHON_VERSION=3.12
-FROM python:3.12-alpine3.19 AS base
+ARG PYTHON_VERSION=3.13
+FROM python:$PYTHON_VERSION-alpine3.19 AS base
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_ROOT_USER_ACTION=ignore
 WORKDIR /app
 
