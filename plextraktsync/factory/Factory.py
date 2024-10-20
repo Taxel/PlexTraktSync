@@ -141,6 +141,9 @@ class Factory:
             pass
 
         return CachedSession(
+            # niquests
+            multiplexed=True,
+            # requests-cache
             cache_name=self.config.cache_path,
             cache_control=True,
             urls_expire_after=self.urls_expire_after,
