@@ -10,7 +10,7 @@ jobs:
   renovate:
     runs-on: ubuntu-latest
     steps:
-      - uses: docker://renovate/renovate:35.62
+      - uses: docker://ghcr.io/renovatebot/renovate:38.114.0
         with:
           args: renovate "${{ github.repository }}"
         env:
