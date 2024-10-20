@@ -16,6 +16,7 @@ jobs:
         with:
           renovate-version: 38.114.0
           token: ${{ secrets.GITHUB_TOKEN }}
+          configurationFile: renovate.json5
         env:
           LOG_LEVEL: debug
 
