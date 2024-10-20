@@ -14,6 +14,8 @@ jobs:
         with:
           args: renovate "${{ github.repository }}"
         env:
+          GITHUB_COM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RENOVATE_BASE_DIR: ${{ github.workspace }}/renovate
           RENOVATE_GIT_AUTHOR: Renovate Bot <plextraktsync+renovate-bot@github.com>
           RENOVATE_OPTIMIZE_FOR_DISABLED: "true"
