@@ -141,6 +141,9 @@ class Factory:
             pass
 
         return CachedSession(
+            # niquests
+            multiplexed=True,
+            # requests-cache
             cache_name=self.config.cache_path,
             # Plex sends "Cache-Control: no-cache" headers to requests we want to cache
             cache_control=False,
