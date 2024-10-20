@@ -4,6 +4,7 @@ on:
     # The "*" (#42, asterisk) character has special semantics in YAML, so this
     # string has to be quoted.
     - cron: '42 3 * * *'
+  pull_request:
 
 jobs:
   renovate:
