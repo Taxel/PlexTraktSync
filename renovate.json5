@@ -2,7 +2,7 @@
   branchPrefix: "renovate-bot/",
   username: "renovate-release",
   gitAuthor: "Renovate Bot <bot+plextraktsync@renovateapp.com>",
-  onboarding: false,
+  onboarding: true,
   platform: "github",
   forkProcessing: "enabled",
   dryRun: "full",
