@@ -19,7 +19,7 @@
         "lockFileMaintenance",
       ],
       dependencyDashboardApproval: false,
-      minimumReleaseAge: 0,
+      minimumReleaseAge: "3",
     },
   ],
 }
