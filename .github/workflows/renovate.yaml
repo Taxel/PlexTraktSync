@@ -20,6 +20,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           configurationFile: renovate.json5
         env:
+          RENOVATE_REPOSITORIES: '["${{ github.repository }}"]'
           LOG_LEVEL: debug
 
 # vim:ts=2:sw=2:et

@@ -6,7 +6,6 @@
   onboarding: true,
   platform: "github",
   forkProcessing: "enabled",
-  repositories: ["Taxel/PlexTraktSync"],
   packageRules: [
     {
       description: "lockFileMaintenance",
