@@ -6,7 +6,6 @@
   onboarding: true,
   platform: "github",
   forkProcessing: "enabled",
-  dryRun: "full",
   repositories: ["Taxel/PlexTraktSync"],
   packageRules: [
     {
