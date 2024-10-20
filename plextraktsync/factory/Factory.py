@@ -133,7 +133,11 @@ class Factory:
 
     @cached_property
     def session(self):
-        from requests_cache import CachedSession
+        # https://niquests.readthedocs.io/en/latest/community/recommended.html#requests-cache
+        import niquests
+        import requests_cache
+
+        class CachedSession(requests_cache.session.CacheMixin, niquests.Session): ...
 
         return CachedSession(
             cache_name=self.config.cache_path,
