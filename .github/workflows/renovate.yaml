@@ -9,13 +9,14 @@ jobs:
   renovate:
     runs-on: ubuntu-latest
     steps:
-      - uses: docker://code.icb4dc0.de/prskr/ci-images/renovate:latest
+      - uses: docker://renovate/renovate:35.62
         with:
           args: renovate "${{ github.repository }}"
         env:
-          RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
-          GITHUB_COM_TOKEN: ${{ secrets.RENOVATE_GITHUB_TOKEN }}
-          RENOVATE_PLATFORM: gitea
-          RENOVATE_AUTODISCOVER: "false"
-          RENOVATE_ENDPOINT: https://code.icb4dc0.de/api/v1
-          LOG_LEVEL: info
+          RENOVATE_BASE_DIR: ${{ github.workspace }}/renovate
+          RENOVATE_GIT_AUTHOR: Renovate Bot <plextraktsync+renovate-bot@github.com>
+          RENOVATE_OPTIMIZE_FOR_DISABLED: "true"
+          RENOVATE_REPOSITORY_CACHE: "enabled"
+          LOG_LEVEL: debug
+
+# vim:ts=2:sw=2:et
