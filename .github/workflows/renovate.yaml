@@ -7,19 +7,14 @@ on:
   pull_request:
 
 jobs:
+
   renovate:
     runs-on: ubuntu-latest
     steps:
-      - uses: docker://ghcr.io/renovatebot/renovate:38.114.0
+      - name: Self-hosted Renovate
+        uses: renovatebot/github-action@v40.3.4
         with:
-          args: renovate "${{ github.repository }}"
-        env:
-          GITHUB_COM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RENOVATE_BASE_DIR: ${{ github.workspace }}/renovate
-          RENOVATE_GIT_AUTHOR: Renovate Bot <plextraktsync+renovate-bot@github.com>
-          RENOVATE_OPTIMIZE_FOR_DISABLED: "true"
-          RENOVATE_REPOSITORY_CACHE: "enabled"
-          LOG_LEVEL: debug
+          renovate-version: 38.114.0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
 # vim:ts=2:sw=2:et
