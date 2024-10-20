@@ -16,5 +16,7 @@ jobs:
         with:
           renovate-version: 38.114.0
           token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          LOG_LEVEL: debug
 
 # vim:ts=2:sw=2:et
