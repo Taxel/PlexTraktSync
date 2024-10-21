@@ -227,7 +227,7 @@ else
 fi
 
 # Run the sync command inside the container
-docker exec PlexTraktSync plextraksync sync
+docker exec PlexTraktSync plextraktsync sync
 ```
 
 - The format of the script needs to be docker calling your container name (if you changed it from the default, ie to something like plex-trakt-sync), then issuing the command to sync.
