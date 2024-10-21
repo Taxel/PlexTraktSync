@@ -141,14 +141,16 @@ class Factory:
             pass
 
         return CachedSession(
+            keepalive_delay=10,
+            keepalive_idle_window=3.0,
             # niquests
             # resolver="doh+google://",
             # multiplexed=True,
             multiplexed=False,
             disable_ipv6=True,
             # disable_http1=True,
-            disable_http2=True,
-            disable_http3=True,
+            # disable_http2=True,
+            # disable_http3=True,
             happy_eyeballs=False,
             # requests-cache
             cache_name=self.config.cache_path,
