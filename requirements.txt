@@ -13,7 +13,8 @@ idna==3.10; python_version >= '3.6'
 inquirerpy==0.3.4
 markdown-it-py==3.0.0; python_version >= '3.7' and python_version >= '3.8'
 mdurl==0.1.2; python_version >= '3.7'
-oauthlib==3.2.2
+niquests==3.9.1; python_version >= '3.7'
+oauthlib==3.2.2; python_version >= '3.6'
 pfzy==0.3.4; python_version >= '3.7' and python_version < '4.0'
 platformdirs==4.3.6; python_version >= '3.8'
 plexapi==4.15.16; python_version >= '3.8'

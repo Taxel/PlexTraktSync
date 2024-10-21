@@ -133,9 +133,26 @@ class Factory:
 
     @cached_property
     def session(self):
-        from requests_cache import CachedSession
+        # https://niquests.readthedocs.io/en/latest/community/recommended.html#requests-cache
+        from niquests import Session
+        from requests_cache import CacheMixin
+
+        class CachedSession(CacheMixin, Session):
+            pass
 
         return CachedSession(
+            keepalive_delay=10,
+            keepalive_idle_window=3.0,
+            # niquests
+            # resolver="doh+google://",
+            # multiplexed=True,
+            multiplexed=False,
+            disable_ipv6=True,
+            # disable_http1=True,
+            # disable_http2=True,
+            # disable_http3=True,
+            happy_eyeballs=False,
+            # requests-cache
             cache_name=self.config.cache_path,
             cache_control=True,
             urls_expire_after=self.urls_expire_after,
