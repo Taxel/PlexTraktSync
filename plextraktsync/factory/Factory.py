@@ -142,13 +142,7 @@ class Factory:
 
         return CachedSession(
             # niquests
-            resolver="doh+google://",
-            multiplexed=False,
-            disable_ipv6=True,
-            # disable_http1=True,
-            disable_http2=True,
-            disable_http3=True,
-            happy_eyeballs=False,
+            multiplexed=True,
             # requests-cache
             cache_name=self.config.cache_path,
             cache_control=True,
