@@ -8,20 +8,21 @@ verify_ssl = true
 [packages]
 apluggy = "==1.0.3"
 attrs = "==24.2.0"
-cattrs = {version="==24.1.2", python_version=">='3.7'"}
+cattrs = "==24.1.2"
 certifi = "==2024.8.30"
 charset-normalizer = "==3.4.0"
 click = "==8.1.7"
 decorator = "==5.1.1"
 deprecated = "==1.2.14"
+exceptiongroup = {version="==1.2.2", python_version="<'3.11'"}
 humanize = "==4.11.0"
-idna = {version="==3.10", python_version=">='3.5'"}
+idna = "==3.10"
 inquirerpy = "==0.3.4"
-markdown-it-py = {version="==3.0.0", python_version=">='3.7'"}
-mdurl = {version="==0.1.2", python_version=">='3.7'"}
+markdown-it-py = "==3.0.0"
+mdurl = "==0.1.2"
 oauthlib = "==3.2.2"
-pfzy = {version="==0.3.4", markers="python_version >= '3.7' and python_version < '4.0'"}
-platformdirs = {version="==4.3.6", python_version=">='3.7'"}
+pfzy = "==0.3.4"
+platformdirs = "==4.3.6"
 plexapi = "==4.15.16"
 pluggy = "==1.5.0"
 prompt-toolkit = "==3.0.48"
@@ -33,16 +34,17 @@ pytrakt = "==3.4.32"
 pyyaml = "==6.0.2"
 requests = "==2.32.3"
 requests-cache = "==1.2.1"
-requests-oauthlib = {version="==2.0.0", python_version=">='3.4'"}
+requests-oauthlib = "==2.0.0"
 rich = "==13.9.2"
-six = {version="==1.16.0", python_version=">='3.4'"}
+six = "==1.16.0"
 tqdm = "==4.66.5"
-typing-extensions = {version="==4.12.2", python_version=">= '3.8'"}
-url-normalize = {version="==1.4.3", python_version=">='3.6'"}
+types-decorator = "==5.1.8.20240310"
+typing-extensions = "==4.12.2"
+url-normalize = "==1.4.3"
 urllib3 = "==2.2.3"
 wcwidth = "==0.2.13"
 websocket-client = "==1.8.0"
-wrapt = {version="==1.16.0", python_version=">='3.5'"}
+wrapt = "==1.16.0"
 
 [requires]
 python_version = "3"
