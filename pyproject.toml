@@ -51,6 +51,7 @@ packages = [
     "plextraktsync.logger",
     "plextraktsync.media",
     "plextraktsync.mixin",
+    "plextraktsync.factory",
     "plextraktsync.plan",
     "plextraktsync.plex",
     "plextraktsync.plugin",
