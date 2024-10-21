@@ -44,6 +44,7 @@ urllib3 = "==2.2.3"
 wcwidth = "==0.2.13"
 websocket-client = "==1.8.0"
 wrapt = {version="==1.16.0", python_version=">='3.5'"}
+urllib3-future = "==2.11.901"
 
 [requires]
 python_version = "3"
