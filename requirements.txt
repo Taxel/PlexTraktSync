@@ -12,11 +12,11 @@ h11==0.14.0
 humanize==4.11.0
 idna==3.10
 inquirerpy==0.3.4
-jh2==5.0.3
+jh2==5.0.4
 kiss-headers==2.4.3
 markdown-it-py==3.0.0; python_version >= '3.8'
 mdurl==0.1.2; python_version >= '3.7'
-niquests==3.10.1
+niquests==3.10.2
 oauthlib==3.2.2
 pfzy==0.3.4
 platformdirs==4.3.6
@@ -40,8 +40,8 @@ types-decorator==5.1.8.20240310
 typing-extensions==4.12.2
 url-normalize==1.4.3
 urllib3==2.2.3
-urllib3-future==2.11.902
-wassima==1.1.4
+urllib3-future==2.11.910
+wassima==1.1.5
 wcwidth==0.2.13
 websocket-client==1.8.0
 wrapt==1.16.0
