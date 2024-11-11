@@ -51,7 +51,15 @@ class TraktUserList:
 
     @staticmethod
     def build_dict(pl: PublicList):
-        return {(f"{le.type}s", le.trakt): le.rank for le in pl if le.type in ["movie", "episode"]}
+        items = {}
+        for le in pl:
+            if le.type in ["movie", "episode"]:
+                items[(f"{le.type}s", le.trakt)] = le.rank
+            elif le.type == "season" and len(le.item.episodes) > 0:
+                episode_rank = 1 / len(le.item.episodes)
+                for idx, episode in enumerate(le.item.episodes):
+                    items[("episodes", episode.trakt)] = le.rank + (idx * episode_rank)
+        return items
 
     def load_items(self):
         pl = PublicList.load(self.trakt_id)
