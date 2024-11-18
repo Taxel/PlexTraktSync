@@ -51,7 +51,24 @@ class TraktUserList:
 
     @staticmethod
     def build_dict(pl: PublicList):
-        return {(f"{le.type}s", le.trakt): le.rank for le in pl if le.type in ["movie", "episode"]}
+        items = {}
+        for le in pl:
+            if le.type in ["movie", "episode"]:
+                items[(f"{le.type}s", le.trakt)] = le.rank
+            elif le.type == "season" and len(le.item.episodes) > 0:
+                # Here instead of modifying the ranks of all the items that come after the season,
+                # we just assigns float ranks to the episodes based on the season rank.
+                # Instead of having some hard coded value, we calculate the rank increment based on the number of episodes.
+                # So, in the sorting step, the episodes will be sorted based on the season rank and their position in the season.
+                # Example: season rank = 10, number of episodes = 5,
+                # episode_rank = 1 / 5 = 0.2
+                # episode 1 rank = 10 + (0 * 0.2) = 10.0
+                # episode 2 rank = 10 + (1 * 0.2) = 10.2
+                # episode 5 rank = 10 + (4 * 0.2) = 10.8
+                episode_rank = 1 / len(le.item.episodes)
+                for idx, episode in enumerate(le.item.episodes):
+                    items[("episodes", episode.trakt)] = le.rank + (idx * episode_rank)
+        return items
 
     def load_items(self):
         pl = PublicList.load(self.trakt_id)
