@@ -307,6 +307,14 @@ def download():
     """
 
 
+@click.group()
+def launchctl():
+    """
+    Installs launchctl wrapper
+    """
+    pass
+
+
 @command()
 @click.option(
     "--pr",
@@ -363,6 +371,12 @@ def config():
     """
 
 
+def launchctl_available():
+    import shutil
+
+    return shutil.which("launchctl") is not None
+
+
 cli.add_command(bug_report)
 cli.add_command(cache)
 cli.add_command(clear_collections)
@@ -372,6 +386,12 @@ cli.add_command(download)
 cli.add_command(imdb_import)
 cli.add_command(info)
 cli.add_command(inspect)
+if launchctl_available():
+    cli.add_command(launchctl)
+    from .commands.launchctl import load, unload
+
+    launchctl.add_command(load)
+    launchctl.add_command(unload)
 cli.add_command(login)
 cli.add_command(plex_login)
 if factory.enable_self_update:
