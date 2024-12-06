@@ -7,7 +7,6 @@ from plexapi.server import PlexServer
 from requests.exceptions import ConnectionError, SSLError
 
 from plextraktsync.config import PLEX_PLATFORM
-from plextraktsync.decorators.nocache import nocache
 from plextraktsync.factory import Factory, logging
 
 
@@ -29,7 +28,6 @@ class PlexServerConnection:
     def session(self):
         return self.factory.session
 
-    @nocache
     def connect(self, urls: list[str], token: str):
         plexapi.X_PLEX_PLATFORM = PLEX_PLATFORM
         plexapi.TIMEOUT = self.timeout
