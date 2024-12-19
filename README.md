@@ -221,6 +221,7 @@ Once installed (or if already installed):
 # Check if the container is running
 if [ "$(docker ps -q -f name=PlexTraktSync)" ]; then
     echo "PlexTraktSync container is already running."
+    exit 1
 else
     echo "PlexTraktSync container is not running. Starting it now..."
     docker start PlexTraktSync
