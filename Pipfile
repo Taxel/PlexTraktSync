@@ -11,7 +11,7 @@ attrs = "==24.3.0"
 cattrs = "==24.1.2"
 certifi = "==2024.12.14"
 charset-normalizer = "==3.4.0"
-click = "==8.1.7"
+click = "==8.1.8"
 decorator = "==5.1.1"
 deprecated = "==1.2.15"
 exceptiongroup = {version="==1.2.2", python_version="<'3.11'"}
