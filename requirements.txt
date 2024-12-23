@@ -34,7 +34,7 @@ tqdm==4.67.1; python_version >= '3.7'
 types-decorator==5.1.8.20240310
 typing-extensions==4.12.2
 url-normalize==1.4.3
-urllib3==2.2.3; python_version >= '3.8'
+urllib3==2.3.0; python_version >= '3.9'
 wcwidth==0.2.13
 websocket-client==1.8.0
 wrapt==1.17.0; python_version >= '3.8'
