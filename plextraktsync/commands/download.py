@@ -4,7 +4,7 @@ from os.path import exists
 from pathlib import Path, PureWindowsPath
 from typing import TYPE_CHECKING
 
-from plextraktsync.factory import factory
+from plextraktsync.factory import factory, logger
 from plextraktsync.util.expand_id import expand_plexid
 
 if TYPE_CHECKING:
@@ -48,7 +48,7 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem, savepath: Path):
             continue
 
         if not sub.key:
-            print(f"  ERROR: Subtitle {index}: has no key: Not downloadable")
+            logger.error(f"Subtitle {index}: has no key: Not downloadable")
             continue
 
         plex.download(sub, savepath=savepath, filename=filename, showstatus=True)
