@@ -4,6 +4,8 @@ from os.path import exists
 from pathlib import Path, PureWindowsPath
 from typing import TYPE_CHECKING
 
+from plexapi.exceptions import NotFound
+
 from plextraktsync.factory import factory, logger
 from plextraktsync.util.expand_id import expand_plexid
 
@@ -51,7 +53,11 @@ def download_subtitles(plex: PlexApi, pm: PlexLibraryItem, savepath: Path):
             logger.error(f"Subtitle {index}: has no key: Not downloadable")
             continue
 
-        plex.download(sub, savepath=savepath, filename=filename, showstatus=True)
+        try:
+            plex.download(sub, savepath=savepath, filename=filename, showstatus=True)
+        except NotFound:
+            logger.error(f"Subtitle {index}: File doesn't exist: Not downloadable")
+            continue
         print(f"Downloaded: {filename}")
 
 
