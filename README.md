@@ -260,7 +260,7 @@ Installing from GitHub is considered developer mode, and it's documented in
   > If you are not able to run a docker container from commandline, like on a Synology NAS,
   > run an instance of plextraktsync on a different device to create the necesary `.env`, `.pytrakt.json` and `servers.yml` files.
   > Move them to the mapped `/app/config` folder and rebuild the container.
-  
+
 - At first run you will be asked to setup Trakt and Plex access.
 
   Follow the instructions, your credentials and API keys will be stored in
