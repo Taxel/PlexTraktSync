@@ -10,6 +10,19 @@ class Rating(NamedTuple):
     rating: int
     rated_at: datetime | None
 
+    RATING_TITLES = {
+        1: "Weak Sauce :(",
+        2: "Terrible",
+        3: "Bad",
+        4: "Poor",
+        5: "Meh",
+        6: "Fair",
+        7: "Good",
+        8: "Great",
+        9: "Superb",
+        10: "Totally Ninja!",
+    }
+
     def __eq__(self, other):
         """Ratings are equal if their rating value is the same"""
         if isinstance(other, (int, float)):
