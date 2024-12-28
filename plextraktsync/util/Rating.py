@@ -33,6 +33,10 @@ class Rating(NamedTuple):
 
         return self.rating == other.rating
 
+    @property
+    def title(self):
+        return self.RATING_TITLES[self.rating]
+
     def __str__(self):
         rated_at = f"'{timestamp(self.rated_at)}'" if self.rated_at else None
         return f"Rating(rating={self.rating}, rated_at={rated_at})"
