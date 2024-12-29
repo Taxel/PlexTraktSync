@@ -28,6 +28,22 @@ def command():
                 cmd(*args, **kwargs)
             except EOFError as e:
                 raise ClickException(f"Program requested terminal, No terminal is connected: {e}")
+            except KeyboardInterrupt:
+                # from plextraktsync.factory import logging
+                # logger = logging.getLogger(__name__)
+                # logger.error(e)
+                #
+                import asyncio
+
+                try:
+                    loop = asyncio.get_event_loop()
+                    loop.stop()
+                    loop.close()
+                except RuntimeError:
+                    pass
+
+                # raise ClickException(f"Interrupted! [{e}]") from None
+                raise ClickException("Interrupted!")
             except ClickException as e:
                 from plextraktsync.factory import logging
 
