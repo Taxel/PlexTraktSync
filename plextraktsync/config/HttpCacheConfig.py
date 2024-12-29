@@ -37,9 +37,9 @@ class HttpCacheConfig:
         "api.trakt.tv/users/*/collection/movies?extended=metadata": "10s",
         "api.trakt.tv/users/*/collection/movies": DO_NOT_CACHE,
         "api.trakt.tv/users/*/collection/shows": "1m",
-        "api.trakt.tv/users/*/ratings/episodes": "1m",
-        "api.trakt.tv/users/*/ratings/shows": "1m",
-        "api.trakt.tv/users/*/ratings/movies": "1m",
+        "api.trakt.tv/users/*/ratings/episodes": "10s",
+        "api.trakt.tv/users/*/ratings/shows": "10s",
+        "api.trakt.tv/users/*/ratings/movies": "10s",
         # Trakt search urls
         "api.trakt.tv/search/imdb/tt*?type=movie": "1d",
         "api.trakt.tv/search/imdb/tt*?type=show": "1d",
