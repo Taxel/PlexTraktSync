@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from plextraktsync.plex.PlexGuidProviderIMDB import PlexGuidProviderIMDB
-from plextraktsync.plex.PlexGuidProviderLocal import PlexGuidProviderLocal
-from plextraktsync.plex.PlexGuidProviderMbid import PlexGuidProviderMbid
-from plextraktsync.plex.PlexGuidProviderTMDB import PlexGuidProviderTMDB
-from plextraktsync.plex.PlexGuidProviderTVDB import PlexGuidProviderTVDB
-from plextraktsync.plex.PlexGuidProviderYoutube import PlexGuidProviderYoutube
+from .PlexGuidProviderIMDB import PlexGuidProviderIMDB
+from .PlexGuidProviderLocal import PlexGuidProviderLocal
+from .PlexGuidProviderMbid import PlexGuidProviderMbid
+from .PlexGuidProviderTMDB import PlexGuidProviderTMDB
+from .PlexGuidProviderTVDB import PlexGuidProviderTVDB
+from .PlexGuidProviderYoutube import PlexGuidProviderYoutube
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexGuid import PlexGuid
