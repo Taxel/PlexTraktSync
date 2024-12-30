@@ -54,6 +54,8 @@ packages = [
     "plextraktsync.factory",
     "plextraktsync.plan",
     "plextraktsync.plex",
+    "plextraktsync.plex.guid",
+    "plextraktsync.plex.guid.provider",
     "plextraktsync.plugin",
     "plextraktsync.queue",
     "plextraktsync.rich",
