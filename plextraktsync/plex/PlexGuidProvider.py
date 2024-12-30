@@ -7,6 +7,7 @@ from plextraktsync.plex.PlexGuidProviderLocal import PlexGuidProviderLocal
 from plextraktsync.plex.PlexGuidProviderMbid import PlexGuidProviderMbid
 from plextraktsync.plex.PlexGuidProviderTMDB import PlexGuidProviderTMDB
 from plextraktsync.plex.PlexGuidProviderTVDB import PlexGuidProviderTVDB
+from plextraktsync.plex.PlexGuidProviderYoutube import PlexGuidProviderYoutube
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexGuid import PlexGuid
@@ -23,6 +24,8 @@ class PlexGuidProvider:
             return PlexGuidProviderTVDB(guid)
         if guid.provider == "mbid":
             return PlexGuidProviderMbid(guid)
+        if guid.provider == "youtube":
+            return PlexGuidProviderYoutube(guid)
         if guid.provider in ["local", "none"]:
             return PlexGuidProviderLocal(guid)
 
