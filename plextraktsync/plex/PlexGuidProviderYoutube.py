@@ -20,4 +20,4 @@ class PlexGuidProviderYoutube:
 
     @property
     def title(self):
-        return f"{self.guid.provider}:{self.guid.type}:{self.guid.id}"
+        return f"{self.guid.provider}:{self.guid.type}:{self.id}"
