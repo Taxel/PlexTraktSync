@@ -16,7 +16,7 @@ class PlexGuidProviderYoutube:
 
     @property
     def link(self):
-        return None
+        return f"https://www.youtube.com/watch?v={self.id}"
 
     @property
     def title(self):
