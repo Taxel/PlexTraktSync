@@ -6,13 +6,13 @@ if TYPE_CHECKING:
     from plextraktsync.plex.PlexGuid import PlexGuid
 
 
-class PlexGuidProviderLocal:
+class TVDB:
     def __init__(self, guid: PlexGuid):
         self.guid = guid
 
     @property
     def link(self):
-        return None
+        return f"https://www.thetvdb.com/dereferrer/{self.guid.type}/{self.guid.id}"
 
     @property
     def title(self):

@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from .PlexGuidProviderIMDB import PlexGuidProviderIMDB
-from .PlexGuidProviderLocal import PlexGuidProviderLocal
-from .PlexGuidProviderMbid import PlexGuidProviderMbid
-from .PlexGuidProviderTMDB import PlexGuidProviderTMDB
-from .PlexGuidProviderTVDB import PlexGuidProviderTVDB
-from .PlexGuidProviderYoutube import PlexGuidProviderYoutube
+from .IMDB import IMDB
+from .Local import Local
+from .Mbid import Mbid
+from .TMDB import TMDB
+from .TVDB import TVDB
+from .Youtube import Youtube
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexGuid import PlexGuid
@@ -17,16 +17,16 @@ class Factory:
     @classmethod
     def create(cls, guid: PlexGuid):
         if guid.provider == "imdb":
-            return PlexGuidProviderIMDB(guid)
+            return IMDB(guid)
         if guid.provider == "tmdb":
-            return PlexGuidProviderTMDB(guid)
+            return TMDB(guid)
         if guid.provider == "tvdb":
-            return PlexGuidProviderTVDB(guid)
+            return TVDB(guid)
         if guid.provider == "mbid":
-            return PlexGuidProviderMbid(guid)
+            return Mbid(guid)
         if guid.provider == "youtube":
-            return PlexGuidProviderYoutube(guid)
+            return Youtube(guid)
         if guid.provider in ["local", "none"]:
-            return PlexGuidProviderLocal(guid)
+            return Local(guid)
 
         raise RuntimeError(f"Unsupported provider: {guid.provider}")

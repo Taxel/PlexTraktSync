@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from plextraktsync.plex.PlexGuid import PlexGuid
 
 
-class PlexGuidProviderYoutube:
+class Youtube:
     def __init__(self, guid: PlexGuid):
         self.guid = guid
 

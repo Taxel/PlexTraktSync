@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from plextraktsync.plex.PlexGuid import PlexGuid
 
 
-class PlexGuidProviderTMDB:
+class TMDB:
     url = "https://www.themoviedb.org"
 
     def __init__(self, guid: PlexGuid):
