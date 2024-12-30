@@ -11,6 +11,10 @@ class PlexGuidProviderYoutube:
         self.guid = guid
 
     @property
+    def id(self):
+        return self.guid.id.split("|")[1]
+
+    @property
     def link(self):
         return None
 
