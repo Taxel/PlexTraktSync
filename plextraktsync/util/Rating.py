@@ -11,6 +11,7 @@ class Rating(NamedTuple):
     rated_at: datetime | None
 
     RATING_TITLES = {
+        0: "Not Rated",
         1: "Weak Sauce :(",
         2: "Terrible",
         3: "Bad",
