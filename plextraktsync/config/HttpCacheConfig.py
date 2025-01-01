@@ -74,6 +74,8 @@ class HttpCacheConfig:
         # Cache for some time, this activates 304 responses
         "plex.tv/users/account": "1m",
         "plex.tv/api/v2/user": "15m",
+        # plex-login command
+        "plex.tv/api/v2/resources?includeHttps=1&includeRelay=1": "1m",
         # Plex patterns
         # Ratings search
         "*/library/sections/*/all?*userRating*=-1*": "10s",
