@@ -76,7 +76,7 @@ class HttpCacheConfig:
         "plex.tv/api/v2/user": "15m",
         # Plex patterns
         # Ratings search
-        "*/library/sections/*/all?*userRating*=-1*": "5m",
+        "*/library/sections/*/all?*userRating*=-1*": "10s",
         # len(PlexLibrarySection)
         "*/library/sections/*/all?*X-Plex-Container-Size=0": DO_NOT_CACHE,
         # __iter__(PlexLibrarySection)
