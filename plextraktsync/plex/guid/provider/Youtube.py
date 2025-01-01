@@ -1,23 +1,19 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from functools import cached_property
 
-if TYPE_CHECKING:
-    from plextraktsync.plex.guid.PlexGuid import PlexGuid
+from .Abstract import Abstract
 
 
-class Youtube:
-    def __init__(self, guid: PlexGuid):
-        self.guid = guid
-
+class Youtube(Abstract):
     @property
     def id(self):
         return self.guid.id.split("|")[1]
 
-    @property
+    @cached_property
     def link(self):
         return f"https://www.youtube.com/watch?v={self.id}"
 
-    @property
+    @cached_property
     def title(self):
         return f"{self.guid.provider}:{self.guid.type}:{self.id}"
