@@ -190,17 +190,21 @@ def plex_login_autoconfig():
     login(username, password)
 
 
-def plex_login(username, password):
-    login(username, password)
+def plex_login(username, password, use_token: bool):
+    token = None
+    if use_token:
+        config = factory.config
+        token = config["PLEX_ACCOUNT_TOKEN"]
+
+    login(username, password, token)
 
 
-def login(username: str, password: str):
+def login(username: str, password: str, token=None):
     if factory.has_plex_token:
         if not Confirm.ask(PROMPT_PLEX_RELOGIN, default=True):
             return
 
-    config = factory.config
-    account = myplex_login(username, password, config["PLEX_ACCOUNT_TOKEN"])
+    account = myplex_login(username, password, token)
     print(
         Panel.fit(
             "Login to MyPlex was successful",
