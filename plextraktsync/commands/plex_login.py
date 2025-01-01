@@ -65,7 +65,7 @@ def myplex_login(username: str, password: str, token=None, code=None):
             password = Prompt.ask(PROMPT_PLEX_PASSWORD, password=True, default=password, show_default=False)
             code = Prompt.ask(PROMPT_PLEX_CODE)
         try:
-            return MyPlexAccount(username=username, password=password, code=code, token=token)
+            return MyPlexAccount(username=username, password=password, code=code, token=token, session=factory.session)
         except Unauthorized as e:
             if token:
                 raise e
