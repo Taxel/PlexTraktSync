@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from trakt.sync import PlaybackEntry
 from trakt.tv import TVShow
 
-from plextraktsync.mixin.RichMarkup import RichMarkup
+from plextraktsync.rich.RichMarkup import RichMarkup
 from plextraktsync.trakt.TraktLookup import TraktLookup
 
 if TYPE_CHECKING:

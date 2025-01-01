@@ -4,8 +4,8 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plextraktsync.factory import factory
-from plextraktsync.mixin.RichMarkup import RichMarkup
 from plextraktsync.plex.PlexGuidProvider import PlexGuidProvider
+from plextraktsync.rich.RichMarkup import RichMarkup
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem

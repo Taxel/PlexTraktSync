@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from plexapi.exceptions import NotFound
 
-from plextraktsync.mixin.RichMarkup import RichMarkup
+from plextraktsync.rich.RichMarkup import RichMarkup
 
 if TYPE_CHECKING:
     from typing import Literal
