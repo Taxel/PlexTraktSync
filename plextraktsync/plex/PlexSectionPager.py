@@ -22,6 +22,7 @@ class PlexSectionPager:
         return self.total_size
 
     @cached_property
+    @retry
     def total_size(self):
         return self.section.totalViewSize(libtype=self.libtype, includeCollections=False)
 
