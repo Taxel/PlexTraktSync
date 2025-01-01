@@ -10,7 +10,7 @@ from .TVDB import TVDB
 from .Youtube import Youtube
 
 if TYPE_CHECKING:
-    from plextraktsync.plex.PlexGuid import PlexGuid
+    from plextraktsync.plex.guid.PlexGuid import PlexGuid
 
 
 class Factory:

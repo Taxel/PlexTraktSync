@@ -105,7 +105,7 @@ class PlexApi:
         fetchItem(ekey, guid__id__regex=r"(imdb|tmdb|tvdb)://")
         """
 
-        from plextraktsync.plex.PlexGuid import PlexGuid
+        from plextraktsync.plex.guid.PlexGuid import PlexGuid
 
         # Build regex of possible matches
         keys = "|".join(guids.keys())

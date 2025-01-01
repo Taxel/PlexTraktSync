@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logging
 from plextraktsync.mixin.SetWindowTitle import SetWindowTitle
-from plextraktsync.plex.PlexGuid import PlexGuid
+from plextraktsync.plex.guid.PlexGuid import PlexGuid
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from plextraktsync.trakt.TraktApi import TraktApi
 from plextraktsync.trakt.TraktItem import TraktItem

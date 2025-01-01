@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from plextraktsync.factory import factory
 from plextraktsync.rich.RichMarkup import RichMarkup
 
-from .guid.provider.Factory import Factory as GuidProviderFactory
+from .provider.Factory import Factory as GuidProviderFactory
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem

@@ -4,7 +4,7 @@ from __future__ import annotations
 import pytest
 from trakt.tv import TVShow
 
-from plextraktsync.plex.PlexGuid import PlexGuid
+from plextraktsync.plex.guid.PlexGuid import PlexGuid
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
 from plextraktsync.trakt.TraktLookup import TraktLookup
 from tests.conftest import factory, make
