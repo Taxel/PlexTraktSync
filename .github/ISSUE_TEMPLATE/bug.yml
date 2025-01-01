@@ -19,7 +19,7 @@ body:
       options:
         - label: I have read the [README.md](https://github.com/Taxel/PlexTraktSync#readme) on the project homepage
           required: true
-        - label: I have checked if identical issue already exists
+        - label: I have checked if an identical issue or discussion already exists
           required: true
         - label: I have tried downgrading to find version that can be used as a workaround
 
