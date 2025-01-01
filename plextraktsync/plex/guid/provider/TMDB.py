@@ -1,27 +1,19 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from functools import cached_property
 
-if TYPE_CHECKING:
-    from plextraktsync.plex.guid.PlexGuid import PlexGuid
+from .Abstract import Abstract
 
 
-class TMDB:
+class TMDB(Abstract):
     url = "https://www.themoviedb.org"
 
-    def __init__(self, guid: PlexGuid):
-        self.guid = guid
-
-    @property
+    @cached_property
     def link(self):
         if self.guid.type == "episode":
             return f"{self.url}/tv/{self.show_guid.id}/season/{self.season_number}/episode/{self.episode_number}"
 
         return f"{self.url}/{self.type}/{self.guid.id}"
-
-    @property
-    def title(self):
-        return f"{self.guid.provider}:{self.guid.type}:{self.guid.id}"
 
     @property
     def show_guid(self):
