@@ -11,7 +11,7 @@ EPISODES_ORDERING_WARNING = "episodes ordering is different in Plex and Trakt. "
 if TYPE_CHECKING:
     from trakt.tv import TVEpisode, TVShow
 
-    from plextraktsync.plex.PlexGuid import PlexGuid
+    from plextraktsync.plex.guid.PlexGuid import PlexGuid
 
 
 class TraktLookup:

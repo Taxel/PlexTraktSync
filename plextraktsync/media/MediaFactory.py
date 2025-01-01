@@ -10,8 +10,8 @@ from plextraktsync.factory import logging
 from plextraktsync.media.Media import Media
 
 if TYPE_CHECKING:
+    from plextraktsync.plex.guid.PlexGuid import PlexGuid
     from plextraktsync.plex.PlexApi import PlexApi
-    from plextraktsync.plex.PlexGuid import PlexGuid
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
     from plextraktsync.trakt.TraktApi import TraktApi
     from plextraktsync.trakt.TraktItem import TraktItem

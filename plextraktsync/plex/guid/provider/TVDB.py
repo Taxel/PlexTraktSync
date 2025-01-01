@@ -3,16 +3,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from plextraktsync.plex.PlexGuid import PlexGuid
+    from plextraktsync.plex.guid.PlexGuid import PlexGuid
 
 
-class PlexGuidProviderIMDB:
+class TVDB:
     def __init__(self, guid: PlexGuid):
         self.guid = guid
 
     @property
     def link(self):
-        return f"https://www.imdb.com/title/{self.guid.id}/"
+        return f"https://www.thetvdb.com/dereferrer/{self.guid.type}/{self.guid.id}"
 
     @property
     def title(self):

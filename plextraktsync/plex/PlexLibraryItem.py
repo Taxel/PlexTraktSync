@@ -8,7 +8,7 @@ from trakt.utils import timestamp
 
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import factory
-from plextraktsync.plex.PlexGuid import PlexGuid
+from plextraktsync.plex.guid.PlexGuid import PlexGuid
 from plextraktsync.rich.RichMarkup import RichMarkup
 from plextraktsync.util.Rating import Rating
 

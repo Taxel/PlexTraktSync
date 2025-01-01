@@ -4,8 +4,9 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plextraktsync.factory import factory
-from plextraktsync.plex.PlexGuidProvider import PlexGuidProvider
 from plextraktsync.rich.RichMarkup import RichMarkup
+
+from .provider.Factory import Factory as GuidProviderFactory
 
 if TYPE_CHECKING:
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
@@ -108,7 +109,7 @@ class PlexGuid(RichMarkup):
 
     @property
     def provider_link(self):
-        provider = PlexGuidProvider().create(self)
+        provider = GuidProviderFactory().create(self)
         link = provider.link
 
         if not link:

@@ -34,7 +34,7 @@ if TYPE_CHECKING:
     from trakt.movies import Movie
     from trakt.tv import TVEpisode, TVShow
 
-    from plextraktsync.plex.PlexGuid import PlexGuid
+    from plextraktsync.plex.guid.PlexGuid import PlexGuid
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
     from plextraktsync.trakt.types import TraktLikedList, TraktMedia
 
