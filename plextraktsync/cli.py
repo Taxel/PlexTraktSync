@@ -188,6 +188,11 @@ def env_plex_username():
     help="Plex password",
     default=lambda: environ.get("PLEX_PASSWORD", None),
 )
+@click.option(
+    "--use-token",
+    is_flag=True,
+    help="Use saved plex token if available",
+)
 def plex_login():
     """
     Log in to Plex Account to obtain Access Token. Optionally can use managed user on servers that you own.

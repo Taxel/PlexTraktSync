@@ -56,14 +56,19 @@ def server_urls(server: MyPlexResource):
     yield local_url()
 
 
-def myplex_login(username, password):
+def myplex_login(username: str, password: str, token=None, code=None):
     while True:
-        username = Prompt.ask(PROMPT_PLEX_USERNAME, default=username)
-        password = Prompt.ask(PROMPT_PLEX_PASSWORD, password=True, default=password, show_default=False)
-        code = Prompt.ask(PROMPT_PLEX_CODE)
+        if token:
+            print("Using existing token to login to Plex")
+        if not token:
+            username = Prompt.ask(PROMPT_PLEX_USERNAME, default=username)
+            password = Prompt.ask(PROMPT_PLEX_PASSWORD, password=True, default=password, show_default=False)
+            code = Prompt.ask(PROMPT_PLEX_CODE)
         try:
-            return MyPlexAccount(username=username, password=password, code=code)
+            return MyPlexAccount(username=username, password=password, code=code, token=token)
         except Unauthorized as e:
+            if token:
+                raise e
             print(error(f"Log in to Plex failed: '{e}', Try again."), highlight=False)
         except BadRequest as e:
             raise ClickException(f"Log in to Plex failed: {e}")
@@ -185,16 +190,21 @@ def plex_login_autoconfig():
     login(username, password)
 
 
-def plex_login(username, password):
-    login(username, password)
+def plex_login(username, password, use_token: bool):
+    token = None
+    if use_token:
+        config = factory.config
+        token = config["PLEX_ACCOUNT_TOKEN"]
+
+    login(username, password, token)
 
 
-def login(username: str, password: str):
+def login(username: str, password: str, token=None):
     if factory.has_plex_token:
         if not Confirm.ask(PROMPT_PLEX_RELOGIN, default=True):
             return
 
-    account = myplex_login(username, password)
+    account = myplex_login(username, password, token)
     print(
         Panel.fit(
             "Login to MyPlex was successful",
