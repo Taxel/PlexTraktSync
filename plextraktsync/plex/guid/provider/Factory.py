@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from plextraktsync.plex.PlexGuid import PlexGuid
 
 
-class PlexGuidProvider:
+class Factory:
     @classmethod
     def create(cls, guid: PlexGuid):
         if guid.provider == "imdb":
