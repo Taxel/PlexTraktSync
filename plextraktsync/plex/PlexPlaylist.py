@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from plextraktsync.decorators.flatten import flatten_dict
 from plextraktsync.factory import logging
 from plextraktsync.media.Media import Media
-from plextraktsync.mixin.RichMarkup import RichMarkup
+from plextraktsync.rich.RichMarkup import RichMarkup
 
 if TYPE_CHECKING:
     from plexapi.playlist import Playlist
