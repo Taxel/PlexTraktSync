@@ -335,13 +335,11 @@ class PlexLibraryItem(RichMarkup):
 
     @retry()
     def _get_episodes(self):
+        filters = {"show.id": self.show_id}
         if self.type == "season":
-            show_id = self.item.parentRatingKey
-            season = self.item.seasonNumber
+            filters["season.index"] = self.season_number
 
-            return self.library.search(libtype="episode", filters={"show.id": show_id, "season.index": season})
-
-        return self.library.search(libtype="episode", filters={"show.id": self.item.ratingKey})
+        return self.library.search(libtype="episode", filters=filters)
 
     @cached_property
     def season_number(self):
