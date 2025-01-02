@@ -47,6 +47,12 @@ class Rating(NamedTuple):
             return None
 
         rating = int(rating)
+
+        # Treat rating=0 as no rating
+        # https://github.com/Taxel/PlexTraktSync/issues/2122
+        if rating == 0:
+            return None
+
         if isinstance(rated_at, str):
             try:
                 rated_at = datetime.fromisoformat(rated_at)
