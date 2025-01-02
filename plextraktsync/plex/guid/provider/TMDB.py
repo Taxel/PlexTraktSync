@@ -37,6 +37,8 @@ class TMDB(Abstract):
         try:
             return {
                 "show": "tv",
+                "season": "tv",
+                "episode": "tv",
                 "movie": "movie",
             }[self.guid.type]
         except IndexError:
