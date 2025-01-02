@@ -353,9 +353,11 @@ class PlexLibraryItem(RichMarkup):
 
     @property
     def show_id(self):
-        if self.type != "episode":
-            raise RuntimeError("show_id is valid for episodes only")
-        return self.item.grandparentRatingKey
+        if self.type == "season":
+            return self.item.parentRatingKey
+        if self.type == "episode":
+            return self.item.grandparentRatingKey
+        raise RuntimeError(f"Unsupported type={self.type} for show_id")
 
     @property
     def show(self):
