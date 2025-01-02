@@ -353,6 +353,8 @@ class PlexLibraryItem(RichMarkup):
 
     @property
     def show_id(self):
+        if self.type == "show":
+            return self.item.ratingKey
         if self.type == "season":
             return self.item.parentRatingKey
         if self.type == "episode":
