@@ -43,12 +43,9 @@ class TMDB(Abstract):
 
     @property
     def type(self):
-        try:
-            return {
-                "show": "tv",
-                "season": "tv",
-                "episode": "tv",
-                "movie": "movie",
-            }[self.guid.type]
-        except IndexError:
-            return ""
+        return {
+            "show": "tv",
+            "season": "tv",
+            "episode": "tv",
+            "movie": "movie",
+        }[self.guid.type]
