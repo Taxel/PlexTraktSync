@@ -10,6 +10,9 @@ class TMDB(Abstract):
 
     @cached_property
     def link(self):
+        if self.guid.type == "season":
+            return f"{self.url}/tv/{self.show_guid.id}/season/{self.season_number}"
+
         if self.guid.type == "episode":
             return f"{self.url}/tv/{self.show_guid.id}/season/{self.season_number}/episode/{self.episode_number}"
 
