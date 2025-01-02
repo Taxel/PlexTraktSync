@@ -10,17 +10,28 @@ class TMDB(Abstract):
 
     @cached_property
     def link(self):
-        if self.guid.type == "season":
-            return f"{self.url}/tv/{self.show_guid.id}/season/{self.season_number}"
+        url = f"{self.url}/{self.type}"
+        type = self.guid.type
 
-        if self.guid.type == "episode":
-            return f"{self.url}/tv/{self.show_guid.id}/season/{self.season_number}/episode/{self.episode_number}"
+        if type in ["show", "season", "episode"]:
+            url += f"/{self.show_guid.id}"
 
-        return f"{self.url}/{self.type}/{self.guid.id}"
+        if type in ["season", "episode"]:
+            url += f"/season/{self.season_number}"
+
+        if type == "episode":
+            url += f"/episode/{self.episode_number}"
+
+        if type == "movie":
+            url += f"/{self.guid.id}"
+
+        return url
 
     @property
     def show_guid(self):
-        return next(guid for guid in self.guid.pm.show.guids if guid.provider == "tmdb")
+        pm = self.guid.pm
+        guids = pm.guids if self.guid.type == "show" else pm.show.guids
+        return next(guid for guid in guids if guid.provider == "tmdb")
 
     @property
     def season_number(self):
@@ -32,10 +43,9 @@ class TMDB(Abstract):
 
     @property
     def type(self):
-        try:
-            return {
-                "show": "tv",
-                "movie": "movie",
-            }[self.guid.type]
-        except IndexError:
-            return ""
+        return {
+            "show": "tv",
+            "season": "tv",
+            "episode": "tv",
+            "movie": "movie",
+        }[self.guid.type]
