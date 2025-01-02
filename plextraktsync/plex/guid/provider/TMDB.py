@@ -20,7 +20,9 @@ class TMDB(Abstract):
 
     @property
     def show_guid(self):
-        return next(guid for guid in self.guid.pm.show.guids if guid.provider == "tmdb")
+        pm = self.guid.pm
+        guids = pm.guids if self.guid.type == "show" else pm.show.guids
+        return next(guid for guid in guids if guid.provider == "tmdb")
 
     @property
     def season_number(self):
