@@ -455,7 +455,6 @@ services:
     image: ghcr.io/taxel/plextraktsync
     command: sync
     container_name: plextraktsync
-    profiles: ["schedule"]
     volumes:
       - /configs/mediarr/plextraktsync:/app/config
     environment:
@@ -464,7 +463,7 @@ services:
     depends_on:
       - plex
   scheduler:
-    image: mcuadros/ofelia:latest
+    image: mcuadros/ofelia
     container_name: scheduler
     command: daemon --docker
     restart: unless-stopped
@@ -489,11 +488,7 @@ hours. If you have two different PlexTraktSync containers in your docker
 compose, you can run them at the same time.
 
 The above config means that a job is running every 6 hours, alternating between
-the two "servers". The PlexTraktSync container also has a [docker compose
-profile] called "schedule" which means that it won't run automatically when you
-run for example `docker compose up`.
-
-[docker compose profile]: https://docs.docker.com/compose/profiles/
+the two "servers".
 
 ### Logging
 
