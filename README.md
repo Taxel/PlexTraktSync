@@ -124,7 +124,7 @@ You can setup docker compose file like this:
 version: "2"
 services:
   plextraktsync:
-    image: ghcr.io/taxel/plextraktsync
+    image: ghcr.io/taxel/plextraktsync:latest
     command: sync
     container_name: plextraktsync
     restart: on-failure:2
@@ -452,18 +452,18 @@ something similar to this in your `docker-compose.yml`:
 ```yml
 services:
   plextraktsync:
-    image: ghcr.io/taxel/plextraktsync
+    image: ghcr.io/taxel/plextraktsync:latest
     command: sync
     container_name: plextraktsync
     volumes:
-      - /configs/mediarr/plextraktsync:/app/config
+      - ./config:/app/config
     environment:
       - PUID=1000
       - PGID=1000
     depends_on:
       - plex
   scheduler:
-    image: mcuadros/ofelia
+    image: mcuadros/ofelia:latest
     container_name: scheduler
     command: daemon --docker
     restart: unless-stopped
