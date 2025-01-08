@@ -108,3 +108,18 @@ class PlexIdFactory:
 
         return cls.create(location)
 
+    @classmethod
+    def from_plex_redirect_url(cls, url: str):
+        """
+        Extracts id from urls like:
+            https://l.plex.tv/Nd7JNtC
+        """
+        from plextraktsync.factory import factory
+
+        session = factory.session
+        response = session.head(url)
+        location = session.get_redirect_target(response)
+        if location is None:
+            raise RuntimeError(f"Failed to find redirect from url: {url}")
+
+        return cls.create(location)
