@@ -12,6 +12,10 @@ class PlexIdFactory:
             return PlexId(int(key))
         elif key.startswith("https://trakt.tv/"):
             return cls.from_trakt_url(key)
+        elif key.startswith("https://l.plex.tv/"):
+            return cls.from_plex_redirect_url(key)
+        elif key.startswith("https://watch.plex.tv/"):
+            return cls.from_plex_watch_url(key)
         elif key.startswith("https:") or key.startswith("http:"):
             return cls.from_url(key)
         elif key.startswith("plex://"):
@@ -88,3 +92,36 @@ class PlexIdFactory:
         pm = results[0]
 
         return PlexId(pm.key, server=pm.plex.server.machineIdentifier)
+
+    @classmethod
+    def from_plex_watch_url(cls, url: str):
+        """
+        Extracts id from urls like:
+            https://watch.plex.tv/movie/heavier-trip
+        """
+
+        query = parse_qs(urlparse(url).query)
+        if "utm_content" not in query:
+            raise RuntimeError(f"Required 'utm_content' query missing from url: {url}")
+
+        plex_id = ",".join(query["utm_content"])
+        key = f"/library/metadata/{plex_id}"
+        location = f"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.discover/details?key={key}"
+
+        return cls.create(location)
+
+    @classmethod
+    def from_plex_redirect_url(cls, url: str):
+        """
+        Extracts id from urls like:
+            https://l.plex.tv/Nd7JNtC
+        """
+        from plextraktsync.factory import factory
+
+        session = factory.session
+        response = session.head(url)
+        location = session.get_redirect_target(response)
+        if location is None:
+            raise RuntimeError(f"Failed to find redirect from url: {url}")
+
+        return cls.create(location)
