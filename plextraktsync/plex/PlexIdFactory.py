@@ -12,6 +12,8 @@ class PlexIdFactory:
             return PlexId(int(key))
         elif key.startswith("https://trakt.tv/"):
             return cls.from_trakt_url(key)
+        elif key.startswith("https://l.plex.tv/"):
+            return cls.from_plex_redirect_url(key)
         elif key.startswith("https://watch.plex.tv/"):
             return cls.from_plex_watch_url(key)
         elif key.startswith("https:") or key.startswith("http:"):
