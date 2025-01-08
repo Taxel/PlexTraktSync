@@ -88,3 +88,21 @@ class PlexIdFactory:
         pm = results[0]
 
         return PlexId(pm.key, server=pm.plex.server.machineIdentifier)
+
+    @classmethod
+    def from_plex_watch_url(cls, url: str):
+        """
+        Extracts id from urls like:
+            https://watch.plex.tv/movie/heavier-trip
+        """
+
+        query = parse_qs(urlparse(url).query)
+        if "utm_content" not in query:
+            raise RuntimeError(f"Required 'utm_content' query missing from url: {url}")
+
+        plex_id = ",".join(query["utm_content"])
+        key = f"/library/metadata/{plex_id}"
+        location = f"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.discover/details?key={key}"
+
+        return cls.create(location)
+
