@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 apluggy = "==1.0.3"
-attrs = "==24.3.0"
+attrs = "==25.1.0"
 cattrs = "==24.1.2"
 certifi = "==2024.12.14"
 charset-normalizer = "==3.4.1"
