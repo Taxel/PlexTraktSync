@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import plexapi
 from click import ClickException
-from plexapi.exceptions import Unauthorized
+from plexapi.exceptions import BadRequest, Unauthorized
 from plexapi.server import PlexServer
 from requests.exceptions import ConnectionError, SSLError
 
@@ -60,6 +60,9 @@ class PlexServerConnection:
                     urls.append(url)
                     continue
 
+                self.logger.error(e)
+
+            except BadRequest as e:
                 self.logger.error(e)
 
             except ConnectionError as e:
