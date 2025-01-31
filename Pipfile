@@ -9,7 +9,7 @@ verify_ssl = true
 apluggy = "==1.0.3"
 attrs = "==25.1.0"
 cattrs = "==24.1.2"
-certifi = "==2024.12.14"
+certifi = "==2025.1.31"
 charset-normalizer = "==3.4.1"
 click = "==8.1.8"
 decorator = "==5.1.1"
