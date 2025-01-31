@@ -35,7 +35,6 @@ def test_show_episodes_plex():
     assert episode.imdb == "tt12057922", f"Unexpected! {episode}"
 
 
-@pytest.mark.skip(reason="Broken in CI")
 def test_show_episodes():
     show = TVShow("Game of Thrones")
 
@@ -45,7 +44,6 @@ def test_show_episodes():
     assert episodes[0].title == "Winter Is Coming"
 
 
-@pytest.mark.skip(reason="Broken in CI")
 def test_show_episodes_attack_on_titan():
     show = TVShow("Attack on Titan")
 
@@ -72,7 +70,6 @@ def test_show_episodes_attack_on_titan():
     assert te.imdb == "tt2825724"
 
 
-@pytest.mark.skip(reason="Broken in CI")
 def test_show_episodes_attack_on_titan_new_agent():
     show = TVShow("Attack on Titan")
 
