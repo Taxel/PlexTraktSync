@@ -32,6 +32,7 @@ def retry(fn, retries=5, *args, **kwargs):
             TraktBadGateway,
             TraktUnavailable,
             TraktInternalException,
+            # TraktInternalException,
         ) as e:
             if count == retries:
                 logger.error(f"Error: {e}")
@@ -48,3 +49,4 @@ def retry(fn, retries=5, *args, **kwargs):
             count += 1
             logger.warning(f"{e} for {fn.__module__}.{fn.__name__}(), retrying after {seconds} seconds (try: {count}/{retries})")
             sleep(seconds)
+            raise ClickException("EEE")
