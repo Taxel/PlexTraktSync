@@ -23,7 +23,7 @@ pygments==2.19.1; python_version >= '3.8'
 python-dotenv==1.0.1
 python-git-info==0.8.3
 pytimeparse==1.1.8
-pytrakt==4.1.0
+pytrakt==4.2.0
 pyyaml==6.0.2
 requests==2.32.3; python_version >= '3.8'
 requests-cache==1.2.1
