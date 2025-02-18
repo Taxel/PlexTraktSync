@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-apluggy = "==1.0.3"
+apluggy = "==1.1.0"
 attrs = "==25.1.0"
 cattrs = "==24.1.2"
 certifi = "==2025.1.31"
