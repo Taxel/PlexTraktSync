@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from plextraktsync.decorators.retry import retry
 from plextraktsync.factory import logging
 
-EPISODES_ORDERING_WARNING = "episodes ordering is different in Plex and Trakt. " "Check your Plex media source, TMDB is recommended."
+EPISODES_ORDERING_WARNING = "episodes ordering is different in Plex and Trakt. Check your Plex media source, TMDB is recommended."
 
 if TYPE_CHECKING:
     from trakt.tv import TVEpisode, TVShow

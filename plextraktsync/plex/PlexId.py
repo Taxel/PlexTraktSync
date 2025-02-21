@@ -34,4 +34,4 @@ class PlexId:
         keys = [self.__class__.__name__, self.server, self.provider, self.key]
         fields = map(str, filter(None, keys))
 
-        return f'<{":".join(fields)}>'
+        return f"<{':'.join(fields)}>"

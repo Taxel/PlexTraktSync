@@ -73,7 +73,7 @@ class RichProgressBar:
         from tqdm.rich import FractionColumn, RateColumn
 
         args = (
-            "[progress.description]{task.description}" "[progress.percentage]{task.percentage:>4.0f}%",
+            "[progress.description]{task.description}[progress.percentage]{task.percentage:>4.0f}%",
             BarColumn(bar_width=None),
             FractionColumn(
                 unit_scale=False,
