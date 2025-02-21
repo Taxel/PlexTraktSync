@@ -21,7 +21,7 @@ class Version:
         # Print version from pip
         if self.pipx_installed:
             v = self.vcs_info
-            return f'{__version__[0:-4]}@pr/{v["pr"]}#{v["short_commit_id"]}'
+            return f"{__version__[0:-4]}@pr/{v['pr']}#{v['short_commit_id']}"
 
         # If installed with Git
         gv = self.git_version_info

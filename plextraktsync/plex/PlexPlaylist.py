@@ -38,8 +38,7 @@ class PlexPlaylist(RichMarkup):
             playlist: Playlist = playlists[0]
             if len(playlists) > 1:
                 self.logger.warning(
-                    f"Found multiple playlists ({len(playlists)}) with same name: '{self.name}', "
-                    f"Using first playlist with id {playlist.ratingKey}"
+                    f"Found multiple playlists ({len(playlists)}) with same name: '{self.name}', Using first playlist with id {playlist.ratingKey}"
                 )
             self.logger.debug(f"Loaded plex list: '{self.name}'")
             return playlist
