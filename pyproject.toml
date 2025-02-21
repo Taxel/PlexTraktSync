@@ -3,7 +3,8 @@ name = "PlexTraktSync"
 dynamic = ["version"]
 description = "Plex-Trakt-Sync is a two-way-sync between trakt.tv and Plex Media Server"
 readme = "README.md"
-license = {file = "LICENSE"}
+license = "MIT"
+license-files = [ "LICENSE" ]
 # See: https://pypi.python.org/pypi?:action=list_classifiers
 classifiers = [
   "Development Status :: 5 - Production/Stable",
@@ -11,9 +12,6 @@ classifiers = [
   # Indicate who your project is intended for
   "Environment :: Console",
   "Operating System :: OS Independent",
-
-  # Pick your license as you wish (see also "license" above)
-  "License :: OSI Approved :: MIT License",
 
   # List of Python versions and their support status:
   # https://en.wikipedia.org/wiki/History_of_Python#Support
