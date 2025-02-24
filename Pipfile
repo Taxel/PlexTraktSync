@@ -12,7 +12,7 @@ cattrs = "==24.1.2"
 certifi = "==2025.1.31"
 charset-normalizer = "==3.4.1"
 click = "==8.1.8"
-decorator = "==5.1.1"
+decorator = "==5.2.1"
 deprecated = "==1.2.18"
 exceptiongroup = {version="==1.2.2", python_version="<'3.11'"}
 humanize = "==4.12.1"
