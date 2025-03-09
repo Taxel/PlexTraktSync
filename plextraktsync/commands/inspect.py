@@ -81,6 +81,7 @@ def inspect_media(plex_id: PlexId):
 
     print(f"Metadata: {pm.to_json()}")
     print(f"Played on Plex: {pm.is_watched}")
+    print(f"Plex Play Date: {pm.seen_date}")
 
     history = plex.history(media, device=True, account=True) if not pm.is_discover else []
     print("Plex play history:")
