@@ -16,7 +16,7 @@ jobs:
       contents: write
 
     steps:
-      - uses: fastify/github-action-merge-dependabot@v3.11.0
+      - uses: fastify/github-action-merge-dependabot@v3.11.1
         with:
           target: minor
           github-token: ${{ secrets.github-token }}
