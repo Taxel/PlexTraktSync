@@ -55,7 +55,7 @@ sync:
   rating_priority: plex
 
   plex_to_trakt:
-    collection: true
+    collection: false
     # Clear collected state of items not present in Plex
     clear_collected: false
     ratings: true

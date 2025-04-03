@@ -4,6 +4,7 @@ from collections import defaultdict
 
 import trakt.sync
 
+from plextraktsync.decorators.account_limit import account_limit
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
@@ -32,11 +33,14 @@ class TraktBatchWorker:
     def submit(self, name, items):
         method = getattr(self, name)
         result = method(self.normalize(items))
+        if not result:
+            return
         result = remove_empty_values(result.copy())
         if result:
             self.logger.debug(f"Submitted {name}: {result}")
 
     @rate_limit()
+    @account_limit()
     @time_limit()
     @retry()
     def add_to_collection(self, items):
@@ -49,6 +53,7 @@ class TraktBatchWorker:
         return trakt.sync.remove_from_collection(items)
 
     @rate_limit()
+    @account_limit()
     @time_limit()
     @retry()
     def add_to_watchlist(self, items):
