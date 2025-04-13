@@ -43,6 +43,7 @@ def test_show_episodes():
     assert episodes[0].title == "Winter Is Coming"
 
 
+@skip_in_ci
 def test_show_episodes_attack_on_titan():
     show = TVShow("Attack on Titan")
 
@@ -69,6 +70,7 @@ def test_show_episodes_attack_on_titan():
     assert te.imdb == "tt2825724"
 
 
+@skip_in_ci
 def test_show_episodes_attack_on_titan_new_agent():
     show = TVShow("Attack on Titan")
 
