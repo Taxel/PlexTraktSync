@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 import pytest
 
 from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
-from tests.conftest import make
+from tests.conftest import make, skip_in_ci
 
 testdata = [
     (
@@ -61,8 +61,8 @@ testdata = [
 ]
 
 
+@skip_in_ci
 @pytest.mark.parametrize("test_input,expected", testdata)
-@pytest.mark.skip(reason="Broken in CI")
 def test_collection_metadata(test_input, expected):
     m = PlexLibraryItem(test_input)
     json = m.to_json()
