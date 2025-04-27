@@ -49,9 +49,19 @@ class WatchProgressPlugin:
 
         view_offset = timedelta(milliseconds=m.plex.item.viewOffset)
         progress_offset = timedelta(milliseconds=progress)
-        self.logger.info(
-            f"{m.title_link}: Set watch progress to {p.progress:.02F}%: {view_offset} -> {progress_offset}",
-            extra={"markup": True},
-        )
-        if not dry_run:
-            m.plex.item.updateProgress(progress)
+        
+        # Check if progress is at or very close to 100% (≥ 99%)
+        if p.progress >= 99.0:
+            self.logger.info(
+                f"{m.title_link}: Marking as fully watched (progress: {p.progress:.02F}%)",
+                extra={"markup": True},
+            )
+            if not dry_run:
+                m.plex.item.markWatched()
+        else:
+            self.logger.info(
+                f"{m.title_link}: Set watch progress to {p.progress:.02F}%: {view_offset} -> {progress_offset}",
+                extra={"markup": True},
+            )
+            if not dry_run:
+                m.plex.item.updateProgress(progress)
