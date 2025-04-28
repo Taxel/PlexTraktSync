@@ -22,7 +22,7 @@ def account_limit(fn, *args, **kwargs):
     except AccountLimitExceeded as e:
         logger.error(f"Trakt Error: {e}")
         logger.warning(
-            f"Account Limit Exceeded for Trakt {list_name}: {e.account_limit} items. " \
+            f"Account Limit Exceeded for Trakt {list_name}: {e.account_limit} items. "
             f"Consider disabling {list_name} sync or upgrading your Trakt account."
         )
         logger.debug(e.details)
