@@ -8,7 +8,7 @@ jobs:
   # https://github.com/fastify/github-action-merge-dependabot
   automerge:
     name: Dependabot auto-merge
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request' }}
 
     permissions:
