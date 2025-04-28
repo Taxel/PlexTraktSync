@@ -49,7 +49,7 @@ class WatchProgressPlugin:
 
         view_offset = timedelta(milliseconds=m.plex.item.viewOffset)
         progress_offset = timedelta(milliseconds=progress)
-        
+
         # Check if progress is at or very close to 100% (≥ 99%)
         if p.progress >= 99.0:
             self.logger.info(
