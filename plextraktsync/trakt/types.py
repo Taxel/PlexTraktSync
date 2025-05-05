@@ -12,3 +12,5 @@ TraktPlayable = Union[Movie, TVEpisode]
 class TraktLikedList(TypedDict):
     listid: int
     listname: str
+    private: bool
+    list_type: str  # 'personal' or 'official'

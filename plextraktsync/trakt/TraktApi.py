@@ -74,14 +74,11 @@ class TraktApi:
     @flatten_list
     def liked_lists(self) -> list[TraktLikedList]:
         for item in self.me.get_liked_lists("lists", limit=1000):
-            # Skip private lists
-            # https://github.com/Taxel/PlexTraktSync/issues/1864#issuecomment-2018171311
-            if item["list"]["privacy"] == "private":
-                self.logger.warning(f"Skipping private list: {item['list']['name']} - {item['list']['share_link']}")
-                continue
             tll: TraktLikedList = {
                 "listname": item["list"]["name"],
                 "listid": item["list"]["ids"]["trakt"],
+                "private": item["list"]["privacy"] == "private",
+                "list_type": item["list"]["type"],
             }
             yield tll
 

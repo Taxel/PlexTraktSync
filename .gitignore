@@ -17,3 +17,4 @@
 /tests/config.json
 /trakt_cache.sqlite
 __pycache__/
+venv/
