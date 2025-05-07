@@ -4,7 +4,9 @@ from functools import cached_property
 from itertools import count
 from typing import TYPE_CHECKING
 
-from trakt.users import PublicList
+from trakt.movies import Movie
+from trakt.tv import TVEpisode, TVSeason, TVShow
+from trakt.users import PublicList, User
 
 from plextraktsync.factory import factory, logging
 from plextraktsync.trakt.types import TraktPlayable
@@ -24,6 +26,8 @@ class TraktUserList:
         name: str = None,
         items=None,
         keep_watched: bool = None,
+        is_private: bool = False,
+        list_type: str = "personal",
     ):
         self.trakt_id = trakt_id
         self.name = name
@@ -31,6 +35,8 @@ class TraktUserList:
         self.description = None
         self.plex_items = []
         self.keep_watched = keep_watched
+        self.is_private = is_private
+        self.list_type = list_type
 
     def __iter__(self):
         return iter(self.items)
@@ -70,15 +76,43 @@ class TraktUserList:
                     items[("episodes", episode.trakt)] = le.rank + (idx * episode_rank)
         return items
 
-    def load_items(self):
-        pl = PublicList.load(self.trakt_id)
-        self.logger.info(f"Downloaded Trakt list '{pl.name}' ({len(pl)} items): {pl.share_link}")
+    @staticmethod
+    def build_dict_from_raw_items(items):
+        """
+        Build a dictionary from the raw items in UserList._items
+        This creates the same format as build_dict() but works with UserList items
+        """
+        result = {}
+        for idx, item in enumerate(items, 1):  # Start rank from 1
+            if isinstance(item, Movie):
+                result[("movies", item.trakt)] = idx
+            elif isinstance(item, TVShow):
+                result[("shows", item.trakt)] = idx
+            elif isinstance(item, TVEpisode):
+                result[("episodes", item.trakt)] = idx
+            elif isinstance(item, TVSeason) and hasattr(item, "episodes") and item.episodes:
+                # Handle seasons similar to build_dict
+                episode_rank = 1 / len(item.episodes)
+                for i, episode in enumerate(item.episodes):
+                    result[("episodes", episode.trakt)] = idx + (i * episode_rank)
+        return result
 
-        return pl.description, self.build_dict(pl)
+    def load_items(self):
+        if self.is_private and self.list_type == "personal":
+            # For private personal lists, use the user's personal list endpoint
+            username = factory.trakt_api.me.username
+            user_list = User(username).get_list(self.name)
+            self.logger.info(f"Downloaded private personal Trakt list '{user_list.name}' ({len(user_list._items)} items)")
+            return user_list.description, self.build_dict_from_raw_items(user_list._items)
+        else:
+            # For public lists and official lists, use the public list endpoint
+            pl = PublicList.load(self.trakt_id)
+            self.logger.info(f"Downloaded Trakt list '{pl.name}' ({len(pl)} items): {pl.share_link}")
+            return pl.description, self.build_dict(pl)
 
     @classmethod
-    def from_trakt_list(cls, list_id: int, list_name: str, keep_watched: bool):
-        return cls(trakt_id=list_id, name=list_name, keep_watched=keep_watched)
+    def from_trakt_list(cls, list_id: int, list_name: str, keep_watched: bool, is_private: bool = False, list_type: str = "personal"):
+        return cls(trakt_id=list_id, name=list_name, keep_watched=keep_watched, is_private=is_private, list_type=list_type)
 
     @classmethod
     def from_watchlist(cls, items: list[TraktPlayable]):
