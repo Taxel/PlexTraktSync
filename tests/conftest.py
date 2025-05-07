@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import contextlib
 import json
+import os
 from os import environ
 from os.path import dirname
 from os.path import join as join_path
 
+import pytest
+from decorator import decorator
 from trakt.tv import TVShow
 
 from plextraktsync.factory import Factory
@@ -35,3 +38,13 @@ def make(cls=None, **kwargs) -> TVShow:
     cls = cls if cls is not None else "object"
     # https://stackoverflow.com/a/2827726/2314626
     return type(cls, (object,), kwargs)
+
+
+@decorator
+def skip_in_ci(func, reason="Skipped in CI environment", *args, **kwargs):
+    """Custom decorator to skip tests in CI."""
+
+    condition = os.getenv("CI") == "true"
+    if condition:
+        pytest.skip(reason)
+    func(*args, **kwargs)
