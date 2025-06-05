@@ -101,7 +101,7 @@ class PlexLibraryItem(RichMarkup):
             "local": 100,
             "mbid": 1000,
         }
-        ordered = sorted(guids, key=lambda guid: sort_order[guid.provider])
+        ordered = sorted(guids, key=lambda guid: sort_order.get(guid.provider, 10))
         return ordered
 
     @cached_property
