@@ -206,7 +206,7 @@ class PlexApi:
         try:
             self.server.sessions()
             return True
-        except Unauthorized:
+        except (Unauthorized, BadRequest):
             return False
 
     @property
