@@ -310,6 +310,31 @@ services:
       - ./config:/app/config
 ```
 
+An example using `job-exec` to run both `sync` and `watch` commands:
+
+```yaml
+version: "2"
+services:
+  scheduler:
+    image: mcuadros/ofelia:0.3
+    container_name: scheduler
+    depends_on:
+      - plextraktsync
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      ofelia.job-exec.plextraktsync.schedule: "@every 12h"
+      ofelia.job-exec.plextraktsync.container: "plextraktsync"
+      ofelia.job-exec.plextraktsync.command: "plextraktsync sync"
+  plextraktsync:
+    image: ghcr.io/taxel/plextraktsync:latest
+    container_name: plextraktsync
+    command: watch
+    volumes:
+      - ./config:/app/config
+```
+
 ## Configuration
 
 To disable parts of the functionality of this software, look no further than
