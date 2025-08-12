@@ -37,4 +37,4 @@ url-normalize==2.2.1; python_version >= '3.8'
 urllib3==2.5.0; python_version >= '3.9'
 wcwidth==0.2.13
 websocket-client==1.8.0
-wrapt==1.17.2; python_version >= '3.8'
+wrapt==1.17.3; python_version >= '3.8'
