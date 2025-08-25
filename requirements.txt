@@ -32,7 +32,7 @@ rich==14.1.0; python_full_version >= '3.8.0'
 six==1.17.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 tqdm==4.67.1; python_version >= '3.7'
 types-decorator==5.2.0.20250324; python_version >= '3.9'
-typing-extensions==4.14.1; python_version >= '3.9'
+typing-extensions==4.15.0; python_version >= '3.9'
 url-normalize==2.2.1; python_version >= '3.8'
 urllib3==2.5.0; python_version >= '3.9'
 wcwidth==0.2.13
