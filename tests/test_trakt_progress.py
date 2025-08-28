@@ -1,17 +1,16 @@
 #!/usr/bin/env python3 -m pytest
 from __future__ import annotations
 
-import pytest
 from trakt.tv import TVShow
 
 from plextraktsync.pytrakt_extensions import ShowProgress
 from plextraktsync.trakt.TraktApi import TraktApi
-from tests.conftest import factory
+from tests.conftest import factory, skip_in_ci
 
 trakt: TraktApi = factory.trakt_api
 
 
-@pytest.mark.skip(reason="Broken in CI")
+@skip_in_ci
 def test_trakt_watched_progress():
     show = TVShow("Game of Thrones")
     data = show.watched_progress()
