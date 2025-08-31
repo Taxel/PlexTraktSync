@@ -268,7 +268,7 @@ class PlexApi:
         if not self.account:
             return None
         try:
-            result = self.account.searchDiscover(title, libtype=media_type, providers='discover')
+            result = self.account.searchDiscover(title, libtype=media_type, providers="discover")
         except (BadRequest, Unauthorized) as e:
             self.logger.error(f"{title}: Searching Plex Discover error: {e}")
             return None
