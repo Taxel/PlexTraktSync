@@ -19,9 +19,9 @@ def initialize(config):
 
     # file handler can log down to debug messages
     mode = "a" if config.log_append else "w"
-    log_rotation = true if config.rotation else false
-    log_rotation_max_bytes = config.rotation_max_bytes if config.rotation_max_bytes else 1024000
-    log_rotation_backup_count = config.rotation_backup_count if config.rotation_backup_count else 10
+    log_rotation = true if config.log_rotation else false
+    log_rotation_max_bytes = config.log_rotation_max_bytes if config.log_rotation_max_bytes else 1024000
+    log_rotation_backup_count = config.log_rotation_backup_count if config.log_rotation_backup_count else 10
     if log_rotation:
         file_handler = logging.RotatingFileHandler(config.log_file, mode, log_rotation_max_bytes, log_rotation_backup_count, "utf-8")
     else:
