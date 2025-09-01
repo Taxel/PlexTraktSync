@@ -82,15 +82,15 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
 
     @property
     def log_rotation(self):
-        return self["logging"]["rotation"]
+        return self["logging"]["rotation"]["enable"]
 
     @property
     def log_rotation_max_bytes(self):
-        return self["logging"]["rotation_max_bytes"]
+        return self["logging"]["rotation"]["max_bytes"]
 
     @property
     def log_rotation_backup_count(self):
-        return self["logging"]["rotation_backup_count"]
+        return self["logging"]["rotation"]["backup_count"]
 
     @property
     def cache_path(self):
