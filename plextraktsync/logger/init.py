@@ -18,7 +18,13 @@ def initialize(config):
 
     # file handler can log down to debug messages
     mode = "a" if config.log_append else "w"
-    file_handler = logging.FileHandler(config.log_file, mode, "utf-8")
+    log_rotation = true if config.rotation else false
+    log_rotation_max_bytes = config.rotation_max_bytes if config.rotation_max_bytes else 1024000
+    log_rotation_backup_count = config.rotation_backup_count if config.rotation_backup_count else 10
+    if log_rotation:
+        file_handler = logging.RotatingFileHandler(config.log_file, mode, maxBytes=log_rotation_max_bytes, log_rotation_backup_count=10, "utf-8")
+    else:
+        file_handler = logging.FileHandler(config.log_file, mode, "utf-8")
     file_handler.setFormatter(CustomFormatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s"))
     file_handler.setLevel(logging.DEBUG)
 
