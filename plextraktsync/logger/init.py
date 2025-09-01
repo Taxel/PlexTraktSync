@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import re
 
+from logging.handlers import RotatingFileHandler
 from plextraktsync.factory import factory
 
 
@@ -22,7 +23,7 @@ def initialize(config):
     log_rotation_max_bytes = config.rotation_max_bytes if config.rotation_max_bytes else 1024000
     log_rotation_backup_count = config.rotation_backup_count if config.rotation_backup_count else 10
     if log_rotation:
-        file_handler = logging.RotatingFileHandler(config.log_file, mode, maxBytes=log_rotation_max_bytes, log_rotation_backup_count=10, "utf-8")
+        file_handler = logging.RotatingFileHandler(config.log_file, mode, log_rotation_max_bytes, log_rotation_backup_count, "utf-8")
     else:
         file_handler = logging.FileHandler(config.log_file, mode, "utf-8")
     file_handler.setFormatter(CustomFormatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s"))
