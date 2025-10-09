@@ -1,7 +1,7 @@
 -i https://pypi.org/simple
 apluggy==1.1.0; python_version >= '3.9'
 attrs==25.4.0; python_version >= '3.9'
-cattrs==25.2.0; python_version >= '3.9'
+cattrs==25.3.0; python_version >= '3.9'
 certifi==2025.10.5; python_version >= '3.7'
 charset-normalizer==3.4.3; python_version >= '3.7'
 click==8.1.8; python_version >= '3.7'
