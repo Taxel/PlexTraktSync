@@ -42,6 +42,8 @@ def retry(fn, retries=5, *args, **kwargs):
                     logger.error(f"Error message: {e.error_message}")
 
                 logger.error(f"Last call: {fn.__module__}.{fn.__name__}({args[1:]}, {kwargs})")
+                if isinstance(e, (TraktInternalException, TraktBadGateway, TraktUnavailable)):
+                    return None
                 raise ClickException("API didn't respond properly, script will abort now. Please try again later.")
 
             seconds = 1 + count
