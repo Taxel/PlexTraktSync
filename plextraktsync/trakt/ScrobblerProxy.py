@@ -25,6 +25,8 @@ class ScrobblerProxy:
         self.queue.scrobble_update((self.scrobbler, progress))
 
     def pause(self, progress: float):
+        if progress < 1:  # Trakt requires pause to be at least 1%
+            progress = 1.0
         self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
         self.queue.scrobble_pause((self.scrobbler, progress))
 

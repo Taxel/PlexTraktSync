@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from trakt.errors import ConflictException
+from trakt.errors import ConflictException, ProcessException
 
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
@@ -49,7 +49,7 @@ class TraktScrobbleWorker:
         method = getattr(scrobbler, name)
         try:
             return method(progress)
-        except ConflictException as e:
+        except (ConflictException, ProcessException) as e:
             self.logger.error(e)
             self.logger.debug(e.response.headers)
             self.logger.debug(e.response)
