@@ -50,9 +50,8 @@ class TraktScrobbleWorker:
         try:
             return method(progress)
         except (ConflictException, ProcessException) as e:
-            self.logger.error(e)
+            self.logger.error(f"{e} {e.response.text}")
             self.logger.debug(e.response.headers)
-            self.logger.debug(e.response)
 
     @staticmethod
     def normalize(items: list[TraktPlayable]):
