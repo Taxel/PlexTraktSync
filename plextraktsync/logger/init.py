@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import logging
 import re
-
 from logging.handlers import RotatingFileHandler
+
 from plextraktsync.factory import factory
 
 
