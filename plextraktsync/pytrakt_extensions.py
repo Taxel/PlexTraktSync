@@ -71,6 +71,7 @@ class ShowProgress:
         last_watched_at=None,
         last_updated_at=None,
         reset_at=None,
+        type=None,
         show=None,
         seasons=None,
         hidden_seasons=None,
