@@ -19,6 +19,12 @@ logging:
   console_time: false
   debug: false
   filename: plextraktsync.log
+  # log rotation
+  rotation: 
+    enable: true
+    max_bytes: 10485760  # default to 10 MB
+    backup_count: 5
+  
   # Additional logger names to apply filtering
   filter_loggers:
   #    - plexapi

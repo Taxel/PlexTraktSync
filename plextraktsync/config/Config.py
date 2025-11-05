@@ -81,6 +81,18 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         return self["logging"]["console_time"]
 
     @property
+    def log_rotation(self):
+        return self["logging"]["rotation"]["enable"]
+
+    @property
+    def log_rotation_max_bytes(self):
+        return self["logging"]["rotation"]["max_bytes"]
+
+    @property
+    def log_rotation_backup_count(self):
+        return self["logging"]["rotation"]["backup_count"]
+
+    @property
     def cache_path(self):
         return self["cache"]["path"]
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import re
+from logging.handlers import RotatingFileHandler
 
 from plextraktsync.factory import factory
 
@@ -18,7 +19,13 @@ def initialize(config):
 
     # file handler can log down to debug messages
     mode = "a" if config.log_append else "w"
-    file_handler = logging.FileHandler(config.log_file, mode, "utf-8")
+    log_rotation = config.log_rotation
+    log_rotation_max_bytes = config.log_rotation_max_bytes
+    log_rotation_backup_count = config.log_rotation_backup_count
+    if log_rotation:
+        file_handler = RotatingFileHandler(config.log_file, mode, log_rotation_max_bytes, log_rotation_backup_count, "utf-8")
+    else:
+        file_handler = logging.FileHandler(config.log_file, mode, "utf-8")
     file_handler.setFormatter(CustomFormatter("%(asctime)-15s %(levelname)s[%(name)s]:%(message)s"))
     file_handler.setLevel(logging.DEBUG)
 
