@@ -6,6 +6,7 @@ from click import ClickException
 from decorator import decorator
 from trakt.errors import RateLimitException
 
+from plextraktsync.config import TRAKT_RETRY_AFTER_MARGIN
 from plextraktsync.factory import logging
 
 logger = logging.getLogger(__name__)
@@ -28,4 +29,4 @@ def rate_limit(fn, retries=5, *args, **kwargs):
             retry += 1
             logger.warning(f"{e} for {fn.__module__}.{fn.__name__}(), retrying after {seconds} seconds (try: {retry}/{retries})")
             logger.debug(e.details)
-            sleep(seconds)
+            sleep(seconds + TRAKT_RETRY_AFTER_MARGIN)
