@@ -788,15 +788,14 @@ For systemd --user session to start without having to log in you need to enable 
 
 ## Troubleshooting
 
-### I have duplicate watched episodes sent to Trakt at every sync
+### I have duplicate or missing watched episodes
 
 Check your Plex episodes ordering compared to Trakt ordering.
 If episodes are in a different order, it should not be a problem because they
 are identified with ids.
-But if a season or an episode is missing on Trakt (and tmdb) it can't be synced.
-You can fix it by [adding the missing episodes] or edit metadata (eg. missing
-tvdb or imdb ids) on [tmdb] or [report a metadata issue on Trakt][how-to-report-metadata-issues] ([answers][reports]). It's free for anyone
-to sign up and edit info at tmdb. Trakt will [update from tmdb][trakt-tvshow-update] data.
+But if a season or an episode is missing on Trakt (and tmdb) or doesn't have external ids (ids from tvdb, imdb,...), it can't be synced.
+You can fix it by [adding the missing episodes] or edit metadata (eg. missing tvdb or imdb ids) on [tmdb] or [report a metadata issue on Trakt][how-to-report-metadata-issues] ([answers][reports]).
+It's free for anyone to sign up and edit info at tmdb. Trakt will [update from tmdb][trakt-tvshow-update] data.
 
 [adding the missing episodes]: https://support.trakt.tv/support/solutions/articles/70000264977
 [tmdb]: https://themoviedb.org/
@@ -804,7 +803,7 @@ to sign up and edit info at tmdb. Trakt will [update from tmdb][trakt-tvshow-upd
 [how-to-report-metadata-issues]: https://support.trakt.tv/support/solutions/articles/70000627644-how-to-report-metadata-issues
 [reports]: https://trakt.tv/settings/reports
 
-### I have many matching errors in logs
+### I have matching or not found errors in logs
 
 Make sure you use [good practices](#good-practices) about Plex agent and files
 organization as stated above.
@@ -816,7 +815,7 @@ check if [external ids][house-of-the-dragon] are populated on tmdb.
 ### I have season 0 matching errors
 
 Season 0 folder must only contain episodes belonging to season 0, also named specials.
-Trailers, deleted scenes, featurettes, interviews,... must be stored in a
+Other videos like trailers, deleted scenes, featurettes, interviews, etc... must be stored in a
 separate [Extra folder][extra-folder] (not in season 0) according to Plex rules.
 Keep in mind that seasons 0 aren't really official so datasources (tmdb, imdb
 and tvdb) sometimes don't correspond. Check season 0 of shows on trakt.tv to identify those special episodes.
