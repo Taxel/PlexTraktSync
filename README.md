@@ -812,6 +812,11 @@ check if [external ids][house-of-the-dragon] are populated on tmdb.
 
 [house-of-the-dragon]: https://www.themoviedb.org/tv/94997-house-of-the-dragon/season/1/episode/1/edit?active_nav_item=external_ids
 
+### I see provider 'local' has no external Id in logs
+
+Plex doesn't properly identify your media, it cannot be synced with trakt.
+Use [Fix Match][fix-match] or [Match Hinting][plexmatch] to fetch correct metadata and external ids.
+
 ### I have season 0 matching errors
 
 Season 0 folder must only contain episodes belonging to season 0, also named specials.
