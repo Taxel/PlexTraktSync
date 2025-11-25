@@ -162,12 +162,20 @@ class PlexApi:
             yield section.key, PlexLibrarySection(section, plex=self)
 
     @cache
-    def system_device(self, device_id: int) -> SystemDevice:
-        return self.server.systemDevice(device_id)
+    def system_device(self, device_id: int) -> SystemDevice | None:
+        try:
+            return self.server.systemDevice(device_id)
+        except BadRequest as e:
+            self.logger.debug(f"No permission: {e}")
+            return None
 
     @cache
-    def system_account(self, account_id: int) -> SystemAccount:
-        return self.server.systemAccount(account_id)
+    def system_account(self, account_id: int) -> SystemAccount | None:
+        try:
+            return self.server.systemAccount(account_id)
+        except BadRequest as e:
+            self.logger.debug(f"No permission: {e}")
+            return None
 
     @cached_property
     def ratings(self):
