@@ -87,12 +87,18 @@ def inspect_media(plex_id: PlexId):
     print("Plex play history:")
     for h in history:
         d = h.device
-        # handle cases like "local" for offline plays
-        if d.name == "" and d.platform == "":
+        if not d:
+            dn = f"deviceId {h.deviceID}"
+        elif d.name == "" and d.platform == "":
+            # "local" for offline plays
             dn = h.device.clientIdentifier
         else:
             dn = f"{d.name} with {d.platform}"
-        print(f"- {h.viewedAt} {h}: by {h.account.name} on {dn}")
+        if h.account:
+            viewer = h.account.name
+        else:
+            viewer = f"accountId {h.accountID}"
+        print(f"- {h.viewedAt} {h}: by {viewer} on {dn}")
 
     print("--- Trakt")
     m: Media = mf.resolve_any(pm)
