@@ -34,7 +34,14 @@ def initialize(config):
         console_handler,
     ]
     logging.basicConfig(handlers=handlers, level=log_level, force=True)
-
+    # Diagnostic: show resolved log path and logging settings (helps Docker/mount debugging)
+    pts_logger = logging.getLogger(__name__)
+    pts_logger.info(
+        "Resolved logging config: log_file=%s append=%s rotation=%s",
+        config.log_file,
+        config.log_append,
+        config.log_rotation,
+    )
     # Set debug for other components as well
     if log_level == logging.DEBUG:
         from plexapi import log as logger
