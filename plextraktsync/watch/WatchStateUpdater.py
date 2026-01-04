@@ -200,16 +200,12 @@ class WatchStateUpdater(SetWindowTitle):
         raw_percent = m.plex.watch_progress(event.view_offset)
         percent = self.clamp_percent(raw_percent)
 
-        # Reject stopped with invalid source percent
-        if event.state == "stopped" and raw_percent > 100:
-            self.logger.warning(
-                "Rejected stopped event with invalid progress: %s %.2f%%",
-                m,
-                raw_percent,
+        if percent != raw_percent:
+            self.logger.debug(
+                f"on_play: Invalid percent for {m}: raw {raw_percent:.3F}% clamped {percent:.3F}%",
             )
-            return
 
-        self.logger.info(f"on_play: {movie}: {percent:.6F}%, State: {event.state}, Played: {movie.isPlayed}, LastViewed: {movie.lastViewedAt}")
+        self.logger.info(f"on_play: {movie}: {percent:.3F}%, State: {event.state}, Played: {movie.isPlayed}, LastViewed: {movie.lastViewedAt}")
         scrobbled = self.scrobble(m, percent, event)
 
         if event.state == "stopped":
