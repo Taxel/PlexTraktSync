@@ -38,6 +38,14 @@ class WatchStateUpdater(SetWindowTitle):
         self.config = config
         self.remove_collection = config["watch"]["remove_collection"]
         self.add_collection = config["watch"]["add_collection"]
+        self.session_media = {}
+
+    def clamp_percent(self, percent: float) -> float:
+        if percent < 0:
+            return 0.0
+        if percent > 100:
+            return 100.0
+        return percent
 
     @cached_property
     def username_filter(self):
@@ -166,12 +174,43 @@ class WatchStateUpdater(SetWindowTitle):
         if not m:
             self.logger.debug(f"on_play: Not found: {event.key}")
             return
+        
+        # Bind session → media on first playing event
+        bound = self.session_media.get(event.session_key)
+
+        if event.state == "playing":
+            if bound is None:
+                self.session_media[event.session_key] = m
+            else:
+                # Ignore spurious "playing" for wrong media
+                m = bound
+
+        else:
+            # paused / stopped must use bound media
+            if bound is None:
+                self.logger.debug(
+                    "on_play: %s for unknown session %s",
+                    event.state,
+                    event.session_key,
+                )
+                return
+            m = bound
 
         movie = m.plex.item
-        percent = m.plex.watch_progress(event.view_offset)
+        raw_percent = m.plex.watch_progress(event.view_offset)
+        percent = self.clamp_percent(raw_percent)
 
-        self.logger.info(f"on_play: {movie}: {percent:.6F}%, State: {event.state}, Played: {movie.isPlayed}, LastViewed: {movie.lastViewedAt}")
+        if percent != raw_percent:
+            self.logger.debug(
+                f"on_play: Invalid percent for {m}: raw {raw_percent:.3F}% clamped {percent:.3F}%",
+            )
+
+        self.logger.info(f"on_play: {movie}: {percent:.3F}%, State: {event.state}, Played: {movie.isPlayed}, LastViewed: {movie.lastViewedAt}")
         scrobbled = self.scrobble(m, percent, event)
+
+        if event.state == "stopped":
+            self.session_media.pop(event.session_key, None)
+
         self.logger.debug(f"Scrobbled: {scrobbled}")
 
     def can_scrobble(self, event: PlaySessionStateNotification):
