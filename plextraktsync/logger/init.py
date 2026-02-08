@@ -22,7 +22,7 @@ def initialize(config):
     log_rotation = config.log_rotation
     log_rotation_max_bytes = config.log_rotation_max_bytes
     log_rotation_backup_count = config.log_rotation_backup_count
-    if log_rotation:
+    if log_rotation and mode == "a":
         file_handler = RotatingFileHandler(config.log_file, mode, log_rotation_max_bytes, log_rotation_backup_count, "utf-8")
     else:
         file_handler = logging.FileHandler(config.log_file, mode, "utf-8")
