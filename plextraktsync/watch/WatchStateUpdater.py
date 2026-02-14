@@ -174,7 +174,7 @@ class WatchStateUpdater(SetWindowTitle):
         if not m:
             self.logger.debug(f"on_play: Not found: {event.key}")
             return
-        
+
         # Bind session → media on first playing event
         bound = self.session_media.get(event.session_key)
 
