@@ -31,7 +31,7 @@ class PlexRatings:
         section = self.plex.library_sections[section_id]
         ratings: dict[int, Rating] = self.ratings(section, m.media_type)
 
-        return ratings.get(m.item.ratingKey, None)
+        return ratings.get(m.item.ratingKey)
 
     @staticmethod
     @cache
