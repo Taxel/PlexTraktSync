@@ -283,6 +283,29 @@ def unmatched():
 
 @command()
 @click.option(
+    "--remove-watched",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Remove watched items from playlist",
+)
+@click.option(
+    "--dry-run",
+    "dry_run",
+    type=bool,
+    default=False,
+    is_flag=True,
+    help="Dry run: Do not make changes",
+)
+@click.argument("playlist", nargs=1)
+def update_playlist():
+    """
+    Update playlist: Remove watched items
+    """
+
+
+@command()
+@click.option(
     "--server",
     type=str,
     help="Plex Server name from servers.yml",
@@ -384,5 +407,6 @@ if factory.enable_self_update:
 cli.add_command(sync)
 cli.add_command(trakt_login)
 cli.add_command(unmatched)
+cli.add_command(update_playlist)
 cli.add_command(watch)
 cli.add_command(watched_shows)
