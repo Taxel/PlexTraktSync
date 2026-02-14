@@ -57,7 +57,7 @@ have a file containing those on your harddrive, you can not use this project.
   - [Good practices](#good-practices)
   - [Troubleshooting](#troubleshooting)
 
-[python-versions-badge]: https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue
+[python-versions-badge]: https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue
 
 ## Features
 
