@@ -33,7 +33,7 @@ def limit_iterator(items, limit: int):
         yield from enumerate(items)
 
     else:
-        yield from zip(range(limit), items)
+        yield from zip(range(limit), items, strict=False)
 
 
 def render_xml(data):

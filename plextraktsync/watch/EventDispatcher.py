@@ -24,7 +24,7 @@ class EventDispatcher:
 
     def event_handler(self, data):
         self.logger.debug(data)
-        if isinstance(data, (Error, ServerStarted)):
+        if isinstance(data, Error | ServerStarted):
             return self.dispatch(data)
 
         events = self.event_factory.get_events(data)
