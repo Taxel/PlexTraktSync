@@ -25,7 +25,7 @@ class Rating(NamedTuple):
 
     def __eq__(self, other):
         """Ratings are equal if their rating value is the same"""
-        if isinstance(other, (int, float)):
+        if isinstance(other, int | float):
             return self.rating == int(other)
 
         if other is None:
