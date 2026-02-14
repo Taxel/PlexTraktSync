@@ -179,6 +179,6 @@ class TraktUserList:
         if len(plex_items) == 0:
             return []
 
-        _, items = zip(*sorted(dict(reversed(plex_items)).items()))
+        _, items = zip(*sorted(dict(reversed(plex_items)).items()), strict=False)
 
         return items
