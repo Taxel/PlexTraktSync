@@ -104,6 +104,12 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
 
         return HttpCacheConfig(**cache)
 
+    @property
+    def ignore_ids(self):
+        values = self["ignore_ids"] if "ignore_ids" in self and self["ignore_ids"] else None
+
+        return set(values or [])
+
     def initialize(self):
         """
         Config load order:
