@@ -1,5 +1,5 @@
 -i https://pypi.org/simple
-apluggy==1.1.1; python_version >= '3.9'
+apluggy==1.1.2; python_version >= '3.10'
 attrs==25.4.0; python_version >= '3.9'
 cattrs==25.3.0; python_version >= '3.9'
 certifi==2026.1.4; python_version >= '3.7'
