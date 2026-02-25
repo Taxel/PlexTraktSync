@@ -109,13 +109,17 @@ class PlexGuid(RichMarkup):
 
     @property
     def provider_link(self):
-        provider = GuidProviderFactory().create(self)
+        provider = self.guid_provider
         link = provider.link
 
         if not link:
             return self.markup_title(provider.title)
 
         return self.markup_link(link, provider.title)
+
+    @cached_property
+    def guid_provider(self):
+        return GuidProviderFactory().create(self)
 
     def __str__(self):
         return f"<PlexGuid:{self.guid}>"
