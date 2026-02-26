@@ -45,6 +45,10 @@ class ServerConfigFactory(ConfigMergeMixin):
         from plextraktsync.factory import factory
 
         config = factory.config
+
+        if not config["PLEX_BASEURL"]:
+            return
+
         self.add_server(
             name="default",
             urls=[
@@ -56,6 +60,7 @@ class ServerConfigFactory(ConfigMergeMixin):
         self.save()
         config["PLEX_SERVER"] = "default"
         config.save()
+
         logger = factory.logger
         logger.warning(f"Added default server to {self.config_path}")
 
