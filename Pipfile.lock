@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e3a4b44c4c69148add2e8310fd52eb6df17afaeaccf3c8cd3cf2a8409a7f5b78"
+            "sha256": "51e720af3487da09d28b2b69f75daf2443c8efa60b119b5381eb955712c170eb"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,12 +18,12 @@
     "default": {
         "apluggy": {
             "hashes": [
-                "sha256:c3aced8323dbc14b8261e33b34786689080e9ca5388f685eba423ef6c2b83956",
-                "sha256:e1e53c621ab6feef391339ee4f3c89ac30dee59cd157e34e8e1058082aec28f8"
+                "sha256:18c4c0c631fe9d98be65375c6e73de3bc4b881a39a88bd6b48dd683c91f18e0b",
+                "sha256:421700438e6f3f47d284a5a3bb5d3f2369c70e9165f89f3785d09493a8f5db73"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.9'",
-            "version": "==1.1.1"
+            "markers": "python_version >= '3.10'",
+            "version": "==1.1.2"
         },
         "attrs": {
             "hashes": [
