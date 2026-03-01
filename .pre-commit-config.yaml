@@ -34,4 +34,9 @@ repos:
         # Optional extra validations from SchemaStore:
         additional_dependencies: ["validate-pyproject-schema-store[all]"]
 
+  - repo: https://github.com/renovatebot/pre-commit-hooks
+    rev: 38.128.3
+    hooks:
+      - id: renovate-config-validator
+
 # vim:ts=2:sw=2:et
