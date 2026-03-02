@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "51e720af3487da09d28b2b69f75daf2443c8efa60b119b5381eb955712c170eb"
+            "sha256": "818c46d26c4e7f2faad1412c86cbe2ca7e8b2a680d5b7dc945f472c08397b8e0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -337,11 +337,11 @@
         },
         "pytrakt": {
             "hashes": [
-                "sha256:05225bef5eafa7aacb96b9851c85e28d4b7171d4ed4b9b9dc322fc8dbbdd0693",
-                "sha256:780c8d182a2457d38e0486894eb939363a4f67587eba22577e4908a668bb2ba0"
+                "sha256:7c4549f2b3c6d88b4c65f4185712ec8341765c848c3ae4a94ec0c890643cebfb",
+                "sha256:d24fbc2715ecabb56aa083bb1f7e0bcb1fd6f45f009488981db7f539c740dc1b"
             ],
             "index": "pypi",
-            "version": "==4.2.2"
+            "version": "==4.2.3"
         },
         "pyyaml": {
             "hashes": [
