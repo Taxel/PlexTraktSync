@@ -14,6 +14,8 @@ class ScrobblerProxy:
     Proxy to Scrobbler that queues requests to update trakt
     """
 
+    WATCHED_THRESHOLD = 80
+
     logger = logging.getLogger(__name__)
 
     def __init__(self, scrobbler: Scrobbler):
@@ -24,20 +26,15 @@ class ScrobblerProxy:
         self.queue.scrobble_update((self.scrobbler, progress))
 
     def pause(self, progress: float):
-        if progress < 1:  # Trakt requires pause to be at least 1%
-            progress = 1.0
+        progress = max(progress, 1.0)  # Trakt requires at least 1%
         self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
         self.queue.scrobble_stop((self.scrobbler, progress))
 
     def stop(self, progress: float):
-        if progress >= 80:  # Threshold for trakt to mark media as watched
-            self.logger.debug(f"stop({self.scrobbler.media}): {progress}")
-            self.queue.scrobble_stop((self.scrobbler, progress))
-        else:
-            if progress < 1:  # Trakt requires stop to be at least 1%
-                progress = 1.0
-            self.logger.debug(f"pause({self.scrobbler.media}): {progress}")
-            self.queue.scrobble_stop((self.scrobbler, progress))
+        progress = max(progress, 1.0)  # Trakt requires at least 1%
+        action = "stop" if progress >= self.WATCHED_THRESHOLD else "pause"
+        self.logger.debug(f"{action}({self.scrobbler.media}): {progress}")
+        self.queue.scrobble_stop((self.scrobbler, progress))
 
     @cached_property
     def queue(self):
