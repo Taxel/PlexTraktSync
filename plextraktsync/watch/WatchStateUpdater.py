@@ -85,7 +85,7 @@ class WatchStateUpdater(SetWindowTitle):
     def scrobblers(self):
         from plextraktsync.trakt.ScrobblerCollection import ScrobblerCollection
 
-        return ScrobblerCollection(self.trakt, self.config["watch"]["scrobble_threshold"])
+        return ScrobblerCollection(self.trakt)
 
     @lru_cache(maxsize=2)
     def fetch_item(self, key: str):

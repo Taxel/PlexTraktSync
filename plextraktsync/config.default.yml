@@ -96,8 +96,6 @@ liked_lists:
 watch:
   add_collection: false
   remove_collection: false
-  # what video watched percentage (0 to 100) triggers the watched status
-  scrobble_threshold: 80
   # true to scrobble only what's watched by you, false for all your PMS users
   username_filter: true
   # Show the progress bar of played media in terminal
