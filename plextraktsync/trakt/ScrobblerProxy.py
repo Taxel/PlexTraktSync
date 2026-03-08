@@ -35,8 +35,8 @@ class ScrobblerProxy:
 
     def stop(self, progress: float):
         progress = max(progress, 1.0)  # Trakt requires at least 1%
-        action = "stop" if progress >= self.WATCHED_THRESHOLD else "pause"
-        self.logger.debug(f"{action}({self.scrobbler.media}): {progress}")
+        trakt_action = "scrobble" if progress >= self.WATCHED_THRESHOLD else "pause"
+        self.logger.debug(f"stop({self.scrobbler.media}): {progress} (Trakt will {trakt_action})")
         self.queue.scrobble_stop((self.scrobbler, progress))
 
     @cached_property
