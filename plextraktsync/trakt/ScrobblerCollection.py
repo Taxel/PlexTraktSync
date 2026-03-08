@@ -11,13 +11,12 @@ if TYPE_CHECKING:
 
 
 class ScrobblerCollection(UserDict):
-    def __init__(self, trakt: TraktApi, threshold=80):
+    def __init__(self, trakt: TraktApi):
         super().__init__()
         self.trakt = trakt
-        self.threshold = threshold
 
     def __missing__(self, media: TraktPlayable):
         scrobbler = media.scrobble(0, None, None)
-        self[media] = proxy = ScrobblerProxy(scrobbler, self.threshold)
+        self[media] = proxy = ScrobblerProxy(scrobbler)
 
         return proxy
