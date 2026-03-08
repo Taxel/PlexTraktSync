@@ -93,6 +93,7 @@ liked_lists:
 #    keep_watched: true
 
 # settings for 'watch' command
+# Note: Trakt's scrobble (watched) threshold is fixed at 80% and is not configurable.
 watch:
   add_collection: false
   remove_collection: false
