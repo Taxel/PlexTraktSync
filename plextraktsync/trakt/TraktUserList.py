@@ -24,6 +24,7 @@ class TraktUserList:
         self,
         trakt_id: int = None,
         name: str = None,
+        username: str = None,
         items=None,
         keep_watched: bool = None,
         is_private: bool = False,
@@ -31,6 +32,7 @@ class TraktUserList:
     ):
         self.trakt_id = trakt_id
         self.name = name
+        self.username = username
         self._items = items
         self.description = None
         self.plex_items = []
@@ -98,21 +100,24 @@ class TraktUserList:
         return result
 
     def load_items(self):
-        if self.is_private and self.list_type == "personal":
-            # For private personal lists, use the user's personal list endpoint
-            username = factory.trakt_api.me.username
+        username = factory.trakt_api.me.username
+        if self.list_type == "personal" and self.username == username:
+            # For user's personal lists, use the user's personal list endpoint
             user_list = User(username).get_list(self.name)
             self.logger.info(f"Downloaded private personal Trakt list '{user_list.name}' ({len(user_list._items)} items)")
             return user_list.description, self.build_dict_from_raw_items(user_list._items)
-        else:
+        elif not self.is_private:
             # For public lists and official lists, use the public list endpoint
             pl = PublicList.load(self.trakt_id)
             self.logger.info(f"Downloaded Trakt list '{pl.name}' ({len(pl)} items): {pl.share_link}")
             return pl.description, self.build_dict(pl)
+        else:
+            self.logger.warning(f"Trakt list '{self.name}' is a private list of '{self.username}' and cannot be accessed. You can unlike it.")
+            return self.description, {}
 
     @classmethod
-    def from_trakt_list(cls, list_id: int, list_name: str, keep_watched: bool, is_private: bool = False, list_type: str = "personal"):
-        return cls(trakt_id=list_id, name=list_name, keep_watched=keep_watched, is_private=is_private, list_type=list_type)
+    def from_trakt_list(cls, list_id: int, list_name: str, user_name: str, keep_watched: bool, is_private: bool = False, list_type: str = "personal"):
+        return cls(trakt_id=list_id, name=list_name, username=user_name, keep_watched=keep_watched, is_private=is_private, list_type=list_type)
 
     @classmethod
     def from_watchlist(cls, items: list[TraktPlayable]):
