@@ -12,5 +12,6 @@ TraktPlayable = Movie | TVEpisode
 class TraktLikedList(TypedDict):
     listid: int
     listname: str
+    username: str
     private: bool
     list_type: str  # 'personal' or 'official'
