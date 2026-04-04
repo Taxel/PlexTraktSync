@@ -179,6 +179,8 @@ class Media(RichMarkup):
             return self.trakt_id in self.trakt_api.watched_movies
         elif not self.is_episode:
             raise RuntimeError(f"watched_on_trakt: Unsupported media type: {self.media_type}")
+        elif self.type != "episode":
+            raise RuntimeError(f"watched_on_trakt: Trakt media type is not episode: {self.trakt.type}")
 
         watched = self.trakt_api.watched_shows
         return watched.get_completed(self.show_trakt_id, self.season_number, self.episode_number)
