@@ -76,6 +76,7 @@ class TraktApi:
         for item in self.me.get_liked_lists("lists", limit=1000):
             tll: TraktLikedList = {
                 "listname": item["list"]["name"],
+                "username": item["list"]["user"]["username"],
                 "listid": item["list"]["ids"]["trakt"],
                 "private": item["list"]["privacy"] == "private",
                 "list_type": item["list"]["type"],
