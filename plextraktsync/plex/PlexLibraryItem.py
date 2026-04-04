@@ -357,7 +357,7 @@ class PlexLibraryItem(RichMarkup):
             return self.item.parentRatingKey
         if self.type == "episode":
             return self.item.grandparentRatingKey
-        raise RuntimeError(f"Unsupported type={self.type} for show_id")
+        raise RuntimeError(f"show_id: Unsupported media type: {self.type} for '{self.title}'")
 
     @property
     def show(self):
@@ -369,7 +369,7 @@ class PlexLibraryItem(RichMarkup):
     @show.setter
     def show(self, show):
         if self.type != "episode":
-            raise RuntimeError("show_id is valid for episodes only")
+            raise RuntimeError(f"Set show: Media type is not episode: {self.type} for '{self.title}'")
 
         self._show = show
 

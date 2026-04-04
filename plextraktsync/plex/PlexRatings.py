@@ -26,7 +26,7 @@ class PlexRatings:
         if section_id not in self.plex.library_sections:
             return None
         if m.media_type not in ["movies", "shows", "episodes"]:
-            raise RuntimeError(f"Unsupported media type: {m.media_type}")
+            raise RuntimeError(f"Unsupported media type: {m.media_type} for '{m.title}'")
 
         section = self.plex.library_sections[section_id]
         ratings: dict[int, Rating] = self.ratings(section, m.media_type)
