@@ -1,9 +1,12 @@
+__pycache__/
 /.direnv
 /.env
 /.envrc.local
 /.idea/
 /.pytrakt.json
+/.venv/
 /.vscode/
+/*.egg-info/
 /config.json
 /config.json.old
 /config.yml
@@ -16,6 +19,3 @@
 /tests/.env
 /tests/config.json
 /trakt_cache.sqlite
-__pycache__/
-*.egg-info/
-.venv/
