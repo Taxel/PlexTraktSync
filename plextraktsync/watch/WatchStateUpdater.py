@@ -166,7 +166,13 @@ class WatchStateUpdater(SetWindowTitle):
             self.logger.info(f"on_delete: Removed {event.item_id} from Collection: {m}")
 
     def on_play(self, event: PlaySessionStateNotification):
-        if not self.can_scrobble(event):
+        # If we already have a bound media for this session, the user was
+        # already validated on the initial "playing" event — skip
+        # can_scrobble() which would fail for "stopped" events because
+        # the Plex session is already gone by the time we query it.
+        bound = self.session_media.get(event.session_key)
+
+        if bound is None and not self.can_scrobble(event):
             self.logger.debug(f"on_play: Rejected event {event}")
             return
 
@@ -174,9 +180,6 @@ class WatchStateUpdater(SetWindowTitle):
         if not m:
             self.logger.debug(f"on_play: Not found: {event.key}")
             return
-
-        # Bind session → media on first playing event
-        bound = self.session_media.get(event.session_key)
 
         if event.state == "playing":
             if bound is None:
