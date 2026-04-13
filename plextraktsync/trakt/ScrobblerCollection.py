@@ -4,6 +4,7 @@ from collections import UserDict
 from typing import TYPE_CHECKING
 
 from plextraktsync.trakt.ScrobblerProxy import ScrobblerProxy
+from plextraktsync.util.Version import Version
 
 if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
@@ -16,7 +17,8 @@ class ScrobblerCollection(UserDict):
         self.trakt = trakt
 
     def __missing__(self, media: TraktPlayable):
-        scrobbler = media.scrobble(0, None, None)
+        version = Version()
+        scrobbler = media.scrobble(0, version.version, None)
         self[media] = proxy = ScrobblerProxy(scrobbler)
 
         return proxy
