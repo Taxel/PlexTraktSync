@@ -23,4 +23,6 @@ class SessionCollection(UserDict):
     def update_sessions(self):
         self.clear()
         for session in self.plex.sessions:
+            if not session.usernames:
+                continue
             self[str(session.sessionKey)] = session.usernames[0]
