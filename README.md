@@ -348,6 +348,7 @@ by setting them from `true` to `false` in a text editor:
 - Syncing the watchlists between Plex and Trakt
 - Syncing the watched status between Plex and Trakt
 - Syncing the collected status between Plex and Trakt
+- Syncing watched status from Trakt to Plex Discover (for items not in your local library)
 
 The first execution of the script will (depending on your PMS library size)
 take a long time. After that, movie details and Trakt lists are cached, so
@@ -363,10 +364,13 @@ created.
 You can use `--edit` or `--locate` flags to `config` command to open config
 file in editor or in file browser.
 
-### Libraries
+### Plex Discover Sync
 
-By default, all libraries are processed. You can disable libraries by name by
-changing `excluded-libraries` in `config.yml`.
+PlexTraktSync can sync watched status for movies and TV episodes that are not in your local Plex library but are available in Plex Discover (Plex's cloud database). This allows you to maintain watched history for content you've deleted from your server or never added.
+
+To enable this feature, set `plex_online: true` in the sync section of your config. Note that this only syncs watched status from Trakt to Plex (not the reverse), and requires "Sync Watch states and Ratings" to be enabled in your Plex account settings.
+
+This feature is useful for preserving watch history for old content or maintaining consistency across devices.
 
 You can also set `excluded-libraries` per server in `servers.yml`:
 
