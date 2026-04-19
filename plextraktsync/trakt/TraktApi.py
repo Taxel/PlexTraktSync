@@ -308,8 +308,23 @@ class TraktApi:
             self.logger.debug(f"search_by_id({media_id}, {id_type}, {media_type}) got {len(search)} results, taking first one")
             self.logger.debug([pm.to_json() for pm in search])
 
-        # TODO: sort by "score"?
-        return search[0]
+        m = search[0]
+
+        # Check that the found item has the correct type
+        found_type = m.media_type.rstrip("s")
+        if found_type != media_type:
+            self.logger.debug(f"search_by_id({media_id}, {id_type}, {media_type}): result type '{found_type}' does not match expected '{media_type}'")
+            return None
+
+        # Check that the found item has the correct id
+        found_id = str(m.ids["ids"].get(id_type))
+        if found_id != str(media_id):
+            self.logger.debug(
+                f"search_by_id({media_id}, {id_type}, {media_type}): result {id_type} id '{found_id}' does not match expected '{media_id}'"
+            )
+            return None
+
+        return m
 
     @staticmethod
     def valid_trakt_id(media_id: str):
