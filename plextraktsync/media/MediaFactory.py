@@ -75,7 +75,7 @@ class MediaFactory:
 
         if tm is None:
             self.logger.warning(
-                f"{guid.title_link}: Skipping {guid} not found on Trakt",
+                f"{guid.title_link}: Skipping {guid} {guid.type} not found on Trakt",
                 extra={"markup": True},
             )
             return None

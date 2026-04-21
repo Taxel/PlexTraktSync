@@ -116,7 +116,7 @@ class TraktApi:
 
     def remove_from_collection(self, m: TraktMedia):
         if m.media_type not in ["movies", "shows", "episodes"]:
-            raise ValueError(f"remove_from_collection: Unsupported media type: {m.media_type} for '{m.title}'")
+            raise ValueError(f"remove_from_collection: Unsupported media type: {m.media_type.rstrip('s')} for '{m.title}'")
 
         item = dict(
             title=m.title,
@@ -166,7 +166,7 @@ class TraktApi:
         So fetch for all types.
         """
         if m.media_type not in ["movies", "shows", "episodes"]:
-            raise ValueError(f"rating: Unsupported media type: {m.media_type} for '{m.title}'")
+            raise ValueError(f"rating: Unsupported media type: {m.media_type.rstrip('s')} for '{m.title}'")
 
         return self.ratings[m.media_type].get(m.trakt, None)
 
@@ -190,7 +190,7 @@ class TraktApi:
         elif m.media_type == "episodes" and show_trakt_id:
             self.watched_shows.add(show_trakt_id, m.season, m.number)
         else:
-            raise RuntimeError(f"mark_watched: Unsupported media type: {m.media_type} for '{m.title}'")
+            raise RuntimeError(f"mark_watched: Unsupported media type: {m.media_type.rstrip('s')} for '{m.title}'")
 
         # Add partial object to conserve memory
         partial = PartialTraktMedia.create(m, watched_at=time)
@@ -207,13 +207,13 @@ class TraktApi:
         elif m.media_type == "episodes":
             item = dict(**m.ids, **pm.to_json())
         else:
-            raise ValueError(f"add_to_collection: Unsupported media type: {m.media_type} for '{m.title}' (plex: '{pm.title}')")
+            raise ValueError(f"add_to_collection: Unsupported media type: {m.media_type.rstrip('s')} for '{m.title}' (plex: '{pm.title}')")
 
         self.queue.add_to_collection((m.media_type, item))
 
     def add_to_watchlist(self, m):
         if m.media_type not in ["movies", "shows"]:
-            raise ValueError(f"add_to_watchlist: Unsupported media type: {m.media_type} for '{m.title}'")
+            raise ValueError(f"add_to_watchlist: Unsupported media type: {m.media_type.rstrip('s')} for '{m.title}'")
 
         item = dict(
             title=m.title,
@@ -225,7 +225,7 @@ class TraktApi:
 
     def remove_from_watchlist(self, m):
         if m.media_type not in ["movies", "shows"]:
-            raise ValueError(f"remove_from_watchlist: Unsupported media type: {m.media_type} for '{m.title}'")
+            raise ValueError(f"remove_from_watchlist: Unsupported media type: {m.media_type.rstrip('s')} for '{m.title}'")
 
         item = dict(
             title=m.title,
@@ -308,8 +308,23 @@ class TraktApi:
             self.logger.debug(f"search_by_id({media_id}, {id_type}, {media_type}) got {len(search)} results, taking first one")
             self.logger.debug([pm.to_json() for pm in search])
 
-        # TODO: sort by "score"?
-        return search[0]
+        m = search[0]
+
+        # Check that the found item has the correct type
+        found_type = m.media_type.rstrip("s")
+        if found_type != media_type:
+            self.logger.debug(f"search_by_id({media_id}, {id_type}, {media_type}): result type '{found_type}' does not match expected '{media_type}'")
+            return None
+
+        # Check that the found item has the correct id
+        found_id = str(m.ids["ids"].get(id_type))
+        if found_id != str(media_id):
+            self.logger.debug(
+                f"search_by_id({media_id}, {id_type}, {media_type}): result {id_type} id '{found_id}' does not match expected '{media_id}'"
+            )
+            return None
+
+        return m
 
     @staticmethod
     def valid_trakt_id(media_id: str):

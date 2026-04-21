@@ -139,7 +139,7 @@ class Media(RichMarkup):
         if self.is_movie:
             return self.trakt_id in self.trakt_api.movie_collection_set
         elif not self.is_episode:
-            raise RuntimeError(f"is_collected: Unsupported media type: {self.media_type} for '{self.title}'")
+            raise RuntimeError(f"is_collected: Unsupported media type: {self.type} for '{self.title}'")
 
         collected = self.trakt_api.collected_shows
         return collected.is_collected(self.show_trakt_id, self.season_number, self.episode_number)
@@ -165,7 +165,7 @@ class Media(RichMarkup):
     @cached_property
     def seasons(self):
         if self.media_type != "shows":
-            raise RuntimeError(f"seasons: Unsupported media type: {self.media_type} for '{self.title}'")
+            raise RuntimeError(f"seasons: Unsupported media type: {self.type} for '{self.title}'")
 
         return TraktLookup(self.trakt)
 
@@ -178,7 +178,7 @@ class Media(RichMarkup):
         if self.is_movie:
             return self.trakt_id in self.trakt_api.watched_movies
         elif not self.is_episode:
-            raise RuntimeError(f"watched_on_trakt: Unsupported media type: {self.media_type} for '{self.title}'")
+            raise RuntimeError(f"watched_on_trakt: Unsupported media type: {self.type} for '{self.title}'")
         elif self.type != "episode":
             raise RuntimeError(f"watched_on_trakt: Trakt media type is not episode: {self.type} for '{self.title}'")
 
@@ -191,7 +191,7 @@ class Media(RichMarkup):
         Return True if episode was watched before show reset (if there is a reset).
         """
         if not self.is_episode:
-            raise RuntimeError(f"watched_before_reset is valid for episodes only, got {self.media_type} for '{self.title}'")
+            raise RuntimeError(f"watched_before_reset is valid for episodes only, got {self.type} for '{self.title}'")
 
         return self.show_reset_at and self.plex.seen_date.replace(tzinfo=None) < self.show_reset_at
 
@@ -207,7 +207,7 @@ class Media(RichMarkup):
         elif self.is_episode:
             self.trakt_api.mark_watched(self.trakt, self.plex.seen_date, self.show_trakt_id)
         else:
-            raise RuntimeError(f"mark_watched_trakt: Unsupported media type: {self.media_type} for '{self.title}'")
+            raise RuntimeError(f"mark_watched_trakt: Unsupported media type: {self.type} for '{self.title}'")
 
     def mark_watched_plex(self):
         self.plex_api.mark_watched(self.plex.item)
