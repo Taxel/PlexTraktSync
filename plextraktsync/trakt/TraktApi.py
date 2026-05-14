@@ -146,13 +146,13 @@ class TraktApi:
     @rate_limit()
     @retry()
     def watchlist_movies(self):
-        return self.me.watchlist_movies
+        return pytrakt_extensions.get_watchlist("movies")
 
     @property
     @rate_limit()
     @retry()
     def watchlist_shows(self):
-        return self.me.watchlist_shows
+        return pytrakt_extensions.get_watchlist("shows")
 
     @cached_property
     def ratings(self):

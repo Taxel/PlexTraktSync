@@ -1,7 +1,35 @@
 from __future__ import annotations
 
+import trakt.core
 from trakt.core import get
 from trakt.utils import airs_date
+
+
+def get_watchlist(media_type: str) -> list:
+    """Fetch all watchlist items with pagination, bypassing pytrakt's single-page limit."""
+    from trakt.movies import Movie
+    from trakt.tv import TVShow
+
+    factory = Movie if media_type == "movies" else TVShow
+    item_key = "movie" if media_type == "movies" else "show"
+
+    page = 1
+    limit = 1000
+    results = []
+
+    while True:
+        data = trakt.core.api().request("get", f"users/me/watchlist/{media_type}", {"page": page, "limit": limit})
+        if not data:
+            break
+        for item in data:
+            item_data = item.pop(item_key)
+            item_data.update(item)
+            results.append(factory(**item_data))
+        if len(data) < limit:
+            break
+        page += 1
+
+    return results
 
 
 @get
