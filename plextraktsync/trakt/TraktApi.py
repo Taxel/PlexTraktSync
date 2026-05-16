@@ -282,6 +282,7 @@ class TraktApi:
             raise RuntimeError(f"find_by_slug: Unable to find with slug: {slug}")
 
     @rate_limit()
+    @time_limit()
     def search_by_id(self, media_id: str, id_type: str, media_type: str) -> TVShow | Movie | None:
         if id_type == "tvdb" and media_type == "movie":
             # Skip invalid search.
