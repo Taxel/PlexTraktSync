@@ -18,6 +18,7 @@ from trakt.errors import (
 
 from plextraktsync import pytrakt_extensions
 from plextraktsync.decorators.flatten import flatten_list
+from plextraktsync.decorators.get_limit import get_limit
 from plextraktsync.decorators.rate_limit import rate_limit
 from plextraktsync.decorators.retry import retry
 from plextraktsync.decorators.time_limit import time_limit
@@ -282,7 +283,7 @@ class TraktApi:
             raise RuntimeError(f"find_by_slug: Unable to find with slug: {slug}")
 
     @rate_limit()
-    @time_limit()
+    @get_limit()
     def search_by_id(self, media_id: str, id_type: str, media_type: str) -> TVShow | Movie | None:
         if id_type == "tvdb" and media_type == "movie":
             # Skip invalid search.
