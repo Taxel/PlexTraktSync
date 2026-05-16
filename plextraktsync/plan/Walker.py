@@ -150,10 +150,14 @@ class Walker(SetWindowTitle):
             yield show
 
     async def get_plex_episodes(self, episodes: list[Episode]) -> Generator[Media, Any, None]:
+        show_cache: dict[str, Media | None] = {}
         it = self.progressbar(episodes, desc="Processing episodes")
         async for pe in it:
-            guid = PlexGuid(pe.grandparentGuid, "show")
-            show = self.mf.resolve_guid(guid)
+            grandparent_guid = pe.grandparentGuid
+            if grandparent_guid not in show_cache:
+                guid = PlexGuid(grandparent_guid, "show")
+                show_cache[grandparent_guid] = self.mf.resolve_guid(guid)
+            show = show_cache[grandparent_guid]
             if not show:
                 continue
             me = self.mf.resolve_any(PlexLibraryItem(pe, plex=self.plex), show)

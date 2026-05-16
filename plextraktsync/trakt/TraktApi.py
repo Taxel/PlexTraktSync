@@ -101,7 +101,7 @@ class TraktApi:
     def movie_collection(self):
         return self.me.movie_collection
 
-    @property
+    @cached_property
     @rate_limit()
     @retry()
     def show_collection(self):
