@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from click import ClickException
+from trakt.errors import OAuthRefreshException
+
 from plextraktsync.factory import factory
 from plextraktsync.watch.events import (
     ActivityNotification,
@@ -11,26 +14,29 @@ from plextraktsync.watch.events import (
 
 
 def watch(server: str):
-    factory.run_config.update(
-        server=server,
-    )
-    ws = factory.web_socket_listener
-    updater = factory.watch_state_updater
+    try:
+        factory.run_config.update(
+            server=server,
+        )
+        ws = factory.web_socket_listener
+        updater = factory.watch_state_updater
 
-    ws.on(ServerStarted, updater.on_start)
-    ws.on(
-        PlaySessionStateNotification,
-        updater.on_play,
-        state=["playing", "stopped", "paused"],
-    )
-    ws.on(
-        ActivityNotification,
-        updater.on_activity,
-        type="library.refresh.items",
-        event="ended",
-        progress=100,
-    )
-    ws.on(TimelineEntry, updater.on_delete, state=9, metadata_state="deleted")
-    ws.on(Error, updater.on_error)
+        ws.on(ServerStarted, updater.on_start)
+        ws.on(
+            PlaySessionStateNotification,
+            updater.on_play,
+            state=["playing", "stopped", "paused"],
+        )
+        ws.on(
+            ActivityNotification,
+            updater.on_activity,
+            type="library.refresh.items",
+            event="ended",
+            progress=100,
+        )
+        ws.on(TimelineEntry, updater.on_delete, state=9, metadata_state="deleted")
+        ws.on(Error, updater.on_error)
 
-    ws.listen()
+        ws.listen()
+    except OAuthRefreshException as e:
+        raise ClickException(f"Trakt error: Unable to refresh token: {e}") from e
