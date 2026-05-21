@@ -7,13 +7,14 @@ from trakt.errors import OAuthRefreshException
 from plextraktsync.queue.BackgroundTask import BackgroundTask
 from plextraktsync.watch.FatalErrorState import FatalErrorState
 from plextraktsync.watch.WebSocketListener import WebSocketListener
+from tests.conftest import make_oauth_refresh_exception
 
 
 def test_background_task_records_oauth_refresh_exception():
     fatal_error = FatalErrorState()
 
     def task(_queues):
-        raise OAuthRefreshException()
+        raise make_oauth_refresh_exception()
 
     background_task = BackgroundTask(None, task, fatal_error=fatal_error)
     background_task.timed_events()
@@ -62,7 +63,7 @@ def test_websocket_listener_raises_recorded_oauth_refresh_exception(monkeypatch)
             return Notifier()
 
     def fail_sleep(_interval):
-        fatal_error.set(OAuthRefreshException())
+        fatal_error.set(make_oauth_refresh_exception())
 
     monkeypatch.setattr("plextraktsync.watch.WebSocketListener.sleep", fail_sleep)
 

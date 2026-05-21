@@ -8,7 +8,7 @@ from plextraktsync.watch.EventDispatcher import EventDispatcher
 from plextraktsync.watch.EventFactory import EventFactory
 from plextraktsync.watch.events import ActivityNotification
 from plextraktsync.watch.FatalErrorState import FatalErrorState
-from tests.conftest import load_mock
+from tests.conftest import load_mock, make_oauth_refresh_exception
 
 
 def test_events():
@@ -81,10 +81,23 @@ def test_event_dispatcher():
 
 def test_event_dispatcher_reraises_oauth_refresh_exception():
     fatal_error = FatalErrorState()
-    dispatcher = EventDispatcher(fatal_error=fatal_error).on(ActivityNotification, lambda _: (_ for _ in ()).throw(OAuthRefreshException()))
+    dispatcher = EventDispatcher(fatal_error=fatal_error).on(
+        ActivityNotification,
+        lambda _: (_ for _ in ()).throw(make_oauth_refresh_exception()),
+    )
 
     with pytest.raises(OAuthRefreshException):
-        dispatcher.dispatch(ActivityNotification(Activity={"event": "ended", "type": "library.refresh.items", "progress": 100, "Context": {"key": "/library/metadata/1"}}, event="ended"))
+        dispatcher.dispatch(
+            ActivityNotification(
+                Activity={
+                    "event": "ended",
+                    "type": "library.refresh.items",
+                    "progress": 100,
+                    "Context": {"key": "/library/metadata/1"},
+                },
+                event="ended",
+            )
+        )
 
     with pytest.raises(OAuthRefreshException):
         fatal_error.raise_if_set()
