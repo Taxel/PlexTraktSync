@@ -46,7 +46,8 @@ class BackgroundTask:
             except OAuthRefreshException as e:
                 if self.fatal_error is not None:
                     self.fatal_error.set(e)
-                return
+                    return
+                raise
             except Exception as e:
                 self.logger.error(f"Got exception while working on {task}: {e}")
 
@@ -68,7 +69,7 @@ class BackgroundTask:
 
         while True:
             if self.fatal_error is not None:
-                return self.fatal_error.raise_if_set()
+                self.fatal_error.raise_if_set()
 
             try:
                 message = queue.get(timeout=1)
@@ -83,4 +84,4 @@ class BackgroundTask:
             self.check_timer()
 
             if self.fatal_error is not None:
-                return self.fatal_error.raise_if_set()
+                self.fatal_error.raise_if_set()

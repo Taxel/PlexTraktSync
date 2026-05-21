@@ -22,6 +22,29 @@ def test_background_task_records_oauth_refresh_exception():
         fatal_error.raise_if_set()
 
 
+def test_background_task_continues_without_fatal_error():
+    fatal_error = FatalErrorState()
+    calls = []
+
+    class Queue:
+        def __init__(self):
+            self.messages = iter([
+                ("test", 1),
+                None,
+            ])
+
+        def get(self, timeout):
+            return next(self.messages)
+
+    def task(queues):
+        calls.append(list(queues["test"]))
+
+    background_task = BackgroundTask(None, task, fatal_error=fatal_error)
+    background_task(Queue())
+
+    assert calls == [[1]]
+
+
 def test_websocket_listener_raises_recorded_oauth_refresh_exception(monkeypatch):
     fatal_error = FatalErrorState()
 
