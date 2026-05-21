@@ -4,6 +4,8 @@ from collections import defaultdict
 from queue import Empty
 from typing import TYPE_CHECKING
 
+from trakt.errors import OAuthRefreshException
+
 from plextraktsync.factory import logging
 
 if TYPE_CHECKING:
@@ -20,10 +22,11 @@ class BackgroundTask:
 
     logger = logging.getLogger(__name__)
 
-    def __init__(self, timer: Timer = None, *tasks):
+    def __init__(self, timer: Timer = None, *tasks, fatal_error=None):
         self.queues = defaultdict(list)
         self.timer = timer
         self.tasks = tasks
+        self.fatal_error = fatal_error
 
     def check_timer(self):
         if not self.timer:
@@ -40,6 +43,10 @@ class BackgroundTask:
         for task in self.tasks:
             try:
                 task(self.queues)
+            except OAuthRefreshException as e:
+                if self.fatal_error is not None:
+                    self.fatal_error.set(e)
+                return
             except Exception as e:
                 self.logger.error(f"Got exception while working on {task}: {e}")
 
@@ -60,6 +67,9 @@ class BackgroundTask:
         """
 
         while True:
+            if self.fatal_error is not None:
+                return self.fatal_error.raise_if_set()
+
             try:
                 message = queue.get(timeout=1)
             except Empty:
@@ -71,3 +81,6 @@ class BackgroundTask:
                 self.process_message(message)
 
             self.check_timer()
+
+            if self.fatal_error is not None:
+                return self.fatal_error.raise_if_set()

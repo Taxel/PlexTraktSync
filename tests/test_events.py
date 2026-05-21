@@ -1,9 +1,13 @@
 #!/usr/bin/env python3 -m pytest
 from __future__ import annotations
 
+import pytest
+from trakt.errors import OAuthRefreshException
+
 from plextraktsync.watch.EventDispatcher import EventDispatcher
 from plextraktsync.watch.EventFactory import EventFactory
 from plextraktsync.watch.events import ActivityNotification
+from plextraktsync.watch.FatalErrorState import FatalErrorState
 from tests.conftest import load_mock
 
 
@@ -73,3 +77,14 @@ def test_event_dispatcher():
     dispatcher = EventDispatcher().on(ActivityNotification, lambda x: events.append(x), event=["ended"], progress=99)
     dispatcher.event_handler(raw_events[4])
     assert len(events) == 0, "No match for event=ended and progress=99"
+
+
+def test_event_dispatcher_reraises_oauth_refresh_exception():
+    fatal_error = FatalErrorState()
+    dispatcher = EventDispatcher(fatal_error=fatal_error).on(ActivityNotification, lambda _: (_ for _ in ()).throw(OAuthRefreshException()))
+
+    with pytest.raises(OAuthRefreshException):
+        dispatcher.dispatch(ActivityNotification(Activity={"event": "ended", "type": "library.refresh.items", "progress": 100, "Context": {"key": "/library/metadata/1"}}, event="ended"))
+
+    with pytest.raises(OAuthRefreshException):
+        fatal_error.raise_if_set()

@@ -15,6 +15,7 @@ from plextraktsync.watch.events import (
 
 def watch(server: str):
     try:
+        factory.watch_fatal_error.clear()
         factory.run_config.update(
             server=server,
         )

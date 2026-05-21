@@ -211,7 +211,7 @@ class Factory:
     def web_socket_listener(self):
         from plextraktsync.watch.WebSocketListener import WebSocketListener
 
-        return WebSocketListener(plex=self.plex_server)
+        return WebSocketListener(plex=self.plex_server, fatal_error=self.watch_fatal_error)
 
     @cached_property
     def watch_state_updater(self):
@@ -223,6 +223,12 @@ class Factory:
             mf=self.media_factory,
             config=self.config,
         )
+
+    @cached_property
+    def watch_fatal_error(self):
+        from plextraktsync.watch.FatalErrorState import FatalErrorState
+
+        return FatalErrorState()
 
     @cached_property
     def logging(self):
@@ -324,7 +330,7 @@ class Factory:
             TraktMarkWatchedWorker(),
             TraktScrobbleWorker(),
         ]
-        task = BackgroundTask(self.batch_delay_timer, *workers)
+        task = BackgroundTask(self.batch_delay_timer, *workers, fatal_error=self.watch_fatal_error)
         queue = Queue(task)
 
         return queue
