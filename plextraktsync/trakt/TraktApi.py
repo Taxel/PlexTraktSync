@@ -73,7 +73,7 @@ class TraktApi:
     @retry()
     @flatten_list
     def liked_lists(self) -> list[TraktLikedList]:
-        for item in self.me.get_liked_lists("lists", limit=1000):
+        for item in self.me.get_liked_lists("lists", limit=100):
             tll: TraktLikedList = {
                 "listname": item["list"]["name"],
                 "username": item["list"]["user"]["username"],
@@ -101,7 +101,7 @@ class TraktApi:
     def movie_collection(self):
         return self.me.movie_collection
 
-    @property
+    @cached_property
     @rate_limit()
     @retry()
     def show_collection(self):
