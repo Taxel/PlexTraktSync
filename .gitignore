@@ -14,7 +14,7 @@ __pycache__/
 /dist/
 /docker-compose.override.yml
 /last_update.log
-/plextraktsync.log
+/plextraktsync.log*
 /servers.yml
 /tests/.env
 /tests/config.json
