@@ -50,6 +50,23 @@ These instructions apply to the whole repository.
   `config.json` users.
 - Add or update pytest coverage for behavior changes when practical.
 
+## Commit guidelines
+
+- Prefer atomic commits: one intent, one self-contained change.
+- Keep commits small enough to review and revert independently.
+- Separate refactors, behavior changes, tests, and docs when practical.
+- Follow the principles from https://cbea.ms/git-commit/.
+- Use commit messages with:
+  - a short imperative subject line
+  - a blank line after the subject
+  - optional body bullets explaining why/context
+- Include a `Co-authored-by` trailer for LLM-assisted commits.
+- The trailer example below is illustrative only; agents must replace both the
+  name and email with their own identity instead of copying the example
+  literally.
+- Example trailer format:
+  - `Co-authored-by: OpenCode (<active-model>) <noreply@openai.com>`
+
 ## Validation
 
 - Run `pytest` for behavior changes.
