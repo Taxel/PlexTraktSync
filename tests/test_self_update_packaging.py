@@ -55,7 +55,9 @@ def test_uv_detection(monkeypatch):
         [
             "plextraktsync v0.35.0 [required:  PlexTraktSync] [CPython 3.12.3] (/tmp/uv/plextraktsync)",
             "- plextraktsync (/tmp/bin/plextraktsync)",
-            "plextraktsync-pr v0.35.0.dev0 [required:  git+https://github.com/Taxel/PlexTraktSync@refs/pull/838/head] [CPython 3.12.3] (/tmp/uv/plextraktsync-pr)",
+            "plextraktsync-pr v0.35.0.dev0 "
+            "[required:  git+https://github.com/Taxel/PlexTraktSync@refs/pull/838/head] "
+            "[CPython 3.12.3] (/tmp/uv/plextraktsync-pr)",
             "- plextraktsync-pr (/tmp/bin/plextraktsync-pr)",
         ]
     ).encode("utf-8")
