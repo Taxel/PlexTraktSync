@@ -39,11 +39,10 @@ def self_update(pr: int):
             if backend is None:
                 continue
 
-            print(f"Updating PlexTraktSync in {backend_name} to pull request #{pr}")
+            print(f"Updating PlexTraktSync using {backend_name} to pull request #{pr}")
             commands = backend.pr_update_commands(pr, backend_installs)
             for command in commands:
-                if backend_name == "pipx" and command.startswith("pipx uninstall"):
-                    print(f"Uninstalling previous plextraktsync@{pr}")
+                print(f"Running [{backend_name}] {command}")
                 execp(command)
         return
 

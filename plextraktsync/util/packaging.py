@@ -9,6 +9,8 @@ from os.path import dirname
 
 from plextraktsync.util.execx import execx
 
+MANAGED_PACKAGE_FILTER = "plextraktsync"
+
 
 def installed():
     """
@@ -134,7 +136,7 @@ class PipxInstallBackend(InstallBackend):
             if not package_name and not source:
                 continue
 
-            if "plextraktsync" not in package_name.lower() and "plextraktsync" not in (source or "").lower():
+            if MANAGED_PACKAGE_FILTER not in package_name.lower() and MANAGED_PACKAGE_FILTER not in (source or "").lower():
                 continue
 
             apps = main_package.get("apps") or []
@@ -158,10 +160,10 @@ class PipxInstallBackend(InstallBackend):
         return f"pipx upgrade {install.app_name}"
 
     def pr_update_commands(self, pr: int, installs: list[ManagedInstall]) -> list[str]:
-        install_name = f"plextraktsync@{pr}"
+        target_name = f"plextraktsync@{pr}"
         commands = []
-        if any(install.app_name.lower() == install_name.lower() for install in installs):
-            commands.append(f"pipx uninstall {install_name}")
+        if any(install.app_name.lower() == target_name for install in installs):
+            commands.append(f"pipx uninstall {target_name}")
         commands.append(f"pipx install --suffix=@{pr} --force git+https://github.com/Taxel/PlexTraktSync@refs/pull/{pr}/head")
 
         return commands
@@ -190,7 +192,7 @@ class UvInstallBackend(InstallBackend):
 
             app_name = match.group(1)
             source = match.group(2)
-            if "plextraktsync" not in app_name.lower() and "plextraktsync" not in (source or "").lower():
+            if MANAGED_PACKAGE_FILTER not in app_name.lower() and MANAGED_PACKAGE_FILTER not in (source or "").lower():
                 continue
 
             installs.append(

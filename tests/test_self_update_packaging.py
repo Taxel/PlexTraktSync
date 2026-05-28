@@ -48,6 +48,7 @@ def test_pipx_detection(monkeypatch):
     assert len(installs) == 1
     assert installs[0].backend == "pipx"
     assert installs[0].app_name == "plextraktsync"
+    assert installs[0].package_name == "PlexTraktSync"
 
 
 def test_uv_detection(monkeypatch):
@@ -96,7 +97,11 @@ def test_uv_detection(monkeypatch):
 )
 def test_enable_self_update(monkeypatch, installs, enabled):
     monkeypatch.setattr(packaging, "list_managed_installs", lambda: installs)
-    monkeypatch.setattr(packaging, "managed_install_for_program", lambda name=None: installs[0] if installs else None)
+    monkeypatch.setattr(
+        packaging,
+        "managed_install_for_program",
+        lambda name=None: next((install for install in installs if name is None or install.app_name == name), None),
+    )
     assert Factory().enable_self_update is enabled
 
 
