@@ -111,19 +111,26 @@ pipenv run plextraktsync
 
 ### Install code from Pull request
 
-This requires prior installation with `pipx`.
+This requires prior installation with `pipx` or `uv`.
 Replace `838` with a pull request you intend to install.
 
 ```
 plextraktsync self-update --pr 838
 ```
 
-It will create new binary `plextraktsync@838` for that pull request. You need to run this binary instead of `plextraktsync`.
+With `pipx`, it creates a new binary `plextraktsync@838` for that pull request. You need to run this binary instead of `plextraktsync`.
+With `uv`, it updates your `plextraktsync` tool install to the pull request ref.
 
 To pull new changes for the same pull request:
 
 ```
 plextraktsync@838 self-update
+```
+
+or with `uv`:
+
+```
+plextraktsync self-update --pr 838
 ```
 
 If you need to do the same in docker container, you should:
@@ -134,6 +141,8 @@ If you need to do the same in docker container, you should:
 $ docker-compose run --rm --entrypoint sh plextraktsync
 /app # pip install pipx
 /app # pipx install plextraktsync
+/app # pip install uv
+/app # uv tool install plextraktsync
 /app # apk add git
 /app # plextraktsync self-update --pr 969
 /app # plextraktsync@969 info
@@ -165,6 +174,12 @@ uninstalled PlexTraktSync@838! ✨ 🌟 ✨
 $ pipx uninstall plextraktsync@984
 uninstalled PlexTraktSync@984! ✨ 🌟 ✨
 $
+```
+
+For `uv`, remove the tool with:
+
+```
+uv tool uninstall plextraktsync
 ```
 
 ## Building docker image

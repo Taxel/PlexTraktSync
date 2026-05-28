@@ -36,6 +36,7 @@ have a file containing those on your harddrive, you can not use this project.
   - [Pre-requisites](#pre-requisites)
   - [Installation](#installation)
     - [pipx](#pipx)
+    - [uv](#uv)
     - [Docker Compose](#docker-compose)
     - [Install code from Pull request](#install-code-from-pull-request), development
     - [Windows Setup (optional alternative)](#windows-setup-optional-alternative), unsupported
@@ -104,6 +105,28 @@ which just calls `pipx` with:
 pipx upgrade PlexTraktSync
 ```
 
+### uv
+
+Installation with [uv][install-uv]:
+
+```
+uv tool install PlexTraktSync
+```
+
+and to upgrade:
+
+```
+plextraktsync self-update
+```
+
+which calls `uv` with:
+
+```
+uv tool upgrade plextraktsync
+```
+
+If both `pipx` and `uv` installs exist, `plextraktsync self-update` updates all detected installs.
+
 to run:
 
 ```
@@ -115,6 +138,7 @@ NOTE: `pipx` install will use OS specific paths for Config, Logs, Cache, see
 
 [platformdirs]: https://pypi.org/project/platformdirs
 [install-pipx]: https://github.com/pypa/pipx#install-pipx
+[install-uv]: https://docs.astral.sh/uv/getting-started/installation/
 
 ### Docker Compose
 
@@ -554,7 +578,7 @@ Commands:
   inspect            Inspect details of an object
   login              Log in to Plex and Trakt if needed
   plex-login         Log in to Plex Account to obtain Access Token.
-  self-update        Update PlexTraktSync to the latest version using pipx
+  self-update        Update PlexTraktSync to the latest version using pipx and/or uv
   sync               Perform sync between Plex and Trakt
   trakt-login        Log in to Trakt Account to obtain Access Token.
   unmatched          List media that has no match in Trakt or Plex
