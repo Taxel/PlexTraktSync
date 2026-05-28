@@ -19,9 +19,10 @@ class Version:
             return __version__
 
         # Print version from pip
-        if self.pipx_installed:
+        if self.managed_installed:
             v = self.vcs_info
-            return f"{__version__[0:-4]}@pr/{v['pr']}#{v['short_commit_id']}"
+            if v:
+                return f"{__version__[0:-4]}@pr/{v['pr']}#{v['short_commit_id']}"
 
         # If installed with Git
         gv = self.git_version_info
@@ -73,15 +74,15 @@ class Version:
         return vcs_info("PlexTraktSync")
 
     @property
-    def pipx_installed(self):
+    def managed_installed(self):
         if not self.installed:
             return False
 
-        from plextraktsync.util.packaging import pipx_installed, program_name
+        from plextraktsync.util.packaging import managed_install_for_program
 
-        package = pipx_installed(program_name())
+        install = managed_install_for_program()
 
-        return package is not None
+        return install is not None
 
     @property
     def installed(self):

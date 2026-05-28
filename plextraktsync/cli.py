@@ -321,12 +321,12 @@ def download():
 )
 def self_update():
     """
-    Update PlexTraktSync to the latest version using pipx
+    Update PlexTraktSync to the latest version using pipx and/or uv
 
     \b
     $ plextraktsync self-update
-    Updating PlexTraktSync to latest using pipx
-    upgraded package plextraktsync from 0.15.3 to 0.18.5 (location: /Users/glen/.local/pipx/venvs/plextraktsync)
+    Updating PlexTraktSync install 'plextraktsync' using pipx
+    Updating PlexTraktSync install 'plextraktsync' using uv
     """
 
 
