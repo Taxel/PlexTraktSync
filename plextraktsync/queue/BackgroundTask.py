@@ -78,6 +78,8 @@ class BackgroundTask:
             else:
                 if message is None:
                     self.shutdown()
+                    if self.fatal_error is not None:
+                        self.fatal_error.raise_if_set()
                     break
                 self.process_message(message)
 
