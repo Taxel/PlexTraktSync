@@ -62,6 +62,17 @@ def pipx_installed(package: str):
     return package
 
 
+def program_path():
+    """
+    Return path to currently executed script
+    """
+    import sys
+
+    absdir = dirname(dirname(dirname(__file__)))
+
+    return f"env PYTHONPATH={absdir} {sys.executable} -m plextraktsync"
+
+
 def program_name():
     """
     Return current program name:
