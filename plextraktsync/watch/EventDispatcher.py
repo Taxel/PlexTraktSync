@@ -10,10 +10,9 @@ from plextraktsync.watch.events import Error, ServerStarted
 class EventDispatcher:
     logger = logging.getLogger(__name__)
 
-    def __init__(self, fatal_error=None):
+    def __init__(self):
         self.event_listeners = []
         self.event_factory = EventFactory()
-        self.fatal_error = fatal_error
 
     def on(self, event_type, listener, **kwargs):
         self.event_listeners.append(
@@ -41,9 +40,7 @@ class EventDispatcher:
 
             try:
                 listener["listener"](event)
-            except OAuthRefreshException as e:
-                if self.fatal_error is not None:
-                    self.fatal_error.set(e)
+            except OAuthRefreshException:
                 raise
             except Exception as e:
                 self.logger.error(f"{type(e).__name__} was raised: {e}")

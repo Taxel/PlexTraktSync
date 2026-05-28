@@ -7,7 +7,6 @@ from trakt.errors import OAuthRefreshException
 from plextraktsync.watch.EventDispatcher import EventDispatcher
 from plextraktsync.watch.EventFactory import EventFactory
 from plextraktsync.watch.events import ActivityNotification
-from plextraktsync.watch.FatalErrorState import FatalErrorState
 from tests.conftest import load_mock, make_oauth_refresh_exception
 
 
@@ -80,8 +79,7 @@ def test_event_dispatcher():
 
 
 def test_event_dispatcher_reraises_oauth_refresh_exception():
-    fatal_error = FatalErrorState()
-    dispatcher = EventDispatcher(fatal_error=fatal_error).on(
+    dispatcher = EventDispatcher().on(
         ActivityNotification,
         lambda _: (_ for _ in ()).throw(make_oauth_refresh_exception()),
     )
@@ -98,6 +96,3 @@ def test_event_dispatcher_reraises_oauth_refresh_exception():
                 event="ended",
             )
         )
-
-    with pytest.raises(OAuthRefreshException):
-        fatal_error.raise_if_set()
