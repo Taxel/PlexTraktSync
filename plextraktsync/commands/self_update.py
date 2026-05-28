@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from plextraktsync.factory import factory
 from plextraktsync.util.execp import execp
+from plextraktsync.util.packaging import program_name
 
 
 def has_previous_pr(pr: int):
@@ -17,10 +18,8 @@ def pr_number() -> int | None:
     Check if current executable is named plextraktsync@<pr>
     """
 
-    import sys
-
     try:
-        pr = sys.argv[0].split("@")[1]
+        pr = program_name().split("@")[1]
     except IndexError:
         return None
 
