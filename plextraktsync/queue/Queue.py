@@ -51,7 +51,7 @@ class Queue:
 
     def close(self):
         """
-        Close queue.
+        Close the queue.
         Terminate child thread and stop accepting items to queue.
         """
         if self.daemon.is_alive():

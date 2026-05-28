@@ -10,6 +10,6 @@ if TYPE_CHECKING:
 
 def trakt_set(collection: Iterable[TraktMedia]) -> set[int]:
     """
-    Create set of trakt_id's from collection
+    Create a set of trakt_id's from a collection
     """
     return set(map(lambda m: m.trakt, collection))

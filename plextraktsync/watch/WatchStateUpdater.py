@@ -53,7 +53,7 @@ class WatchStateUpdater(SetWindowTitle):
             return None
 
         if self.plex.has_sessions():
-            # This must be username, not email
+            # This must be a username, not email
             return self.plex.account.username
 
         self.logger.warning("No permission to access sessions, disabling username filter")

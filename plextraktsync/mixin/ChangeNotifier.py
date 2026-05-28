@@ -3,7 +3,7 @@ from __future__ import annotations
 
 class ChangeNotifier(dict):
     """
-    MixIn that would make dict object notify listeners when a value is set to dict
+    MixIn that would make a dict object notify listeners when a value is set to dict
     """
 
     listeners = []

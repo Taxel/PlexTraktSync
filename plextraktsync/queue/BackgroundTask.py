@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 class BackgroundTask:
     """
-    Class to read events from queue and invoke them at tasks to flush them at interval set by the timer
+    Class to read events from the queue and invoke them at tasks to flush them at an interval set by the timer
     """
 
     logger = logging.getLogger(__name__)
@@ -56,7 +56,7 @@ class BackgroundTask:
 
     def __call__(self, queue: SimpleQueue):
         """
-        Process events from queue and invoke timed events.
+        Process events from the queue and invoke timed events.
         """
 
         while True:

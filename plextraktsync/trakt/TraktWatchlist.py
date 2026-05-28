@@ -33,8 +33,8 @@ class TraktWatchList:
     @flatten_dict
     def idmap(self) -> dict[int]:
         """
-        Return map of trakt_id of Trakt Watchlist items.
-        We use dict() rather set() to be able to remove items from it.
+        Return a map of trakt_id of Trakt Watchlist items.
+        We use dict() rather than set() to be able to remove items from it.
         """
         for tm in self.watchlist:
             yield tm.trakt, None

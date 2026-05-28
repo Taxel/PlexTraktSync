@@ -6,14 +6,14 @@ from trakt.utils import airs_date
 
 @get
 def allwatched():
-    # returns a AllShowProgress object containing all watched shows
+    # returns an AllShowProgress object containing all watched shows
     data = yield "sync/watched/shows"
     yield AllShowsProgress(data)
 
 
 @get
 def allcollected():
-    # returns a AllShowProgress object containing all collected shows
+    # returns an AllShowProgress object containing all collected shows
     data = yield "sync/collection/shows"
     yield AllShowsProgress(data)
 

@@ -192,7 +192,7 @@ class TraktApi:
         else:
             raise RuntimeError(f"mark_watched: Unsupported media type: {m.media_type.rstrip('s')} for '{m.title}'")
 
-        # Add partial object to conserve memory
+        # Add a partial object to conserve memory
         partial = PartialTraktMedia.create(m, watched_at=time)
         self.queue.add_to_history(partial)
 
