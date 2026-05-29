@@ -136,6 +136,17 @@ services:
       - TZ=Europe/Tallinn
 ```
 
+To enable optional container health monitoring, add a `healthcheck` entry. This scans the log for ERROR or CRITICAL entries within the last hour and marks the container unhealthy if any are found.
+
+```yaml
+    healthcheck:
+      test: ["CMD", "plextraktsync", "healthcheck"]
+      interval: 60s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+```
+
 You can use specific version `0.25.16`:
 
 - `image: ghcr.io/taxel/plextraktsync:0.25.16`

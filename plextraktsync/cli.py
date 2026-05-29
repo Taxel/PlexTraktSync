@@ -331,6 +331,17 @@ def self_update():
 
 
 @command()
+@click.option("--max-age", type=int, default=3600, show_default=True, help="Only consider log entries newer than N seconds")
+def healthcheck():
+    """
+    Check health of PlexTraktSync services.
+
+    Scans the log for ERROR or CRITICAL entries within --max-age seconds.
+    Exits 0 if healthy, 1 if any errors are found.
+    """
+
+
+@command()
 def bug_report():
     """
     Create a pre-populated GitHub issue with information about your configuration
@@ -369,6 +380,7 @@ def config():
 
 
 cli.add_command(bug_report)
+cli.add_command(healthcheck)
 cli.add_command(cache)
 cli.add_command(clear_collections)
 cli.add_command(compare_libraries)
