@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f61056d2357a66e65dfbb093d083db134861ea394c0afbf3f19053eac4069838"
+            "sha256": "24d20458ce0e524c9297d26eb8ecd3728e51276a0c97dc93a830221bdb46c8c8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -235,12 +235,12 @@
         },
         "idna": {
             "hashes": [
-                "sha256:466e48829084efe2548012b855df21540b96f2e20e51bd124c851536556a592c",
-                "sha256:5eb0cb53bc467c12eadcf6de83163ad8527cec9416f44b9b61b19caedad2b87f"
+                "sha256:7f952cbe720b688055e3f87de14f5c3e5fdaa8bc3928985c4077ca689de849a2",
+                "sha256:ffb385a7e039654cef1ab9ef32c6fafe283c0c0467bba1d9029738ce4a14a848"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==3.17"
+            "version": "==3.18"
         },
         "inquirerpy": {
             "hashes": [
