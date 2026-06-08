@@ -42,7 +42,7 @@ types-decorator = "==5.2.0.20260519"
 typing-extensions = "==4.15.0"
 url-normalize = "==3.0.0"
 urllib3 = "==2.7.0"
-wcwidth = "==0.7.0"
+wcwidth = "==0.8.1"
 websocket-client = "==1.9.0"
 wrapt = "==1.17.3"
 
