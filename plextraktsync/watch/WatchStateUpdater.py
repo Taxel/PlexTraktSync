@@ -39,6 +39,9 @@ class WatchStateUpdater(SetWindowTitle):
         self.remove_collection = config["watch"]["remove_collection"]
         self.add_collection = config["watch"]["add_collection"]
         self.session_media = {}
+        self.username_filter_value: str | None = None
+        self.username_filter_resolved = False
+        self.sessions_probe_warned = False
 
     def clamp_percent(self, percent: float) -> float:
         if percent < 0:
@@ -48,16 +51,42 @@ class WatchStateUpdater(SetWindowTitle):
         return percent
 
     @cached_property
-    def username_filter(self):
-        if not self.config["watch"]["username_filter"]:
+    def username_filter_enabled(self) -> bool:
+        return bool(self.config["watch"]["username_filter"])
+
+    @cached_property
+    def is_owner_session(self) -> bool:
+        """Non-owner (shared-server) users authenticate via PLEX_ACCOUNT_TOKEN."""
+        return not self.config["PLEX_ACCOUNT_TOKEN"]
+
+    @property
+    def username_filter(self) -> str | None:
+        if not self.username_filter_enabled:
             return None
+
+        if self.username_filter_resolved:
+            return self.username_filter_value
 
         if self.plex.has_sessions():
             # This must be a username, not email
-            return self.plex.account.username
+            self.username_filter_value = self.plex.account.username
+            self.username_filter_resolved = True
+            if self.sessions_probe_warned:
+                self.logger.info("Sessions access recovered, username filter active")
+        elif self.is_owner_session:
+            # Owner token: transient failure during PMS startup — do not cache,
+            # retry on the next event and skip scrobbling meanwhile (fail closed).
+            # See https://github.com/Taxel/PlexTraktSync/issues/2499
+            if not self.sessions_probe_warned:
+                self.logger.error("No permission to access sessions, will retry (skipping events until accessible)")
+                self.sessions_probe_warned = True
+        else:
+            # Non-owner tokens can't access sessions by design; run unfiltered
+            # (safe because their event stream only carries their own sessions)
+            self.logger.warning("No permission to access sessions, disabling username filter")
+            self.username_filter_resolved = True
 
-        self.logger.warning("No permission to access sessions, disabling username filter")
-        return None
+        return self.username_filter_value
 
     @cached_property
     def ignore_clients(self):
@@ -74,7 +103,7 @@ class WatchStateUpdater(SetWindowTitle):
 
     @cached_property
     def sessions(self):
-        if not self.username_filter:
+        if not self.username_filter_enabled:
             return None
 
         from plextraktsync.plex.SessionCollection import SessionCollection
@@ -221,10 +250,16 @@ class WatchStateUpdater(SetWindowTitle):
             if event.client_identifier in self.ignore_clients:
                 return False
 
-        if not self.username_filter:
+        if not self.username_filter_enabled:
             return True
 
-        return self.sessions[event.session_key] == self.username_filter
+        username = self.username_filter
+        if username is None:
+            # Non-owner: _username_filter_resolved is True → scrobble (safe)
+            # Owner: _username_filter_resolved is False → skip (fail closed)
+            return self.username_filter_resolved
+
+        return self.sessions[event.session_key] == username
 
     def scrobble(self, m: Media, percent: float, event: PlaySessionStateNotification):
         tm = m.trakt
