@@ -27,6 +27,7 @@ class EpisodeProgress:
         completed=False,
         last_watched_at=None,
         collected_at=None,
+        metadata=None,
     ):
         self.number = number
         self.aired = aired
@@ -41,7 +42,7 @@ class EpisodeProgress:
 
 
 class SeasonProgress:
-    def __init__(self, number=0, title=None, aired=0, completed=False, episodes=None):
+    def __init__(self, number=0, title=None, aired=0, completed=False, episodes=None, metadata=None):
         self.number = number
         self.aired = aired
         self.episodes = {}
@@ -78,6 +79,7 @@ class ShowProgress:
         next_episode=0,
         last_episode=0,
         last_collected_at=None,
+        metadata=None,
     ):
         self.aired = aired
         self.last_watched_at = last_watched_at
