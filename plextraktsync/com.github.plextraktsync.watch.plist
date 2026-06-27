@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.github.plextraktsync.watch</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>plextraktsync</string>
+		<string>watch</string>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>/</string>
+	<key>LimitLoadToSessionType</key>
+	<string>Aqua</string>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>ExitTimeOut</key>
+	<integer>0</integer>
+	<key>ProcessType</key>
+	<string>Background</string>
+
+	<!--
+	Enable to see debug logs.
+	- https://stackoverflow.com/a/29926482/2314626
+	-->
+	<key>StandardErrorPath</key>
+	<string>/tmp/plextraktsync.err</string>
+	<key>StandardOutPath</key>
+	<string>/tmp/plextraktsync.out</string>
+</dict>
+</plist>
