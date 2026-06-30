@@ -75,6 +75,30 @@ class SyncRatingsPlugin:
             elif self.trakt_to_plex and has_trakt:
                 rate = "plex"
 
+        elif self.rating_priority == "newer_wins":
+            # Prefer the side with the newest rating timestamp. If one side is
+            # missing a rating, fill it from the side that has one. If neither
+            # side has a timestamp, keep the previous default behavior of
+            # preferring Plex when both directions are enabled.
+            if m.plex_rating is not None and m.trakt_rating is not None:
+                plex_rated_at = m.plex_rating.rated_at
+                trakt_rated_at = m.trakt_rating.rated_at
+                plex_is_newer = plex_rated_at is None and trakt_rated_at is None
+
+                if plex_rated_at is not None and trakt_rated_at is None:
+                    plex_is_newer = True
+                elif plex_rated_at is not None and trakt_rated_at is not None:
+                    plex_is_newer = plex_rated_at >= trakt_rated_at
+
+                if plex_is_newer and self.plex_to_trakt:
+                    rate = "trakt"
+                elif not plex_is_newer and self.trakt_to_plex:
+                    rate = "plex"
+            elif self.plex_to_trakt and has_plex:
+                rate = "trakt"
+            elif self.trakt_to_plex and has_trakt:
+                rate = "plex"
+
         if rate == "trakt":
             self.logger.info(
                 f"Rating {m.title_link} with {m.plex_rating} on Trakt (was {m.trakt_rating})",
