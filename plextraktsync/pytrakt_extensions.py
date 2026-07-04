@@ -46,6 +46,7 @@ class SeasonProgress:
         self.number = number
         self.aired = aired
         self.episodes = {}
+        episodes = episodes or []
         for episode in episodes:
             prog = EpisodeProgress(**episode)
             self.episodes[prog.number] = prog
@@ -92,6 +93,7 @@ class ShowProgress:
         self.trakt = show["ids"]["trakt"] if show else None
         self.slug = show["ids"]["slug"] if show else None
         self.seasons = {}
+        seasons = seasons or []
         allCompleted = True
         for season in seasons:
             prog = SeasonProgress(**season)
@@ -112,6 +114,7 @@ class ShowProgress:
 class AllShowsProgress:
     def __init__(self, shows=None):
         self.shows = {}
+        shows = shows or []
         for show in shows:
             prog = ShowProgress(**show)
             self.shows[prog.trakt] = prog
