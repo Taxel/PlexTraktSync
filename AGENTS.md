@@ -49,6 +49,10 @@ These instructions apply to the whole repository.
 - When changing config behavior, preserve migration behavior for legacy
   `config.json` users.
 - Add or update pytest coverage for behavior changes when practical.
+- Prefer behavior-focused tests over implementation-coupled tests.
+- Avoid asserting internal call shapes (exact URL/query construction, private
+  helper usage, or call ordering) unless that detail is itself user-visible
+  behavior or a documented compatibility contract.
 
 ## Commit guidelines
 
