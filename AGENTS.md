@@ -38,6 +38,9 @@ These instructions apply to the whole repository.
 - Install runtime deps: `python -m pip install -r requirements.txt`
 - `requirements.pipenv.txt` exists to keep Pipenv versions in sync for
   Dependabot, not as a runtime requirements file.
+- This repo uses direnv-managed virtualenvs; check `.envrc` for the active
+  Python version/path and prefer that interpreter/tools (for example,
+  `.direnv/python-3.10/bin/pytest`) when `python`/`pytest` are not on PATH.
 
 ## Change guidance
 
