@@ -1,21 +1,15 @@
 from __future__ import annotations
 
-from trakt.core import get
+from trakt.pagination import paginate
 from trakt.utils import airs_date
 
 
-@get
 def allwatched():
-    # returns an AllShowProgress object containing all watched shows
-    data = yield "sync/watched/shows"
-    yield AllShowsProgress(data)
+    return AllShowsProgress(paginate("sync/watched/shows", extended="progress"))
 
 
-@get
 def allcollected():
-    # returns an AllShowProgress object containing all collected shows
-    data = yield "sync/collection/shows"
-    yield AllShowsProgress(data)
+    return AllShowsProgress(paginate("sync/collection/shows", extended="metadata"))
 
 
 class EpisodeProgress:
