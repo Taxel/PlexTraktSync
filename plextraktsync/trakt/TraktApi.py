@@ -173,7 +173,10 @@ class TraktApi:
     @rate_limit()
     @retry()
     def get_ratings(self, media_type: str):
-        return self.me.get_ratings(media_type)
+        try:
+            return self.me.get_ratings(media_type)
+        except NotFoundException as e:
+            raise ClickException(f"Unable to fetch ratings: {e}")
 
     @rate_limit()
     @time_limit()
