@@ -105,7 +105,7 @@ class TraktUserList:
         if self.list_type == "personal" and self.username == username:
             # For user's personal lists, use the user's personal list endpoint
             user_list = trakt.get_personal_list(username, self.name)
-            self.logger.info(f"Downloaded private personal Trakt list '{user_list.name}' ({len(user_list._items)} items)")
+            self.logger.info(f"Downloaded private personal Trakt list '{user_list.name}' ({len(user_list)} items)")
             return user_list.description, self.build_dict_from_raw_items(user_list._items)
         elif not self.is_private:
             # For public lists and official lists, use the public list endpoint
