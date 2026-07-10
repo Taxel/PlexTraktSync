@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 from trakt.movies import Movie
 from trakt.tv import TVEpisode, TVSeason, TVShow
-from trakt.users import PublicList, User
+from trakt.users import PublicList
 
 from plextraktsync.factory import factory, logging
 from plextraktsync.trakt.types import TraktPlayable
@@ -100,11 +100,12 @@ class TraktUserList:
         return result
 
     def load_items(self):
-        username = factory.trakt_api.me.username
+        trakt = factory.trakt_api
+        username = trakt.me.username
         if self.list_type == "personal" and self.username == username:
             # For user's personal lists, use the user's personal list endpoint
-            user_list = User(username).get_list(self.name)
-            self.logger.info(f"Downloaded private personal Trakt list '{user_list.name}' ({len(user_list._items)} items)")
+            user_list = trakt.get_personal_list(username, self.name)
+            self.logger.info(f"Downloaded private personal Trakt list '{user_list.name}' ({len(user_list)} items)")
             return user_list.description, self.build_dict_from_raw_items(user_list._items)
         elif not self.is_private:
             # For public lists and official lists, use the public list endpoint
