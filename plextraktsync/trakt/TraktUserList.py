@@ -100,7 +100,8 @@ class TraktUserList:
         return result
 
     def load_items(self):
-        username = factory.trakt_api.me.username
+        trakt = factory.trakt_api
+        username = trakt.me.username
         if self.list_type == "personal" and self.username == username:
             # For user's personal lists, use the user's personal list endpoint
             user_list = User(username).get_list(self.name)
