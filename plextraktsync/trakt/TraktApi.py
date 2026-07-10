@@ -83,6 +83,13 @@ class TraktApi:
             }
             yield tll
 
+    @staticmethod
+    def get_personal_list(username: str, listname: str):
+        try:
+            return trakt.users.UserList.get(listname, username)
+        except NotFoundException as e:
+            raise ClickException(f"Unable to fetch userlist: {e}")
+
     @cached_property
     @rate_limit()
     @retry()
