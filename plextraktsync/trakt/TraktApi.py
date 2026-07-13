@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 
     from plextraktsync.plex.guid.PlexGuid import PlexGuid
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
-    from plextraktsync.trakt.types import TraktLikedList, TraktMedia
+    from plextraktsync.trakt.types import TraktLikedList, TraktMedia, TraktPlayable
 
 
 class TraktApi:
@@ -121,7 +121,7 @@ class TraktApi:
             for season in show.seasons:
                 yield from season.episodes
 
-    def remove_from_collection(self, m: TraktMedia):
+    def remove_from_collection(self, m: TraktPlayable):
         if m.media_type not in ["movies", "shows", "episodes"]:
             raise ValueError(f"remove_from_collection: Unsupported media type: {m.media_type.rstrip('s')} for '{m.title}'")
 
