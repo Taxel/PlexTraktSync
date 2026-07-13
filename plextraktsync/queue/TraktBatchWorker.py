@@ -39,29 +39,29 @@ class TraktBatchWorker:
         if result:
             self.logger.debug(f"Submitted {name}: {result}")
 
-    @rate_limit()
-    @account_limit()
-    @time_limit()
-    @retry()
+    @rate_limit
+    @account_limit
+    @time_limit
+    @retry
     def add_to_collection(self, items):
         return trakt.sync.add_to_collection(items)
 
-    @rate_limit()
-    @time_limit()
-    @retry()
+    @rate_limit
+    @time_limit
+    @retry
     def remove_from_collection(self, items):
         return trakt.sync.remove_from_collection(items)
 
-    @rate_limit()
-    @account_limit()
-    @time_limit()
-    @retry()
+    @rate_limit
+    @account_limit
+    @time_limit
+    @retry
     def add_to_watchlist(self, items):
         return trakt.sync.add_to_watchlist(items)
 
-    @rate_limit()
-    @time_limit()
-    @retry()
+    @rate_limit
+    @time_limit
+    @retry
     def remove_from_watchlist(self, items):
         return trakt.sync.remove_from_watchlist(items)
 
