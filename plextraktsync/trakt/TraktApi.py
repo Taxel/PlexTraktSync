@@ -31,6 +31,8 @@ from plextraktsync.trakt.WatchProgress import WatchProgress
 from plextraktsync.util.Rating import Rating
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from trakt.movies import Movie
     from trakt.tv import TVEpisode, TVShow
 
@@ -116,7 +118,7 @@ class TraktApi:
 
     @cached_property
     @flatten_list
-    def episodes_collection(self) -> list[TVEpisode]:
+    def episodes_collection(self) -> Generator[TVEpisode, None, None]:
         for show in self.show_collection:
             for season in show.seasons:
                 yield from season.episodes
