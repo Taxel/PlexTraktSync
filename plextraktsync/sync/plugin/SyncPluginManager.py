@@ -59,9 +59,9 @@ class SyncPluginManager:
     def register_plugins(self, sync: Sync):
         for plugin in self.plugins:
             enabled = plugin.enabled(sync.config)
-            self.logger.info(f"Enable sync plugin '{plugin.__name__}': {enabled}")
             if not enabled:
                 continue
+            self.logger.info(f"Enable sync plugin '{plugin.__name__}'")
             with measure_time(f"Created '{plugin.__name__}' plugin", logger=self.logger.debug):
                 p = plugin.factory(sync)
             with measure_time(f"Registered '{plugin.__name__}' plugin", logger=self.logger.debug):
