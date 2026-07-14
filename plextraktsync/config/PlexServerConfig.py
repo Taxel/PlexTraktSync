@@ -45,3 +45,8 @@ class PlexServerConfig:
             return default
 
         return self.config.get(section, default)
+
+    def serialize(self):
+        return {
+            self.name: self.asdict(),
+        }
