@@ -55,7 +55,8 @@ class Factory:
 
         trakt = self.trakt_api
         plex = self.plex_api
-        mf = MediaFactory(plex, trakt)
+        config = self.server_config
+        mf = MediaFactory(plex, trakt, server_config=config)
 
         return mf
 

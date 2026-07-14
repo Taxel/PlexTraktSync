@@ -6,6 +6,7 @@ from plexapi.exceptions import PlexApiException
 from requests import RequestException
 from trakt.errors import TraktException
 
+from plextraktsync.config.PlexServerConfig import PlexServerConfig
 from plextraktsync.factory import logging
 from plextraktsync.media.Media import Media
 
@@ -24,9 +25,10 @@ class MediaFactory:
 
     logger = logging.getLogger(__name__)
 
-    def __init__(self, plex: PlexApi, trakt: TraktApi):
+    def __init__(self, plex: PlexApi, trakt: TraktApi, server_config: PlexServerConfig):
         self.plex = plex
         self.trakt = trakt
+        self.server_config = server_config
 
     def resolve_any(self, pm: PlexLibraryItem, show: Media = None) -> Media | None:
         try:
