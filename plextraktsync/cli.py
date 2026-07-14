@@ -371,6 +371,7 @@ def watched_shows():
 
 @command()
 @click.option("--urls-expire-after", is_flag=True, help="Print urls_expire_after configuration")
+@click.option("--server", is_flag=True, help="Print active server configuration")
 @click.option("--edit", is_flag=True, help="Open config file in editor")
 @click.option("--locate", is_flag=True, help="Locate config file in file browser")
 def config():

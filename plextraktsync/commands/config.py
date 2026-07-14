@@ -16,7 +16,7 @@ def dump(data, print=None):
     print(dump)
 
 
-def config(urls_expire_after: bool, edit: bool, locate: bool):
+def config(urls_expire_after: bool, server: bool, edit: bool, locate: bool):
     config = factory.config
     print = factory.print
 
