@@ -16,7 +16,7 @@ def dump(data, print=None):
     print(dump)
 
 
-def config(urls_expire_after: bool, edit: bool, locate: bool):
+def config(urls_expire_after: bool, server: bool, edit: bool, locate: bool):
     config = factory.config
     print = factory.print
 
@@ -24,6 +24,12 @@ def config(urls_expire_after: bool, edit: bool, locate: bool):
         import click
 
         click.launch(config.config_yml, locate=locate)
+        return
+
+    if server:
+        print("# Server Config")
+        config = factory.server_config
+        dump(config.serialize(), print=print)
         return
 
     if urls_expire_after:
