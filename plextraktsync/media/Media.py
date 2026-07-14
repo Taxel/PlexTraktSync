@@ -165,7 +165,7 @@ class Media(RichMarkup):
     @cached_property
     def seasons(self):
         if self.media_type != "shows":
-            raise RuntimeError(f"seasons: Unsupported media type: {self.type} for '{self.title}'")
+            raise RuntimeError(f"seasons: Unsupported media type: {self.media_type} for '{self.title}'")
 
         return TraktLookup(self.trakt)
 
