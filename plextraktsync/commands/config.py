@@ -26,6 +26,12 @@ def config(urls_expire_after: bool, server: bool, edit: bool, locate: bool):
         click.launch(config.config_yml, locate=locate)
         return
 
+    if server:
+        print("# Server Config")
+        config = factory.server_config
+        dump(config.serialize(), print=print)
+        return
+
     if urls_expire_after:
         print("# HTTP Cache")
         dump(config.http_cache.serialize(), print=print)
