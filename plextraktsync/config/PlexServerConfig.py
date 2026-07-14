@@ -21,7 +21,7 @@ class PlexServerConfig:
         del data["name"]
 
         # Remove optional fields that are None so they don't overwrite
-        # existing values when merging (e.g. preserving user config on re-login)
+        # existing values when merging (e.g., preserving user config on re-login)
         for key in ("id", "config"):
             if data[key] is None:
                 del data[key]
