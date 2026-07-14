@@ -239,7 +239,7 @@ class PlexApi:
 
         try:
             return try_login()
-        except BadRequest as e:
+        except (BadRequest, NotFound) as e:
             self.logger.error(f"Error during Plex {plex_username} account access: {e}. Try log in with plex-login again")
 
             return None
