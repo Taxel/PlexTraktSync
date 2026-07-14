@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from plexapi.exceptions import PlexApiException
 from requests import RequestException
-from trakt.errors import TraktException
+from trakt.errors import OAuthRefreshException, TraktException
 
 from plextraktsync.factory import logging
 from plextraktsync.media.Media import Media
@@ -66,6 +66,8 @@ class MediaFactory:
                 tm = self.trakt.find_episode_guid(guid, show.seasons)
             else:
                 tm = self.trakt.find_by_guid(guid)
+        except OAuthRefreshException:
+            raise
         except (TraktException, RequestException) as e:
             self.logger.warning(
                 f"{guid.title_link}: Skipping {guid}: Trakt errors: {e}",
