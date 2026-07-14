@@ -6,7 +6,7 @@ from dataclasses import asdict, dataclass
 @dataclass
 class PlexServerConfig:
     """
-    Class to hold single server config
+    Class to hold a single server config
     """
 
     name: str
