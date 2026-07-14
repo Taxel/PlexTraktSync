@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 from plexapi.exceptions import PlexApiException
@@ -29,6 +30,10 @@ class MediaFactory:
         self.plex = plex
         self.trakt = trakt
         self.server_config = server_config
+
+    @cached_property
+    def ignore_ids(self):
+        return self.server_config.ignore_ids
 
     def resolve_any(self, pm: PlexLibraryItem, show: Media = None) -> Media | None:
         try:
