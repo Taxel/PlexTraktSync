@@ -37,6 +37,10 @@ class PlexServerConfig:
         return self.get_section("libraries")
 
     @property
+    def ignore_ids(self):
+        return self.get_section("ignore_ids", [])
+
+    @property
     def excluded_libraries(self):
         return self.get_section("excluded-libraries")
 
