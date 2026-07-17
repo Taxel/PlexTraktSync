@@ -31,12 +31,14 @@ from plextraktsync.trakt.WatchProgress import WatchProgress
 from plextraktsync.util.Rating import Rating
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from trakt.movies import Movie
     from trakt.tv import TVEpisode, TVShow
 
     from plextraktsync.plex.guid.PlexGuid import PlexGuid
     from plextraktsync.plex.PlexLibraryItem import PlexLibraryItem
-    from plextraktsync.trakt.types import TraktLikedList, TraktMedia
+    from plextraktsync.trakt.types import TraktLikedList, TraktMedia, TraktPlayable
 
 
 class TraktApi:
@@ -57,8 +59,8 @@ class TraktApi:
         return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
 
     @cached_property
-    @rate_limit()
-    @retry()
+    @rate_limit
+    @retry
     def me(self):
         try:
             return trakt.users.User("me")
@@ -69,8 +71,8 @@ class TraktApi:
             raise ClickException(f"Trakt authentication error: {str(e)}")
 
     @cached_property
-    @rate_limit()
-    @retry()
+    @rate_limit
+    @retry
     @flatten_list
     def liked_lists(self) -> list[TraktLikedList]:
         for item in self.me.get_liked_lists("lists", limit=100):
@@ -91,37 +93,37 @@ class TraktApi:
             raise ClickException(f"Unable to fetch userlist: {e}")
 
     @cached_property
-    @rate_limit()
-    @retry()
+    @rate_limit
+    @retry
     def watched_movies(self):
         return set(map(lambda m: m.trakt, self.me.watched_movies))
 
     @cached_property
-    @rate_limit()
-    @retry()
+    @rate_limit
+    @retry
     def watch_progress(self):
         return WatchProgress(trakt.sync.get_playback())
 
     @cached_property
-    @rate_limit()
-    @retry()
+    @rate_limit
+    @retry
     def movie_collection(self):
         return self.me.movie_collection
 
     @cached_property
-    @rate_limit()
-    @retry()
+    @rate_limit
+    @retry
     def show_collection(self):
         return self.me.show_collection
 
     @cached_property
     @flatten_list
-    def episodes_collection(self) -> list[TVEpisode]:
+    def episodes_collection(self) -> Generator[TVEpisode, None, None]:
         for show in self.show_collection:
             for season in show.seasons:
                 yield from season.episodes
 
-    def remove_from_collection(self, m: TraktMedia):
+    def remove_from_collection(self, m: TraktPlayable):
         if m.media_type not in ["movies", "shows", "episodes"]:
             raise ValueError(f"remove_from_collection: Unsupported media type: {m.media_type} for '{m.title}'")
 
@@ -138,26 +140,26 @@ class TraktApi:
         return set(map(lambda m: m.trakt, self.movie_collection))
 
     @cached_property
-    @rate_limit()
-    @retry()
+    @rate_limit
+    @retry
     def watched_shows(self):
         return pytrakt_extensions.allwatched()
 
     @cached_property
-    @rate_limit()
-    @retry()
+    @rate_limit
+    @retry
     def collected_shows(self):
         return pytrakt_extensions.allcollected()
 
     @property
-    @rate_limit()
-    @retry()
+    @rate_limit
+    @retry
     def watchlist_movies(self):
         return self.me.watchlist_movies
 
     @property
-    @rate_limit()
-    @retry()
+    @rate_limit
+    @retry
     def watchlist_shows(self):
         return self.me.watchlist_shows
 
@@ -177,23 +179,23 @@ class TraktApi:
 
         return self.ratings[m.media_type].get(m.trakt, None)
 
-    @rate_limit()
-    @retry()
+    @rate_limit
+    @retry
     def get_ratings(self, media_type: str):
         try:
             return self.me.get_ratings(media_type)
         except NotFoundException as e:
             raise ClickException(f"Unable to fetch ratings: {e}")
 
-    @rate_limit()
-    @time_limit()
-    @retry()
+    @rate_limit
+    @time_limit
+    @retry
     def rate(self, m: TraktMedia, rating: int, rate_date: datetime.datetime = None):
         m.rate(rating, rate_date)
 
-    @rate_limit()
-    @time_limit()
-    @retry()
+    @rate_limit
+    @time_limit
+    @retry
     def mark_watched(self, m: TraktMedia, time: datetime.datetime, show_trakt_id=None):
         if m.media_type == "movies":
             self.watched_movies.add(m.trakt)
@@ -291,7 +293,7 @@ class TraktApi:
         except NotFoundException:
             raise RuntimeError(f"find_by_slug: Unable to find with slug: {slug}")
 
-    @rate_limit()
+    @rate_limit
     def search_by_id(self, media_id: str, id_type: str, media_type: str) -> TVShow | Movie | None:
         if id_type == "tvdb" and media_type == "movie":
             # Skip invalid search.
