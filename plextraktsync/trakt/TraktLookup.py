@@ -27,7 +27,7 @@ class TraktLookup:
         self.same_order = True
 
     @cached_property
-    @retry()
+    @retry
     def table(self):
         """
         Build a lookup-table accessible via table[season][episode]
