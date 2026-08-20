@@ -133,7 +133,16 @@ class Walker(SetWindowTitle):
 
         async for ep in self.episodes_from_sections(self.plan.show_sections):
             show_id = ep.show_id
-            ep.show = plex_shows[show_id]
+            # The shows above and the episodes here are two independent pagers
+            # over a live server: `section.pager()` for shows,
+            # `section.pager("episode")` here. An episode whose show was not
+            # yielded by the first pass (library changed mid-sync, or the show
+            # itself failed to load) must not abort the whole sync.
+            plex_show = plex_shows.get(show_id)
+            if plex_show is None:
+                self.logger.warning(f"Skipping episode {ep}: show {show_id} was not found in the preloaded shows")
+                continue
+            ep.show = plex_show
             show = show_cache.get(show_id)
             m = self.mf.resolve_any(ep, show)
             if not m:
