@@ -71,3 +71,90 @@ def test_walker():
     assert len(plan.show_sections) == 0
     assert len(plan.movies) == 1
     assert len(plan.shows) == 1
+
+
+class ShowStub:
+    """Minimal stand-in for a preloaded PlexLibraryItem show."""
+
+    def __init__(self, key):
+        self.key = key
+
+    def __str__(self):
+        return f"show:{self.key}"
+
+
+class EpisodeStub:
+    """Minimal stand-in for an episode yielded by the episode pager."""
+
+    def __init__(self, show_id, title):
+        self.show_id = show_id
+        self.title = title
+        self.show = None
+
+    def __str__(self):
+        return self.title
+
+
+class MediaFactoryStub:
+    def resolve_any(self, item, show=None):
+        return item
+
+
+class WalkPlanStub:
+    def __init__(self):
+        self.episodes = None
+        self.show_sections = ["section"]
+
+
+def _walker_with(shows, episodes):
+    from plextraktsync.plan.Walker import Walker
+
+    walker = Walker(plex=None, trakt=None, mf=MediaFactoryStub(), config=None)
+    walker.__dict__["plan"] = WalkPlanStub()
+
+    async def get_plex_shows():
+        for s in shows:
+            yield s
+
+    async def episodes_from_sections(_sections):
+        for e in episodes:
+            yield e
+
+    walker.get_plex_shows = get_plex_shows
+    walker.episodes_from_sections = episodes_from_sections
+    return walker
+
+
+async def _collect(walker):
+    return [m async for m in walker.find_episodes()]
+
+
+def test_find_episodes_skips_an_episode_whose_show_was_not_preloaded(caplog):
+    """An orphan episode must not abort the whole sync.
+
+    The shows and the episodes come from two independent pagers over a live
+    server, so an episode can arrive whose show the first pass never yielded.
+    Before this was guarded, that raised KeyError out of find_episodes and
+    killed the run (gh-2113).
+    """
+    import asyncio
+    import logging
+
+    known = ShowStub(1)
+    walker = _walker_with(
+        shows=[known],
+        episodes=[
+            EpisodeStub(1, "kept-before"),
+            EpisodeStub(568765, "orphan"),
+            EpisodeStub(1, "kept-after"),
+        ],
+    )
+
+    with caplog.at_level(logging.WARNING):
+        result = asyncio.run(_collect(walker))
+
+    # The orphan is dropped and both good episodes survive, including the one
+    # after it: a fix that returned early instead of continuing would lose it.
+    assert [str(m) for m in result] == ["kept-before", "kept-after"]
+    assert all(m.show is known for m in result)
+    assert "568765" in caplog.text
