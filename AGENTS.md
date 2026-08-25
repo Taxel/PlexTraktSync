@@ -62,6 +62,10 @@ These instructions apply to the whole repository.
 - Prefer atomic commits: one intent, one self-contained change.
 - Keep commits small enough to review and revert independently.
 - Separate refactors, behavior changes, tests, and docs when practical.
+  A fix and the test covering it are practical to split in nearly every
+  case: commit the behavior change first, then the test. A single commit
+  touching both `plextraktsync/` and `tests/` is usually the signal to
+  split it.
 - Follow the principles from https://cbea.ms/git-commit/.
 - Use commit messages with:
   - a short imperative subject line
