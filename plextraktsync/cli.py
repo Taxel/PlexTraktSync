@@ -33,6 +33,7 @@ def command():
 
                 logger = logging.getLogger(__name__)
                 logger.fatal(f"Error running {name} command: {str(e)}")
+                raise
             except Exception as e:
                 from plextraktsync.factory import logging
 

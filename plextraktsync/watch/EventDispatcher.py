@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from trakt.errors import OAuthRefreshException
+
 from plextraktsync.factory import logging
 from plextraktsync.watch.EventFactory import EventFactory
 from plextraktsync.watch.events import Error, ServerStarted
@@ -38,6 +40,8 @@ class EventDispatcher:
 
             try:
                 listener["listener"](event)
+            except OAuthRefreshException:
+                raise
             except Exception as e:
                 self.logger.error(f"{type(e).__name__} was raised: {e}")
 
