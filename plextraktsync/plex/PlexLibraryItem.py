@@ -60,7 +60,7 @@ class PlexLibraryItem(RichMarkup):
 
         return None
 
-    @retry()
+    @retry
     def get_guids(self):
         return self.item.guids
 
@@ -333,7 +333,7 @@ class PlexLibraryItem(RichMarkup):
         for ep in self._get_episodes():
             yield PlexLibraryItem(ep, plex=self.plex)
 
-    @retry()
+    @retry
     def _get_episodes(self):
         filters = {"show.id": self.show_id}
         if self.type == "season":
