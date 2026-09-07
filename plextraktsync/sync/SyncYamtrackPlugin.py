@@ -107,5 +107,6 @@ class SyncYamtrackPlugin:
 
     @staticmethod
     def tmdb_id(media: Media):
-        trakt = media.show.trakt if media.is_episode else media.trakt
-        return trakt.ids["ids"].get("tmdb")
+        trakt = getattr(media.show, "trakt", None) if media.is_episode else getattr(media, "trakt", None)
+        ids = getattr(trakt, "ids", None) or {}
+        return ids.get("ids", {}).get("tmdb")

@@ -32,7 +32,7 @@ class YamtrackApi:
     def headers(self):
         return {
             "Accept": "application/json",
-            "Authorization": f"******",
+            "Authorization": "Bearer " + self.token,
         }
 
     def movie_history(self, tmdb_id: int | str):
@@ -60,6 +60,7 @@ class YamtrackApi:
             payload={
                 "source": "tmdb",
                 "media_id": str(show_tmdb_id),
+                "status": 3,
                 "season_number": season_number,
                 "episode_number": episode_number,
                 "end_date": self.normalize_datetime(watched_at),

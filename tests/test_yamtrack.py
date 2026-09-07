@@ -24,6 +24,7 @@ class DummyResponse:
 
 def test_config_serialize_omits_yamtrack_token():
     config = factory.config
+    _ = config["sync"]
     config["YAMTRACK_TOKEN"] = "secret-token"
 
     assert "YAMTRACK_TOKEN" not in config.serialize()
@@ -57,7 +58,7 @@ def test_yamtrack_api_movie_requests():
     get_call = session.request.call_args_list[0]
     post_call = session.request.call_args_list[1]
     assert get_call.kwargs["url"] == "https://yamtrack.example/api/v1/media/movie/tmdb/123/history/"
-    assert get_call.kwargs["headers"]["Authorization"] == "******"
+    assert get_call.kwargs["headers"]["Authorization"] == "Bearer " + "token"
     assert post_call.kwargs["url"] == "https://yamtrack.example/api/v1/media/movie/"
     assert post_call.kwargs["json"] == {
         "source": "tmdb",
