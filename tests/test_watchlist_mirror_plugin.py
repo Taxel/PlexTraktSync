@@ -50,16 +50,19 @@ class WalkerStub:
 
 
 class StateStub:
-    def __init__(self, items=None, seeded=False):
+    def __init__(self, items=None, seeded=False, unresolved_baseline=0):
         self._items = items or {}
         self.is_seeded = seeded
+        self.unresolved_baseline = unresolved_baseline
         self.saved = None
+        self.saved_unresolved = None
 
     def load(self):
         return dict(self._items), "2026-09-09T00:00:00+00:00"
 
-    def save(self, items):
+    def save(self, items, unresolved=0):
         self.saved = items
+        self.saved_unresolved = unresolved
 
 
 def build(state, plex_media, trakt_media, plex_count=None, max_delete_percent=10):
@@ -127,7 +130,7 @@ def test_addition_on_trakt_propagates_to_plex():
     assert item.calls == ["add_plex"]
 
 
-def test_unresolvable_plex_item_suppresses_removals():
+def test_new_unresolvable_plex_item_suppresses_removals():
     """A Plex entry the walker could not match must not read as a deletion."""
     item = MediaStub(1)
     state = StateStub({"movies:1": BOTH}, seeded=True)
@@ -137,6 +140,41 @@ def test_unresolvable_plex_item_suppresses_removals():
     run(plugin, walker)
 
     assert item.calls == []
+
+
+def test_known_unresolvable_plex_item_does_not_block_removals():
+    """A permanently unmatchable entry must not disable removals forever."""
+    item = MediaStub(1)
+    keeper = MediaStub(2)
+    state = StateStub({"movies:1": BOTH, "movies:2": BOTH}, seeded=True, unresolved_baseline=1)
+    # 2 raw Plex entries, only the keeper resolves: same shortfall as last run
+    plugin, walker = build(state, [keeper], [item, keeper], plex_count=2)
+
+    run(plugin, walker)
+
+    assert item.calls == ["remove_trakt"]
+
+
+def test_worsening_shortfall_still_suppresses_removals():
+    item = MediaStub(1)
+    keeper = MediaStub(2)
+    state = StateStub({"movies:1": BOTH, "movies:2": BOTH}, seeded=True, unresolved_baseline=1)
+    # shortfall of 3, worse than the recorded baseline of 1
+    plugin, walker = build(state, [keeper], [item, keeper], plex_count=4)
+
+    run(plugin, walker)
+
+    assert item.calls == []
+
+
+def test_unresolved_count_is_recorded_for_next_run():
+    keeper = MediaStub(2)
+    state = StateStub({"movies:2": BOTH}, seeded=True, unresolved_baseline=2)
+    plugin, walker = build(state, [keeper], [keeper], plex_count=3)
+
+    run(plugin, walker)
+
+    assert state.saved_unresolved == 2
 
 
 def test_empty_plex_watchlist_suppresses_removals():

@@ -29,10 +29,23 @@ class WatchlistState:
         self.path = state_path
         self.scope = scope
         self._seeded = False
+        self._unresolved = 0
 
     @property
     def is_seeded(self) -> bool:
         return self._seeded
+
+    @property
+    def unresolved_baseline(self) -> int:
+        """How many Plex watchlist entries failed to resolve during the last sync.
+
+        Some entries can never resolve - Trakt simply has no record of that GUID.
+        Those are a permanent, harmless shortfall, so treating any shortfall as a
+        failed enumeration would disable removals forever on such an account.
+        Recording the count makes the check self-calibrating: only a shortfall
+        *worse* than last time indicates something actually went wrong.
+        """
+        return self._unresolved
 
     def _read_document(self) -> dict:
         if not path.exists(self.path):
@@ -55,17 +68,20 @@ class WatchlistState:
         entry = (self._read_document().get("scopes") or {}).get(self.scope)
         if not entry:
             self._seeded = False
+            self._unresolved = 0
             return {}, None
 
         items = {key: Presence(trakt=bool(value.get("trakt")), plex=bool(value.get("plex"))) for key, value in (entry.get("items") or {}).items()}
         self._seeded = True
+        self._unresolved = int(entry.get("unresolved") or 0)
 
         return items, entry.get("synced_at")
 
-    def save(self, items: dict[str, Presence]) -> None:
+    def save(self, items: dict[str, Presence], unresolved: int = 0) -> None:
         document = self._read_document() or {"version": SCHEMA_VERSION, "scopes": {}}
         document.setdefault("scopes", {})[self.scope] = {
             "synced_at": datetime.now(timezone.utc).isoformat(),
+            "unresolved": unresolved,
             "items": {key: {"trakt": presence.trakt, "plex": presence.plex} for key, presence in items.items()},
         }
 
@@ -75,3 +91,4 @@ class WatchlistState:
         replace(tmp, self.path)
 
         self._seeded = True
+        self._unresolved = unresolved

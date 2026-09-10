@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from plextraktsync.plex.PlexApi import PlexApi
     from plextraktsync.trakt.TraktApi import TraktApi
 
-    from .plugin.SyncPluginInterface import Sync, SyncConfig, SyncPluginManager, Walker
+    from .plugin.SyncPluginInterface import Sync, SyncConfig, Walker
     from .WatchlistMirror import WatchlistPlan
     from .WatchlistState import WatchlistState
 
@@ -54,13 +54,10 @@ class WatchlistMirrorPlugin:
             max_delete_percent=sync.config.watchlist_mirror_max_delete_percent,
         )
 
-    @hookimpl
-    def init(self, pm: SyncPluginManager, is_partial: bool):
-        if not is_partial:
-            return
-
-        self.logger.warning("Disabling Watchlist Mirror: Running partial library sync")
-        pm.unregister(self)
+    # NB: no is_partial guard. That flag describes the *library* walk, and the
+    # watchlists are enumerated in full independently of it - `--sync=watchlist`
+    # is itself a partial walk. Completeness of the watchlists themselves is what
+    # matters here, and removal_gate() checks that directly.
 
     @cached_property
     def plex_wl(self):
@@ -124,7 +121,7 @@ class WatchlistMirrorPlugin:
         # a run that raised partway would bake a false "this was removed" into the
         # next diff.
         if not dry_run:
-            self.state.save(current)
+            self.state.save(current, unresolved=plex_total - resolved_from_plex)
 
     def removal_gate(self, plex_total: int, trakt_total: int, resolved_from_plex: int) -> tuple[bool, str | None]:
         """Decide whether removals may be applied at all this run.
@@ -139,9 +136,14 @@ class WatchlistMirrorPlugin:
             return False, "Plex watchlist came back empty, treating as a failed fetch"
         if trakt_total == 0:
             return False, "Trakt watchlist came back empty, treating as a failed fetch"
-        if resolved_from_plex < plex_total:
-            missing = plex_total - resolved_from_plex
-            return False, f"{missing} Plex watchlist item(s) could not be matched, so absence is not proof of removal"
+        missing = plex_total - resolved_from_plex
+        if missing > self.state.unresolved_baseline:
+            # Some entries never resolve because Trakt has no record of that GUID.
+            # Only a shortfall worse than the last run means this run's view is
+            # untrustworthy; a steady shortfall is just those known entries.
+            return False, (
+                f"{missing} Plex watchlist item(s) could not be matched, up from {self.state.unresolved_baseline}, so absence is not proof of removal"
+            )
 
         return True, None
 
