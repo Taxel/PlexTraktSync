@@ -14,3 +14,4 @@ config_yml = p.config_yml
 servers_config = p.servers_config
 pytrakt_file = p.pytrakt_file
 env_file = p.env_file
+watchlist_state = p.watchlist_state
