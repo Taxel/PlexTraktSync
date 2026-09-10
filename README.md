@@ -371,6 +371,40 @@ seconds, second run - 111 seconds
 You can view sync progress in the `plextraktsync.log` file which will be
 created.
 
+### Mirroring the watchlists
+
+By default, syncing the watchlists in both directions computes their union.
+PlexTraktSync compares only the two live watchlists, so an item present on one
+side but not the other is always treated as an addition. Removing something from
+one watchlist therefore gets undone on the next run. Enabling only one direction
+avoids that, but then the other side's *additions* are deleted instead.
+
+Setting `watchlist_mirror: true` under `sync:` changes this. PlexTraktSync then
+records the state of both watchlists after each sync, in
+`watchlist_mirror_state.json` next to `config.yml`, and compares against that
+record on the next run. Because it knows what was there before, it can tell an
+addition from a removal, and a removal on either side is propagated to the other.
+
+```yaml
+sync:
+  watchlist_mirror: true
+```
+
+When enabled, `plex_to_trakt.watchlist` and `trakt_to_plex.watchlist` are ignored.
+
+Removals are skipped, and a warning logged, if any of the following hold:
+
+- it is the first run, or the state file is missing or unreadable
+- either watchlist came back empty
+- a Plex watchlist item could not be matched, so its absence is not proof of removal
+- the run would remove more than `watchlist_mirror_max_delete_percent` (default
+  `10`) of the previously synced watchlist
+
+Additions are always applied. Items on Trakt that Plex Discover has no entry for
+are left alone rather than removed. Deleting `watchlist_mirror_state.json` is
+safe: the next run re-seeds from the union of both watchlists without removing
+anything.
+
 You can use `--edit` or `--locate` flags to `config` command to open config
 file in editor or in file browser.
 
