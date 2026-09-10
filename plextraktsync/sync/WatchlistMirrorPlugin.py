@@ -7,7 +7,7 @@ from plextraktsync.decorators.measure_time import measure_time
 from plextraktsync.factory import logging
 from plextraktsync.plugin import hookimpl
 
-from .WatchlistMirror import Presence, plan_changes
+from .WatchlistMirror import Presence, WatchlistPlan, plan_changes
 
 if TYPE_CHECKING:
     from plextraktsync.media.Media import Media
@@ -15,7 +15,6 @@ if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
 
     from .plugin.SyncPluginInterface import Sync, SyncConfig, Walker
-    from .WatchlistMirror import WatchlistPlan
     from .WatchlistState import WatchlistState
 
 
@@ -115,13 +114,33 @@ class WatchlistMirrorPlugin:
         if plan.suppressed_removals:
             self.logger.warning(f"Skipping {plan.suppressed_removals} watchlist removal(s): {plan.suppress_reason}")
 
-        self.apply(plan, media, dry_run=dry_run)
+        applied = self.apply(plan, media, dry_run=dry_run)
 
         # Only a completed pass may become the new baseline. Recording state from
         # a run that raised partway would bake a false "this was removed" into the
         # next diff.
         if not dry_run:
-            self.state.save(current, unresolved=plex_total - resolved_from_plex)
+            self.state.save(self.settled(current, applied), unresolved=plex_total - resolved_from_plex)
+
+    @staticmethod
+    def settled(current: dict[str, Presence], applied: WatchlistPlan) -> dict[str, Presence]:
+        """Fold this run's own changes into the state being recorded.
+
+        `current` describes both watchlists as they were *enumerated*, before this
+        run touched them. Saving that verbatim would record an item we just added
+        to Plex as still absent from Plex, and the next run would then read a
+        genuine user removal as "no change" and fail to propagate it.
+        """
+        settled = dict(current)
+        # An applied add leaves the item on both sides.
+        for key in applied.add_to_plex | applied.add_to_trakt:
+            settled[key] = Presence(trakt=True, plex=True)
+        # An applied removal takes it off the side it was still on, and it was
+        # already gone from the other, so it is now on neither.
+        for key in applied.remove_from_plex | applied.remove_from_trakt:
+            settled.pop(key, None)
+
+        return settled
 
     def removal_gate(self, plex_total: int, trakt_total: int, resolved_from_plex: int) -> tuple[bool, str | None]:
         """Decide whether removals may be applied at all this run.
@@ -155,7 +174,15 @@ class WatchlistMirrorPlugin:
         # would read as a delete plus an unrelated add.
         return f"{m.media_type}:{m.trakt_id}"
 
-    def apply(self, plan: WatchlistPlan, media: dict[str, Media], dry_run: bool):
+    def apply(self, plan: WatchlistPlan, media: dict[str, Media], dry_run: bool) -> WatchlistPlan:
+        """Carry out the plan, returning what was actually done.
+
+        Not every planned change is applicable: an item Plex Discover cannot match
+        has nowhere to be added or removed. The caller records the returned plan,
+        not the requested one.
+        """
+        applied = WatchlistPlan()
+
         for key in sorted(plan.add_to_plex):
             m = media[key]
             if m.plex is None:
@@ -164,12 +191,14 @@ class WatchlistMirrorPlugin:
             self.logger.info(f"Adding {m.title_link} to Plex watchlist", extra={"markup": True})
             if not dry_run:
                 m.add_to_plex_watchlist()
+            applied.add_to_plex.add(key)
 
         for key in sorted(plan.add_to_trakt):
             m = media[key]
             self.logger.info(f"Adding {m.title_link} to Trakt watchlist", extra={"markup": True})
             if not dry_run:
                 m.add_to_trakt_watchlist()
+            applied.add_to_trakt.add(key)
 
         for key in sorted(plan.remove_from_plex):
             m = media[key]
@@ -178,9 +207,13 @@ class WatchlistMirrorPlugin:
             self.logger.info(f"Removing {m.title_link} from Plex watchlist", extra={"markup": True})
             if not dry_run:
                 m.remove_from_plex_watchlist()
+            applied.remove_from_plex.add(key)
 
         for key in sorted(plan.remove_from_trakt):
             m = media[key]
             self.logger.info(f"Removing {m.title_link} from Trakt watchlist", extra={"markup": True})
             if not dry_run:
                 m.remove_from_trakt_watchlist()
+            applied.remove_from_trakt.add(key)
+
+        return applied

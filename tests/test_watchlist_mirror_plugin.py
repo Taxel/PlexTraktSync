@@ -235,3 +235,33 @@ def test_dry_run_makes_no_calls_and_saves_no_state():
 
     assert item.calls == []
     assert state.saved is None
+
+
+def test_saved_state_reflects_changes_this_run_made():
+    """State must record the post-sync world, not the pre-sync enumeration.
+
+    An item added to Plex during this run must be saved as present on Plex. If it
+    were saved as absent, a genuine removal before the next run would read as "no
+    change" and never propagate.
+    """
+    added = MediaStub(2)
+    keeper = MediaStub(1)
+    state = StateStub({"movies:1": BOTH}, seeded=True)
+    plugin, walker = build(state, [keeper], [added, keeper])
+
+    run(plugin, walker)
+
+    assert added.calls == ["add_plex"]
+    assert state.saved["movies:2"] == BOTH
+
+
+def test_saved_state_drops_items_removed_this_run():
+    item = MediaStub(1)
+    keeper = MediaStub(2)
+    state = StateStub({"movies:1": BOTH, "movies:2": BOTH}, seeded=True)
+    plugin, walker = build(state, [keeper], [item, keeper])
+
+    run(plugin, walker)
+
+    assert item.calls == ["remove_trakt"]
+    assert "movies:1" not in state.saved
