@@ -31,6 +31,9 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
 
   automerge:
+    permissions:
+      contents: write
+      pull-requests: write
     uses: ./.github/workflows/automerge.yml
     needs:
       - docker
@@ -38,4 +41,3 @@ jobs:
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
 
-# vim:ft=yaml:et:ts=2:sw=2
