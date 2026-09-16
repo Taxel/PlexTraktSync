@@ -37,6 +37,7 @@ def test_watched_shows_reports_episode_completion_from_progress_data():
         patch("plextraktsync.trakt.TraktApi.pytrakt_extensions.allwatched") as mock_allwatched,
     ):
         mock_factory.session = MagicMock()
+        mock_factory.config = {"TRAKT_BROWSER_TOKEN_FILE": None}
         mock_allwatched.return_value = AllShowsProgress(
             [
                 make_watched_progress(10, "show-one"),

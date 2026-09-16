@@ -45,6 +45,13 @@ def trakt_authenticate(api: TraktApi):
 
 
 def has_trakt_token():
+    token_file = factory.config["TRAKT_BROWSER_TOKEN_FILE"]
+    if token_file:
+        from plextraktsync.trakt.BrowserTokenAuth import BrowserTokenAuth
+
+        BrowserTokenAuth(token_file).read()
+        return factory.config["TRAKT_USERNAME"] is not None
+
     if not exists(pytrakt_file):
         return False
 
@@ -66,11 +73,15 @@ def trakt_login():
 def login():
     print = factory.print
     api = factory.trakt_api
-    trakt_authenticate(api)
+    if not api.browser_token_file:
+        trakt_authenticate(api)
     user = api.me.username
 
     CONFIG = factory.config
     CONFIG["TRAKT_USERNAME"] = user
     CONFIG.save()
 
-    print(TRAKT_LOGIN_SUCCESS)
+    if api.browser_token_file:
+        print(success("Trakt browser token verified; username saved. Credentials remain in the external token file."))
+    else:
+        print(TRAKT_LOGIN_SUCCESS)
