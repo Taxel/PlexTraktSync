@@ -7,12 +7,21 @@ on:
     tags:
       - "*.*.*"
   pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 */6 * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   docker:
     uses: ./.github/workflows/docker-image.yml
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
+      docker-username: ${{ secrets.DOCKER_USERNAME }}
+      docker-password: ${{ secrets.DOCKER_PASSWORD }}
 
   test:
     uses: ./.github/workflows/test.yml

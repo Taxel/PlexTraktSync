@@ -22,6 +22,7 @@ def trakt_api():
     # real HTTP session creation during __init__.
     with patch("plextraktsync.trakt.TraktApi.factory") as mock_factory:
         mock_factory.session = MagicMock()
+        mock_factory.config = {"TRAKT_BROWSER_TOKEN_FILE": None}
         yield TraktApi()
 
 

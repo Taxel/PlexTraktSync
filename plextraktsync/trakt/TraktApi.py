@@ -49,6 +49,14 @@ class TraktApi:
     def __init__(self):
         trakt.core.CONFIG_PATH = pytrakt_file
         trakt.core.session = factory.session
+        self.browser_token_file = factory.config["TRAKT_BROWSER_TOKEN_FILE"]
+        if self.browser_token_file:
+            from plextraktsync.trakt.BrowserTokenAuth import BrowserTokenAuth
+
+            auth = BrowserTokenAuth(self.browser_token_file)
+            auth.read()
+            trakt.core.api().base_url = "https://api.trakt.tv/"
+            trakt.core.api().auth = auth
 
     @staticmethod
     def device_auth(client_id: str, client_secret: str):

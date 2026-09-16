@@ -10,6 +10,10 @@ on:
     secrets:
       github-token:
         required: true
+      docker-username:
+        required: false
+      docker-password:
+        required: false
 
 env:
   REGISTRY: ghcr.io
@@ -36,28 +40,35 @@ jobs:
       - name: Set version variable
         id: vars
         run: |
-          if [[ "${GITHUB_REF#refs/heads/}" = "${GITHUB_REF}" ]]; then
-            APP_VERSION=${GITHUB_REF#refs/tags/}
-          else
-            git fetch --tags --unshallow
-            APP_VERSION=$(git describe --tags)_${GITHUB_REF#refs/heads/}
-          fi
-          echo "version=$APP_VERSION" >> $GITHUB_OUTPUT
+          echo "version=git-${GITHUB_SHA:0:12}" >> "$GITHUB_OUTPUT"
 
       - name: Log in to the Container registry
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v4.6.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.github-token }}
 
+      - name: Log in to Docker Hub
+        if: github.event_name != 'pull_request' && vars.PUBLISH_DOCKERHUB == 'true'
+        uses: docker/login-action@v4.6.0
+        with:
+          username: ${{ secrets.docker-username }}
+          password: ${{ secrets.docker-password }}
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            name=ac1dburn/plextraktsync,enable=${{ vars.PUBLISH_DOCKERHUB == 'true' }}
           tags: |
             type=ref,event=branch
+            type=ref,event=pr
+            type=sha
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/0.') }}
@@ -77,7 +88,7 @@ jobs:
 
       - name: Self-test Docker image
         run: |
-          docker run -e TRACE=1 --rm ${{ env.TEST_IMAGE }} test
+          docker run --network none -e TRACE=1 --rm ${{ env.TEST_IMAGE }} test
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v7
