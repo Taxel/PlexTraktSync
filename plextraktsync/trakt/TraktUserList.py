@@ -81,7 +81,7 @@ class TraktUserList:
     @staticmethod
     def build_dict_from_raw_items(items):
         """
-        Build a dictionary from the raw items in UserList._items
+        Build a dictionary from the items of a trakt UserList
         This creates the same format as build_dict() but works with UserList items
         """
         result = {}
@@ -106,7 +106,7 @@ class TraktUserList:
             # For user's personal lists, use the user's personal list endpoint
             user_list = trakt.get_personal_list(username, self.name)
             self.logger.info(f"Downloaded private personal Trakt list '{user_list.name}' ({len(user_list)} items)")
-            return user_list.description, self.build_dict_from_raw_items(user_list._items)
+            return user_list.description, self.build_dict_from_raw_items(user_list)
         elif not self.is_private:
             # For public lists and official lists, use the public list endpoint
             pl = PublicList.load(self.trakt_id)
