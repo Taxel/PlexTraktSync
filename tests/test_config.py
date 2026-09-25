@@ -85,3 +85,39 @@ def test_http_config():
     cache = config.http_cache
     assert cache is not None
     assert cache.policy["a"] == "b"
+
+
+def make_sync_config(overrides=None):
+    from plextraktsync.config.PlexServerConfig import PlexServerConfig
+    from plextraktsync.config.SyncConfig import SyncConfig
+
+    config = Config()
+    # Force lazy initialization: merge() uses setdefault(), which bypasses the
+    # lazy-loading __getitem__ and would seed an empty section that initialize()
+    # then overwrites.
+    config["sync"]
+    if overrides:
+        config.merge({"sync": overrides}, config)
+    server_config = PlexServerConfig(name="test", token="", urls=[], id="test-machine-id")
+
+    return SyncConfig(config, server_config)
+
+
+def test_watchlist_mirror_defaults_off():
+    sync = make_sync_config()
+
+    assert sync.watchlist_mirror is False
+    assert sync.watchlist_mirror_max_delete_percent == 10
+
+
+def test_watchlist_mirror_disables_legacy_watchlist_plugin():
+    from plextraktsync.sync.WatchListPlugin import WatchListPlugin
+
+    assert WatchListPlugin.enabled(make_sync_config()) is True
+    assert WatchListPlugin.enabled(make_sync_config({"watchlist_mirror": True})) is False
+
+
+def test_watchlist_mirror_enables_watchlist_syncing():
+    sync = make_sync_config({"watchlist_mirror": True, "plex_to_trakt": {"watchlist": False}, "trakt_to_plex": {"watchlist": False}})
+
+    assert sync.sync_watchlists is True
