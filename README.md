@@ -44,6 +44,7 @@ have a file containing those on your harddrive, you can not use this project.
   - [Setup](#setup)
   - [Configuration](#configuration)
     - [Libraries](#libraries)
+    - [Plex Discover Sync](#plex-discover-sync)
     - [Per server configuration](#per-server-configuration)
     - [Logging](#logging)
   - [Commands](#commands)
@@ -415,6 +416,14 @@ Enabled 2 libraries in Plex Server:
  - 1: Movies
  - 2: TV Shows
 ```
+
+### Plex Discover Sync
+
+PlexTraktSync can sync watched status for movies and TV episodes that are not in your local Plex library but are available in Plex Discover (Plex's cloud database). This allows you to maintain watched history for content you've deleted from your server or never added.
+
+To enable this feature, set `plex_online: true` in the sync section of your config. Note that this only syncs watched status from Trakt to Plex (not the reverse), and requires ["Sync My Watch State and Ratings"](https://support.plex.tv/articles/sync-watch-state-and-ratings/) to be enabled in your Plex account settings.
+
+This feature is useful for preserving watch history for old content or maintaining consistency across devices.
 
 ### Per server configuration
 

@@ -6,6 +6,7 @@ from os import environ
 from os.path import dirname
 from os.path import join as join_path
 
+import pytest
 from trakt.tv import TVShow
 
 from plextraktsync.factory import Factory
@@ -35,3 +36,8 @@ def make(cls=None, **kwargs) -> TVShow:
     cls = cls if cls is not None else "object"
     # https://stackoverflow.com/a/2827726/2314626
     return type(cls, (object,), kwargs)
+
+
+@pytest.fixture
+def trakt_api():
+    return factory.trakt_api
