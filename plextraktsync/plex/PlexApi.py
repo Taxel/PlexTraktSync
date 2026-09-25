@@ -68,7 +68,7 @@ class PlexApi:
                 continue
             yield section
 
-    @retry()
+    @retry
     def fetch_item(self, key: int | str | PlexId) -> PlexLibraryItem | None:
         try:
             if isinstance(key, PlexId):
@@ -183,7 +183,7 @@ class PlexApi:
 
         return PlexRatings(self)
 
-    @retry()
+    @retry
     def rate(self, m: PlexMedia, rating: int | float | None):
         m.rate(rating)
 
@@ -202,11 +202,11 @@ class PlexApi:
                 h.account = self.system_account(h.accountID)
             yield h
 
-    @retry()
+    @retry
     def mark_watched(self, m):
         m.markPlayed()
 
-    @retry()
+    @retry
     def mark_unwatched(self, m):
         m.markUnplayed()
 
@@ -271,7 +271,7 @@ class PlexApi:
         except BadRequest as e:
             self.logger.error(f"Error when removing {item.title} from Plex watchlist: {e}")
 
-    @retry()
+    @retry
     def search_online(self, title: str, media_type: str):
         if not self.account:
             return None
