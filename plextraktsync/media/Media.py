@@ -4,7 +4,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from trakt.sync import PlaybackEntry
-from trakt.tv import TVShow
+from trakt.tv import TVSeason, TVShow
 
 from plextraktsync.rich.RichMarkup import RichMarkup
 from plextraktsync.trakt.TraktLookup import TraktLookup
@@ -65,6 +65,9 @@ class Media(RichMarkup):
 
     @cached_property
     def media_type(self):
+        # NB: TVSeason does not have "media_type" property
+        if isinstance(self.trakt, TVSeason):
+            return "seasons"
         return self.trakt.media_type
 
     @cached_property
@@ -72,8 +75,7 @@ class Media(RichMarkup):
         """
         Return "movie", "show", "season", "episode"
         """
-        # NB: TVSeason does not have "media_type" property
-        return self.trakt.media_type[:-1]
+        return self.media_type[:-1]
 
     @property
     def season_number(self):
