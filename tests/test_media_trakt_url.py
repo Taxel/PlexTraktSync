@@ -60,3 +60,20 @@ def test_trakt_url_episode_without_show_object():
     m = Media(plex=None, trakt=episode)
 
     assert m.trakt_url == "https://app.trakt.tv/shows/42?season=2&view=episode&episode=3"
+
+
+def test_trakt_url_episode_without_show_id_falls_back_to_show_title():
+    # No show object and no show_id: only the show title is left. The episode id
+    # must never end up in the show path.
+    episode = TVEpisode(show="Brickleberry", season=2, number=3, ids={"trakt": 99})
+    m = Media(plex=None, trakt=episode)
+
+    assert m.trakt_url == "https://app.trakt.tv/shows/brickleberry?season=2&view=episode&episode=3"
+
+
+def test_trakt_url_episode_with_unknown_show():
+    # Nothing identifies the parent show, no url rather than a wrong one.
+    episode = TVEpisode(show="", season=2, number=3, ids={"trakt": 99})
+    m = Media(plex=None, trakt=episode)
+
+    assert m.trakt_url is None
