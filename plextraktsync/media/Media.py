@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from trakt.sync import PlaybackEntry
 from trakt.tv import TVSeason, TVShow
+from trakt.utils import slugify
 
 from plextraktsync.rich.RichMarkup import RichMarkup
 from plextraktsync.trakt.TraktLookup import TraktLookup
@@ -94,18 +95,25 @@ class Media(RichMarkup):
         return self.plex.key
 
     @property
-    def trakt_url(self):
+    def trakt_url(self) -> str | None:
         base_url = "https://app.trakt.tv"
 
         if self.type == "episode":
+            show_path = self.show_trakt_path
+            if show_path is None:
+                return None
+
             return (
-                f"{base_url}/shows/{self.show_trakt_path}"
+                f"{base_url}/shows/{show_path}"
                 f"?season={self.season_number}&view=episode&episode={self.episode_number}"
             )
 
         if self.type == "season":
-            # NB: TVSeason.slug is actually the slug of the parent show
-            show_path = self.trakt.slug if self.trakt.slug else self.show_trakt_path
+            show_path = self.show_trakt_path
+            if show_path is None:
+                return None
+
+            # NB: the path is the parent show, not the season
             return f"{base_url}/shows/{show_path}/seasons/{self.season_number}"
 
         path = self.trakt.slug if self.trakt.slug else self.trakt_id
@@ -113,30 +121,40 @@ class Media(RichMarkup):
         return f"{base_url}/{self.media_type}/{path}"
 
     @property
-    def show_trakt_path(self):
+    def show_trakt_path(self) -> str | None:
         """
-        Resolve the slug (or trakt id as fallback) of the parent show, used
-        to build the url for episodes (and as a fallback for seasons).
+        Return the slug (or trakt id) identifying the parent show, used to
+        build the url of episodes and seasons.
+
+        Only attributes already present on the trakt object are considered, so
+        this never triggers a lookup. Returns None when the parent show can not
+        be identified, as guessing would produce a url pointing at some other
+        media.
         """
         show = self.trakt_show
         if show is not None:
             return show.slug if show.slug else show.trakt
 
-        return getattr(self.trakt, "show_id", None) or self.trakt_id
+        show_id = getattr(self.trakt, "show_id", None)
+        if show_id:
+            return show_id
+
+        # NB: last resort, the show title is all that is left. Same fallback
+        # the trakt library itself uses in TVEpisode.ext.
+        show_title = getattr(self.trakt, "show", None)
+        if not show_title:
+            return None
+
+        return slugify(show_title) or None
 
     @cached_property
-    def trakt_show(self):
+    def trakt_show(self) -> TVShow | None:
         """
-        Resolve the Trakt TVShow of the parent show, used for episodes.
+        Return the TVShow of the parent show, if the trakt object carries one.
         """
         show = getattr(self.trakt, "show", None)
-        if isinstance(show, TVShow):
-            return show
 
-        if self.show is not None:
-            return self.show.trakt
-
-        return None
+        return show if isinstance(show, TVShow) else None
 
     @property
     def show(self) -> Media | None:
