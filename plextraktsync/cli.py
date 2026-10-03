@@ -275,6 +275,12 @@ def trakt_login():
     is_flag=True,
     help="Show only local files (no match in Plex)",
 )
+@click.option(
+    "--library",
+    type=str,
+    multiple=True,
+    help="Specify Library to use (can be given multiple times)",
+)
 def unmatched():
     """
     List media that has no match in Trakt or Plex
