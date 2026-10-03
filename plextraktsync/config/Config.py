@@ -22,6 +22,7 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
     env_keys = {
         "PLEX_USERNAME": True,
         "TRAKT_USERNAME": True,
+        "YAMTRACK_TOKEN": True,
         "PLEX_SERVER": True,  # new in 0.24.0
         # The token of the PMS administrator/owner.
         # This is stored/used only for managed users (home users) so the script
