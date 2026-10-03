@@ -5,14 +5,32 @@ from plextraktsync.decorators.coro import coro
 from plextraktsync.factory import factory
 
 
+def select_libraries(walker, library: tuple[str, ...]):
+    """
+    Add requested libraries to walk config and ensure they are movie libraries.
+    """
+
+    if not library:
+        return
+
+    for name in library:
+        walker.config.add_library(name)
+
+    if walker.plan.show_sections:
+        titles = ", ".join(f"'{s.title}'" for s in walker.plan.show_sections)
+        raise RuntimeError(f"Library {titles} is not a movie library, only movie libraries can be scanned")
+
+
 @coro
-async def unmatched(no_progress_bar: bool, local: bool):
+async def unmatched(no_progress_bar: bool, local: bool, library: tuple[str, ...]):
     factory.run_config.update(progressbar=not no_progress_bar)
     ensure_login()
     plex = factory.plex_api
     mf = factory.media_factory
     wc = factory.walk_config
     walker = factory.walker
+
+    select_libraries(walker, library)
 
     if not wc.is_valid:
         print("Nothing to scan, this is likely due conflicting options given.")
