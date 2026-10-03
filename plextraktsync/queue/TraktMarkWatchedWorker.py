@@ -31,9 +31,9 @@ class TraktMarkWatchedWorker:
         if result:
             self.logger.debug(f"Submitted add_to_history: {result}")
 
-    @rate_limit()
-    @time_limit()
-    @retry()
+    @rate_limit
+    @time_limit
+    @retry
     def add_to_history(self, items: dict):
         return trakt.sync.add_to_history(items)
 
