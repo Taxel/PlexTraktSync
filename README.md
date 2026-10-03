@@ -48,6 +48,7 @@ have a file containing those on your harddrive, you can not use this project.
     - [Logging](#logging)
   - [Commands](#commands)
     - [Sync](#sync)
+    - [Compare libraries](#compare-libraries)
     - [Unmatched](#unmatched)
     - [Info command](#info-command)
     - [Inspect](#inspect)
@@ -136,7 +137,7 @@ services:
       - TZ=Europe/Tallinn
 ```
 
-To enable optional container health monitoring, add a `healthcheck` entry. This scans the log for ERROR or CRITICAL entries within the last hour and marks the container unhealthy if any are found.
+To enable optional container health monitoring, add a `healthcheck` entry. This scans the log for ERROR or CRITICAL entries within the last hour and marks the container unhealthy if any are found[...]
 
 ```yaml
     healthcheck:
@@ -593,6 +594,66 @@ Options:
   --help                          Show this message and exit.
 ```
 
+### Compare libraries
+
+Use `compare library` to compare two Plex libraries and report shared items by matching Plex GUIDs/external IDs.
+
+The command takes two required library selectors, one for the first/source library and one for the second/comparison library:
+
+```
+plextraktsync compare library --library1 <server>/<library> --library2 <server>/<library> [--match-watched]
+```
+
+Each selector must use the Plex server name from `servers.yml`, followed by `/`, followed by either:
+
+- the Plex library title, or
+- the numeric library section id shown by `plextraktsync info`.
+
+For example, if `Movies` is section `2`, both of these are valid:
+
+```
+plextraktsync compare library --library1 Example1/Movies --library2 Example1/2
+```
+
+The first library (`--library1`) is the source side of the comparison, and the second library (`--library2`) is the comparison target.
+Items are considered equal when any Plex GUID matches, so the comparison is based on external identifiers such as TMDB, TVDB, IMDb, or a legacy Plex/IMDb GUID, depending on what Plex exposes for the item.
+
+The command prints a summary line for the two libraries, then prints each matched pair as:
+
+- `Checking match '<ratingKey>': <title link> == <title link>`
+- the set of file paths from the first item
+- the set of file paths from the second item
+
+So the output includes media file paths for matched items.
+
+Only items that match across both libraries are printed as matches. Items present in only one library are not printed as separate unmatched entries, and there is no per-item diff output beyond the matched pairs.
+At the end, the command prints `Made <n> matches`.
+
+If a matched item has no media parts, or Plex cannot load parts for an item, the command prints the exception and skips that pair.
+
+The `--match-watched` flag changes which items are eligible for matching: when set, only watched items from the first/source library are counted; when not set, the command uses a cache file to avoid repeating previous non-watched comparisons.
+
+Practical example: to compare a temporary old-movies library against your main Movies library and find movies that already exist in the main library, put the old/temporary library on the left and the main library on the right:
+
+```
+plextraktsync compare library --library1 "PlexServer/Old Movies" --library2 "PlexServer/Movies"
+```
+
+In that setup, `Old Movies` is the first/source library and `Movies` is the second/comparison library.
+
+```
+➔ plextraktsync compare library --help
+Usage: plextraktsync compare library [OPTIONS]
+
+  Compare two Plex Libraries
+
+Options:
+  --library1 TEXT       Plex Server/Plex Library name from servers.yml
+  --library2 TEXT       Plex Server/Plex Library name from servers.yml
+  --match-watched       Match only watched items
+  --help                Show this message and exit.
+```
+
 ### Unmatched
 
 You can use `unmatched` command to scan your library and display unmatched
@@ -805,7 +866,7 @@ Check your Plex episodes ordering compared to Trakt ordering.
 If episodes are in a different order, it should not be a problem because they
 are identified with ids.
 But if a season or an episode is missing on Trakt (and tmdb) or doesn't have external ids (ids from tvdb, imdb,...), it can't be synced.
-You can fix it by [adding the missing episodes] or edit metadata (eg. missing tvdb or imdb ids) on [tmdb] or [report a metadata issue on Trakt][how-to-report-metadata-issues] ([answers][reports]).
+You can fix it by [adding the missing episodes] or edit metadata (eg. missing tvdb or imdb ids) on [tmdb] or [report a metadata issue on Trakt][how-to-report-metadata-issues] ([answers][reports])[...]
 It's free for anyone to sign up and edit info at tmdb. Trakt will [update from tmdb][trakt-tvshow-update] data.
 
 [adding the missing episodes]: https://support.trakt.tv/support/solutions/articles/70000264977
