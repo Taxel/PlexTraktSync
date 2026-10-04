@@ -112,6 +112,13 @@ def cache():
 
 
 @command()
+def auth():
+    """
+    Show Plex and Trakt authentication status
+    """
+
+
+@command()
 @click.option("--confirm", is_flag=True, help="Confirm the dangerous action")
 @click.option("--dry-run", is_flag=True, help="Do not perform delete actions")
 @click.option(
@@ -386,6 +393,7 @@ def config():
     """
 
 
+cli.add_command(auth)
 cli.add_command(bug_report)
 cli.add_command(healthcheck)
 cli.add_command(cache)
