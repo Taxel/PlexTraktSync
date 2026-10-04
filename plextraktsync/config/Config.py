@@ -153,17 +153,18 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         self["cache"]["path"] = self["cache"]["path"].replace("$PTS_CACHE_DIR", cache_dir)
 
     def serialize(self):
-        """
-        Print config serialized as yaml.
-        If print is None, return the produced string instead.
-        """
         data = dict(self)
         # Remove env variables. They are usually secrets
         for key in self.env_keys:
             del data[key]
+
         return data
 
     def dump(self, print=None):
+        """
+        Print config serialized as yaml.
+        If print is None, return the produced string instead.
+        """
         data = self.serialize()
         dump = ConfigLoader.dump_yaml(None, data)
         if print is None:
