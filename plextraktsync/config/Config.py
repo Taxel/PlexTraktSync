@@ -153,6 +153,8 @@ class Config(ChangeNotifier, ConfigMergeMixin, dict):
         self["cache"]["path"] = self["cache"]["path"].replace("$PTS_CACHE_DIR", cache_dir)
 
     def serialize(self):
+        if not self.initialized:
+            self.initialize()
         data = dict(self)
         # Remove env variables. They are usually secrets
         for key in self.env_keys:
