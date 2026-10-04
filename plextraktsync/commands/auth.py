@@ -16,6 +16,8 @@ def trakt_token_expiry():
     try:
         with open(pytrakt_file) as fp:
             expires_at = json.load(fp).get("OAUTH_EXPIRES_AT")
+        if not expires_at:
+            return None
         return datetime.fromtimestamp(int(expires_at), tz=timezone.utc)
     except (OSError, ValueError, TypeError):
         return None
