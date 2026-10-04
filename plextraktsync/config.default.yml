@@ -98,6 +98,7 @@ watch:
   add_collection: false
   remove_collection: false
   # true to scrobble only what's watched by you, false for all your PMS users
+  # Your username is read from PLEX_USERNAME, falling back to a plex.tv lookup
   username_filter: true
   # Show the progress bar of played media in terminal
   media_progressbar: true
