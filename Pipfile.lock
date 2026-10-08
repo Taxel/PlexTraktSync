@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4f03e71aa28cdd6ceeeea098c2b4cc40e4c582d03e40020be5e03457782f95ba"
+            "sha256": "21fd6ba85e45dff34c6ba379c114a66c237f86964a1a668b407c5b1a32661f0f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -389,10 +389,12 @@
         },
         "pytimeparse": {
             "hashes": [
-                "sha256:04b7be6cc8bd9f5647a6325444926c3ac34ee6bc7e69da4367ba282f076036bd",
-                "sha256:e86136477be924d7e670646a98561957e8ca7308d44841e21f5ddea757556a0a"
+                "sha256:1f1c0bedcfbe481b78f7cb11dba7d81039455af8ba014eafc6df060c9c0ab156",
+                "sha256:627b2f483d8b713cc86d78f95c17d5acc06794949afc51ad8dabfa9655e3c8ba"
             ],
-            "version": "==1.1.8"
+            "index": "pypi",
+            "markers": "python_version >= '3.11'",
+            "version": "==1.1.9"
         },
         "pytrakt": {
             "hashes": [
