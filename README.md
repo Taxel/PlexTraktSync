@@ -725,6 +725,10 @@ watch:
   username_filter: true
 ```
 
+The username to compare against is taken from `PLEX_USERNAME`, which
+`plextraktsync plex-login` fills in for you. Only if that is unset, or holds an
+e-mail address rather than a username, is it looked up from plex.tv instead.
+
 To run `watch` command:
 
 `plextraktsync watch`
