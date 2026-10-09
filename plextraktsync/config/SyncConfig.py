@@ -101,6 +101,10 @@ class SyncConfig:
             ]
         )
 
+    @property
+    def plex_online(self):
+        return self.config.get("plex_online", False)
+
     @cached_property
     def need_library_walk(self):
         return any(
