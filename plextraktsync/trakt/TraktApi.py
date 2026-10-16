@@ -51,7 +51,7 @@ class TraktApi:
         trakt.core.session = factory.session
 
     @staticmethod
-    def device_auth(client_id: str, client_secret: str):
+    def device_auth(client_id: str, client_secret: str | None = None):
         trakt.core.AUTH_METHOD = trakt.core.DEVICE_AUTH
 
         return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
