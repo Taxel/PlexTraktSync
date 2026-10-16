@@ -96,7 +96,7 @@ class Media(RichMarkup):
 
     @property
     def trakt_url(self) -> str | None:
-        base_url = "https://trakt.tv"
+        base_url = "https://app.trakt.tv"
 
         if self.type == "episode":
             show_path = self.show_trakt_path

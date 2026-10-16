@@ -14,8 +14,8 @@ def watched_shows():
     table.add_column("Slug")
     table.add_column("Seasons", justify="right")
     for show_id, progress in sorted(trakt.watched_shows.shows.items()):
-        id = f"[link=https://trakt.tv/shows/{show_id}]{show_id}[/]"
-        slug = f"[link=https://trakt.tv/shows/{progress.slug}]{progress.slug}[/]"
+        id = f"[link=https://app.trakt.tv/shows/{show_id}]{show_id}[/]"
+        slug = f"[link=https://app.trakt.tv/shows/{progress.slug}]{progress.slug}[/]"
         table.add_row(id, slug, str(len(progress.seasons)))
 
     print(table)
