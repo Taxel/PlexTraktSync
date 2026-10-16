@@ -95,10 +95,30 @@ class Media(RichMarkup):
         return self.plex.key
 
     @property
-    def trakt_url(self):
+    def trakt_url(self) -> str | None:
+        base_url = "https://trakt.tv"
+
+        if self.type == "episode":
+            show_path = self.show_trakt_path
+            if show_path is None:
+                return None
+
+            return (
+                f"{base_url}/shows/{show_path}"
+                f"?season={self.season_number}&view=episode&episode={self.episode_number}"
+            )
+
+        if self.type == "season":
+            show_path = self.show_trakt_path
+            if show_path is None:
+                return None
+
+            # NB: the path is the parent show, not the season
+            return f"{base_url}/shows/{show_path}/seasons/{self.season_number}"
+
         path = self.trakt.slug if self.trakt.slug else self.trakt_id
 
-        return f"https://trakt.tv/{self.media_type}/{path}"
+        return f"{base_url}/{self.media_type}/{path}"
 
     @cached_property
     def trakt_show(self) -> TVShow | None:
