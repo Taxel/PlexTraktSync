@@ -15,31 +15,40 @@ if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
 
 PROMPT_TRAKT_CLIENT_ID = prompt("Please enter your client id")
-PROMPT_TRAKT_CLIENT_SECRET = prompt("Please enter your client secret")
+PROMPT_TRAKT_CLIENT_SECRET = prompt("Please enter your client secret (leave blank if your app has none)")
 TRAKT_LOGIN_SUCCESS = success("You are now logged into Trakt. Your Trakt credentials have been added in .env and .pytrakt.json files.")
+
+TRAKT_URL = "https://trakt.tv"
+TRAKT_APP_URL = "https://developer.trakt.tv/apps/new"
+TRAKT_REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
+
+
+def print_create_app_instructions(print):
+    print("If you do not have a Trakt app yet:")
+    print(f"      1 - Open {TRAKT_APP_URL} on any computer")
+    print("      2 - Set the App name field = plex")
+    print("      3 - Leave the Description field blank (optional)")
+    print(f"      4 - Set the Redirect URIs field = {TRAKT_REDIRECT_URI}")
+    print("      5 - Leave the Allowed origins field blank (optional)")
+    print("      6 - Press the Create app button")
+    print("      7 - Copy the generated Client ID")
+    print("")
+    print("Note: a Client Secret is only shown for older apps and is optional.")
 
 
 def trakt_authenticate(api: TraktApi):
     print = factory.print
 
-    print(title("Sign in to Trakt"))
-
-    print("If you do not have a Trakt client ID and secret:")
-    print("      1 - Open https://trakt.tv/oauth/applications on any computer")
-    print("      2 - Login to your Trakt account")
-    print("      3 - Press the NEW APPLICATION button")
-    print("      4 - Set the NAME field = plex")
-    print("      5 - Set the REDIRECT URL field = urn:ietf:wg:oauth:2.0:oob")
-    print("      6 - Press the SAVE APP button")
-    print("")
+    print(title(f"Sign in to Trakt - {TRAKT_URL}"))
+    print_create_app_instructions(print)
 
     while True:
         client_id = Prompt.ask(PROMPT_TRAKT_CLIENT_ID)
-        client_secret = Prompt.ask(PROMPT_TRAKT_CLIENT_SECRET, password=True)
+        client_secret = Prompt.ask(PROMPT_TRAKT_CLIENT_SECRET, password=True, default="", show_default=False)
 
         print("Attempting to authenticate with Trakt")
         try:
-            return api.device_auth(client_id=client_id, client_secret=client_secret)
+            return api.device_auth(client_id=client_id, client_secret=client_secret or None)
         except (ForbiddenException, JSONDecodeError) as e:
             print(error(f"Log in to Trakt failed: {e}, Try again."))
 
