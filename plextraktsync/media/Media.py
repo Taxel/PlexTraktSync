@@ -99,6 +99,15 @@ class Media(RichMarkup):
 
         return f"https://trakt.tv/{self.media_type}/{path}"
 
+    @cached_property
+    def trakt_show(self) -> TVShow | None:
+        """
+        Return the TVShow of the parent show, if the trakt object carries one.
+        """
+        show = getattr(self.trakt, "show", None)
+
+        return show if isinstance(show, TVShow) else None
+
     @property
     def show(self) -> Media | None:
         if self._show is None and self.mf and not self.plex.is_discover:
