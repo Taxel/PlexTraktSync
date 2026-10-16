@@ -42,6 +42,7 @@ have a file containing those on your harddrive, you can not use this project.
     - [Unraid setup](#unraid-setup), unsupported
     - [GitHub](#github), unsupported
   - [Setup](#setup)
+    - [Trakt authentication](#trakt-authentication)
   - [Configuration](#configuration)
     - [Libraries](#libraries)
     - [Per server configuration](#per-server-configuration)
@@ -256,12 +257,33 @@ Installing from GitHub is considered developer mode, and it's documented in
 
 ## Setup
 
-- You will need to create a Trakt API app if you do not already have one:
+### Trakt authentication
 
-  - Visit https://trakt.tv/oauth/applications/new
-  - Give it a meaningful name
-  - Enter `urn:ietf:wg:oauth:2.0:oob` as the redirect url
-  - You can leave Javascript origins and the Permissions checkboxes blank
+Sign in with your Trakt app's **Client ID**. New apps only provide a Client ID;
+a Client Secret is shown only on older apps and is optional.
+
+Create a Trakt API app at https://developer.trakt.tv/apps/new with these
+fields:
+
+- **App name**: a meaningful name, for example `plex`
+- **Description**: optional, you can leave it blank
+- **Redirect URIs**: `urn:ietf:wg:oauth:2.0:oob` (Trakt requires one; the device
+  flow does not use it)
+- **Allowed origins**: optional, you can leave it blank
+
+Then sign in:
+
+- Run `plextraktsync trakt-login`.
+- Paste your app's **Client ID**.
+- Press Enter at the Client Secret prompt if your app has none (only older apps
+  show one).
+- Open the verification URL the command prints and enter the displayed code.
+
+Trakt's device flow works on free accounts and shows a code to enter on Trakt's
+activation page, so it needs no redirect and works in Docker, on a NAS, and on
+the local network.
+
+### First run
 
 - Run `plextraktsync login`, the script will ask for missing credentials
 
@@ -276,7 +298,7 @@ Installing from GitHub is considered developer mode, and it's documented in
 - At first run you will be asked to setup Trakt and Plex access.
 
   Follow the instructions, your credentials and API keys will be stored in
-  `.env`and `.pytrakt.json` files. Plex URL and token is stored in `servers.yml`.
+  `.env` and `.pytrakt.json` files. Plex URL and token is stored in `servers.yml`.
 
   If you have [2 Factor Authentication enabled on Plex][two-factor-authentication], input the code when prompted. If you don't have 2FA enabled, just leave the prompt blank and press Enter.
 
