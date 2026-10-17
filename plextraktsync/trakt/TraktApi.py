@@ -56,17 +56,45 @@ class TraktApi:
 
         return trakt.init(client_id=client_id, client_secret=client_secret, store=True)
 
+    @staticmethod
+    def _user_slug(user) -> str | None:
+        """Return ids.slug when it is safe to use as a Trakt username path segment.
+
+        pytrakt slugifies ``username`` into user URLs. A non-ASCII display name
+        slugifies to an empty segment (``GET /users//watched/movies`` -> 405).
+        ``ids.slug`` is the canonical segment and slugify leaves it unchanged.
+        https://github.com/Taxel/PlexTraktSync/issues/2223
+        """
+        if isinstance(user, dict):
+            ids = user.get("ids")
+        else:
+            ids = getattr(user, "ids", None)
+        if not isinstance(ids, dict):
+            return None
+
+        slug = ids.get("slug")
+        if not isinstance(slug, str) or not slug.isascii():
+            return None
+        if not any(char.isalnum() for char in slug):
+            return None
+        return slug
+
     @cached_property
     @rate_limit()
     @retry()
     def me(self):
         try:
-            return trakt.users.User("me")
+            user = trakt.users.User("me")
         except OAuthRefreshException as e:
             self.logger.error(f"{e.error}: {e.error_description}")
             raise ClickException("Trakt error: Unable to refresh token")
         except (OAuthException, ForbiddenException) as e:
             raise ClickException(f"Trakt authentication error: {str(e)}")
+
+        slug = self._user_slug(user)
+        if slug:
+            user.username = slug
+        return user
 
     @cached_property
     @rate_limit()
@@ -74,9 +102,10 @@ class TraktApi:
     @flatten_list
     def liked_lists(self) -> list[TraktLikedList]:
         for item in self.me.get_liked_lists("lists", limit=100):
+            owner = item["list"]["user"]
             tll: TraktLikedList = {
                 "listname": item["list"]["name"],
-                "username": item["list"]["user"]["username"],
+                "username": self._user_slug(owner) or owner["username"],
                 "listid": item["list"]["ids"]["trakt"],
                 "private": item["list"]["privacy"] == "private",
                 "list_type": item["list"]["type"],
