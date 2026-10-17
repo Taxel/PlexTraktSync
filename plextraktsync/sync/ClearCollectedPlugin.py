@@ -9,7 +9,7 @@ from plextraktsync.plugin import hookimpl
 
 if TYPE_CHECKING:
     from plextraktsync.trakt.TraktApi import TraktApi
-    from plextraktsync.trakt.types import TraktMedia
+    from plextraktsync.trakt.types import TraktPlayable
 
     from .plugin.SyncPluginInterface import Sync, SyncConfig, SyncPluginManager
 
@@ -51,7 +51,7 @@ class ClearCollectedPlugin:
     async def walk_episode(self, episode: Media):
         self.episode_trakt_ids.add(episode.trakt_id)
 
-    def clear_collected(self, existing_items: Iterable[TraktMedia], keep_ids: set[int], dry_run):
+    def clear_collected(self, existing_items: Iterable[TraktPlayable], keep_ids: set[int], dry_run):
         from plextraktsync.trakt.trakt_set import trakt_set
 
         existing_ids = trakt_set(existing_items)
