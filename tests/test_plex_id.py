@@ -1,6 +1,9 @@
 #!/usr/bin/env python3 -m pytest
 from __future__ import annotations
 
+from types import SimpleNamespace
+from unittest.mock import patch
+
 from plextraktsync.plex.PlexId import PlexId
 from plextraktsync.plex.PlexIdFactory import PlexIdFactory
 
@@ -40,6 +43,19 @@ def test_plex_id_urls():
     assert pid.provider is None
     assert pid.server == SERVER_ID
     assert pid.is_discover is False
+
+
+def test_plex_id_app_trakt_movie_url():
+    trakt_item = SimpleNamespace(media_type="movies", ids={"ids": {"imdb": "tt123"}})
+    plex_item = SimpleNamespace(key=10, plex=SimpleNamespace(server=SimpleNamespace(machineIdentifier=SERVER_ID)))
+
+    with patch("plextraktsync.factory.factory") as mock_factory:
+        mock_factory.trakt_api.find_by_slug.return_value = trakt_item
+        mock_factory.plex_api.search_by_guid.return_value = [plex_item]
+
+        pid = PlexIdFactory.create("https://app.trakt.tv/movies/inception-2010")
+
+    assert pid == PlexId(10, server=SERVER_ID)
 
 
 def test_plex_id_discover_url():
