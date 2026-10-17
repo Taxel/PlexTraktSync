@@ -6,6 +6,7 @@ from os import environ
 from os.path import dirname
 from os.path import join as join_path
 
+from trakt.errors import OAuthRefreshException
 from trakt.tv import TVShow
 
 from plextraktsync.factory import Factory
@@ -35,3 +36,17 @@ def make(cls=None, **kwargs) -> TVShow:
     cls = cls if cls is not None else "object"
     # https://stackoverflow.com/a/2827726/2314626
     return type(cls, (object,), kwargs)
+
+
+def make_oauth_refresh_exception(
+    error: str = "invalid_grant",
+    error_description: str = "The provided authorization grant is invalid.",
+) -> OAuthRefreshException:
+    response = make(
+        cls="Response",
+        json=lambda self: {
+            "error": error,
+            "error_description": error_description,
+        },
+    )()
+    return OAuthRefreshException(response)
