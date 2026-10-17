@@ -16,6 +16,7 @@ __pycache__/
 /last_update.log
 /plextraktsync.log*
 /servers.yml
+/watchlist_mirror_state.json
 /tests/.env
 /tests/config.json
 /trakt_cache.sqlite

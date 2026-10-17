@@ -21,6 +21,7 @@ class Path:
         self.servers_config = join(self.config_dir, "servers.yml")
         self.pytrakt_file = join(self.config_dir, ".pytrakt.json")
         self.env_file = join(self.config_dir, ".env")
+        self.watchlist_state = join(self.config_dir, "watchlist_mirror_state.json")
 
     @cached_property
     def config_dir(self):
