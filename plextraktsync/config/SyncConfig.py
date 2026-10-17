@@ -14,6 +14,7 @@ class SyncConfig:
     config: dict[str, Any]
 
     def __init__(self, config: Config, server_config: PlexServerConfig):
+        self.root_config = config
         self.config = dict(config["sync"])
         self.liked_lists = config["liked_lists"]
         self.liked_lists_overrides = config.get("liked_list", {})
@@ -53,6 +54,15 @@ class SyncConfig:
         }
 
     @cached_property
+    def yamtrack(self):
+        return {
+            "enabled": self.get("yamtrack", "enabled"),
+            "url": self.get("yamtrack", "url"),
+            "timeout": self.get("yamtrack", "timeout"),
+            "token": self.root_config["YAMTRACK_TOKEN"],
+        }
+
+    @cached_property
     def sync_ratings(self):
         return self.trakt_to_plex["ratings"] or self.plex_to_trakt["ratings"]
 
@@ -63,6 +73,10 @@ class SyncConfig:
     @cached_property
     def sync_watched_status(self):
         return self.trakt_to_plex["watched_status"] or self.plex_to_trakt["watched_status"]
+
+    @cached_property
+    def sync_yamtrack_history(self):
+        return self.yamtrack["enabled"]
 
     @property
     def liked_lists_keep_watched(self):
@@ -106,6 +120,7 @@ class SyncConfig:
         return any(
             [
                 self.update_plex_wl_as_pl,
+                self.sync_yamtrack_history,
                 self.sync_watched_status,
                 self.sync_ratings,
                 self.plex_to_trakt["collection"],
