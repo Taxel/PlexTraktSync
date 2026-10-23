@@ -26,7 +26,7 @@ class PlexSectionPager:
     def total_size(self):
         return self.section.totalViewSize(libtype=self.libtype, includeCollections=False)
 
-    @retry()
+    @retry
     def fetch_items(self, start: int, size: int):
         return self.section.search(
             libtype=self.libtype,
