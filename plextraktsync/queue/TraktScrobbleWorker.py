@@ -41,9 +41,9 @@ class TraktScrobbleWorker:
         if results:
             self.logger.debug(f"Submitted {name}: {results}")
 
-    @rate_limit()
-    @time_limit()
-    @retry()
+    @rate_limit
+    @time_limit
+    @retry
     def scrobble(self, scrobbler: Scrobbler, name: str, progress: float):
         method = getattr(scrobbler, name)
         try:
