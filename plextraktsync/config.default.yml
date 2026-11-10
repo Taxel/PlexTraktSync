@@ -81,6 +81,10 @@ sync:
     watchlist_as_playlist: false
     # Sync Play Progress from Trakt to Plex
     playback_status: false
+  yamtrack:
+    enabled: false
+    url: ~
+    timeout: 30
 
 # Configuration for liked lists
 liked_lists:

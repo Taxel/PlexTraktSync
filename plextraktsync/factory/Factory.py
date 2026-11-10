@@ -41,6 +41,15 @@ class Factory:
         return TraktApi()
 
     @cached_property
+    def yamtrack_api(self):
+        from plextraktsync.yamtrack.YamtrackApi import YamtrackApi
+
+        return YamtrackApi(
+            config=self.sync_config.yamtrack,
+            session=self.session,
+        )
+
+    @cached_property
     def plex_api(self):
         from plextraktsync.plex.PlexApi import PlexApi
 

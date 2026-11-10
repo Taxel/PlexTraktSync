@@ -65,6 +65,7 @@ packages = [
     "plextraktsync.trakt",
     "plextraktsync.util",
     "plextraktsync.watch",
+    "plextraktsync.yamtrack",
 ]
 
 [project.scripts]
