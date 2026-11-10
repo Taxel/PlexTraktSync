@@ -60,6 +60,19 @@ sync:
   # plex - Plex ratings have priority. Existing Trakt ratings are overwritten.
   rating_priority: plex
 
+  # Mirror the Plex and Trakt watchlists, propagating removals in both
+  # directions. Removing an item on either side removes it on the other.
+  # Requires persisted state, stored in watchlist_mirror_state.json next to
+  # config.yml. When true, plex_to_trakt.watchlist and trakt_to_plex.watchlist
+  # are ignored.
+  watchlist_mirror: false
+
+  # Safety valve for watchlist_mirror. If a single run would remove more than
+  # this percentage of the previously synced watchlist, every removal is
+  # skipped and a warning is logged. Guards against a failed or truncated
+  # watchlist fetch being read as a mass deletion.
+  watchlist_mirror_max_delete_percent: 10
+
   plex_to_trakt:
     collection: false
     # Clear collected state of items not present in Plex

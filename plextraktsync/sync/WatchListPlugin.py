@@ -24,7 +24,7 @@ class WatchListPlugin:
 
     @staticmethod
     def enabled(config: SyncConfig):
-        return config.sync_watchlists
+        return config.sync_watchlists and not config.watchlist_mirror
 
     @classmethod
     def factory(cls, sync: Sync):
