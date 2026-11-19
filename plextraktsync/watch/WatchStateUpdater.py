@@ -59,6 +59,32 @@ class WatchStateUpdater(SetWindowTitle):
         """Non-owner (shared-server) users authenticate via PLEX_ACCOUNT_TOKEN."""
         return not self.config["PLEX_ACCOUNT_TOKEN"]
 
+    @cached_property
+    def configured_username(self) -> str | None:
+        """
+        The username to filter on, taken from config instead of plex.tv.
+
+        `plex-login` stores account.username here, or the managed user picked
+        during login, which is exactly the value sessions report. Reading it
+        avoids PlexApi.account, which builds a MyPlexAccount (and calls
+        switchHomeUser when PLEX_OWNER_TOKEN is set) just to learn a name we
+        already have locally.
+
+        Returns None when the value cannot be trusted to match a session
+        username, so the caller falls back to asking plex.tv:
+
+        - unset, e.g. credentials supplied purely via tokens
+        - an e-mail address: `plex-login` prompts for "username or e-mail" and
+          PLEX_USERNAME may be passed through the environment without ever
+          being normalised by a login. Sessions never report an e-mail, so
+          filtering on one would silently match nothing.
+        """
+        username = self.config["PLEX_USERNAME"]
+        if not username or "@" in username:
+            return None
+
+        return username
+
     @property
     def username_filter(self) -> str | None:
         if not self.username_filter_enabled:
@@ -69,7 +95,7 @@ class WatchStateUpdater(SetWindowTitle):
 
         if self.plex.has_sessions():
             # This must be a username, not email
-            self.username_filter_value = self.plex.account.username
+            self.username_filter_value = self.configured_username or self.plex.account.username
             self.username_filter_resolved = True
             if self.sessions_probe_warned:
                 self.logger.info("Sessions access recovered, username filter active")
