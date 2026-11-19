@@ -10,7 +10,7 @@ class PlexIdFactory:
     def create(cls, key: str | int):
         if isinstance(key, int) or key.isnumeric():
             return PlexId(int(key))
-        elif key.startswith("https://trakt.tv/"):
+        elif key.startswith(("https://trakt.tv/", "https://app.trakt.tv/")):
             return cls.from_trakt_url(key)
         elif key.startswith("https://l.plex.tv/"):
             return cls.from_plex_redirect_url(key)
