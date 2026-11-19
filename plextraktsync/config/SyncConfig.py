@@ -98,8 +98,17 @@ class SyncConfig:
             [
                 self.plex_to_trakt["watchlist"],
                 self.trakt_to_plex["watchlist"],
+                self.watchlist_mirror,
             ]
         )
+
+    @cached_property
+    def watchlist_mirror(self):
+        return self.get("plex_to_trakt", "watchlist_mirror")
+
+    @cached_property
+    def watchlist_mirror_max_delete_percent(self):
+        return self.get("plex_to_trakt", "watchlist_mirror_max_delete_percent")
 
     @cached_property
     def need_library_walk(self):

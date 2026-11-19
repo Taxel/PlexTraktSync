@@ -44,6 +44,7 @@ class SyncPluginManager:
         from ..SyncRatingsPlugin import SyncRatingsPlugin
         from ..SyncWatchedPlugin import SyncWatchedPlugin
         from ..TraktListsPlugin import TraktListsPlugin
+        from ..WatchlistMirrorPlugin import WatchlistMirrorPlugin
         from ..WatchListPlugin import WatchListPlugin
         from ..WatchProgressPlugin import WatchProgressPlugin
 
@@ -54,6 +55,7 @@ class SyncPluginManager:
         yield SyncWatchedPlugin
         yield TraktListsPlugin
         yield WatchListPlugin
+        yield WatchlistMirrorPlugin
         yield WatchProgressPlugin
 
     def register_plugins(self, sync: Sync):
