@@ -1,7 +1,5 @@
 # syntax = docker/dockerfile:1.3-labs
-ARG PYTHON_VERSION=3.13
-ARG ALPINE_VERSION=3.21
-FROM python:$PYTHON_VERSION-alpine$ALPINE_VERSION AS base
+FROM python:3.13.18-alpine3.24 AS base
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 PIP_ROOT_USER_ACTION=ignore
 WORKDIR /app
 
@@ -10,9 +8,11 @@ FROM base AS tools
 RUN apk add util-linux shadow
 WORKDIR /dist
 RUN <<eot
+set -e
 install -d ./usr/bin ./usr/lib
-install -p /usr/bin/setpriv ./usr/bin
+install -p /bin/setpriv ./usr/bin
 install -p /usr/lib/libcap-ng.so.0 ./usr/lib
+install -p /usr/lib/libeconf.so.0 ./usr/lib
 install -p /usr/lib/libbsd.so.0 ./usr/lib
 install -p /usr/lib/libmd.so.0 ./usr/lib
 install -p /usr/sbin/usermod /usr/sbin/groupmod ./usr/bin
@@ -44,8 +44,7 @@ RUN \
 	pipenv run pip install /wheels/*.whl
 
 # Verify site-packages path
-ARG PYTHON_VERSION
-RUN du -sh /root/.local/share/virtualenvs/app-*/lib/python$PYTHON_VERSION/site-packages
+RUN du -sh /root/.local/share/virtualenvs/app-*/lib/python*/site-packages
 
 FROM base AS compile
 ARG APP_VERSION=$APP_VERSION
@@ -104,8 +103,7 @@ eot
 
 # Copy things together
 COPY --from=tools /dist /
-ARG PYTHON_VERSION
-COPY --from=build /root/.local/share/virtualenvs/app-*/lib/python$PYTHON_VERSION/site-packages /usr/local/lib/python$PYTHON_VERSION/site-packages
+COPY --from=build /root/.local/share/virtualenvs/app-*/lib/ /usr/local/lib/
 COPY --from=compile /app ./
 COPY entrypoint.sh /init
 RUN ln -s /app/plextraktsync.sh /usr/bin/plextraktsync
